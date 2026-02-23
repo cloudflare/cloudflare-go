@@ -95,24 +95,36 @@ func (r *InstanceItemService) Get(ctx context.Context, id string, itemID string,
 }
 
 type InstanceItemListResponse struct {
-	ID         string                         `json:"id,required"`
-	Key        string                         `json:"key,required"`
-	Status     InstanceItemListResponseStatus `json:"status,required"`
-	Error      string                         `json:"error"`
-	LastSeenAt time.Time                      `json:"last_seen_at" format:"date-time"`
-	NextAction string                         `json:"next_action"`
-	JSON       instanceItemListResponseJSON   `json:"-"`
+	ID          float64                            `json:"id,required"`
+	Checksum    string                             `json:"checksum,required"`
+	ChunksCount int64                              `json:"chunks_count,required,nullable"`
+	CreatedAt   time.Time                          `json:"created_at,required" format:"date-time"`
+	FileSize    float64                            `json:"file_size,required,nullable"`
+	Key         string                             `json:"key,required"`
+	LastSeenAt  time.Time                          `json:"last_seen_at,required" format:"date-time"`
+	Namespace   string                             `json:"namespace,required"`
+	NextAction  InstanceItemListResponseNextAction `json:"next_action,required,nullable"`
+	Status      InstanceItemListResponseStatus     `json:"status,required"`
+	Error       string                             `json:"error"`
+	PublicID    string                             `json:"public_id"`
+	JSON        instanceItemListResponseJSON       `json:"-"`
 }
 
 // instanceItemListResponseJSON contains the JSON metadata for the struct
 // [InstanceItemListResponse]
 type instanceItemListResponseJSON struct {
 	ID          apijson.Field
+	Checksum    apijson.Field
+	ChunksCount apijson.Field
+	CreatedAt   apijson.Field
+	FileSize    apijson.Field
 	Key         apijson.Field
+	LastSeenAt  apijson.Field
+	Namespace   apijson.Field
+	NextAction  apijson.Field
 	Status      apijson.Field
 	Error       apijson.Field
-	LastSeenAt  apijson.Field
-	NextAction  apijson.Field
+	PublicID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -123,6 +135,21 @@ func (r *InstanceItemListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceItemListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceItemListResponseNextAction string
+
+const (
+	InstanceItemListResponseNextActionIndex  InstanceItemListResponseNextAction = "INDEX"
+	InstanceItemListResponseNextActionDelete InstanceItemListResponseNextAction = "DELETE"
+)
+
+func (r InstanceItemListResponseNextAction) IsKnown() bool {
+	switch r {
+	case InstanceItemListResponseNextActionIndex, InstanceItemListResponseNextActionDelete:
+		return true
+	}
+	return false
 }
 
 type InstanceItemListResponseStatus string
@@ -144,24 +171,36 @@ func (r InstanceItemListResponseStatus) IsKnown() bool {
 }
 
 type InstanceItemGetResponse struct {
-	ID         string                        `json:"id,required"`
-	Key        string                        `json:"key,required"`
-	Status     InstanceItemGetResponseStatus `json:"status,required"`
-	Error      string                        `json:"error"`
-	LastSeenAt time.Time                     `json:"last_seen_at" format:"date-time"`
-	NextAction string                        `json:"next_action"`
-	JSON       instanceItemGetResponseJSON   `json:"-"`
+	ID          float64                           `json:"id,required"`
+	Checksum    string                            `json:"checksum,required"`
+	ChunksCount int64                             `json:"chunks_count,required,nullable"`
+	CreatedAt   time.Time                         `json:"created_at,required" format:"date-time"`
+	FileSize    float64                           `json:"file_size,required,nullable"`
+	Key         string                            `json:"key,required"`
+	LastSeenAt  time.Time                         `json:"last_seen_at,required" format:"date-time"`
+	Namespace   string                            `json:"namespace,required"`
+	NextAction  InstanceItemGetResponseNextAction `json:"next_action,required,nullable"`
+	Status      InstanceItemGetResponseStatus     `json:"status,required"`
+	Error       string                            `json:"error"`
+	PublicID    string                            `json:"public_id"`
+	JSON        instanceItemGetResponseJSON       `json:"-"`
 }
 
 // instanceItemGetResponseJSON contains the JSON metadata for the struct
 // [InstanceItemGetResponse]
 type instanceItemGetResponseJSON struct {
 	ID          apijson.Field
+	Checksum    apijson.Field
+	ChunksCount apijson.Field
+	CreatedAt   apijson.Field
+	FileSize    apijson.Field
 	Key         apijson.Field
+	LastSeenAt  apijson.Field
+	Namespace   apijson.Field
+	NextAction  apijson.Field
 	Status      apijson.Field
 	Error       apijson.Field
-	LastSeenAt  apijson.Field
-	NextAction  apijson.Field
+	PublicID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -172,6 +211,21 @@ func (r *InstanceItemGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceItemGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceItemGetResponseNextAction string
+
+const (
+	InstanceItemGetResponseNextActionIndex  InstanceItemGetResponseNextAction = "INDEX"
+	InstanceItemGetResponseNextActionDelete InstanceItemGetResponseNextAction = "DELETE"
+)
+
+func (r InstanceItemGetResponseNextAction) IsKnown() bool {
+	switch r {
+	case InstanceItemGetResponseNextActionIndex, InstanceItemGetResponseNextActionDelete:
+		return true
+	}
+	return false
 }
 
 type InstanceItemGetResponseStatus string

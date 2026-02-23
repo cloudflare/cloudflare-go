@@ -237,6 +237,7 @@ type InstanceNewResponse struct {
 	PublicEndpointParams InstanceNewResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                    `json:"reranking"`
 	RerankingModel       InstanceNewResponseRerankingModel       `json:"reranking_model"`
+	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options,nullable"`
 	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                    `json:"rewrite_query"`
 	ScoreThreshold       float64                                 `json:"score_threshold"`
@@ -276,6 +277,7 @@ type instanceNewResponseJSON struct {
 	PublicEndpointParams apijson.Field
 	Reranking            apijson.Field
 	RerankingModel       apijson.Field
+	RetrievalOptions     apijson.Field
 	RewriteModel         apijson.Field
 	RewriteQuery         apijson.Field
 	ScoreThreshold       apijson.Field
@@ -620,6 +622,48 @@ func (r InstanceNewResponseRerankingModel) IsKnown() bool {
 	return false
 }
 
+type InstanceNewResponseRetrievalOptions struct {
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode InstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
+	JSON             instanceNewResponseRetrievalOptionsJSON             `json:"-"`
+}
+
+// instanceNewResponseRetrievalOptionsJSON contains the JSON metadata for the
+// struct [InstanceNewResponseRetrievalOptions]
+type instanceNewResponseRetrievalOptionsJSON struct {
+	KeywordMatchMode apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseRetrievalOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseRetrievalOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceNewResponseRetrievalOptionsKeywordMatchMode string
+
+const (
+	InstanceNewResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceNewResponseRetrievalOptionsKeywordMatchMode = "exact_match"
+	InstanceNewResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceNewResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceNewResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceNewResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+		return true
+	}
+	return false
+}
+
 type InstanceNewResponseRewriteModel string
 
 const (
@@ -819,6 +863,7 @@ type InstanceUpdateResponse struct {
 	PublicEndpointParams InstanceUpdateResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
 	RerankingModel       InstanceUpdateResponseRerankingModel       `json:"reranking_model"`
+	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options,nullable"`
 	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
@@ -858,6 +903,7 @@ type instanceUpdateResponseJSON struct {
 	PublicEndpointParams apijson.Field
 	Reranking            apijson.Field
 	RerankingModel       apijson.Field
+	RetrievalOptions     apijson.Field
 	RewriteModel         apijson.Field
 	RewriteQuery         apijson.Field
 	ScoreThreshold       apijson.Field
@@ -1203,6 +1249,48 @@ func (r InstanceUpdateResponseRerankingModel) IsKnown() bool {
 	return false
 }
 
+type InstanceUpdateResponseRetrievalOptions struct {
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode InstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
+	JSON             instanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
+}
+
+// instanceUpdateResponseRetrievalOptionsJSON contains the JSON metadata for the
+// struct [InstanceUpdateResponseRetrievalOptions]
+type instanceUpdateResponseRetrievalOptionsJSON struct {
+	KeywordMatchMode apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseRetrievalOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseRetrievalOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
+
+const (
+	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "exact_match"
+	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceUpdateResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceUpdateResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+		return true
+	}
+	return false
+}
+
 type InstanceUpdateResponseRewriteModel string
 
 const (
@@ -1404,6 +1492,7 @@ type InstanceListResponse struct {
 	PublicEndpointParams InstanceListResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
 	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model"`
+	RetrievalOptions     InstanceListResponseRetrievalOptions     `json:"retrieval_options,nullable"`
 	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
@@ -1443,6 +1532,7 @@ type instanceListResponseJSON struct {
 	PublicEndpointParams apijson.Field
 	Reranking            apijson.Field
 	RerankingModel       apijson.Field
+	RetrievalOptions     apijson.Field
 	RewriteModel         apijson.Field
 	RewriteQuery         apijson.Field
 	ScoreThreshold       apijson.Field
@@ -1787,6 +1877,48 @@ func (r InstanceListResponseRerankingModel) IsKnown() bool {
 	return false
 }
 
+type InstanceListResponseRetrievalOptions struct {
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode InstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
+	JSON             instanceListResponseRetrievalOptionsJSON             `json:"-"`
+}
+
+// instanceListResponseRetrievalOptionsJSON contains the JSON metadata for the
+// struct [InstanceListResponseRetrievalOptions]
+type instanceListResponseRetrievalOptionsJSON struct {
+	KeywordMatchMode apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceListResponseRetrievalOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseRetrievalOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceListResponseRetrievalOptionsKeywordMatchMode string
+
+const (
+	InstanceListResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceListResponseRetrievalOptionsKeywordMatchMode = "exact_match"
+	InstanceListResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceListResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceListResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceListResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceListResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+		return true
+	}
+	return false
+}
+
 type InstanceListResponseRewriteModel string
 
 const (
@@ -1986,6 +2118,7 @@ type InstanceDeleteResponse struct {
 	PublicEndpointParams InstanceDeleteResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
 	RerankingModel       InstanceDeleteResponseRerankingModel       `json:"reranking_model"`
+	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options,nullable"`
 	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
@@ -2025,6 +2158,7 @@ type instanceDeleteResponseJSON struct {
 	PublicEndpointParams apijson.Field
 	Reranking            apijson.Field
 	RerankingModel       apijson.Field
+	RetrievalOptions     apijson.Field
 	RewriteModel         apijson.Field
 	RewriteQuery         apijson.Field
 	ScoreThreshold       apijson.Field
@@ -2365,6 +2499,48 @@ const (
 func (r InstanceDeleteResponseRerankingModel) IsKnown() bool {
 	switch r {
 	case InstanceDeleteResponseRerankingModelCfBaaiBgeRerankerBase, InstanceDeleteResponseRerankingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceDeleteResponseRetrievalOptions struct {
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode InstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
+	JSON             instanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
+}
+
+// instanceDeleteResponseRetrievalOptionsJSON contains the JSON metadata for the
+// struct [InstanceDeleteResponseRetrievalOptions]
+type instanceDeleteResponseRetrievalOptionsJSON struct {
+	KeywordMatchMode apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseRetrievalOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseRetrievalOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
+
+const (
+	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "exact_match"
+	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceDeleteResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceDeleteResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
 		return true
 	}
 	return false
@@ -2751,6 +2927,7 @@ type InstanceReadResponse struct {
 	PublicEndpointParams InstanceReadResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
 	RerankingModel       InstanceReadResponseRerankingModel       `json:"reranking_model"`
+	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options,nullable"`
 	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
@@ -2790,6 +2967,7 @@ type instanceReadResponseJSON struct {
 	PublicEndpointParams apijson.Field
 	Reranking            apijson.Field
 	RerankingModel       apijson.Field
+	RetrievalOptions     apijson.Field
 	RewriteModel         apijson.Field
 	RewriteQuery         apijson.Field
 	ScoreThreshold       apijson.Field
@@ -3134,6 +3312,48 @@ func (r InstanceReadResponseRerankingModel) IsKnown() bool {
 	return false
 }
 
+type InstanceReadResponseRetrievalOptions struct {
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode InstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
+	JSON             instanceReadResponseRetrievalOptionsJSON             `json:"-"`
+}
+
+// instanceReadResponseRetrievalOptionsJSON contains the JSON metadata for the
+// struct [InstanceReadResponseRetrievalOptions]
+type instanceReadResponseRetrievalOptionsJSON struct {
+	KeywordMatchMode apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseRetrievalOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseRetrievalOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceReadResponseRetrievalOptionsKeywordMatchMode string
+
+const (
+	InstanceReadResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceReadResponseRetrievalOptionsKeywordMatchMode = "exact_match"
+	InstanceReadResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceReadResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceReadResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceReadResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+		return true
+	}
+	return false
+}
+
 type InstanceReadResponseRewriteModel string
 
 const (
@@ -3467,6 +3687,7 @@ type InstanceNewParams struct {
 	PublicEndpointParams param.Field[InstanceNewParamsPublicEndpointParams] `json:"public_endpoint_params"`
 	Reranking            param.Field[bool]                                  `json:"reranking"`
 	RerankingModel       param.Field[InstanceNewParamsRerankingModel]       `json:"reranking_model"`
+	RetrievalOptions     param.Field[InstanceNewParamsRetrievalOptions]     `json:"retrieval_options"`
 	RewriteModel         param.Field[InstanceNewParamsRewriteModel]         `json:"rewrite_model"`
 	RewriteQuery         param.Field[bool]                                  `json:"rewrite_query"`
 	ScoreThreshold       param.Field[float64]                               `json:"score_threshold"`
@@ -3685,6 +3906,35 @@ func (r InstanceNewParamsRerankingModel) IsKnown() bool {
 	return false
 }
 
+type InstanceNewParamsRetrievalOptions struct {
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode param.Field[InstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
+}
+
+func (r InstanceNewParamsRetrievalOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceNewParamsRetrievalOptionsKeywordMatchMode string
+
+const (
+	InstanceNewParamsRetrievalOptionsKeywordMatchModeExactMatch InstanceNewParamsRetrievalOptionsKeywordMatchMode = "exact_match"
+	InstanceNewParamsRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceNewParamsRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceNewParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsRetrievalOptionsKeywordMatchModeExactMatch, InstanceNewParamsRetrievalOptionsKeywordMatchModeFuzzyMatch:
+		return true
+	}
+	return false
+}
+
 type InstanceNewParamsRewriteModel string
 
 const (
@@ -3834,6 +4084,7 @@ type InstanceUpdateParams struct {
 	PublicEndpointParams           param.Field[InstanceUpdateParamsPublicEndpointParams] `json:"public_endpoint_params"`
 	Reranking                      param.Field[bool]                                     `json:"reranking"`
 	RerankingModel                 param.Field[InstanceUpdateParamsRerankingModel]       `json:"reranking_model"`
+	RetrievalOptions               param.Field[InstanceUpdateParamsRetrievalOptions]     `json:"retrieval_options"`
 	RewriteModel                   param.Field[InstanceUpdateParamsRewriteModel]         `json:"rewrite_model"`
 	RewriteQuery                   param.Field[bool]                                     `json:"rewrite_query"`
 	ScoreThreshold                 param.Field[float64]                                  `json:"score_threshold"`
@@ -4054,6 +4305,35 @@ const (
 func (r InstanceUpdateParamsRerankingModel) IsKnown() bool {
 	switch r {
 	case InstanceUpdateParamsRerankingModelCfBaaiBgeRerankerBase, InstanceUpdateParamsRerankingModelEmpty:
+		return true
+	}
+	return false
+}
+
+type InstanceUpdateParamsRetrievalOptions struct {
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode param.Field[InstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
+}
+
+func (r InstanceUpdateParamsRetrievalOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
+
+const (
+	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeExactMatch InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "exact_match"
+	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceUpdateParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsRetrievalOptionsKeywordMatchModeExactMatch, InstanceUpdateParamsRetrievalOptionsKeywordMatchModeFuzzyMatch:
 		return true
 	}
 	return false
@@ -4400,13 +4680,17 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRerankingModel) IsKnown() bo
 }
 
 type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
-	ContextExpansion param.Field[int64]                                                              `json:"context_expansion"`
-	Filters          param.Field[map[string]interface{}]                                             `json:"filters"`
-	FusionMethod     param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod]  `json:"fusion_method"`
-	MatchThreshold   param.Field[float64]                                                            `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                              `json:"max_num_results"`
-	RetrievalType    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                               `json:"return_on_failure"`
+	ContextExpansion param.Field[int64]                                                             `json:"context_expansion"`
+	Filters          param.Field[map[string]interface{}]                                            `json:"filters"`
+	FusionMethod     param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
+	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
+	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
+	RetrievalType    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
+	ReturnOnFailure  param.Field[bool]                                                                  `json:"return_on_failure"`
 }
 
 func (r InstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -4423,6 +4707,24 @@ const (
 func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethodMax, InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "exact_match"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch, InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch:
 		return true
 	}
 	return false
@@ -4637,13 +4939,17 @@ func (r InstanceSearchParamsAISearchOptionsRerankingModel) IsKnown() bool {
 }
 
 type InstanceSearchParamsAISearchOptionsRetrieval struct {
-	ContextExpansion param.Field[int64]                                                     `json:"context_expansion"`
-	Filters          param.Field[map[string]interface{}]                                    `json:"filters"`
-	FusionMethod     param.Field[InstanceSearchParamsAISearchOptionsRetrievalFusionMethod]  `json:"fusion_method"`
-	MatchThreshold   param.Field[float64]                                                   `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                     `json:"max_num_results"`
-	RetrievalType    param.Field[InstanceSearchParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                      `json:"return_on_failure"`
+	ContextExpansion param.Field[int64]                                                    `json:"context_expansion"`
+	Filters          param.Field[map[string]interface{}]                                   `json:"filters"`
+	FusionMethod     param.Field[InstanceSearchParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
+	// Controls how keyword search terms are matched. exact_match requires all terms to
+	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+	// exact_match.
+	KeywordMatchMode param.Field[InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
+	MatchThreshold   param.Field[float64]                                                      `json:"match_threshold"`
+	MaxNumResults    param.Field[int64]                                                        `json:"max_num_results"`
+	RetrievalType    param.Field[InstanceSearchParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
+	ReturnOnFailure  param.Field[bool]                                                         `json:"return_on_failure"`
 }
 
 func (r InstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -4660,6 +4966,24 @@ const (
 func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceSearchParamsAISearchOptionsRetrievalFusionMethodMax, InstanceSearchParamsAISearchOptionsRetrievalFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls how keyword search terms are matched. exact_match requires all terms to
+// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
+// exact_match.
+type InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
+
+const (
+	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "exact_match"
+	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "fuzzy_match"
+)
+
+func (r InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch, InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch:
 		return true
 	}
 	return false
