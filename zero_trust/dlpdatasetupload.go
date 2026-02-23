@@ -11,7 +11,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"slices"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -40,7 +39,7 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 }
 
 // Prepare to upload a new version of a dataset
-func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *DLPDatasetUploadNewResponse, err error) {
+func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
 	var env DLPDatasetUploadNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -64,7 +63,7 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 // only be created in the Cloudflare dashboard. For other clients, this operation
 // can only be used for non-secret Custom Word Lists. The body must be a UTF-8
 // encoded, newline (NL or CRNL) separated list of words to be matched.
-func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, dataset io.Reader, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDatasetUploadEditResponse, err error) {
+func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, dataset io.Reader, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env DLPDatasetUploadEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", dataset)}, opts...)
@@ -85,19 +84,18 @@ func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, ve
 	return
 }
 
-type DLPDatasetUploadNewResponse struct {
-	EncodingVersion int64                               `json:"encoding_version,required"`
-	MaxCells        int64                               `json:"max_cells,required"`
-	Version         int64                               `json:"version,required"`
-	CaseSensitive   bool                                `json:"case_sensitive"`
-	Columns         []DLPDatasetUploadNewResponseColumn `json:"columns"`
-	Secret          string                              `json:"secret" format:"password"`
-	JSON            dlpDatasetUploadNewResponseJSON     `json:"-"`
+type NewVersion struct {
+	EncodingVersion int64              `json:"encoding_version,required"`
+	MaxCells        int64              `json:"max_cells,required"`
+	Version         int64              `json:"version,required"`
+	CaseSensitive   bool               `json:"case_sensitive"`
+	Columns         []NewVersionColumn `json:"columns"`
+	Secret          string             `json:"secret" format:"password"`
+	JSON            newVersionJSON     `json:"-"`
 }
 
-// dlpDatasetUploadNewResponseJSON contains the JSON metadata for the struct
-// [DLPDatasetUploadNewResponse]
-type dlpDatasetUploadNewResponseJSON struct {
+// newVersionJSON contains the JSON metadata for the struct [NewVersion]
+type newVersionJSON struct {
 	EncodingVersion apijson.Field
 	MaxCells        apijson.Field
 	Version         apijson.Field
@@ -108,25 +106,25 @@ type dlpDatasetUploadNewResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DLPDatasetUploadNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *NewVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpDatasetUploadNewResponseJSON) RawJSON() string {
+func (r newVersionJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUploadNewResponseColumn struct {
-	EntryID      string                                         `json:"entry_id,required" format:"uuid"`
-	HeaderName   string                                         `json:"header_name,required"`
-	NumCells     int64                                          `json:"num_cells,required"`
-	UploadStatus DLPDatasetUploadNewResponseColumnsUploadStatus `json:"upload_status,required"`
-	JSON         dlpDatasetUploadNewResponseColumnJSON          `json:"-"`
+type NewVersionColumn struct {
+	EntryID      string                        `json:"entry_id,required" format:"uuid"`
+	HeaderName   string                        `json:"header_name,required"`
+	NumCells     int64                         `json:"num_cells,required"`
+	UploadStatus NewVersionColumnsUploadStatus `json:"upload_status,required"`
+	JSON         newVersionColumnJSON          `json:"-"`
 }
 
-// dlpDatasetUploadNewResponseColumnJSON contains the JSON metadata for the struct
-// [DLPDatasetUploadNewResponseColumn]
-type dlpDatasetUploadNewResponseColumnJSON struct {
+// newVersionColumnJSON contains the JSON metadata for the struct
+// [NewVersionColumn]
+type newVersionColumnJSON struct {
 	EntryID      apijson.Field
 	HeaderName   apijson.Field
 	NumCells     apijson.Field
@@ -135,184 +133,28 @@ type dlpDatasetUploadNewResponseColumnJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DLPDatasetUploadNewResponseColumn) UnmarshalJSON(data []byte) (err error) {
+func (r *NewVersionColumn) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpDatasetUploadNewResponseColumnJSON) RawJSON() string {
+func (r newVersionColumnJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUploadNewResponseColumnsUploadStatus string
+type NewVersionColumnsUploadStatus string
 
 const (
-	DLPDatasetUploadNewResponseColumnsUploadStatusEmpty      DLPDatasetUploadNewResponseColumnsUploadStatus = "empty"
-	DLPDatasetUploadNewResponseColumnsUploadStatusUploading  DLPDatasetUploadNewResponseColumnsUploadStatus = "uploading"
-	DLPDatasetUploadNewResponseColumnsUploadStatusPending    DLPDatasetUploadNewResponseColumnsUploadStatus = "pending"
-	DLPDatasetUploadNewResponseColumnsUploadStatusProcessing DLPDatasetUploadNewResponseColumnsUploadStatus = "processing"
-	DLPDatasetUploadNewResponseColumnsUploadStatusFailed     DLPDatasetUploadNewResponseColumnsUploadStatus = "failed"
-	DLPDatasetUploadNewResponseColumnsUploadStatusComplete   DLPDatasetUploadNewResponseColumnsUploadStatus = "complete"
+	NewVersionColumnsUploadStatusEmpty      NewVersionColumnsUploadStatus = "empty"
+	NewVersionColumnsUploadStatusUploading  NewVersionColumnsUploadStatus = "uploading"
+	NewVersionColumnsUploadStatusPending    NewVersionColumnsUploadStatus = "pending"
+	NewVersionColumnsUploadStatusProcessing NewVersionColumnsUploadStatus = "processing"
+	NewVersionColumnsUploadStatusFailed     NewVersionColumnsUploadStatus = "failed"
+	NewVersionColumnsUploadStatusComplete   NewVersionColumnsUploadStatus = "complete"
 )
 
-func (r DLPDatasetUploadNewResponseColumnsUploadStatus) IsKnown() bool {
+func (r NewVersionColumnsUploadStatus) IsKnown() bool {
 	switch r {
-	case DLPDatasetUploadNewResponseColumnsUploadStatusEmpty, DLPDatasetUploadNewResponseColumnsUploadStatusUploading, DLPDatasetUploadNewResponseColumnsUploadStatusPending, DLPDatasetUploadNewResponseColumnsUploadStatusProcessing, DLPDatasetUploadNewResponseColumnsUploadStatusFailed, DLPDatasetUploadNewResponseColumnsUploadStatusComplete:
-		return true
-	}
-	return false
-}
-
-type DLPDatasetUploadEditResponse struct {
-	ID              string                               `json:"id,required" format:"uuid"`
-	Columns         []DLPDatasetUploadEditResponseColumn `json:"columns,required"`
-	CreatedAt       time.Time                            `json:"created_at,required" format:"date-time"`
-	EncodingVersion int64                                `json:"encoding_version,required"`
-	Name            string                               `json:"name,required"`
-	NumCells        int64                                `json:"num_cells,required"`
-	Secret          bool                                 `json:"secret,required"`
-	Status          DLPDatasetUploadEditResponseStatus   `json:"status,required"`
-	// Stores when the dataset was last updated.
-	//
-	// This includes name or description changes as well as uploads.
-	UpdatedAt     time.Time                            `json:"updated_at,required" format:"date-time"`
-	Uploads       []DLPDatasetUploadEditResponseUpload `json:"uploads,required"`
-	CaseSensitive bool                                 `json:"case_sensitive"`
-	// The description of the dataset.
-	Description string                           `json:"description,nullable"`
-	JSON        dlpDatasetUploadEditResponseJSON `json:"-"`
-}
-
-// dlpDatasetUploadEditResponseJSON contains the JSON metadata for the struct
-// [DLPDatasetUploadEditResponse]
-type dlpDatasetUploadEditResponseJSON struct {
-	ID              apijson.Field
-	Columns         apijson.Field
-	CreatedAt       apijson.Field
-	EncodingVersion apijson.Field
-	Name            apijson.Field
-	NumCells        apijson.Field
-	Secret          apijson.Field
-	Status          apijson.Field
-	UpdatedAt       apijson.Field
-	Uploads         apijson.Field
-	CaseSensitive   apijson.Field
-	Description     apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DLPDatasetUploadEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUploadEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPDatasetUploadEditResponseColumn struct {
-	EntryID      string                                          `json:"entry_id,required" format:"uuid"`
-	HeaderName   string                                          `json:"header_name,required"`
-	NumCells     int64                                           `json:"num_cells,required"`
-	UploadStatus DLPDatasetUploadEditResponseColumnsUploadStatus `json:"upload_status,required"`
-	JSON         dlpDatasetUploadEditResponseColumnJSON          `json:"-"`
-}
-
-// dlpDatasetUploadEditResponseColumnJSON contains the JSON metadata for the struct
-// [DLPDatasetUploadEditResponseColumn]
-type dlpDatasetUploadEditResponseColumnJSON struct {
-	EntryID      apijson.Field
-	HeaderName   apijson.Field
-	NumCells     apijson.Field
-	UploadStatus apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *DLPDatasetUploadEditResponseColumn) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUploadEditResponseColumnJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPDatasetUploadEditResponseColumnsUploadStatus string
-
-const (
-	DLPDatasetUploadEditResponseColumnsUploadStatusEmpty      DLPDatasetUploadEditResponseColumnsUploadStatus = "empty"
-	DLPDatasetUploadEditResponseColumnsUploadStatusUploading  DLPDatasetUploadEditResponseColumnsUploadStatus = "uploading"
-	DLPDatasetUploadEditResponseColumnsUploadStatusPending    DLPDatasetUploadEditResponseColumnsUploadStatus = "pending"
-	DLPDatasetUploadEditResponseColumnsUploadStatusProcessing DLPDatasetUploadEditResponseColumnsUploadStatus = "processing"
-	DLPDatasetUploadEditResponseColumnsUploadStatusFailed     DLPDatasetUploadEditResponseColumnsUploadStatus = "failed"
-	DLPDatasetUploadEditResponseColumnsUploadStatusComplete   DLPDatasetUploadEditResponseColumnsUploadStatus = "complete"
-)
-
-func (r DLPDatasetUploadEditResponseColumnsUploadStatus) IsKnown() bool {
-	switch r {
-	case DLPDatasetUploadEditResponseColumnsUploadStatusEmpty, DLPDatasetUploadEditResponseColumnsUploadStatusUploading, DLPDatasetUploadEditResponseColumnsUploadStatusPending, DLPDatasetUploadEditResponseColumnsUploadStatusProcessing, DLPDatasetUploadEditResponseColumnsUploadStatusFailed, DLPDatasetUploadEditResponseColumnsUploadStatusComplete:
-		return true
-	}
-	return false
-}
-
-type DLPDatasetUploadEditResponseStatus string
-
-const (
-	DLPDatasetUploadEditResponseStatusEmpty      DLPDatasetUploadEditResponseStatus = "empty"
-	DLPDatasetUploadEditResponseStatusUploading  DLPDatasetUploadEditResponseStatus = "uploading"
-	DLPDatasetUploadEditResponseStatusPending    DLPDatasetUploadEditResponseStatus = "pending"
-	DLPDatasetUploadEditResponseStatusProcessing DLPDatasetUploadEditResponseStatus = "processing"
-	DLPDatasetUploadEditResponseStatusFailed     DLPDatasetUploadEditResponseStatus = "failed"
-	DLPDatasetUploadEditResponseStatusComplete   DLPDatasetUploadEditResponseStatus = "complete"
-)
-
-func (r DLPDatasetUploadEditResponseStatus) IsKnown() bool {
-	switch r {
-	case DLPDatasetUploadEditResponseStatusEmpty, DLPDatasetUploadEditResponseStatusUploading, DLPDatasetUploadEditResponseStatusPending, DLPDatasetUploadEditResponseStatusProcessing, DLPDatasetUploadEditResponseStatusFailed, DLPDatasetUploadEditResponseStatusComplete:
-		return true
-	}
-	return false
-}
-
-type DLPDatasetUploadEditResponseUpload struct {
-	NumCells int64                                     `json:"num_cells,required"`
-	Status   DLPDatasetUploadEditResponseUploadsStatus `json:"status,required"`
-	Version  int64                                     `json:"version,required"`
-	JSON     dlpDatasetUploadEditResponseUploadJSON    `json:"-"`
-}
-
-// dlpDatasetUploadEditResponseUploadJSON contains the JSON metadata for the struct
-// [DLPDatasetUploadEditResponseUpload]
-type dlpDatasetUploadEditResponseUploadJSON struct {
-	NumCells    apijson.Field
-	Status      apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPDatasetUploadEditResponseUpload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUploadEditResponseUploadJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPDatasetUploadEditResponseUploadsStatus string
-
-const (
-	DLPDatasetUploadEditResponseUploadsStatusEmpty      DLPDatasetUploadEditResponseUploadsStatus = "empty"
-	DLPDatasetUploadEditResponseUploadsStatusUploading  DLPDatasetUploadEditResponseUploadsStatus = "uploading"
-	DLPDatasetUploadEditResponseUploadsStatusPending    DLPDatasetUploadEditResponseUploadsStatus = "pending"
-	DLPDatasetUploadEditResponseUploadsStatusProcessing DLPDatasetUploadEditResponseUploadsStatus = "processing"
-	DLPDatasetUploadEditResponseUploadsStatusFailed     DLPDatasetUploadEditResponseUploadsStatus = "failed"
-	DLPDatasetUploadEditResponseUploadsStatusComplete   DLPDatasetUploadEditResponseUploadsStatus = "complete"
-)
-
-func (r DLPDatasetUploadEditResponseUploadsStatus) IsKnown() bool {
-	switch r {
-	case DLPDatasetUploadEditResponseUploadsStatusEmpty, DLPDatasetUploadEditResponseUploadsStatusUploading, DLPDatasetUploadEditResponseUploadsStatusPending, DLPDatasetUploadEditResponseUploadsStatusProcessing, DLPDatasetUploadEditResponseUploadsStatusFailed, DLPDatasetUploadEditResponseUploadsStatusComplete:
+	case NewVersionColumnsUploadStatusEmpty, NewVersionColumnsUploadStatusUploading, NewVersionColumnsUploadStatusPending, NewVersionColumnsUploadStatusProcessing, NewVersionColumnsUploadStatusFailed, NewVersionColumnsUploadStatusComplete:
 		return true
 	}
 	return false
@@ -327,7 +169,7 @@ type DLPDatasetUploadNewResponseEnvelope struct {
 	Messages []DLPDatasetUploadNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DLPDatasetUploadNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  DLPDatasetUploadNewResponse                `json:"result"`
+	Result  NewVersion                                 `json:"result"`
 	JSON    dlpDatasetUploadNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -485,7 +327,7 @@ type DLPDatasetUploadEditResponseEnvelope struct {
 	Messages []DLPDatasetUploadEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DLPDatasetUploadEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  DLPDatasetUploadEditResponse                `json:"result"`
+	Result  Dataset                                     `json:"result"`
 	JSON    dlpDatasetUploadEditResponseEnvelopeJSON    `json:"-"`
 }
 
