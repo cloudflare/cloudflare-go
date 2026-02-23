@@ -382,7 +382,7 @@ type CustomCertificateNewParams struct {
 	// the EU region. If there are too few data centers satisfying the policy, it will
 	// be rejected. Note: The API accepts this field as either "policy" or
 	// "policy_restrictions" in requests. Responses return this field as
-	// "policy_restrictions". example: "(country: US) or (region: EU)"
+	// "policy_restrictions".
 	Policy param.Field[string] `json:"policy"`
 	// The type 'legacy_custom' enables support for legacy clients which do not include
 	// SNI in the TLS handshake.
@@ -796,7 +796,7 @@ type CustomCertificateEditParams struct {
 	// the EU region. If there are too few data centers satisfying the policy, it will
 	// be rejected. Note: The API accepts this field as either "policy" or
 	// "policy_restrictions" in requests. Responses return this field as
-	// "policy_restrictions". example: "(country: US) or (region: EU)"
+	// "policy_restrictions".
 	Policy param.Field[string] `json:"policy"`
 	// The zone's private key.
 	PrivateKey param.Field[string] `json:"private_key"`
