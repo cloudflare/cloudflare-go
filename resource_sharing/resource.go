@@ -39,7 +39,7 @@ func NewResourceService(opts ...option.RequestOption) (r *ResourceService) {
 	return
 }
 
-// Create a new share resource
+// Adds a resource to an existing share, making it available to share recipients.
 func (r *ResourceService) New(ctx context.Context, shareID string, params ResourceNewParams, opts ...option.RequestOption) (res *ResourceNewResponse, err error) {
 	var env ResourceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

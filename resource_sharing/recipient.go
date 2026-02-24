@@ -39,7 +39,8 @@ func NewRecipientService(opts ...option.RequestOption) (r *RecipientService) {
 	return
 }
 
-// Create a new share recipient
+// Adds a recipient to a resource share, granting them access to the shared
+// resources.
 func (r *RecipientService) New(ctx context.Context, shareID string, params RecipientNewParams, opts ...option.RequestOption) (res *RecipientNewResponse, err error) {
 	var env RecipientNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

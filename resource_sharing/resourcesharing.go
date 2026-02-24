@@ -43,7 +43,8 @@ func NewResourceSharingService(opts ...option.RequestOption) (r *ResourceSharing
 	return
 }
 
-// Create a new share
+// Creates a new resource share for sharing Cloudflare resources with other
+// accounts or organizations.
 func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharingNewParams, opts ...option.RequestOption) (res *ResourceSharingNewResponse, err error) {
 	var env ResourceSharingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
