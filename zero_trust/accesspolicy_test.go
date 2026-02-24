@@ -46,6 +46,12 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 			EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 		}}),
 		ApprovalRequired: cloudflare.F(true),
+		ConnectionRules: cloudflare.F(zero_trust.AccessPolicyNewParamsConnectionRules{
+			Rdp: cloudflare.F(zero_trust.AccessPolicyNewParamsConnectionRulesRdp{
+				AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat{zero_trust.AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText}),
+				AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat{zero_trust.AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText}),
+			}),
+		}),
 		Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
 			Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
 				ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
@@ -110,6 +116,12 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 			}}),
 			ApprovalRequired: cloudflare.F(true),
+			ConnectionRules: cloudflare.F(zero_trust.AccessPolicyUpdateParamsConnectionRules{
+				Rdp: cloudflare.F(zero_trust.AccessPolicyUpdateParamsConnectionRulesRdp{
+					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat{zero_trust.AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText}),
+					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat{zero_trust.AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText}),
+				}),
+			}),
 			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
 				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
 					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),

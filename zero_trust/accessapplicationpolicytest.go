@@ -213,6 +213,9 @@ type AccessApplicationPolicyTestNewParamsPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// The rules that define how users may connect to targets secured by your
+	// application.
+	ConnectionRules param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -240,6 +243,59 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObject) MarshalJSON() (data 
 }
 
 func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion() {
+}
+
+// The rules that define how users may connect to targets secured by your
+// application.
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules struct {
+	// The RDP-specific rules that define clipboard behavior for RDP connections.
+	Rdp param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp] `json:"rdp"`
+}
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp struct {
+	// Clipboard formats allowed when copying from local machine to remote RDP session.
+	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
+	// Clipboard formats allowed when copying from remote RDP session to local machine.
+	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
+}
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Clipboard format for RDP connections.
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+
+const (
+	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+)
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+		return true
+	}
+	return false
+}
+
+// Clipboard format for RDP connections.
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+
+const (
+	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+)
+
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+		return true
+	}
+	return false
 }
 
 // Configures multi-factor authentication (MFA) settings.

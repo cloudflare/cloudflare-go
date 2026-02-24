@@ -47,6 +47,12 @@ func TestAccessApplicationPolicyTestNewWithOptionalParams(t *testing.T) {
 				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 			}}),
 			ApprovalRequired: cloudflare.F(true),
+			ConnectionRules: cloudflare.F(zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules{
+				Rdp: cloudflare.F(zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp{
+					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat{zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText}),
+					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat{zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText}),
+				}),
+			}),
 			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
 				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
 					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),

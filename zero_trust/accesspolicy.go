@@ -196,8 +196,11 @@ type AccessPolicyNewResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool      `json:"approval_required"`
-	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	ApprovalRequired bool `json:"approval_required"`
+	// The rules that define how users may connect to targets secured by your
+	// application.
+	ConnectionRules AccessPolicyNewResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                              `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -238,6 +241,7 @@ type accessPolicyNewResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
+	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -261,6 +265,86 @@ func (r *AccessPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// The rules that define how users may connect to targets secured by your
+// application.
+type AccessPolicyNewResponseConnectionRules struct {
+	// The RDP-specific rules that define clipboard behavior for RDP connections.
+	Rdp  AccessPolicyNewResponseConnectionRulesRdp  `json:"rdp"`
+	JSON accessPolicyNewResponseConnectionRulesJSON `json:"-"`
+}
+
+// accessPolicyNewResponseConnectionRulesJSON contains the JSON metadata for the
+// struct [AccessPolicyNewResponseConnectionRules]
+type accessPolicyNewResponseConnectionRulesJSON struct {
+	Rdp         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessPolicyNewResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyNewResponseConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessPolicyNewResponseConnectionRulesRdp struct {
+	// Clipboard formats allowed when copying from local machine to remote RDP session.
+	AllowedClipboardLocalToRemoteFormats []AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	// Clipboard formats allowed when copying from remote RDP session to local machine.
+	AllowedClipboardRemoteToLocalFormats []AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessPolicyNewResponseConnectionRulesRdpJSON                                  `json:"-"`
+}
+
+// accessPolicyNewResponseConnectionRulesRdpJSON contains the JSON metadata for the
+// struct [AccessPolicyNewResponseConnectionRulesRdp]
+type accessPolicyNewResponseConnectionRulesRdpJSON struct {
+	AllowedClipboardLocalToRemoteFormats apijson.Field
+	AllowedClipboardRemoteToLocalFormats apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
+}
+
+func (r *AccessPolicyNewResponseConnectionRulesRdp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyNewResponseConnectionRulesRdpJSON) RawJSON() string {
+	return r.raw
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+
+const (
+	AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+)
+
+func (r AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+		return true
+	}
+	return false
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+
+const (
+	AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+)
+
+func (r AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyNewResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+		return true
+	}
+	return false
 }
 
 // Configures multi-factor authentication (MFA) settings.
@@ -333,8 +417,11 @@ type AccessPolicyUpdateResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool      `json:"approval_required"`
-	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	ApprovalRequired bool `json:"approval_required"`
+	// The rules that define how users may connect to targets secured by your
+	// application.
+	ConnectionRules AccessPolicyUpdateResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                 `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -375,6 +462,7 @@ type accessPolicyUpdateResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
+	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -398,6 +486,86 @@ func (r *AccessPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessPolicyUpdateResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// The rules that define how users may connect to targets secured by your
+// application.
+type AccessPolicyUpdateResponseConnectionRules struct {
+	// The RDP-specific rules that define clipboard behavior for RDP connections.
+	Rdp  AccessPolicyUpdateResponseConnectionRulesRdp  `json:"rdp"`
+	JSON accessPolicyUpdateResponseConnectionRulesJSON `json:"-"`
+}
+
+// accessPolicyUpdateResponseConnectionRulesJSON contains the JSON metadata for the
+// struct [AccessPolicyUpdateResponseConnectionRules]
+type accessPolicyUpdateResponseConnectionRulesJSON struct {
+	Rdp         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessPolicyUpdateResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyUpdateResponseConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessPolicyUpdateResponseConnectionRulesRdp struct {
+	// Clipboard formats allowed when copying from local machine to remote RDP session.
+	AllowedClipboardLocalToRemoteFormats []AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	// Clipboard formats allowed when copying from remote RDP session to local machine.
+	AllowedClipboardRemoteToLocalFormats []AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessPolicyUpdateResponseConnectionRulesRdpJSON                                  `json:"-"`
+}
+
+// accessPolicyUpdateResponseConnectionRulesRdpJSON contains the JSON metadata for
+// the struct [AccessPolicyUpdateResponseConnectionRulesRdp]
+type accessPolicyUpdateResponseConnectionRulesRdpJSON struct {
+	AllowedClipboardLocalToRemoteFormats apijson.Field
+	AllowedClipboardRemoteToLocalFormats apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
+}
+
+func (r *AccessPolicyUpdateResponseConnectionRulesRdp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyUpdateResponseConnectionRulesRdpJSON) RawJSON() string {
+	return r.raw
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+
+const (
+	AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+)
+
+func (r AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+		return true
+	}
+	return false
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+
+const (
+	AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+)
+
+func (r AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyUpdateResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+		return true
+	}
+	return false
 }
 
 // Configures multi-factor authentication (MFA) settings.
@@ -470,8 +638,11 @@ type AccessPolicyListResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool      `json:"approval_required"`
-	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	ApprovalRequired bool `json:"approval_required"`
+	// The rules that define how users may connect to targets secured by your
+	// application.
+	ConnectionRules AccessPolicyListResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                               `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -512,6 +683,7 @@ type accessPolicyListResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
+	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -535,6 +707,86 @@ func (r *AccessPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessPolicyListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// The rules that define how users may connect to targets secured by your
+// application.
+type AccessPolicyListResponseConnectionRules struct {
+	// The RDP-specific rules that define clipboard behavior for RDP connections.
+	Rdp  AccessPolicyListResponseConnectionRulesRdp  `json:"rdp"`
+	JSON accessPolicyListResponseConnectionRulesJSON `json:"-"`
+}
+
+// accessPolicyListResponseConnectionRulesJSON contains the JSON metadata for the
+// struct [AccessPolicyListResponseConnectionRules]
+type accessPolicyListResponseConnectionRulesJSON struct {
+	Rdp         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessPolicyListResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyListResponseConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessPolicyListResponseConnectionRulesRdp struct {
+	// Clipboard formats allowed when copying from local machine to remote RDP session.
+	AllowedClipboardLocalToRemoteFormats []AccessPolicyListResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	// Clipboard formats allowed when copying from remote RDP session to local machine.
+	AllowedClipboardRemoteToLocalFormats []AccessPolicyListResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessPolicyListResponseConnectionRulesRdpJSON                                  `json:"-"`
+}
+
+// accessPolicyListResponseConnectionRulesRdpJSON contains the JSON metadata for
+// the struct [AccessPolicyListResponseConnectionRulesRdp]
+type accessPolicyListResponseConnectionRulesRdpJSON struct {
+	AllowedClipboardLocalToRemoteFormats apijson.Field
+	AllowedClipboardRemoteToLocalFormats apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
+}
+
+func (r *AccessPolicyListResponseConnectionRulesRdp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyListResponseConnectionRulesRdpJSON) RawJSON() string {
+	return r.raw
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyListResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+
+const (
+	AccessPolicyListResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessPolicyListResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+)
+
+func (r AccessPolicyListResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyListResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+		return true
+	}
+	return false
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyListResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+
+const (
+	AccessPolicyListResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessPolicyListResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+)
+
+func (r AccessPolicyListResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyListResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+		return true
+	}
+	return false
 }
 
 // Configures multi-factor authentication (MFA) settings.
@@ -629,8 +881,11 @@ type AccessPolicyGetResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool      `json:"approval_required"`
-	CreatedAt        time.Time `json:"created_at" format:"date-time"`
+	ApprovalRequired bool `json:"approval_required"`
+	// The rules that define how users may connect to targets secured by your
+	// application.
+	ConnectionRules AccessPolicyGetResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                              `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -671,6 +926,7 @@ type accessPolicyGetResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
+	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -694,6 +950,86 @@ func (r *AccessPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessPolicyGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// The rules that define how users may connect to targets secured by your
+// application.
+type AccessPolicyGetResponseConnectionRules struct {
+	// The RDP-specific rules that define clipboard behavior for RDP connections.
+	Rdp  AccessPolicyGetResponseConnectionRulesRdp  `json:"rdp"`
+	JSON accessPolicyGetResponseConnectionRulesJSON `json:"-"`
+}
+
+// accessPolicyGetResponseConnectionRulesJSON contains the JSON metadata for the
+// struct [AccessPolicyGetResponseConnectionRules]
+type accessPolicyGetResponseConnectionRulesJSON struct {
+	Rdp         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessPolicyGetResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyGetResponseConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessPolicyGetResponseConnectionRulesRdp struct {
+	// Clipboard formats allowed when copying from local machine to remote RDP session.
+	AllowedClipboardLocalToRemoteFormats []AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	// Clipboard formats allowed when copying from remote RDP session to local machine.
+	AllowedClipboardRemoteToLocalFormats []AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessPolicyGetResponseConnectionRulesRdpJSON                                  `json:"-"`
+}
+
+// accessPolicyGetResponseConnectionRulesRdpJSON contains the JSON metadata for the
+// struct [AccessPolicyGetResponseConnectionRulesRdp]
+type accessPolicyGetResponseConnectionRulesRdpJSON struct {
+	AllowedClipboardLocalToRemoteFormats apijson.Field
+	AllowedClipboardRemoteToLocalFormats apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
+}
+
+func (r *AccessPolicyGetResponseConnectionRulesRdp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessPolicyGetResponseConnectionRulesRdpJSON) RawJSON() string {
+	return r.raw
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+
+const (
+	AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+)
+
+func (r AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+		return true
+	}
+	return false
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+
+const (
+	AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+)
+
+func (r AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyGetResponseConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+		return true
+	}
+	return false
 }
 
 // Configures multi-factor authentication (MFA) settings.
@@ -773,6 +1109,9 @@ type AccessPolicyNewParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// The rules that define how users may connect to targets secured by your
+	// application.
+	ConnectionRules param.Field[AccessPolicyNewParamsConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -797,6 +1136,59 @@ type AccessPolicyNewParams struct {
 
 func (r AccessPolicyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The rules that define how users may connect to targets secured by your
+// application.
+type AccessPolicyNewParamsConnectionRules struct {
+	// The RDP-specific rules that define clipboard behavior for RDP connections.
+	Rdp param.Field[AccessPolicyNewParamsConnectionRulesRdp] `json:"rdp"`
+}
+
+func (r AccessPolicyNewParamsConnectionRules) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessPolicyNewParamsConnectionRulesRdp struct {
+	// Clipboard formats allowed when copying from local machine to remote RDP session.
+	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
+	// Clipboard formats allowed when copying from remote RDP session to local machine.
+	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
+}
+
+func (r AccessPolicyNewParamsConnectionRulesRdp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+
+const (
+	AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+)
+
+func (r AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+		return true
+	}
+	return false
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+
+const (
+	AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+)
+
+func (r AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+		return true
+	}
+	return false
 }
 
 // Configures multi-factor authentication (MFA) settings.
@@ -986,6 +1378,9 @@ type AccessPolicyUpdateParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// The rules that define how users may connect to targets secured by your
+	// application.
+	ConnectionRules param.Field[AccessPolicyUpdateParamsConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -1010,6 +1405,59 @@ type AccessPolicyUpdateParams struct {
 
 func (r AccessPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The rules that define how users may connect to targets secured by your
+// application.
+type AccessPolicyUpdateParamsConnectionRules struct {
+	// The RDP-specific rules that define clipboard behavior for RDP connections.
+	Rdp param.Field[AccessPolicyUpdateParamsConnectionRulesRdp] `json:"rdp"`
+}
+
+func (r AccessPolicyUpdateParamsConnectionRules) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessPolicyUpdateParamsConnectionRulesRdp struct {
+	// Clipboard formats allowed when copying from local machine to remote RDP session.
+	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
+	// Clipboard formats allowed when copying from remote RDP session to local machine.
+	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
+}
+
+func (r AccessPolicyUpdateParamsConnectionRulesRdp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+
+const (
+	AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+)
+
+func (r AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+		return true
+	}
+	return false
+}
+
+// Clipboard format for RDP connections.
+type AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+
+const (
+	AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+)
+
+func (r AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+	switch r {
+	case AccessPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+		return true
+	}
+	return false
 }
 
 // Configures multi-factor authentication (MFA) settings.

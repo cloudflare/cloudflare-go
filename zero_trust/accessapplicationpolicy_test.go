@@ -42,7 +42,13 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
 				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 			}}),
-			ApprovalRequired:  cloudflare.F(true),
+			ApprovalRequired: cloudflare.F(true),
+			ConnectionRules: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsConnectionRules{
+				Rdp: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdp{
+					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat{zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText}),
+					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat{zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText}),
+				}),
+			}),
 			IsolationRequired: cloudflare.F(false),
 			MfaConfig: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsMfaConfig{
 				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorSecurityKey}),
@@ -93,7 +99,13 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
 				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 			}}),
-			ApprovalRequired:  cloudflare.F(true),
+			ApprovalRequired: cloudflare.F(true),
+			ConnectionRules: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsConnectionRules{
+				Rdp: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdp{
+					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat{zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText}),
+					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat{zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText}),
+				}),
+			}),
 			IsolationRequired: cloudflare.F(false),
 			MfaConfig: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsMfaConfig{
 				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey}),
