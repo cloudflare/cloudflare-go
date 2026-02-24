@@ -34,7 +34,7 @@ func NewIndicatorFeedPermissionService(opts ...option.RequestOption) (r *Indicat
 	return
 }
 
-// Grant permission to indicator feed
+// Grants access permissions for a custom threat indicator feed to other accounts.
 func (r *IndicatorFeedPermissionService) New(ctx context.Context, params IndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionNewResponse, err error) {
 	var env IndicatorFeedPermissionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,7 +51,7 @@ func (r *IndicatorFeedPermissionService) New(ctx context.Context, params Indicat
 	return
 }
 
-// List indicator feed permissions
+// Lists current access permissions for custom threat indicator feeds.
 func (r *IndicatorFeedPermissionService) List(ctx context.Context, query IndicatorFeedPermissionListParams, opts ...option.RequestOption) (res *[]IndicatorFeedPermissionListResponse, err error) {
 	var env IndicatorFeedPermissionListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -68,7 +68,7 @@ func (r *IndicatorFeedPermissionService) List(ctx context.Context, query Indicat
 	return
 }
 
-// Revoke permission to indicator feed
+// Revokes access permissions for a custom threat indicator feed.
 func (r *IndicatorFeedPermissionService) Delete(ctx context.Context, params IndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionDeleteResponse, err error) {
 	var env IndicatorFeedPermissionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

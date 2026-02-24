@@ -42,7 +42,7 @@ func NewIndicatorFeedService(opts ...option.RequestOption) (r *IndicatorFeedServ
 	return
 }
 
-// Create new indicator feed
+// Creates a new custom threat indicator feed for sharing threat intelligence data.
 func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewParams, opts ...option.RequestOption) (res *IndicatorFeedNewResponse, err error) {
 	var env IndicatorFeedNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +59,7 @@ func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewP
 	return
 }
 
-// Update indicator feed metadata
+// Retrieves the raw data entries in a custom threat indicator feed.
 func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params IndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedUpdateResponse, err error) {
 	var env IndicatorFeedUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +76,7 @@ func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params 
 	return
 }
 
-// Get indicator feeds owned by this account
+// Retrieves details for a specific custom threat indicator feed.
 func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IndicatorFeedListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -98,12 +98,12 @@ func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedList
 	return res, nil
 }
 
-// Get indicator feeds owned by this account
+// Retrieves details for a specific custom threat indicator feed.
 func (r *IndicatorFeedService) ListAutoPaging(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IndicatorFeedListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Get indicator feed data
+// Retrieves the raw data entries in a custom threat indicator feed.
 func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query IndicatorFeedDataParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
@@ -116,7 +116,7 @@ func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query Ind
 	return
 }
 
-// Get indicator feed metadata
+// Retrieves the raw data entries in a custom threat indicator feed.
 func (r *IndicatorFeedService) Get(ctx context.Context, feedID int64, query IndicatorFeedGetParams, opts ...option.RequestOption) (res *IndicatorFeedGetResponse, err error) {
 	var env IndicatorFeedGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
