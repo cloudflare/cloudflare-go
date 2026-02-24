@@ -1653,6 +1653,10 @@ type ScriptUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata,required"`
+	// When set to "strict", the upload will fail if any `inherit` type bindings cannot
+	// be resolved against the previous version of the Worker. Without this,
+	// unresolvable inherit bindings are silently dropped.
+	BindingsInherit param.Field[ScriptUpdateParamsBindingsInherit] `query:"bindings_inherit"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
 	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
@@ -1676,6 +1680,14 @@ func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string,
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+// URLQuery serializes [ScriptUpdateParams]'s query parameters as `url.Values`.
+func (r ScriptUpdateParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 // JSON-encoded metadata about the uploaded parts and Worker configuration.
@@ -3309,6 +3321,23 @@ const (
 func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
 	case ScriptUpdateParamsMetadataUsageModelStandard, ScriptUpdateParamsMetadataUsageModelBundled, ScriptUpdateParamsMetadataUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
+// When set to "strict", the upload will fail if any `inherit` type bindings cannot
+// be resolved against the previous version of the Worker. Without this,
+// unresolvable inherit bindings are silently dropped.
+type ScriptUpdateParamsBindingsInherit string
+
+const (
+	ScriptUpdateParamsBindingsInheritStrict ScriptUpdateParamsBindingsInherit = "strict"
+)
+
+func (r ScriptUpdateParamsBindingsInherit) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsBindingsInheritStrict:
 		return true
 	}
 	return false

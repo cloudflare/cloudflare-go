@@ -601,6 +601,10 @@ type DispatchNamespaceScriptUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[DispatchNamespaceScriptUpdateParamsMetadata] `json:"metadata,required"`
+	// When set to "strict", the upload will fail if any `inherit` type bindings cannot
+	// be resolved against the previous version of the script. Without this,
+	// unresolvable inherit bindings are silently dropped.
+	BindingsInherit param.Field[DispatchNamespaceScriptUpdateParamsBindingsInherit] `query:"bindings_inherit"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
 	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
@@ -624,6 +628,15 @@ func (r DispatchNamespaceScriptUpdateParams) MarshalMultipart() (data []byte, co
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+// URLQuery serializes [DispatchNamespaceScriptUpdateParams]'s query parameters as
+// `url.Values`.
+func (r DispatchNamespaceScriptUpdateParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 // JSON-encoded metadata about the uploaded parts and Worker configuration.
@@ -2248,6 +2261,23 @@ const (
 func (r DispatchNamespaceScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard, DispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled, DispatchNamespaceScriptUpdateParamsMetadataUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
+// When set to "strict", the upload will fail if any `inherit` type bindings cannot
+// be resolved against the previous version of the script. Without this,
+// unresolvable inherit bindings are silently dropped.
+type DispatchNamespaceScriptUpdateParamsBindingsInherit string
+
+const (
+	DispatchNamespaceScriptUpdateParamsBindingsInheritStrict DispatchNamespaceScriptUpdateParamsBindingsInherit = "strict"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsBindingsInherit) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsBindingsInheritStrict:
 		return true
 	}
 	return false

@@ -4763,6 +4763,10 @@ type ScriptVersionNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptVersionNewParamsMetadata] `json:"metadata,required"`
+	// When set to "strict", the upload will fail if any `inherit` type bindings cannot
+	// be resolved against the previous version of the Worker. Without this,
+	// unresolvable inherit bindings are silently dropped.
+	BindingsInherit param.Field[ScriptVersionNewParamsBindingsInherit] `query:"bindings_inherit"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
 	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
@@ -4786,6 +4790,14 @@ func (r ScriptVersionNewParams) MarshalMultipart() (data []byte, contentType str
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+// URLQuery serializes [ScriptVersionNewParams]'s query parameters as `url.Values`.
+func (r ScriptVersionNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 // JSON-encoded metadata about the uploaded parts and Worker configuration.
@@ -6090,6 +6102,23 @@ const (
 func (r ScriptVersionNewParamsMetadataUsageModel) IsKnown() bool {
 	switch r {
 	case ScriptVersionNewParamsMetadataUsageModelStandard, ScriptVersionNewParamsMetadataUsageModelBundled, ScriptVersionNewParamsMetadataUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
+// When set to "strict", the upload will fail if any `inherit` type bindings cannot
+// be resolved against the previous version of the Worker. Without this,
+// unresolvable inherit bindings are silently dropped.
+type ScriptVersionNewParamsBindingsInherit string
+
+const (
+	ScriptVersionNewParamsBindingsInheritStrict ScriptVersionNewParamsBindingsInherit = "strict"
+)
+
+func (r ScriptVersionNewParamsBindingsInherit) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewParamsBindingsInheritStrict:
 		return true
 	}
 	return false

@@ -52,7 +52,8 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string"}),
 				UsageModel:         cloudflare.F(workers.ScriptVersionNewParamsMetadataUsageModelStandard),
 			}),
-			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			BindingsInherit: cloudflare.F(workers.ScriptVersionNewParamsBindingsInheritStrict),
+			Files:           cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},
 	)
 	if err != nil {

@@ -104,7 +104,8 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				UsageModel: cloudflare.F(workers.ScriptUpdateParamsMetadataUsageModelStandard),
 			}),
-			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			BindingsInherit: cloudflare.F(workers.ScriptUpdateParamsBindingsInheritStrict),
+			Files:           cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},
 	)
 	if err != nil {

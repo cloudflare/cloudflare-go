@@ -102,7 +102,8 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard),
 			}),
-			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			BindingsInherit: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBindingsInheritStrict),
+			Files:           cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 		},
 	)
 	if err != nil {
