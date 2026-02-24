@@ -67,7 +67,8 @@ func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSCl
 	return
 }
 
-// List Certificates
+// Lists all client certificates configured for zone-level authenticated origin
+// pulls.
 //
 // Deprecated: Use zone_certificates.list for zone-level certificates. This method
 // will be removed in a future major version.
@@ -92,7 +93,8 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSCl
 	return res, nil
 }
 
-// List Certificates
+// Lists all client certificates configured for zone-level authenticated origin
+// pulls.
 //
 // Deprecated: Use zone_certificates.list for zone-level certificates. This method
 // will be removed in a future major version.
@@ -100,7 +102,7 @@ func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query O
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete Certificate
+// Removes a client certificate used for zone-level authenticated origin pulls.
 //
 // Deprecated: Use zone_certificates.delete for zone-level certificates. This
 // method will be removed in a future major version.
@@ -124,7 +126,8 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID s
 	return
 }
 
-// Get Certificate Details
+// Retrieves details for a specific client certificate used in zone-level
+// authenticated origin pulls.
 //
 // Deprecated: Use zone_certificates.get for zone-level certificates. This method
 // will be removed in a future major version.

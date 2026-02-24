@@ -54,7 +54,8 @@ func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCer
 	return
 }
 
-// List Certificates
+// Lists all client certificates configured for per-hostname authenticated origin
+// pulls on the zone.
 func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[HostnameCertificateListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -76,12 +77,17 @@ func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCer
 	return res, nil
 }
 
-// List Certificates
+// Lists all client certificates configured for per-hostname authenticated origin
+// pulls on the zone.
 func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[HostnameCertificateListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete Hostname Client Certificate
+// Removes a client certificate used for authenticated origin pulls on a specific
+// hostname. Note: Before deleting the certificate, you must first invalidate the
+// hostname for client authentication by sending a PUT request with `enabled` set
+// to null. After invalidating the association, the certificate can be safely
+// deleted.
 func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, body HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *HostnameCertificateDeleteResponse, err error) {
 	var env HostnameCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

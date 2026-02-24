@@ -57,7 +57,8 @@ func (r *ZoneCertificateService) New(ctx context.Context, params ZoneCertificate
 	return
 }
 
-// List Certificates
+// Lists all client certificates configured for zone-level authenticated origin
+// pulls.
 func (r *ZoneCertificateService) List(ctx context.Context, query ZoneCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZoneCertificateListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -79,12 +80,13 @@ func (r *ZoneCertificateService) List(ctx context.Context, query ZoneCertificate
 	return res, nil
 }
 
-// List Certificates
+// Lists all client certificates configured for zone-level authenticated origin
+// pulls.
 func (r *ZoneCertificateService) ListAutoPaging(ctx context.Context, query ZoneCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZoneCertificateListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete Certificate
+// Removes a client certificate used for zone-level authenticated origin pulls.
 func (r *ZoneCertificateService) Delete(ctx context.Context, certificateID string, body ZoneCertificateDeleteParams, opts ...option.RequestOption) (res *ZoneCertificateDeleteResponse, err error) {
 	var env ZoneCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -105,7 +107,8 @@ func (r *ZoneCertificateService) Delete(ctx context.Context, certificateID strin
 	return
 }
 
-// Get Certificate Details
+// Retrieves details for a specific client certificate used in zone-level
+// authenticated origin pulls.
 func (r *ZoneCertificateService) Get(ctx context.Context, certificateID string, query ZoneCertificateGetParams, opts ...option.RequestOption) (res *ZoneCertificateGetResponse, err error) {
 	var env ZoneCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

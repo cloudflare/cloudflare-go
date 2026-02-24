@@ -37,7 +37,8 @@ func NewKeylessCertificateService(opts ...option.RequestOption) (r *KeylessCerti
 	return
 }
 
-// Create Keyless SSL Configuration
+// Creates a Keyless SSL configuration that allows SSL/TLS termination without
+// exposing private keys to Cloudflare. Keys remain on your infrastructure.
 func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCertificateNewParams, opts ...option.RequestOption) (res *KeylessCertificate, err error) {
 	var env KeylessCertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -81,7 +82,8 @@ func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query Ke
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete Keyless SSL Configuration
+// Removes a Keyless SSL configuration. SSL connections will no longer use the
+// keyless server for cryptographic operations.
 func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertificateID string, body KeylessCertificateDeleteParams, opts ...option.RequestOption) (res *KeylessCertificateDeleteResponse, err error) {
 	var env KeylessCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

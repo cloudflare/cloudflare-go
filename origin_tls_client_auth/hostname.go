@@ -71,7 +71,8 @@ func (r *HostnameService) UpdateAutoPaging(ctx context.Context, params HostnameU
 	return pagination.NewSinglePageAutoPager(r.Update(ctx, params, opts...))
 }
 
-// Get the Hostname Status for Client Authentication
+// Retrieves the client certificate authentication status for a specific hostname,
+// showing whether authenticated origin pulls are enabled.
 func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *AuthenticatedOriginPull, err error) {
 	var env HostnameGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

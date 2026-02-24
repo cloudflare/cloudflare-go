@@ -134,7 +134,9 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 	return
 }
 
-// SSL Configuration Details
+// Retrieves details for a specific custom SSL certificate, including certificate
+// metadata, bundle method, geographic restrictions, and associated keyless server
+// configuration.
 func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificate, err error) {
 	var env CustomCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

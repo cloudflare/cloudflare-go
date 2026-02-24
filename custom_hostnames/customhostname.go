@@ -96,7 +96,8 @@ func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params Custo
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete Custom Hostname (and any issued SSL certificates)
+// Permanently deletes a custom hostname and revokes any SSL certificates that were
+// issued for it. This action cannot be undone.
 func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, body CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -139,7 +140,8 @@ func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID strin
 	return
 }
 
-// Custom Hostname Details
+// Retrieves detailed information about a specific custom hostname, including SSL
+// certificate status, ownership verification, and origin configuration.
 func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string, query CustomHostnameGetParams, opts ...option.RequestOption) (res *CustomHostnameGetResponse, err error) {
 	var env CustomHostnameGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

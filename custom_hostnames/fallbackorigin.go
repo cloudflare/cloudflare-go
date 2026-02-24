@@ -35,7 +35,8 @@ func NewFallbackOriginService(opts ...option.RequestOption) (r *FallbackOriginSe
 	return
 }
 
-// Update Fallback Origin for Custom Hostnames
+// Updates the fallback origin configuration for custom hostnames on a zone. Sets
+// the default origin server for custom hostname traffic.
 func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponse, err error) {
 	var env FallbackOriginUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +53,8 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 	return
 }
 
-// Delete Fallback Origin for Custom Hostnames
+// Removes the fallback origin configuration for custom hostnames on a zone. Custom
+// hostnames without specific origins will no longer have a fallback.
 func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponse, err error) {
 	var env FallbackOriginDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +71,9 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 	return
 }
 
-// Get Fallback Origin for Custom Hostnames
+// Retrieves the current fallback origin configuration for custom hostnames on a
+// zone. The fallback origin handles traffic when specific custom hostname origins
+// are unavailable.
 func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponse, err error) {
 	var env FallbackOriginGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
