@@ -43,7 +43,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	return
 }
 
-// Create new instances.
+// Create a new instances.
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -129,7 +129,8 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 	return
 }
 
-// Chat Completions
+// Performs a chat completion request against an AI Search instance, using indexed
+// content as context for generating responses.
 func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params InstanceChatCompletionsParams, opts ...option.RequestOption) (res *InstanceChatCompletionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -166,7 +167,8 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 	return
 }
 
-// Search
+// Executes a semantic search query against an AI Search instance to find relevant
+// indexed content.
 func (r *InstanceService) Search(ctx context.Context, id string, params InstanceSearchParams, opts ...option.RequestOption) (res *InstanceSearchResponse, err error) {
 	var env InstanceSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -187,7 +189,7 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 	return
 }
 
-// Stats
+// Retrieves usage statistics for AI Search instances.
 func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceStatsParams, opts ...option.RequestOption) (res *InstanceStatsResponse, err error) {
 	var env InstanceStatsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

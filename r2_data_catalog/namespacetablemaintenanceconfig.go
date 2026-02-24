@@ -124,7 +124,7 @@ func (r namespaceTableMaintenanceConfigUpdateResponseJSON) RawJSON() string {
 type NamespaceTableMaintenanceConfigUpdateResponseCompaction struct {
 	// Specifies the state of maintenance operations.
 	State NamespaceTableMaintenanceConfigUpdateResponseCompactionState `json:"state,required"`
-	// Sets the target file size for compaction in megabytes.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB NamespaceTableMaintenanceConfigUpdateResponseCompactionTargetSizeMB `json:"target_size_mb,required"`
 	JSON         namespaceTableMaintenanceConfigUpdateResponseCompactionJSON         `json:"-"`
 }
@@ -163,7 +163,7 @@ func (r NamespaceTableMaintenanceConfigUpdateResponseCompactionState) IsKnown() 
 	return false
 }
 
-// Sets the target file size for compaction in megabytes.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type NamespaceTableMaintenanceConfigUpdateResponseCompactionTargetSizeMB string
 
 const (
@@ -186,9 +186,9 @@ type NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration struct {
 	// Specifies the maximum age for snapshots. The system deletes snapshots older than
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes).
+	// minutes). Defaults to "7d".
 	MaxSnapshotAge string `json:"max_snapshot_age,required"`
-	// Specifies the minimum number of snapshots to retain.
+	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
 	// Specifies the state of maintenance operations.
 	State NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state,required"`
@@ -284,7 +284,7 @@ func (r namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON) RawJSON
 type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
 	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionState `json:"state,required"`
-	// Sets the target file size for compaction in megabytes.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
 	JSON         namespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionJSON         `json:"-"`
 }
@@ -323,7 +323,7 @@ func (r NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionSta
 	return false
 }
 
-// Sets the target file size for compaction in megabytes.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB string
 
 const (
@@ -346,9 +346,9 @@ type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirati
 	// Specifies the maximum age for snapshots. The system deletes snapshots older than
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes).
+	// minutes). Defaults to "7d".
 	MaxSnapshotAge string `json:"max_snapshot_age,required"`
-	// Specifies the minimum number of snapshots to retain.
+	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
 	// Specifies the state of maintenance operations.
 	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`

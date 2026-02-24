@@ -38,7 +38,7 @@ func NewInstanceItemService(opts ...option.RequestOption) (r *InstanceItemServic
 	return
 }
 
-// Items List.
+// Lists indexed items in an AI Search instance.
 func (r *InstanceItemService) List(ctx context.Context, id string, params InstanceItemListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceItemListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -64,12 +64,12 @@ func (r *InstanceItemService) List(ctx context.Context, id string, params Instan
 	return res, nil
 }
 
-// Items List.
+// Lists indexed items in an AI Search instance.
 func (r *InstanceItemService) ListAutoPaging(ctx context.Context, id string, params InstanceItemListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceItemListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, id, params, opts...))
 }
 
-// Get Item.
+// Retrieves a specific indexed item from an AI Search instance.
 func (r *InstanceItemService) Get(ctx context.Context, id string, itemID string, query InstanceItemGetParams, opts ...option.RequestOption) (res *InstanceItemGetResponse, err error) {
 	var env InstanceItemGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

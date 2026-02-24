@@ -245,7 +245,7 @@ func (r r2DataCatalogListResponseWarehousesMaintenanceConfigJSON) RawJSON() stri
 type R2DataCatalogListResponseWarehousesMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
 	State R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionState `json:"state,required"`
-	// Sets the target file size for compaction in megabytes.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
 	JSON         r2DataCatalogListResponseWarehousesMaintenanceConfigCompactionJSON         `json:"-"`
 }
@@ -284,7 +284,7 @@ func (r R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionState) IsK
 	return false
 }
 
-// Sets the target file size for compaction in megabytes.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB string
 
 const (
@@ -307,9 +307,9 @@ type R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpiration stru
 	// Specifies the maximum age for snapshots. The system deletes snapshots older than
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes).
+	// minutes). Defaults to "7d".
 	MaxSnapshotAge string `json:"max_snapshot_age,required"`
-	// Specifies the minimum number of snapshots to retain.
+	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
 	// Specifies the state of maintenance operations.
 	State R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState `json:"state,required"`
@@ -477,7 +477,7 @@ func (r r2DataCatalogGetResponseMaintenanceConfigJSON) RawJSON() string {
 type R2DataCatalogGetResponseMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
 	State R2DataCatalogGetResponseMaintenanceConfigCompactionState `json:"state,required"`
-	// Sets the target file size for compaction in megabytes.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
 	JSON         r2DataCatalogGetResponseMaintenanceConfigCompactionJSON         `json:"-"`
 }
@@ -515,7 +515,7 @@ func (r R2DataCatalogGetResponseMaintenanceConfigCompactionState) IsKnown() bool
 	return false
 }
 
-// Sets the target file size for compaction in megabytes.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB string
 
 const (
@@ -538,9 +538,9 @@ type R2DataCatalogGetResponseMaintenanceConfigSnapshotExpiration struct {
 	// Specifies the maximum age for snapshots. The system deletes snapshots older than
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes).
+	// minutes). Defaults to "7d".
 	MaxSnapshotAge string `json:"max_snapshot_age,required"`
-	// Specifies the minimum number of snapshots to retain.
+	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
 	// Specifies the state of maintenance operations.
 	State R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`

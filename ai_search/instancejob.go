@@ -37,7 +37,7 @@ func NewInstanceJobService(opts ...option.RequestOption) (r *InstanceJobService)
 	return
 }
 
-// Create new job
+// Creates a new indexing job for an AI Search instance.
 func (r *InstanceJobService) New(ctx context.Context, id string, body InstanceJobNewParams, opts ...option.RequestOption) (res *InstanceJobNewResponse, err error) {
 	var env InstanceJobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +58,7 @@ func (r *InstanceJobService) New(ctx context.Context, id string, body InstanceJo
 	return
 }
 
-// List Jobs
+// Lists indexing jobs for an AI Search instance.
 func (r *InstanceJobService) List(ctx context.Context, id string, params InstanceJobListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceJobListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -84,12 +84,12 @@ func (r *InstanceJobService) List(ctx context.Context, id string, params Instanc
 	return res, nil
 }
 
-// List Jobs
+// Lists indexing jobs for an AI Search instance.
 func (r *InstanceJobService) ListAutoPaging(ctx context.Context, id string, params InstanceJobListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceJobListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, id, params, opts...))
 }
 
-// Get a Job Details
+// Retrieves details for a specific AI Search indexing job.
 func (r *InstanceJobService) Get(ctx context.Context, id string, jobID string, query InstanceJobGetParams, opts ...option.RequestOption) (res *InstanceJobGetResponse, err error) {
 	var env InstanceJobGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -114,7 +114,7 @@ func (r *InstanceJobService) Get(ctx context.Context, id string, jobID string, q
 	return
 }
 
-// List Job Logs
+// Lists log entries for an AI Search indexing job.
 func (r *InstanceJobService) Logs(ctx context.Context, id string, jobID string, params InstanceJobLogsParams, opts ...option.RequestOption) (res *[]InstanceJobLogsResponse, err error) {
 	var env InstanceJobLogsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

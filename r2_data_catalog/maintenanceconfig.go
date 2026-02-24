@@ -108,7 +108,7 @@ func (r maintenanceConfigUpdateResponseJSON) RawJSON() string {
 type MaintenanceConfigUpdateResponseCompaction struct {
 	// Specifies the state of maintenance operations.
 	State MaintenanceConfigUpdateResponseCompactionState `json:"state,required"`
-	// Sets the target file size for compaction in megabytes.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB MaintenanceConfigUpdateResponseCompactionTargetSizeMB `json:"target_size_mb,required"`
 	JSON         maintenanceConfigUpdateResponseCompactionJSON         `json:"-"`
 }
@@ -146,7 +146,7 @@ func (r MaintenanceConfigUpdateResponseCompactionState) IsKnown() bool {
 	return false
 }
 
-// Sets the target file size for compaction in megabytes.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type MaintenanceConfigUpdateResponseCompactionTargetSizeMB string
 
 const (
@@ -169,9 +169,9 @@ type MaintenanceConfigUpdateResponseSnapshotExpiration struct {
 	// Specifies the maximum age for snapshots. The system deletes snapshots older than
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes).
+	// minutes). Defaults to "7d".
 	MaxSnapshotAge string `json:"max_snapshot_age,required"`
-	// Specifies the minimum number of snapshots to retain.
+	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
 	// Specifies the state of maintenance operations.
 	State MaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state,required"`
@@ -284,7 +284,7 @@ func (r maintenanceConfigGetResponseMaintenanceConfigJSON) RawJSON() string {
 type MaintenanceConfigGetResponseMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
 	State MaintenanceConfigGetResponseMaintenanceConfigCompactionState `json:"state,required"`
-	// Sets the target file size for compaction in megabytes.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB MaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
 	JSON         maintenanceConfigGetResponseMaintenanceConfigCompactionJSON         `json:"-"`
 }
@@ -323,7 +323,7 @@ func (r MaintenanceConfigGetResponseMaintenanceConfigCompactionState) IsKnown() 
 	return false
 }
 
-// Sets the target file size for compaction in megabytes.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type MaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB string
 
 const (
@@ -346,9 +346,9 @@ type MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration struct {
 	// Specifies the maximum age for snapshots. The system deletes snapshots older than
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes).
+	// minutes). Defaults to "7d".
 	MaxSnapshotAge string `json:"max_snapshot_age,required"`
-	// Specifies the minimum number of snapshots to retain.
+	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
 	// Specifies the state of maintenance operations.
 	State MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`

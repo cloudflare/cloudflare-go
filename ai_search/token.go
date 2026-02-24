@@ -38,7 +38,7 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 	return
 }
 
-// Create new tokens.
+// Create a new tokens.
 func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
