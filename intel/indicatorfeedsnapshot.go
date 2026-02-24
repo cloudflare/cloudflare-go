@@ -37,7 +37,7 @@ func NewIndicatorFeedSnapshotService(opts ...option.RequestOption) (r *Indicator
 	return
 }
 
-// Retrieves the raw data entries in a custom threat indicator feed.
+// Revises the raw data entries in a custom threat indicator feed.
 func (r *IndicatorFeedSnapshotService) Update(ctx context.Context, feedID int64, params IndicatorFeedSnapshotUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedSnapshotUpdateResponse, err error) {
 	var env IndicatorFeedSnapshotUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

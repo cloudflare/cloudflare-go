@@ -59,7 +59,7 @@ func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewP
 	return
 }
 
-// Retrieves the raw data entries in a custom threat indicator feed.
+// Revises details for a specific custom threat indicator feed.
 func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params IndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedUpdateResponse, err error) {
 	var env IndicatorFeedUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +76,7 @@ func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params 
 	return
 }
 
-// Retrieves details for a specific custom threat indicator feed.
+// Retrieves details for all accessible custom threat indicator feeds.
 func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IndicatorFeedListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -98,7 +98,7 @@ func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedList
 	return res, nil
 }
 
-// Retrieves details for a specific custom threat indicator feed.
+// Retrieves details for all accessible custom threat indicator feeds.
 func (r *IndicatorFeedService) ListAutoPaging(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IndicatorFeedListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
@@ -116,7 +116,7 @@ func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query Ind
 	return
 }
 
-// Retrieves the raw data entries in a custom threat indicator feed.
+// Retrieves details for a specific custom threat indicator feed.
 func (r *IndicatorFeedService) Get(ctx context.Context, feedID int64, query IndicatorFeedGetParams, opts ...option.RequestOption) (res *IndicatorFeedGetResponse, err error) {
 	var env IndicatorFeedGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
