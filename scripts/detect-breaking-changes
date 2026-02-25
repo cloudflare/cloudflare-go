@@ -102,6 +102,7 @@ TEST_PATHS=(
 	email_security/investigatemove_test.go
 	email_security/investigatereclassify_test.go
 	email_security/investigaterelease_test.go
+	email_security/phishguardreport_test.go
 	email_security/settingallowpolicy_test.go
 	email_security/settingblocksender_test.go
 	email_security/settingdomain_test.go

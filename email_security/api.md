@@ -86,6 +86,18 @@ Methods:
 
 - <code title="post /accounts/{account_id}/email-security/investigate/release">client.EmailSecurity.Investigate.Release.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security#InvestigateReleaseService.Bulk">Bulk</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security">email_security</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security#InvestigateReleaseBulkParams">InvestigateReleaseBulkParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security">email_security</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security#InvestigateReleaseBulkResponse">InvestigateReleaseBulkResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## Phishguard
+
+### Reports
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security">email_security</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security#PhishguardReportListResponse">PhishguardReportListResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/email-security/phishguard/reports">client.EmailSecurity.Phishguard.Reports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security#PhishguardReportService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security">email_security</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security#PhishguardReportListParams">PhishguardReportListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security">email_security</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/email_security#PhishguardReportListResponse">PhishguardReportListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Settings
 
 ### AllowPolicies
