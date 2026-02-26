@@ -249,7 +249,7 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessAppl
 // application.
 type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	Rdp param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp] `json:"rdp"`
+	RDP param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP] `json:"rdp"`
 }
 
 func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
@@ -257,42 +257,42 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules) Marsh
 }
 
 // The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp struct {
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
+	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
 }
 
-func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Clipboard format for RDP connections.
-type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
+	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
 // Clipboard format for RDP connections.
-type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
+	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false

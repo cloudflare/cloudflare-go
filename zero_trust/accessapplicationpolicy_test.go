@@ -44,9 +44,9 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 			}}),
 			ApprovalRequired: cloudflare.F(true),
 			ConnectionRules: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsConnectionRules{
-				Rdp: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdp{
-					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat{zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText}),
-					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat{zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText}),
+				RDP: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRDP{
+					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat{zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText}),
+					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat{zero_trust.AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText}),
 				}),
 			}),
 			IsolationRequired: cloudflare.F(false),
@@ -101,9 +101,9 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 			}}),
 			ApprovalRequired: cloudflare.F(true),
 			ConnectionRules: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsConnectionRules{
-				Rdp: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdp{
-					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormat{zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText}),
-					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormat{zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText}),
+				RDP: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRDP{
+					AllowedClipboardLocalToRemoteFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat{zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText}),
+					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat{zero_trust.AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText}),
 				}),
 			}),
 			IsolationRequired: cloudflare.F(false),

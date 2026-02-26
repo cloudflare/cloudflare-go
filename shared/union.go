@@ -90,7 +90,7 @@ func (UnionString) ImplementsAccessApplicationNewParamsBodyBrowserIsolationPermi
 func (UnionString) ImplementsAccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsAccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion()        {}
-func (UnionString) ImplementsAccessApplicationNewParamsBodyBrowserRdpApplicationPolicyUnion()      {}
+func (UnionString) ImplementsAccessApplicationNewParamsBodyBrowserRDPApplicationPolicyUnion()      {}
 func (UnionString) ImplementsAccessApplicationNewParamsBodyMcpServerApplicationPolicyUnion()       {}
 func (UnionString) ImplementsAccessApplicationNewParamsBodyMcpServerPortalApplicationPolicyUnion() {}
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion()   {}
@@ -105,7 +105,7 @@ func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBrowserIsolationPe
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion()   {}
-func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBrowserRdpApplicationPolicyUnion() {}
+func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBrowserRDPApplicationPolicyUnion() {}
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyMcpServerApplicationPolicyUnion()  {}
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationPolicyUnion() {
 }
