@@ -66,6 +66,7 @@ TEST_PATHS=(
 	ssl/universalsetting_test.go
 	ssl/verification_test.go
 	acm/totaltls_test.go
+	acm/customtruststore_test.go
 	argo/smartrouting_test.go
 	argo/tieredcaching_test.go
 	certificate_authorities/hostnameassociation_test.go
