@@ -47,7 +47,7 @@ func NewNetworkSubnetWARPService(opts ...option.RequestOption) (r *NetworkSubnet
 //   - `100.64.0.0/10` (RFC 6598 - CGNAT)
 //   - The subnet must have a prefix length of `/24` or larger (e.g., `/16`, `/20`,
 //     `/24` are valid; `/25`, `/28` are not)
-func (r *NetworkSubnetWARPService) New(ctx context.Context, params NetworkSubnetWARPNewParams, opts ...option.RequestOption) (res *NetworkSubnetWARPNewResponse, err error) {
+func (r *NetworkSubnetWARPService) New(ctx context.Context, params NetworkSubnetWARPNewParams, opts ...option.RequestOption) (res *Subnet, err error) {
 	var env NetworkSubnetWARPNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -92,7 +92,7 @@ func (r *NetworkSubnetWARPService) Delete(ctx context.Context, subnetID string, 
 //   - The `network` field cannot be modified for WARP subnets. Only `name`,
 //     `comment`, and `is_default_network` can be updated.
 //   - IPv6 subnets cannot be updated
-func (r *NetworkSubnetWARPService) Edit(ctx context.Context, subnetID string, params NetworkSubnetWARPEditParams, opts ...option.RequestOption) (res *NetworkSubnetWARPEditResponse, err error) {
+func (r *NetworkSubnetWARPService) Edit(ctx context.Context, subnetID string, params NetworkSubnetWARPEditParams, opts ...option.RequestOption) (res *Subnet, err error) {
 	var env NetworkSubnetWARPEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -113,7 +113,7 @@ func (r *NetworkSubnetWARPService) Edit(ctx context.Context, subnetID string, pa
 }
 
 // Get a WARP IP assignment subnet.
-func (r *NetworkSubnetWARPService) Get(ctx context.Context, subnetID string, query NetworkSubnetWARPGetParams, opts ...option.RequestOption) (res *NetworkSubnetWARPGetResponse, err error) {
+func (r *NetworkSubnetWARPService) Get(ctx context.Context, subnetID string, query NetworkSubnetWARPGetParams, opts ...option.RequestOption) (res *Subnet, err error) {
 	var env NetworkSubnetWARPGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -133,7 +133,7 @@ func (r *NetworkSubnetWARPService) Get(ctx context.Context, subnetID string, que
 	return
 }
 
-type NetworkSubnetWARPNewResponse struct {
+type Subnet struct {
 	// The UUID of the subnet.
 	ID string `json:"id" format:"uuid"`
 	// An optional description of the subnet.
@@ -151,13 +151,12 @@ type NetworkSubnetWARPNewResponse struct {
 	// The private IPv4 or IPv6 range defining the subnet, in CIDR notation.
 	Network string `json:"network"`
 	// The type of subnet.
-	SubnetType NetworkSubnetWARPNewResponseSubnetType `json:"subnet_type"`
-	JSON       networkSubnetWARPNewResponseJSON       `json:"-"`
+	SubnetType SubnetSubnetType `json:"subnet_type"`
+	JSON       subnetJSON       `json:"-"`
 }
 
-// networkSubnetWARPNewResponseJSON contains the JSON metadata for the struct
-// [NetworkSubnetWARPNewResponse]
-type networkSubnetWARPNewResponseJSON struct {
+// subnetJSON contains the JSON metadata for the struct [Subnet]
+type subnetJSON struct {
 	ID               apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
@@ -170,25 +169,25 @@ type networkSubnetWARPNewResponseJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *NetworkSubnetWARPNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Subnet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkSubnetWARPNewResponseJSON) RawJSON() string {
+func (r subnetJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of subnet.
-type NetworkSubnetWARPNewResponseSubnetType string
+type SubnetSubnetType string
 
 const (
-	NetworkSubnetWARPNewResponseSubnetTypeCloudflareSource NetworkSubnetWARPNewResponseSubnetType = "cloudflare_source"
-	NetworkSubnetWARPNewResponseSubnetTypeWARP             NetworkSubnetWARPNewResponseSubnetType = "warp"
+	SubnetSubnetTypeCloudflareSource SubnetSubnetType = "cloudflare_source"
+	SubnetSubnetTypeWARP             SubnetSubnetType = "warp"
 )
 
-func (r NetworkSubnetWARPNewResponseSubnetType) IsKnown() bool {
+func (r SubnetSubnetType) IsKnown() bool {
 	switch r {
-	case NetworkSubnetWARPNewResponseSubnetTypeCloudflareSource, NetworkSubnetWARPNewResponseSubnetTypeWARP:
+	case SubnetSubnetTypeCloudflareSource, SubnetSubnetTypeWARP:
 		return true
 	}
 	return false
@@ -255,128 +254,6 @@ func (r NetworkSubnetWARPDeleteResponseSubnetType) IsKnown() bool {
 	return false
 }
 
-type NetworkSubnetWARPEditResponse struct {
-	// The UUID of the subnet.
-	ID string `json:"id" format:"uuid"`
-	// An optional description of the subnet.
-	Comment string `json:"comment"`
-	// Timestamp of when the resource was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the resource was deleted. If `null`, the resource has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// If `true`, this is the default subnet for the account. There can only be one
-	// default subnet per account.
-	IsDefaultNetwork bool `json:"is_default_network"`
-	// A user-friendly name for the subnet.
-	Name string `json:"name"`
-	// The private IPv4 or IPv6 range defining the subnet, in CIDR notation.
-	Network string `json:"network"`
-	// The type of subnet.
-	SubnetType NetworkSubnetWARPEditResponseSubnetType `json:"subnet_type"`
-	JSON       networkSubnetWARPEditResponseJSON       `json:"-"`
-}
-
-// networkSubnetWARPEditResponseJSON contains the JSON metadata for the struct
-// [NetworkSubnetWARPEditResponse]
-type networkSubnetWARPEditResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	IsDefaultNetwork apijson.Field
-	Name             apijson.Field
-	Network          apijson.Field
-	SubnetType       apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkSubnetWARPEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkSubnetWARPEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of subnet.
-type NetworkSubnetWARPEditResponseSubnetType string
-
-const (
-	NetworkSubnetWARPEditResponseSubnetTypeCloudflareSource NetworkSubnetWARPEditResponseSubnetType = "cloudflare_source"
-	NetworkSubnetWARPEditResponseSubnetTypeWARP             NetworkSubnetWARPEditResponseSubnetType = "warp"
-)
-
-func (r NetworkSubnetWARPEditResponseSubnetType) IsKnown() bool {
-	switch r {
-	case NetworkSubnetWARPEditResponseSubnetTypeCloudflareSource, NetworkSubnetWARPEditResponseSubnetTypeWARP:
-		return true
-	}
-	return false
-}
-
-type NetworkSubnetWARPGetResponse struct {
-	// The UUID of the subnet.
-	ID string `json:"id" format:"uuid"`
-	// An optional description of the subnet.
-	Comment string `json:"comment"`
-	// Timestamp of when the resource was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the resource was deleted. If `null`, the resource has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// If `true`, this is the default subnet for the account. There can only be one
-	// default subnet per account.
-	IsDefaultNetwork bool `json:"is_default_network"`
-	// A user-friendly name for the subnet.
-	Name string `json:"name"`
-	// The private IPv4 or IPv6 range defining the subnet, in CIDR notation.
-	Network string `json:"network"`
-	// The type of subnet.
-	SubnetType NetworkSubnetWARPGetResponseSubnetType `json:"subnet_type"`
-	JSON       networkSubnetWARPGetResponseJSON       `json:"-"`
-}
-
-// networkSubnetWARPGetResponseJSON contains the JSON metadata for the struct
-// [NetworkSubnetWARPGetResponse]
-type networkSubnetWARPGetResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	IsDefaultNetwork apijson.Field
-	Name             apijson.Field
-	Network          apijson.Field
-	SubnetType       apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkSubnetWARPGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkSubnetWARPGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of subnet.
-type NetworkSubnetWARPGetResponseSubnetType string
-
-const (
-	NetworkSubnetWARPGetResponseSubnetTypeCloudflareSource NetworkSubnetWARPGetResponseSubnetType = "cloudflare_source"
-	NetworkSubnetWARPGetResponseSubnetTypeWARP             NetworkSubnetWARPGetResponseSubnetType = "warp"
-)
-
-func (r NetworkSubnetWARPGetResponseSubnetType) IsKnown() bool {
-	switch r {
-	case NetworkSubnetWARPGetResponseSubnetTypeCloudflareSource, NetworkSubnetWARPGetResponseSubnetTypeWARP:
-		return true
-	}
-	return false
-}
-
 type NetworkSubnetWARPNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -396,9 +273,9 @@ func (r NetworkSubnetWARPNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkSubnetWARPNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   NetworkSubnetWARPNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Subnet                `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkSubnetWARPNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkSubnetWARPNewResponseEnvelopeJSON    `json:"-"`
@@ -505,9 +382,9 @@ func (r NetworkSubnetWARPEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkSubnetWARPEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   NetworkSubnetWARPEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Subnet                `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkSubnetWARPEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkSubnetWARPEditResponseEnvelopeJSON    `json:"-"`
@@ -553,9 +430,9 @@ type NetworkSubnetWARPGetParams struct {
 }
 
 type NetworkSubnetWARPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   NetworkSubnetWARPGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Subnet                `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkSubnetWARPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkSubnetWARPGetResponseEnvelopeJSON    `json:"-"`
