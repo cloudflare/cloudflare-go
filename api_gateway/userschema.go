@@ -71,7 +71,8 @@ func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams,
 	return
 }
 
-// Retrieve information about all schemas on a zone
+// Lists all OpenAPI schemas uploaded to API Shield for the zone, including their
+// validation status and associated operations.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -97,7 +98,8 @@ func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParam
 	return res, nil
 }
 
-// Retrieve information about all schemas on a zone
+// Lists all OpenAPI schemas uploaded to API Shield for the zone, including their
+// validation status and associated operations.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -106,7 +108,8 @@ func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchem
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a schema
+// Permanently removes an uploaded OpenAPI schema from API Shield schema
+// validation. Operations using this schema will lose their validation rules.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -126,7 +129,8 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 	return
 }
 
-// Enable validation for a schema
+// Activates schema validation for an uploaded OpenAPI schema. Requests to matching
+// endpoints will be validated against the schema definitions.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -151,7 +155,8 @@ func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params Us
 	return
 }
 
-// Retrieve information about a specific schema on a zone
+// Gets detailed information about a specific uploaded OpenAPI schema, including
+// its contents and validation configuration.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)

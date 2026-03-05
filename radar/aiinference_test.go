@@ -79,7 +79,7 @@ func TestAIInferenceTimeseriesGroupsV2WithOptionalParams(t *testing.T) {
 			LimitPerGroup: cloudflare.F(int64(10)),
 			Location:      cloudflare.F([]string{"string"}),
 			Name:          cloudflare.F([]string{"main_series"}),
-			Normalization: cloudflare.F(radar.AIInferenceTimeseriesGroupsV2ParamsNormalizationMin0Max),
+			Normalization: cloudflare.F(radar.AIInferenceTimeseriesGroupsV2ParamsNormalizationPercentage),
 		},
 	)
 	if err != nil {

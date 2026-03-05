@@ -38,7 +38,8 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 	return
 }
 
-// Update configuration properties
+// Updates API Shield configuration settings for a zone. Can modify validation
+// strictness, enforcement mode, and other global settings.
 func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigurationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +56,8 @@ func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationU
 	return
 }
 
-// Retrieve information about specific configuration properties
+// Gets the current API Shield configuration settings for a zone, including
+// validation behavior and enforcement mode.
 func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

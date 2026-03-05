@@ -42,7 +42,7 @@ func NewWorkflowService(opts ...option.RequestOption) (r *WorkflowService) {
 	return
 }
 
-// Create/modify Workflow
+// Creates a new workflow or updates an existing workflow definition.
 func (r *WorkflowService) Update(ctx context.Context, workflowName string, params WorkflowUpdateParams, opts ...option.RequestOption) (res *WorkflowUpdateResponse, err error) {
 	var env WorkflowUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -63,7 +63,7 @@ func (r *WorkflowService) Update(ctx context.Context, workflowName string, param
 	return
 }
 
-// List all Workflows
+// Lists all workflows configured for the account.
 func (r *WorkflowService) List(ctx context.Context, params WorkflowListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WorkflowListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -85,7 +85,7 @@ func (r *WorkflowService) List(ctx context.Context, params WorkflowListParams, o
 	return res, nil
 }
 
-// List all Workflows
+// Lists all workflows configured for the account.
 func (r *WorkflowService) ListAutoPaging(ctx context.Context, params WorkflowListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WorkflowListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -112,7 +112,7 @@ func (r *WorkflowService) Delete(ctx context.Context, workflowName string, body 
 	return
 }
 
-// Get Workflow details
+// Retrieves configuration and metadata for a specific workflow.
 func (r *WorkflowService) Get(ctx context.Context, workflowName string, query WorkflowGetParams, opts ...option.RequestOption) (res *WorkflowGetResponse, err error) {
 	var env WorkflowGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -350,12 +350,21 @@ func (r workflowGetResponseInstancesJSON) RawJSON() string {
 }
 
 type WorkflowUpdateParams struct {
-	AccountID  param.Field[string] `path:"account_id,required"`
-	ClassName  param.Field[string] `json:"class_name,required"`
-	ScriptName param.Field[string] `json:"script_name,required"`
+	AccountID  param.Field[string]                     `path:"account_id,required"`
+	ClassName  param.Field[string]                     `json:"class_name,required"`
+	ScriptName param.Field[string]                     `json:"script_name,required"`
+	Limits     param.Field[WorkflowUpdateParamsLimits] `json:"limits"`
 }
 
 func (r WorkflowUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkflowUpdateParamsLimits struct {
+	Steps param.Field[int64] `json:"steps"`
+}
+
+func (r WorkflowUpdateParamsLimits) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -634,6 +634,8 @@ func (r configurationDeleteResponseJSON) RawJSON() string {
 }
 
 type ConfigurationEditResponse struct {
+	// UUID.
+	ID           string                        `json:"id"`
 	Description  string                        `json:"description"`
 	Title        string                        `json:"title"`
 	TokenSources []string                      `json:"token_sources"`
@@ -643,6 +645,7 @@ type ConfigurationEditResponse struct {
 // configurationEditResponseJSON contains the JSON metadata for the struct
 // [ConfigurationEditResponse]
 type configurationEditResponseJSON struct {
+	ID           apijson.Field
 	Description  apijson.Field
 	Title        apijson.Field
 	TokenSources apijson.Field

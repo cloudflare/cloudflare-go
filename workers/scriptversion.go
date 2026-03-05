@@ -97,7 +97,7 @@ func (r *ScriptVersionService) ListAutoPaging(ctx context.Context, scriptName st
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, scriptName, params, opts...))
 }
 
-// Get Version Detail
+// Retrieves detailed information about a specific version of a Workers script.
 func (r *ScriptVersionService) Get(ctx context.Context, scriptName string, versionID string, query ScriptVersionGetParams, opts ...option.RequestOption) (res *ScriptVersionGetResponse, err error) {
 	var env ScriptVersionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

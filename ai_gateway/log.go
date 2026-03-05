@@ -85,7 +85,7 @@ func (r *LogService) Delete(ctx context.Context, gatewayID string, params LogDel
 	return
 }
 
-// Patch Gateway Log
+// Updates metadata for an AI Gateway log entry.
 func (r *LogService) Edit(ctx context.Context, gatewayID string, id string, params LogEditParams, opts ...option.RequestOption) (res *LogEditResponse, err error) {
 	var env LogEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -110,7 +110,7 @@ func (r *LogService) Edit(ctx context.Context, gatewayID string, id string, para
 	return
 }
 
-// Get Gateway Log Detail
+// Retrieves detailed information for a specific AI Gateway log entry.
 func (r *LogService) Get(ctx context.Context, gatewayID string, id string, query LogGetParams, opts ...option.RequestOption) (res *LogGetResponse, err error) {
 	var env LogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -135,7 +135,7 @@ func (r *LogService) Get(ctx context.Context, gatewayID string, id string, query
 	return
 }
 
-// Get Gateway Log Request
+// Retrieves the original request payload for an AI Gateway log entry.
 func (r *LogService) Request(ctx context.Context, gatewayID string, id string, query LogRequestParams, opts ...option.RequestOption) (res *LogRequestResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -155,7 +155,7 @@ func (r *LogService) Request(ctx context.Context, gatewayID string, id string, q
 	return
 }
 
-// Get Gateway Log Response
+// Retrieves the response payload for an AI Gateway log entry.
 func (r *LogService) Response(ctx context.Context, gatewayID string, id string, query LogResponseParams, opts ...option.RequestOption) (res *LogResponseResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

@@ -38,7 +38,7 @@ func NewProviderConfigService(opts ...option.RequestOption) (r *ProviderConfigSe
 	return
 }
 
-// Create a new Provider Configs
+// Creates a new AI Gateway.
 func (r *ProviderConfigService) New(ctx context.Context, gatewayID string, params ProviderConfigNewParams, opts ...option.RequestOption) (res *ProviderConfigNewResponse, err error) {
 	var env ProviderConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +59,7 @@ func (r *ProviderConfigService) New(ctx context.Context, gatewayID string, param
 	return
 }
 
-// List Provider Configs
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *ProviderConfigService) List(ctx context.Context, gatewayID string, params ProviderConfigListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ProviderConfigListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -85,15 +85,13 @@ func (r *ProviderConfigService) List(ctx context.Context, gatewayID string, para
 	return res, nil
 }
 
-// List Provider Configs
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *ProviderConfigService) ListAutoPaging(ctx context.Context, gatewayID string, params ProviderConfigListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ProviderConfigListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
 type ProviderConfigNewResponse struct {
 	ID            string `json:"id,required"`
-	AccountID     string `json:"account_id,required"`
-	AccountTag    string `json:"account_tag,required"`
 	Alias         string `json:"alias,required"`
 	DefaultConfig bool   `json:"default_config,required"`
 	// gateway id
@@ -111,8 +109,6 @@ type ProviderConfigNewResponse struct {
 // [ProviderConfigNewResponse]
 type providerConfigNewResponseJSON struct {
 	ID              apijson.Field
-	AccountID       apijson.Field
-	AccountTag      apijson.Field
 	Alias           apijson.Field
 	DefaultConfig   apijson.Field
 	GatewayID       apijson.Field
@@ -136,8 +132,6 @@ func (r providerConfigNewResponseJSON) RawJSON() string {
 
 type ProviderConfigListResponse struct {
 	ID            string `json:"id,required"`
-	AccountID     string `json:"account_id,required"`
-	AccountTag    string `json:"account_tag,required"`
 	Alias         string `json:"alias,required"`
 	DefaultConfig bool   `json:"default_config,required"`
 	// gateway id
@@ -155,8 +149,6 @@ type ProviderConfigListResponse struct {
 // [ProviderConfigListResponse]
 type providerConfigListResponseJSON struct {
 	ID              apijson.Field
-	AccountID       apijson.Field
-	AccountTag      apijson.Field
 	Alias           apijson.Field
 	DefaultConfig   apijson.Field
 	GatewayID       apijson.Field

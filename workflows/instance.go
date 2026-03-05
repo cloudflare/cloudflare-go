@@ -45,7 +45,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	return
 }
 
-// Create a new workflow instance
+// Creates a new instance of a workflow, starting its execution.
 func (r *InstanceService) New(ctx context.Context, workflowName string, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -66,7 +66,7 @@ func (r *InstanceService) New(ctx context.Context, workflowName string, params I
 	return
 }
 
-// List of workflow instances
+// Lists all instances of a workflow with their execution status.
 func (r *InstanceService) List(ctx context.Context, workflowName string, params InstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -92,12 +92,12 @@ func (r *InstanceService) List(ctx context.Context, workflowName string, params 
 	return res, nil
 }
 
-// List of workflow instances
+// Lists all instances of a workflow with their execution status.
 func (r *InstanceService) ListAutoPaging(ctx context.Context, workflowName string, params InstanceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, workflowName, params, opts...))
 }
 
-// Batch create new Workflow instances
+// Creates multiple workflow instances in a single batch operation.
 func (r *InstanceService) Bulk(ctx context.Context, workflowName string, params InstanceBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InstanceBulkResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -123,16 +123,16 @@ func (r *InstanceService) Bulk(ctx context.Context, workflowName string, params 
 	return res, nil
 }
 
-// Batch create new Workflow instances
+// Creates multiple workflow instances in a single batch operation.
 func (r *InstanceService) BulkAutoPaging(ctx context.Context, workflowName string, params InstanceBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InstanceBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, workflowName, params, opts...))
 }
 
-// Get logs and status from instance
-func (r *InstanceService) Get(ctx context.Context, workflowName string, instanceID string, query InstanceGetParams, opts ...option.RequestOption) (res *InstanceGetResponse, err error) {
+// Retrieves logs and execution status for a specific workflow instance.
+func (r *InstanceService) Get(ctx context.Context, workflowName string, instanceID string, params InstanceGetParams, opts ...option.RequestOption) (res *InstanceGetResponse, err error) {
 	var env InstanceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -144,8 +144,8 @@ func (r *InstanceService) Get(ctx context.Context, workflowName string, instance
 		err = errors.New("missing required instance_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/%s", query.AccountID, workflowName, instanceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/%s", params.AccountID, workflowName, instanceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -313,6 +313,7 @@ type InstanceGetResponse struct {
 	Queued    time.Time                      `json:"queued,required" format:"date-time"`
 	Start     time.Time                      `json:"start,required,nullable" format:"date-time"`
 	Status    InstanceGetResponseStatus      `json:"status,required"`
+	StepCount int64                          `json:"step_count,required"`
 	Steps     []InstanceGetResponseStep      `json:"steps,required"`
 	Success   bool                           `json:"success,required,nullable"`
 	Trigger   InstanceGetResponseTrigger     `json:"trigger,required"`
@@ -330,6 +331,7 @@ type instanceGetResponseJSON struct {
 	Queued      apijson.Field
 	Start       apijson.Field
 	Status      apijson.Field
+	StepCount   apijson.Field
 	Steps       apijson.Field
 	Success     apijson.Field
 	Trigger     apijson.Field
@@ -1033,6 +1035,50 @@ type InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion interface {
 
 type InstanceGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Step ordering: "asc" (default, oldest first) or "desc" (newest first).
+	Order param.Field[InstanceGetParamsOrder] `query:"order"`
+	// When true, omits step details and returns only metadata with step_count.
+	Simple param.Field[InstanceGetParamsSimple] `query:"simple"`
+}
+
+// URLQuery serializes [InstanceGetParams]'s query parameters as `url.Values`.
+func (r InstanceGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Step ordering: "asc" (default, oldest first) or "desc" (newest first).
+type InstanceGetParamsOrder string
+
+const (
+	InstanceGetParamsOrderAsc  InstanceGetParamsOrder = "asc"
+	InstanceGetParamsOrderDesc InstanceGetParamsOrder = "desc"
+)
+
+func (r InstanceGetParamsOrder) IsKnown() bool {
+	switch r {
+	case InstanceGetParamsOrderAsc, InstanceGetParamsOrderDesc:
+		return true
+	}
+	return false
+}
+
+// When true, omits step details and returns only metadata with step_count.
+type InstanceGetParamsSimple string
+
+const (
+	InstanceGetParamsSimpleTrue  InstanceGetParamsSimple = "true"
+	InstanceGetParamsSimpleFalse InstanceGetParamsSimple = "false"
+)
+
+func (r InstanceGetParamsSimple) IsKnown() bool {
+	switch r {
+	case InstanceGetParamsSimpleTrue, InstanceGetParamsSimpleFalse:
+		return true
+	}
+	return false
 }
 
 type InstanceGetResponseEnvelope struct {

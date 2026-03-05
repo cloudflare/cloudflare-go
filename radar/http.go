@@ -971,6 +971,7 @@ type HTTPSummaryV2ParamsDimension string
 
 const (
 	HTTPSummaryV2ParamsDimensionAdm1          HTTPSummaryV2ParamsDimension = "ADM1"
+	HTTPSummaryV2ParamsDimensionAs            HTTPSummaryV2ParamsDimension = "AS"
 	HTTPSummaryV2ParamsDimensionBotClass      HTTPSummaryV2ParamsDimension = "BOT_CLASS"
 	HTTPSummaryV2ParamsDimensionBrowser       HTTPSummaryV2ParamsDimension = "BROWSER"
 	HTTPSummaryV2ParamsDimensionBrowserFamily HTTPSummaryV2ParamsDimension = "BROWSER_FAMILY"
@@ -978,6 +979,7 @@ const (
 	HTTPSummaryV2ParamsDimensionHTTPProtocol  HTTPSummaryV2ParamsDimension = "HTTP_PROTOCOL"
 	HTTPSummaryV2ParamsDimensionHTTPVersion   HTTPSummaryV2ParamsDimension = "HTTP_VERSION"
 	HTTPSummaryV2ParamsDimensionIPVersion     HTTPSummaryV2ParamsDimension = "IP_VERSION"
+	HTTPSummaryV2ParamsDimensionLocation      HTTPSummaryV2ParamsDimension = "LOCATION"
 	HTTPSummaryV2ParamsDimensionOS            HTTPSummaryV2ParamsDimension = "OS"
 	HTTPSummaryV2ParamsDimensionPostQuantum   HTTPSummaryV2ParamsDimension = "POST_QUANTUM"
 	HTTPSummaryV2ParamsDimensionTLSVersion    HTTPSummaryV2ParamsDimension = "TLS_VERSION"
@@ -985,7 +987,7 @@ const (
 
 func (r HTTPSummaryV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case HTTPSummaryV2ParamsDimensionAdm1, HTTPSummaryV2ParamsDimensionBotClass, HTTPSummaryV2ParamsDimensionBrowser, HTTPSummaryV2ParamsDimensionBrowserFamily, HTTPSummaryV2ParamsDimensionDeviceType, HTTPSummaryV2ParamsDimensionHTTPProtocol, HTTPSummaryV2ParamsDimensionHTTPVersion, HTTPSummaryV2ParamsDimensionIPVersion, HTTPSummaryV2ParamsDimensionOS, HTTPSummaryV2ParamsDimensionPostQuantum, HTTPSummaryV2ParamsDimensionTLSVersion:
+	case HTTPSummaryV2ParamsDimensionAdm1, HTTPSummaryV2ParamsDimensionAs, HTTPSummaryV2ParamsDimensionBotClass, HTTPSummaryV2ParamsDimensionBrowser, HTTPSummaryV2ParamsDimensionBrowserFamily, HTTPSummaryV2ParamsDimensionDeviceType, HTTPSummaryV2ParamsDimensionHTTPProtocol, HTTPSummaryV2ParamsDimensionHTTPVersion, HTTPSummaryV2ParamsDimensionIPVersion, HTTPSummaryV2ParamsDimensionLocation, HTTPSummaryV2ParamsDimensionOS, HTTPSummaryV2ParamsDimensionPostQuantum, HTTPSummaryV2ParamsDimensionTLSVersion:
 		return true
 	}
 	return false
@@ -1491,6 +1493,7 @@ type HTTPTimeseriesGroupsV2ParamsDimension string
 
 const (
 	HTTPTimeseriesGroupsV2ParamsDimensionAdm1          HTTPTimeseriesGroupsV2ParamsDimension = "ADM1"
+	HTTPTimeseriesGroupsV2ParamsDimensionAs            HTTPTimeseriesGroupsV2ParamsDimension = "AS"
 	HTTPTimeseriesGroupsV2ParamsDimensionBotClass      HTTPTimeseriesGroupsV2ParamsDimension = "BOT_CLASS"
 	HTTPTimeseriesGroupsV2ParamsDimensionBrowser       HTTPTimeseriesGroupsV2ParamsDimension = "BROWSER"
 	HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily HTTPTimeseriesGroupsV2ParamsDimension = "BROWSER_FAMILY"
@@ -1498,6 +1501,7 @@ const (
 	HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol  HTTPTimeseriesGroupsV2ParamsDimension = "HTTP_PROTOCOL"
 	HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion   HTTPTimeseriesGroupsV2ParamsDimension = "HTTP_VERSION"
 	HTTPTimeseriesGroupsV2ParamsDimensionIPVersion     HTTPTimeseriesGroupsV2ParamsDimension = "IP_VERSION"
+	HTTPTimeseriesGroupsV2ParamsDimensionLocation      HTTPTimeseriesGroupsV2ParamsDimension = "LOCATION"
 	HTTPTimeseriesGroupsV2ParamsDimensionOS            HTTPTimeseriesGroupsV2ParamsDimension = "OS"
 	HTTPTimeseriesGroupsV2ParamsDimensionPostQuantum   HTTPTimeseriesGroupsV2ParamsDimension = "POST_QUANTUM"
 	HTTPTimeseriesGroupsV2ParamsDimensionTLSVersion    HTTPTimeseriesGroupsV2ParamsDimension = "TLS_VERSION"
@@ -1505,7 +1509,7 @@ const (
 
 func (r HTTPTimeseriesGroupsV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupsV2ParamsDimensionAdm1, HTTPTimeseriesGroupsV2ParamsDimensionBotClass, HTTPTimeseriesGroupsV2ParamsDimensionBrowser, HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily, HTTPTimeseriesGroupsV2ParamsDimensionDeviceType, HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol, HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion, HTTPTimeseriesGroupsV2ParamsDimensionIPVersion, HTTPTimeseriesGroupsV2ParamsDimensionOS, HTTPTimeseriesGroupsV2ParamsDimensionPostQuantum, HTTPTimeseriesGroupsV2ParamsDimensionTLSVersion:
+	case HTTPTimeseriesGroupsV2ParamsDimensionAdm1, HTTPTimeseriesGroupsV2ParamsDimensionAs, HTTPTimeseriesGroupsV2ParamsDimensionBotClass, HTTPTimeseriesGroupsV2ParamsDimensionBrowser, HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily, HTTPTimeseriesGroupsV2ParamsDimensionDeviceType, HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol, HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion, HTTPTimeseriesGroupsV2ParamsDimensionIPVersion, HTTPTimeseriesGroupsV2ParamsDimensionLocation, HTTPTimeseriesGroupsV2ParamsDimensionOS, HTTPTimeseriesGroupsV2ParamsDimensionPostQuantum, HTTPTimeseriesGroupsV2ParamsDimensionTLSVersion:
 		return true
 	}
 	return false

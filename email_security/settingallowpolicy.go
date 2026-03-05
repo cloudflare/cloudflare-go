@@ -39,7 +39,8 @@ func NewSettingAllowPolicyService(opts ...option.RequestOption) (r *SettingAllow
 	return
 }
 
-// Create an email allow policy
+// Creates a new email allow policy that permits specific senders, domains, or
+// patterns to bypass security scanning.
 func (r *SettingAllowPolicyService) New(ctx context.Context, params SettingAllowPolicyNewParams, opts ...option.RequestOption) (res *SettingAllowPolicyNewResponse, err error) {
 	var env SettingAllowPolicyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -83,7 +84,8 @@ func (r *SettingAllowPolicyService) ListAutoPaging(ctx context.Context, params S
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete an email allow policy
+// Removes an email allow policy. Previously allowed senders will be subject to
+// normal security scanning.
 func (r *SettingAllowPolicyService) Delete(ctx context.Context, policyID int64, body SettingAllowPolicyDeleteParams, opts ...option.RequestOption) (res *SettingAllowPolicyDeleteResponse, err error) {
 	var env SettingAllowPolicyDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -100,7 +102,8 @@ func (r *SettingAllowPolicyService) Delete(ctx context.Context, policyID int64, 
 	return
 }
 
-// Update an email allow policy
+// Updates an existing email allow policy, modifying its matching criteria or
+// scope.
 func (r *SettingAllowPolicyService) Edit(ctx context.Context, policyID int64, params SettingAllowPolicyEditParams, opts ...option.RequestOption) (res *SettingAllowPolicyEditResponse, err error) {
 	var env SettingAllowPolicyEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -117,7 +120,8 @@ func (r *SettingAllowPolicyService) Edit(ctx context.Context, policyID int64, pa
 	return
 }
 
-// Get an email allow policy
+// Retrieves details for a specific email allow policy, including its matching
+// criteria and scope.
 func (r *SettingAllowPolicyService) Get(ctx context.Context, policyID int64, query SettingAllowPolicyGetParams, opts ...option.RequestOption) (res *SettingAllowPolicyGetResponse, err error) {
 	var env SettingAllowPolicyGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

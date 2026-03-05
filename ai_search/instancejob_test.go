@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestInstanceJobNew(t *testing.T) {
+func TestInstanceJobNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,7 +31,8 @@ func TestInstanceJobNew(t *testing.T) {
 		context.TODO(),
 		"my-ai-search",
 		ai_search.InstanceJobNewParams{
-			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+			AccountID:   cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+			Description: cloudflare.F("description"),
 		},
 	)
 	if err != nil {

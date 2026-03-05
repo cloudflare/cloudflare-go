@@ -92,7 +92,8 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 	return
 }
 
-// Reads data for a raw event
+// Retrieves the raw data associated with an event. Searches across all shards in
+// the dataset.
 func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, eventID string, query ThreatEventDatasetRawParams, opts ...option.RequestOption) (res *ThreatEventDatasetRawResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -213,10 +214,10 @@ func (r threatEventDatasetGetResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetRawResponse struct {
-	ID        string                            `json:"id,required"`
+	ID        float64                           `json:"id,required"`
 	AccountID float64                           `json:"accountId,required"`
 	Created   string                            `json:"created,required"`
-	Data      interface{}                       `json:"data,required"`
+	Data      string                            `json:"data,required"`
 	Source    string                            `json:"source,required"`
 	TLP       string                            `json:"tlp,required"`
 	JSON      threatEventDatasetRawResponseJSON `json:"-"`

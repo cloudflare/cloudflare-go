@@ -88,9 +88,11 @@ func TestTokenListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AISearch.Tokens.List(context.TODO(), ai_search.TokenListParams{
-		AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-		Page:      cloudflare.F(int64(1)),
-		PerPage:   cloudflare.F(int64(1)),
+		AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+		OrderBy:          cloudflare.F(ai_search.TokenListParamsOrderByCreatedAt),
+		OrderByDirection: cloudflare.F(ai_search.TokenListParamsOrderByDirectionAsc),
+		Page:             cloudflare.F(int64(1)),
+		PerPage:          cloudflare.F(int64(1)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

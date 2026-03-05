@@ -36,6 +36,9 @@ type D1 struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The D1 database's size, in bytes.
 	FileSize float64 `json:"file_size"`
+	// Specify the location to restrict the D1 database to run and store data. If this
+	// option is present, the location hint is ignored.
+	Jurisdiction D1Jurisdiction `json:"jurisdiction,nullable"`
 	// D1 database name.
 	Name      string  `json:"name"`
 	NumTables float64 `json:"num_tables"`
@@ -51,6 +54,7 @@ type D1 struct {
 type d1JSON struct {
 	CreatedAt       apijson.Field
 	FileSize        apijson.Field
+	Jurisdiction    apijson.Field
 	Name            apijson.Field
 	NumTables       apijson.Field
 	ReadReplication apijson.Field
@@ -66,6 +70,23 @@ func (r *D1) UnmarshalJSON(data []byte) (err error) {
 
 func (r d1JSON) RawJSON() string {
 	return r.raw
+}
+
+// Specify the location to restrict the D1 database to run and store data. If this
+// option is present, the location hint is ignored.
+type D1Jurisdiction string
+
+const (
+	D1JurisdictionEu      D1Jurisdiction = "eu"
+	D1JurisdictionFedramp D1Jurisdiction = "fedramp"
+)
+
+func (r D1Jurisdiction) IsKnown() bool {
+	switch r {
+	case D1JurisdictionEu, D1JurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 // Configuration for D1 read replication.

@@ -406,6 +406,9 @@ func (r queryResultMetaTimingsJSON) RawJSON() string {
 type DatabaseListResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Specify the location to restrict the D1 database to run and store data. If this
+	// option is present, the location hint is ignored.
+	Jurisdiction DatabaseListResponseJurisdiction `json:"jurisdiction,nullable"`
 	// D1 database name.
 	Name string `json:"name"`
 	// D1 database identifier (UUID).
@@ -417,12 +420,13 @@ type DatabaseListResponse struct {
 // databaseListResponseJSON contains the JSON metadata for the struct
 // [DatabaseListResponse]
 type databaseListResponseJSON struct {
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	UUID        apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	CreatedAt    apijson.Field
+	Jurisdiction apijson.Field
+	Name         apijson.Field
+	UUID         apijson.Field
+	Version      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *DatabaseListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -431,6 +435,23 @@ func (r *DatabaseListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r databaseListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Specify the location to restrict the D1 database to run and store data. If this
+// option is present, the location hint is ignored.
+type DatabaseListResponseJurisdiction string
+
+const (
+	DatabaseListResponseJurisdictionEu      DatabaseListResponseJurisdiction = "eu"
+	DatabaseListResponseJurisdictionFedramp DatabaseListResponseJurisdiction = "fedramp"
+)
+
+func (r DatabaseListResponseJurisdiction) IsKnown() bool {
+	switch r {
+	case DatabaseListResponseJurisdictionEu, DatabaseListResponseJurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type DatabaseDeleteResponse = interface{}

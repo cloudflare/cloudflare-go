@@ -36,7 +36,8 @@ func NewInvestigateMoveService(opts ...option.RequestOption) (r *InvestigateMove
 	return
 }
 
-// Move a message
+// Moves a single email message to a different folder or changes its quarantine
+// status.
 func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateMoveNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -62,7 +63,8 @@ func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, para
 	return res, nil
 }
 
-// Move a message
+// Moves a single email message to a different folder or changes its quarantine
+// status.
 func (r *InvestigateMoveService) NewAutoPaging(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.New(ctx, postfixID, params, opts...))
 }

@@ -39,7 +39,8 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 	return
 }
 
-// Upload a schema
+// Uploads a new OpenAPI schema for API Shield schema validation. The schema
+// defines expected request/response formats for API endpoints.
 func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +57,7 @@ func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ..
 	return
 }
 
-// List all uploaded schemas
+// Lists all OpenAPI schemas uploaded to API Shield with pagination support.
 func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PublicSchema], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -78,12 +79,13 @@ func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts 
 	return res, nil
 }
 
-// List all uploaded schemas
+// Lists all OpenAPI schemas uploaded to API Shield with pagination support.
 func (r *SchemaService) ListAutoPaging(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PublicSchema] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a schema
+// Permanently removes an uploaded OpenAPI schema from API Shield. Operations using
+// this schema will lose their validation rules.
 func (r *SchemaService) Delete(ctx context.Context, schemaID string, body SchemaDeleteParams, opts ...option.RequestOption) (res *SchemaDeleteResponse, err error) {
 	var env SchemaDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -104,7 +106,8 @@ func (r *SchemaService) Delete(ctx context.Context, schemaID string, body Schema
 	return
 }
 
-// Edit details of a schema to enable validation
+// Modifies an existing OpenAPI schema in API Shield, updating the validation rules
+// for associated API operations.
 func (r *SchemaService) Edit(ctx context.Context, schemaID string, params SchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,7 +128,8 @@ func (r *SchemaService) Edit(ctx context.Context, schemaID string, params Schema
 	return
 }
 
-// Get details of a schema
+// Gets the contents and metadata of a specific OpenAPI schema uploaded to API
+// Shield.
 func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

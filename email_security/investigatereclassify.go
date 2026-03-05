@@ -35,7 +35,8 @@ func NewInvestigateReclassifyService(opts ...option.RequestOption) (r *Investiga
 	return
 }
 
-// Change email classfication
+// Submits an email message for reclassification, updating its threat assessment
+// based on new analysis.
 func (r *InvestigateReclassifyService) New(ctx context.Context, postfixID string, params InvestigateReclassifyNewParams, opts ...option.RequestOption) (res *InvestigateReclassifyNewResponse, err error) {
 	var env InvestigateReclassifyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

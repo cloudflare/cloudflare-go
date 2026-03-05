@@ -400,8 +400,12 @@ func (r tokenUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type TokenListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Page      param.Field[int64]  `query:"page"`
-	PerPage   param.Field[int64]  `query:"per_page"`
+	// Order By Column Name
+	OrderBy param.Field[TokenListParamsOrderBy] `query:"order_by"`
+	// Order By Direction
+	OrderByDirection param.Field[TokenListParamsOrderByDirection] `query:"order_by_direction"`
+	Page             param.Field[int64]                           `query:"page"`
+	PerPage          param.Field[int64]                           `query:"per_page"`
 }
 
 // URLQuery serializes [TokenListParams]'s query parameters as `url.Values`.
@@ -410,6 +414,37 @@ func (r TokenListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Order By Column Name
+type TokenListParamsOrderBy string
+
+const (
+	TokenListParamsOrderByCreatedAt TokenListParamsOrderBy = "created_at"
+)
+
+func (r TokenListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case TokenListParamsOrderByCreatedAt:
+		return true
+	}
+	return false
+}
+
+// Order By Direction
+type TokenListParamsOrderByDirection string
+
+const (
+	TokenListParamsOrderByDirectionAsc  TokenListParamsOrderByDirection = "asc"
+	TokenListParamsOrderByDirectionDesc TokenListParamsOrderByDirection = "desc"
+)
+
+func (r TokenListParamsOrderByDirection) IsKnown() bool {
+	switch r {
+	case TokenListParamsOrderByDirectionAsc, TokenListParamsOrderByDirectionDesc:
+		return true
+	}
+	return false
 }
 
 type TokenDeleteParams struct {

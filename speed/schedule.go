@@ -228,6 +228,9 @@ func (r scheduleDeleteResponseJSON) RawJSON() string {
 type ScheduleNewParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// The frequency of the scheduled test. Defaults to WEEKLY for free plans, DAILY
+	// for paid plans.
+	Frequency param.Field[ScheduleNewParamsFrequency] `query:"frequency"`
 	// A test region.
 	Region param.Field[ScheduleNewParamsRegion] `query:"region"`
 }
@@ -238,6 +241,23 @@ func (r ScheduleNewParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// The frequency of the scheduled test. Defaults to WEEKLY for free plans, DAILY
+// for paid plans.
+type ScheduleNewParamsFrequency string
+
+const (
+	ScheduleNewParamsFrequencyDaily  ScheduleNewParamsFrequency = "DAILY"
+	ScheduleNewParamsFrequencyWeekly ScheduleNewParamsFrequency = "WEEKLY"
+)
+
+func (r ScheduleNewParamsFrequency) IsKnown() bool {
+	switch r {
+	case ScheduleNewParamsFrequencyDaily, ScheduleNewParamsFrequencyWeekly:
+		return true
+	}
+	return false
 }
 
 // A test region.

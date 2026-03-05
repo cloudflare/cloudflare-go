@@ -68,6 +68,7 @@ func (r *SubmissionService) ListAutoPaging(ctx context.Context, params Submissio
 type SubmissionListResponse struct {
 	RequestedTs          time.Time                                  `json:"requested_ts,required" format:"date-time"`
 	SubmissionID         string                                     `json:"submission_id,required"`
+	CustomerStatus       SubmissionListResponseCustomerStatus       `json:"customer_status"`
 	OriginalDisposition  SubmissionListResponseOriginalDisposition  `json:"original_disposition,nullable"`
 	OriginalEdfHash      string                                     `json:"original_edf_hash,nullable"`
 	Outcome              string                                     `json:"outcome,nullable"`
@@ -85,6 +86,7 @@ type SubmissionListResponse struct {
 type submissionListResponseJSON struct {
 	RequestedTs          apijson.Field
 	SubmissionID         apijson.Field
+	CustomerStatus       apijson.Field
 	OriginalDisposition  apijson.Field
 	OriginalEdfHash      apijson.Field
 	Outcome              apijson.Field
@@ -104,6 +106,22 @@ func (r *SubmissionListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r submissionListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type SubmissionListResponseCustomerStatus string
+
+const (
+	SubmissionListResponseCustomerStatusEscalated  SubmissionListResponseCustomerStatus = "escalated"
+	SubmissionListResponseCustomerStatusReviewed   SubmissionListResponseCustomerStatus = "reviewed"
+	SubmissionListResponseCustomerStatusUnreviewed SubmissionListResponseCustomerStatus = "unreviewed"
+)
+
+func (r SubmissionListResponseCustomerStatus) IsKnown() bool {
+	switch r {
+	case SubmissionListResponseCustomerStatusEscalated, SubmissionListResponseCustomerStatusReviewed, SubmissionListResponseCustomerStatusUnreviewed:
+		return true
+	}
+	return false
 }
 
 type SubmissionListResponseOriginalDisposition string
@@ -177,7 +195,8 @@ func (r SubmissionListResponseRequestedDisposition) IsKnown() bool {
 
 type SubmissionListParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID      param.Field[string]                             `path:"account_id,required"`
+	CustomerStatus param.Field[SubmissionListParamsCustomerStatus] `query:"customer_status"`
 	// The end of the search date range. Defaults to `now` if not provided.
 	End                 param.Field[time.Time]                               `query:"end" format:"date-time"`
 	OriginalDisposition param.Field[SubmissionListParamsOriginalDisposition] `query:"original_disposition"`
@@ -202,6 +221,22 @@ func (r SubmissionListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type SubmissionListParamsCustomerStatus string
+
+const (
+	SubmissionListParamsCustomerStatusEscalated  SubmissionListParamsCustomerStatus = "escalated"
+	SubmissionListParamsCustomerStatusReviewed   SubmissionListParamsCustomerStatus = "reviewed"
+	SubmissionListParamsCustomerStatusUnreviewed SubmissionListParamsCustomerStatus = "unreviewed"
+)
+
+func (r SubmissionListParamsCustomerStatus) IsKnown() bool {
+	switch r {
+	case SubmissionListParamsCustomerStatusEscalated, SubmissionListParamsCustomerStatusReviewed, SubmissionListParamsCustomerStatusUnreviewed:
+		return true
+	}
+	return false
 }
 
 type SubmissionListParamsOriginalDisposition string

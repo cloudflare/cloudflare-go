@@ -38,10 +38,10 @@ func NewInstanceJobService(opts ...option.RequestOption) (r *InstanceJobService)
 }
 
 // Creates a new indexing job for an AI Search instance.
-func (r *InstanceJobService) New(ctx context.Context, id string, body InstanceJobNewParams, opts ...option.RequestOption) (res *InstanceJobNewResponse, err error) {
+func (r *InstanceJobService) New(ctx context.Context, id string, params InstanceJobNewParams, opts ...option.RequestOption) (res *InstanceJobNewResponse, err error) {
 	var env InstanceJobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -49,8 +49,8 @@ func (r *InstanceJobService) New(ctx context.Context, id string, body InstanceJo
 		err = errors.New("missing required id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/jobs", body.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/jobs", params.AccountID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -140,13 +140,14 @@ func (r *InstanceJobService) Logs(ctx context.Context, id string, jobID string, 
 }
 
 type InstanceJobNewResponse struct {
-	ID         string                       `json:"id,required"`
-	Source     InstanceJobNewResponseSource `json:"source,required"`
-	EndReason  string                       `json:"end_reason"`
-	EndedAt    string                       `json:"ended_at"`
-	LastSeenAt string                       `json:"last_seen_at"`
-	StartedAt  string                       `json:"started_at"`
-	JSON       instanceJobNewResponseJSON   `json:"-"`
+	ID          string                       `json:"id,required"`
+	Source      InstanceJobNewResponseSource `json:"source,required"`
+	Description string                       `json:"description"`
+	EndReason   string                       `json:"end_reason"`
+	EndedAt     string                       `json:"ended_at"`
+	LastSeenAt  string                       `json:"last_seen_at"`
+	StartedAt   string                       `json:"started_at"`
+	JSON        instanceJobNewResponseJSON   `json:"-"`
 }
 
 // instanceJobNewResponseJSON contains the JSON metadata for the struct
@@ -154,6 +155,7 @@ type InstanceJobNewResponse struct {
 type instanceJobNewResponseJSON struct {
 	ID          apijson.Field
 	Source      apijson.Field
+	Description apijson.Field
 	EndReason   apijson.Field
 	EndedAt     apijson.Field
 	LastSeenAt  apijson.Field
@@ -186,13 +188,14 @@ func (r InstanceJobNewResponseSource) IsKnown() bool {
 }
 
 type InstanceJobListResponse struct {
-	ID         string                        `json:"id,required"`
-	Source     InstanceJobListResponseSource `json:"source,required"`
-	EndReason  string                        `json:"end_reason"`
-	EndedAt    string                        `json:"ended_at"`
-	LastSeenAt string                        `json:"last_seen_at"`
-	StartedAt  string                        `json:"started_at"`
-	JSON       instanceJobListResponseJSON   `json:"-"`
+	ID          string                        `json:"id,required"`
+	Source      InstanceJobListResponseSource `json:"source,required"`
+	Description string                        `json:"description"`
+	EndReason   string                        `json:"end_reason"`
+	EndedAt     string                        `json:"ended_at"`
+	LastSeenAt  string                        `json:"last_seen_at"`
+	StartedAt   string                        `json:"started_at"`
+	JSON        instanceJobListResponseJSON   `json:"-"`
 }
 
 // instanceJobListResponseJSON contains the JSON metadata for the struct
@@ -200,6 +203,7 @@ type InstanceJobListResponse struct {
 type instanceJobListResponseJSON struct {
 	ID          apijson.Field
 	Source      apijson.Field
+	Description apijson.Field
 	EndReason   apijson.Field
 	EndedAt     apijson.Field
 	LastSeenAt  apijson.Field
@@ -232,13 +236,14 @@ func (r InstanceJobListResponseSource) IsKnown() bool {
 }
 
 type InstanceJobGetResponse struct {
-	ID         string                       `json:"id,required"`
-	Source     InstanceJobGetResponseSource `json:"source,required"`
-	EndReason  string                       `json:"end_reason"`
-	EndedAt    string                       `json:"ended_at"`
-	LastSeenAt string                       `json:"last_seen_at"`
-	StartedAt  string                       `json:"started_at"`
-	JSON       instanceJobGetResponseJSON   `json:"-"`
+	ID          string                       `json:"id,required"`
+	Source      InstanceJobGetResponseSource `json:"source,required"`
+	Description string                       `json:"description"`
+	EndReason   string                       `json:"end_reason"`
+	EndedAt     string                       `json:"ended_at"`
+	LastSeenAt  string                       `json:"last_seen_at"`
+	StartedAt   string                       `json:"started_at"`
+	JSON        instanceJobGetResponseJSON   `json:"-"`
 }
 
 // instanceJobGetResponseJSON contains the JSON metadata for the struct
@@ -246,6 +251,7 @@ type InstanceJobGetResponse struct {
 type instanceJobGetResponseJSON struct {
 	ID          apijson.Field
 	Source      apijson.Field
+	Description apijson.Field
 	EndReason   apijson.Field
 	EndedAt     apijson.Field
 	LastSeenAt  apijson.Field
@@ -305,7 +311,12 @@ func (r instanceJobLogsResponseJSON) RawJSON() string {
 }
 
 type InstanceJobNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID   param.Field[string] `path:"account_id,required"`
+	Description param.Field[string] `json:"description"`
+}
+
+func (r InstanceJobNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type InstanceJobNewResponseEnvelope struct {
