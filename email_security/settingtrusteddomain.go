@@ -41,7 +41,8 @@ func NewSettingTrustedDomainService(opts ...option.RequestOption) (r *SettingTru
 	return
 }
 
-// Create a trusted email domain
+// Adds a domain to the trusted domains list for email security, reducing false
+// positive detections.
 func (r *SettingTrustedDomainService) New(ctx context.Context, params SettingTrustedDomainNewParams, opts ...option.RequestOption) (res *SettingTrustedDomainNewResponseUnion, err error) {
 	var env SettingTrustedDomainNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -85,7 +86,8 @@ func (r *SettingTrustedDomainService) ListAutoPaging(ctx context.Context, params
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a trusted email domain
+// Removes a domain from the trusted domains list, subjecting it to normal security
+// scanning.
 func (r *SettingTrustedDomainService) Delete(ctx context.Context, trustedDomainID int64, body SettingTrustedDomainDeleteParams, opts ...option.RequestOption) (res *SettingTrustedDomainDeleteResponse, err error) {
 	var env SettingTrustedDomainDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -102,7 +104,7 @@ func (r *SettingTrustedDomainService) Delete(ctx context.Context, trustedDomainI
 	return
 }
 
-// Update a trusted email domain
+// Modifies a trusted domain entry's configuration.
 func (r *SettingTrustedDomainService) Edit(ctx context.Context, trustedDomainID int64, params SettingTrustedDomainEditParams, opts ...option.RequestOption) (res *SettingTrustedDomainEditResponse, err error) {
 	var env SettingTrustedDomainEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -119,7 +121,7 @@ func (r *SettingTrustedDomainService) Edit(ctx context.Context, trustedDomainID 
 	return
 }
 
-// Get a trusted email domain
+// Gets information about a specific trusted domain entry.
 func (r *SettingTrustedDomainService) Get(ctx context.Context, trustedDomainID int64, query SettingTrustedDomainGetParams, opts ...option.RequestOption) (res *SettingTrustedDomainGetResponse, err error) {
 	var env SettingTrustedDomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

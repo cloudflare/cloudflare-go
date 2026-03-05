@@ -69,31 +69,6 @@ func (r *InstanceItemService) ListAutoPaging(ctx context.Context, id string, par
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, id, params, opts...))
 }
 
-// Retrieves a specific indexed item from an AI Search instance.
-func (r *InstanceItemService) Get(ctx context.Context, id string, itemID string, query InstanceItemGetParams, opts ...option.RequestOption) (res *InstanceItemGetResponse, err error) {
-	var env InstanceItemGetResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
-		return
-	}
-	if itemID == "" {
-		err = errors.New("missing required item_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/items/%s", query.AccountID, id, itemID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type InstanceItemListResponse struct {
 	ID          float64                            `json:"id,required"`
 	Checksum    string                             `json:"checksum,required"`
@@ -170,82 +145,6 @@ func (r InstanceItemListResponseStatus) IsKnown() bool {
 	return false
 }
 
-type InstanceItemGetResponse struct {
-	ID          float64                           `json:"id,required"`
-	Checksum    string                            `json:"checksum,required"`
-	ChunksCount int64                             `json:"chunks_count,required,nullable"`
-	CreatedAt   time.Time                         `json:"created_at,required" format:"date-time"`
-	FileSize    float64                           `json:"file_size,required,nullable"`
-	Key         string                            `json:"key,required"`
-	LastSeenAt  time.Time                         `json:"last_seen_at,required" format:"date-time"`
-	Namespace   string                            `json:"namespace,required"`
-	NextAction  InstanceItemGetResponseNextAction `json:"next_action,required,nullable"`
-	Status      InstanceItemGetResponseStatus     `json:"status,required"`
-	Error       string                            `json:"error"`
-	PublicID    string                            `json:"public_id"`
-	JSON        instanceItemGetResponseJSON       `json:"-"`
-}
-
-// instanceItemGetResponseJSON contains the JSON metadata for the struct
-// [InstanceItemGetResponse]
-type instanceItemGetResponseJSON struct {
-	ID          apijson.Field
-	Checksum    apijson.Field
-	ChunksCount apijson.Field
-	CreatedAt   apijson.Field
-	FileSize    apijson.Field
-	Key         apijson.Field
-	LastSeenAt  apijson.Field
-	Namespace   apijson.Field
-	NextAction  apijson.Field
-	Status      apijson.Field
-	Error       apijson.Field
-	PublicID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InstanceItemGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r instanceItemGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InstanceItemGetResponseNextAction string
-
-const (
-	InstanceItemGetResponseNextActionIndex  InstanceItemGetResponseNextAction = "INDEX"
-	InstanceItemGetResponseNextActionDelete InstanceItemGetResponseNextAction = "DELETE"
-)
-
-func (r InstanceItemGetResponseNextAction) IsKnown() bool {
-	switch r {
-	case InstanceItemGetResponseNextActionIndex, InstanceItemGetResponseNextActionDelete:
-		return true
-	}
-	return false
-}
-
-type InstanceItemGetResponseStatus string
-
-const (
-	InstanceItemGetResponseStatusQueued    InstanceItemGetResponseStatus = "queued"
-	InstanceItemGetResponseStatusRunning   InstanceItemGetResponseStatus = "running"
-	InstanceItemGetResponseStatusCompleted InstanceItemGetResponseStatus = "completed"
-	InstanceItemGetResponseStatusError     InstanceItemGetResponseStatus = "error"
-	InstanceItemGetResponseStatusSkipped   InstanceItemGetResponseStatus = "skipped"
-)
-
-func (r InstanceItemGetResponseStatus) IsKnown() bool {
-	switch r {
-	case InstanceItemGetResponseStatusQueued, InstanceItemGetResponseStatusRunning, InstanceItemGetResponseStatusCompleted, InstanceItemGetResponseStatusError, InstanceItemGetResponseStatusSkipped:
-		return true
-	}
-	return false
-}
-
 type InstanceItemListParams struct {
 	AccountID param.Field[string]                       `path:"account_id,required"`
 	Page      param.Field[int64]                        `query:"page"`
@@ -278,31 +177,4 @@ func (r InstanceItemListParamsStatus) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type InstanceItemGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type InstanceItemGetResponseEnvelope struct {
-	Result  InstanceItemGetResponse             `json:"result,required"`
-	Success bool                                `json:"success,required"`
-	JSON    instanceItemGetResponseEnvelopeJSON `json:"-"`
-}
-
-// instanceItemGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InstanceItemGetResponseEnvelope]
-type instanceItemGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InstanceItemGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r instanceItemGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }

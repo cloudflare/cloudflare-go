@@ -359,7 +359,7 @@ type SecurityTXTGetResponse struct {
 	Expires            time.Time                  `json:"expires" format:"date-time"`
 	Hiring             []string                   `json:"hiring" format:"uri"`
 	Policy             []string                   `json:"policy" format:"uri"`
-	PreferredLanguages string                     `json:"preferredLanguages"`
+	PreferredLanguages string                     `json:"preferred_languages"`
 	JSON               securityTXTGetResponseJSON `json:"-"`
 }
 
@@ -398,7 +398,7 @@ type SecurityTXTUpdateParams struct {
 	Expires            param.Field[time.Time] `json:"expires" format:"date-time"`
 	Hiring             param.Field[[]string]  `json:"hiring" format:"uri"`
 	Policy             param.Field[[]string]  `json:"policy" format:"uri"`
-	PreferredLanguages param.Field[string]    `json:"preferredLanguages"`
+	PreferredLanguages param.Field[string]    `json:"preferred_languages"`
 }
 
 func (r SecurityTXTUpdateParams) MarshalJSON() (data []byte, err error) {

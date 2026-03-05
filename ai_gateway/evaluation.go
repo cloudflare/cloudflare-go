@@ -41,7 +41,7 @@ func NewEvaluationService(opts ...option.RequestOption) (r *EvaluationService) {
 	return
 }
 
-// Create a new Evaluation
+// Creates a new AI Gateway.
 func (r *EvaluationService) New(ctx context.Context, gatewayID string, params EvaluationNewParams, opts ...option.RequestOption) (res *EvaluationNewResponse, err error) {
 	var env EvaluationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -62,7 +62,7 @@ func (r *EvaluationService) New(ctx context.Context, gatewayID string, params Ev
 	return
 }
 
-// List Evaluations
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *EvaluationService) List(ctx context.Context, gatewayID string, params EvaluationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EvaluationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -88,12 +88,12 @@ func (r *EvaluationService) List(ctx context.Context, gatewayID string, params E
 	return res, nil
 }
 
-// List Evaluations
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *EvaluationService) ListAutoPaging(ctx context.Context, gatewayID string, params EvaluationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EvaluationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
-// Delete a Evaluation
+// Deletes an AI Gateway dataset.
 func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id string, body EvaluationDeleteParams, opts ...option.RequestOption) (res *EvaluationDeleteResponse, err error) {
 	var env EvaluationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -118,7 +118,7 @@ func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id str
 	return
 }
 
-// Fetch a Evaluation
+// Retrieves details for a specific AI Gateway dataset.
 func (r *EvaluationService) Get(ctx context.Context, gatewayID string, id string, query EvaluationGetParams, opts ...option.RequestOption) (res *EvaluationGetResponse, err error) {
 	var env EvaluationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -144,11 +144,9 @@ func (r *EvaluationService) Get(ctx context.Context, gatewayID string, id string
 }
 
 type EvaluationNewResponse struct {
-	ID         string                         `json:"id,required"`
-	AccountID  string                         `json:"account_id,required"`
-	AccountTag string                         `json:"account_tag,required"`
-	CreatedAt  time.Time                      `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationNewResponseDataset `json:"datasets,required"`
+	ID        string                         `json:"id,required"`
+	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationNewResponseDataset `json:"datasets,required"`
 	// gateway id
 	GatewayID  string                        `json:"gateway_id,required"`
 	ModifiedAt time.Time                     `json:"modified_at,required" format:"date-time"`
@@ -163,8 +161,6 @@ type EvaluationNewResponse struct {
 // [EvaluationNewResponse]
 type evaluationNewResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Datasets    apijson.Field
 	GatewayID   apijson.Field
@@ -358,11 +354,9 @@ func (r evaluationNewResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationListResponse struct {
-	ID         string                          `json:"id,required"`
-	AccountID  string                          `json:"account_id,required"`
-	AccountTag string                          `json:"account_tag,required"`
-	CreatedAt  time.Time                       `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationListResponseDataset `json:"datasets,required"`
+	ID        string                          `json:"id,required"`
+	CreatedAt time.Time                       `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationListResponseDataset `json:"datasets,required"`
 	// gateway id
 	GatewayID  string                         `json:"gateway_id,required"`
 	ModifiedAt time.Time                      `json:"modified_at,required" format:"date-time"`
@@ -377,8 +371,6 @@ type EvaluationListResponse struct {
 // [EvaluationListResponse]
 type evaluationListResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Datasets    apijson.Field
 	GatewayID   apijson.Field
@@ -572,11 +564,9 @@ func (r evaluationListResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationDeleteResponse struct {
-	ID         string                            `json:"id,required"`
-	AccountID  string                            `json:"account_id,required"`
-	AccountTag string                            `json:"account_tag,required"`
-	CreatedAt  time.Time                         `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationDeleteResponseDataset `json:"datasets,required"`
+	ID        string                            `json:"id,required"`
+	CreatedAt time.Time                         `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationDeleteResponseDataset `json:"datasets,required"`
 	// gateway id
 	GatewayID  string                           `json:"gateway_id,required"`
 	ModifiedAt time.Time                        `json:"modified_at,required" format:"date-time"`
@@ -591,8 +581,6 @@ type EvaluationDeleteResponse struct {
 // [EvaluationDeleteResponse]
 type evaluationDeleteResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Datasets    apijson.Field
 	GatewayID   apijson.Field
@@ -786,11 +774,9 @@ func (r evaluationDeleteResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationGetResponse struct {
-	ID         string                         `json:"id,required"`
-	AccountID  string                         `json:"account_id,required"`
-	AccountTag string                         `json:"account_tag,required"`
-	CreatedAt  time.Time                      `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationGetResponseDataset `json:"datasets,required"`
+	ID        string                         `json:"id,required"`
+	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationGetResponseDataset `json:"datasets,required"`
 	// gateway id
 	GatewayID  string                        `json:"gateway_id,required"`
 	ModifiedAt time.Time                     `json:"modified_at,required" format:"date-time"`
@@ -805,8 +791,6 @@ type EvaluationGetResponse struct {
 // [EvaluationGetResponse]
 type evaluationGetResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Datasets    apijson.Field
 	GatewayID   apijson.Field

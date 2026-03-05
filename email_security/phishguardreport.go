@@ -38,7 +38,8 @@ func NewPhishguardReportService(opts ...option.RequestOption) (r *PhishguardRepo
 	return
 }
 
-// Get `PhishGuard` reports
+// Retrieves `PhishGuard` reports showing phishing attempts and suspicious email
+// patterns detected.
 func (r *PhishguardReportService) List(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhishguardReportListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +61,8 @@ func (r *PhishguardReportService) List(ctx context.Context, params PhishguardRep
 	return res, nil
 }
 
-// Get `PhishGuard` reports
+// Retrieves `PhishGuard` reports showing phishing attempts and suspicious email
+// patterns detected.
 func (r *PhishguardReportService) ListAutoPaging(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PhishguardReportListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }

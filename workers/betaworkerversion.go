@@ -145,6 +145,9 @@ type Version struct {
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// The integer version number, starting from one.
 	Number int64 `json:"number,required"`
+	// All routable URLs that always point to this version. Does not include alias
+	// URLs, since aliases can be updated to point to a different version.
+	URLs []string `json:"urls,required" format:"uri"`
 	// Metadata about the version.
 	Annotations VersionAnnotations `json:"annotations"`
 	// Configuration for assets within a Worker.
@@ -206,6 +209,7 @@ type versionJSON struct {
 	ID                 apijson.Field
 	CreatedOn          apijson.Field
 	Number             apijson.Field
+	URLs               apijson.Field
 	Annotations        apijson.Field
 	Assets             apijson.Field
 	Bindings           apijson.Field

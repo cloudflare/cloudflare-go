@@ -34,7 +34,7 @@ func NewInstanceEventService(opts ...option.RequestOption) (r *InstanceEventServ
 	return
 }
 
-// Send event to instance
+// Sends an event to a running workflow instance to trigger state transitions.
 func (r *InstanceEventService) New(ctx context.Context, workflowName string, instanceID string, eventType string, params InstanceEventNewParams, opts ...option.RequestOption) (res *InstanceEventNewResponse, err error) {
 	var env InstanceEventNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -41,7 +41,7 @@ func NewDatasetService(opts ...option.RequestOption) (r *DatasetService) {
 	return
 }
 
-// Create a new Dataset
+// Creates a new AI Gateway.
 func (r *DatasetService) New(ctx context.Context, gatewayID string, params DatasetNewParams, opts ...option.RequestOption) (res *DatasetNewResponse, err error) {
 	var env DatasetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -62,7 +62,7 @@ func (r *DatasetService) New(ctx context.Context, gatewayID string, params Datas
 	return
 }
 
-// Update a Dataset
+// Updates an existing AI Gateway dataset.
 func (r *DatasetService) Update(ctx context.Context, gatewayID string, id string, params DatasetUpdateParams, opts ...option.RequestOption) (res *DatasetUpdateResponse, err error) {
 	var env DatasetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -87,7 +87,7 @@ func (r *DatasetService) Update(ctx context.Context, gatewayID string, id string
 	return
 }
 
-// List Datasets
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *DatasetService) List(ctx context.Context, gatewayID string, params DatasetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DatasetListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -113,12 +113,12 @@ func (r *DatasetService) List(ctx context.Context, gatewayID string, params Data
 	return res, nil
 }
 
-// List Datasets
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *DatasetService) ListAutoPaging(ctx context.Context, gatewayID string, params DatasetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DatasetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
-// Delete a Dataset
+// Deletes an AI Gateway dataset.
 func (r *DatasetService) Delete(ctx context.Context, gatewayID string, id string, body DatasetDeleteParams, opts ...option.RequestOption) (res *DatasetDeleteResponse, err error) {
 	var env DatasetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -143,7 +143,7 @@ func (r *DatasetService) Delete(ctx context.Context, gatewayID string, id string
 	return
 }
 
-// Fetch a Dataset
+// Retrieves details for a specific AI Gateway dataset.
 func (r *DatasetService) Get(ctx context.Context, gatewayID string, id string, query DatasetGetParams, opts ...option.RequestOption) (res *DatasetGetResponse, err error) {
 	var env DatasetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -169,12 +169,10 @@ func (r *DatasetService) Get(ctx context.Context, gatewayID string, id string, q
 }
 
 type DatasetNewResponse struct {
-	ID         string                     `json:"id,required"`
-	AccountID  string                     `json:"account_id,required"`
-	AccountTag string                     `json:"account_tag,required"`
-	CreatedAt  time.Time                  `json:"created_at,required" format:"date-time"`
-	Enable     bool                       `json:"enable,required"`
-	Filters    []DatasetNewResponseFilter `json:"filters,required"`
+	ID        string                     `json:"id,required"`
+	CreatedAt time.Time                  `json:"created_at,required" format:"date-time"`
+	Enable    bool                       `json:"enable,required"`
+	Filters   []DatasetNewResponseFilter `json:"filters,required"`
 	// gateway id
 	GatewayID  string                 `json:"gateway_id,required"`
 	ModifiedAt time.Time              `json:"modified_at,required" format:"date-time"`
@@ -186,8 +184,6 @@ type DatasetNewResponse struct {
 // [DatasetNewResponse]
 type datasetNewResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Enable      apijson.Field
 	Filters     apijson.Field
@@ -304,12 +300,10 @@ func init() {
 }
 
 type DatasetUpdateResponse struct {
-	ID         string                        `json:"id,required"`
-	AccountID  string                        `json:"account_id,required"`
-	AccountTag string                        `json:"account_tag,required"`
-	CreatedAt  time.Time                     `json:"created_at,required" format:"date-time"`
-	Enable     bool                          `json:"enable,required"`
-	Filters    []DatasetUpdateResponseFilter `json:"filters,required"`
+	ID        string                        `json:"id,required"`
+	CreatedAt time.Time                     `json:"created_at,required" format:"date-time"`
+	Enable    bool                          `json:"enable,required"`
+	Filters   []DatasetUpdateResponseFilter `json:"filters,required"`
 	// gateway id
 	GatewayID  string                    `json:"gateway_id,required"`
 	ModifiedAt time.Time                 `json:"modified_at,required" format:"date-time"`
@@ -321,8 +315,6 @@ type DatasetUpdateResponse struct {
 // [DatasetUpdateResponse]
 type datasetUpdateResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Enable      apijson.Field
 	Filters     apijson.Field
@@ -439,12 +431,10 @@ func init() {
 }
 
 type DatasetListResponse struct {
-	ID         string                      `json:"id,required"`
-	AccountID  string                      `json:"account_id,required"`
-	AccountTag string                      `json:"account_tag,required"`
-	CreatedAt  time.Time                   `json:"created_at,required" format:"date-time"`
-	Enable     bool                        `json:"enable,required"`
-	Filters    []DatasetListResponseFilter `json:"filters,required"`
+	ID        string                      `json:"id,required"`
+	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
+	Enable    bool                        `json:"enable,required"`
+	Filters   []DatasetListResponseFilter `json:"filters,required"`
 	// gateway id
 	GatewayID  string                  `json:"gateway_id,required"`
 	ModifiedAt time.Time               `json:"modified_at,required" format:"date-time"`
@@ -456,8 +446,6 @@ type DatasetListResponse struct {
 // [DatasetListResponse]
 type datasetListResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Enable      apijson.Field
 	Filters     apijson.Field
@@ -574,12 +562,10 @@ func init() {
 }
 
 type DatasetDeleteResponse struct {
-	ID         string                        `json:"id,required"`
-	AccountID  string                        `json:"account_id,required"`
-	AccountTag string                        `json:"account_tag,required"`
-	CreatedAt  time.Time                     `json:"created_at,required" format:"date-time"`
-	Enable     bool                          `json:"enable,required"`
-	Filters    []DatasetDeleteResponseFilter `json:"filters,required"`
+	ID        string                        `json:"id,required"`
+	CreatedAt time.Time                     `json:"created_at,required" format:"date-time"`
+	Enable    bool                          `json:"enable,required"`
+	Filters   []DatasetDeleteResponseFilter `json:"filters,required"`
 	// gateway id
 	GatewayID  string                    `json:"gateway_id,required"`
 	ModifiedAt time.Time                 `json:"modified_at,required" format:"date-time"`
@@ -591,8 +577,6 @@ type DatasetDeleteResponse struct {
 // [DatasetDeleteResponse]
 type datasetDeleteResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Enable      apijson.Field
 	Filters     apijson.Field
@@ -709,12 +693,10 @@ func init() {
 }
 
 type DatasetGetResponse struct {
-	ID         string                     `json:"id,required"`
-	AccountID  string                     `json:"account_id,required"`
-	AccountTag string                     `json:"account_tag,required"`
-	CreatedAt  time.Time                  `json:"created_at,required" format:"date-time"`
-	Enable     bool                       `json:"enable,required"`
-	Filters    []DatasetGetResponseFilter `json:"filters,required"`
+	ID        string                     `json:"id,required"`
+	CreatedAt time.Time                  `json:"created_at,required" format:"date-time"`
+	Enable    bool                       `json:"enable,required"`
+	Filters   []DatasetGetResponseFilter `json:"filters,required"`
 	// gateway id
 	GatewayID  string                 `json:"gateway_id,required"`
 	ModifiedAt time.Time              `json:"modified_at,required" format:"date-time"`
@@ -726,8 +708,6 @@ type DatasetGetResponse struct {
 // [DatasetGetResponse]
 type datasetGetResponseJSON struct {
 	ID          apijson.Field
-	AccountID   apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Enable      apijson.Field
 	Filters     apijson.Field

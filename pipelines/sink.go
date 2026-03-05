@@ -1764,26 +1764,21 @@ type SinkListResponseConfig struct {
 	AccountID string `json:"account_id,required"`
 	// R2 Bucket to write to
 	Bucket string `json:"bucket,required"`
-	// Authentication token
-	Token string `json:"token" format:"var-str"`
 	// This field can have the runtime type of
-	// [SinkListResponseConfigCloudflarePipelinesR2TableCredentials].
-	Credentials interface{} `json:"credentials"`
-	// This field can have the runtime type of
-	// [SinkListResponseConfigCloudflarePipelinesR2TableFileNaming].
+	// [SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNaming].
 	FileNaming interface{} `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
 	Jurisdiction string `json:"jurisdiction"`
 	// Table namespace
 	Namespace string `json:"namespace"`
 	// This field can have the runtime type of
-	// [SinkListResponseConfigCloudflarePipelinesR2TablePartitioning].
+	// [SinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioning].
 	Partitioning interface{} `json:"partitioning"`
 	// Subpath within the bucket to write to
 	Path string `json:"path"`
 	// This field can have the runtime type of
-	// [SinkListResponseConfigCloudflarePipelinesR2TableRollingPolicy],
-	// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy].
+	// [SinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy],
+	// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy].
 	RollingPolicy interface{} `json:"rolling_policy"`
 	// Table name
 	TableName string                     `json:"table_name"`
@@ -1796,8 +1791,6 @@ type SinkListResponseConfig struct {
 type sinkListResponseConfigJSON struct {
 	AccountID     apijson.Field
 	Bucket        apijson.Field
-	Token         apijson.Field
-	Credentials   apijson.Field
 	FileNaming    apijson.Field
 	Jurisdiction  apijson.Field
 	Namespace     apijson.Field
@@ -1826,16 +1819,16 @@ func (r *SinkListResponseConfig) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [SinkListResponseConfigCloudflarePipelinesR2Table],
-// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable].
+// [SinkListResponseConfigCloudflarePipelinesR2TablePublic],
+// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic].
 func (r SinkListResponseConfig) AsUnion() SinkListResponseConfigUnion {
 	return r.union
 }
 
 // Defines the configuration of the R2 Sink.
 //
-// Union satisfied by [SinkListResponseConfigCloudflarePipelinesR2Table] or
-// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable].
+// Union satisfied by [SinkListResponseConfigCloudflarePipelinesR2TablePublic] or
+// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic].
 type SinkListResponseConfigUnion interface {
 	implementsSinkListResponseConfig()
 }
@@ -1846,40 +1839,39 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SinkListResponseConfigCloudflarePipelinesR2Table{}),
+			Type:       reflect.TypeOf(SinkListResponseConfigCloudflarePipelinesR2TablePublic{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable{}),
+			Type:       reflect.TypeOf(SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic{}),
 		},
 	)
 }
 
-type SinkListResponseConfigCloudflarePipelinesR2Table struct {
+// R2 Sink public configuration.
+type SinkListResponseConfigCloudflarePipelinesR2TablePublic struct {
 	// Cloudflare Account ID for the bucket
 	AccountID string `json:"account_id,required"`
 	// R2 Bucket to write to
-	Bucket      string                                                      `json:"bucket,required"`
-	Credentials SinkListResponseConfigCloudflarePipelinesR2TableCredentials `json:"credentials,required"`
+	Bucket string `json:"bucket,required"`
 	// Controls filename prefix/suffix and strategy.
-	FileNaming SinkListResponseConfigCloudflarePipelinesR2TableFileNaming `json:"file_naming"`
+	FileNaming SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNaming `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
 	Jurisdiction string `json:"jurisdiction"`
 	// Data-layout partitioning for sinks.
-	Partitioning SinkListResponseConfigCloudflarePipelinesR2TablePartitioning `json:"partitioning"`
+	Partitioning SinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioning `json:"partitioning"`
 	// Subpath within the bucket to write to
 	Path string `json:"path"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
-	RollingPolicy SinkListResponseConfigCloudflarePipelinesR2TableRollingPolicy `json:"rolling_policy"`
-	JSON          sinkListResponseConfigCloudflarePipelinesR2TableJSON          `json:"-"`
+	RollingPolicy SinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy `json:"rolling_policy"`
+	JSON          sinkListResponseConfigCloudflarePipelinesR2TablePublicJSON          `json:"-"`
 }
 
-// sinkListResponseConfigCloudflarePipelinesR2TableJSON contains the JSON metadata
-// for the struct [SinkListResponseConfigCloudflarePipelinesR2Table]
-type sinkListResponseConfigCloudflarePipelinesR2TableJSON struct {
+// sinkListResponseConfigCloudflarePipelinesR2TablePublicJSON contains the JSON
+// metadata for the struct [SinkListResponseConfigCloudflarePipelinesR2TablePublic]
+type sinkListResponseConfigCloudflarePipelinesR2TablePublicJSON struct {
 	AccountID     apijson.Field
 	Bucket        apijson.Field
-	Credentials   apijson.Field
 	FileNaming    apijson.Field
 	Jurisdiction  apijson.Field
 	Partitioning  apijson.Field
@@ -1889,57 +1881,31 @@ type sinkListResponseConfigCloudflarePipelinesR2TableJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SinkListResponseConfigCloudflarePipelinesR2Table) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkListResponseConfigCloudflarePipelinesR2TablePublic) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkListResponseConfigCloudflarePipelinesR2TableJSON) RawJSON() string {
+func (r sinkListResponseConfigCloudflarePipelinesR2TablePublicJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SinkListResponseConfigCloudflarePipelinesR2Table) implementsSinkListResponseConfig() {}
-
-type SinkListResponseConfigCloudflarePipelinesR2TableCredentials struct {
-	// Cloudflare Account ID for the bucket
-	AccessKeyID string `json:"access_key_id,required" format:"var-str"`
-	// Cloudflare Account ID for the bucket
-	SecretAccessKey string                                                          `json:"secret_access_key,required" format:"var-str"`
-	JSON            sinkListResponseConfigCloudflarePipelinesR2TableCredentialsJSON `json:"-"`
-}
-
-// sinkListResponseConfigCloudflarePipelinesR2TableCredentialsJSON contains the
-// JSON metadata for the struct
-// [SinkListResponseConfigCloudflarePipelinesR2TableCredentials]
-type sinkListResponseConfigCloudflarePipelinesR2TableCredentialsJSON struct {
-	AccessKeyID     apijson.Field
-	SecretAccessKey apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *SinkListResponseConfigCloudflarePipelinesR2TableCredentials) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkListResponseConfigCloudflarePipelinesR2TableCredentialsJSON) RawJSON() string {
-	return r.raw
-}
+func (r SinkListResponseConfigCloudflarePipelinesR2TablePublic) implementsSinkListResponseConfig() {}
 
 // Controls filename prefix/suffix and strategy.
-type SinkListResponseConfigCloudflarePipelinesR2TableFileNaming struct {
+type SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNaming struct {
 	// The prefix to use in file name. i.e prefix-<uuid>.parquet
 	Prefix string `json:"prefix"`
 	// Filename generation strategy.
-	Strategy SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategy `json:"strategy"`
+	Strategy SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy `json:"strategy"`
 	// This will overwrite the default file suffix. i.e .parquet, use with caution
-	Suffix string                                                         `json:"suffix"`
-	JSON   sinkListResponseConfigCloudflarePipelinesR2TableFileNamingJSON `json:"-"`
+	Suffix string                                                               `json:"suffix"`
+	JSON   sinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON `json:"-"`
 }
 
-// sinkListResponseConfigCloudflarePipelinesR2TableFileNamingJSON contains the JSON
-// metadata for the struct
-// [SinkListResponseConfigCloudflarePipelinesR2TableFileNaming]
-type sinkListResponseConfigCloudflarePipelinesR2TableFileNamingJSON struct {
+// sinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON contains
+// the JSON metadata for the struct
+// [SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNaming]
+type sinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON struct {
 	Prefix      apijson.Field
 	Strategy    apijson.Field
 	Suffix      apijson.Field
@@ -1947,71 +1913,71 @@ type sinkListResponseConfigCloudflarePipelinesR2TableFileNamingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SinkListResponseConfigCloudflarePipelinesR2TableFileNaming) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNaming) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkListResponseConfigCloudflarePipelinesR2TableFileNamingJSON) RawJSON() string {
+func (r sinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Filename generation strategy.
-type SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategy string
+type SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy string
 
 const (
-	SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategySerial SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "serial"
-	SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUID   SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "uuid"
-	SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUIDV7 SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "uuid_v7"
-	SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUlid   SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "ulid"
+	SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategySerial SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "serial"
+	SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUID   SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "uuid"
+	SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUIDV7 SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "uuid_v7"
+	SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUlid   SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "ulid"
 )
 
-func (r SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategy) IsKnown() bool {
+func (r SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy) IsKnown() bool {
 	switch r {
-	case SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategySerial, SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUID, SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUIDV7, SinkListResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUlid:
+	case SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategySerial, SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUID, SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUIDV7, SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUlid:
 		return true
 	}
 	return false
 }
 
 // Data-layout partitioning for sinks.
-type SinkListResponseConfigCloudflarePipelinesR2TablePartitioning struct {
+type SinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioning struct {
 	// The pattern of the date string
-	TimePattern string                                                           `json:"time_pattern"`
-	JSON        sinkListResponseConfigCloudflarePipelinesR2TablePartitioningJSON `json:"-"`
+	TimePattern string                                                                 `json:"time_pattern"`
+	JSON        sinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON `json:"-"`
 }
 
-// sinkListResponseConfigCloudflarePipelinesR2TablePartitioningJSON contains the
-// JSON metadata for the struct
-// [SinkListResponseConfigCloudflarePipelinesR2TablePartitioning]
-type sinkListResponseConfigCloudflarePipelinesR2TablePartitioningJSON struct {
+// sinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON contains
+// the JSON metadata for the struct
+// [SinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioning]
+type sinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON struct {
 	TimePattern apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SinkListResponseConfigCloudflarePipelinesR2TablePartitioning) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkListResponseConfigCloudflarePipelinesR2TablePartitioningJSON) RawJSON() string {
+func (r sinkListResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON) RawJSON() string {
 	return r.raw
 }
 
 // Rolling policy for file sinks (when & why to close a file and open a new one).
-type SinkListResponseConfigCloudflarePipelinesR2TableRollingPolicy struct {
+type SinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy struct {
 	// Files will be rolled after reaching this number of bytes
 	FileSizeBytes int64 `json:"file_size_bytes"`
 	// Number of seconds of inactivity to wait before rolling over to a new file
 	InactivitySeconds int64 `json:"inactivity_seconds"`
 	// Number of seconds to wait before rolling over to a new file
-	IntervalSeconds int64                                                             `json:"interval_seconds"`
-	JSON            sinkListResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON `json:"-"`
+	IntervalSeconds int64                                                                   `json:"interval_seconds"`
+	JSON            sinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON `json:"-"`
 }
 
-// sinkListResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON contains the
-// JSON metadata for the struct
-// [SinkListResponseConfigCloudflarePipelinesR2TableRollingPolicy]
-type sinkListResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON struct {
+// sinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON contains
+// the JSON metadata for the struct
+// [SinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy]
+type sinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON struct {
 	FileSizeBytes     apijson.Field
 	InactivitySeconds apijson.Field
 	IntervalSeconds   apijson.Field
@@ -2019,18 +1985,16 @@ type sinkListResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SinkListResponseConfigCloudflarePipelinesR2TableRollingPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkListResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON) RawJSON() string {
+func (r sinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-// R2 Data Catalog Sink
-type SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable struct {
-	// Authentication token
-	Token string `json:"token,required" format:"var-str"`
+// R2 Data Catalog Sink public configuration.
+type SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic struct {
 	// Cloudflare Account ID
 	AccountID string `json:"account_id,required" format:"uri"`
 	// The R2 Bucket that hosts this catalog
@@ -2040,15 +2004,14 @@ type SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable struct {
 	// Table namespace
 	Namespace string `json:"namespace"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
-	RollingPolicy SinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy `json:"rolling_policy"`
-	JSON          sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableJSON          `json:"-"`
+	RollingPolicy SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy `json:"rolling_policy"`
+	JSON          sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON          `json:"-"`
 }
 
-// sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableJSON contains the
-// JSON metadata for the struct
-// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable]
-type sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableJSON struct {
-	Token         apijson.Field
+// sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON contains
+// the JSON metadata for the struct
+// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic]
+type sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON struct {
 	AccountID     apijson.Field
 	Bucket        apijson.Field
 	TableName     apijson.Field
@@ -2058,32 +2021,32 @@ type sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableJSON) RawJSON() string {
+func (r sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SinkListResponseConfigCloudflarePipelinesR2DataCatalogTable) implementsSinkListResponseConfig() {
+func (r SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic) implementsSinkListResponseConfig() {
 }
 
 // Rolling policy for file sinks (when & why to close a file and open a new one).
-type SinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy struct {
+type SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy struct {
 	// Files will be rolled after reaching this number of bytes
 	FileSizeBytes int64 `json:"file_size_bytes"`
 	// Number of seconds of inactivity to wait before rolling over to a new file
 	InactivitySeconds int64 `json:"inactivity_seconds"`
 	// Number of seconds to wait before rolling over to a new file
-	IntervalSeconds int64                                                                        `json:"interval_seconds"`
-	JSON            sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON `json:"-"`
+	IntervalSeconds int64                                                                              `json:"interval_seconds"`
+	JSON            sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON `json:"-"`
 }
 
-// sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON
+// sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON
 // contains the JSON metadata for the struct
-// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy]
-type sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON struct {
+// [SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy]
+type sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON struct {
 	FileSizeBytes     apijson.Field
 	InactivitySeconds apijson.Field
 	IntervalSeconds   apijson.Field
@@ -2091,11 +2054,11 @@ type sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSO
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkListResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON) RawJSON() string {
+func (r sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3345,26 +3308,21 @@ type SinkGetResponseConfig struct {
 	AccountID string `json:"account_id,required"`
 	// R2 Bucket to write to
 	Bucket string `json:"bucket,required"`
-	// Authentication token
-	Token string `json:"token" format:"var-str"`
 	// This field can have the runtime type of
-	// [SinkGetResponseConfigCloudflarePipelinesR2TableCredentials].
-	Credentials interface{} `json:"credentials"`
-	// This field can have the runtime type of
-	// [SinkGetResponseConfigCloudflarePipelinesR2TableFileNaming].
+	// [SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNaming].
 	FileNaming interface{} `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
 	Jurisdiction string `json:"jurisdiction"`
 	// Table namespace
 	Namespace string `json:"namespace"`
 	// This field can have the runtime type of
-	// [SinkGetResponseConfigCloudflarePipelinesR2TablePartitioning].
+	// [SinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioning].
 	Partitioning interface{} `json:"partitioning"`
 	// Subpath within the bucket to write to
 	Path string `json:"path"`
 	// This field can have the runtime type of
-	// [SinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicy],
-	// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy].
+	// [SinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy],
+	// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy].
 	RollingPolicy interface{} `json:"rolling_policy"`
 	// Table name
 	TableName string                    `json:"table_name"`
@@ -3377,8 +3335,6 @@ type SinkGetResponseConfig struct {
 type sinkGetResponseConfigJSON struct {
 	AccountID     apijson.Field
 	Bucket        apijson.Field
-	Token         apijson.Field
-	Credentials   apijson.Field
 	FileNaming    apijson.Field
 	Jurisdiction  apijson.Field
 	Namespace     apijson.Field
@@ -3407,16 +3363,16 @@ func (r *SinkGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [SinkGetResponseConfigCloudflarePipelinesR2Table],
-// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable].
+// [SinkGetResponseConfigCloudflarePipelinesR2TablePublic],
+// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic].
 func (r SinkGetResponseConfig) AsUnion() SinkGetResponseConfigUnion {
 	return r.union
 }
 
 // Defines the configuration of the R2 Sink.
 //
-// Union satisfied by [SinkGetResponseConfigCloudflarePipelinesR2Table] or
-// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable].
+// Union satisfied by [SinkGetResponseConfigCloudflarePipelinesR2TablePublic] or
+// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic].
 type SinkGetResponseConfigUnion interface {
 	implementsSinkGetResponseConfig()
 }
@@ -3427,40 +3383,39 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SinkGetResponseConfigCloudflarePipelinesR2Table{}),
+			Type:       reflect.TypeOf(SinkGetResponseConfigCloudflarePipelinesR2TablePublic{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable{}),
+			Type:       reflect.TypeOf(SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic{}),
 		},
 	)
 }
 
-type SinkGetResponseConfigCloudflarePipelinesR2Table struct {
+// R2 Sink public configuration.
+type SinkGetResponseConfigCloudflarePipelinesR2TablePublic struct {
 	// Cloudflare Account ID for the bucket
 	AccountID string `json:"account_id,required"`
 	// R2 Bucket to write to
-	Bucket      string                                                     `json:"bucket,required"`
-	Credentials SinkGetResponseConfigCloudflarePipelinesR2TableCredentials `json:"credentials,required"`
+	Bucket string `json:"bucket,required"`
 	// Controls filename prefix/suffix and strategy.
-	FileNaming SinkGetResponseConfigCloudflarePipelinesR2TableFileNaming `json:"file_naming"`
+	FileNaming SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNaming `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
 	Jurisdiction string `json:"jurisdiction"`
 	// Data-layout partitioning for sinks.
-	Partitioning SinkGetResponseConfigCloudflarePipelinesR2TablePartitioning `json:"partitioning"`
+	Partitioning SinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioning `json:"partitioning"`
 	// Subpath within the bucket to write to
 	Path string `json:"path"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
-	RollingPolicy SinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicy `json:"rolling_policy"`
-	JSON          sinkGetResponseConfigCloudflarePipelinesR2TableJSON          `json:"-"`
+	RollingPolicy SinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy `json:"rolling_policy"`
+	JSON          sinkGetResponseConfigCloudflarePipelinesR2TablePublicJSON          `json:"-"`
 }
 
-// sinkGetResponseConfigCloudflarePipelinesR2TableJSON contains the JSON metadata
-// for the struct [SinkGetResponseConfigCloudflarePipelinesR2Table]
-type sinkGetResponseConfigCloudflarePipelinesR2TableJSON struct {
+// sinkGetResponseConfigCloudflarePipelinesR2TablePublicJSON contains the JSON
+// metadata for the struct [SinkGetResponseConfigCloudflarePipelinesR2TablePublic]
+type sinkGetResponseConfigCloudflarePipelinesR2TablePublicJSON struct {
 	AccountID     apijson.Field
 	Bucket        apijson.Field
-	Credentials   apijson.Field
 	FileNaming    apijson.Field
 	Jurisdiction  apijson.Field
 	Partitioning  apijson.Field
@@ -3470,57 +3425,31 @@ type sinkGetResponseConfigCloudflarePipelinesR2TableJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SinkGetResponseConfigCloudflarePipelinesR2Table) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkGetResponseConfigCloudflarePipelinesR2TablePublic) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkGetResponseConfigCloudflarePipelinesR2TableJSON) RawJSON() string {
+func (r sinkGetResponseConfigCloudflarePipelinesR2TablePublicJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SinkGetResponseConfigCloudflarePipelinesR2Table) implementsSinkGetResponseConfig() {}
-
-type SinkGetResponseConfigCloudflarePipelinesR2TableCredentials struct {
-	// Cloudflare Account ID for the bucket
-	AccessKeyID string `json:"access_key_id,required" format:"var-str"`
-	// Cloudflare Account ID for the bucket
-	SecretAccessKey string                                                         `json:"secret_access_key,required" format:"var-str"`
-	JSON            sinkGetResponseConfigCloudflarePipelinesR2TableCredentialsJSON `json:"-"`
-}
-
-// sinkGetResponseConfigCloudflarePipelinesR2TableCredentialsJSON contains the JSON
-// metadata for the struct
-// [SinkGetResponseConfigCloudflarePipelinesR2TableCredentials]
-type sinkGetResponseConfigCloudflarePipelinesR2TableCredentialsJSON struct {
-	AccessKeyID     apijson.Field
-	SecretAccessKey apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *SinkGetResponseConfigCloudflarePipelinesR2TableCredentials) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkGetResponseConfigCloudflarePipelinesR2TableCredentialsJSON) RawJSON() string {
-	return r.raw
-}
+func (r SinkGetResponseConfigCloudflarePipelinesR2TablePublic) implementsSinkGetResponseConfig() {}
 
 // Controls filename prefix/suffix and strategy.
-type SinkGetResponseConfigCloudflarePipelinesR2TableFileNaming struct {
+type SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNaming struct {
 	// The prefix to use in file name. i.e prefix-<uuid>.parquet
 	Prefix string `json:"prefix"`
 	// Filename generation strategy.
-	Strategy SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategy `json:"strategy"`
+	Strategy SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy `json:"strategy"`
 	// This will overwrite the default file suffix. i.e .parquet, use with caution
-	Suffix string                                                        `json:"suffix"`
-	JSON   sinkGetResponseConfigCloudflarePipelinesR2TableFileNamingJSON `json:"-"`
+	Suffix string                                                              `json:"suffix"`
+	JSON   sinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON `json:"-"`
 }
 
-// sinkGetResponseConfigCloudflarePipelinesR2TableFileNamingJSON contains the JSON
-// metadata for the struct
-// [SinkGetResponseConfigCloudflarePipelinesR2TableFileNaming]
-type sinkGetResponseConfigCloudflarePipelinesR2TableFileNamingJSON struct {
+// sinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON contains the
+// JSON metadata for the struct
+// [SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNaming]
+type sinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON struct {
 	Prefix      apijson.Field
 	Strategy    apijson.Field
 	Suffix      apijson.Field
@@ -3528,71 +3457,71 @@ type sinkGetResponseConfigCloudflarePipelinesR2TableFileNamingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SinkGetResponseConfigCloudflarePipelinesR2TableFileNaming) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNaming) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkGetResponseConfigCloudflarePipelinesR2TableFileNamingJSON) RawJSON() string {
+func (r sinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Filename generation strategy.
-type SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategy string
+type SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy string
 
 const (
-	SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategySerial SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "serial"
-	SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUID   SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "uuid"
-	SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUIDV7 SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "uuid_v7"
-	SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUlid   SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategy = "ulid"
+	SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategySerial SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "serial"
+	SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUID   SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "uuid"
+	SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUIDV7 SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "uuid_v7"
+	SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUlid   SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy = "ulid"
 )
 
-func (r SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategy) IsKnown() bool {
+func (r SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategy) IsKnown() bool {
 	switch r {
-	case SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategySerial, SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUID, SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUUIDV7, SinkGetResponseConfigCloudflarePipelinesR2TableFileNamingStrategyUlid:
+	case SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategySerial, SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUID, SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUUIDV7, SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNamingStrategyUlid:
 		return true
 	}
 	return false
 }
 
 // Data-layout partitioning for sinks.
-type SinkGetResponseConfigCloudflarePipelinesR2TablePartitioning struct {
+type SinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioning struct {
 	// The pattern of the date string
-	TimePattern string                                                          `json:"time_pattern"`
-	JSON        sinkGetResponseConfigCloudflarePipelinesR2TablePartitioningJSON `json:"-"`
+	TimePattern string                                                                `json:"time_pattern"`
+	JSON        sinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON `json:"-"`
 }
 
-// sinkGetResponseConfigCloudflarePipelinesR2TablePartitioningJSON contains the
-// JSON metadata for the struct
-// [SinkGetResponseConfigCloudflarePipelinesR2TablePartitioning]
-type sinkGetResponseConfigCloudflarePipelinesR2TablePartitioningJSON struct {
+// sinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON contains
+// the JSON metadata for the struct
+// [SinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioning]
+type sinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON struct {
 	TimePattern apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SinkGetResponseConfigCloudflarePipelinesR2TablePartitioning) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkGetResponseConfigCloudflarePipelinesR2TablePartitioningJSON) RawJSON() string {
+func (r sinkGetResponseConfigCloudflarePipelinesR2TablePublicPartitioningJSON) RawJSON() string {
 	return r.raw
 }
 
 // Rolling policy for file sinks (when & why to close a file and open a new one).
-type SinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicy struct {
+type SinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy struct {
 	// Files will be rolled after reaching this number of bytes
 	FileSizeBytes int64 `json:"file_size_bytes"`
 	// Number of seconds of inactivity to wait before rolling over to a new file
 	InactivitySeconds int64 `json:"inactivity_seconds"`
 	// Number of seconds to wait before rolling over to a new file
-	IntervalSeconds int64                                                            `json:"interval_seconds"`
-	JSON            sinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON `json:"-"`
+	IntervalSeconds int64                                                                  `json:"interval_seconds"`
+	JSON            sinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON `json:"-"`
 }
 
-// sinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON contains the
-// JSON metadata for the struct
-// [SinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicy]
-type sinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON struct {
+// sinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON contains
+// the JSON metadata for the struct
+// [SinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy]
+type sinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON struct {
 	FileSizeBytes     apijson.Field
 	InactivitySeconds apijson.Field
 	IntervalSeconds   apijson.Field
@@ -3600,18 +3529,16 @@ type sinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkGetResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON) RawJSON() string {
+func (r sinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-// R2 Data Catalog Sink
-type SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable struct {
-	// Authentication token
-	Token string `json:"token,required" format:"var-str"`
+// R2 Data Catalog Sink public configuration.
+type SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic struct {
 	// Cloudflare Account ID
 	AccountID string `json:"account_id,required" format:"uri"`
 	// The R2 Bucket that hosts this catalog
@@ -3621,15 +3548,14 @@ type SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable struct {
 	// Table namespace
 	Namespace string `json:"namespace"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
-	RollingPolicy SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy `json:"rolling_policy"`
-	JSON          sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableJSON          `json:"-"`
+	RollingPolicy SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy `json:"rolling_policy"`
+	JSON          sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON          `json:"-"`
 }
 
-// sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableJSON contains the JSON
-// metadata for the struct
-// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable]
-type sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableJSON struct {
-	Token         apijson.Field
+// sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON contains
+// the JSON metadata for the struct
+// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic]
+type sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON struct {
 	AccountID     apijson.Field
 	Bucket        apijson.Field
 	TableName     apijson.Field
@@ -3639,32 +3565,32 @@ type sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableJSON) RawJSON() string {
+func (r sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTable) implementsSinkGetResponseConfig() {
+func (r SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic) implementsSinkGetResponseConfig() {
 }
 
 // Rolling policy for file sinks (when & why to close a file and open a new one).
-type SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy struct {
+type SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy struct {
 	// Files will be rolled after reaching this number of bytes
 	FileSizeBytes int64 `json:"file_size_bytes"`
 	// Number of seconds of inactivity to wait before rolling over to a new file
 	InactivitySeconds int64 `json:"inactivity_seconds"`
 	// Number of seconds to wait before rolling over to a new file
-	IntervalSeconds int64                                                                       `json:"interval_seconds"`
-	JSON            sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON `json:"-"`
+	IntervalSeconds int64                                                                             `json:"interval_seconds"`
+	JSON            sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON `json:"-"`
 }
 
-// sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON
+// sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON
 // contains the JSON metadata for the struct
-// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy]
-type sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON struct {
+// [SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy]
+type sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON struct {
 	FileSizeBytes     apijson.Field
 	InactivitySeconds apijson.Field
 	IntervalSeconds   apijson.Field
@@ -3672,11 +3598,11 @@ type sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJSON) RawJSON() string {
+func (r sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingPolicyJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -36,7 +36,7 @@ func NewModelSchemaService(opts ...option.RequestOption) (r *ModelSchemaService)
 	return
 }
 
-// Get Model Schema
+// Retrieves the input and output JSON schema definition for a Workers AI model.
 func (r *ModelSchemaService) Get(ctx context.Context, params ModelSchemaGetParams, opts ...option.RequestOption) (res *ModelSchemaGetResponse, err error) {
 	var env ModelSchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

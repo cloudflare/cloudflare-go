@@ -970,11 +970,13 @@ func (r DNSSummaryV2Params) URLQuery() (v url.Values) {
 type DNSSummaryV2ParamsDimension string
 
 const (
-	DNSSummaryV2ParamsDimensionIPVersion       DNSSummaryV2ParamsDimension = "IP_VERSION"
+	DNSSummaryV2ParamsDimensionAs              DNSSummaryV2ParamsDimension = "AS"
 	DNSSummaryV2ParamsDimensionCacheHit        DNSSummaryV2ParamsDimension = "CACHE_HIT"
 	DNSSummaryV2ParamsDimensionDNSSEC          DNSSummaryV2ParamsDimension = "DNSSEC"
 	DNSSummaryV2ParamsDimensionDNSSECAware     DNSSummaryV2ParamsDimension = "DNSSEC_AWARE"
 	DNSSummaryV2ParamsDimensionDNSSECE2E       DNSSummaryV2ParamsDimension = "DNSSEC_E2E"
+	DNSSummaryV2ParamsDimensionIPVersion       DNSSummaryV2ParamsDimension = "IP_VERSION"
+	DNSSummaryV2ParamsDimensionLocation        DNSSummaryV2ParamsDimension = "LOCATION"
 	DNSSummaryV2ParamsDimensionMatchingAnswer  DNSSummaryV2ParamsDimension = "MATCHING_ANSWER"
 	DNSSummaryV2ParamsDimensionProtocol        DNSSummaryV2ParamsDimension = "PROTOCOL"
 	DNSSummaryV2ParamsDimensionQueryType       DNSSummaryV2ParamsDimension = "QUERY_TYPE"
@@ -986,7 +988,7 @@ const (
 
 func (r DNSSummaryV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case DNSSummaryV2ParamsDimensionIPVersion, DNSSummaryV2ParamsDimensionCacheHit, DNSSummaryV2ParamsDimensionDNSSEC, DNSSummaryV2ParamsDimensionDNSSECAware, DNSSummaryV2ParamsDimensionDNSSECE2E, DNSSummaryV2ParamsDimensionMatchingAnswer, DNSSummaryV2ParamsDimensionProtocol, DNSSummaryV2ParamsDimensionQueryType, DNSSummaryV2ParamsDimensionResponseCode, DNSSummaryV2ParamsDimensionResponseTTL, DNSSummaryV2ParamsDimensionTLD, DNSSummaryV2ParamsDimensionTLDDNSMagnitude:
+	case DNSSummaryV2ParamsDimensionAs, DNSSummaryV2ParamsDimensionCacheHit, DNSSummaryV2ParamsDimensionDNSSEC, DNSSummaryV2ParamsDimensionDNSSECAware, DNSSummaryV2ParamsDimensionDNSSECE2E, DNSSummaryV2ParamsDimensionIPVersion, DNSSummaryV2ParamsDimensionLocation, DNSSummaryV2ParamsDimensionMatchingAnswer, DNSSummaryV2ParamsDimensionProtocol, DNSSummaryV2ParamsDimensionQueryType, DNSSummaryV2ParamsDimensionResponseCode, DNSSummaryV2ParamsDimensionResponseTTL, DNSSummaryV2ParamsDimensionTLD, DNSSummaryV2ParamsDimensionTLDDNSMagnitude:
 		return true
 	}
 	return false
@@ -1664,11 +1666,13 @@ func (r DNSTimeseriesGroupsV2Params) URLQuery() (v url.Values) {
 type DNSTimeseriesGroupsV2ParamsDimension string
 
 const (
-	DNSTimeseriesGroupsV2ParamsDimensionIPVersion      DNSTimeseriesGroupsV2ParamsDimension = "IP_VERSION"
+	DNSTimeseriesGroupsV2ParamsDimensionAs             DNSTimeseriesGroupsV2ParamsDimension = "AS"
 	DNSTimeseriesGroupsV2ParamsDimensionCacheHit       DNSTimeseriesGroupsV2ParamsDimension = "CACHE_HIT"
 	DNSTimeseriesGroupsV2ParamsDimensionDNSSEC         DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC"
 	DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware    DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC_AWARE"
 	DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E      DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC_E2E"
+	DNSTimeseriesGroupsV2ParamsDimensionIPVersion      DNSTimeseriesGroupsV2ParamsDimension = "IP_VERSION"
+	DNSTimeseriesGroupsV2ParamsDimensionLocation       DNSTimeseriesGroupsV2ParamsDimension = "LOCATION"
 	DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer DNSTimeseriesGroupsV2ParamsDimension = "MATCHING_ANSWER"
 	DNSTimeseriesGroupsV2ParamsDimensionProtocol       DNSTimeseriesGroupsV2ParamsDimension = "PROTOCOL"
 	DNSTimeseriesGroupsV2ParamsDimensionQueryType      DNSTimeseriesGroupsV2ParamsDimension = "QUERY_TYPE"
@@ -1679,7 +1683,7 @@ const (
 
 func (r DNSTimeseriesGroupsV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupsV2ParamsDimensionIPVersion, DNSTimeseriesGroupsV2ParamsDimensionCacheHit, DNSTimeseriesGroupsV2ParamsDimensionDNSSEC, DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware, DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E, DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer, DNSTimeseriesGroupsV2ParamsDimensionProtocol, DNSTimeseriesGroupsV2ParamsDimensionQueryType, DNSTimeseriesGroupsV2ParamsDimensionResponseCode, DNSTimeseriesGroupsV2ParamsDimensionResponseTTL, DNSTimeseriesGroupsV2ParamsDimensionTLD:
+	case DNSTimeseriesGroupsV2ParamsDimensionAs, DNSTimeseriesGroupsV2ParamsDimensionCacheHit, DNSTimeseriesGroupsV2ParamsDimensionDNSSEC, DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware, DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E, DNSTimeseriesGroupsV2ParamsDimensionIPVersion, DNSTimeseriesGroupsV2ParamsDimensionLocation, DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer, DNSTimeseriesGroupsV2ParamsDimensionProtocol, DNSTimeseriesGroupsV2ParamsDimensionQueryType, DNSTimeseriesGroupsV2ParamsDimensionResponseCode, DNSTimeseriesGroupsV2ParamsDimensionResponseTTL, DNSTimeseriesGroupsV2ParamsDimensionTLD:
 		return true
 	}
 	return false

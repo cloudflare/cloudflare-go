@@ -265,7 +265,6 @@ func (r *DynamicRoutingService) ListVersions(ctx context.Context, gatewayID stri
 
 type DynamicRoutingNewResponse struct {
 	ID         string                              `json:"id,required"`
-	AccountTag string                              `json:"account_tag,required"`
 	CreatedAt  time.Time                           `json:"created_at,required" format:"date-time"`
 	Deployment DynamicRoutingNewResponseDeployment `json:"deployment,required"`
 	Elements   []DynamicRoutingNewResponseElement  `json:"elements,required"`
@@ -280,7 +279,6 @@ type DynamicRoutingNewResponse struct {
 // [DynamicRoutingNewResponse]
 type dynamicRoutingNewResponseJSON struct {
 	ID          apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Deployment  apijson.Field
 	Elements    apijson.Field
@@ -1254,7 +1252,6 @@ func (r DynamicRoutingListResponseDataRoutesVersionActive) IsKnown() bool {
 
 type DynamicRoutingDeleteResponse struct {
 	ID         string                                `json:"id,required"`
-	AccountTag string                                `json:"account_tag,required"`
 	CreatedAt  time.Time                             `json:"created_at,required" format:"date-time"`
 	Elements   []DynamicRoutingDeleteResponseElement `json:"elements,required"`
 	GatewayID  string                                `json:"gateway_id,required"`
@@ -1267,7 +1264,6 @@ type DynamicRoutingDeleteResponse struct {
 // [DynamicRoutingDeleteResponse]
 type dynamicRoutingDeleteResponseJSON struct {
 	ID          apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Elements    apijson.Field
 	GatewayID   apijson.Field
@@ -1482,7 +1478,6 @@ func (r DynamicRoutingDeleteResponseElementsType) IsKnown() bool {
 
 type DynamicRoutingNewDeploymentResponse struct {
 	ID         string                                       `json:"id,required"`
-	AccountTag string                                       `json:"account_tag,required"`
 	CreatedAt  time.Time                                    `json:"created_at,required" format:"date-time"`
 	Elements   []DynamicRoutingNewDeploymentResponseElement `json:"elements,required"`
 	GatewayID  string                                       `json:"gateway_id,required"`
@@ -1495,7 +1490,6 @@ type DynamicRoutingNewDeploymentResponse struct {
 // struct [DynamicRoutingNewDeploymentResponse]
 type dynamicRoutingNewDeploymentResponseJSON struct {
 	ID          apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Elements    apijson.Field
 	GatewayID   apijson.Field
@@ -1713,7 +1707,6 @@ func (r DynamicRoutingNewDeploymentResponseElementsType) IsKnown() bool {
 
 type DynamicRoutingNewVersionResponse struct {
 	ID         string                                    `json:"id,required"`
-	AccountTag string                                    `json:"account_tag,required"`
 	CreatedAt  time.Time                                 `json:"created_at,required" format:"date-time"`
 	Elements   []DynamicRoutingNewVersionResponseElement `json:"elements,required"`
 	GatewayID  string                                    `json:"gateway_id,required"`
@@ -1726,7 +1719,6 @@ type DynamicRoutingNewVersionResponse struct {
 // [DynamicRoutingNewVersionResponse]
 type dynamicRoutingNewVersionResponseJSON struct {
 	ID          apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Elements    apijson.Field
 	GatewayID   apijson.Field
@@ -1943,7 +1935,6 @@ func (r DynamicRoutingNewVersionResponseElementsType) IsKnown() bool {
 
 type DynamicRoutingGetResponse struct {
 	ID         string                              `json:"id,required"`
-	AccountTag string                              `json:"account_tag,required"`
 	CreatedAt  time.Time                           `json:"created_at,required" format:"date-time"`
 	Deployment DynamicRoutingGetResponseDeployment `json:"deployment,required"`
 	Elements   []DynamicRoutingGetResponseElement  `json:"elements,required"`
@@ -1958,7 +1949,6 @@ type DynamicRoutingGetResponse struct {
 // [DynamicRoutingGetResponse]
 type dynamicRoutingGetResponseJSON struct {
 	ID          apijson.Field
-	AccountTag  apijson.Field
 	CreatedAt   apijson.Field
 	Deployment  apijson.Field
 	Elements    apijson.Field
@@ -2246,7 +2236,6 @@ func (r DynamicRoutingGetResponseVersionActive) IsKnown() bool {
 
 type DynamicRoutingGetVersionResponse struct {
 	ID         string                                    `json:"id,required"`
-	AccountTag string                                    `json:"account_tag,required"`
 	Active     DynamicRoutingGetVersionResponseActive    `json:"active,required"`
 	CreatedAt  string                                    `json:"created_at,required"`
 	Data       string                                    `json:"data,required"`
@@ -2263,7 +2252,6 @@ type DynamicRoutingGetVersionResponse struct {
 // [DynamicRoutingGetVersionResponse]
 type dynamicRoutingGetVersionResponseJSON struct {
 	ID          apijson.Field
-	AccountTag  apijson.Field
 	Active      apijson.Field
 	CreatedAt   apijson.Field
 	Data        apijson.Field

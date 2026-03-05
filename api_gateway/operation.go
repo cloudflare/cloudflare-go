@@ -66,7 +66,8 @@ func (r *OperationService) New(ctx context.Context, params OperationNewParams, o
 	return
 }
 
-// Retrieve information about all operations on a zone
+// Lists all API operations tracked by API Shield for a zone with pagination.
+// Returns operation details including method, path, and feature configurations.
 func (r *OperationService) List(ctx context.Context, params OperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OperationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -88,12 +89,14 @@ func (r *OperationService) List(ctx context.Context, params OperationListParams,
 	return res, nil
 }
 
-// Retrieve information about all operations on a zone
+// Lists all API operations tracked by API Shield for a zone with pagination.
+// Returns operation details including method, path, and feature configurations.
 func (r *OperationService) ListAutoPaging(ctx context.Context, params OperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OperationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete an operation
+// Removes a single API operation from API Shield endpoint management. The
+// operation will no longer be tracked or protected by API Shield rules.
 func (r *OperationService) Delete(ctx context.Context, operationID string, body OperationDeleteParams, opts ...option.RequestOption) (res *OperationDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -144,7 +147,8 @@ func (r *OperationService) BulkNewAutoPaging(ctx context.Context, params Operati
 	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
 }
 
-// Delete multiple operations
+// Bulk removes multiple API operations from API Shield endpoint management in a
+// single request. Efficient for cleaning up unused endpoints.
 func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDeleteParams, opts ...option.RequestOption) (res *OperationBulkDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -156,7 +160,8 @@ func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDel
 	return
 }
 
-// Retrieve information about an operation
+// Gets detailed information about a specific API operation in API Shield,
+// including its schema validation settings and traffic statistics.
 func (r *OperationService) Get(ctx context.Context, operationID string, params OperationGetParams, opts ...option.RequestOption) (res *OperationGetResponse, err error) {
 	var env OperationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

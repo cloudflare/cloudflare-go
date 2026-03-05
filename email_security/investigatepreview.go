@@ -35,7 +35,8 @@ func NewInvestigatePreviewService(opts ...option.RequestOption) (r *InvestigateP
 	return
 }
 
-// Preview for non-detection messages
+// Generates a preview of an email message for safe viewing without executing any
+// embedded content.
 func (r *InvestigatePreviewService) New(ctx context.Context, params InvestigatePreviewNewParams, opts ...option.RequestOption) (res *InvestigatePreviewNewResponse, err error) {
 	var env InvestigatePreviewNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

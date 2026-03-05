@@ -3982,6 +3982,7 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingEditResponseZonesSchemasPolishValue], [PrefetchPreloadValue],
 	// [SettingEditResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
+	// [SettingEditResponseZonesRedirectsForAITrainingValue],
 	// [SettingEditResponseZonesReplaceInsecureJSValue],
 	// [SettingEditResponseZonesSchemasResponseBufferingValue],
 	// [SettingEditResponseZonesSchemasRocketLoaderValue],
@@ -4050,6 +4051,7 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [SettingEditResponseZonesSchemasPolish], [PrefetchPreload],
 // [SettingEditResponseZonesPrivacyPass], [ProxyReadTimeout], [PseudoIPV4],
+// [SettingEditResponseZonesRedirectsForAITraining],
 // [SettingEditResponseZonesReplaceInsecureJS],
 // [SettingEditResponseZonesSchemasResponseBuffering],
 // [SettingEditResponseZonesSchemasRocketLoader],
@@ -4091,6 +4093,7 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [SettingEditResponseZonesSchemasPolish], [PrefetchPreload],
 // [SettingEditResponseZonesPrivacyPass], [ProxyReadTimeout], [PseudoIPV4],
+// [SettingEditResponseZonesRedirectsForAITraining],
 // [SettingEditResponseZonesReplaceInsecureJS],
 // [SettingEditResponseZonesSchemasResponseBuffering],
 // [SettingEditResponseZonesSchemasRocketLoader],
@@ -4275,6 +4278,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(PseudoIPV4{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesRedirectsForAITraining{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -6043,6 +6050,91 @@ func (r SettingEditResponseZonesPrivacyPassEditable) IsKnown() bool {
 	return false
 }
 
+// When enabled, Cloudflare will redirect verified AI training crawlers to
+// canonical URLs found in the HTML response, ensuring AI models train on
+// authoritative content.
+type SettingEditResponseZonesRedirectsForAITraining struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesRedirectsForAITrainingID `json:"id,required"`
+	// Current value of the zone setting.
+	Value SettingEditResponseZonesRedirectsForAITrainingValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseZonesRedirectsForAITrainingEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingEditResponseZonesRedirectsForAITrainingJSON `json:"-"`
+}
+
+// settingEditResponseZonesRedirectsForAITrainingJSON contains the JSON metadata
+// for the struct [SettingEditResponseZonesRedirectsForAITraining]
+type settingEditResponseZonesRedirectsForAITrainingJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesRedirectsForAITraining) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesRedirectsForAITrainingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesRedirectsForAITraining) implementsSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesRedirectsForAITrainingID string
+
+const (
+	SettingEditResponseZonesRedirectsForAITrainingIDRedirectsForAITraining SettingEditResponseZonesRedirectsForAITrainingID = "redirects_for_ai_training"
+)
+
+func (r SettingEditResponseZonesRedirectsForAITrainingID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesRedirectsForAITrainingIDRedirectsForAITraining:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingEditResponseZonesRedirectsForAITrainingValue string
+
+const (
+	SettingEditResponseZonesRedirectsForAITrainingValueOff SettingEditResponseZonesRedirectsForAITrainingValue = "off"
+	SettingEditResponseZonesRedirectsForAITrainingValueOn  SettingEditResponseZonesRedirectsForAITrainingValue = "on"
+)
+
+func (r SettingEditResponseZonesRedirectsForAITrainingValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesRedirectsForAITrainingValueOff, SettingEditResponseZonesRedirectsForAITrainingValueOn:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseZonesRedirectsForAITrainingEditable bool
+
+const (
+	SettingEditResponseZonesRedirectsForAITrainingEditableTrue  SettingEditResponseZonesRedirectsForAITrainingEditable = true
+	SettingEditResponseZonesRedirectsForAITrainingEditableFalse SettingEditResponseZonesRedirectsForAITrainingEditable = false
+)
+
+func (r SettingEditResponseZonesRedirectsForAITrainingEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesRedirectsForAITrainingEditableTrue, SettingEditResponseZonesRedirectsForAITrainingEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Automatically replace insecure JavaScript libraries with safer and faster
 // alternatives provided under cdnjs and powered by Cloudflare. Currently supports
 // the following libraries: Polyfill under polyfill.io.
@@ -7205,6 +7297,7 @@ const (
 	SettingEditResponseIDPrivacyPass                   SettingEditResponseID = "privacy_pass"
 	SettingEditResponseIDProxyReadTimeout              SettingEditResponseID = "proxy_read_timeout"
 	SettingEditResponseIDPseudoIPV4                    SettingEditResponseID = "pseudo_ipv4"
+	SettingEditResponseIDRedirectsForAITraining        SettingEditResponseID = "redirects_for_ai_training"
 	SettingEditResponseIDReplaceInsecureJS             SettingEditResponseID = "replace_insecure_js"
 	SettingEditResponseIDResponseBuffering             SettingEditResponseID = "response_buffering"
 	SettingEditResponseIDRocketLoader                  SettingEditResponseID = "rocket_loader"
@@ -7229,7 +7322,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDRedirectsForAITraining, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7288,6 +7381,7 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue],
 	// [SettingGetResponseZonesSchemasPolishValue], [PrefetchPreloadValue],
 	// [SettingGetResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
+	// [SettingGetResponseZonesRedirectsForAITrainingValue],
 	// [SettingGetResponseZonesReplaceInsecureJSValue],
 	// [SettingGetResponseZonesSchemasResponseBufferingValue],
 	// [SettingGetResponseZonesSchemasRocketLoaderValue],
@@ -7356,6 +7450,7 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [SettingGetResponseZonesSchemasPolish], [PrefetchPreload],
 // [SettingGetResponseZonesPrivacyPass], [ProxyReadTimeout], [PseudoIPV4],
+// [SettingGetResponseZonesRedirectsForAITraining],
 // [SettingGetResponseZonesReplaceInsecureJS],
 // [SettingGetResponseZonesSchemasResponseBuffering],
 // [SettingGetResponseZonesSchemasRocketLoader],
@@ -7397,6 +7492,7 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersion],
 // [SettingGetResponseZonesSchemasPolish], [PrefetchPreload],
 // [SettingGetResponseZonesPrivacyPass], [ProxyReadTimeout], [PseudoIPV4],
+// [SettingGetResponseZonesRedirectsForAITraining],
 // [SettingGetResponseZonesReplaceInsecureJS],
 // [SettingGetResponseZonesSchemasResponseBuffering],
 // [SettingGetResponseZonesSchemasRocketLoader],
@@ -7581,6 +7677,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(PseudoIPV4{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesRedirectsForAITraining{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9349,6 +9449,91 @@ func (r SettingGetResponseZonesPrivacyPassEditable) IsKnown() bool {
 	return false
 }
 
+// When enabled, Cloudflare will redirect verified AI training crawlers to
+// canonical URLs found in the HTML response, ensuring AI models train on
+// authoritative content.
+type SettingGetResponseZonesRedirectsForAITraining struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesRedirectsForAITrainingID `json:"id,required"`
+	// Current value of the zone setting.
+	Value SettingGetResponseZonesRedirectsForAITrainingValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseZonesRedirectsForAITrainingEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingGetResponseZonesRedirectsForAITrainingJSON `json:"-"`
+}
+
+// settingGetResponseZonesRedirectsForAITrainingJSON contains the JSON metadata for
+// the struct [SettingGetResponseZonesRedirectsForAITraining]
+type settingGetResponseZonesRedirectsForAITrainingJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesRedirectsForAITraining) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesRedirectsForAITrainingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesRedirectsForAITraining) implementsSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesRedirectsForAITrainingID string
+
+const (
+	SettingGetResponseZonesRedirectsForAITrainingIDRedirectsForAITraining SettingGetResponseZonesRedirectsForAITrainingID = "redirects_for_ai_training"
+)
+
+func (r SettingGetResponseZonesRedirectsForAITrainingID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesRedirectsForAITrainingIDRedirectsForAITraining:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingGetResponseZonesRedirectsForAITrainingValue string
+
+const (
+	SettingGetResponseZonesRedirectsForAITrainingValueOff SettingGetResponseZonesRedirectsForAITrainingValue = "off"
+	SettingGetResponseZonesRedirectsForAITrainingValueOn  SettingGetResponseZonesRedirectsForAITrainingValue = "on"
+)
+
+func (r SettingGetResponseZonesRedirectsForAITrainingValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesRedirectsForAITrainingValueOff, SettingGetResponseZonesRedirectsForAITrainingValueOn:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseZonesRedirectsForAITrainingEditable bool
+
+const (
+	SettingGetResponseZonesRedirectsForAITrainingEditableTrue  SettingGetResponseZonesRedirectsForAITrainingEditable = true
+	SettingGetResponseZonesRedirectsForAITrainingEditableFalse SettingGetResponseZonesRedirectsForAITrainingEditable = false
+)
+
+func (r SettingGetResponseZonesRedirectsForAITrainingEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesRedirectsForAITrainingEditableTrue, SettingGetResponseZonesRedirectsForAITrainingEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Automatically replace insecure JavaScript libraries with safer and faster
 // alternatives provided under cdnjs and powered by Cloudflare. Currently supports
 // the following libraries: Polyfill under polyfill.io.
@@ -10510,6 +10695,7 @@ const (
 	SettingGetResponseIDPrivacyPass                   SettingGetResponseID = "privacy_pass"
 	SettingGetResponseIDProxyReadTimeout              SettingGetResponseID = "proxy_read_timeout"
 	SettingGetResponseIDPseudoIPV4                    SettingGetResponseID = "pseudo_ipv4"
+	SettingGetResponseIDRedirectsForAITraining        SettingGetResponseID = "redirects_for_ai_training"
 	SettingGetResponseIDReplaceInsecureJS             SettingGetResponseID = "replace_insecure_js"
 	SettingGetResponseIDResponseBuffering             SettingGetResponseID = "response_buffering"
 	SettingGetResponseIDRocketLoader                  SettingGetResponseID = "rocket_loader"
@@ -10534,7 +10720,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDRedirectsForAITraining, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false

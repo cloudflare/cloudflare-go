@@ -38,7 +38,7 @@ func NewSettingOperationService(opts ...option.RequestOption) (r *SettingOperati
 	return
 }
 
-// Update per-operation schema validation setting
+// Fully updates schema validation settings for a specific API operation.
 func (r *SettingOperationService) Update(ctx context.Context, operationID string, params SettingOperationUpdateParams, opts ...option.RequestOption) (res *SettingOperationUpdateResponse, err error) {
 	var env SettingOperationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +59,7 @@ func (r *SettingOperationService) Update(ctx context.Context, operationID string
 	return
 }
 
-// List per-operation schema validation settings
+// Lists all per-operation schema validation settings configured for the zone.
 func (r *SettingOperationService) List(ctx context.Context, params SettingOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingOperationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -81,12 +81,13 @@ func (r *SettingOperationService) List(ctx context.Context, params SettingOperat
 	return res, nil
 }
 
-// List per-operation schema validation settings
+// Lists all per-operation schema validation settings configured for the zone.
 func (r *SettingOperationService) ListAutoPaging(ctx context.Context, params SettingOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingOperationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete per-operation schema validation setting
+// Removes custom schema validation settings for a specific API operation,
+// reverting to zone-level defaults.
 func (r *SettingOperationService) Delete(ctx context.Context, operationID string, body SettingOperationDeleteParams, opts ...option.RequestOption) (res *SettingOperationDeleteResponse, err error) {
 	var env SettingOperationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -107,7 +108,8 @@ func (r *SettingOperationService) Delete(ctx context.Context, operationID string
 	return
 }
 
-// Bulk edit per-operation schema validation settings
+// Updates schema validation settings for multiple API operations in a single
+// request. Efficient for applying consistent validation rules across endpoints.
 func (r *SettingOperationService) BulkEdit(ctx context.Context, params SettingOperationBulkEditParams, opts ...option.RequestOption) (res *SettingOperationBulkEditResponse, err error) {
 	var env SettingOperationBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -124,7 +126,8 @@ func (r *SettingOperationService) BulkEdit(ctx context.Context, params SettingOp
 	return
 }
 
-// Get per-operation schema validation setting
+// Retrieves the schema validation settings configured for a specific API
+// operation.
 func (r *SettingOperationService) Get(ctx context.Context, operationID string, query SettingOperationGetParams, opts ...option.RequestOption) (res *SettingOperationGetResponse, err error) {
 	var env SettingOperationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
