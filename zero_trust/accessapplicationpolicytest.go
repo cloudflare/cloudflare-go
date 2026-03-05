@@ -302,9 +302,9 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllo
 type AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`

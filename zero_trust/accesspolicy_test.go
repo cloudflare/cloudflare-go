@@ -60,7 +60,7 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 		IsolationRequired: cloudflare.F(false),
 		MfaConfig: cloudflare.F(zero_trust.AccessPolicyNewParamsMfaConfig{
 			AllowedAuthenticators: cloudflare.F([]zero_trust.AccessPolicyNewParamsMfaConfigAllowedAuthenticator{zero_trust.AccessPolicyNewParamsMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessPolicyNewParamsMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessPolicyNewParamsMfaConfigAllowedAuthenticatorSecurityKey}),
-			MfaBypass:             cloudflare.F(false),
+			MfaDisabled:           cloudflare.F(false),
 			SessionDuration:       cloudflare.F("24h"),
 		}),
 		PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
@@ -130,7 +130,7 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 			IsolationRequired: cloudflare.F(false),
 			MfaConfig: cloudflare.F(zero_trust.AccessPolicyUpdateParamsMfaConfig{
 				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessPolicyUpdateParamsMfaConfigAllowedAuthenticator{zero_trust.AccessPolicyUpdateParamsMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessPolicyUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessPolicyUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey}),
-				MfaBypass:             cloudflare.F(false),
+				MfaDisabled:           cloudflare.F(false),
 				SessionDuration:       cloudflare.F("24h"),
 			}),
 			PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
