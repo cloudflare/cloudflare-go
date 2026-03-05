@@ -239,9 +239,6 @@ type Organization struct {
 	LoginDesign  LoginDesign `json:"login_design"`
 	// Configures multi-factor authentication (MFA) settings for an organization.
 	MfaConfig OrganizationMfaConfig `json:"mfa_config"`
-	// Indicates if this organization can enforce multi-factor authentication (MFA)
-	// requirements at the application and policy level.
-	MfaConfigurationAllowed bool `json:"mfa_configuration_allowed"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
 	// session duration configured.
@@ -277,7 +274,6 @@ type organizationJSON struct {
 	IsUIReadOnly                           apijson.Field
 	LoginDesign                            apijson.Field
 	MfaConfig                              apijson.Field
-	MfaConfigurationAllowed                apijson.Field
 	MfaRequiredForAllApps                  apijson.Field
 	Name                                   apijson.Field
 	SessionDuration                        apijson.Field
@@ -412,9 +408,6 @@ type OrganizationNewParams struct {
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// Configures multi-factor authentication (MFA) settings for an organization.
 	MfaConfig param.Field[OrganizationNewParamsMfaConfig] `json:"mfa_config"`
-	// Indicates if this organization can enforce multi-factor authentication (MFA)
-	// requirements at the application and policy level.
-	MfaConfigurationAllowed param.Field[bool] `json:"mfa_configuration_allowed"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
 	// session duration configured.
@@ -639,9 +632,6 @@ type OrganizationUpdateParams struct {
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// Configures multi-factor authentication (MFA) settings for an organization.
 	MfaConfig param.Field[OrganizationUpdateParamsMfaConfig] `json:"mfa_config"`
-	// Indicates if this organization can enforce multi-factor authentication (MFA)
-	// requirements at the application and policy level.
-	MfaConfigurationAllowed param.Field[bool] `json:"mfa_configuration_allowed"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
 	// session duration configured.

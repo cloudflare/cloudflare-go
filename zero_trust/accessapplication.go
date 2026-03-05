@@ -2874,9 +2874,9 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsType) IsKno
 type AccessApplicationNewResponseSelfHostedApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseSelfHostedApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -2888,7 +2888,7 @@ type AccessApplicationNewResponseSelfHostedApplicationMfaConfig struct {
 // [AccessApplicationNewResponseSelfHostedApplicationMfaConfig]
 type accessApplicationNewResponseSelfHostedApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -3183,9 +3183,9 @@ func (r AccessApplicationNewResponseSelfHostedApplicationPoliciesConnectionRules
 type AccessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -3197,7 +3197,7 @@ type AccessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfig struct {
 // [AccessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -3765,9 +3765,9 @@ func (r AccessApplicationNewResponseSaaSApplicationPoliciesConnectionRulesRDPAll
 type AccessApplicationNewResponseSaaSApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseSaaSApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                           `json:"session_duration"`
@@ -3779,7 +3779,7 @@ type AccessApplicationNewResponseSaaSApplicationPoliciesMfaConfig struct {
 // [AccessApplicationNewResponseSaaSApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseSaaSApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -4751,9 +4751,9 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsType) IsKno
 type AccessApplicationNewResponseBrowserSSHApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBrowserSSHApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -4765,7 +4765,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationMfaConfig struct {
 // [AccessApplicationNewResponseBrowserSSHApplicationMfaConfig]
 type accessApplicationNewResponseBrowserSSHApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -5060,9 +5060,9 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationPoliciesConnectionRules
 type AccessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -5074,7 +5074,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfig struct {
 // [AccessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -5896,9 +5896,9 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsType) IsKno
 type AccessApplicationNewResponseBrowserVNCApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBrowserVNCApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -5910,7 +5910,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationMfaConfig struct {
 // [AccessApplicationNewResponseBrowserVNCApplicationMfaConfig]
 type accessApplicationNewResponseBrowserVNCApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -6205,9 +6205,9 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationPoliciesConnectionRules
 type AccessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -6219,7 +6219,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfig struct {
 // [AccessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -6898,9 +6898,9 @@ func (r AccessApplicationNewResponseAppLauncherApplicationPoliciesConnectionRule
 type AccessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                  `json:"session_duration"`
@@ -6912,7 +6912,7 @@ type AccessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfig struct 
 // [AccessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -7173,9 +7173,9 @@ func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolici
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                  `json:"session_duration"`
@@ -7187,7 +7187,7 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesM
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -7448,9 +7448,9 @@ func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolici
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                  `json:"session_duration"`
@@ -7462,7 +7462,7 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesM
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -7723,9 +7723,9 @@ func (r AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolic
 type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                   `json:"session_duration"`
@@ -7737,7 +7737,7 @@ type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicies
 // [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -7980,9 +7980,9 @@ func (r AccessApplicationNewResponseBookmarkApplicationPoliciesConnectionRulesRD
 type AccessApplicationNewResponseBookmarkApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBookmarkApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                               `json:"session_duration"`
@@ -7994,7 +7994,7 @@ type AccessApplicationNewResponseBookmarkApplicationPoliciesMfaConfig struct {
 // [AccessApplicationNewResponseBookmarkApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseBookmarkApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -8711,9 +8711,9 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsType) IsKno
 type AccessApplicationNewResponseBrowserRDPApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBrowserRDPApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -8725,7 +8725,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationMfaConfig struct {
 // [AccessApplicationNewResponseBrowserRDPApplicationMfaConfig]
 type accessApplicationNewResponseBrowserRDPApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -9020,9 +9020,9 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationPoliciesConnectionRules
 type AccessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -9034,7 +9034,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfig struct {
 // [AccessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -10037,9 +10037,9 @@ func (r AccessApplicationNewResponseMcpServerApplicationPoliciesConnectionRulesR
 type AccessApplicationNewResponseMcpServerApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseMcpServerApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                `json:"session_duration"`
@@ -10051,7 +10051,7 @@ type AccessApplicationNewResponseMcpServerApplicationPoliciesMfaConfig struct {
 // [AccessApplicationNewResponseMcpServerApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseMcpServerApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -11060,9 +11060,9 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationPoliciesConnection
 type AccessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                      `json:"session_duration"`
@@ -11074,7 +11074,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfig str
 // [AccessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfig]
 type accessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -12178,9 +12178,9 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType) Is
 type AccessApplicationUpdateResponseSelfHostedApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseSelfHostedApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                            `json:"session_duration"`
@@ -12192,7 +12192,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationMfaConfig struct {
 // [AccessApplicationUpdateResponseSelfHostedApplicationMfaConfig]
 type accessApplicationUpdateResponseSelfHostedApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -12487,9 +12487,9 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationPoliciesConnectionRu
 type AccessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                    `json:"session_duration"`
@@ -12501,7 +12501,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfig struc
 // [AccessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -13069,9 +13069,9 @@ func (r AccessApplicationUpdateResponseSaaSApplicationPoliciesConnectionRulesRDP
 type AccessApplicationUpdateResponseSaaSApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseSaaSApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                              `json:"session_duration"`
@@ -13083,7 +13083,7 @@ type AccessApplicationUpdateResponseSaaSApplicationPoliciesMfaConfig struct {
 // [AccessApplicationUpdateResponseSaaSApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseSaaSApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -14057,9 +14057,9 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType) Is
 type AccessApplicationUpdateResponseBrowserSSHApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBrowserSSHApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                            `json:"session_duration"`
@@ -14071,7 +14071,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationMfaConfig struct {
 // [AccessApplicationUpdateResponseBrowserSSHApplicationMfaConfig]
 type accessApplicationUpdateResponseBrowserSSHApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -14366,9 +14366,9 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesConnectionRu
 type AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                    `json:"session_duration"`
@@ -14380,7 +14380,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfig struc
 // [AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -15203,9 +15203,9 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType) Is
 type AccessApplicationUpdateResponseBrowserVNCApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBrowserVNCApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                            `json:"session_duration"`
@@ -15217,7 +15217,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationMfaConfig struct {
 // [AccessApplicationUpdateResponseBrowserVNCApplicationMfaConfig]
 type accessApplicationUpdateResponseBrowserVNCApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -15512,9 +15512,9 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesConnectionRu
 type AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                    `json:"session_duration"`
@@ -15526,7 +15526,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfig struc
 // [AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -16205,9 +16205,9 @@ func (r AccessApplicationUpdateResponseAppLauncherApplicationPoliciesConnectionR
 type AccessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                     `json:"session_duration"`
@@ -16219,7 +16219,7 @@ type AccessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfig stru
 // [AccessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -16480,9 +16480,9 @@ func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPol
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                     `json:"session_duration"`
@@ -16494,7 +16494,7 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolici
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -16755,9 +16755,9 @@ func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPol
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                     `json:"session_duration"`
@@ -16769,7 +16769,7 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolici
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -17030,9 +17030,9 @@ func (r AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPo
 type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                      `json:"session_duration"`
@@ -17044,7 +17044,7 @@ type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolic
 // [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -17289,9 +17289,9 @@ func (r AccessApplicationUpdateResponseBookmarkApplicationPoliciesConnectionRule
 type AccessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                  `json:"session_duration"`
@@ -17303,7 +17303,7 @@ type AccessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfig struct 
 // [AccessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -18022,9 +18022,9 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType) Is
 type AccessApplicationUpdateResponseBrowserRDPApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBrowserRDPApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                            `json:"session_duration"`
@@ -18036,7 +18036,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationMfaConfig struct {
 // [AccessApplicationUpdateResponseBrowserRDPApplicationMfaConfig]
 type accessApplicationUpdateResponseBrowserRDPApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -18331,9 +18331,9 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesConnectionRu
 type AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                    `json:"session_duration"`
@@ -18345,7 +18345,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfig struc
 // [AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -19350,9 +19350,9 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationPoliciesConnectionRul
 type AccessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                   `json:"session_duration"`
@@ -19364,7 +19364,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfig struct
 // [AccessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -20374,9 +20374,9 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesConnect
 type AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                         `json:"session_duration"`
@@ -20388,7 +20388,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConfig 
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConfig]
 type accessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -21492,9 +21492,9 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsType) IsKn
 type AccessApplicationListResponseSelfHostedApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseSelfHostedApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                          `json:"session_duration"`
@@ -21506,7 +21506,7 @@ type AccessApplicationListResponseSelfHostedApplicationMfaConfig struct {
 // [AccessApplicationListResponseSelfHostedApplicationMfaConfig]
 type accessApplicationListResponseSelfHostedApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -21801,9 +21801,9 @@ func (r AccessApplicationListResponseSelfHostedApplicationPoliciesConnectionRule
 type AccessApplicationListResponseSelfHostedApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseSelfHostedApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                  `json:"session_duration"`
@@ -21815,7 +21815,7 @@ type AccessApplicationListResponseSelfHostedApplicationPoliciesMfaConfig struct 
 // [AccessApplicationListResponseSelfHostedApplicationPoliciesMfaConfig]
 type accessApplicationListResponseSelfHostedApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -22383,9 +22383,9 @@ func (r AccessApplicationListResponseSaaSApplicationPoliciesConnectionRulesRDPAl
 type AccessApplicationListResponseSaaSApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseSaaSApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                            `json:"session_duration"`
@@ -22397,7 +22397,7 @@ type AccessApplicationListResponseSaaSApplicationPoliciesMfaConfig struct {
 // [AccessApplicationListResponseSaaSApplicationPoliciesMfaConfig]
 type accessApplicationListResponseSaaSApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -23370,9 +23370,9 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsType) IsKn
 type AccessApplicationListResponseBrowserSSHApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBrowserSSHApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                          `json:"session_duration"`
@@ -23384,7 +23384,7 @@ type AccessApplicationListResponseBrowserSSHApplicationMfaConfig struct {
 // [AccessApplicationListResponseBrowserSSHApplicationMfaConfig]
 type accessApplicationListResponseBrowserSSHApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -23679,9 +23679,9 @@ func (r AccessApplicationListResponseBrowserSSHApplicationPoliciesConnectionRule
 type AccessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                  `json:"session_duration"`
@@ -23693,7 +23693,7 @@ type AccessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfig struct 
 // [AccessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfig]
 type accessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -24516,9 +24516,9 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsType) IsKn
 type AccessApplicationListResponseBrowserVNCApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBrowserVNCApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                          `json:"session_duration"`
@@ -24530,7 +24530,7 @@ type AccessApplicationListResponseBrowserVNCApplicationMfaConfig struct {
 // [AccessApplicationListResponseBrowserVNCApplicationMfaConfig]
 type accessApplicationListResponseBrowserVNCApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -24825,9 +24825,9 @@ func (r AccessApplicationListResponseBrowserVNCApplicationPoliciesConnectionRule
 type AccessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                  `json:"session_duration"`
@@ -24839,7 +24839,7 @@ type AccessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfig struct 
 // [AccessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfig]
 type accessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -25518,9 +25518,9 @@ func (r AccessApplicationListResponseAppLauncherApplicationPoliciesConnectionRul
 type AccessApplicationListResponseAppLauncherApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseAppLauncherApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                   `json:"session_duration"`
@@ -25532,7 +25532,7 @@ type AccessApplicationListResponseAppLauncherApplicationPoliciesMfaConfig struct
 // [AccessApplicationListResponseAppLauncherApplicationPoliciesMfaConfig]
 type accessApplicationListResponseAppLauncherApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -25793,9 +25793,9 @@ func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolic
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                   `json:"session_duration"`
@@ -25807,7 +25807,7 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicies
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -26068,9 +26068,9 @@ func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolic
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                   `json:"session_duration"`
@@ -26082,7 +26082,7 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicies
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -26343,9 +26343,9 @@ func (r AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPoli
 type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                    `json:"session_duration"`
@@ -26357,7 +26357,7 @@ type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicie
 // [AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig]
 type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -26600,9 +26600,9 @@ func (r AccessApplicationListResponseBookmarkApplicationPoliciesConnectionRulesR
 type AccessApplicationListResponseBookmarkApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBookmarkApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                `json:"session_duration"`
@@ -26614,7 +26614,7 @@ type AccessApplicationListResponseBookmarkApplicationPoliciesMfaConfig struct {
 // [AccessApplicationListResponseBookmarkApplicationPoliciesMfaConfig]
 type accessApplicationListResponseBookmarkApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -27332,9 +27332,9 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsType) IsKn
 type AccessApplicationListResponseBrowserRDPApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBrowserRDPApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                          `json:"session_duration"`
@@ -27346,7 +27346,7 @@ type AccessApplicationListResponseBrowserRDPApplicationMfaConfig struct {
 // [AccessApplicationListResponseBrowserRDPApplicationMfaConfig]
 type accessApplicationListResponseBrowserRDPApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -27641,9 +27641,9 @@ func (r AccessApplicationListResponseBrowserRDPApplicationPoliciesConnectionRule
 type AccessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                  `json:"session_duration"`
@@ -27655,7 +27655,7 @@ type AccessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfig struct 
 // [AccessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfig]
 type accessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -28660,9 +28660,9 @@ func (r AccessApplicationListResponseMcpServerApplicationPoliciesConnectionRules
 type AccessApplicationListResponseMcpServerApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseMcpServerApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -28674,7 +28674,7 @@ type AccessApplicationListResponseMcpServerApplicationPoliciesMfaConfig struct {
 // [AccessApplicationListResponseMcpServerApplicationPoliciesMfaConfig]
 type accessApplicationListResponseMcpServerApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -29684,9 +29684,9 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationPoliciesConnectio
 type AccessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                       `json:"session_duration"`
@@ -29698,7 +29698,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfig st
 // [AccessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfig]
 type accessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -30823,9 +30823,9 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsType) IsKno
 type AccessApplicationGetResponseSelfHostedApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseSelfHostedApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -30837,7 +30837,7 @@ type AccessApplicationGetResponseSelfHostedApplicationMfaConfig struct {
 // [AccessApplicationGetResponseSelfHostedApplicationMfaConfig]
 type accessApplicationGetResponseSelfHostedApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -31132,9 +31132,9 @@ func (r AccessApplicationGetResponseSelfHostedApplicationPoliciesConnectionRules
 type AccessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -31146,7 +31146,7 @@ type AccessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfig struct {
 // [AccessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -31714,9 +31714,9 @@ func (r AccessApplicationGetResponseSaaSApplicationPoliciesConnectionRulesRDPAll
 type AccessApplicationGetResponseSaaSApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseSaaSApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                           `json:"session_duration"`
@@ -31728,7 +31728,7 @@ type AccessApplicationGetResponseSaaSApplicationPoliciesMfaConfig struct {
 // [AccessApplicationGetResponseSaaSApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseSaaSApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -32700,9 +32700,9 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsType) IsKno
 type AccessApplicationGetResponseBrowserSSHApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBrowserSSHApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -32714,7 +32714,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationMfaConfig struct {
 // [AccessApplicationGetResponseBrowserSSHApplicationMfaConfig]
 type accessApplicationGetResponseBrowserSSHApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -33009,9 +33009,9 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationPoliciesConnectionRules
 type AccessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -33023,7 +33023,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfig struct {
 // [AccessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -33845,9 +33845,9 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsType) IsKno
 type AccessApplicationGetResponseBrowserVNCApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBrowserVNCApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -33859,7 +33859,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationMfaConfig struct {
 // [AccessApplicationGetResponseBrowserVNCApplicationMfaConfig]
 type accessApplicationGetResponseBrowserVNCApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -34154,9 +34154,9 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationPoliciesConnectionRules
 type AccessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -34168,7 +34168,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfig struct {
 // [AccessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -34847,9 +34847,9 @@ func (r AccessApplicationGetResponseAppLauncherApplicationPoliciesConnectionRule
 type AccessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                  `json:"session_duration"`
@@ -34861,7 +34861,7 @@ type AccessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfig struct 
 // [AccessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -35122,9 +35122,9 @@ func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolici
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                  `json:"session_duration"`
@@ -35136,7 +35136,7 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesM
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -35397,9 +35397,9 @@ func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolici
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                  `json:"session_duration"`
@@ -35411,7 +35411,7 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesM
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -35672,9 +35672,9 @@ func (r AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolic
 type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                                   `json:"session_duration"`
@@ -35686,7 +35686,7 @@ type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicies
 // [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -35929,9 +35929,9 @@ func (r AccessApplicationGetResponseBookmarkApplicationPoliciesConnectionRulesRD
 type AccessApplicationGetResponseBookmarkApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBookmarkApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                               `json:"session_duration"`
@@ -35943,7 +35943,7 @@ type AccessApplicationGetResponseBookmarkApplicationPoliciesMfaConfig struct {
 // [AccessApplicationGetResponseBookmarkApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseBookmarkApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -36660,9 +36660,9 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsType) IsKno
 type AccessApplicationGetResponseBrowserRDPApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBrowserRDPApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                         `json:"session_duration"`
@@ -36674,7 +36674,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationMfaConfig struct {
 // [AccessApplicationGetResponseBrowserRDPApplicationMfaConfig]
 type accessApplicationGetResponseBrowserRDPApplicationMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -36969,9 +36969,9 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationPoliciesConnectionRules
 type AccessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                 `json:"session_duration"`
@@ -36983,7 +36983,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfig struct {
 // [AccessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -37986,9 +37986,9 @@ func (r AccessApplicationGetResponseMcpServerApplicationPoliciesConnectionRulesR
 type AccessApplicationGetResponseMcpServerApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseMcpServerApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                `json:"session_duration"`
@@ -38000,7 +38000,7 @@ type AccessApplicationGetResponseMcpServerApplicationPoliciesMfaConfig struct {
 // [AccessApplicationGetResponseMcpServerApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseMcpServerApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -39009,9 +39009,9 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationPoliciesConnection
 type AccessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                                                      `json:"session_duration"`
@@ -39023,7 +39023,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfig str
 // [AccessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfig]
 type accessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -39801,9 +39801,9 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType) IsK
 type AccessApplicationNewParamsBodySelfHostedApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -40035,9 +40035,9 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnect
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -40481,9 +40481,9 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRul
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -41151,9 +41151,9 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType) IsK
 type AccessApplicationNewParamsBodyBrowserSSHApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -41385,9 +41385,9 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnect
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -41971,9 +41971,9 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType) IsK
 type AccessApplicationNewParamsBodyBrowserVNCApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -42205,9 +42205,9 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnect
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -42717,9 +42717,9 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnec
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -42934,9 +42934,9 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -43151,9 +43151,9 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -43373,9 +43373,9 @@ func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPol
 type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -43583,9 +43583,9 @@ func (r AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObjectConnectio
 type AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -44041,9 +44041,9 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType) IsK
 type AccessApplicationNewParamsBodyBrowserRDPApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -44275,9 +44275,9 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationPoliciesObjectConnect
 type AccessApplicationNewParamsBodyBrowserRDPApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -44996,9 +44996,9 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationPoliciesObjectConnecti
 type AccessApplicationNewParamsBodyMcpServerApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -45720,9 +45720,9 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationPoliciesObjectCo
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -46549,9 +46549,9 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType) 
 type AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -46783,9 +46783,9 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConn
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -47229,9 +47229,9 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnection
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -47899,9 +47899,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType) 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -48133,9 +48133,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConn
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -48719,9 +48719,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType) 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -48953,9 +48953,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConn
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -49465,9 +49465,9 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectCon
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -49682,9 +49682,9 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -49899,9 +49899,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -50121,9 +50121,9 @@ func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication
 type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -50331,9 +50331,9 @@ func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObjectConnec
 type AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -50789,9 +50789,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType) 
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -51023,9 +51023,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationPoliciesObjectConn
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -51744,9 +51744,9 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationPoliciesObjectConne
 type AccessApplicationUpdateParamsBodyMcpServerApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -52468,9 +52468,9 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPoliciesObjec
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`

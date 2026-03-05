@@ -52,7 +52,7 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 			IsolationRequired: cloudflare.F(false),
 			MfaConfig: cloudflare.F(zero_trust.AccessApplicationPolicyNewParamsMfaConfig{
 				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorSecurityKey}),
-				MfaBypass:             cloudflare.F(false),
+				MfaDisabled:           cloudflare.F(false),
 				SessionDuration:       cloudflare.F("24h"),
 			}),
 			Precedence:                   cloudflare.F(int64(0)),
@@ -109,7 +109,7 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 			IsolationRequired: cloudflare.F(false),
 			MfaConfig: cloudflare.F(zero_trust.AccessApplicationPolicyUpdateParamsMfaConfig{
 				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey}),
-				MfaBypass:             cloudflare.F(false),
+				MfaDisabled:           cloudflare.F(false),
 				SessionDuration:       cloudflare.F("24h"),
 			}),
 			Precedence:                   cloudflare.F(int64(0)),
