@@ -15,6 +15,7 @@ import (
 )
 
 func TestDeviceIPProfileNewWithOptionalParams(t *testing.T) {
+	t.Skip("401 Unauthorized: Prism doesnt handle api tokens")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,6 +47,7 @@ func TestDeviceIPProfileNewWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceIPProfileUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("401 Unauthorized: Prism doesnt handle api tokens")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -81,6 +83,7 @@ func TestDeviceIPProfileUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceIPProfileListWithOptionalParams(t *testing.T) {
+	t.Skip("401 Unauthorized: Prism doesnt handle api tokens")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -107,6 +110,7 @@ func TestDeviceIPProfileListWithOptionalParams(t *testing.T) {
 }
 
 func TestDeviceIPProfileDelete(t *testing.T) {
+	t.Skip("401 Unauthorized: Prism doesnt handle api tokens")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -136,6 +140,7 @@ func TestDeviceIPProfileDelete(t *testing.T) {
 }
 
 func TestDeviceIPProfileGet(t *testing.T) {
+	t.Skip("401 Unauthorized: Prism doesnt handle api tokens")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
