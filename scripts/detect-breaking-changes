@@ -657,6 +657,11 @@ TEST_PATHS=(
 	resource_sharing/resourcesharing_test.go
 	resource_sharing/recipient_test.go
 	resource_sharing/resource_test.go
+	resource_tagging/resourcetagging_test.go
+	resource_tagging/accounttag_test.go
+	resource_tagging/zonetag_test.go
+	resource_tagging/key_test.go
+	resource_tagging/value_test.go
 	leaked_credential_checks/leakedcredentialcheck_test.go
 	leaked_credential_checks/detection_test.go
 	content_scanning/contentscanning_test.go

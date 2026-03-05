@@ -86,6 +86,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/registrar"
 	"github.com/cloudflare/cloudflare-go/v6/request_tracers"
 	"github.com/cloudflare/cloudflare-go/v6/resource_sharing"
+	"github.com/cloudflare/cloudflare-go/v6/resource_tagging"
 	"github.com/cloudflare/cloudflare-go/v6/rules"
 	"github.com/cloudflare/cloudflare-go/v6/rulesets"
 	"github.com/cloudflare/cloudflare-go/v6/rum"
@@ -217,6 +218,7 @@ type Client struct {
 	SecurityTXT                 *security_txt.SecurityTXTService
 	Workflows                   *workflows.WorkflowService
 	ResourceSharing             *resource_sharing.ResourceSharingService
+	ResourceTagging             *resource_tagging.ResourceTaggingService
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
 	AbuseReports                *abuse_reports.AbuseReportService
@@ -354,6 +356,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SecurityTXT = security_txt.NewSecurityTXTService(opts...)
 	r.Workflows = workflows.NewWorkflowService(opts...)
 	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
+	r.ResourceTagging = resource_tagging.NewResourceTaggingService(opts...)
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
