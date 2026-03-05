@@ -30,6 +30,7 @@ type DeviceService struct {
 	Resilience    *DeviceResilienceService
 	Registrations *DeviceRegistrationService
 	DEXTests      *DeviceDEXTestService
+	IPProfiles    *DeviceIPProfileService
 	Networks      *DeviceNetworkService
 	FleetStatus   *DeviceFleetStatusService
 	Policies      *DevicePolicyService
@@ -50,6 +51,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	r.Resilience = NewDeviceResilienceService(opts...)
 	r.Registrations = NewDeviceRegistrationService(opts...)
 	r.DEXTests = NewDeviceDEXTestService(opts...)
+	r.IPProfiles = NewDeviceIPProfileService(opts...)
 	r.Networks = NewDeviceNetworkService(opts...)
 	r.FleetStatus = NewDeviceFleetStatusService(opts...)
 	r.Policies = NewDevicePolicyService(opts...)
