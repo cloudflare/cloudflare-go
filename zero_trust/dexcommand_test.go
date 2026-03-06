@@ -41,6 +41,7 @@ func TestDEXCommandNew(t *testing.T) {
 				TestAllRoutes:   cloudflare.F(true),
 				TimeLimitMin:    cloudflare.F(1.000000),
 			}),
+			RegistrationID: cloudflare.F("registration_id"),
 		}}),
 	})
 	if err != nil {
