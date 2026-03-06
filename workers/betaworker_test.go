@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/workers"
 )
 
-func TestBetaWorkerNew(t *testing.T) {
+func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,7 +60,7 @@ func TestBetaWorkerNew(t *testing.T) {
 	}
 }
 
-func TestBetaWorkerUpdate(t *testing.T) {
+func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -125,6 +125,8 @@ func TestBetaWorkerListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Beta.Workers.List(context.TODO(), workers.BetaWorkerListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Order:     cloudflare.F(workers.BetaWorkerListParamsOrderAsc),
+		OrderBy:   cloudflare.F(workers.BetaWorkerListParamsOrderByDeployedOn),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(1)),
 	})
@@ -166,7 +168,7 @@ func TestBetaWorkerDelete(t *testing.T) {
 	}
 }
 
-func TestBetaWorkerEdit(t *testing.T) {
+func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

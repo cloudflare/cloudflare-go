@@ -187,8 +187,11 @@ type Worker struct {
 	// Other Workers that should consume logs from the Worker.
 	TailConsumers []WorkerTailConsumer `json:"tail_consumers,required"`
 	// When the Worker was most recently updated.
-	UpdatedOn time.Time  `json:"updated_on,required" format:"date-time"`
-	JSON      workerJSON `json:"-"`
+	UpdatedOn time.Time `json:"updated_on,required" format:"date-time"`
+	// When the Worker's most recent deployment was created. `null` if the Worker has
+	// never been deployed.
+	DeployedOn time.Time  `json:"deployed_on,nullable" format:"date-time"`
+	JSON       workerJSON `json:"-"`
 }
 
 // workerJSON contains the JSON metadata for the struct [Worker]
@@ -203,6 +206,7 @@ type workerJSON struct {
 	Tags          apijson.Field
 	TailConsumers apijson.Field
 	UpdatedOn     apijson.Field
+	DeployedOn    apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -1109,6 +1113,10 @@ func (r BetaWorkerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type BetaWorkerListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Sort direction.
+	Order param.Field[BetaWorkerListParamsOrder] `query:"order"`
+	// Property to sort results by.
+	OrderBy param.Field[BetaWorkerListParamsOrderBy] `query:"order_by"`
 	// Current page.
 	Page param.Field[int64] `query:"page"`
 	// Items per-page.
@@ -1121,6 +1129,40 @@ func (r BetaWorkerListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Sort direction.
+type BetaWorkerListParamsOrder string
+
+const (
+	BetaWorkerListParamsOrderAsc  BetaWorkerListParamsOrder = "asc"
+	BetaWorkerListParamsOrderDesc BetaWorkerListParamsOrder = "desc"
+)
+
+func (r BetaWorkerListParamsOrder) IsKnown() bool {
+	switch r {
+	case BetaWorkerListParamsOrderAsc, BetaWorkerListParamsOrderDesc:
+		return true
+	}
+	return false
+}
+
+// Property to sort results by.
+type BetaWorkerListParamsOrderBy string
+
+const (
+	BetaWorkerListParamsOrderByDeployedOn BetaWorkerListParamsOrderBy = "deployed_on"
+	BetaWorkerListParamsOrderByUpdatedOn  BetaWorkerListParamsOrderBy = "updated_on"
+	BetaWorkerListParamsOrderByCreatedOn  BetaWorkerListParamsOrderBy = "created_on"
+	BetaWorkerListParamsOrderByName       BetaWorkerListParamsOrderBy = "name"
+)
+
+func (r BetaWorkerListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case BetaWorkerListParamsOrderByDeployedOn, BetaWorkerListParamsOrderByUpdatedOn, BetaWorkerListParamsOrderByCreatedOn, BetaWorkerListParamsOrderByName:
+		return true
+	}
+	return false
 }
 
 type BetaWorkerDeleteParams struct {
