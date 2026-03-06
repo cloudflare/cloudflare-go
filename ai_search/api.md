@@ -26,14 +26,6 @@ Methods:
 
 ### Items
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai_search">ai_search</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai_search#InstanceItemListResponse">InstanceItemListResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/ai-search/instances/{id}/items">client.AISearch.Instances.Items.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai_search#InstanceItemService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai_search">ai_search</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai_search#InstanceItemListParams">InstanceItemListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai_search">ai_search</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/ai_search#InstanceItemListResponse">InstanceItemListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Jobs
 
 Response Types:
