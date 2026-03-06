@@ -101,6 +101,9 @@ type DEXCommandDeviceListResponseDevice struct {
 	PersonEmail string `json:"personEmail"`
 	// Operating system
 	Platform string `json:"platform"`
+	// Device registration identifier (UUID v4). On multi-user devices, this uniquely
+	// identifies a user's registration on the device.
+	RegistrationID string `json:"registrationId"`
 	// Network status
 	Status string `json:"status"`
 	// Timestamp in ISO format
@@ -119,6 +122,7 @@ type dexCommandDeviceListResponseDeviceJSON struct {
 	IneligibleReason apijson.Field
 	PersonEmail      apijson.Field
 	Platform         apijson.Field
+	RegistrationID   apijson.Field
 	Status           apijson.Field
 	Timestamp        apijson.Field
 	Version          apijson.Field

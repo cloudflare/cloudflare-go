@@ -119,6 +119,8 @@ type DEXCommandNewResponseCommand struct {
 	Args map[string]string `json:"args"`
 	// Identifier for the device associated with the command
 	DeviceID string `json:"device_id"`
+	// Unique identifier for the device registration
+	RegistrationID string `json:"registration_id"`
 	// Current status of the command
 	Status DEXCommandNewResponseCommandsStatus `json:"status"`
 	// Type of the command (e.g., "pcap" or "warp-diag")
@@ -129,13 +131,14 @@ type DEXCommandNewResponseCommand struct {
 // dexCommandNewResponseCommandJSON contains the JSON metadata for the struct
 // [DEXCommandNewResponseCommand]
 type dexCommandNewResponseCommandJSON struct {
-	ID          apijson.Field
-	Args        apijson.Field
-	DeviceID    apijson.Field
-	Status      apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	Args           apijson.Field
+	DeviceID       apijson.Field
+	RegistrationID apijson.Field
+	Status         apijson.Field
+	Type           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *DEXCommandNewResponseCommand) UnmarshalJSON(data []byte) (err error) {
@@ -186,30 +189,33 @@ func (r dexCommandListResponseJSON) RawJSON() string {
 }
 
 type DEXCommandListResponseCommand struct {
-	ID            string                            `json:"id"`
-	CompletedDate time.Time                         `json:"completed_date,nullable" format:"date-time"`
-	CreatedDate   time.Time                         `json:"created_date" format:"date-time"`
-	DeviceID      string                            `json:"device_id"`
-	Filename      string                            `json:"filename,nullable"`
-	Status        string                            `json:"status"`
-	Type          string                            `json:"type"`
-	UserEmail     string                            `json:"user_email"`
-	JSON          dexCommandListResponseCommandJSON `json:"-"`
+	ID            string    `json:"id"`
+	CompletedDate time.Time `json:"completed_date,nullable" format:"date-time"`
+	CreatedDate   time.Time `json:"created_date" format:"date-time"`
+	DeviceID      string    `json:"device_id"`
+	Filename      string    `json:"filename,nullable"`
+	// Unique identifier for the device registration
+	RegistrationID string                            `json:"registration_id"`
+	Status         string                            `json:"status"`
+	Type           string                            `json:"type"`
+	UserEmail      string                            `json:"user_email"`
+	JSON           dexCommandListResponseCommandJSON `json:"-"`
 }
 
 // dexCommandListResponseCommandJSON contains the JSON metadata for the struct
 // [DEXCommandListResponseCommand]
 type dexCommandListResponseCommandJSON struct {
-	ID            apijson.Field
-	CompletedDate apijson.Field
-	CreatedDate   apijson.Field
-	DeviceID      apijson.Field
-	Filename      apijson.Field
-	Status        apijson.Field
-	Type          apijson.Field
-	UserEmail     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID             apijson.Field
+	CompletedDate  apijson.Field
+	CreatedDate    apijson.Field
+	DeviceID       apijson.Field
+	Filename       apijson.Field
+	RegistrationID apijson.Field
+	Status         apijson.Field
+	Type           apijson.Field
+	UserEmail      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *DEXCommandListResponseCommand) UnmarshalJSON(data []byte) (err error) {
@@ -233,11 +239,14 @@ func (r DEXCommandNewParams) MarshalJSON() (data []byte, err error) {
 type DEXCommandNewParamsCommand struct {
 	// Type of command to execute on the device
 	CommandType param.Field[DEXCommandNewParamsCommandsCommandType] `json:"command_type,required"`
-	// Unique identifier for the device
+	// Unique identifier for the physical device
 	DeviceID param.Field[string] `json:"device_id,required"`
 	// Email tied to the device
 	UserEmail   param.Field[string]                                 `json:"user_email,required"`
 	CommandArgs param.Field[DEXCommandNewParamsCommandsCommandArgs] `json:"command_args"`
+	// Unique identifier for the device registration. Required for multi-user devices
+	// to target the correct user session.
+	RegistrationID param.Field[string] `json:"registration_id"`
 }
 
 func (r DEXCommandNewParamsCommand) MarshalJSON() (data []byte, err error) {
