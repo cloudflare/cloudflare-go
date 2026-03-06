@@ -90,6 +90,9 @@ func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatc
 	return
 }
 
+// Script and version settings for Workers for Platforms namespace scripts. Same as
+// script-and-version-settings-item but without annotations, which are not
+// supported for namespace scripts.
 type DispatchNamespaceScriptSettingEditResponse struct {
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
@@ -170,6 +173,10 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// Destination address for the email.
 	DestinationAddress string `json:"destination_address" format:"email"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Data format of the key.
@@ -210,6 +217,8 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id"`
 	// This field can have the runtime type of
 	// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitSimple].
 	Simple interface{} `json:"simple"`
@@ -244,6 +253,8 @@ type dispatchNamespaceScriptSettingEditResponseBindingJSON struct {
 	ClassName                   apijson.Field
 	Dataset                     apijson.Field
 	DestinationAddress          apijson.Field
+	DispatchNamespace           apijson.Field
+	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
 	IndexName                   apijson.Field
@@ -260,6 +271,7 @@ type dispatchNamespaceScriptSettingEditResponseBindingJSON struct {
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
+	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
@@ -315,7 +327,8 @@ func (r *DispatchNamespaceScriptSettingEditResponseBinding) UnmarshalJSON(data [
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow],
-// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModule].
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModule],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService].
 func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNamespaceScriptSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -350,9 +363,10 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey],
-// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow]
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModule]
 // or
-// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModule].
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService].
 type DispatchNamespaceScriptSettingEditResponseBindingsUnion interface {
 	implementsDispatchNamespaceScriptSettingEditResponseBinding()
 }
@@ -505,6 +519,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModule{}),
 			DiscriminatorValue: "wasm_module",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService{}),
+			DiscriminatorValue: "vpc_service",
 		},
 	)
 }
@@ -923,6 +942,8 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurable
 	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -937,14 +958,15 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurable
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	ClassName   apijson.Field
-	Environment apijson.Field
-	NamespaceID apijson.Field
-	ScriptName  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ClassName         apijson.Field
+	DispatchNamespace apijson.Field
+	Environment       apijson.Field
+	NamespaceID       apijson.Field
+	ScriptName        apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -1535,13 +1557,14 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bu
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction string
 
 const (
-	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu      DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
-	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu          DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp     DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
 )
 
 func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
+	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp, DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -1651,6 +1674,8 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
 	Environment string                                                                          `json:"environment"`
 	JSON        dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
@@ -1663,6 +1688,7 @@ type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
+	Entrypoint  apijson.Field
 	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2086,6 +2112,53 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasm
 	return false
 }
 
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceType `json:"type,required"`
+	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService]
+type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON struct {
+	Name        apijson.Field
+	ServiceID   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceTypeVPCService DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceType = "vpc_service"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceTypeVPCService:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptSettingEditResponseBindingsType string
 
@@ -2119,11 +2192,12 @@ const (
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey              DispatchNamespaceScriptSettingEditResponseBindingsType = "secret_key"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeWorkflow               DispatchNamespaceScriptSettingEditResponseBindingsType = "workflow"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeWasmModule             DispatchNamespaceScriptSettingEditResponseBindingsType = "wasm_module"
+	DispatchNamespaceScriptSettingEditResponseBindingsTypeVPCService             DispatchNamespaceScriptSettingEditResponseBindingsType = "vpc_service"
 )
 
 func (r DispatchNamespaceScriptSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditResponseBindingsTypeAI, DispatchNamespaceScriptSettingEditResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditResponseBindingsTypeAssets, DispatchNamespaceScriptSettingEditResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingEditResponseBindingsTypeD1, DispatchNamespaceScriptSettingEditResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditResponseBindingsTypeInherit, DispatchNamespaceScriptSettingEditResponseBindingsTypeImages, DispatchNamespaceScriptSettingEditResponseBindingsTypeJson, DispatchNamespaceScriptSettingEditResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText, DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines, DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue, DispatchNamespaceScriptSettingEditResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingEditResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditResponseBindingsTypeService, DispatchNamespaceScriptSettingEditResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingEditResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditResponseBindingsTypeWasmModule:
+	case DispatchNamespaceScriptSettingEditResponseBindingsTypeAI, DispatchNamespaceScriptSettingEditResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditResponseBindingsTypeAssets, DispatchNamespaceScriptSettingEditResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingEditResponseBindingsTypeD1, DispatchNamespaceScriptSettingEditResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditResponseBindingsTypeInherit, DispatchNamespaceScriptSettingEditResponseBindingsTypeImages, DispatchNamespaceScriptSettingEditResponseBindingsTypeJson, DispatchNamespaceScriptSettingEditResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText, DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines, DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue, DispatchNamespaceScriptSettingEditResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingEditResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditResponseBindingsTypeService, DispatchNamespaceScriptSettingEditResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingEditResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditResponseBindingsTypeWasmModule, DispatchNamespaceScriptSettingEditResponseBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -2154,13 +2228,14 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsFormat) IsKnown() bool
 type DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction string
 
 const (
-	DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionEu      DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction = "eu"
-	DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionFedramp DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionEu          DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction = "eu"
+	DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionFedramp     DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionFedrampHigh DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction = "fedramp-high"
 )
 
 func (r DispatchNamespaceScriptSettingEditResponseBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionEu, DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionFedramp:
+	case DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionEu, DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionFedramp, DispatchNamespaceScriptSettingEditResponseBindingsJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -2657,6 +2732,9 @@ func (r DispatchNamespaceScriptSettingEditResponseUsageModel) IsKnown() bool {
 	return false
 }
 
+// Script and version settings for Workers for Platforms namespace scripts. Same as
+// script-and-version-settings-item but without annotations, which are not
+// supported for namespace scripts.
 type DispatchNamespaceScriptSettingGetResponse struct {
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
@@ -2737,6 +2815,10 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// Destination address for the email.
 	DestinationAddress string `json:"destination_address" format:"email"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Data format of the key.
@@ -2777,6 +2859,8 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id"`
 	// This field can have the runtime type of
 	// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitSimple].
 	Simple interface{} `json:"simple"`
@@ -2811,6 +2895,8 @@ type dispatchNamespaceScriptSettingGetResponseBindingJSON struct {
 	ClassName                   apijson.Field
 	Dataset                     apijson.Field
 	DestinationAddress          apijson.Field
+	DispatchNamespace           apijson.Field
+	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
 	IndexName                   apijson.Field
@@ -2827,6 +2913,7 @@ type dispatchNamespaceScriptSettingGetResponseBindingJSON struct {
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
+	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
@@ -2882,7 +2969,8 @@ func (r *DispatchNamespaceScriptSettingGetResponseBinding) UnmarshalJSON(data []
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow],
-// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModule].
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModule],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService].
 func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchNamespaceScriptSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -2917,8 +3005,10 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey],
-// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow] or
-// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModule].
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModule]
+// or
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService].
 type DispatchNamespaceScriptSettingGetResponseBindingsUnion interface {
 	implementsDispatchNamespaceScriptSettingGetResponseBinding()
 }
@@ -3071,6 +3161,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModule{}),
 			DiscriminatorValue: "wasm_module",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService{}),
+			DiscriminatorValue: "vpc_service",
 		},
 	)
 }
@@ -3489,6 +3584,8 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableO
 	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -3503,14 +3600,15 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableO
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	ClassName   apijson.Field
-	Environment apijson.Field
-	NamespaceID apijson.Field
-	ScriptName  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ClassName         apijson.Field
+	DispatchNamespace apijson.Field
+	Environment       apijson.Field
+	NamespaceID       apijson.Field
+	ScriptName        apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -4101,13 +4199,14 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Buc
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction string
 
 const (
-	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu      DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
-	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu          DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp     DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
 )
 
 func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
+	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp, DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -4217,6 +4316,8 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService 
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
 	Environment string                                                                         `json:"environment"`
 	JSON        dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
@@ -4229,6 +4330,7 @@ type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindServiceJ
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
+	Entrypoint  apijson.Field
 	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -4652,6 +4754,53 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmM
 	return false
 }
 
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceType `json:"type,required"`
+	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService]
+type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON struct {
+	Name        apijson.Field
+	ServiceID   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceTypeVPCService DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceType = "vpc_service"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceTypeVPCService:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptSettingGetResponseBindingsType string
 
@@ -4685,11 +4834,12 @@ const (
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey              DispatchNamespaceScriptSettingGetResponseBindingsType = "secret_key"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeWorkflow               DispatchNamespaceScriptSettingGetResponseBindingsType = "workflow"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeWasmModule             DispatchNamespaceScriptSettingGetResponseBindingsType = "wasm_module"
+	DispatchNamespaceScriptSettingGetResponseBindingsTypeVPCService             DispatchNamespaceScriptSettingGetResponseBindingsType = "vpc_service"
 )
 
 func (r DispatchNamespaceScriptSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingGetResponseBindingsTypeAI, DispatchNamespaceScriptSettingGetResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingGetResponseBindingsTypeAssets, DispatchNamespaceScriptSettingGetResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingGetResponseBindingsTypeD1, DispatchNamespaceScriptSettingGetResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingGetResponseBindingsTypeInherit, DispatchNamespaceScriptSettingGetResponseBindingsTypeImages, DispatchNamespaceScriptSettingGetResponseBindingsTypeJson, DispatchNamespaceScriptSettingGetResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText, DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines, DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue, DispatchNamespaceScriptSettingGetResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingGetResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingGetResponseBindingsTypeService, DispatchNamespaceScriptSettingGetResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingGetResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingGetResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingGetResponseBindingsTypeWasmModule:
+	case DispatchNamespaceScriptSettingGetResponseBindingsTypeAI, DispatchNamespaceScriptSettingGetResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingGetResponseBindingsTypeAssets, DispatchNamespaceScriptSettingGetResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingGetResponseBindingsTypeD1, DispatchNamespaceScriptSettingGetResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingGetResponseBindingsTypeInherit, DispatchNamespaceScriptSettingGetResponseBindingsTypeImages, DispatchNamespaceScriptSettingGetResponseBindingsTypeJson, DispatchNamespaceScriptSettingGetResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText, DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines, DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue, DispatchNamespaceScriptSettingGetResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingGetResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingGetResponseBindingsTypeService, DispatchNamespaceScriptSettingGetResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingGetResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingGetResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingGetResponseBindingsTypeWasmModule, DispatchNamespaceScriptSettingGetResponseBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -4720,13 +4870,14 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsFormat) IsKnown() bool 
 type DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction string
 
 const (
-	DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionEu      DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction = "eu"
-	DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionFedramp DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionEu          DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction = "eu"
+	DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionFedramp     DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionFedrampHigh DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction = "fedramp-high"
 )
 
 func (r DispatchNamespaceScriptSettingGetResponseBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionEu, DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionFedramp:
+	case DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionEu, DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionFedramp, DispatchNamespaceScriptSettingGetResponseBindingsJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -5222,8 +5373,11 @@ func (r DispatchNamespaceScriptSettingGetResponseUsageModel) IsKnown() bool {
 
 type DispatchNamespaceScriptSettingEditParams struct {
 	// Identifier.
-	AccountID param.Field[string]                                           `path:"account_id,required"`
-	Settings  param.Field[DispatchNamespaceScriptSettingEditParamsSettings] `json:"settings"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Script and version settings for Workers for Platforms namespace scripts. Same as
+	// script-and-version-settings-item but without annotations, which are not
+	// supported for namespace scripts.
+	Settings param.Field[DispatchNamespaceScriptSettingEditParamsSettings] `json:"settings"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -5241,6 +5395,9 @@ func (r DispatchNamespaceScriptSettingEditParams) MarshalMultipart() (data []byt
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
+// Script and version settings for Workers for Platforms namespace scripts. Same as
+// script-and-version-settings-item but without annotations, which are not
+// supported for namespace scripts.
 type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
@@ -5298,6 +5455,10 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	Dataset param.Field[string] `json:"dataset"`
 	// Destination address for the email.
 	DestinationAddress param.Field[string] `json:"destination_address" format:"email"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace param.Field[string] `json:"dispatch_namespace"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Data format of the key.
@@ -5335,8 +5496,10 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// Name of the secret in the store.
 	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
-	Service param.Field[string]      `json:"service"`
-	Simple  param.Field[interface{}] `json:"simple"`
+	Service param.Field[string] `json:"service"`
+	// Identifier of the VPC service to bind to.
+	ServiceID param.Field[string]      `json:"service_id"`
+	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
@@ -5389,6 +5552,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsDispa
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCService],
 // [DispatchNamespaceScriptSettingEditParamsSettingsBinding].
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingUnion interface {
 	implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion()
@@ -5653,6 +5817,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindD
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace param.Field[string] `json:"dispatch_namespace"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -6053,13 +6219,14 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction string
 
 const (
-	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu      DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
-	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu          DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp     DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
 )
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp, DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -6138,6 +6305,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindS
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint param.Field[string] `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment"`
 }
@@ -6446,6 +6615,37 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return false
 }
 
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCService struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Identifier of the VPC service to bind to.
+	ServiceID param.Field[string] `json:"service_id,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType] `json:"type,required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCService) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCService) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceTypeVPCService DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType = "vpc_service"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceTypeVPCService:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsType string
 
@@ -6479,11 +6679,12 @@ const (
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey              DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "secret_key"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWorkflow               DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "workflow"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWasmModule             DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "wasm_module"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVPCService             DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "vpc_service"
 )
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAI, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAssets, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeBrowser, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeD1, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeInherit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeImages, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeJson, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVectorize, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWasmModule:
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAI, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAssets, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeBrowser, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeD1, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeInherit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeImages, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeJson, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVectorize, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWasmModule, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -6514,13 +6715,14 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormat) IsKnown(
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdiction string
 
 const (
-	DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionEu      DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdiction = "eu"
-	DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionFedramp DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionEu          DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdiction = "eu"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionFedramp     DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdiction = "fedramp"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionFedrampHigh DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdiction = "fedramp-high"
 )
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionEu, DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionFedramp:
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionEu, DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionFedramp, DispatchNamespaceScriptSettingEditParamsSettingsBindingsJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -6776,8 +6978,11 @@ type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
 	Messages []DispatchNamespaceScriptSettingEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  DispatchNamespaceScriptSettingEditResponse                `json:"result"`
-	JSON    dispatchNamespaceScriptSettingEditResponseEnvelopeJSON    `json:"-"`
+	// Script and version settings for Workers for Platforms namespace scripts. Same as
+	// script-and-version-settings-item but without annotations, which are not
+	// supported for namespace scripts.
+	Result DispatchNamespaceScriptSettingEditResponse             `json:"result"`
+	JSON   dispatchNamespaceScriptSettingEditResponseEnvelopeJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingEditResponseEnvelopeJSON contains the JSON
@@ -6924,8 +7129,11 @@ type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
 	Messages []DispatchNamespaceScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful.
 	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  DispatchNamespaceScriptSettingGetResponse                `json:"result"`
-	JSON    dispatchNamespaceScriptSettingGetResponseEnvelopeJSON    `json:"-"`
+	// Script and version settings for Workers for Platforms namespace scripts. Same as
+	// script-and-version-settings-item but without annotations, which are not
+	// supported for namespace scripts.
+	Result DispatchNamespaceScriptSettingGetResponse             `json:"result"`
+	JSON   dispatchNamespaceScriptSettingGetResponseEnvelopeJSON `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingGetResponseEnvelopeJSON contains the JSON metadata

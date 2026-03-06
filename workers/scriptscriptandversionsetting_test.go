@@ -34,6 +34,10 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 		workers.ScriptScriptAndVersionSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Settings: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettings{
+				Annotations: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsAnnotations{
+					WorkersMessage: cloudflare.F("Fixed bug."),
+					WorkersTag:     cloudflare.F("v1.0.1"),
+				}),
 				Bindings: cloudflare.F([]workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingUnion{workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
 					Text: cloudflare.F("my_data"),

@@ -82,6 +82,10 @@ func (r *ScriptScriptAndVersionSettingService) Get(ctx context.Context, scriptNa
 }
 
 type ScriptScriptAndVersionSettingEditResponse struct {
+	// Annotations for the Worker version. Annotations are not inherited across
+	// settings updates; omitting this field means the new version will have no
+	// annotations.
+	Annotations ScriptScriptAndVersionSettingEditResponseAnnotations `json:"annotations"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
@@ -115,6 +119,7 @@ type ScriptScriptAndVersionSettingEditResponse struct {
 // scriptScriptAndVersionSettingEditResponseJSON contains the JSON metadata for the
 // struct [ScriptScriptAndVersionSettingEditResponse]
 type scriptScriptAndVersionSettingEditResponseJSON struct {
+	Annotations        apijson.Field
 	Bindings           apijson.Field
 	CompatibilityDate  apijson.Field
 	CompatibilityFlags apijson.Field
@@ -134,6 +139,38 @@ func (r *ScriptScriptAndVersionSettingEditResponse) UnmarshalJSON(data []byte) (
 }
 
 func (r scriptScriptAndVersionSettingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotations for the Worker version. Annotations are not inherited across
+// settings updates; omitting this field means the new version will have no
+// annotations.
+type ScriptScriptAndVersionSettingEditResponseAnnotations struct {
+	// Human-readable message about the version.
+	WorkersMessage string `json:"workers/message"`
+	// User-provided identifier for the version.
+	WorkersTag string `json:"workers/tag"`
+	// Operation that triggered the creation of the version. This is read-only and set
+	// by the server.
+	WorkersTriggeredBy string                                                   `json:"workers/triggered_by"`
+	JSON               scriptScriptAndVersionSettingEditResponseAnnotationsJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseAnnotationsJSON contains the JSON
+// metadata for the struct [ScriptScriptAndVersionSettingEditResponseAnnotations]
+type scriptScriptAndVersionSettingEditResponseAnnotationsJSON struct {
+	WorkersMessage     apijson.Field
+	WorkersTag         apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseAnnotationsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -161,6 +198,10 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// Destination address for the email.
 	DestinationAddress string `json:"destination_address" format:"email"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Data format of the key.
@@ -201,6 +242,8 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id"`
 	// This field can have the runtime type of
 	// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimitSimple].
 	Simple interface{} `json:"simple"`
@@ -235,6 +278,8 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	ClassName                   apijson.Field
 	Dataset                     apijson.Field
 	DestinationAddress          apijson.Field
+	DispatchNamespace           apijson.Field
+	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
 	IndexName                   apijson.Field
@@ -251,6 +296,7 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
+	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
@@ -306,7 +352,8 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService].
 func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScriptAndVersionSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -341,8 +388,10 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow] or
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule]
+// or
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService].
 type ScriptScriptAndVersionSettingEditResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseBinding()
 }
@@ -495,6 +544,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule{}),
 			DiscriminatorValue: "wasm_module",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService{}),
+			DiscriminatorValue: "vpc_service",
 		},
 	)
 }
@@ -913,6 +967,8 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableO
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -927,14 +983,15 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableO
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	ClassName   apijson.Field
-	Environment apijson.Field
-	NamespaceID apijson.Field
-	ScriptName  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ClassName         apijson.Field
+	DispatchNamespace apijson.Field
+	Environment       apijson.Field
+	NamespaceID       apijson.Field
+	ScriptName        apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -1525,13 +1582,14 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Buc
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
-	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu          ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp     ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp, ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -1641,6 +1699,8 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindService 
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
 	Environment string                                                                         `json:"environment"`
 	JSON        scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
@@ -1653,6 +1713,7 @@ type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindServiceJ
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
+	Entrypoint  apijson.Field
 	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2076,6 +2137,53 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmM
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON struct {
+	Name        apijson.Field
+	ServiceID   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceTypeVPCService ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceType = "vpc_service"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCServiceTypeVPCService:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditResponseBindingsType string
 
@@ -2109,11 +2217,12 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditResponseBindingsType = "secret_key"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditResponseBindingsType = "workflow"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule             ScriptScriptAndVersionSettingEditResponseBindingsType = "wasm_module"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCService             ScriptScriptAndVersionSettingEditResponseBindingsType = "vpc_service"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit, ScriptScriptAndVersionSettingEditResponseBindingsTypeImages, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule:
+	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit, ScriptScriptAndVersionSettingEditResponseBindingsTypeImages, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -2144,13 +2253,14 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsFormat) IsKnown() bool 
 type ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction string
 
 const (
-	ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionEu      ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction = "eu"
-	ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedramp ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionEu          ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedramp     ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedrampHigh ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction = "fedramp-high"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionEu, ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedramp:
+	case ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionEu, ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedramp, ScriptScriptAndVersionSettingEditResponseBindingsJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -2643,6 +2753,10 @@ func (r ScriptScriptAndVersionSettingEditResponseUsageModel) IsKnown() bool {
 }
 
 type ScriptScriptAndVersionSettingGetResponse struct {
+	// Annotations for the Worker version. Annotations are not inherited across
+	// settings updates; omitting this field means the new version will have no
+	// annotations.
+	Annotations ScriptScriptAndVersionSettingGetResponseAnnotations `json:"annotations"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
@@ -2676,6 +2790,7 @@ type ScriptScriptAndVersionSettingGetResponse struct {
 // scriptScriptAndVersionSettingGetResponseJSON contains the JSON metadata for the
 // struct [ScriptScriptAndVersionSettingGetResponse]
 type scriptScriptAndVersionSettingGetResponseJSON struct {
+	Annotations        apijson.Field
 	Bindings           apijson.Field
 	CompatibilityDate  apijson.Field
 	CompatibilityFlags apijson.Field
@@ -2695,6 +2810,38 @@ func (r *ScriptScriptAndVersionSettingGetResponse) UnmarshalJSON(data []byte) (e
 }
 
 func (r scriptScriptAndVersionSettingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Annotations for the Worker version. Annotations are not inherited across
+// settings updates; omitting this field means the new version will have no
+// annotations.
+type ScriptScriptAndVersionSettingGetResponseAnnotations struct {
+	// Human-readable message about the version.
+	WorkersMessage string `json:"workers/message"`
+	// User-provided identifier for the version.
+	WorkersTag string `json:"workers/tag"`
+	// Operation that triggered the creation of the version. This is read-only and set
+	// by the server.
+	WorkersTriggeredBy string                                                  `json:"workers/triggered_by"`
+	JSON               scriptScriptAndVersionSettingGetResponseAnnotationsJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseAnnotationsJSON contains the JSON
+// metadata for the struct [ScriptScriptAndVersionSettingGetResponseAnnotations]
+type scriptScriptAndVersionSettingGetResponseAnnotationsJSON struct {
+	WorkersMessage     apijson.Field
+	WorkersTag         apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseAnnotationsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2722,6 +2869,10 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Dataset string `json:"dataset"`
 	// Destination address for the email.
 	DestinationAddress string `json:"destination_address" format:"email"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Data format of the key.
@@ -2762,6 +2913,8 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	SecretName string `json:"secret_name"`
 	// Name of Worker to bind to.
 	Service string `json:"service"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id"`
 	// This field can have the runtime type of
 	// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimitSimple].
 	Simple interface{} `json:"simple"`
@@ -2796,6 +2949,8 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	ClassName                   apijson.Field
 	Dataset                     apijson.Field
 	DestinationAddress          apijson.Field
+	DispatchNamespace           apijson.Field
+	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
 	IndexName                   apijson.Field
@@ -2812,6 +2967,7 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
+	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
@@ -2867,7 +3023,8 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService].
 func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptAndVersionSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -2902,8 +3059,10 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVersionMetadata],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow] or
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule]
+// or
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService].
 type ScriptScriptAndVersionSettingGetResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseBinding()
 }
@@ -3056,6 +3215,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule{}),
 			DiscriminatorValue: "wasm_module",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService{}),
+			DiscriminatorValue: "vpc_service",
 		},
 	)
 }
@@ -3474,6 +3638,8 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableOb
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace string `json:"dispatch_namespace"`
 	// The environment of the script_name to bind to.
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
@@ -3488,14 +3654,15 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableOb
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace]
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	ClassName   apijson.Field
-	Environment apijson.Field
-	NamespaceID apijson.Field
-	ScriptName  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ClassName         apijson.Field
+	DispatchNamespace apijson.Field
+	Environment       apijson.Field
+	NamespaceID       apijson.Field
+	ScriptName        apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -4086,13 +4253,14 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Buck
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
-	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu          ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp     ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedramp, ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -4202,6 +4370,8 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindService s
 	Service string `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
 	Environment string                                                                        `json:"environment"`
 	JSON        scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceJSON `json:"-"`
@@ -4214,6 +4384,7 @@ type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindServiceJS
 	Name        apijson.Field
 	Service     apijson.Field
 	Type        apijson.Field
+	Entrypoint  apijson.Field
 	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -4637,6 +4808,53 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmMo
 	return false
 }
 
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Identifier of the VPC service to bind to.
+	ServiceID string `json:"service_id,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceType `json:"type,required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON struct {
+	Name        apijson.Field
+	ServiceID   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceTypeVPCService ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceType = "vpc_service"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCServiceTypeVPCService:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingGetResponseBindingsType string
 
@@ -4670,11 +4888,12 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey              ScriptScriptAndVersionSettingGetResponseBindingsType = "secret_key"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingGetResponseBindingsType = "workflow"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule             ScriptScriptAndVersionSettingGetResponseBindingsType = "wasm_module"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCService             ScriptScriptAndVersionSettingGetResponseBindingsType = "vpc_service"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit, ScriptScriptAndVersionSettingGetResponseBindingsTypeImages, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule:
+	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit, ScriptScriptAndVersionSettingGetResponseBindingsTypeImages, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -4705,13 +4924,14 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsFormat) IsKnown() bool {
 type ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction string
 
 const (
-	ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionEu      ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction = "eu"
-	ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedramp ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionEu          ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction = "eu"
+	ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedramp     ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedrampHigh ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction = "fedramp-high"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionEu, ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedramp:
+	case ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionEu, ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedramp, ScriptScriptAndVersionSettingGetResponseBindingsJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -5225,6 +5445,10 @@ func (r ScriptScriptAndVersionSettingEditParams) MarshalMultipart() (data []byte
 }
 
 type ScriptScriptAndVersionSettingEditParamsSettings struct {
+	// Annotations for the Worker version. Annotations are not inherited across
+	// settings updates; omitting this field means the new version will have no
+	// annotations.
+	Annotations param.Field[ScriptScriptAndVersionSettingEditParamsSettingsAnnotations] `json:"annotations"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
@@ -5260,6 +5484,20 @@ func (r ScriptScriptAndVersionSettingEditParamsSettings) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
+// Annotations for the Worker version. Annotations are not inherited across
+// settings updates; omitting this field means the new version will have no
+// annotations.
+type ScriptScriptAndVersionSettingEditParamsSettingsAnnotations struct {
+	// Human-readable message about the version.
+	WorkersMessage param.Field[string] `json:"workers/message"`
+	// User-provided identifier for the version.
+	WorkersTag param.Field[string] `json:"workers/tag"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsAnnotations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // A binding to allow the Worker to communicate with resources.
 type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// A JavaScript variable name for the binding.
@@ -5281,6 +5519,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	Dataset param.Field[string] `json:"dataset"`
 	// Destination address for the email.
 	DestinationAddress param.Field[string] `json:"destination_address" format:"email"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace param.Field[string] `json:"dispatch_namespace"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Data format of the key.
@@ -5318,8 +5560,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// Name of the secret in the store.
 	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
-	Service param.Field[string]      `json:"service"`
-	Simple  param.Field[interface{}] `json:"simple"`
+	Service param.Field[string] `json:"service"`
+	// Identifier of the VPC service to bind to.
+	ServiceID param.Field[string]      `json:"service_id"`
+	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
@@ -5372,6 +5616,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCService],
 // [ScriptScriptAndVersionSettingEditParamsSettingsBinding].
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingUnion interface {
 	implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion()
@@ -5636,6 +5881,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDu
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace param.Field[string] `json:"dispatch_namespace"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -6036,13 +6283,14 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu          ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp     ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedramp, ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -6121,6 +6369,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindSe
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint param.Field[string] `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment"`
 }
@@ -6429,6 +6679,37 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCService struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Identifier of the VPC service to bind to.
+	ServiceID param.Field[string] `json:"service_id,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType] `json:"type,required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCService) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCService) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceTypeVPCService ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType = "vpc_service"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceTypeVPCService:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsType string
 
@@ -6462,11 +6743,12 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "secret_key"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "workflow"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "wasm_module"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCService             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "vpc_service"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -6497,13 +6779,14 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat) IsKnown()
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction string
 
 const (
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionEu      ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction = "eu"
-	ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedramp ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionEu          ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction = "eu"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedramp     ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction = "fedramp"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedrampHigh ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction = "fedramp-high"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionEu, ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedramp:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionEu, ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedramp, ScriptScriptAndVersionSettingEditParamsSettingsBindingsJurisdictionFedrampHigh:
 		return true
 	}
 	return false
