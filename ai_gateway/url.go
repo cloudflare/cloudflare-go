@@ -34,7 +34,7 @@ func NewURLService(opts ...option.RequestOption) (r *URLService) {
 	return
 }
 
-// Get Gateway URL
+// Retrieves the endpoint URL for an AI Gateway.
 func (r *URLService) Get(ctx context.Context, gatewayID string, provider string, query URLGetParams, opts ...option.RequestOption) (res *string, err error) {
 	var env URLGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

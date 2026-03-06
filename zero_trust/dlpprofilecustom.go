@@ -173,10 +173,16 @@ type DLPProfileCustomNewParams struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
+	// Data class IDs to associate with the profile.
+	DataClasses param.Field[[]string] `json:"data_classes" format:"uuid"`
+	// Data tag IDs to associate with the profile.
+	DataTags param.Field[[]string] `json:"data_tags" format:"uuid"`
 	// The description of the profile.
 	Description param.Field[string]                                `json:"description"`
 	Entries     param.Field[[]DLPProfileCustomNewParamsEntryUnion] `json:"entries"`
 	OCREnabled  param.Field[bool]                                  `json:"ocr_enabled"`
+	// Sensitivity levels to associate with the profile as (group_id, level_id) tuples.
+	SensitivityLevels param.Field[[][]string] `json:"sensitivity_levels" format:"uuid"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
 	// Microsoft Information Protection profiles).
 	SharedEntries param.Field[[]DLPProfileCustomNewParamsSharedEntry] `json:"shared_entries"`
@@ -391,12 +397,21 @@ type DLPProfileCustomUpdateParams struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
+	// Data class IDs to associate with the profile. If omitted, existing associations
+	// are unchanged.
+	DataClasses param.Field[[]string] `json:"data_classes" format:"uuid"`
+	// Data tag IDs to associate with the profile. If omitted, existing associations
+	// are unchanged.
+	DataTags param.Field[[]string] `json:"data_tags" format:"uuid"`
 	// The description of the profile.
 	Description param.Field[string] `json:"description"`
 	// Custom entries from this profile. If this field is omitted, entries owned by
 	// this profile will not be changed.
 	Entries    param.Field[[]DLPProfileCustomUpdateParamsEntryUnion] `json:"entries"`
 	OCREnabled param.Field[bool]                                     `json:"ocr_enabled"`
+	// Sensitivity levels to associate with the profile. If omitted, existing
+	// associations are unchanged.
+	SensitivityLevels param.Field[[][]string] `json:"sensitivity_levels" format:"uuid"`
 	// Other entries, e.g. predefined or integration.
 	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntry] `json:"shared_entries"`
 }

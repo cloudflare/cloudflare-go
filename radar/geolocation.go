@@ -97,6 +97,7 @@ type GeolocationListResponseGeolocation struct {
 	Parent    GeolocationListResponseGeolocationsParent `json:"parent,required"`
 	// The type of the geolocation.
 	Type GeolocationListResponseGeolocationsType `json:"type,required"`
+	Code string                                  `json:"code"`
 	JSON geolocationListResponseGeolocationJSON  `json:"-"`
 }
 
@@ -109,6 +110,7 @@ type geolocationListResponseGeolocationJSON struct {
 	Name        apijson.Field
 	Parent      apijson.Field
 	Type        apijson.Field
+	Code        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -131,6 +133,7 @@ type GeolocationListResponseGeolocationsParent struct {
 	Parent    GeolocationListResponseGeolocationsParentParent `json:"parent,required"`
 	// The type of the geolocation.
 	Type GeolocationListResponseGeolocationsParentType `json:"type,required"`
+	Code string                                        `json:"code"`
 	JSON geolocationListResponseGeolocationsParentJSON `json:"-"`
 }
 
@@ -143,6 +146,7 @@ type geolocationListResponseGeolocationsParentJSON struct {
 	Name        apijson.Field
 	Parent      apijson.Field
 	Type        apijson.Field
+	Code        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -164,6 +168,7 @@ type GeolocationListResponseGeolocationsParentParent struct {
 	Name      string `json:"name,required"`
 	// The type of the geolocation.
 	Type GeolocationListResponseGeolocationsParentParentType `json:"type,required"`
+	Code string                                              `json:"code"`
 	JSON geolocationListResponseGeolocationsParentParentJSON `json:"-"`
 }
 
@@ -175,6 +180,7 @@ type geolocationListResponseGeolocationsParentParentJSON struct {
 	Longitude   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Code        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -269,6 +275,7 @@ type GeolocationGetResponseGeolocation struct {
 	Parent    GeolocationGetResponseGeolocationParent `json:"parent,required"`
 	// The type of the geolocation.
 	Type GeolocationGetResponseGeolocationType `json:"type,required"`
+	Code string                                `json:"code"`
 	JSON geolocationGetResponseGeolocationJSON `json:"-"`
 }
 
@@ -281,6 +288,7 @@ type geolocationGetResponseGeolocationJSON struct {
 	Name        apijson.Field
 	Parent      apijson.Field
 	Type        apijson.Field
+	Code        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -303,6 +311,7 @@ type GeolocationGetResponseGeolocationParent struct {
 	Parent    GeolocationGetResponseGeolocationParentParent `json:"parent,required"`
 	// The type of the geolocation.
 	Type GeolocationGetResponseGeolocationParentType `json:"type,required"`
+	Code string                                      `json:"code"`
 	JSON geolocationGetResponseGeolocationParentJSON `json:"-"`
 }
 
@@ -315,6 +324,7 @@ type geolocationGetResponseGeolocationParentJSON struct {
 	Name        apijson.Field
 	Parent      apijson.Field
 	Type        apijson.Field
+	Code        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -336,6 +346,7 @@ type GeolocationGetResponseGeolocationParentParent struct {
 	Name      string `json:"name,required"`
 	// The type of the geolocation.
 	Type GeolocationGetResponseGeolocationParentParentType `json:"type,required"`
+	Code string                                            `json:"code"`
 	JSON geolocationGetResponseGeolocationParentParentJSON `json:"-"`
 }
 
@@ -347,6 +358,7 @@ type geolocationGetResponseGeolocationParentParentJSON struct {
 	Longitude   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Code        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

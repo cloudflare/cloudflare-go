@@ -212,6 +212,8 @@
 
 # [ResourceSharing](resource_sharing/api.md)
 
+# [ResourceTagging](resource_tagging/api.md)
+
 # [LeakedCredentialChecks](leaked_credential_checks/api.md)
 
 # [ContentScanning](content_scanning/api.md)

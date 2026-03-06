@@ -124,7 +124,7 @@ func TestInstanceBulkWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestInstanceGet(t *testing.T) {
+func TestInstanceGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -143,6 +143,8 @@ func TestInstanceGet(t *testing.T) {
 		"x",
 		workflows.InstanceGetParams{
 			AccountID: cloudflare.F("account_id"),
+			Order:     cloudflare.F(workflows.InstanceGetParamsOrderAsc),
+			Simple:    cloudflare.F(workflows.InstanceGetParamsSimpleTrue),
 		},
 	)
 	if err != nil {

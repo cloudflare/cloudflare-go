@@ -367,9 +367,12 @@ type AccessRule struct {
 	// This field can have the runtime type of [SAMLGroupRuleSAML].
 	SAML interface{} `json:"saml"`
 	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
-	ServiceToken interface{}    `json:"service_token"`
-	JSON         accessRuleJSON `json:"-"`
-	union        AccessRuleUnion
+	ServiceToken interface{} `json:"service_token"`
+	// This field can have the runtime type of
+	// [AccessRuleAccessUserRiskScoreRuleUserRiskScore].
+	UserRiskScore interface{}    `json:"user_risk_score"`
+	JSON          accessRuleJSON `json:"-"`
+	union         AccessRuleUnion
 }
 
 // accessRuleJSON contains the JSON metadata for the struct [AccessRule]
@@ -398,6 +401,7 @@ type accessRuleJSON struct {
 	Okta                 apijson.Field
 	SAML                 apijson.Field
 	ServiceToken         apijson.Field
+	UserRiskScore        apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -425,7 +429,8 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
 // [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
-// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule].
+// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule],
+// [AccessRuleAccessUserRiskScoreRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
@@ -439,7 +444,8 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
 // [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
-// [ServiceTokenRule] or [AccessRuleAccessLinkedAppTokenRule].
+// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule] or
+// [AccessRuleAccessUserRiskScoreRule].
 type AccessRuleUnion interface {
 	implementsAccessRule()
 }
@@ -543,6 +549,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessRuleAccessLinkedAppTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessRuleAccessUserRiskScoreRule{}),
 		},
 	)
 }
@@ -790,6 +800,70 @@ func (r accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON) RawJSON() string {
 	return r.raw
 }
 
+// Matches a user's risk score.
+type AccessRuleAccessUserRiskScoreRule struct {
+	UserRiskScore AccessRuleAccessUserRiskScoreRuleUserRiskScore `json:"user_risk_score,required"`
+	JSON          accessRuleAccessUserRiskScoreRuleJSON          `json:"-"`
+}
+
+// accessRuleAccessUserRiskScoreRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessUserRiskScoreRule]
+type accessRuleAccessUserRiskScoreRuleJSON struct {
+	UserRiskScore apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessUserRiskScoreRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessUserRiskScoreRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessUserRiskScoreRule) implementsAccessRule() {}
+
+type AccessRuleAccessUserRiskScoreRuleUserRiskScore struct {
+	// A list of risk score levels to match. Values can be low, medium, high, or
+	// unscored.
+	UserRiskScore []AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore `json:"user_risk_score,required"`
+	JSON          accessRuleAccessUserRiskScoreRuleUserRiskScoreJSON            `json:"-"`
+}
+
+// accessRuleAccessUserRiskScoreRuleUserRiskScoreJSON contains the JSON metadata
+// for the struct [AccessRuleAccessUserRiskScoreRuleUserRiskScore]
+type accessRuleAccessUserRiskScoreRuleUserRiskScoreJSON struct {
+	UserRiskScore apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessUserRiskScoreRuleUserRiskScore) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessUserRiskScoreRuleUserRiskScoreJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore string
+
+const (
+	AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreLow      AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore = "low"
+	AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreMedium   AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore = "medium"
+	AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreHigh     AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore = "high"
+	AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreUnscored AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore = "unscored"
+)
+
+func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore) IsKnown() bool {
+	switch r {
+	case AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreLow, AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreMedium, AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreHigh, AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScoreUnscored:
+		return true
+	}
+	return false
+}
+
 // Matches an Access group.
 type AccessRuleParam struct {
 	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token"`
@@ -816,6 +890,7 @@ type AccessRuleParam struct {
 	Okta                 param.Field[interface{}] `json:"okta"`
 	SAML                 param.Field[interface{}] `json:"saml"`
 	ServiceToken         param.Field[interface{}] `json:"service_token"`
+	UserRiskScore        param.Field[interface{}] `json:"user_risk_score"`
 }
 
 func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
@@ -841,7 +916,8 @@ func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 // [zero_trust.SAMLGroupRuleParam],
 // [zero_trust.AccessRuleAccessOIDCClaimRuleParam],
 // [zero_trust.ServiceTokenRuleParam],
-// [zero_trust.AccessRuleAccessLinkedAppTokenRuleParam], [AccessRuleParam].
+// [zero_trust.AccessRuleAccessLinkedAppTokenRuleParam],
+// [zero_trust.AccessRuleAccessUserRiskScoreRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsAccessRuleUnionParam()
 }
@@ -952,6 +1028,27 @@ type AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam struct {
 }
 
 func (r AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a user's risk score.
+type AccessRuleAccessUserRiskScoreRuleParam struct {
+	UserRiskScore param.Field[AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam] `json:"user_risk_score,required"`
+}
+
+func (r AccessRuleAccessUserRiskScoreRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessUserRiskScoreRuleParam) implementsAccessRuleUnionParam() {}
+
+type AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam struct {
+	// A list of risk score levels to match. Values can be low, medium, high, or
+	// unscored.
+	UserRiskScore param.Field[[]AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore] `json:"user_risk_score,required"`
+}
+
+func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2328,9 +2425,9 @@ func (r AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemo
 type AccessApplicationPolicyNewResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                          `json:"session_duration"`
@@ -2341,7 +2438,7 @@ type AccessApplicationPolicyNewResponseMfaConfig struct {
 // the struct [AccessApplicationPolicyNewResponseMfaConfig]
 type accessApplicationPolicyNewResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -2535,9 +2632,9 @@ func (r AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardR
 type AccessApplicationPolicyUpdateResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                             `json:"session_duration"`
@@ -2548,7 +2645,7 @@ type AccessApplicationPolicyUpdateResponseMfaConfig struct {
 // for the struct [AccessApplicationPolicyUpdateResponseMfaConfig]
 type accessApplicationPolicyUpdateResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -2741,9 +2838,9 @@ func (r AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRem
 type AccessApplicationPolicyListResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                           `json:"session_duration"`
@@ -2754,7 +2851,7 @@ type AccessApplicationPolicyListResponseMfaConfig struct {
 // the struct [AccessApplicationPolicyListResponseMfaConfig]
 type accessApplicationPolicyListResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -2969,9 +3066,9 @@ func (r AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemo
 type AccessApplicationPolicyGetResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass bool `json:"mfa_bypass"`
+	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration string                                          `json:"session_duration"`
@@ -2982,7 +3079,7 @@ type AccessApplicationPolicyGetResponseMfaConfig struct {
 // the struct [AccessApplicationPolicyGetResponseMfaConfig]
 type accessApplicationPolicyGetResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
-	MfaBypass             apijson.Field
+	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -3105,9 +3202,9 @@ func (r AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemote
 type AccessApplicationPolicyNewParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`
@@ -3366,9 +3463,9 @@ func (r AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRem
 type AccessApplicationPolicyUpdateParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to bypass MFA for this resource. This option is available at
+	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
-	MfaBypass param.Field[bool] `json:"mfa_bypass"`
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
 	SessionDuration param.Field[string] `json:"session_duration"`

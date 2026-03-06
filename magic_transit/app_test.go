@@ -29,11 +29,12 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.Apps.New(context.TODO(), magic_transit.AppNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:      cloudflare.F("Cloudflare Dashboard"),
-		Type:      cloudflare.F("Development"),
-		Hostnames: cloudflare.F([]string{"auth.cloudflare.com"}),
-		IPSubnets: cloudflare.F([]string{"192.0.2.0/24"}),
+		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:          cloudflare.F("Cloudflare Dashboard"),
+		Type:          cloudflare.F("Development"),
+		Hostnames:     cloudflare.F([]string{"auth.cloudflare.com"}),
+		IPSubnets:     cloudflare.F([]string{"192.0.2.0/24"}),
+		SourceSubnets: cloudflare.F([]string{"192.0.2.0/24"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,11 +63,12 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.AppUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Hostnames: cloudflare.F([]string{"auth.cloudflare.com"}),
-			IPSubnets: cloudflare.F([]string{"1.1.1.1/32"}),
-			Name:      cloudflare.F("Cloudflare Dashboard"),
-			Type:      cloudflare.F("Development"),
+			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Hostnames:     cloudflare.F([]string{"auth.cloudflare.com"}),
+			IPSubnets:     cloudflare.F([]string{"1.1.1.1/32"}),
+			Name:          cloudflare.F("Cloudflare Dashboard"),
+			SourceSubnets: cloudflare.F([]string{"1.1.1.1/32"}),
+			Type:          cloudflare.F("Development"),
 		},
 	)
 	if err != nil {
@@ -151,11 +153,12 @@ func TestAppEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.AppEditParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Hostnames: cloudflare.F([]string{"auth.cloudflare.com"}),
-			IPSubnets: cloudflare.F([]string{"1.1.1.1/32"}),
-			Name:      cloudflare.F("Cloudflare Dashboard"),
-			Type:      cloudflare.F("Development"),
+			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Hostnames:     cloudflare.F([]string{"auth.cloudflare.com"}),
+			IPSubnets:     cloudflare.F([]string{"1.1.1.1/32"}),
+			Name:          cloudflare.F("Cloudflare Dashboard"),
+			SourceSubnets: cloudflare.F([]string{"1.1.1.1/32"}),
+			Type:          cloudflare.F("Development"),
 		},
 	)
 	if err != nil {

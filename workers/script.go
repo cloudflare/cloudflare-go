@@ -1870,6 +1870,10 @@ type ScriptUpdateParamsMetadataBinding struct {
 	Dataset param.Field[string] `json:"dataset"`
 	// Destination address for the email.
 	DestinationAddress param.Field[string] `json:"destination_address" format:"email"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace param.Field[string] `json:"dispatch_namespace"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Data format of the key.
@@ -1907,8 +1911,10 @@ type ScriptUpdateParamsMetadataBinding struct {
 	// Name of the secret in the store.
 	SecretName param.Field[string] `json:"secret_name"`
 	// Name of Worker to bind to.
-	Service param.Field[string]      `json:"service"`
-	Simple  param.Field[interface{}] `json:"simple"`
+	Service param.Field[string] `json:"service"`
+	// Identifier of the VPC service to bind to.
+	ServiceID param.Field[string]      `json:"service_id"`
+	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
@@ -1959,6 +1965,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModule],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCService],
 // [ScriptUpdateParamsMetadataBinding].
 type ScriptUpdateParamsMetadataBindingUnion interface {
 	implementsScriptUpdateParamsMetadataBindingUnion()
@@ -2223,6 +2230,8 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace 
 	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
+	// The dispatch namespace the Durable Object script belongs to.
+	DispatchNamespace param.Field[string] `json:"dispatch_namespace"`
 	// The environment of the script_name to bind to.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
@@ -2623,13 +2632,14 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType) IsKnow
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction string
 
 const (
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu      ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
-	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu          ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp     ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
 )
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp:
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -2708,6 +2718,8 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindService struct {
 	Service param.Field[string] `json:"service,required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	// Entrypoint to invoke on the target Worker.
+	Entrypoint param.Field[string] `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment"`
 }
@@ -3016,6 +3028,37 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModuleType) IsKn
 	return false
 }
 
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCService struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Identifier of the VPC service to bind to.
+	ServiceID param.Field[string] `json:"service_id,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCService) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCService) implementsScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceTypeVPCService ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType = "vpc_service"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceTypeVPCService:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptUpdateParamsMetadataBindingsType string
 
@@ -3049,11 +3092,12 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypeSecretKey              ScriptUpdateParamsMetadataBindingsType = "secret_key"
 	ScriptUpdateParamsMetadataBindingsTypeWorkflow               ScriptUpdateParamsMetadataBindingsType = "workflow"
 	ScriptUpdateParamsMetadataBindingsTypeWasmModule             ScriptUpdateParamsMetadataBindingsType = "wasm_module"
+	ScriptUpdateParamsMetadataBindingsTypeVPCService             ScriptUpdateParamsMetadataBindingsType = "vpc_service"
 )
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule, ScriptUpdateParamsMetadataBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -3084,13 +3128,14 @@ func (r ScriptUpdateParamsMetadataBindingsFormat) IsKnown() bool {
 type ScriptUpdateParamsMetadataBindingsJurisdiction string
 
 const (
-	ScriptUpdateParamsMetadataBindingsJurisdictionEu      ScriptUpdateParamsMetadataBindingsJurisdiction = "eu"
-	ScriptUpdateParamsMetadataBindingsJurisdictionFedramp ScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp"
+	ScriptUpdateParamsMetadataBindingsJurisdictionEu          ScriptUpdateParamsMetadataBindingsJurisdiction = "eu"
+	ScriptUpdateParamsMetadataBindingsJurisdictionFedramp     ScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp"
+	ScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh ScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp-high"
 )
 
 func (r ScriptUpdateParamsMetadataBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsJurisdictionEu, ScriptUpdateParamsMetadataBindingsJurisdictionFedramp:
+	case ScriptUpdateParamsMetadataBindingsJurisdictionEu, ScriptUpdateParamsMetadataBindingsJurisdictionFedramp, ScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh:
 		return true
 	}
 	return false

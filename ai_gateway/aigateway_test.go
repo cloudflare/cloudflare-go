@@ -37,11 +37,11 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		RateLimitingLimit:       cloudflare.F(int64(0)),
 		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
 		Authentication:          cloudflare.F(true),
-		IsDefault:               cloudflare.F(true),
 		LogManagement:           cloudflare.F(int64(10000)),
 		LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayNewParamsLogManagementStrategyStopInserting),
 		Logpush:                 cloudflare.F(true),
 		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
+		WorkersAIBillingMode:    cloudflare.F(ai_gateway.AIGatewayNewParamsWorkersAIBillingModePostpaid),
 		Zdr:                     cloudflare.F(true),
 	})
 	if err != nil {
@@ -83,7 +83,6 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 				Enabled:  cloudflare.F(true),
 				Profiles: cloudflare.F([]string{"string"}),
 			}),
-			IsDefault:             cloudflare.F(true),
 			LogManagement:         cloudflare.F(int64(10000)),
 			LogManagementStrategy: cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
 			Logpush:               cloudflare.F(true),
@@ -93,7 +92,8 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 				Headers: cloudflare.F(map[string]string{
 					"foo": "string",
 				}),
-				URL: cloudflare.F("url"),
+				URL:         cloudflare.F("url"),
+				ContentType: cloudflare.F(ai_gateway.AIGatewayUpdateParamsOtelContentTypeJson),
 			}}),
 			StoreID: cloudflare.F("store_id"),
 			Stripe: cloudflare.F(ai_gateway.AIGatewayUpdateParamsStripe{
@@ -102,7 +102,8 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 					Payload: cloudflare.F("payload"),
 				}}),
 			}),
-			Zdr: cloudflare.F(true),
+			WorkersAIBillingMode: cloudflare.F(ai_gateway.AIGatewayUpdateParamsWorkersAIBillingModePostpaid),
+			Zdr:                  cloudflare.F(true),
 		},
 	)
 	if err != nil {

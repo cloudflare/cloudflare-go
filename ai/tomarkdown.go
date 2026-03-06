@@ -39,7 +39,7 @@ func NewToMarkdownService(opts ...option.RequestOption) (r *ToMarkdownService) {
 	return
 }
 
-// Get all converted formats supported
+// Lists all file formats supported for conversion to Markdown.
 func (r *ToMarkdownService) Supported(ctx context.Context, query ToMarkdownSupportedParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownSupportedResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -61,12 +61,12 @@ func (r *ToMarkdownService) Supported(ctx context.Context, query ToMarkdownSuppo
 	return res, nil
 }
 
-// Get all converted formats supported
+// Lists all file formats supported for conversion to Markdown.
 func (r *ToMarkdownService) SupportedAutoPaging(ctx context.Context, query ToMarkdownSupportedParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownSupportedResponse] {
 	return pagination.NewSinglePageAutoPager(r.Supported(ctx, query, opts...))
 }
 
-// Convert Files into Markdown
+// Converts uploaded files into Markdown format using Workers AI.
 func (r *ToMarkdownService) Transform(ctx context.Context, params ToMarkdownTransformParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownTransformResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -88,7 +88,7 @@ func (r *ToMarkdownService) Transform(ctx context.Context, params ToMarkdownTran
 	return res, nil
 }
 
-// Convert Files into Markdown
+// Converts uploaded files into Markdown format using Workers AI.
 func (r *ToMarkdownService) TransformAutoPaging(ctx context.Context, params ToMarkdownTransformParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownTransformResponse] {
 	return pagination.NewSinglePageAutoPager(r.Transform(ctx, params, opts...))
 }

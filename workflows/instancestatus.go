@@ -35,7 +35,8 @@ func NewInstanceStatusService(opts ...option.RequestOption) (r *InstanceStatusSe
 	return
 }
 
-// Change status of instance
+// Changes the execution status of a workflow instance (e.g., pause, resume,
+// terminate).
 func (r *InstanceStatusService) Edit(ctx context.Context, workflowName string, instanceID string, params InstanceStatusEditParams, opts ...option.RequestOption) (res *InstanceStatusEditResponse, err error) {
 	var env InstanceStatusEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

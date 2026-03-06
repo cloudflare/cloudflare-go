@@ -284,7 +284,11 @@ type LAN struct {
 	BondID int64  `json:"bond_id"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
-	HaLink        bool           `json:"ha_link"`
+	HaLink bool `json:"ha_link"`
+	// mark true to use this LAN for source-based breakout traffic
+	IsBreakout bool `json:"is_breakout"`
+	// mark true to use this LAN for source-based prioritized traffic
+	IsPrioritized bool           `json:"is_prioritized"`
 	Name          string         `json:"name"`
 	Nat           Nat            `json:"nat"`
 	Physport      int64          `json:"physport"`
@@ -305,6 +309,8 @@ type lanJSON struct {
 	ID               apijson.Field
 	BondID           apijson.Field
 	HaLink           apijson.Field
+	IsBreakout       apijson.Field
+	IsPrioritized    apijson.Field
 	Name             apijson.Field
 	Nat              apijson.Field
 	Physport         apijson.Field
@@ -451,7 +457,11 @@ type SiteLANNewParams struct {
 	BondID    param.Field[int64]  `json:"bond_id"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
-	HaLink        param.Field[bool]                `json:"ha_link"`
+	HaLink param.Field[bool] `json:"ha_link"`
+	// mark true to use this LAN for source-based breakout traffic
+	IsBreakout param.Field[bool] `json:"is_breakout"`
+	// mark true to use this LAN for source-based prioritized traffic
+	IsPrioritized param.Field[bool]                `json:"is_prioritized"`
 	Name          param.Field[string]              `json:"name"`
 	Nat           param.Field[NatParam]            `json:"nat"`
 	Physport      param.Field[int64]               `json:"physport"`
@@ -470,8 +480,12 @@ func (r SiteLANNewParams) MarshalJSON() (data []byte, err error) {
 
 type SiteLANUpdateParams struct {
 	// Identifier
-	AccountID     param.Field[string]              `path:"account_id,required"`
-	BondID        param.Field[int64]               `json:"bond_id"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	BondID    param.Field[int64]  `json:"bond_id"`
+	// mark true to use this LAN for source-based breakout traffic
+	IsBreakout param.Field[bool] `json:"is_breakout"`
+	// mark true to use this LAN for source-based prioritized traffic
+	IsPrioritized param.Field[bool]                `json:"is_prioritized"`
 	Name          param.Field[string]              `json:"name"`
 	Nat           param.Field[NatParam]            `json:"nat"`
 	Physport      param.Field[int64]               `json:"physport"`
@@ -586,8 +600,12 @@ func (r SiteLANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteLANEditParams struct {
 	// Identifier
-	AccountID     param.Field[string]              `path:"account_id,required"`
-	BondID        param.Field[int64]               `json:"bond_id"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	BondID    param.Field[int64]  `json:"bond_id"`
+	// mark true to use this LAN for source-based breakout traffic
+	IsBreakout param.Field[bool] `json:"is_breakout"`
+	// mark true to use this LAN for source-based prioritized traffic
+	IsPrioritized param.Field[bool]                `json:"is_prioritized"`
 	Name          param.Field[string]              `json:"name"`
 	Nat           param.Field[NatParam]            `json:"nat"`
 	Physport      param.Field[int64]               `json:"physport"`

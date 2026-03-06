@@ -38,7 +38,7 @@ func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 	return
 }
 
-// List deployed Workflow versions
+// Lists all deployed versions of a workflow.
 func (r *VersionService) List(ctx context.Context, workflowName string, params VersionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[VersionListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -64,12 +64,12 @@ func (r *VersionService) List(ctx context.Context, workflowName string, params V
 	return res, nil
 }
 
-// List deployed Workflow versions
+// Lists all deployed versions of a workflow.
 func (r *VersionService) ListAutoPaging(ctx context.Context, workflowName string, params VersionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[VersionListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, workflowName, params, opts...))
 }
 
-// Get Workflow version details
+// Retrieves details for a specific deployed workflow version.
 func (r *VersionService) Get(ctx context.Context, workflowName string, versionID string, query VersionGetParams, opts ...option.RequestOption) (res *VersionGetResponse, err error) {
 	var env VersionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -95,13 +95,14 @@ func (r *VersionService) Get(ctx context.Context, workflowName string, versionID
 }
 
 type VersionListResponse struct {
-	ID         string                  `json:"id,required" format:"uuid"`
-	ClassName  string                  `json:"class_name,required"`
-	CreatedOn  time.Time               `json:"created_on,required" format:"date-time"`
-	HasDag     bool                    `json:"has_dag,required"`
-	ModifiedOn time.Time               `json:"modified_on,required" format:"date-time"`
-	WorkflowID string                  `json:"workflow_id,required" format:"uuid"`
-	JSON       versionListResponseJSON `json:"-"`
+	ID         string                    `json:"id,required" format:"uuid"`
+	ClassName  string                    `json:"class_name,required"`
+	CreatedOn  time.Time                 `json:"created_on,required" format:"date-time"`
+	HasDag     bool                      `json:"has_dag,required"`
+	ModifiedOn time.Time                 `json:"modified_on,required" format:"date-time"`
+	WorkflowID string                    `json:"workflow_id,required" format:"uuid"`
+	Limits     VersionListResponseLimits `json:"limits"`
+	JSON       versionListResponseJSON   `json:"-"`
 }
 
 // versionListResponseJSON contains the JSON metadata for the struct
@@ -113,6 +114,7 @@ type versionListResponseJSON struct {
 	HasDag      apijson.Field
 	ModifiedOn  apijson.Field
 	WorkflowID  apijson.Field
+	Limits      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -125,14 +127,36 @@ func (r versionListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type VersionListResponseLimits struct {
+	Steps int64                         `json:"steps"`
+	JSON  versionListResponseLimitsJSON `json:"-"`
+}
+
+// versionListResponseLimitsJSON contains the JSON metadata for the struct
+// [VersionListResponseLimits]
+type versionListResponseLimitsJSON struct {
+	Steps       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VersionGetResponse struct {
-	ID         string                 `json:"id,required" format:"uuid"`
-	ClassName  string                 `json:"class_name,required"`
-	CreatedOn  time.Time              `json:"created_on,required" format:"date-time"`
-	HasDag     bool                   `json:"has_dag,required"`
-	ModifiedOn time.Time              `json:"modified_on,required" format:"date-time"`
-	WorkflowID string                 `json:"workflow_id,required" format:"uuid"`
-	JSON       versionGetResponseJSON `json:"-"`
+	ID         string                   `json:"id,required" format:"uuid"`
+	ClassName  string                   `json:"class_name,required"`
+	CreatedOn  time.Time                `json:"created_on,required" format:"date-time"`
+	HasDag     bool                     `json:"has_dag,required"`
+	ModifiedOn time.Time                `json:"modified_on,required" format:"date-time"`
+	WorkflowID string                   `json:"workflow_id,required" format:"uuid"`
+	Limits     VersionGetResponseLimits `json:"limits"`
+	JSON       versionGetResponseJSON   `json:"-"`
 }
 
 // versionGetResponseJSON contains the JSON metadata for the struct
@@ -144,6 +168,7 @@ type versionGetResponseJSON struct {
 	HasDag      apijson.Field
 	ModifiedOn  apijson.Field
 	WorkflowID  apijson.Field
+	Limits      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -153,6 +178,27 @@ func (r *VersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r versionGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type VersionGetResponseLimits struct {
+	Steps int64                        `json:"steps"`
+	JSON  versionGetResponseLimitsJSON `json:"-"`
+}
+
+// versionGetResponseLimitsJSON contains the JSON metadata for the struct
+// [VersionGetResponseLimits]
+type versionGetResponseLimitsJSON struct {
+	Steps       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseLimitsJSON) RawJSON() string {
 	return r.raw
 }
 

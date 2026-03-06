@@ -39,7 +39,7 @@ func NewSettingImpersonationRegistryService(opts ...option.RequestOption) (r *Se
 	return
 }
 
-// Create an entry in impersonation registry
+// Creates a display name entry for email security impersonation protection.
 func (r *SettingImpersonationRegistryService) New(ctx context.Context, params SettingImpersonationRegistryNewParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryNewResponse, err error) {
 	var env SettingImpersonationRegistryNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -83,7 +83,7 @@ func (r *SettingImpersonationRegistryService) ListAutoPaging(ctx context.Context
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete an entry from impersonation registry
+// Removes a display name from impersonation protection monitoring.
 func (r *SettingImpersonationRegistryService) Delete(ctx context.Context, displayNameID int64, body SettingImpersonationRegistryDeleteParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryDeleteResponse, err error) {
 	var env SettingImpersonationRegistryDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -100,7 +100,7 @@ func (r *SettingImpersonationRegistryService) Delete(ctx context.Context, displa
 	return
 }
 
-// Update an entry in impersonation registry
+// Updates a display name entry used for impersonation protection.
 func (r *SettingImpersonationRegistryService) Edit(ctx context.Context, displayNameID int64, params SettingImpersonationRegistryEditParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryEditResponse, err error) {
 	var env SettingImpersonationRegistryEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -117,7 +117,7 @@ func (r *SettingImpersonationRegistryService) Edit(ctx context.Context, displayN
 	return
 }
 
-// Get an entry in impersonation registry
+// Retrieves a display name entry used for impersonation protection.
 func (r *SettingImpersonationRegistryService) Get(ctx context.Context, displayNameID int64, query SettingImpersonationRegistryGetParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryGetResponse, err error) {
 	var env SettingImpersonationRegistryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

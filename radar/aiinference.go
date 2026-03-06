@@ -818,13 +818,13 @@ func (r AIInferenceTimeseriesGroupsV2ParamsFormat) IsKnown() bool {
 type AIInferenceTimeseriesGroupsV2ParamsNormalization string
 
 const (
-	AIInferenceTimeseriesGroupsV2ParamsNormalizationPercentageChange AIInferenceTimeseriesGroupsV2ParamsNormalization = "PERCENTAGE_CHANGE"
-	AIInferenceTimeseriesGroupsV2ParamsNormalizationMin0Max          AIInferenceTimeseriesGroupsV2ParamsNormalization = "MIN0_MAX"
+	AIInferenceTimeseriesGroupsV2ParamsNormalizationPercentage AIInferenceTimeseriesGroupsV2ParamsNormalization = "PERCENTAGE"
+	AIInferenceTimeseriesGroupsV2ParamsNormalizationMin0Max    AIInferenceTimeseriesGroupsV2ParamsNormalization = "MIN0_MAX"
 )
 
 func (r AIInferenceTimeseriesGroupsV2ParamsNormalization) IsKnown() bool {
 	switch r {
-	case AIInferenceTimeseriesGroupsV2ParamsNormalizationPercentageChange, AIInferenceTimeseriesGroupsV2ParamsNormalizationMin0Max:
+	case AIInferenceTimeseriesGroupsV2ParamsNormalizationPercentage, AIInferenceTimeseriesGroupsV2ParamsNormalizationMin0Max:
 		return true
 	}
 	return false

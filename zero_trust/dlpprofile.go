@@ -155,6 +155,10 @@ type Profile struct {
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	// When the profile was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// This field can have the runtime type of [[]string].
+	DataClasses interface{} `json:"data_classes"`
+	// This field can have the runtime type of [[]string].
+	DataTags interface{} `json:"data_tags"`
 	// The description of the profile.
 	Description string `json:"description,nullable"`
 	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
@@ -163,6 +167,8 @@ type Profile struct {
 	OCREnabled bool        `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.
 	OpenAccess bool `json:"open_access"`
+	// This field can have the runtime type of [[][]string].
+	SensitivityLevels interface{} `json:"sensitivity_levels"`
 	// This field can have the runtime type of [[]ProfileCustomProfileSharedEntry],
 	// [[]ProfileIntegrationProfileSharedEntry].
 	SharedEntries interface{} `json:"shared_entries"`
@@ -182,10 +188,13 @@ type profileJSON struct {
 	ConfidenceThreshold apijson.Field
 	ContextAwareness    apijson.Field
 	CreatedAt           apijson.Field
+	DataClasses         apijson.Field
+	DataTags            apijson.Field
 	Description         apijson.Field
 	Entries             apijson.Field
 	OCREnabled          apijson.Field
 	OpenAccess          apijson.Field
+	SensitivityLevels   apijson.Field
 	SharedEntries       apijson.Field
 	UpdatedAt           apijson.Field
 	raw                 string
@@ -259,12 +268,18 @@ type ProfileCustomProfile struct {
 	//
 	// Deprecated: deprecated
 	ContextAwareness ContextAwareness `json:"context_awareness"`
+	// Data classes associated with this profile.
+	DataClasses []string `json:"data_classes" format:"uuid"`
+	// Data tags associated with this profile.
+	DataTags []string `json:"data_tags" format:"uuid"`
 	// The description of the profile.
 	Description string `json:"description,nullable"`
 	// Deprecated: deprecated
-	Entries       []ProfileCustomProfileEntry       `json:"entries"`
-	SharedEntries []ProfileCustomProfileSharedEntry `json:"shared_entries"`
-	JSON          profileCustomProfileJSON          `json:"-"`
+	Entries []ProfileCustomProfileEntry `json:"entries"`
+	// Sensitivity levels associated with this profile as (group_id, level_id) tuples.
+	SensitivityLevels [][]string                        `json:"sensitivity_levels" format:"uuid"`
+	SharedEntries     []ProfileCustomProfileSharedEntry `json:"shared_entries"`
+	JSON              profileCustomProfileJSON          `json:"-"`
 }
 
 // profileCustomProfileJSON contains the JSON metadata for the struct
@@ -280,8 +295,11 @@ type profileCustomProfileJSON struct {
 	AIContextEnabled    apijson.Field
 	ConfidenceThreshold apijson.Field
 	ContextAwareness    apijson.Field
+	DataClasses         apijson.Field
+	DataTags            apijson.Field
 	Description         apijson.Field
 	Entries             apijson.Field
+	SensitivityLevels   apijson.Field
 	SharedEntries       apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field

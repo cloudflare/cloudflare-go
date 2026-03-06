@@ -39,7 +39,8 @@ func NewSettingBlockSenderService(opts ...option.RequestOption) (r *SettingBlock
 	return
 }
 
-// Create a blocked email sender
+// Adds a sender pattern to the email block list, preventing messages from matching
+// senders from being delivered.
 func (r *SettingBlockSenderService) New(ctx context.Context, params SettingBlockSenderNewParams, opts ...option.RequestOption) (res *SettingBlockSenderNewResponse, err error) {
 	var env SettingBlockSenderNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +57,7 @@ func (r *SettingBlockSenderService) New(ctx context.Context, params SettingBlock
 	return
 }
 
-// List blocked email senders
+// Lists all blocked sender entries with their patterns and block reasons.
 func (r *SettingBlockSenderService) List(ctx context.Context, params SettingBlockSenderListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingBlockSenderListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -78,12 +79,13 @@ func (r *SettingBlockSenderService) List(ctx context.Context, params SettingBloc
 	return res, nil
 }
 
-// List blocked email senders
+// Lists all blocked sender entries with their patterns and block reasons.
 func (r *SettingBlockSenderService) ListAutoPaging(ctx context.Context, params SettingBlockSenderListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingBlockSenderListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a blocked email sender
+// Removes a sender from the email block list, allowing their messages to be
+// delivered normally.
 func (r *SettingBlockSenderService) Delete(ctx context.Context, patternID int64, body SettingBlockSenderDeleteParams, opts ...option.RequestOption) (res *SettingBlockSenderDeleteResponse, err error) {
 	var env SettingBlockSenderDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -100,7 +102,7 @@ func (r *SettingBlockSenderService) Delete(ctx context.Context, patternID int64,
 	return
 }
 
-// Update a blocked email sender
+// Modifies a blocked sender entry, updating its pattern or block reason.
 func (r *SettingBlockSenderService) Edit(ctx context.Context, patternID int64, params SettingBlockSenderEditParams, opts ...option.RequestOption) (res *SettingBlockSenderEditResponse, err error) {
 	var env SettingBlockSenderEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -117,7 +119,8 @@ func (r *SettingBlockSenderService) Edit(ctx context.Context, patternID int64, p
 	return
 }
 
-// Get a blocked email sender
+// Gets information about a specific blocked sender entry, including the pattern
+// and block reason.
 func (r *SettingBlockSenderService) Get(ctx context.Context, patternID int64, query SettingBlockSenderGetParams, opts ...option.RequestOption) (res *SettingBlockSenderGetResponse, err error) {
 	var env SettingBlockSenderGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

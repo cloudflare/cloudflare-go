@@ -36,7 +36,8 @@ func NewInvestigateTraceService(opts ...option.RequestOption) (r *InvestigateTra
 	return
 }
 
-// Get email trace
+// Gets the delivery trace for an email message, showing its path through email
+// security processing.
 func (r *InvestigateTraceService) Get(ctx context.Context, postfixID string, query InvestigateTraceGetParams, opts ...option.RequestOption) (res *InvestigateTraceGetResponse, err error) {
 	var env InvestigateTraceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

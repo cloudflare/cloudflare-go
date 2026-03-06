@@ -5442,7 +5442,13 @@ type SetCacheSettingsRuleActionParameters struct {
 	RespectStrongEtags bool `json:"respect_strong_etags"`
 	// When to serve stale content from cache.
 	ServeStale SetCacheSettingsRuleActionParametersServeStale `json:"serve_stale"`
-	JSON       setCacheSettingsRuleActionParametersJSON       `json:"-"`
+	// Whether to strip ETag headers from the origin response before caching.
+	StripEtags bool `json:"strip_etags"`
+	// Whether to strip Last-Modified headers from the origin response before caching.
+	StripLastModified bool `json:"strip_last_modified"`
+	// Whether to strip Set-Cookie headers from the origin response before caching.
+	StripSetCookie bool                                     `json:"strip_set_cookie"`
+	JSON           setCacheSettingsRuleActionParametersJSON `json:"-"`
 }
 
 // setCacheSettingsRuleActionParametersJSON contains the JSON metadata for the
@@ -5459,6 +5465,9 @@ type setCacheSettingsRuleActionParametersJSON struct {
 	ReadTimeout              apijson.Field
 	RespectStrongEtags       apijson.Field
 	ServeStale               apijson.Field
+	StripEtags               apijson.Field
+	StripLastModified        apijson.Field
+	StripSetCookie           apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -6116,6 +6125,12 @@ type SetCacheSettingsRuleActionParametersParam struct {
 	RespectStrongEtags param.Field[bool] `json:"respect_strong_etags"`
 	// When to serve stale content from cache.
 	ServeStale param.Field[SetCacheSettingsRuleActionParametersServeStaleParam] `json:"serve_stale"`
+	// Whether to strip ETag headers from the origin response before caching.
+	StripEtags param.Field[bool] `json:"strip_etags"`
+	// Whether to strip Last-Modified headers from the origin response before caching.
+	StripLastModified param.Field[bool] `json:"strip_last_modified"`
+	// Whether to strip Set-Cookie headers from the origin response before caching.
+	StripSetCookie param.Field[bool] `json:"strip_set_cookie"`
 }
 
 func (r SetCacheSettingsRuleActionParametersParam) MarshalJSON() (data []byte, err error) {
@@ -7373,7 +7388,10 @@ type RuleNewResponseRule struct {
 	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
 	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
 	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
-	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [ServeErrorRuleActionParameters],
+	// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters],
 	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
@@ -7393,7 +7411,9 @@ type RuleNewResponseRule struct {
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
 	// [ServeErrorRuleExposedCredentialCheck],
+	// [RuleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [RuleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck],
 	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -7408,7 +7428,10 @@ type RuleNewResponseRule struct {
 	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
 	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
 	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit].
+	// [RuleNewResponseRulesRulesetsSetCacheControlRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit],
+	// [RuleNewResponseRulesRulesetsSetCacheTagsRuleRatelimit],
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                  `json:"ref"`
@@ -7457,7 +7480,9 @@ func (r *RuleNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
 // [RuleNewResponseRulesRulesetsJSChallengeRule], [LogRule], [LogCustomFieldRule],
 // [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetCacheSettingsRule], [SetConfigRule], [SkipRule].
+// [ServeErrorRule], [RuleNewResponseRulesRulesetsSetCacheControlRule],
+// [SetCacheSettingsRule], [RuleNewResponseRulesRulesetsSetCacheTagsRule],
+// [SetConfigRule], [SkipRule].
 func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
 	return r.union
 }
@@ -7467,7 +7492,8 @@ func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
 // [ForceConnectionCloseRule], [RuleNewResponseRulesRulesetsJSChallengeRule],
 // [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
 // [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
-// [SetCacheSettingsRule], [SetConfigRule] or [SkipRule].
+// [RuleNewResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule] or [SkipRule].
 type RuleNewResponseRulesUnion interface {
 	implementsRuleNewResponseRule()
 }
@@ -7553,8 +7579,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRule{}),
+			DiscriminatorValue: "set_cache_control",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
 			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheTagsRule{}),
+			DiscriminatorValue: "set_cache_tags",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -7873,6 +7909,3123 @@ func (r ruleNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() stri
 	return r.raw
 }
 
+type RuleNewResponseRulesRulesetsSetCacheControlRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleNewResponseRulesRulesetsSetCacheControlRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RuleNewResponseRulesRulesetsSetCacheControlRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck RuleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit RuleNewResponseRulesRulesetsSetCacheControlRuleRatelimit `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref  string                                              `json:"ref"`
+	JSON ruleNewResponseRulesRulesetsSetCacheControlRuleJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleJSON contains the JSON metadata
+// for the struct [RuleNewResponseRulesRulesetsSetCacheControlRule]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleJSON struct {
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRule) implementsRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleAction string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionSetCacheControl RuleNewResponseRulesRulesetsSetCacheControlRuleAction = "set_cache_control"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionSetCacheControl:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParameters struct {
+	// A cache-control directive configuration.
+	Immutable RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable `json:"immutable"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	MaxAge RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge `json:"max-age"`
+	// A cache-control directive configuration.
+	MustRevalidate RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate `json:"must-revalidate"`
+	// A cache-control directive configuration.
+	MustUnderstand RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand `json:"must-understand"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	NoCache RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache `json:"no-cache"`
+	// A cache-control directive configuration.
+	NoStore RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore `json:"no-store"`
+	// A cache-control directive configuration.
+	NoTransform RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform `json:"no-transform"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	Private RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate `json:"private"`
+	// A cache-control directive configuration.
+	ProxyRevalidate RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate `json:"proxy-revalidate"`
+	// A cache-control directive configuration.
+	Public RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic `json:"public"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	SMaxage RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage `json:"s-maxage"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleIfError RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError `json:"stale-if-error"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleWhileRevalidate RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate `json:"stale-while-revalidate"`
+	JSON                 ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersJSON                 `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParameters]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersJSON struct {
+	Immutable            apijson.Field
+	MaxAge               apijson.Field
+	MustRevalidate       apijson.Field
+	MustUnderstand       apijson.Field
+	NoCache              apijson.Field
+	NoStore              apijson.Field
+	NoTransform          apijson.Field
+	Private              apijson.Field
+	ProxyRevalidate      apijson.Field
+	Public               apijson.Field
+	SMaxage              apijson.Field
+	StaleIfError         apijson.Field
+	StaleWhileRevalidate apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+// A cache-control directive configuration.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                         `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
+	union          RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                     `json:"value"`
+	JSON  ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON `json:"-"`
+	union RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                  `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                              `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
+	union          RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                              `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
+	union          RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                `json:"qualifiers"`
+	JSON       ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON `json:"-"`
+	union      RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                               `json:"qualifiers"`
+	JSON       ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                       `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
+	union          RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                           `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
+	union          RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                `json:"qualifiers"`
+	JSON       ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON `json:"-"`
+	union      RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                               `json:"qualifiers"`
+	JSON       ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
+	union          RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                      `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
+	union          RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                  `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                      `json:"value"`
+	JSON  ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON `json:"-"`
+	union RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                           `json:"value"`
+	JSON  ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON `json:"-"`
+	union RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                                   `json:"value"`
+	JSON  ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON `json:"-"`
+	union RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                   `json:"cloudflare_only"`
+	JSON           ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) implementsRuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet    RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "set"
+	RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "remove"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet, RuleNewResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                    `json:"username_expression,required"`
+	JSON               ruleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleNewResponseRulesRulesetsSetCacheControlRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                       `json:"score_response_header_name"`
+	JSON                    ruleNewResponseRulesRulesetsSetCacheControlRuleRatelimitJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheControlRuleRatelimitJSON contains the JSON
+// metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheControlRuleRatelimit]
+type ruleNewResponseRulesRulesetsSetCacheControlRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheControlRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheControlRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleNewResponseRulesRulesetsSetCacheTagsRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleNewResponseRulesRulesetsSetCacheTagsRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck RuleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit RuleNewResponseRulesRulesetsSetCacheTagsRuleRatelimit `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref  string                                           `json:"ref"`
+	JSON ruleNewResponseRulesRulesetsSetCacheTagsRuleJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleJSON contains the JSON metadata for
+// the struct [RuleNewResponseRulesRulesetsSetCacheTagsRule]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleJSON struct {
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRule) implementsRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleAction string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionSetCacheTags RuleNewResponseRulesRulesetsSetCacheTagsRuleAction = "set_cache_tags"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionSetCacheTags:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters struct {
+	// The operation to perform on the cache tags.
+	Operation RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation,required"`
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression"`
+	// This field can have the runtime type of [[]string].
+	Values interface{}                                                      `json:"values"`
+	JSON   ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON `json:"-"`
+	union  RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON struct {
+	Operation   apijson.Field
+	Expression  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters) AsUnion() RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion {
+	return r.union
+}
+
+// The parameters configuring the rule's action.
+//
+// Union satisfied by
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
+// or
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion interface {
+	implementsRuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression{}),
+		},
+	)
+}
+
+// Add cache tags using a list of values.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                           `json:"values,required"`
+	JSON   ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues) implementsRuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "add"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "remove"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "set"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Add cache tags using an expression.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression) implementsRuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "add"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "remove"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using a list of values.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                              `json:"values,required"`
+	JSON   ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues) implementsRuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "add"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "remove"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "set"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using an expression.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) implementsRuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "add"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "remove"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using a list of values.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                           `json:"values,required"`
+	JSON   ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues) implementsRuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "add"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "remove"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "set"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using an expression.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression) implementsRuleNewResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "add"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "remove"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache tags.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation string
+
+const (
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationAdd    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "add"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationRemove RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "remove"
+	RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationSet    RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "set"
+)
+
+func (r RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationAdd, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationRemove, RuleNewResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationSet:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                 `json:"username_expression,required"`
+	JSON               ruleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON contains
+// the JSON metadata for the struct
+// [RuleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleNewResponseRulesRulesetsSetCacheTagsRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                    `json:"score_response_header_name"`
+	JSON                    ruleNewResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON contains the JSON
+// metadata for the struct [RuleNewResponseRulesRulesetsSetCacheTagsRuleRatelimit]
+type ruleNewResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsSetCacheTagsRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to perform when the rule matches.
 type RuleNewResponseRulesAction string
 
@@ -7892,14 +11045,16 @@ const (
 	RuleNewResponseRulesActionRoute                RuleNewResponseRulesAction = "route"
 	RuleNewResponseRulesActionScore                RuleNewResponseRulesAction = "score"
 	RuleNewResponseRulesActionServeError           RuleNewResponseRulesAction = "serve_error"
+	RuleNewResponseRulesActionSetCacheControl      RuleNewResponseRulesAction = "set_cache_control"
 	RuleNewResponseRulesActionSetCacheSettings     RuleNewResponseRulesAction = "set_cache_settings"
+	RuleNewResponseRulesActionSetCacheTags         RuleNewResponseRulesAction = "set_cache_tags"
 	RuleNewResponseRulesActionSetConfig            RuleNewResponseRulesAction = "set_config"
 	RuleNewResponseRulesActionSkip                 RuleNewResponseRulesAction = "skip"
 )
 
 func (r RuleNewResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RuleNewResponseRulesActionBlock, RuleNewResponseRulesActionChallenge, RuleNewResponseRulesActionCompressResponse, RuleNewResponseRulesActionDDoSDynamic, RuleNewResponseRulesActionExecute, RuleNewResponseRulesActionForceConnectionClose, RuleNewResponseRulesActionJSChallenge, RuleNewResponseRulesActionLog, RuleNewResponseRulesActionLogCustomField, RuleNewResponseRulesActionManagedChallenge, RuleNewResponseRulesActionRedirect, RuleNewResponseRulesActionRewrite, RuleNewResponseRulesActionRoute, RuleNewResponseRulesActionScore, RuleNewResponseRulesActionServeError, RuleNewResponseRulesActionSetCacheSettings, RuleNewResponseRulesActionSetConfig, RuleNewResponseRulesActionSkip:
+	case RuleNewResponseRulesActionBlock, RuleNewResponseRulesActionChallenge, RuleNewResponseRulesActionCompressResponse, RuleNewResponseRulesActionDDoSDynamic, RuleNewResponseRulesActionExecute, RuleNewResponseRulesActionForceConnectionClose, RuleNewResponseRulesActionJSChallenge, RuleNewResponseRulesActionLog, RuleNewResponseRulesActionLogCustomField, RuleNewResponseRulesActionManagedChallenge, RuleNewResponseRulesActionRedirect, RuleNewResponseRulesActionRewrite, RuleNewResponseRulesActionRoute, RuleNewResponseRulesActionScore, RuleNewResponseRulesActionServeError, RuleNewResponseRulesActionSetCacheControl, RuleNewResponseRulesActionSetCacheSettings, RuleNewResponseRulesActionSetCacheTags, RuleNewResponseRulesActionSetConfig, RuleNewResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -7963,7 +11118,10 @@ type RuleDeleteResponseRule struct {
 	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
 	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
 	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
-	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [ServeErrorRuleActionParameters],
+	// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters],
 	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
@@ -7983,7 +11141,9 @@ type RuleDeleteResponseRule struct {
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
 	// [ServeErrorRuleExposedCredentialCheck],
+	// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck],
 	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -7998,7 +11158,10 @@ type RuleDeleteResponseRule struct {
 	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
 	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
 	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit].
+	// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit],
+	// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimit],
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                     `json:"ref"`
@@ -8047,8 +11210,9 @@ func (r *RuleDeleteResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
 // [RuleDeleteResponseRulesRulesetsJSChallengeRule], [LogRule],
 // [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
-// [RouteRule], [ScoreRule], [ServeErrorRule], [SetCacheSettingsRule],
-// [SetConfigRule], [SkipRule].
+// [RouteRule], [ScoreRule], [ServeErrorRule],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule].
 func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
 	return r.union
 }
@@ -8058,7 +11222,9 @@ func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
 // [ForceConnectionCloseRule], [RuleDeleteResponseRulesRulesetsJSChallengeRule],
 // [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
 // [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
-// [SetCacheSettingsRule], [SetConfigRule] or [SkipRule].
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule] or
+// [SkipRule].
 type RuleDeleteResponseRulesUnion interface {
 	implementsRuleDeleteResponseRule()
 }
@@ -8144,8 +11310,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRule{}),
+			DiscriminatorValue: "set_cache_control",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
 			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheTagsRule{}),
+			DiscriminatorValue: "set_cache_tags",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -8465,6 +11641,3124 @@ func (r ruleDeleteResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() s
 	return r.raw
 }
 
+type RuleDeleteResponseRulesRulesetsSetCacheControlRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleDeleteResponseRulesRulesetsSetCacheControlRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck RuleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit RuleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimit `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref  string                                                 `json:"ref"`
+	JSON ruleDeleteResponseRulesRulesetsSetCacheControlRuleJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleJSON contains the JSON
+// metadata for the struct [RuleDeleteResponseRulesRulesetsSetCacheControlRule]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleJSON struct {
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRule) implementsRuleDeleteResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleAction string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionSetCacheControl RuleDeleteResponseRulesRulesetsSetCacheControlRuleAction = "set_cache_control"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleAction) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionSetCacheControl:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParameters struct {
+	// A cache-control directive configuration.
+	Immutable RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable `json:"immutable"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	MaxAge RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge `json:"max-age"`
+	// A cache-control directive configuration.
+	MustRevalidate RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate `json:"must-revalidate"`
+	// A cache-control directive configuration.
+	MustUnderstand RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand `json:"must-understand"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	NoCache RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache `json:"no-cache"`
+	// A cache-control directive configuration.
+	NoStore RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore `json:"no-store"`
+	// A cache-control directive configuration.
+	NoTransform RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform `json:"no-transform"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	Private RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate `json:"private"`
+	// A cache-control directive configuration.
+	ProxyRevalidate RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate `json:"proxy-revalidate"`
+	// A cache-control directive configuration.
+	Public RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic `json:"public"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	SMaxage RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage `json:"s-maxage"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleIfError RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError `json:"stale-if-error"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleWhileRevalidate RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate `json:"stale-while-revalidate"`
+	JSON                 ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersJSON                 `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersJSON contains
+// the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParameters]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersJSON struct {
+	Immutable            apijson.Field
+	MaxAge               apijson.Field
+	MustRevalidate       apijson.Field
+	MustUnderstand       apijson.Field
+	NoCache              apijson.Field
+	NoStore              apijson.Field
+	NoTransform          apijson.Field
+	Private              apijson.Field
+	ProxyRevalidate      apijson.Field
+	Public               apijson.Field
+	SMaxage              apijson.Field
+	StaleIfError         apijson.Field
+	StaleWhileRevalidate apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+// A cache-control directive configuration.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                            `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
+	union          RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                        `json:"value"`
+	JSON  ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON `json:"-"`
+	union RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
+	union          RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
+	union          RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                   `json:"qualifiers"`
+	JSON       ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON `json:"-"`
+	union      RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                                  `json:"qualifiers"`
+	JSON       ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                          `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
+	union          RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                              `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
+	union          RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                   `json:"qualifiers"`
+	JSON       ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON `json:"-"`
+	union      RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                                  `json:"qualifiers"`
+	JSON       ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                  `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
+	union          RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                 `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                         `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
+	union          RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                         `json:"value"`
+	JSON  ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON `json:"-"`
+	union RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                              `json:"value"`
+	JSON  ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON `json:"-"`
+	union RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                                      `json:"value"`
+	JSON  ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON `json:"-"`
+	union RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                   `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                      `json:"cloudflare_only"`
+	JSON           ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) implementsRuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet    RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "set"
+	RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "remove"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet, RuleDeleteResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                       `json:"username_expression,required"`
+	JSON               ruleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                          `json:"score_response_header_name"`
+	JSON                    ruleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimitJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimitJSON contains the
+// JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimit]
+type ruleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheControlRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleDeleteResponseRulesRulesetsSetCacheTagsRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck RuleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit RuleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimit `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref  string                                              `json:"ref"`
+	JSON ruleDeleteResponseRulesRulesetsSetCacheTagsRuleJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleJSON contains the JSON metadata
+// for the struct [RuleDeleteResponseRulesRulesetsSetCacheTagsRule]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleJSON struct {
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRule) implementsRuleDeleteResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleAction string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionSetCacheTags RuleDeleteResponseRulesRulesetsSetCacheTagsRuleAction = "set_cache_tags"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleAction) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionSetCacheTags:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters struct {
+	// The operation to perform on the cache tags.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation,required"`
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression"`
+	// This field can have the runtime type of [[]string].
+	Values interface{}                                                         `json:"values"`
+	JSON   ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON `json:"-"`
+	union  RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON struct {
+	Operation   apijson.Field
+	Expression  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters) AsUnion() RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion {
+	return r.union
+}
+
+// The parameters configuring the rule's action.
+//
+// Union satisfied by
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
+// or
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion interface {
+	implementsRuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression{}),
+		},
+	)
+}
+
+// Add cache tags using a list of values.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                              `json:"values,required"`
+	JSON   ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues) implementsRuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "add"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "remove"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "set"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Add cache tags using an expression.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression) implementsRuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "add"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "remove"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using a list of values.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                                 `json:"values,required"`
+	JSON   ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues) implementsRuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "add"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "remove"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "set"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using an expression.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) implementsRuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "add"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "remove"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using a list of values.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                              `json:"values,required"`
+	JSON   ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues) implementsRuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "add"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "remove"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "set"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using an expression.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression) implementsRuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "add"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "remove"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache tags.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation string
+
+const (
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationAdd    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "add"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationRemove RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "remove"
+	RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationSet    RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "set"
+)
+
+func (r RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationAdd, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationRemove, RuleDeleteResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationSet:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                    `json:"username_expression,required"`
+	JSON               ruleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                       `json:"score_response_header_name"`
+	JSON                    ruleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON contains the JSON
+// metadata for the struct
+// [RuleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimit]
+type ruleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to perform when the rule matches.
 type RuleDeleteResponseRulesAction string
 
@@ -8484,14 +14778,16 @@ const (
 	RuleDeleteResponseRulesActionRoute                RuleDeleteResponseRulesAction = "route"
 	RuleDeleteResponseRulesActionScore                RuleDeleteResponseRulesAction = "score"
 	RuleDeleteResponseRulesActionServeError           RuleDeleteResponseRulesAction = "serve_error"
+	RuleDeleteResponseRulesActionSetCacheControl      RuleDeleteResponseRulesAction = "set_cache_control"
 	RuleDeleteResponseRulesActionSetCacheSettings     RuleDeleteResponseRulesAction = "set_cache_settings"
+	RuleDeleteResponseRulesActionSetCacheTags         RuleDeleteResponseRulesAction = "set_cache_tags"
 	RuleDeleteResponseRulesActionSetConfig            RuleDeleteResponseRulesAction = "set_config"
 	RuleDeleteResponseRulesActionSkip                 RuleDeleteResponseRulesAction = "skip"
 )
 
 func (r RuleDeleteResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RuleDeleteResponseRulesActionBlock, RuleDeleteResponseRulesActionChallenge, RuleDeleteResponseRulesActionCompressResponse, RuleDeleteResponseRulesActionDDoSDynamic, RuleDeleteResponseRulesActionExecute, RuleDeleteResponseRulesActionForceConnectionClose, RuleDeleteResponseRulesActionJSChallenge, RuleDeleteResponseRulesActionLog, RuleDeleteResponseRulesActionLogCustomField, RuleDeleteResponseRulesActionManagedChallenge, RuleDeleteResponseRulesActionRedirect, RuleDeleteResponseRulesActionRewrite, RuleDeleteResponseRulesActionRoute, RuleDeleteResponseRulesActionScore, RuleDeleteResponseRulesActionServeError, RuleDeleteResponseRulesActionSetCacheSettings, RuleDeleteResponseRulesActionSetConfig, RuleDeleteResponseRulesActionSkip:
+	case RuleDeleteResponseRulesActionBlock, RuleDeleteResponseRulesActionChallenge, RuleDeleteResponseRulesActionCompressResponse, RuleDeleteResponseRulesActionDDoSDynamic, RuleDeleteResponseRulesActionExecute, RuleDeleteResponseRulesActionForceConnectionClose, RuleDeleteResponseRulesActionJSChallenge, RuleDeleteResponseRulesActionLog, RuleDeleteResponseRulesActionLogCustomField, RuleDeleteResponseRulesActionManagedChallenge, RuleDeleteResponseRulesActionRedirect, RuleDeleteResponseRulesActionRewrite, RuleDeleteResponseRulesActionRoute, RuleDeleteResponseRulesActionScore, RuleDeleteResponseRulesActionServeError, RuleDeleteResponseRulesActionSetCacheControl, RuleDeleteResponseRulesActionSetCacheSettings, RuleDeleteResponseRulesActionSetCacheTags, RuleDeleteResponseRulesActionSetConfig, RuleDeleteResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -8555,7 +14851,10 @@ type RuleEditResponseRule struct {
 	// [ExecuteRuleActionParameters], [LogCustomFieldRuleActionParameters],
 	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
 	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
-	// [ServeErrorRuleActionParameters], [SetCacheSettingsRuleActionParameters],
+	// [ServeErrorRuleActionParameters],
+	// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters],
 	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
@@ -8575,7 +14874,9 @@ type RuleEditResponseRule struct {
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
 	// [ServeErrorRuleExposedCredentialCheck],
+	// [RuleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
+	// [RuleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck],
 	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -8590,7 +14891,10 @@ type RuleEditResponseRule struct {
 	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
 	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
 	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
-	// [SetCacheSettingsRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit].
+	// [RuleEditResponseRulesRulesetsSetCacheControlRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit],
+	// [RuleEditResponseRulesRulesetsSetCacheTagsRuleRatelimit],
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                   `json:"ref"`
@@ -8639,7 +14943,9 @@ func (r *RuleEditResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [DDoSDynamicRule], [ExecuteRule], [ForceConnectionCloseRule],
 // [RuleEditResponseRulesRulesetsJSChallengeRule], [LogRule], [LogCustomFieldRule],
 // [ManagedChallengeRule], [RedirectRule], [RewriteRule], [RouteRule], [ScoreRule],
-// [ServeErrorRule], [SetCacheSettingsRule], [SetConfigRule], [SkipRule].
+// [ServeErrorRule], [RuleEditResponseRulesRulesetsSetCacheControlRule],
+// [SetCacheSettingsRule], [RuleEditResponseRulesRulesetsSetCacheTagsRule],
+// [SetConfigRule], [SkipRule].
 func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
 	return r.union
 }
@@ -8649,7 +14955,8 @@ func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
 // [ForceConnectionCloseRule], [RuleEditResponseRulesRulesetsJSChallengeRule],
 // [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
 // [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
-// [SetCacheSettingsRule], [SetConfigRule] or [SkipRule].
+// [RuleEditResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule] or [SkipRule].
 type RuleEditResponseRulesUnion interface {
 	implementsRuleEditResponseRule()
 }
@@ -8735,8 +15042,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRule{}),
+			DiscriminatorValue: "set_cache_control",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SetCacheSettingsRule{}),
 			DiscriminatorValue: "set_cache_settings",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheTagsRule{}),
+			DiscriminatorValue: "set_cache_tags",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -9055,6 +15372,3123 @@ func (r ruleEditResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() str
 	return r.raw
 }
 
+type RuleEditResponseRulesRulesetsSetCacheControlRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleEditResponseRulesRulesetsSetCacheControlRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RuleEditResponseRulesRulesetsSetCacheControlRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck RuleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit RuleEditResponseRulesRulesetsSetCacheControlRuleRatelimit `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref  string                                               `json:"ref"`
+	JSON ruleEditResponseRulesRulesetsSetCacheControlRuleJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleJSON contains the JSON metadata
+// for the struct [RuleEditResponseRulesRulesetsSetCacheControlRule]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleJSON struct {
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRule) implementsRuleEditResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleAction string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionSetCacheControl RuleEditResponseRulesRulesetsSetCacheControlRuleAction = "set_cache_control"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionSetCacheControl:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParameters struct {
+	// A cache-control directive configuration.
+	Immutable RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable `json:"immutable"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	MaxAge RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge `json:"max-age"`
+	// A cache-control directive configuration.
+	MustRevalidate RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate `json:"must-revalidate"`
+	// A cache-control directive configuration.
+	MustUnderstand RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand `json:"must-understand"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	NoCache RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache `json:"no-cache"`
+	// A cache-control directive configuration.
+	NoStore RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore `json:"no-store"`
+	// A cache-control directive configuration.
+	NoTransform RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform `json:"no-transform"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	Private RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate `json:"private"`
+	// A cache-control directive configuration.
+	ProxyRevalidate RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate `json:"proxy-revalidate"`
+	// A cache-control directive configuration.
+	Public RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic `json:"public"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	SMaxage RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage `json:"s-maxage"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleIfError RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError `json:"stale-if-error"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleWhileRevalidate RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate `json:"stale-while-revalidate"`
+	JSON                 ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersJSON                 `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersJSON contains
+// the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParameters]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersJSON struct {
+	Immutable            apijson.Field
+	MaxAge               apijson.Field
+	MustRevalidate       apijson.Field
+	MustUnderstand       apijson.Field
+	NoCache              apijson.Field
+	NoStore              apijson.Field
+	NoTransform          apijson.Field
+	Private              apijson.Field
+	ProxyRevalidate      apijson.Field
+	Public               apijson.Field
+	SMaxage              apijson.Field
+	StaleIfError         apijson.Field
+	StaleWhileRevalidate apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+// A cache-control directive configuration.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                          `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
+	union          RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                      `json:"value"`
+	JSON  ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON `json:"-"`
+	union RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
+	union          RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
+	union          RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                 `json:"qualifiers"`
+	JSON       ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON `json:"-"`
+	union      RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                                `json:"qualifiers"`
+	JSON       ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                        `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
+	union          RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                    `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                            `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
+	union          RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                 `json:"qualifiers"`
+	JSON       ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON `json:"-"`
+	union      RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                                `json:"qualifiers"`
+	JSON       ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
+	union          RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                       `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
+	union          RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                       `json:"value"`
+	JSON  ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON `json:"-"`
+	union RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                    `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                            `json:"value"`
+	JSON  ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON `json:"-"`
+	union RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                                    `json:"value"`
+	JSON  ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON `json:"-"`
+	union RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                 `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                    `json:"cloudflare_only"`
+	JSON           ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) implementsRuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet    RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "set"
+	RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "remove"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet, RuleEditResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                     `json:"username_expression,required"`
+	JSON               ruleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleEditResponseRulesRulesetsSetCacheControlRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                        `json:"score_response_header_name"`
+	JSON                    ruleEditResponseRulesRulesetsSetCacheControlRuleRatelimitJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheControlRuleRatelimitJSON contains the JSON
+// metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheControlRuleRatelimit]
+type ruleEditResponseRulesRulesetsSetCacheControlRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheControlRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheControlRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleEditResponseRulesRulesetsSetCacheTagsRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleEditResponseRulesRulesetsSetCacheTagsRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck RuleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit RuleEditResponseRulesRulesetsSetCacheTagsRuleRatelimit `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref  string                                            `json:"ref"`
+	JSON ruleEditResponseRulesRulesetsSetCacheTagsRuleJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleJSON contains the JSON metadata for
+// the struct [RuleEditResponseRulesRulesetsSetCacheTagsRule]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleJSON struct {
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRule) implementsRuleEditResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleAction string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionSetCacheTags RuleEditResponseRulesRulesetsSetCacheTagsRuleAction = "set_cache_tags"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionSetCacheTags:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters struct {
+	// The operation to perform on the cache tags.
+	Operation RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation,required"`
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression"`
+	// This field can have the runtime type of [[]string].
+	Values interface{}                                                       `json:"values"`
+	JSON   ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON `json:"-"`
+	union  RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON struct {
+	Operation   apijson.Field
+	Expression  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	*r = RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters) AsUnion() RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion {
+	return r.union
+}
+
+// The parameters configuring the rule's action.
+//
+// Union satisfied by
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
+// or
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion interface {
+	implementsRuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression{}),
+		},
+	)
+}
+
+// Add cache tags using a list of values.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                            `json:"values,required"`
+	JSON   ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues) implementsRuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "add"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "remove"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "set"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Add cache tags using an expression.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression) implementsRuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "add"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "remove"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using a list of values.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                               `json:"values,required"`
+	JSON   ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues) implementsRuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "add"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "remove"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "set"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using an expression.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) implementsRuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "add"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "remove"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using a list of values.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation,required"`
+	// A list of cache tag values.
+	Values []string                                                                            `json:"values,required"`
+	JSON   ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues) implementsRuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "add"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "remove"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "set"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using an expression.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation,required"`
+	JSON      ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression) implementsRuleEditResponseRulesRulesetsSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "add"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "remove"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache tags.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation string
+
+const (
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationAdd    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "add"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationRemove RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "remove"
+	RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationSet    RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation = "set"
+)
+
+func (r RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationAdd, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationRemove, RuleEditResponseRulesRulesetsSetCacheTagsRuleActionParametersOperationSet:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                  `json:"username_expression,required"`
+	JSON               ruleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON contains
+// the JSON metadata for the struct
+// [RuleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleEditResponseRulesRulesetsSetCacheTagsRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                     `json:"score_response_header_name"`
+	JSON                    ruleEditResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON contains the JSON
+// metadata for the struct [RuleEditResponseRulesRulesetsSetCacheTagsRuleRatelimit]
+type ruleEditResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsSetCacheTagsRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to perform when the rule matches.
 type RuleEditResponseRulesAction string
 
@@ -9074,14 +18508,16 @@ const (
 	RuleEditResponseRulesActionRoute                RuleEditResponseRulesAction = "route"
 	RuleEditResponseRulesActionScore                RuleEditResponseRulesAction = "score"
 	RuleEditResponseRulesActionServeError           RuleEditResponseRulesAction = "serve_error"
+	RuleEditResponseRulesActionSetCacheControl      RuleEditResponseRulesAction = "set_cache_control"
 	RuleEditResponseRulesActionSetCacheSettings     RuleEditResponseRulesAction = "set_cache_settings"
+	RuleEditResponseRulesActionSetCacheTags         RuleEditResponseRulesAction = "set_cache_tags"
 	RuleEditResponseRulesActionSetConfig            RuleEditResponseRulesAction = "set_config"
 	RuleEditResponseRulesActionSkip                 RuleEditResponseRulesAction = "skip"
 )
 
 func (r RuleEditResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RuleEditResponseRulesActionBlock, RuleEditResponseRulesActionChallenge, RuleEditResponseRulesActionCompressResponse, RuleEditResponseRulesActionDDoSDynamic, RuleEditResponseRulesActionExecute, RuleEditResponseRulesActionForceConnectionClose, RuleEditResponseRulesActionJSChallenge, RuleEditResponseRulesActionLog, RuleEditResponseRulesActionLogCustomField, RuleEditResponseRulesActionManagedChallenge, RuleEditResponseRulesActionRedirect, RuleEditResponseRulesActionRewrite, RuleEditResponseRulesActionRoute, RuleEditResponseRulesActionScore, RuleEditResponseRulesActionServeError, RuleEditResponseRulesActionSetCacheSettings, RuleEditResponseRulesActionSetConfig, RuleEditResponseRulesActionSkip:
+	case RuleEditResponseRulesActionBlock, RuleEditResponseRulesActionChallenge, RuleEditResponseRulesActionCompressResponse, RuleEditResponseRulesActionDDoSDynamic, RuleEditResponseRulesActionExecute, RuleEditResponseRulesActionForceConnectionClose, RuleEditResponseRulesActionJSChallenge, RuleEditResponseRulesActionLog, RuleEditResponseRulesActionLogCustomField, RuleEditResponseRulesActionManagedChallenge, RuleEditResponseRulesActionRedirect, RuleEditResponseRulesActionRewrite, RuleEditResponseRulesActionRoute, RuleEditResponseRulesActionScore, RuleEditResponseRulesActionServeError, RuleEditResponseRulesActionSetCacheControl, RuleEditResponseRulesActionSetCacheSettings, RuleEditResponseRulesActionSetCacheTags, RuleEditResponseRulesActionSetConfig, RuleEditResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -9141,7 +18577,9 @@ func (r RuleNewParamsBody) implementsRuleNewParamsBodyUnion() {}
 // [rulesets.RuleNewParamsBodyRewriteRule], [rulesets.RuleNewParamsBodyRouteRule],
 // [rulesets.RuleNewParamsBodyScoreRule],
 // [rulesets.RuleNewParamsBodyServeErrorRule],
+// [rulesets.RuleNewParamsBodySetCacheControlRule],
 // [rulesets.RuleNewParamsBodySetCacheSettingsRule],
+// [rulesets.RuleNewParamsBodySetCacheTagsRule],
 // [rulesets.RuleNewParamsBodySetConfigurationRule],
 // [rulesets.RuleNewParamsBodySkipRule], [RuleNewParamsBody].
 type RuleNewParamsBodyUnion interface {
@@ -10529,6 +19967,1580 @@ func (r RuleNewParamsBodyServeErrorRulePositionIndexPosition) MarshalJSON() (dat
 func (r RuleNewParamsBodyServeErrorRulePositionIndexPosition) implementsRuleNewParamsBodyServeErrorRulePositionUnion() {
 }
 
+type RuleNewParamsBodySetCacheControlRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleNewParamsBodySetCacheControlRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[RuleNewParamsBodySetCacheControlRuleActionParameters] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck param.Field[RuleNewParamsBodySetCacheControlRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodySetCacheControlRulePositionUnion] `json:"position"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit param.Field[RuleNewParamsBodySetCacheControlRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRule) implementsRuleNewParamsBodyUnion() {}
+
+// The action to perform when the rule matches.
+type RuleNewParamsBodySetCacheControlRuleAction string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionSetCacheControl RuleNewParamsBodySetCacheControlRuleAction = "set_cache_control"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionSetCacheControl:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleNewParamsBodySetCacheControlRuleActionParameters struct {
+	// A cache-control directive configuration.
+	Immutable param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersImmutableUnion] `json:"immutable"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	MaxAge param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeUnion] `json:"max-age"`
+	// A cache-control directive configuration.
+	MustRevalidate param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion] `json:"must-revalidate"`
+	// A cache-control directive configuration.
+	MustUnderstand param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion] `json:"must-understand"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	NoCache param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheUnion] `json:"no-cache"`
+	// A cache-control directive configuration.
+	NoStore param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreUnion] `json:"no-store"`
+	// A cache-control directive configuration.
+	NoTransform param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformUnion] `json:"no-transform"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	Private param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPrivateUnion] `json:"private"`
+	// A cache-control directive configuration.
+	ProxyRevalidate param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion] `json:"proxy-revalidate"`
+	// A cache-control directive configuration.
+	Public param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPublicUnion] `json:"public"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	SMaxage param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageUnion] `json:"s-maxage"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleIfError param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion] `json:"stale-if-error"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleWhileRevalidate param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion] `json:"stale-while-revalidate"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A cache-control directive configuration.
+type RuleNewParamsBodySetCacheControlRuleActionParametersImmutable struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutable) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutable) implementsRuleNewParamsBodySetCacheControlRuleActionParametersImmutableUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersImmutable].
+type RuleNewParamsBodySetCacheControlRuleActionParametersImmutableUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersImmutableUnion()
+}
+
+// Set the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersImmutableUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersImmutableUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersImmutableOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMaxAge struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAge) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAge) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersMaxAge].
+type RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMaxAgeOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidate) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidate].
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion()
+}
+
+// Set the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstand struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstand) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstand) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstand].
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion()
+}
+
+// Set the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoCache struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool]        `json:"cloudflare_only"`
+	Qualifiers     param.Field[interface{}] `json:"qualifiers"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCache) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCache) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoCacheUnion() {
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersNoCache].
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoCacheUnion()
+}
+
+// Set the directive with optional qualifiers.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers param.Field[[]string] `json:"qualifiers"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoCacheUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoCacheUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoCacheOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoStore struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStore) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStore) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoStoreUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersNoStore].
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoStoreUnion()
+}
+
+// Set the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoStoreUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoStoreUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoStoreOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoTransform struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransform) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransform) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoTransformUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersNoTransform].
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoTransformUnion()
+}
+
+// Set the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoTransformUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersNoTransformUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersNoTransformOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleNewParamsBodySetCacheControlRuleActionParametersPrivate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool]        `json:"cloudflare_only"`
+	Qualifiers     param.Field[interface{}] `json:"qualifiers"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivate) implementsRuleNewParamsBodySetCacheControlRuleActionParametersPrivateUnion() {
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersPrivate].
+type RuleNewParamsBodySetCacheControlRuleActionParametersPrivateUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersPrivateUnion()
+}
+
+// Set the directive with optional qualifiers.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers param.Field[[]string] `json:"qualifiers"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersPrivateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersPrivateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersPrivateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidate) implementsRuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidate].
+type RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion()
+}
+
+// Set the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPublic struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublic) implementsRuleNewParamsBodySetCacheControlRuleActionParametersPublicUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersPublic].
+type RuleNewParamsBodySetCacheControlRuleActionParametersPublicUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersPublicUnion()
+}
+
+// Set the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersPublicUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersPublicUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersPublicOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersSMaxage struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxage) implementsRuleNewParamsBodySetCacheControlRuleActionParametersSMaxageUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersSMaxage].
+type RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersSMaxageUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersSMaxageUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersSMaxageUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersSMaxageOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfError struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfError) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfError) implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfError].
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate) implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
+// [rulesets.RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective],
+// [RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate].
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) implementsRuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation string
+
+const (
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet    RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "set"
+	RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "remove"
+)
+
+func (r RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet, RuleNewParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleNewParamsBodySetCacheControlRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheControlRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePosition) implementsRuleNewParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheControlRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodySetCacheControlRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodySetCacheControlRulePositionIndexPosition],
+// [RuleNewParamsBodySetCacheControlRulePosition].
+type RuleNewParamsBodySetCacheControlRulePositionUnion interface {
+	implementsRuleNewParamsBodySetCacheControlRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheControlRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePositionBeforePosition) implementsRuleNewParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheControlRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePositionAfterPosition) implementsRuleNewParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheControlRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheControlRulePositionIndexPosition) implementsRuleNewParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleNewParamsBodySetCacheControlRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[int64] `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
+}
+
+func (r RuleNewParamsBodySetCacheControlRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type RuleNewParamsBodySetCacheSettingsRule struct {
 	// An object configuring where the rule will be placed.
 	Position param.Field[RuleNewParamsBodySetCacheSettingsRulePositionUnion] `json:"position"`
@@ -10610,6 +21622,403 @@ func (r RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition) MarshalJSON(
 }
 
 func (r RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+type RuleNewParamsBodySetCacheTagsRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleNewParamsBodySetCacheTagsRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersUnion] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck param.Field[RuleNewParamsBodySetCacheTagsRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodySetCacheTagsRulePositionUnion] `json:"position"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit param.Field[RuleNewParamsBodySetCacheTagsRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRule) implementsRuleNewParamsBodyUnion() {}
+
+// The action to perform when the rule matches.
+type RuleNewParamsBodySetCacheTagsRuleAction string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionSetCacheTags RuleNewParamsBodySetCacheTagsRuleAction = "set_cache_tags"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionSetCacheTags:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleNewParamsBodySetCacheTagsRuleActionParameters struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersOperation] `json:"operation,required"`
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string]      `json:"expression"`
+	Values     param.Field[interface{}] `json:"values"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParameters) implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The parameters configuring the rule's action.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [rulesets.RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [rulesets.RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [rulesets.RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [rulesets.RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues],
+// [rulesets.RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression],
+// [RuleNewParamsBodySetCacheTagsRuleActionParameters].
+type RuleNewParamsBodySetCacheTagsRuleActionParametersUnion interface {
+	implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion()
+}
+
+// Add cache tags using a list of values.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation] `json:"operation,required"`
+	// A list of cache tag values.
+	Values param.Field[[]string] `json:"values,required"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues) implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd    RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "add"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "remove"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet    RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "set"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd, RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove, RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Add cache tags using an expression.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string] `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation] `json:"operation,required"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression) implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd    RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "add"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "remove"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet    RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd, RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove, RuleNewParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using a list of values.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation] `json:"operation,required"`
+	// A list of cache tag values.
+	Values param.Field[[]string] `json:"values,required"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues) implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd    RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "add"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "remove"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet    RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "set"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd, RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove, RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using an expression.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string] `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation] `json:"operation,required"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression) implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd    RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "add"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "remove"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet    RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd, RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove, RuleNewParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using a list of values.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation] `json:"operation,required"`
+	// A list of cache tag values.
+	Values param.Field[[]string] `json:"values,required"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues) implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd    RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "add"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "remove"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet    RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "set"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd, RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove, RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using an expression.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string] `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation] `json:"operation,required"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression) implementsRuleNewParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd    RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "add"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "remove"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet    RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd, RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove, RuleNewParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache tags.
+type RuleNewParamsBodySetCacheTagsRuleActionParametersOperation string
+
+const (
+	RuleNewParamsBodySetCacheTagsRuleActionParametersOperationAdd    RuleNewParamsBodySetCacheTagsRuleActionParametersOperation = "add"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersOperationRemove RuleNewParamsBodySetCacheTagsRuleActionParametersOperation = "remove"
+	RuleNewParamsBodySetCacheTagsRuleActionParametersOperationSet    RuleNewParamsBodySetCacheTagsRuleActionParametersOperation = "set"
+)
+
+func (r RuleNewParamsBodySetCacheTagsRuleActionParametersOperation) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodySetCacheTagsRuleActionParametersOperationAdd, RuleNewParamsBodySetCacheTagsRuleActionParametersOperationRemove, RuleNewParamsBodySetCacheTagsRuleActionParametersOperationSet:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleNewParamsBodySetCacheTagsRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheTagsRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePosition) implementsRuleNewParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodySetCacheTagsRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodySetCacheTagsRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodySetCacheTagsRulePositionIndexPosition],
+// [RuleNewParamsBodySetCacheTagsRulePosition].
+type RuleNewParamsBodySetCacheTagsRulePositionUnion interface {
+	implementsRuleNewParamsBodySetCacheTagsRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheTagsRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePositionBeforePosition) implementsRuleNewParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheTagsRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePositionAfterPosition) implementsRuleNewParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheTagsRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheTagsRulePositionIndexPosition) implementsRuleNewParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleNewParamsBodySetCacheTagsRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[int64] `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
+}
+
+func (r RuleNewParamsBodySetCacheTagsRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RuleNewParamsBodySetConfigurationRule struct {
@@ -10795,14 +22204,16 @@ const (
 	RuleNewParamsBodyActionRoute                RuleNewParamsBodyAction = "route"
 	RuleNewParamsBodyActionScore                RuleNewParamsBodyAction = "score"
 	RuleNewParamsBodyActionServeError           RuleNewParamsBodyAction = "serve_error"
+	RuleNewParamsBodyActionSetCacheControl      RuleNewParamsBodyAction = "set_cache_control"
 	RuleNewParamsBodyActionSetCacheSettings     RuleNewParamsBodyAction = "set_cache_settings"
+	RuleNewParamsBodyActionSetCacheTags         RuleNewParamsBodyAction = "set_cache_tags"
 	RuleNewParamsBodyActionSetConfig            RuleNewParamsBodyAction = "set_config"
 	RuleNewParamsBodyActionSkip                 RuleNewParamsBodyAction = "skip"
 )
 
 func (r RuleNewParamsBodyAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsBodyActionBlock, RuleNewParamsBodyActionChallenge, RuleNewParamsBodyActionCompressResponse, RuleNewParamsBodyActionDDoSDynamic, RuleNewParamsBodyActionExecute, RuleNewParamsBodyActionForceConnectionClose, RuleNewParamsBodyActionJSChallenge, RuleNewParamsBodyActionLog, RuleNewParamsBodyActionLogCustomField, RuleNewParamsBodyActionManagedChallenge, RuleNewParamsBodyActionRedirect, RuleNewParamsBodyActionRewrite, RuleNewParamsBodyActionRoute, RuleNewParamsBodyActionScore, RuleNewParamsBodyActionServeError, RuleNewParamsBodyActionSetCacheSettings, RuleNewParamsBodyActionSetConfig, RuleNewParamsBodyActionSkip:
+	case RuleNewParamsBodyActionBlock, RuleNewParamsBodyActionChallenge, RuleNewParamsBodyActionCompressResponse, RuleNewParamsBodyActionDDoSDynamic, RuleNewParamsBodyActionExecute, RuleNewParamsBodyActionForceConnectionClose, RuleNewParamsBodyActionJSChallenge, RuleNewParamsBodyActionLog, RuleNewParamsBodyActionLogCustomField, RuleNewParamsBodyActionManagedChallenge, RuleNewParamsBodyActionRedirect, RuleNewParamsBodyActionRewrite, RuleNewParamsBodyActionRoute, RuleNewParamsBodyActionScore, RuleNewParamsBodyActionServeError, RuleNewParamsBodyActionSetCacheControl, RuleNewParamsBodyActionSetCacheSettings, RuleNewParamsBodyActionSetCacheTags, RuleNewParamsBodyActionSetConfig, RuleNewParamsBodyActionSkip:
 		return true
 	}
 	return false
@@ -11171,7 +22582,9 @@ func (r RuleEditParamsBody) implementsRuleEditParamsBodyUnion() {}
 // [rulesets.RuleEditParamsBodyRewriteRule],
 // [rulesets.RuleEditParamsBodyRouteRule], [rulesets.RuleEditParamsBodyScoreRule],
 // [rulesets.RuleEditParamsBodyServeErrorRule],
+// [rulesets.RuleEditParamsBodySetCacheControlRule],
 // [rulesets.RuleEditParamsBodySetCacheSettingsRule],
+// [rulesets.RuleEditParamsBodySetCacheTagsRule],
 // [rulesets.RuleEditParamsBodySetConfigurationRule],
 // [rulesets.RuleEditParamsBodySkipRule], [RuleEditParamsBody].
 type RuleEditParamsBodyUnion interface {
@@ -12561,6 +23974,1580 @@ func (r RuleEditParamsBodyServeErrorRulePositionIndexPosition) MarshalJSON() (da
 func (r RuleEditParamsBodyServeErrorRulePositionIndexPosition) implementsRuleEditParamsBodyServeErrorRulePositionUnion() {
 }
 
+type RuleEditParamsBodySetCacheControlRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleEditParamsBodySetCacheControlRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[RuleEditParamsBodySetCacheControlRuleActionParameters] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck param.Field[RuleEditParamsBodySetCacheControlRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodySetCacheControlRulePositionUnion] `json:"position"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit param.Field[RuleEditParamsBodySetCacheControlRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRule) implementsRuleEditParamsBodyUnion() {}
+
+// The action to perform when the rule matches.
+type RuleEditParamsBodySetCacheControlRuleAction string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionSetCacheControl RuleEditParamsBodySetCacheControlRuleAction = "set_cache_control"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionSetCacheControl:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleEditParamsBodySetCacheControlRuleActionParameters struct {
+	// A cache-control directive configuration.
+	Immutable param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersImmutableUnion] `json:"immutable"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	MaxAge param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeUnion] `json:"max-age"`
+	// A cache-control directive configuration.
+	MustRevalidate param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion] `json:"must-revalidate"`
+	// A cache-control directive configuration.
+	MustUnderstand param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion] `json:"must-understand"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	NoCache param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheUnion] `json:"no-cache"`
+	// A cache-control directive configuration.
+	NoStore param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreUnion] `json:"no-store"`
+	// A cache-control directive configuration.
+	NoTransform param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformUnion] `json:"no-transform"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	Private param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPrivateUnion] `json:"private"`
+	// A cache-control directive configuration.
+	ProxyRevalidate param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion] `json:"proxy-revalidate"`
+	// A cache-control directive configuration.
+	Public param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPublicUnion] `json:"public"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	SMaxage param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageUnion] `json:"s-maxage"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleIfError param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion] `json:"stale-if-error"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleWhileRevalidate param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion] `json:"stale-while-revalidate"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A cache-control directive configuration.
+type RuleEditParamsBodySetCacheControlRuleActionParametersImmutable struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutable) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutable) implementsRuleEditParamsBodySetCacheControlRuleActionParametersImmutableUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersImmutable].
+type RuleEditParamsBodySetCacheControlRuleActionParametersImmutableUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersImmutableUnion()
+}
+
+// Set the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersImmutableUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersImmutableUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersImmutableOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMaxAge struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAge) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAge) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersMaxAge].
+type RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMaxAgeOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidate) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidate].
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion()
+}
+
+// Set the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMustRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstand struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstand) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstand) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstand].
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion()
+}
+
+// Set the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersMustUnderstandOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoCache struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool]        `json:"cloudflare_only"`
+	Qualifiers     param.Field[interface{}] `json:"qualifiers"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCache) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCache) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoCacheUnion() {
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersNoCache].
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoCacheUnion()
+}
+
+// Set the directive with optional qualifiers.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers param.Field[[]string] `json:"qualifiers"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoCacheUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoCacheUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoCacheOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoStore struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStore) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStore) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoStoreUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersNoStore].
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoStoreUnion()
+}
+
+// Set the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoStoreUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoStoreUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoStoreOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoTransform struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransform) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransform) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoTransformUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersNoTransform].
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoTransformUnion()
+}
+
+// Set the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoTransformUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersNoTransformUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersNoTransformOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type RuleEditParamsBodySetCacheControlRuleActionParametersPrivate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool]        `json:"cloudflare_only"`
+	Qualifiers     param.Field[interface{}] `json:"qualifiers"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivate) implementsRuleEditParamsBodySetCacheControlRuleActionParametersPrivateUnion() {
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersPrivate].
+type RuleEditParamsBodySetCacheControlRuleActionParametersPrivateUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersPrivateUnion()
+}
+
+// Set the directive with optional qualifiers.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers param.Field[[]string] `json:"qualifiers"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersPrivateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersPrivateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersPrivateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidate) implementsRuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidate].
+type RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion()
+}
+
+// Set the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersProxyRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPublic struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublic) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublic) implementsRuleEditParamsBodySetCacheControlRuleActionParametersPublicUnion() {
+}
+
+// A cache-control directive configuration.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersPublic].
+type RuleEditParamsBodySetCacheControlRuleActionParametersPublicUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersPublicUnion()
+}
+
+// Set the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersPublicUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersPublicUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersPublicOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersSMaxage struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxage) implementsRuleEditParamsBodySetCacheControlRuleActionParametersSMaxageUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersSMaxage].
+type RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersSMaxageUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersSMaxageUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersSMaxageUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersSMaxageOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfError struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfError) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfError) implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfError].
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersStaleIfErrorOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate) implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion() {
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
+// [rulesets.RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective],
+// [RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidate].
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion()
+}
+
+// Set the directive with a duration value in seconds.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation] `json:"operation,required"`
+	// The duration value in seconds for the directive.
+	Value param.Field[int64] `json:"value,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation param.Field[RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) implementsRuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateUnion() {
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation string
+
+const (
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet    RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "set"
+	RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "remove"
+)
+
+func (r RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet, RuleEditParamsBodySetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleEditParamsBodySetCacheControlRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheControlRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePosition) implementsRuleEditParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheControlRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodySetCacheControlRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodySetCacheControlRulePositionIndexPosition],
+// [RuleEditParamsBodySetCacheControlRulePosition].
+type RuleEditParamsBodySetCacheControlRulePositionUnion interface {
+	implementsRuleEditParamsBodySetCacheControlRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheControlRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePositionBeforePosition) implementsRuleEditParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheControlRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePositionAfterPosition) implementsRuleEditParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheControlRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheControlRulePositionIndexPosition) implementsRuleEditParamsBodySetCacheControlRulePositionUnion() {
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleEditParamsBodySetCacheControlRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[int64] `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
+}
+
+func (r RuleEditParamsBodySetCacheControlRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type RuleEditParamsBodySetCacheSettingsRule struct {
 	// An object configuring where the rule will be placed.
 	Position param.Field[RuleEditParamsBodySetCacheSettingsRulePositionUnion] `json:"position"`
@@ -12642,6 +25629,404 @@ func (r RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition) MarshalJSON
 }
 
 func (r RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+type RuleEditParamsBodySetCacheTagsRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleEditParamsBodySetCacheTagsRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersUnion] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck param.Field[RuleEditParamsBodySetCacheTagsRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodySetCacheTagsRulePositionUnion] `json:"position"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit param.Field[RuleEditParamsBodySetCacheTagsRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule's ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRule) implementsRuleEditParamsBodyUnion() {}
+
+// The action to perform when the rule matches.
+type RuleEditParamsBodySetCacheTagsRuleAction string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionSetCacheTags RuleEditParamsBodySetCacheTagsRuleAction = "set_cache_tags"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionSetCacheTags:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type RuleEditParamsBodySetCacheTagsRuleActionParameters struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersOperation] `json:"operation,required"`
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string]      `json:"expression"`
+	Values     param.Field[interface{}] `json:"values"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParameters) implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The parameters configuring the rule's action.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [rulesets.RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [rulesets.RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [rulesets.RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [rulesets.RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues],
+// [rulesets.RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression],
+// [RuleEditParamsBodySetCacheTagsRuleActionParameters].
+type RuleEditParamsBodySetCacheTagsRuleActionParametersUnion interface {
+	implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion()
+}
+
+// Add cache tags using a list of values.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation] `json:"operation,required"`
+	// A list of cache tag values.
+	Values param.Field[[]string] `json:"values,required"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValues) implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd    RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "add"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "remove"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet    RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "set"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd, RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove, RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Add cache tags using an expression.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string] `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation] `json:"operation,required"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpression) implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd    RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "add"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "remove"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet    RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd, RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove, RuleEditParamsBodySetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using a list of values.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation] `json:"operation,required"`
+	// A list of cache tag values.
+	Values param.Field[[]string] `json:"values,required"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValues) implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd    RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "add"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "remove"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet    RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "set"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd, RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove, RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using an expression.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string] `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation] `json:"operation,required"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpression) implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd    RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "add"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "remove"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet    RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd, RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove, RuleEditParamsBodySetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using a list of values.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation] `json:"operation,required"`
+	// A list of cache tag values.
+	Values param.Field[[]string] `json:"values,required"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValues) implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd    RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "add"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "remove"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet    RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "set"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd, RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove, RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using an expression.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression param.Field[string] `json:"expression,required"`
+	// The operation to perform on the cache tags.
+	Operation param.Field[RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation] `json:"operation,required"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpression) implementsRuleEditParamsBodySetCacheTagsRuleActionParametersUnion() {
+}
+
+// The operation to perform on the cache tags.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd    RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "add"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "remove"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet    RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "set"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd, RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove, RuleEditParamsBodySetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache tags.
+type RuleEditParamsBodySetCacheTagsRuleActionParametersOperation string
+
+const (
+	RuleEditParamsBodySetCacheTagsRuleActionParametersOperationAdd    RuleEditParamsBodySetCacheTagsRuleActionParametersOperation = "add"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersOperationRemove RuleEditParamsBodySetCacheTagsRuleActionParametersOperation = "remove"
+	RuleEditParamsBodySetCacheTagsRuleActionParametersOperationSet    RuleEditParamsBodySetCacheTagsRuleActionParametersOperation = "set"
+)
+
+func (r RuleEditParamsBodySetCacheTagsRuleActionParametersOperation) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodySetCacheTagsRuleActionParametersOperationAdd, RuleEditParamsBodySetCacheTagsRuleActionParametersOperationRemove, RuleEditParamsBodySetCacheTagsRuleActionParametersOperationSet:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type RuleEditParamsBodySetCacheTagsRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheTagsRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePosition) implementsRuleEditParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheTagsRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodySetCacheTagsRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodySetCacheTagsRulePositionIndexPosition],
+// [RuleEditParamsBodySetCacheTagsRulePosition].
+type RuleEditParamsBodySetCacheTagsRulePositionUnion interface {
+	implementsRuleEditParamsBodySetCacheTagsRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheTagsRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePositionBeforePosition) implementsRuleEditParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheTagsRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePositionAfterPosition) implementsRuleEditParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheTagsRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheTagsRulePositionIndexPosition) implementsRuleEditParamsBodySetCacheTagsRulePositionUnion() {
+}
+
+// An object configuring the rule's rate limit behavior.
+type RuleEditParamsBodySetCacheTagsRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[int64] `json:"period,required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
+}
+
+func (r RuleEditParamsBodySetCacheTagsRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RuleEditParamsBodySetConfigurationRule struct {
@@ -12827,14 +26212,16 @@ const (
 	RuleEditParamsBodyActionRoute                RuleEditParamsBodyAction = "route"
 	RuleEditParamsBodyActionScore                RuleEditParamsBodyAction = "score"
 	RuleEditParamsBodyActionServeError           RuleEditParamsBodyAction = "serve_error"
+	RuleEditParamsBodyActionSetCacheControl      RuleEditParamsBodyAction = "set_cache_control"
 	RuleEditParamsBodyActionSetCacheSettings     RuleEditParamsBodyAction = "set_cache_settings"
+	RuleEditParamsBodyActionSetCacheTags         RuleEditParamsBodyAction = "set_cache_tags"
 	RuleEditParamsBodyActionSetConfig            RuleEditParamsBodyAction = "set_config"
 	RuleEditParamsBodyActionSkip                 RuleEditParamsBodyAction = "skip"
 )
 
 func (r RuleEditParamsBodyAction) IsKnown() bool {
 	switch r {
-	case RuleEditParamsBodyActionBlock, RuleEditParamsBodyActionChallenge, RuleEditParamsBodyActionCompressResponse, RuleEditParamsBodyActionDDoSDynamic, RuleEditParamsBodyActionExecute, RuleEditParamsBodyActionForceConnectionClose, RuleEditParamsBodyActionJSChallenge, RuleEditParamsBodyActionLog, RuleEditParamsBodyActionLogCustomField, RuleEditParamsBodyActionManagedChallenge, RuleEditParamsBodyActionRedirect, RuleEditParamsBodyActionRewrite, RuleEditParamsBodyActionRoute, RuleEditParamsBodyActionScore, RuleEditParamsBodyActionServeError, RuleEditParamsBodyActionSetCacheSettings, RuleEditParamsBodyActionSetConfig, RuleEditParamsBodyActionSkip:
+	case RuleEditParamsBodyActionBlock, RuleEditParamsBodyActionChallenge, RuleEditParamsBodyActionCompressResponse, RuleEditParamsBodyActionDDoSDynamic, RuleEditParamsBodyActionExecute, RuleEditParamsBodyActionForceConnectionClose, RuleEditParamsBodyActionJSChallenge, RuleEditParamsBodyActionLog, RuleEditParamsBodyActionLogCustomField, RuleEditParamsBodyActionManagedChallenge, RuleEditParamsBodyActionRedirect, RuleEditParamsBodyActionRewrite, RuleEditParamsBodyActionRoute, RuleEditParamsBodyActionScore, RuleEditParamsBodyActionServeError, RuleEditParamsBodyActionSetCacheControl, RuleEditParamsBodyActionSetCacheSettings, RuleEditParamsBodyActionSetCacheTags, RuleEditParamsBodyActionSetConfig, RuleEditParamsBodyActionSkip:
 		return true
 	}
 	return false

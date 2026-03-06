@@ -30,7 +30,7 @@ func TestDNSSummaryV2WithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.DNS.SummaryV2(
 		context.TODO(),
-		radar.DNSSummaryV2ParamsDimensionIPVersion,
+		radar.DNSSummaryV2ParamsDimensionAs,
 		radar.DNSSummaryV2Params{
 			ASN:            cloudflare.F([]string{"string"}),
 			CacheHit:       cloudflare.F([]bool{true}),
@@ -124,7 +124,7 @@ func TestDNSTimeseriesGroupsV2WithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.DNS.TimeseriesGroupsV2(
 		context.TODO(),
-		radar.DNSTimeseriesGroupsV2ParamsDimensionIPVersion,
+		radar.DNSTimeseriesGroupsV2ParamsDimensionAs,
 		radar.DNSTimeseriesGroupsV2Params{
 			AggInterval:    cloudflare.F(radar.DNSTimeseriesGroupsV2ParamsAggInterval1h),
 			ASN:            cloudflare.F([]string{"string"}),

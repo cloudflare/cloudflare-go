@@ -70,14 +70,14 @@ func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetPa
 }
 
 type DLPPayloadLogUpdateResponse struct {
+	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
 	// Masking level for payload logs.
 	//
 	// - `full`: The entire payload is masked.
 	// - `partial`: Only partial payload content is masked.
 	// - `clear`: No masking is applied to the payload content.
 	// - `default`: DLP uses its default masking behavior.
-	MaskingLevel DLPPayloadLogUpdateResponseMaskingLevel `json:"masking_level,required"`
-	UpdatedAt    time.Time                               `json:"updated_at,required" format:"date-time"`
+	MaskingLevel DLPPayloadLogUpdateResponseMaskingLevel `json:"masking_level"`
 	// Base64-encoded public key for encrypting payload logs. Null when payload logging
 	// is disabled.
 	PublicKey string                          `json:"public_key,nullable"`
@@ -87,8 +87,8 @@ type DLPPayloadLogUpdateResponse struct {
 // dlpPayloadLogUpdateResponseJSON contains the JSON metadata for the struct
 // [DLPPayloadLogUpdateResponse]
 type dlpPayloadLogUpdateResponseJSON struct {
-	MaskingLevel apijson.Field
 	UpdatedAt    apijson.Field
+	MaskingLevel apijson.Field
 	PublicKey    apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -126,14 +126,14 @@ func (r DLPPayloadLogUpdateResponseMaskingLevel) IsKnown() bool {
 }
 
 type DLPPayloadLogGetResponse struct {
+	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
 	// Masking level for payload logs.
 	//
 	// - `full`: The entire payload is masked.
 	// - `partial`: Only partial payload content is masked.
 	// - `clear`: No masking is applied to the payload content.
 	// - `default`: DLP uses its default masking behavior.
-	MaskingLevel DLPPayloadLogGetResponseMaskingLevel `json:"masking_level,required"`
-	UpdatedAt    time.Time                            `json:"updated_at,required" format:"date-time"`
+	MaskingLevel DLPPayloadLogGetResponseMaskingLevel `json:"masking_level"`
 	// Base64-encoded public key for encrypting payload logs. Null when payload logging
 	// is disabled.
 	PublicKey string                       `json:"public_key,nullable"`
@@ -143,8 +143,8 @@ type DLPPayloadLogGetResponse struct {
 // dlpPayloadLogGetResponseJSON contains the JSON metadata for the struct
 // [DLPPayloadLogGetResponse]
 type dlpPayloadLogGetResponseJSON struct {
-	MaskingLevel apijson.Field
 	UpdatedAt    apijson.Field
+	MaskingLevel apijson.Field
 	PublicKey    apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field

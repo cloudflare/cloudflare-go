@@ -54,7 +54,7 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	return
 }
 
-// Create a new Gateway
+// Creates a new AI Gateway.
 func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, opts ...option.RequestOption) (res *AIGatewayNewResponse, err error) {
 	var env AIGatewayNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -71,7 +71,7 @@ func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, o
 	return
 }
 
-// Update a Gateway
+// Updates an existing AI Gateway dataset.
 func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatewayUpdateParams, opts ...option.RequestOption) (res *AIGatewayUpdateResponse, err error) {
 	var env AIGatewayUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -92,7 +92,7 @@ func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatew
 	return
 }
 
-// List Gateways
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AIGatewayListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -114,12 +114,12 @@ func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams,
 	return res, nil
 }
 
-// List Gateways
+// Lists all AI Gateway evaluator types configured for the account.
 func (r *AIGatewayService) ListAutoPaging(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AIGatewayListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a Gateway
+// Deletes an AI Gateway dataset.
 func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGatewayDeleteParams, opts ...option.RequestOption) (res *AIGatewayDeleteResponse, err error) {
 	var env AIGatewayDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -140,7 +140,7 @@ func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGateway
 	return
 }
 
-// Fetch a Gateway
+// Retrieves details for a specific AI Gateway dataset.
 func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGetParams, opts ...option.RequestOption) (res *AIGatewayGetResponse, err error) {
 	var env AIGatewayGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -164,13 +164,10 @@ func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGe
 type AIGatewayNewResponse struct {
 	// gateway id
 	ID                      string                                    `json:"id,required"`
-	AccountID               string                                    `json:"account_id,required"`
-	AccountTag              string                                    `json:"account_tag,required"`
 	CacheInvalidateOnUpdate bool                                      `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                                     `json:"cache_ttl,required,nullable"`
 	CollectLogs             bool                                      `json:"collect_logs,required"`
 	CreatedAt               time.Time                                 `json:"created_at,required" format:"date-time"`
-	InternalID              string                                    `json:"internal_id,required" format:"uuid"`
 	ModifiedAt              time.Time                                 `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
@@ -185,21 +182,20 @@ type AIGatewayNewResponse struct {
 	Otel                    []AIGatewayNewResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayNewResponseStripe                `json:"stripe,nullable"`
-	Zdr                     bool                                      `json:"zdr"`
-	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
+	// Controls how Workers AI inference calls routed through this gateway are billed
+	WorkersAIBillingMode AIGatewayNewResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
+	Zdr                  bool                                     `json:"zdr"`
+	JSON                 aiGatewayNewResponseJSON                 `json:"-"`
 }
 
 // aiGatewayNewResponseJSON contains the JSON metadata for the struct
 // [AIGatewayNewResponse]
 type aiGatewayNewResponseJSON struct {
 	ID                      apijson.Field
-	AccountID               apijson.Field
-	AccountTag              apijson.Field
 	CacheInvalidateOnUpdate apijson.Field
 	CacheTTL                apijson.Field
 	CollectLogs             apijson.Field
 	CreatedAt               apijson.Field
-	InternalID              apijson.Field
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
@@ -214,6 +210,7 @@ type aiGatewayNewResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	WorkersAIBillingMode    apijson.Field
 	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -380,10 +377,11 @@ func (r AIGatewayNewResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayNewResponseOtel struct {
-	Authorization string                       `json:"authorization,required"`
-	Headers       map[string]string            `json:"headers,required"`
-	URL           string                       `json:"url,required"`
-	JSON          aiGatewayNewResponseOtelJSON `json:"-"`
+	Authorization string                              `json:"authorization,required"`
+	Headers       map[string]string                   `json:"headers,required"`
+	URL           string                              `json:"url,required"`
+	ContentType   AIGatewayNewResponseOtelContentType `json:"content_type"`
+	JSON          aiGatewayNewResponseOtelJSON        `json:"-"`
 }
 
 // aiGatewayNewResponseOtelJSON contains the JSON metadata for the struct
@@ -392,6 +390,7 @@ type aiGatewayNewResponseOtelJSON struct {
 	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -402,6 +401,21 @@ func (r *AIGatewayNewResponseOtel) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayNewResponseOtelJSON) RawJSON() string {
 	return r.raw
+}
+
+type AIGatewayNewResponseOtelContentType string
+
+const (
+	AIGatewayNewResponseOtelContentTypeJson     AIGatewayNewResponseOtelContentType = "json"
+	AIGatewayNewResponseOtelContentTypeProtobuf AIGatewayNewResponseOtelContentType = "protobuf"
+)
+
+func (r AIGatewayNewResponseOtelContentType) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseOtelContentTypeJson, AIGatewayNewResponseOtelContentTypeProtobuf:
+		return true
+	}
+	return false
 }
 
 type AIGatewayNewResponseStripe struct {
@@ -448,16 +462,29 @@ func (r aiGatewayNewResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls how Workers AI inference calls routed through this gateway are billed
+type AIGatewayNewResponseWorkersAIBillingMode string
+
+const (
+	AIGatewayNewResponseWorkersAIBillingModePostpaid AIGatewayNewResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayNewResponseWorkersAIBillingModeUnified  AIGatewayNewResponseWorkersAIBillingMode = "unified"
+)
+
+func (r AIGatewayNewResponseWorkersAIBillingMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseWorkersAIBillingModePostpaid, AIGatewayNewResponseWorkersAIBillingModeUnified:
+		return true
+	}
+	return false
+}
+
 type AIGatewayUpdateResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
-	AccountID               string                                       `json:"account_id,required"`
-	AccountTag              string                                       `json:"account_tag,required"`
 	CacheInvalidateOnUpdate bool                                         `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                                        `json:"cache_ttl,required,nullable"`
 	CollectLogs             bool                                         `json:"collect_logs,required"`
 	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
-	InternalID              string                                       `json:"internal_id,required" format:"uuid"`
 	ModifiedAt              time.Time                                    `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
@@ -472,21 +499,20 @@ type AIGatewayUpdateResponse struct {
 	Otel                    []AIGatewayUpdateResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayUpdateResponseStripe                `json:"stripe,nullable"`
-	Zdr                     bool                                         `json:"zdr"`
-	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
+	// Controls how Workers AI inference calls routed through this gateway are billed
+	WorkersAIBillingMode AIGatewayUpdateResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
+	Zdr                  bool                                        `json:"zdr"`
+	JSON                 aiGatewayUpdateResponseJSON                 `json:"-"`
 }
 
 // aiGatewayUpdateResponseJSON contains the JSON metadata for the struct
 // [AIGatewayUpdateResponse]
 type aiGatewayUpdateResponseJSON struct {
 	ID                      apijson.Field
-	AccountID               apijson.Field
-	AccountTag              apijson.Field
 	CacheInvalidateOnUpdate apijson.Field
 	CacheTTL                apijson.Field
 	CollectLogs             apijson.Field
 	CreatedAt               apijson.Field
-	InternalID              apijson.Field
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
@@ -501,6 +527,7 @@ type aiGatewayUpdateResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	WorkersAIBillingMode    apijson.Field
 	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -668,10 +695,11 @@ func (r AIGatewayUpdateResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayUpdateResponseOtel struct {
-	Authorization string                          `json:"authorization,required"`
-	Headers       map[string]string               `json:"headers,required"`
-	URL           string                          `json:"url,required"`
-	JSON          aiGatewayUpdateResponseOtelJSON `json:"-"`
+	Authorization string                                 `json:"authorization,required"`
+	Headers       map[string]string                      `json:"headers,required"`
+	URL           string                                 `json:"url,required"`
+	ContentType   AIGatewayUpdateResponseOtelContentType `json:"content_type"`
+	JSON          aiGatewayUpdateResponseOtelJSON        `json:"-"`
 }
 
 // aiGatewayUpdateResponseOtelJSON contains the JSON metadata for the struct
@@ -680,6 +708,7 @@ type aiGatewayUpdateResponseOtelJSON struct {
 	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -690,6 +719,21 @@ func (r *AIGatewayUpdateResponseOtel) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayUpdateResponseOtelJSON) RawJSON() string {
 	return r.raw
+}
+
+type AIGatewayUpdateResponseOtelContentType string
+
+const (
+	AIGatewayUpdateResponseOtelContentTypeJson     AIGatewayUpdateResponseOtelContentType = "json"
+	AIGatewayUpdateResponseOtelContentTypeProtobuf AIGatewayUpdateResponseOtelContentType = "protobuf"
+)
+
+func (r AIGatewayUpdateResponseOtelContentType) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseOtelContentTypeJson, AIGatewayUpdateResponseOtelContentTypeProtobuf:
+		return true
+	}
+	return false
 }
 
 type AIGatewayUpdateResponseStripe struct {
@@ -736,16 +780,29 @@ func (r aiGatewayUpdateResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls how Workers AI inference calls routed through this gateway are billed
+type AIGatewayUpdateResponseWorkersAIBillingMode string
+
+const (
+	AIGatewayUpdateResponseWorkersAIBillingModePostpaid AIGatewayUpdateResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayUpdateResponseWorkersAIBillingModeUnified  AIGatewayUpdateResponseWorkersAIBillingMode = "unified"
+)
+
+func (r AIGatewayUpdateResponseWorkersAIBillingMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseWorkersAIBillingModePostpaid, AIGatewayUpdateResponseWorkersAIBillingModeUnified:
+		return true
+	}
+	return false
+}
+
 type AIGatewayListResponse struct {
 	// gateway id
 	ID                      string                                     `json:"id,required"`
-	AccountID               string                                     `json:"account_id,required"`
-	AccountTag              string                                     `json:"account_tag,required"`
 	CacheInvalidateOnUpdate bool                                       `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                                      `json:"cache_ttl,required,nullable"`
 	CollectLogs             bool                                       `json:"collect_logs,required"`
 	CreatedAt               time.Time                                  `json:"created_at,required" format:"date-time"`
-	InternalID              string                                     `json:"internal_id,required" format:"uuid"`
 	ModifiedAt              time.Time                                  `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                      `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                      `json:"rate_limiting_limit,required,nullable"`
@@ -760,21 +817,20 @@ type AIGatewayListResponse struct {
 	Otel                    []AIGatewayListResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                     `json:"store_id,nullable"`
 	Stripe                  AIGatewayListResponseStripe                `json:"stripe,nullable"`
-	Zdr                     bool                                       `json:"zdr"`
-	JSON                    aiGatewayListResponseJSON                  `json:"-"`
+	// Controls how Workers AI inference calls routed through this gateway are billed
+	WorkersAIBillingMode AIGatewayListResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
+	Zdr                  bool                                      `json:"zdr"`
+	JSON                 aiGatewayListResponseJSON                 `json:"-"`
 }
 
 // aiGatewayListResponseJSON contains the JSON metadata for the struct
 // [AIGatewayListResponse]
 type aiGatewayListResponseJSON struct {
 	ID                      apijson.Field
-	AccountID               apijson.Field
-	AccountTag              apijson.Field
 	CacheInvalidateOnUpdate apijson.Field
 	CacheTTL                apijson.Field
 	CollectLogs             apijson.Field
 	CreatedAt               apijson.Field
-	InternalID              apijson.Field
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
@@ -789,6 +845,7 @@ type aiGatewayListResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	WorkersAIBillingMode    apijson.Field
 	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -956,10 +1013,11 @@ func (r AIGatewayListResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayListResponseOtel struct {
-	Authorization string                        `json:"authorization,required"`
-	Headers       map[string]string             `json:"headers,required"`
-	URL           string                        `json:"url,required"`
-	JSON          aiGatewayListResponseOtelJSON `json:"-"`
+	Authorization string                               `json:"authorization,required"`
+	Headers       map[string]string                    `json:"headers,required"`
+	URL           string                               `json:"url,required"`
+	ContentType   AIGatewayListResponseOtelContentType `json:"content_type"`
+	JSON          aiGatewayListResponseOtelJSON        `json:"-"`
 }
 
 // aiGatewayListResponseOtelJSON contains the JSON metadata for the struct
@@ -968,6 +1026,7 @@ type aiGatewayListResponseOtelJSON struct {
 	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -978,6 +1037,21 @@ func (r *AIGatewayListResponseOtel) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayListResponseOtelJSON) RawJSON() string {
 	return r.raw
+}
+
+type AIGatewayListResponseOtelContentType string
+
+const (
+	AIGatewayListResponseOtelContentTypeJson     AIGatewayListResponseOtelContentType = "json"
+	AIGatewayListResponseOtelContentTypeProtobuf AIGatewayListResponseOtelContentType = "protobuf"
+)
+
+func (r AIGatewayListResponseOtelContentType) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseOtelContentTypeJson, AIGatewayListResponseOtelContentTypeProtobuf:
+		return true
+	}
+	return false
 }
 
 type AIGatewayListResponseStripe struct {
@@ -1024,16 +1098,29 @@ func (r aiGatewayListResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls how Workers AI inference calls routed through this gateway are billed
+type AIGatewayListResponseWorkersAIBillingMode string
+
+const (
+	AIGatewayListResponseWorkersAIBillingModePostpaid AIGatewayListResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayListResponseWorkersAIBillingModeUnified  AIGatewayListResponseWorkersAIBillingMode = "unified"
+)
+
+func (r AIGatewayListResponseWorkersAIBillingMode) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseWorkersAIBillingModePostpaid, AIGatewayListResponseWorkersAIBillingModeUnified:
+		return true
+	}
+	return false
+}
+
 type AIGatewayDeleteResponse struct {
 	// gateway id
 	ID                      string                                       `json:"id,required"`
-	AccountID               string                                       `json:"account_id,required"`
-	AccountTag              string                                       `json:"account_tag,required"`
 	CacheInvalidateOnUpdate bool                                         `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                                        `json:"cache_ttl,required,nullable"`
 	CollectLogs             bool                                         `json:"collect_logs,required"`
 	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
-	InternalID              string                                       `json:"internal_id,required" format:"uuid"`
 	ModifiedAt              time.Time                                    `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
@@ -1048,21 +1135,20 @@ type AIGatewayDeleteResponse struct {
 	Otel                    []AIGatewayDeleteResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayDeleteResponseStripe                `json:"stripe,nullable"`
-	Zdr                     bool                                         `json:"zdr"`
-	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
+	// Controls how Workers AI inference calls routed through this gateway are billed
+	WorkersAIBillingMode AIGatewayDeleteResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
+	Zdr                  bool                                        `json:"zdr"`
+	JSON                 aiGatewayDeleteResponseJSON                 `json:"-"`
 }
 
 // aiGatewayDeleteResponseJSON contains the JSON metadata for the struct
 // [AIGatewayDeleteResponse]
 type aiGatewayDeleteResponseJSON struct {
 	ID                      apijson.Field
-	AccountID               apijson.Field
-	AccountTag              apijson.Field
 	CacheInvalidateOnUpdate apijson.Field
 	CacheTTL                apijson.Field
 	CollectLogs             apijson.Field
 	CreatedAt               apijson.Field
-	InternalID              apijson.Field
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
@@ -1077,6 +1163,7 @@ type aiGatewayDeleteResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	WorkersAIBillingMode    apijson.Field
 	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -1244,10 +1331,11 @@ func (r AIGatewayDeleteResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayDeleteResponseOtel struct {
-	Authorization string                          `json:"authorization,required"`
-	Headers       map[string]string               `json:"headers,required"`
-	URL           string                          `json:"url,required"`
-	JSON          aiGatewayDeleteResponseOtelJSON `json:"-"`
+	Authorization string                                 `json:"authorization,required"`
+	Headers       map[string]string                      `json:"headers,required"`
+	URL           string                                 `json:"url,required"`
+	ContentType   AIGatewayDeleteResponseOtelContentType `json:"content_type"`
+	JSON          aiGatewayDeleteResponseOtelJSON        `json:"-"`
 }
 
 // aiGatewayDeleteResponseOtelJSON contains the JSON metadata for the struct
@@ -1256,6 +1344,7 @@ type aiGatewayDeleteResponseOtelJSON struct {
 	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -1266,6 +1355,21 @@ func (r *AIGatewayDeleteResponseOtel) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayDeleteResponseOtelJSON) RawJSON() string {
 	return r.raw
+}
+
+type AIGatewayDeleteResponseOtelContentType string
+
+const (
+	AIGatewayDeleteResponseOtelContentTypeJson     AIGatewayDeleteResponseOtelContentType = "json"
+	AIGatewayDeleteResponseOtelContentTypeProtobuf AIGatewayDeleteResponseOtelContentType = "protobuf"
+)
+
+func (r AIGatewayDeleteResponseOtelContentType) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseOtelContentTypeJson, AIGatewayDeleteResponseOtelContentTypeProtobuf:
+		return true
+	}
+	return false
 }
 
 type AIGatewayDeleteResponseStripe struct {
@@ -1312,16 +1416,29 @@ func (r aiGatewayDeleteResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls how Workers AI inference calls routed through this gateway are billed
+type AIGatewayDeleteResponseWorkersAIBillingMode string
+
+const (
+	AIGatewayDeleteResponseWorkersAIBillingModePostpaid AIGatewayDeleteResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayDeleteResponseWorkersAIBillingModeUnified  AIGatewayDeleteResponseWorkersAIBillingMode = "unified"
+)
+
+func (r AIGatewayDeleteResponseWorkersAIBillingMode) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseWorkersAIBillingModePostpaid, AIGatewayDeleteResponseWorkersAIBillingModeUnified:
+		return true
+	}
+	return false
+}
+
 type AIGatewayGetResponse struct {
 	// gateway id
 	ID                      string                                    `json:"id,required"`
-	AccountID               string                                    `json:"account_id,required"`
-	AccountTag              string                                    `json:"account_tag,required"`
 	CacheInvalidateOnUpdate bool                                      `json:"cache_invalidate_on_update,required"`
 	CacheTTL                int64                                     `json:"cache_ttl,required,nullable"`
 	CollectLogs             bool                                      `json:"collect_logs,required"`
 	CreatedAt               time.Time                                 `json:"created_at,required" format:"date-time"`
-	InternalID              string                                    `json:"internal_id,required" format:"uuid"`
 	ModifiedAt              time.Time                                 `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
@@ -1336,21 +1453,20 @@ type AIGatewayGetResponse struct {
 	Otel                    []AIGatewayGetResponseOtel                `json:"otel,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayGetResponseStripe                `json:"stripe,nullable"`
-	Zdr                     bool                                      `json:"zdr"`
-	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
+	// Controls how Workers AI inference calls routed through this gateway are billed
+	WorkersAIBillingMode AIGatewayGetResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
+	Zdr                  bool                                     `json:"zdr"`
+	JSON                 aiGatewayGetResponseJSON                 `json:"-"`
 }
 
 // aiGatewayGetResponseJSON contains the JSON metadata for the struct
 // [AIGatewayGetResponse]
 type aiGatewayGetResponseJSON struct {
 	ID                      apijson.Field
-	AccountID               apijson.Field
-	AccountTag              apijson.Field
 	CacheInvalidateOnUpdate apijson.Field
 	CacheTTL                apijson.Field
 	CollectLogs             apijson.Field
 	CreatedAt               apijson.Field
-	InternalID              apijson.Field
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
@@ -1365,6 +1481,7 @@ type aiGatewayGetResponseJSON struct {
 	Otel                    apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
+	WorkersAIBillingMode    apijson.Field
 	Zdr                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -1531,10 +1648,11 @@ func (r AIGatewayGetResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayGetResponseOtel struct {
-	Authorization string                       `json:"authorization,required"`
-	Headers       map[string]string            `json:"headers,required"`
-	URL           string                       `json:"url,required"`
-	JSON          aiGatewayGetResponseOtelJSON `json:"-"`
+	Authorization string                              `json:"authorization,required"`
+	Headers       map[string]string                   `json:"headers,required"`
+	URL           string                              `json:"url,required"`
+	ContentType   AIGatewayGetResponseOtelContentType `json:"content_type"`
+	JSON          aiGatewayGetResponseOtelJSON        `json:"-"`
 }
 
 // aiGatewayGetResponseOtelJSON contains the JSON metadata for the struct
@@ -1543,6 +1661,7 @@ type aiGatewayGetResponseOtelJSON struct {
 	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -1553,6 +1672,21 @@ func (r *AIGatewayGetResponseOtel) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayGetResponseOtelJSON) RawJSON() string {
 	return r.raw
+}
+
+type AIGatewayGetResponseOtelContentType string
+
+const (
+	AIGatewayGetResponseOtelContentTypeJson     AIGatewayGetResponseOtelContentType = "json"
+	AIGatewayGetResponseOtelContentTypeProtobuf AIGatewayGetResponseOtelContentType = "protobuf"
+)
+
+func (r AIGatewayGetResponseOtelContentType) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseOtelContentTypeJson, AIGatewayGetResponseOtelContentTypeProtobuf:
+		return true
+	}
+	return false
 }
 
 type AIGatewayGetResponseStripe struct {
@@ -1599,6 +1733,22 @@ func (r aiGatewayGetResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
+// Controls how Workers AI inference calls routed through this gateway are billed
+type AIGatewayGetResponseWorkersAIBillingMode string
+
+const (
+	AIGatewayGetResponseWorkersAIBillingModePostpaid AIGatewayGetResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayGetResponseWorkersAIBillingModeUnified  AIGatewayGetResponseWorkersAIBillingMode = "unified"
+)
+
+func (r AIGatewayGetResponseWorkersAIBillingMode) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseWorkersAIBillingModePostpaid, AIGatewayGetResponseWorkersAIBillingModeUnified:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// gateway id
@@ -1610,12 +1760,13 @@ type AIGatewayNewParams struct {
 	RateLimitingLimit       param.Field[int64]                                   `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                    `json:"authentication"`
-	IsDefault               param.Field[bool]                                    `json:"is_default"`
 	LogManagement           param.Field[int64]                                   `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
-	Zdr                     param.Field[bool]                                    `json:"zdr"`
+	// Controls how Workers AI inference calls routed through this gateway are billed
+	WorkersAIBillingMode param.Field[AIGatewayNewParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
+	Zdr                  param.Field[bool]                                   `json:"zdr"`
 }
 
 func (r AIGatewayNewParams) MarshalJSON() (data []byte, err error) {
@@ -1647,6 +1798,22 @@ const (
 func (r AIGatewayNewParamsLogManagementStrategy) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsLogManagementStrategyStopInserting, AIGatewayNewParamsLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
+// Controls how Workers AI inference calls routed through this gateway are billed
+type AIGatewayNewParamsWorkersAIBillingMode string
+
+const (
+	AIGatewayNewParamsWorkersAIBillingModePostpaid AIGatewayNewParamsWorkersAIBillingMode = "postpaid"
+	AIGatewayNewParamsWorkersAIBillingModeUnified  AIGatewayNewParamsWorkersAIBillingMode = "unified"
+)
+
+func (r AIGatewayNewParamsWorkersAIBillingMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsWorkersAIBillingModePostpaid, AIGatewayNewParamsWorkersAIBillingModeUnified:
 		return true
 	}
 	return false
@@ -1685,7 +1852,6 @@ type AIGatewayUpdateParams struct {
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                       `json:"authentication"`
 	DLP                     param.Field[AIGatewayUpdateParamsDLPUnion]              `json:"dlp"`
-	IsDefault               param.Field[bool]                                       `json:"is_default"`
 	LogManagement           param.Field[int64]                                      `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
@@ -1693,7 +1859,9 @@ type AIGatewayUpdateParams struct {
 	Otel                    param.Field[[]AIGatewayUpdateParamsOtel]                `json:"otel"`
 	StoreID                 param.Field[string]                                     `json:"store_id"`
 	Stripe                  param.Field[AIGatewayUpdateParamsStripe]                `json:"stripe"`
-	Zdr                     param.Field[bool]                                       `json:"zdr"`
+	// Controls how Workers AI inference calls routed through this gateway are billed
+	WorkersAIBillingMode param.Field[AIGatewayUpdateParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
+	Zdr                  param.Field[bool]                                      `json:"zdr"`
 }
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1792,13 +1960,29 @@ func (r AIGatewayUpdateParamsLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayUpdateParamsOtel struct {
-	Authorization param.Field[string]            `json:"authorization,required"`
-	Headers       param.Field[map[string]string] `json:"headers,required"`
-	URL           param.Field[string]            `json:"url,required"`
+	Authorization param.Field[string]                               `json:"authorization,required"`
+	Headers       param.Field[map[string]string]                    `json:"headers,required"`
+	URL           param.Field[string]                               `json:"url,required"`
+	ContentType   param.Field[AIGatewayUpdateParamsOtelContentType] `json:"content_type"`
 }
 
 func (r AIGatewayUpdateParamsOtel) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsOtelContentType string
+
+const (
+	AIGatewayUpdateParamsOtelContentTypeJson     AIGatewayUpdateParamsOtelContentType = "json"
+	AIGatewayUpdateParamsOtelContentTypeProtobuf AIGatewayUpdateParamsOtelContentType = "protobuf"
+)
+
+func (r AIGatewayUpdateParamsOtelContentType) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsOtelContentTypeJson, AIGatewayUpdateParamsOtelContentTypeProtobuf:
+		return true
+	}
+	return false
 }
 
 type AIGatewayUpdateParamsStripe struct {
@@ -1816,6 +2000,22 @@ type AIGatewayUpdateParamsStripeUsageEvent struct {
 
 func (r AIGatewayUpdateParamsStripeUsageEvent) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Controls how Workers AI inference calls routed through this gateway are billed
+type AIGatewayUpdateParamsWorkersAIBillingMode string
+
+const (
+	AIGatewayUpdateParamsWorkersAIBillingModePostpaid AIGatewayUpdateParamsWorkersAIBillingMode = "postpaid"
+	AIGatewayUpdateParamsWorkersAIBillingModeUnified  AIGatewayUpdateParamsWorkersAIBillingMode = "unified"
+)
+
+func (r AIGatewayUpdateParamsWorkersAIBillingMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsWorkersAIBillingModePostpaid, AIGatewayUpdateParamsWorkersAIBillingModeUnified:
+		return true
+	}
+	return false
 }
 
 type AIGatewayUpdateResponseEnvelope struct {

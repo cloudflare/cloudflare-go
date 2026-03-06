@@ -156,6 +156,9 @@ type AppNewResponse struct {
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets []string `json:"source_subnets"`
 	// Category of the app.
 	Type string             `json:"type"`
 	JSON appNewResponseJSON `json:"-"`
@@ -163,13 +166,14 @@ type AppNewResponse struct {
 
 // appNewResponseJSON contains the JSON metadata for the struct [AppNewResponse]
 type appNewResponseJSON struct {
-	AccountAppID apijson.Field
-	Hostnames    apijson.Field
-	IPSubnets    apijson.Field
-	Name         apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	AccountAppID  apijson.Field
+	Hostnames     apijson.Field
+	IPSubnets     apijson.Field
+	Name          apijson.Field
+	SourceSubnets apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *AppNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -191,6 +195,9 @@ type AppUpdateResponse struct {
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets []string `json:"source_subnets"`
 	// Category of the app.
 	Type string                `json:"type"`
 	JSON appUpdateResponseJSON `json:"-"`
@@ -199,13 +206,14 @@ type AppUpdateResponse struct {
 // appUpdateResponseJSON contains the JSON metadata for the struct
 // [AppUpdateResponse]
 type appUpdateResponseJSON struct {
-	AccountAppID apijson.Field
-	Hostnames    apijson.Field
-	IPSubnets    apijson.Field
-	Name         apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	AccountAppID  apijson.Field
+	Hostnames     apijson.Field
+	IPSubnets     apijson.Field
+	Name          apijson.Field
+	SourceSubnets apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *AppUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -228,6 +236,8 @@ type AppListResponse struct {
 	ManagedAppID string `json:"managed_app_id"`
 	// Display name for the app.
 	Name string `json:"name"`
+	// This field can have the runtime type of [[]string].
+	SourceSubnets interface{} `json:"source_subnets"`
 	// Category of the app.
 	Type  string              `json:"type"`
 	JSON  appListResponseJSON `json:"-"`
@@ -236,14 +246,15 @@ type AppListResponse struct {
 
 // appListResponseJSON contains the JSON metadata for the struct [AppListResponse]
 type appListResponseJSON struct {
-	AccountAppID apijson.Field
-	Hostnames    apijson.Field
-	IPSubnets    apijson.Field
-	ManagedAppID apijson.Field
-	Name         apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	AccountAppID  apijson.Field
+	Hostnames     apijson.Field
+	IPSubnets     apijson.Field
+	ManagedAppID  apijson.Field
+	Name          apijson.Field
+	SourceSubnets apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r appListResponseJSON) RawJSON() string {
@@ -302,6 +313,9 @@ type AppListResponseMagicAccountApp struct {
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets []string `json:"source_subnets"`
 	// Category of the app.
 	Type string                             `json:"type"`
 	JSON appListResponseMagicAccountAppJSON `json:"-"`
@@ -310,13 +324,14 @@ type AppListResponseMagicAccountApp struct {
 // appListResponseMagicAccountAppJSON contains the JSON metadata for the struct
 // [AppListResponseMagicAccountApp]
 type appListResponseMagicAccountAppJSON struct {
-	AccountAppID apijson.Field
-	Hostnames    apijson.Field
-	IPSubnets    apijson.Field
-	Name         apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	AccountAppID  apijson.Field
+	Hostnames     apijson.Field
+	IPSubnets     apijson.Field
+	Name          apijson.Field
+	SourceSubnets apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *AppListResponseMagicAccountApp) UnmarshalJSON(data []byte) (err error) {
@@ -340,6 +355,9 @@ type AppListResponseMagicManagedApp struct {
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets []string `json:"source_subnets"`
 	// Category of the app.
 	Type string                             `json:"type"`
 	JSON appListResponseMagicManagedAppJSON `json:"-"`
@@ -348,13 +366,14 @@ type AppListResponseMagicManagedApp struct {
 // appListResponseMagicManagedAppJSON contains the JSON metadata for the struct
 // [AppListResponseMagicManagedApp]
 type appListResponseMagicManagedAppJSON struct {
-	ManagedAppID apijson.Field
-	Hostnames    apijson.Field
-	IPSubnets    apijson.Field
-	Name         apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ManagedAppID  apijson.Field
+	Hostnames     apijson.Field
+	IPSubnets     apijson.Field
+	Name          apijson.Field
+	SourceSubnets apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *AppListResponseMagicManagedApp) UnmarshalJSON(data []byte) (err error) {
@@ -378,6 +397,9 @@ type AppDeleteResponse struct {
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets []string `json:"source_subnets"`
 	// Category of the app.
 	Type string                `json:"type"`
 	JSON appDeleteResponseJSON `json:"-"`
@@ -386,13 +408,14 @@ type AppDeleteResponse struct {
 // appDeleteResponseJSON contains the JSON metadata for the struct
 // [AppDeleteResponse]
 type appDeleteResponseJSON struct {
-	AccountAppID apijson.Field
-	Hostnames    apijson.Field
-	IPSubnets    apijson.Field
-	Name         apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	AccountAppID  apijson.Field
+	Hostnames     apijson.Field
+	IPSubnets     apijson.Field
+	Name          apijson.Field
+	SourceSubnets apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *AppDeleteResponse) UnmarshalJSON(data []byte) (err error) {
@@ -414,6 +437,9 @@ type AppEditResponse struct {
 	IPSubnets []string `json:"ip_subnets"`
 	// Display name for the app.
 	Name string `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets []string `json:"source_subnets"`
 	// Category of the app.
 	Type string              `json:"type"`
 	JSON appEditResponseJSON `json:"-"`
@@ -421,13 +447,14 @@ type AppEditResponse struct {
 
 // appEditResponseJSON contains the JSON metadata for the struct [AppEditResponse]
 type appEditResponseJSON struct {
-	AccountAppID apijson.Field
-	Hostnames    apijson.Field
-	IPSubnets    apijson.Field
-	Name         apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	AccountAppID  apijson.Field
+	Hostnames     apijson.Field
+	IPSubnets     apijson.Field
+	Name          apijson.Field
+	SourceSubnets apijson.Field
+	Type          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *AppEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -450,6 +477,9 @@ type AppNewParams struct {
 	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
 	// unsupported)
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets param.Field[[]string] `json:"source_subnets"`
 }
 
 func (r AppNewParams) MarshalJSON() (data []byte, err error) {
@@ -510,6 +540,9 @@ type AppUpdateParams struct {
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
 	// Display name for the app.
 	Name param.Field[string] `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets param.Field[[]string] `json:"source_subnets"`
 	// Category of the app.
 	Type param.Field[string] `json:"type"`
 }
@@ -626,6 +659,9 @@ type AppEditParams struct {
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
 	// Display name for the app.
 	Name param.Field[string] `json:"name"`
+	// IPv4 CIDRs to associate with traffic decisions. (IPv6 CIDRs are currently
+	// unsupported)
+	SourceSubnets param.Field[[]string] `json:"source_subnets"`
 	// Category of the app.
 	Type param.Field[string] `json:"type"`
 }

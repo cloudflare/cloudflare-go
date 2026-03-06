@@ -37,7 +37,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	return
 }
 
-// Update global schema validation settings
+// Fully updates global schema validation settings for a zone, replacing existing
+// configuration.
 func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
 	var env SettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +55,8 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 	return
 }
 
-// Edit global schema validation settings
+// Partially updates global schema validation settings for a zone using PATCH
+// semantics.
 func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opts ...option.RequestOption) (res *SettingEditResponse, err error) {
 	var env SettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -71,7 +73,7 @@ func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opt
 	return
 }
 
-// Get global schema validation settings
+// Retrieves the current global schema validation settings for a zone.
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	var env SettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

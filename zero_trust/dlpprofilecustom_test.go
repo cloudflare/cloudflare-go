@@ -39,6 +39,8 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 				Files: cloudflare.F(true),
 			}),
 		}),
+		DataClasses: cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
+		DataTags:    cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
 		Description: cloudflare.F("description"),
 		Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsEntryUnion{zero_trust.DLPProfileCustomNewParamsEntriesDLPNewCustomEntry{
 			Enabled: cloudflare.F(true),
@@ -49,7 +51,8 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 			}),
 			Description: cloudflare.F("description"),
 		}}),
-		OCREnabled: cloudflare.F(true),
+		OCREnabled:        cloudflare.F(true),
+		SensitivityLevels: cloudflare.F([][]string{{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}}),
 		SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsSharedEntry{{
 			Enabled: cloudflare.F(true),
 			EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
@@ -92,6 +95,8 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 					Files: cloudflare.F(true),
 				}),
 			}),
+			DataClasses: cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
+			DataTags:    cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
 			Description: cloudflare.F("description"),
 			Entries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsEntryUnion{zero_trust.DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID{
 				Enabled: cloudflare.F(true),
@@ -103,7 +108,8 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Description: cloudflare.F("description"),
 			}}),
-			OCREnabled: cloudflare.F(true),
+			OCREnabled:        cloudflare.F(true),
+			SensitivityLevels: cloudflare.F([][]string{{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}}),
 			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntry{{
 				Enabled: cloudflare.F(true),
 				EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),

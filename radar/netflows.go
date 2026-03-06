@@ -1348,13 +1348,15 @@ func (r NetFlowsSummaryV2Params) URLQuery() (v url.Values) {
 type NetFlowsSummaryV2ParamsDimension string
 
 const (
-	NetFlowsSummaryV2ParamsDimensionAdm1    NetFlowsSummaryV2ParamsDimension = "ADM1"
-	NetFlowsSummaryV2ParamsDimensionProduct NetFlowsSummaryV2ParamsDimension = "PRODUCT"
+	NetFlowsSummaryV2ParamsDimensionAdm1     NetFlowsSummaryV2ParamsDimension = "ADM1"
+	NetFlowsSummaryV2ParamsDimensionAs       NetFlowsSummaryV2ParamsDimension = "AS"
+	NetFlowsSummaryV2ParamsDimensionLocation NetFlowsSummaryV2ParamsDimension = "LOCATION"
+	NetFlowsSummaryV2ParamsDimensionProduct  NetFlowsSummaryV2ParamsDimension = "PRODUCT"
 )
 
 func (r NetFlowsSummaryV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case NetFlowsSummaryV2ParamsDimensionAdm1, NetFlowsSummaryV2ParamsDimensionProduct:
+	case NetFlowsSummaryV2ParamsDimensionAdm1, NetFlowsSummaryV2ParamsDimensionAs, NetFlowsSummaryV2ParamsDimensionLocation, NetFlowsSummaryV2ParamsDimensionProduct:
 		return true
 	}
 	return false
@@ -1615,13 +1617,15 @@ func (r NetFlowsTimeseriesGroupsParams) URLQuery() (v url.Values) {
 type NetFlowsTimeseriesGroupsParamsDimension string
 
 const (
-	NetFlowsTimeseriesGroupsParamsDimensionAdm1    NetFlowsTimeseriesGroupsParamsDimension = "ADM1"
-	NetFlowsTimeseriesGroupsParamsDimensionProduct NetFlowsTimeseriesGroupsParamsDimension = "PRODUCT"
+	NetFlowsTimeseriesGroupsParamsDimensionAdm1     NetFlowsTimeseriesGroupsParamsDimension = "ADM1"
+	NetFlowsTimeseriesGroupsParamsDimensionAs       NetFlowsTimeseriesGroupsParamsDimension = "AS"
+	NetFlowsTimeseriesGroupsParamsDimensionLocation NetFlowsTimeseriesGroupsParamsDimension = "LOCATION"
+	NetFlowsTimeseriesGroupsParamsDimensionProduct  NetFlowsTimeseriesGroupsParamsDimension = "PRODUCT"
 )
 
 func (r NetFlowsTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case NetFlowsTimeseriesGroupsParamsDimensionAdm1, NetFlowsTimeseriesGroupsParamsDimensionProduct:
+	case NetFlowsTimeseriesGroupsParamsDimensionAdm1, NetFlowsTimeseriesGroupsParamsDimensionAs, NetFlowsTimeseriesGroupsParamsDimensionLocation, NetFlowsTimeseriesGroupsParamsDimensionProduct:
 		return true
 	}
 	return false

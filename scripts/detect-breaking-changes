@@ -228,6 +228,7 @@ TEST_PATHS=(
 	addressing/prefixdelegation_test.go
 	audit_logs/auditlog_test.go
 	billing/profile_test.go
+	billing/usage_test.go
 	brand_protection/brandprotection_test.go
 	brand_protection/query_test.go
 	brand_protection/match_test.go
@@ -657,6 +658,11 @@ TEST_PATHS=(
 	resource_sharing/resourcesharing_test.go
 	resource_sharing/recipient_test.go
 	resource_sharing/resource_test.go
+	resource_tagging/resourcetagging_test.go
+	resource_tagging/accounttag_test.go
+	resource_tagging/zonetag_test.go
+	resource_tagging/key_test.go
+	resource_tagging/value_test.go
 	leaked_credential_checks/leakedcredentialcheck_test.go
 	leaked_credential_checks/detection_test.go
 	content_scanning/contentscanning_test.go
@@ -674,7 +680,6 @@ TEST_PATHS=(
 	ai/modelschema_test.go
 	ai/tomarkdown_test.go
 	ai_search/instance_test.go
-	ai_search/instanceitem_test.go
 	ai_search/instancejob_test.go
 	ai_search/token_test.go
 	security_center/insight_test.go

@@ -83,7 +83,8 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID int64, body 
 	return
 }
 
-// Unprotect multiple email domains
+// Bulk removes multiple domains from email security configuration in a single
+// request.
 func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingDomainBulkDeleteResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -105,12 +106,13 @@ func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomai
 	return res, nil
 }
 
-// Unprotect multiple email domains
+// Bulk removes multiple domains from email security configuration in a single
+// request.
 func (r *SettingDomainService) BulkDeleteAutoPaging(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingDomainBulkDeleteResponse] {
 	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
 }
 
-// Update an email domain
+// Updates configuration for a domain in email security.
 func (r *SettingDomainService) Edit(ctx context.Context, domainID int64, params SettingDomainEditParams, opts ...option.RequestOption) (res *SettingDomainEditResponse, err error) {
 	var env SettingDomainEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -127,7 +129,7 @@ func (r *SettingDomainService) Edit(ctx context.Context, domainID int64, params 
 	return
 }
 
-// Get an email domain
+// Gets configuration details for a specific domain in email security.
 func (r *SettingDomainService) Get(ctx context.Context, domainID int64, query SettingDomainGetParams, opts ...option.RequestOption) (res *SettingDomainGetResponse, err error) {
 	var env SettingDomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

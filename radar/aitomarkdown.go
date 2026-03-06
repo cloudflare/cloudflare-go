@@ -39,7 +39,7 @@ func NewAIToMarkdownService(opts ...option.RequestOption) (r *AIToMarkdownServic
 	return
 }
 
-// Convert Files into Markdown
+// Converts uploaded files into Markdown format using Workers AI.
 //
 // Deprecated: Use
 // [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
@@ -65,7 +65,7 @@ func (r *AIToMarkdownService) New(ctx context.Context, params AIToMarkdownNewPar
 	return res, nil
 }
 
-// Convert Files into Markdown
+// Converts uploaded files into Markdown format using Workers AI.
 //
 // Deprecated: Use
 // [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)

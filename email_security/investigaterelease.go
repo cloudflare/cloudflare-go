@@ -35,7 +35,8 @@ func NewInvestigateReleaseService(opts ...option.RequestOption) (r *InvestigateR
 	return
 }
 
-// Release messages from quarantine
+// Releases a quarantined email message, allowing it to be delivered to the
+// recipient.
 func (r *InvestigateReleaseService) Bulk(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateReleaseBulkResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +58,8 @@ func (r *InvestigateReleaseService) Bulk(ctx context.Context, params Investigate
 	return res, nil
 }
 
-// Release messages from quarantine
+// Releases a quarantined email message, allowing it to be delivered to the
+// recipient.
 func (r *InvestigateReleaseService) BulkAutoPaging(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateReleaseBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }
