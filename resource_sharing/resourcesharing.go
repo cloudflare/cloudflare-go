@@ -316,7 +316,6 @@ type ResourceSharingNewResponseResourcesResourceType string
 
 const (
 	ResourceSharingNewResponseResourcesResourceTypeCustomRuleset                ResourceSharingNewResponseResourcesResourceType = "custom-ruleset"
-	ResourceSharingNewResponseResourcesResourceTypeWidget                       ResourceSharingNewResponseResourcesResourceType = "widget"
 	ResourceSharingNewResponseResourcesResourceTypeGatewayPolicy                ResourceSharingNewResponseResourcesResourceType = "gateway-policy"
 	ResourceSharingNewResponseResourcesResourceTypeGatewayDestinationIP         ResourceSharingNewResponseResourcesResourceType = "gateway-destination-ip"
 	ResourceSharingNewResponseResourcesResourceTypeGatewayBlockPageSettings     ResourceSharingNewResponseResourcesResourceType = "gateway-block-page-settings"
@@ -325,7 +324,7 @@ const (
 
 func (r ResourceSharingNewResponseResourcesResourceType) IsKnown() bool {
 	switch r {
-	case ResourceSharingNewResponseResourcesResourceTypeCustomRuleset, ResourceSharingNewResponseResourcesResourceTypeWidget, ResourceSharingNewResponseResourcesResourceTypeGatewayPolicy, ResourceSharingNewResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingNewResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingNewResponseResourcesResourceTypeGatewayExtendedEmailMatching:
+	case ResourceSharingNewResponseResourcesResourceTypeCustomRuleset, ResourceSharingNewResponseResourcesResourceTypeGatewayPolicy, ResourceSharingNewResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingNewResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingNewResponseResourcesResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -511,7 +510,6 @@ type ResourceSharingUpdateResponseResourcesResourceType string
 
 const (
 	ResourceSharingUpdateResponseResourcesResourceTypeCustomRuleset                ResourceSharingUpdateResponseResourcesResourceType = "custom-ruleset"
-	ResourceSharingUpdateResponseResourcesResourceTypeWidget                       ResourceSharingUpdateResponseResourcesResourceType = "widget"
 	ResourceSharingUpdateResponseResourcesResourceTypeGatewayPolicy                ResourceSharingUpdateResponseResourcesResourceType = "gateway-policy"
 	ResourceSharingUpdateResponseResourcesResourceTypeGatewayDestinationIP         ResourceSharingUpdateResponseResourcesResourceType = "gateway-destination-ip"
 	ResourceSharingUpdateResponseResourcesResourceTypeGatewayBlockPageSettings     ResourceSharingUpdateResponseResourcesResourceType = "gateway-block-page-settings"
@@ -520,7 +518,7 @@ const (
 
 func (r ResourceSharingUpdateResponseResourcesResourceType) IsKnown() bool {
 	switch r {
-	case ResourceSharingUpdateResponseResourcesResourceTypeCustomRuleset, ResourceSharingUpdateResponseResourcesResourceTypeWidget, ResourceSharingUpdateResponseResourcesResourceTypeGatewayPolicy, ResourceSharingUpdateResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingUpdateResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingUpdateResponseResourcesResourceTypeGatewayExtendedEmailMatching:
+	case ResourceSharingUpdateResponseResourcesResourceTypeCustomRuleset, ResourceSharingUpdateResponseResourcesResourceTypeGatewayPolicy, ResourceSharingUpdateResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingUpdateResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingUpdateResponseResourcesResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -706,7 +704,6 @@ type ResourceSharingListResponseResourcesResourceType string
 
 const (
 	ResourceSharingListResponseResourcesResourceTypeCustomRuleset                ResourceSharingListResponseResourcesResourceType = "custom-ruleset"
-	ResourceSharingListResponseResourcesResourceTypeWidget                       ResourceSharingListResponseResourcesResourceType = "widget"
 	ResourceSharingListResponseResourcesResourceTypeGatewayPolicy                ResourceSharingListResponseResourcesResourceType = "gateway-policy"
 	ResourceSharingListResponseResourcesResourceTypeGatewayDestinationIP         ResourceSharingListResponseResourcesResourceType = "gateway-destination-ip"
 	ResourceSharingListResponseResourcesResourceTypeGatewayBlockPageSettings     ResourceSharingListResponseResourcesResourceType = "gateway-block-page-settings"
@@ -715,7 +712,7 @@ const (
 
 func (r ResourceSharingListResponseResourcesResourceType) IsKnown() bool {
 	switch r {
-	case ResourceSharingListResponseResourcesResourceTypeCustomRuleset, ResourceSharingListResponseResourcesResourceTypeWidget, ResourceSharingListResponseResourcesResourceTypeGatewayPolicy, ResourceSharingListResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingListResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingListResponseResourcesResourceTypeGatewayExtendedEmailMatching:
+	case ResourceSharingListResponseResourcesResourceTypeCustomRuleset, ResourceSharingListResponseResourcesResourceTypeGatewayPolicy, ResourceSharingListResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingListResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingListResponseResourcesResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -901,7 +898,6 @@ type ResourceSharingDeleteResponseResourcesResourceType string
 
 const (
 	ResourceSharingDeleteResponseResourcesResourceTypeCustomRuleset                ResourceSharingDeleteResponseResourcesResourceType = "custom-ruleset"
-	ResourceSharingDeleteResponseResourcesResourceTypeWidget                       ResourceSharingDeleteResponseResourcesResourceType = "widget"
 	ResourceSharingDeleteResponseResourcesResourceTypeGatewayPolicy                ResourceSharingDeleteResponseResourcesResourceType = "gateway-policy"
 	ResourceSharingDeleteResponseResourcesResourceTypeGatewayDestinationIP         ResourceSharingDeleteResponseResourcesResourceType = "gateway-destination-ip"
 	ResourceSharingDeleteResponseResourcesResourceTypeGatewayBlockPageSettings     ResourceSharingDeleteResponseResourcesResourceType = "gateway-block-page-settings"
@@ -910,7 +906,7 @@ const (
 
 func (r ResourceSharingDeleteResponseResourcesResourceType) IsKnown() bool {
 	switch r {
-	case ResourceSharingDeleteResponseResourcesResourceTypeCustomRuleset, ResourceSharingDeleteResponseResourcesResourceTypeWidget, ResourceSharingDeleteResponseResourcesResourceTypeGatewayPolicy, ResourceSharingDeleteResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingDeleteResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingDeleteResponseResourcesResourceTypeGatewayExtendedEmailMatching:
+	case ResourceSharingDeleteResponseResourcesResourceTypeCustomRuleset, ResourceSharingDeleteResponseResourcesResourceTypeGatewayPolicy, ResourceSharingDeleteResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingDeleteResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingDeleteResponseResourcesResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -1096,7 +1092,6 @@ type ResourceSharingGetResponseResourcesResourceType string
 
 const (
 	ResourceSharingGetResponseResourcesResourceTypeCustomRuleset                ResourceSharingGetResponseResourcesResourceType = "custom-ruleset"
-	ResourceSharingGetResponseResourcesResourceTypeWidget                       ResourceSharingGetResponseResourcesResourceType = "widget"
 	ResourceSharingGetResponseResourcesResourceTypeGatewayPolicy                ResourceSharingGetResponseResourcesResourceType = "gateway-policy"
 	ResourceSharingGetResponseResourcesResourceTypeGatewayDestinationIP         ResourceSharingGetResponseResourcesResourceType = "gateway-destination-ip"
 	ResourceSharingGetResponseResourcesResourceTypeGatewayBlockPageSettings     ResourceSharingGetResponseResourcesResourceType = "gateway-block-page-settings"
@@ -1105,7 +1100,7 @@ const (
 
 func (r ResourceSharingGetResponseResourcesResourceType) IsKnown() bool {
 	switch r {
-	case ResourceSharingGetResponseResourcesResourceTypeCustomRuleset, ResourceSharingGetResponseResourcesResourceTypeWidget, ResourceSharingGetResponseResourcesResourceTypeGatewayPolicy, ResourceSharingGetResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingGetResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingGetResponseResourcesResourceTypeGatewayExtendedEmailMatching:
+	case ResourceSharingGetResponseResourcesResourceTypeCustomRuleset, ResourceSharingGetResponseResourcesResourceTypeGatewayPolicy, ResourceSharingGetResponseResourcesResourceTypeGatewayDestinationIP, ResourceSharingGetResponseResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingGetResponseResourcesResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -1173,7 +1168,6 @@ type ResourceSharingNewParamsResourcesResourceType string
 
 const (
 	ResourceSharingNewParamsResourcesResourceTypeCustomRuleset                ResourceSharingNewParamsResourcesResourceType = "custom-ruleset"
-	ResourceSharingNewParamsResourcesResourceTypeWidget                       ResourceSharingNewParamsResourcesResourceType = "widget"
 	ResourceSharingNewParamsResourcesResourceTypeGatewayPolicy                ResourceSharingNewParamsResourcesResourceType = "gateway-policy"
 	ResourceSharingNewParamsResourcesResourceTypeGatewayDestinationIP         ResourceSharingNewParamsResourcesResourceType = "gateway-destination-ip"
 	ResourceSharingNewParamsResourcesResourceTypeGatewayBlockPageSettings     ResourceSharingNewParamsResourcesResourceType = "gateway-block-page-settings"
@@ -1182,7 +1176,7 @@ const (
 
 func (r ResourceSharingNewParamsResourcesResourceType) IsKnown() bool {
 	switch r {
-	case ResourceSharingNewParamsResourcesResourceTypeCustomRuleset, ResourceSharingNewParamsResourcesResourceTypeWidget, ResourceSharingNewParamsResourcesResourceTypeGatewayPolicy, ResourceSharingNewParamsResourcesResourceTypeGatewayDestinationIP, ResourceSharingNewParamsResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingNewParamsResourcesResourceTypeGatewayExtendedEmailMatching:
+	case ResourceSharingNewParamsResourcesResourceTypeCustomRuleset, ResourceSharingNewParamsResourcesResourceTypeGatewayPolicy, ResourceSharingNewParamsResourcesResourceTypeGatewayDestinationIP, ResourceSharingNewParamsResourcesResourceTypeGatewayBlockPageSettings, ResourceSharingNewParamsResourcesResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
@@ -1338,7 +1332,6 @@ type ResourceSharingListParamsResourceType string
 
 const (
 	ResourceSharingListParamsResourceTypeCustomRuleset                ResourceSharingListParamsResourceType = "custom-ruleset"
-	ResourceSharingListParamsResourceTypeWidget                       ResourceSharingListParamsResourceType = "widget"
 	ResourceSharingListParamsResourceTypeGatewayPolicy                ResourceSharingListParamsResourceType = "gateway-policy"
 	ResourceSharingListParamsResourceTypeGatewayDestinationIP         ResourceSharingListParamsResourceType = "gateway-destination-ip"
 	ResourceSharingListParamsResourceTypeGatewayBlockPageSettings     ResourceSharingListParamsResourceType = "gateway-block-page-settings"
@@ -1347,7 +1340,7 @@ const (
 
 func (r ResourceSharingListParamsResourceType) IsKnown() bool {
 	switch r {
-	case ResourceSharingListParamsResourceTypeCustomRuleset, ResourceSharingListParamsResourceTypeWidget, ResourceSharingListParamsResourceTypeGatewayPolicy, ResourceSharingListParamsResourceTypeGatewayDestinationIP, ResourceSharingListParamsResourceTypeGatewayBlockPageSettings, ResourceSharingListParamsResourceTypeGatewayExtendedEmailMatching:
+	case ResourceSharingListParamsResourceTypeCustomRuleset, ResourceSharingListParamsResourceTypeGatewayPolicy, ResourceSharingListParamsResourceTypeGatewayDestinationIP, ResourceSharingListParamsResourceTypeGatewayBlockPageSettings, ResourceSharingListParamsResourceTypeGatewayExtendedEmailMatching:
 		return true
 	}
 	return false
