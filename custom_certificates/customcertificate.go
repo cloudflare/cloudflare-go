@@ -167,6 +167,8 @@ type CustomCertificate struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod custom_hostnames.BundleMethod `json:"bundle_method"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID string `json:"custom_csr_id"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// Specify the region where your private key can be held locally for optimal TLS
@@ -211,6 +213,7 @@ type customCertificateJSON struct {
 	ID                 apijson.Field
 	ZoneID             apijson.Field
 	BundleMethod       apijson.Field
+	CustomCsrID        apijson.Field
 	ExpiresOn          apijson.Field
 	GeoRestrictions    apijson.Field
 	Hosts              apijson.Field
@@ -364,6 +367,8 @@ type CustomCertificateNewParams struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID param.Field[string] `json:"custom_csr_id"`
 	// The environment to deploy the certificate to, defaults to production
 	Deploy param.Field[CustomCertificateNewParamsDeploy] `json:"deploy"`
 	// Specify the region where your private key can be held locally for optimal TLS
@@ -778,6 +783,8 @@ type CustomCertificateEditParams struct {
 	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID param.Field[string] `json:"custom_csr_id"`
 	// The environment to deploy the certificate to, defaults to production
 	Deploy param.Field[CustomCertificateEditParamsDeploy] `json:"deploy"`
 	// Specify the region where your private key can be held locally for optimal TLS

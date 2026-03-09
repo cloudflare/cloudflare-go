@@ -2245,6 +2245,8 @@ type CustomHostnameNewParamsSSL struct {
 	CustomCERTBundle param.Field[[]CustomHostnameNewParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID param.Field[string] `json:"custom_csr_id"`
 	// The key for a custom uploaded certificate.
 	CustomKey param.Field[string] `json:"custom_key"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -2620,6 +2622,8 @@ type CustomHostnameEditParamsSSL struct {
 	CustomCERTBundle param.Field[[]CustomHostnameEditParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID param.Field[string] `json:"custom_csr_id"`
 	// The key for a custom uploaded certificate.
 	CustomKey param.Field[string] `json:"custom_key"`
 	// Domain control validation (DCV) method used for this hostname.
