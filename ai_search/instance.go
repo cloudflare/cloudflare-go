@@ -215,7 +215,6 @@ type InstanceNewResponse struct {
 	ID                   string                                  `json:"id,required"`
 	CreatedAt            time.Time                               `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                               `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                  `json:"vectorize_name,required"`
 	AIGatewayID          string                                  `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                    `json:"cache"`
@@ -255,7 +254,6 @@ type instanceNewResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -382,14 +380,15 @@ func (r instanceNewResponseCustomMetadataJSON) RawJSON() string {
 type InstanceNewResponseCustomMetadataDataType string
 
 const (
-	InstanceNewResponseCustomMetadataDataTypeText    InstanceNewResponseCustomMetadataDataType = "text"
-	InstanceNewResponseCustomMetadataDataTypeNumber  InstanceNewResponseCustomMetadataDataType = "number"
-	InstanceNewResponseCustomMetadataDataTypeBoolean InstanceNewResponseCustomMetadataDataType = "boolean"
+	InstanceNewResponseCustomMetadataDataTypeText     InstanceNewResponseCustomMetadataDataType = "text"
+	InstanceNewResponseCustomMetadataDataTypeNumber   InstanceNewResponseCustomMetadataDataType = "number"
+	InstanceNewResponseCustomMetadataDataTypeBoolean  InstanceNewResponseCustomMetadataDataType = "boolean"
+	InstanceNewResponseCustomMetadataDataTypeDatetime InstanceNewResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceNewResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseCustomMetadataDataTypeText, InstanceNewResponseCustomMetadataDataTypeNumber, InstanceNewResponseCustomMetadataDataTypeBoolean:
+	case InstanceNewResponseCustomMetadataDataTypeText, InstanceNewResponseCustomMetadataDataTypeNumber, InstanceNewResponseCustomMetadataDataTypeBoolean, InstanceNewResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -641,13 +640,13 @@ func (r instanceNewResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceNewResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceNewResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceNewResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -672,7 +671,7 @@ func (r instanceNewResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceNewResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -979,7 +978,6 @@ type InstanceUpdateResponse struct {
 	ID                   string                                     `json:"id,required"`
 	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                     `json:"vectorize_name,required"`
 	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                       `json:"cache"`
@@ -1019,7 +1017,6 @@ type instanceUpdateResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -1146,14 +1143,15 @@ func (r instanceUpdateResponseCustomMetadataJSON) RawJSON() string {
 type InstanceUpdateResponseCustomMetadataDataType string
 
 const (
-	InstanceUpdateResponseCustomMetadataDataTypeText    InstanceUpdateResponseCustomMetadataDataType = "text"
-	InstanceUpdateResponseCustomMetadataDataTypeNumber  InstanceUpdateResponseCustomMetadataDataType = "number"
-	InstanceUpdateResponseCustomMetadataDataTypeBoolean InstanceUpdateResponseCustomMetadataDataType = "boolean"
+	InstanceUpdateResponseCustomMetadataDataTypeText     InstanceUpdateResponseCustomMetadataDataType = "text"
+	InstanceUpdateResponseCustomMetadataDataTypeNumber   InstanceUpdateResponseCustomMetadataDataType = "number"
+	InstanceUpdateResponseCustomMetadataDataTypeBoolean  InstanceUpdateResponseCustomMetadataDataType = "boolean"
+	InstanceUpdateResponseCustomMetadataDataTypeDatetime InstanceUpdateResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceUpdateResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseCustomMetadataDataTypeText, InstanceUpdateResponseCustomMetadataDataTypeNumber, InstanceUpdateResponseCustomMetadataDataTypeBoolean:
+	case InstanceUpdateResponseCustomMetadataDataTypeText, InstanceUpdateResponseCustomMetadataDataTypeNumber, InstanceUpdateResponseCustomMetadataDataTypeBoolean, InstanceUpdateResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -1406,13 +1404,13 @@ func (r instanceUpdateResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceUpdateResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceUpdateResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceUpdateResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -1437,7 +1435,7 @@ func (r instanceUpdateResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceUpdateResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -1747,7 +1745,6 @@ type InstanceListResponse struct {
 	ID                   string                                   `json:"id,required"`
 	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                   `json:"vectorize_name,required"`
 	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                     `json:"cache"`
@@ -1787,7 +1784,6 @@ type instanceListResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -1914,14 +1910,15 @@ func (r instanceListResponseCustomMetadataJSON) RawJSON() string {
 type InstanceListResponseCustomMetadataDataType string
 
 const (
-	InstanceListResponseCustomMetadataDataTypeText    InstanceListResponseCustomMetadataDataType = "text"
-	InstanceListResponseCustomMetadataDataTypeNumber  InstanceListResponseCustomMetadataDataType = "number"
-	InstanceListResponseCustomMetadataDataTypeBoolean InstanceListResponseCustomMetadataDataType = "boolean"
+	InstanceListResponseCustomMetadataDataTypeText     InstanceListResponseCustomMetadataDataType = "text"
+	InstanceListResponseCustomMetadataDataTypeNumber   InstanceListResponseCustomMetadataDataType = "number"
+	InstanceListResponseCustomMetadataDataTypeBoolean  InstanceListResponseCustomMetadataDataType = "boolean"
+	InstanceListResponseCustomMetadataDataTypeDatetime InstanceListResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceListResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceListResponseCustomMetadataDataTypeText, InstanceListResponseCustomMetadataDataTypeNumber, InstanceListResponseCustomMetadataDataTypeBoolean:
+	case InstanceListResponseCustomMetadataDataTypeText, InstanceListResponseCustomMetadataDataTypeNumber, InstanceListResponseCustomMetadataDataTypeBoolean, InstanceListResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -2173,13 +2170,13 @@ func (r instanceListResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceListResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceListResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceListResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -2204,7 +2201,7 @@ func (r instanceListResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceListResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -2511,7 +2508,6 @@ type InstanceDeleteResponse struct {
 	ID                   string                                     `json:"id,required"`
 	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                     `json:"vectorize_name,required"`
 	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                       `json:"cache"`
@@ -2551,7 +2547,6 @@ type instanceDeleteResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -2678,14 +2673,15 @@ func (r instanceDeleteResponseCustomMetadataJSON) RawJSON() string {
 type InstanceDeleteResponseCustomMetadataDataType string
 
 const (
-	InstanceDeleteResponseCustomMetadataDataTypeText    InstanceDeleteResponseCustomMetadataDataType = "text"
-	InstanceDeleteResponseCustomMetadataDataTypeNumber  InstanceDeleteResponseCustomMetadataDataType = "number"
-	InstanceDeleteResponseCustomMetadataDataTypeBoolean InstanceDeleteResponseCustomMetadataDataType = "boolean"
+	InstanceDeleteResponseCustomMetadataDataTypeText     InstanceDeleteResponseCustomMetadataDataType = "text"
+	InstanceDeleteResponseCustomMetadataDataTypeNumber   InstanceDeleteResponseCustomMetadataDataType = "number"
+	InstanceDeleteResponseCustomMetadataDataTypeBoolean  InstanceDeleteResponseCustomMetadataDataType = "boolean"
+	InstanceDeleteResponseCustomMetadataDataTypeDatetime InstanceDeleteResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceDeleteResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseCustomMetadataDataTypeText, InstanceDeleteResponseCustomMetadataDataTypeNumber, InstanceDeleteResponseCustomMetadataDataTypeBoolean:
+	case InstanceDeleteResponseCustomMetadataDataTypeText, InstanceDeleteResponseCustomMetadataDataTypeNumber, InstanceDeleteResponseCustomMetadataDataTypeBoolean, InstanceDeleteResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -2938,13 +2934,13 @@ func (r instanceDeleteResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceDeleteResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceDeleteResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceDeleteResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -2969,7 +2965,7 @@ func (r instanceDeleteResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceDeleteResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -3459,7 +3455,6 @@ type InstanceReadResponse struct {
 	ID                   string                                   `json:"id,required"`
 	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                   `json:"vectorize_name,required"`
 	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                     `json:"cache"`
@@ -3499,7 +3494,6 @@ type instanceReadResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -3626,14 +3620,15 @@ func (r instanceReadResponseCustomMetadataJSON) RawJSON() string {
 type InstanceReadResponseCustomMetadataDataType string
 
 const (
-	InstanceReadResponseCustomMetadataDataTypeText    InstanceReadResponseCustomMetadataDataType = "text"
-	InstanceReadResponseCustomMetadataDataTypeNumber  InstanceReadResponseCustomMetadataDataType = "number"
-	InstanceReadResponseCustomMetadataDataTypeBoolean InstanceReadResponseCustomMetadataDataType = "boolean"
+	InstanceReadResponseCustomMetadataDataTypeText     InstanceReadResponseCustomMetadataDataType = "text"
+	InstanceReadResponseCustomMetadataDataTypeNumber   InstanceReadResponseCustomMetadataDataType = "number"
+	InstanceReadResponseCustomMetadataDataTypeBoolean  InstanceReadResponseCustomMetadataDataType = "boolean"
+	InstanceReadResponseCustomMetadataDataTypeDatetime InstanceReadResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceReadResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseCustomMetadataDataTypeText, InstanceReadResponseCustomMetadataDataTypeNumber, InstanceReadResponseCustomMetadataDataTypeBoolean:
+	case InstanceReadResponseCustomMetadataDataTypeText, InstanceReadResponseCustomMetadataDataTypeNumber, InstanceReadResponseCustomMetadataDataTypeBoolean, InstanceReadResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -3885,13 +3880,13 @@ func (r instanceReadResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceReadResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceReadResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceReadResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -3916,7 +3911,7 @@ func (r instanceReadResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceReadResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -4465,14 +4460,15 @@ func (r InstanceNewParamsCustomMetadata) MarshalJSON() (data []byte, err error) 
 type InstanceNewParamsCustomMetadataDataType string
 
 const (
-	InstanceNewParamsCustomMetadataDataTypeText    InstanceNewParamsCustomMetadataDataType = "text"
-	InstanceNewParamsCustomMetadataDataTypeNumber  InstanceNewParamsCustomMetadataDataType = "number"
-	InstanceNewParamsCustomMetadataDataTypeBoolean InstanceNewParamsCustomMetadataDataType = "boolean"
+	InstanceNewParamsCustomMetadataDataTypeText     InstanceNewParamsCustomMetadataDataType = "text"
+	InstanceNewParamsCustomMetadataDataTypeNumber   InstanceNewParamsCustomMetadataDataType = "number"
+	InstanceNewParamsCustomMetadataDataTypeBoolean  InstanceNewParamsCustomMetadataDataType = "boolean"
+	InstanceNewParamsCustomMetadataDataTypeDatetime InstanceNewParamsCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceNewParamsCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsCustomMetadataDataTypeText, InstanceNewParamsCustomMetadataDataTypeNumber, InstanceNewParamsCustomMetadataDataTypeBoolean:
+	case InstanceNewParamsCustomMetadataDataTypeText, InstanceNewParamsCustomMetadataDataTypeNumber, InstanceNewParamsCustomMetadataDataTypeBoolean, InstanceNewParamsCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -4622,13 +4618,13 @@ func (r InstanceNewParamsRetrievalOptions) MarshalJSON() (data []byte, err error
 
 type InstanceNewParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceNewParamsRetrievalOptionsBoostByDirection] `json:"direction"`
 }
 
@@ -4639,7 +4635,7 @@ func (r InstanceNewParamsRetrievalOptionsBoostBy) MarshalJSON() (data []byte, er
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceNewParamsRetrievalOptionsBoostByDirection string
 
 const (
@@ -4973,14 +4969,15 @@ func (r InstanceUpdateParamsCustomMetadata) MarshalJSON() (data []byte, err erro
 type InstanceUpdateParamsCustomMetadataDataType string
 
 const (
-	InstanceUpdateParamsCustomMetadataDataTypeText    InstanceUpdateParamsCustomMetadataDataType = "text"
-	InstanceUpdateParamsCustomMetadataDataTypeNumber  InstanceUpdateParamsCustomMetadataDataType = "number"
-	InstanceUpdateParamsCustomMetadataDataTypeBoolean InstanceUpdateParamsCustomMetadataDataType = "boolean"
+	InstanceUpdateParamsCustomMetadataDataTypeText     InstanceUpdateParamsCustomMetadataDataType = "text"
+	InstanceUpdateParamsCustomMetadataDataTypeNumber   InstanceUpdateParamsCustomMetadataDataType = "number"
+	InstanceUpdateParamsCustomMetadataDataTypeBoolean  InstanceUpdateParamsCustomMetadataDataType = "boolean"
+	InstanceUpdateParamsCustomMetadataDataTypeDatetime InstanceUpdateParamsCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceUpdateParamsCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsCustomMetadataDataTypeText, InstanceUpdateParamsCustomMetadataDataTypeNumber, InstanceUpdateParamsCustomMetadataDataTypeBoolean:
+	case InstanceUpdateParamsCustomMetadataDataTypeText, InstanceUpdateParamsCustomMetadataDataTypeNumber, InstanceUpdateParamsCustomMetadataDataTypeBoolean, InstanceUpdateParamsCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -5130,13 +5127,13 @@ func (r InstanceUpdateParamsRetrievalOptions) MarshalJSON() (data []byte, err er
 
 type InstanceUpdateParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceUpdateParamsRetrievalOptionsBoostByDirection] `json:"direction"`
 }
 
@@ -5147,7 +5144,7 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostBy) MarshalJSON() (data []byte,
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceUpdateParamsRetrievalOptionsBoostByDirection string
 
 const (
@@ -5607,9 +5604,9 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRerankingModel) IsKnown() bo
 
 type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	// Metadata fields to boost search results by. Overrides the instance-level
-	// boost_by config. Direction defaults to 'asc' for numeric fields, 'exists' for
-	// text/boolean fields. Fields must match 'timestamp' or a defined custom_metadata
-	// field.
+	// boost_by config. Direction defaults to 'asc' for numeric/datetime fields,
+	// 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
+	// custom_metadata field.
 	BoostBy          param.Field[[]InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy]    `json:"boost_by"`
 	ContextExpansion param.Field[int64]                                                             `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                            `json:"filters"`
@@ -5630,13 +5627,13 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (da
 
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
 
@@ -5647,7 +5644,7 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy) MarshalJSO
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection string
 
 const (
@@ -5908,9 +5905,9 @@ func (r InstanceSearchParamsAISearchOptionsRerankingModel) IsKnown() bool {
 
 type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	// Metadata fields to boost search results by. Overrides the instance-level
-	// boost_by config. Direction defaults to 'asc' for numeric fields, 'exists' for
-	// text/boolean fields. Fields must match 'timestamp' or a defined custom_metadata
-	// field.
+	// boost_by config. Direction defaults to 'asc' for numeric/datetime fields,
+	// 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
+	// custom_metadata field.
 	BoostBy          param.Field[[]InstanceSearchParamsAISearchOptionsRetrievalBoostBy]    `json:"boost_by"`
 	ContextExpansion param.Field[int64]                                                    `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                   `json:"filters"`
@@ -5931,13 +5928,13 @@ func (r InstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte
 
 type InstanceSearchParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceSearchParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
 
@@ -5948,7 +5945,7 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalBoostBy) MarshalJSON() (data
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceSearchParamsAISearchOptionsRetrievalBoostByDirection string
 
 const (
