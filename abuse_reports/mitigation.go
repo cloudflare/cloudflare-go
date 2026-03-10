@@ -195,17 +195,18 @@ func (r MitigationListResponseMitigationsStatus) IsKnown() bool {
 type MitigationListResponseMitigationsType string
 
 const (
-	MitigationListResponseMitigationsTypeLegalBlock           MitigationListResponseMitigationsType = "legal_block"
-	MitigationListResponseMitigationsTypePhishingInterstitial MitigationListResponseMitigationsType = "phishing_interstitial"
-	MitigationListResponseMitigationsTypeNetworkBlock         MitigationListResponseMitigationsType = "network_block"
-	MitigationListResponseMitigationsTypeRateLimitCache       MitigationListResponseMitigationsType = "rate_limit_cache"
-	MitigationListResponseMitigationsTypeAccountSuspend       MitigationListResponseMitigationsType = "account_suspend"
-	MitigationListResponseMitigationsTypeRedirectVideoStream  MitigationListResponseMitigationsType = "redirect_video_stream"
+	MitigationListResponseMitigationsTypeLegalBlock             MitigationListResponseMitigationsType = "legal_block"
+	MitigationListResponseMitigationsTypeMisleadingInterstitial MitigationListResponseMitigationsType = "misleading_interstitial"
+	MitigationListResponseMitigationsTypePhishingInterstitial   MitigationListResponseMitigationsType = "phishing_interstitial"
+	MitigationListResponseMitigationsTypeNetworkBlock           MitigationListResponseMitigationsType = "network_block"
+	MitigationListResponseMitigationsTypeRateLimitCache         MitigationListResponseMitigationsType = "rate_limit_cache"
+	MitigationListResponseMitigationsTypeAccountSuspend         MitigationListResponseMitigationsType = "account_suspend"
+	MitigationListResponseMitigationsTypeRedirectVideoStream    MitigationListResponseMitigationsType = "redirect_video_stream"
 )
 
 func (r MitigationListResponseMitigationsType) IsKnown() bool {
 	switch r {
-	case MitigationListResponseMitigationsTypeLegalBlock, MitigationListResponseMitigationsTypePhishingInterstitial, MitigationListResponseMitigationsTypeNetworkBlock, MitigationListResponseMitigationsTypeRateLimitCache, MitigationListResponseMitigationsTypeAccountSuspend, MitigationListResponseMitigationsTypeRedirectVideoStream:
+	case MitigationListResponseMitigationsTypeLegalBlock, MitigationListResponseMitigationsTypeMisleadingInterstitial, MitigationListResponseMitigationsTypePhishingInterstitial, MitigationListResponseMitigationsTypeNetworkBlock, MitigationListResponseMitigationsTypeRateLimitCache, MitigationListResponseMitigationsTypeAccountSuspend, MitigationListResponseMitigationsTypeRedirectVideoStream:
 		return true
 	}
 	return false
@@ -286,17 +287,18 @@ func (r MitigationReviewResponseStatus) IsKnown() bool {
 type MitigationReviewResponseType string
 
 const (
-	MitigationReviewResponseTypeLegalBlock           MitigationReviewResponseType = "legal_block"
-	MitigationReviewResponseTypePhishingInterstitial MitigationReviewResponseType = "phishing_interstitial"
-	MitigationReviewResponseTypeNetworkBlock         MitigationReviewResponseType = "network_block"
-	MitigationReviewResponseTypeRateLimitCache       MitigationReviewResponseType = "rate_limit_cache"
-	MitigationReviewResponseTypeAccountSuspend       MitigationReviewResponseType = "account_suspend"
-	MitigationReviewResponseTypeRedirectVideoStream  MitigationReviewResponseType = "redirect_video_stream"
+	MitigationReviewResponseTypeLegalBlock             MitigationReviewResponseType = "legal_block"
+	MitigationReviewResponseTypeMisleadingInterstitial MitigationReviewResponseType = "misleading_interstitial"
+	MitigationReviewResponseTypePhishingInterstitial   MitigationReviewResponseType = "phishing_interstitial"
+	MitigationReviewResponseTypeNetworkBlock           MitigationReviewResponseType = "network_block"
+	MitigationReviewResponseTypeRateLimitCache         MitigationReviewResponseType = "rate_limit_cache"
+	MitigationReviewResponseTypeAccountSuspend         MitigationReviewResponseType = "account_suspend"
+	MitigationReviewResponseTypeRedirectVideoStream    MitigationReviewResponseType = "redirect_video_stream"
 )
 
 func (r MitigationReviewResponseType) IsKnown() bool {
 	switch r {
-	case MitigationReviewResponseTypeLegalBlock, MitigationReviewResponseTypePhishingInterstitial, MitigationReviewResponseTypeNetworkBlock, MitigationReviewResponseTypeRateLimitCache, MitigationReviewResponseTypeAccountSuspend, MitigationReviewResponseTypeRedirectVideoStream:
+	case MitigationReviewResponseTypeLegalBlock, MitigationReviewResponseTypeMisleadingInterstitial, MitigationReviewResponseTypePhishingInterstitial, MitigationReviewResponseTypeNetworkBlock, MitigationReviewResponseTypeRateLimitCache, MitigationReviewResponseTypeAccountSuspend, MitigationReviewResponseTypeRedirectVideoStream:
 		return true
 	}
 	return false
@@ -396,17 +398,18 @@ func (r MitigationListParamsStatus) IsKnown() bool {
 type MitigationListParamsType string
 
 const (
-	MitigationListParamsTypeLegalBlock           MitigationListParamsType = "legal_block"
-	MitigationListParamsTypePhishingInterstitial MitigationListParamsType = "phishing_interstitial"
-	MitigationListParamsTypeNetworkBlock         MitigationListParamsType = "network_block"
-	MitigationListParamsTypeRateLimitCache       MitigationListParamsType = "rate_limit_cache"
-	MitigationListParamsTypeAccountSuspend       MitigationListParamsType = "account_suspend"
-	MitigationListParamsTypeRedirectVideoStream  MitigationListParamsType = "redirect_video_stream"
+	MitigationListParamsTypeLegalBlock             MitigationListParamsType = "legal_block"
+	MitigationListParamsTypeMisleadingInterstitial MitigationListParamsType = "misleading_interstitial"
+	MitigationListParamsTypePhishingInterstitial   MitigationListParamsType = "phishing_interstitial"
+	MitigationListParamsTypeNetworkBlock           MitigationListParamsType = "network_block"
+	MitigationListParamsTypeRateLimitCache         MitigationListParamsType = "rate_limit_cache"
+	MitigationListParamsTypeAccountSuspend         MitigationListParamsType = "account_suspend"
+	MitigationListParamsTypeRedirectVideoStream    MitigationListParamsType = "redirect_video_stream"
 )
 
 func (r MitigationListParamsType) IsKnown() bool {
 	switch r {
-	case MitigationListParamsTypeLegalBlock, MitigationListParamsTypePhishingInterstitial, MitigationListParamsTypeNetworkBlock, MitigationListParamsTypeRateLimitCache, MitigationListParamsTypeAccountSuspend, MitigationListParamsTypeRedirectVideoStream:
+	case MitigationListParamsTypeLegalBlock, MitigationListParamsTypeMisleadingInterstitial, MitigationListParamsTypePhishingInterstitial, MitigationListParamsTypeNetworkBlock, MitigationListParamsTypeRateLimitCache, MitigationListParamsTypeAccountSuspend, MitigationListParamsTypeRedirectVideoStream:
 		return true
 	}
 	return false
