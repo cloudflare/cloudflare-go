@@ -29,8 +29,9 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomHostnames.New(context.TODO(), custom_hostnames.CustomHostnameNewParams{
-		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Hostname: cloudflare.F("app.example.com"),
+		ZoneID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Hostname:           cloudflare.F("app.example.com"),
+		CustomOriginServer: cloudflare.F("origin.example.com"),
 		CustomMetadata: cloudflare.F(map[string]string{
 			"foo": "string",
 		}),
