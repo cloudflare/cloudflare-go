@@ -182,6 +182,8 @@
 
 # [OriginPostQuantumEncryption](origin_post_quantum_encryption/api.md)
 
+# [GoogleTagGateway](google_tag_gateway/api.md)
+
 # [Zaraz](zaraz/api.md)
 
 # [Speed](speed/api.md)
