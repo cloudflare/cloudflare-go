@@ -144,7 +144,13 @@ func (r OrganizationAccountGetResponseType) IsKnown() bool {
 
 type OrganizationAccountGetParams struct {
 	AccountPubname param.Field[OrganizationAccountGetParamsAccountPubname] `query:"account_pubname"`
-	Name           param.Field[OrganizationAccountGetParamsName]           `query:"name"`
+	// Sort direction for the order_by field. Valid values: `asc`, `desc`. Defaults to
+	// `asc` when order_by is specified.
+	Direction param.Field[OrganizationAccountGetParamsDirection] `query:"direction"`
+	Name      param.Field[OrganizationAccountGetParamsName]      `query:"name"`
+	// Field to order results by. Currently supported values: `account_name`. When not
+	// specified, results are ordered by internal account ID.
+	OrderBy param.Field[OrganizationAccountGetParamsOrderBy] `query:"order_by"`
 	// The amount of items to return. Defaults to 10.
 	PageSize param.Field[int64] `query:"page_size"`
 	// An opaque token returned from the last list response that when provided will
@@ -185,6 +191,23 @@ func (r OrganizationAccountGetParamsAccountPubname) URLQuery() (v url.Values) {
 	})
 }
 
+// Sort direction for the order_by field. Valid values: `asc`, `desc`. Defaults to
+// `asc` when order_by is specified.
+type OrganizationAccountGetParamsDirection string
+
+const (
+	OrganizationAccountGetParamsDirectionAsc  OrganizationAccountGetParamsDirection = "asc"
+	OrganizationAccountGetParamsDirectionDesc OrganizationAccountGetParamsDirection = "desc"
+)
+
+func (r OrganizationAccountGetParamsDirection) IsKnown() bool {
+	switch r {
+	case OrganizationAccountGetParamsDirectionAsc, OrganizationAccountGetParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 type OrganizationAccountGetParamsName struct {
 	// (case-insensitive) Filter the list of accounts to where the name contains a
 	// particular string.
@@ -204,6 +227,22 @@ func (r OrganizationAccountGetParamsName) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Field to order results by. Currently supported values: `account_name`. When not
+// specified, results are ordered by internal account ID.
+type OrganizationAccountGetParamsOrderBy string
+
+const (
+	OrganizationAccountGetParamsOrderByAccountName OrganizationAccountGetParamsOrderBy = "account_name"
+)
+
+func (r OrganizationAccountGetParamsOrderBy) IsKnown() bool {
+	switch r {
+	case OrganizationAccountGetParamsOrderByAccountName:
+		return true
+	}
+	return false
 }
 
 type OrganizationAccountGetResponseEnvelope struct {

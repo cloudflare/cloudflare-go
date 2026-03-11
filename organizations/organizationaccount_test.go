@@ -36,11 +36,13 @@ func TestOrganizationAccountGetWithOptionalParams(t *testing.T) {
 				EndsWith:   cloudflare.F("endsWith"),
 				StartsWith: cloudflare.F("startsWith"),
 			}),
+			Direction: cloudflare.F(organizations.OrganizationAccountGetParamsDirectionAsc),
 			Name: cloudflare.F(organizations.OrganizationAccountGetParamsName{
 				Contains:   cloudflare.F("contains"),
 				EndsWith:   cloudflare.F("endsWith"),
 				StartsWith: cloudflare.F("startsWith"),
 			}),
+			OrderBy:   cloudflare.F(organizations.OrganizationAccountGetParamsOrderByAccountName),
 			PageSize:  cloudflare.F(int64(0)),
 			PageToken: cloudflare.F("page_token"),
 		},
