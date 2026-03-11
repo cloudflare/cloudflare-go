@@ -35,7 +35,9 @@ func NewAccountProfileService(opts ...option.RequestOption) (r *AccountProfileSe
 	return
 }
 
-// Modify account profile
+// Updates the profile information for a Cloudflare account. Allows modification of
+// account-level settings and organizational details. Requires Account Settings
+// Write permission.
 func (r *AccountProfileService) Update(ctx context.Context, params AccountProfileUpdateParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -48,7 +50,9 @@ func (r *AccountProfileService) Update(ctx context.Context, params AccountProfil
 	return
 }
 
-// Get account profile
+// Retrieves the profile information for a specific Cloudflare account, including
+// organization details, settings, and metadata. This endpoint is commonly used to
+// verify account access and retrieve account-level configuration.
 func (r *AccountProfileService) Get(ctx context.Context, query AccountProfileGetParams, opts ...option.RequestOption) (res *AccountProfile, err error) {
 	var env AccountProfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
