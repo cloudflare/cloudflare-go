@@ -695,6 +695,7 @@ TEST_PATHS=(
 	browser_rendering/json_test.go
 	browser_rendering/link_test.go
 	browser_rendering/markdown_test.go
+	browser_rendering/crawl_test.go
 	custom_pages/custompage_test.go
 	secrets_store/store_test.go
 	secrets_store/storesecret_test.go
