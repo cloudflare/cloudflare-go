@@ -80,14 +80,20 @@ func TestCustomHostnameListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomHostnames.List(context.TODO(), custom_hostnames.CustomHostnameListParams{
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ID:        cloudflare.F("0d89c70d-ad9f-4843-b99f-6cc0252067e9"),
-		Direction: cloudflare.F(custom_hostnames.CustomHostnameListParamsDirectionDesc),
-		Hostname:  cloudflare.F("app.example.com"),
-		Order:     cloudflare.F(custom_hostnames.CustomHostnameListParamsOrderSSL),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(5.000000),
-		SSL:       cloudflare.F(custom_hostnames.CustomHostnameListParamsSSL0),
+		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ID:                   cloudflare.F("0d89c70d-ad9f-4843-b99f-6cc0252067e9"),
+		CertificateAuthority: cloudflare.F(custom_hostnames.CustomHostnameListParamsCertificateAuthorityGoogle),
+		Direction:            cloudflare.F(custom_hostnames.CustomHostnameListParamsDirectionDesc),
+		Hostname: cloudflare.F(custom_hostnames.CustomHostnameListParamsHostname{
+			Contain: cloudflare.F("example.com"),
+		}),
+		HostnameStatus: cloudflare.F(custom_hostnames.CustomHostnameListParamsHostnameStatusProvisioned),
+		Order:          cloudflare.F(custom_hostnames.CustomHostnameListParamsOrderSSL),
+		Page:           cloudflare.F(1.000000),
+		PerPage:        cloudflare.F(5.000000),
+		SSL:            cloudflare.F(custom_hostnames.CustomHostnameListParamsSSL0),
+		SSLStatus:      cloudflare.F(custom_hostnames.CustomHostnameListParamsSSLStatusActive),
+		Wildcard:       cloudflare.F(false),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
