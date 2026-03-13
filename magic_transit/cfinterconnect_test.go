@@ -49,6 +49,7 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 			InterfaceAddress:  cloudflare.F("192.0.2.0/31"),
 			InterfaceAddress6: cloudflare.F("2606:54c1:7:0:a9fe:12d2:1:200/127"),
 			Mtu:               cloudflare.F(int64(0)),
+			Name:              cloudflare.F("pni_ord"),
 			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
