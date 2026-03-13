@@ -315,7 +315,6 @@ type CrawlNewParamsBody struct {
 	// only crawl URLs scraped from pages, 'all' - crawl both sitemap and scraped links
 	// (default).
 	Source          param.Field[CrawlNewParamsBodySource] `json:"source"`
-	UserAgent       param.Field[string]                   `json:"userAgent"`
 	Viewport        param.Field[interface{}]              `json:"viewport"`
 	WaitForSelector param.Field[interface{}]              `json:"waitForSelector"`
 	// Waits for a specified timeout before continuing.
@@ -394,8 +393,7 @@ type CrawlNewParamsBodyObject struct {
 	// Source of links to crawl. 'sitemaps' - only crawl URLs from sitemaps, 'links' -
 	// only crawl URLs scraped from pages, 'all' - crawl both sitemap and scraped links
 	// (default).
-	Source    param.Field[CrawlNewParamsBodyObjectSource] `json:"source"`
-	UserAgent param.Field[string]                         `json:"userAgent"`
+	Source param.Field[CrawlNewParamsBodyObjectSource] `json:"source"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
 	Viewport param.Field[CrawlNewParamsBodyObjectViewport] `json:"viewport"`
 	// Wait for the selector to appear in page. Check
