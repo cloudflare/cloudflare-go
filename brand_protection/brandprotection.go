@@ -28,6 +28,7 @@ type BrandProtectionService struct {
 	Matches     *MatchService
 	Logos       *LogoService
 	LogoMatches *LogoMatchService
+	V2          *V2Service
 }
 
 // NewBrandProtectionService generates a new service that applies the given options
@@ -40,6 +41,7 @@ func NewBrandProtectionService(opts ...option.RequestOption) (r *BrandProtection
 	r.Matches = NewMatchService(opts...)
 	r.Logos = NewLogoService(opts...)
 	r.LogoMatches = NewLogoMatchService(opts...)
+	r.V2 = NewV2Service(opts...)
 	return
 }
 
