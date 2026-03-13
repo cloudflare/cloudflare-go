@@ -105,7 +105,6 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 			}),
 			SetJavaScriptEnabled: cloudflare.F(true),
 			Source:               cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectSourceSitemaps),
-			UserAgent:            cloudflare.F("userAgent"),
 			Viewport: cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectViewport{
 				Height:            cloudflare.F(0.000000),
 				Width:             cloudflare.F(0.000000),
