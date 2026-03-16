@@ -379,6 +379,8 @@ type ARecord struct {
 	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
+	// Enables private network routing to the origin.
+	PrivateRouting bool `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
@@ -391,16 +393,17 @@ type ARecord struct {
 
 // aRecordJSON contains the JSON metadata for the struct [ARecord]
 type aRecordJSON struct {
-	Name        apijson.Field
-	TTL         apijson.Field
-	Type        apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	Proxied     apijson.Field
-	Settings    apijson.Field
-	Tags        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name           apijson.Field
+	TTL            apijson.Field
+	Type           apijson.Field
+	Comment        apijson.Field
+	Content        apijson.Field
+	PrivateRouting apijson.Field
+	Proxied        apijson.Field
+	Settings       apijson.Field
+	Tags           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *ARecord) UnmarshalJSON(data []byte) (err error) {
@@ -471,6 +474,8 @@ type ARecordParam struct {
 	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string] `json:"content" format:"ipv4"`
+	// Enables private network routing to the origin.
+	PrivateRouting param.Field[bool] `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
@@ -526,6 +531,8 @@ type AAAARecord struct {
 	Comment string `json:"comment"`
 	// A valid IPv6 address.
 	Content string `json:"content" format:"ipv6"`
+	// Enables private network routing to the origin.
+	PrivateRouting bool `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
@@ -538,16 +545,17 @@ type AAAARecord struct {
 
 // aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
 type aaaaRecordJSON struct {
-	Name        apijson.Field
-	TTL         apijson.Field
-	Type        apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	Proxied     apijson.Field
-	Settings    apijson.Field
-	Tags        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name           apijson.Field
+	TTL            apijson.Field
+	Type           apijson.Field
+	Comment        apijson.Field
+	Content        apijson.Field
+	PrivateRouting apijson.Field
+	Proxied        apijson.Field
+	Settings       apijson.Field
+	Tags           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *AAAARecord) UnmarshalJSON(data []byte) (err error) {
@@ -619,6 +627,8 @@ type AAAARecordParam struct {
 	Comment param.Field[string] `json:"comment"`
 	// A valid IPv6 address.
 	Content param.Field[string] `json:"content" format:"ipv6"`
+	// Enables private network routing to the origin.
+	PrivateRouting param.Field[bool] `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
@@ -3393,6 +3403,8 @@ type RecordResponse struct {
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
+	// Enables private network routing to the origin.
+	PrivateRouting bool `json:"private_routing"`
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Whether the record is receiving the performance and security benefits of
@@ -3433,6 +3445,7 @@ type recordResponseJSON struct {
 	ModifiedOn        apijson.Field
 	Name              apijson.Field
 	Priority          apijson.Field
+	PrivateRouting    apijson.Field
 	Proxiable         apijson.Field
 	Proxied           apijson.Field
 	Settings          apijson.Field
@@ -6252,6 +6265,8 @@ type RecordNewParamsBody struct {
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
+	// Enables private network routing to the origin.
+	PrivateRouting param.Field[bool] `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied  param.Field[bool]        `json:"proxied"`
@@ -6541,6 +6556,8 @@ type RecordUpdateParamsBody struct {
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
+	// Enables private network routing to the origin.
+	PrivateRouting param.Field[bool] `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied  param.Field[bool]        `json:"proxied"`
@@ -7102,6 +7119,8 @@ type RecordBatchParamsPost struct {
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
+	// Enables private network routing to the origin.
+	PrivateRouting param.Field[bool] `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied  param.Field[bool]        `json:"proxied"`
@@ -7391,6 +7410,8 @@ type RecordEditParamsBody struct {
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
+	// Enables private network routing to the origin.
+	PrivateRouting param.Field[bool] `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied  param.Field[bool]        `json:"proxied"`
@@ -8153,6 +8174,8 @@ type RecordScanReviewParamsAccept struct {
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
+	// Enables private network routing to the origin.
+	PrivateRouting param.Field[bool] `json:"private_routing"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied  param.Field[bool]        `json:"proxied"`
