@@ -28,11 +28,12 @@ func TestDomainUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.Update(context.TODO(), workers.DomainUpdateParams{
-		AccountID:   cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
-		Hostname:    cloudflare.F("foo.example.com"),
-		Service:     cloudflare.F("foo"),
-		ZoneID:      cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Hostname:    cloudflare.F("app.example.com"),
+		Service:     cloudflare.F("my-worker"),
 		Environment: cloudflare.F("production"),
+		ZoneID:      cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
+		ZoneName:    cloudflare.F("example.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -57,10 +58,10 @@ func TestDomainListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.List(context.TODO(), workers.DomainListParams{
-		AccountID:   cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Environment: cloudflare.F("production"),
-		Hostname:    cloudflare.F("foo.example.com"),
-		Service:     cloudflare.F("foo"),
+		Hostname:    cloudflare.F("app.example.com"),
+		Service:     cloudflare.F("my-worker"),
 		ZoneID:      cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
 		ZoneName:    cloudflare.F("example.com"),
 	})
@@ -86,11 +87,11 @@ func TestDomainDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Workers.Domains.Delete(
+	_, err := client.Workers.Domains.Delete(
 		context.TODO(),
 		"dbe10b4bc17c295377eabd600e1787fd",
 		workers.DomainDeleteParams{
-			AccountID: cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -119,7 +120,7 @@ func TestDomainGet(t *testing.T) {
 		context.TODO(),
 		"dbe10b4bc17c295377eabd600e1787fd",
 		workers.DomainGetParams{
-			AccountID: cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
