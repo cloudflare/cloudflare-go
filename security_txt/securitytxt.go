@@ -35,7 +35,8 @@ func NewSecurityTXTService(opts ...option.RequestOption) (r *SecurityTXTService)
 	return
 }
 
-// Updates security.txt
+// Updates the security.txt file configuration for a zone, which provides security
+// researchers with vulnerability reporting information.
 func (r *SecurityTXTService) Update(ctx context.Context, params SecurityTXTUpdateParams, opts ...option.RequestOption) (res *SecurityTXTUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -47,7 +48,8 @@ func (r *SecurityTXTService) Update(ctx context.Context, params SecurityTXTUpdat
 	return
 }
 
-// Deletes security.txt
+// Removes the security.txt file configuration for a zone. The
+// /.well-known/security.txt endpoint will no longer be served.
 func (r *SecurityTXTService) Delete(ctx context.Context, body SecurityTXTDeleteParams, opts ...option.RequestOption) (res *SecurityTXTDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -59,7 +61,8 @@ func (r *SecurityTXTService) Delete(ctx context.Context, body SecurityTXTDeleteP
 	return
 }
 
-// Retrieves security.txt
+// Retrieves the current security.txt file configuration for a zone, used for
+// security vulnerability reporting.
 func (r *SecurityTXTService) Get(ctx context.Context, query SecurityTXTGetParams, opts ...option.RequestOption) (res *SecurityTXTGetResponse, err error) {
 	var env SecurityTXTGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
