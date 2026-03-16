@@ -45,7 +45,8 @@ func NewInsightService(opts ...option.RequestOption) (r *InsightService) {
 	return
 }
 
-// Retrieves Security Center Insights
+// Lists all Security Center insights for the account or zone, showing security
+// findings and recommendations.
 func (r *InsightService) List(ctx context.Context, params InsightListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[InsightListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -81,12 +82,14 @@ func (r *InsightService) List(ctx context.Context, params InsightListParams, opt
 	return res, nil
 }
 
-// Retrieves Security Center Insights
+// Lists all Security Center insights for the account or zone, showing security
+// findings and recommendations.
 func (r *InsightService) ListAutoPaging(ctx context.Context, params InsightListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[InsightListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-// Archives Security Center Insight
+// Archives a Security Center insight for an account or zone, removing it from the
+// active insights list while preserving historical data.
 func (r *InsightService) Dismiss(ctx context.Context, issueID string, params InsightDismissParams, opts ...option.RequestOption) (res *InsightDismissResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string

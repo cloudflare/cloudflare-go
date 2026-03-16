@@ -38,7 +38,8 @@ func NewAttackSurfaceReportIssueService(opts ...option.RequestOption) (r *Attack
 	return
 }
 
-// Retrieves Security Center Issues
+// Lists all Security Center issues for the account, showing active security
+// problems requiring attention.
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[AttackSurfaceReportIssueListResponse], err error) {
@@ -62,14 +63,15 @@ func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params Attac
 	return res, nil
 }
 
-// Retrieves Security Center Issues
+// Lists all Security Center issues for the account, showing active security
+// problems requiring attention.
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[AttackSurfaceReportIssueListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-// Retrieves Security Center Issue Counts by Class
+// Retrieves Security Center issue counts aggregated by classification class.
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params AttackSurfaceReportIssueClassParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueClassResponse, err error) {
@@ -88,7 +90,8 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 	return
 }
 
-// Archives Security Center Insight
+// Deprecated endpoint for archiving Security Center insights. Use the newer
+// archive-security-center-insight endpoint instead.
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponse, err error) {
@@ -106,7 +109,7 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 	return
 }
 
-// Retrieves Security Center Issue Counts by Severity
+// Retrieves Security Center issue counts aggregated by severity level.
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params AttackSurfaceReportIssueSeverityParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueSeverityResponse, err error) {
@@ -125,7 +128,7 @@ func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params A
 	return
 }
 
-// Retrieves Security Center Issue Counts by Type
+// Retrieves Security Center issue counts aggregated by issue type.
 //
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params AttackSurfaceReportIssueTypeParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueTypeResponse, err error) {
