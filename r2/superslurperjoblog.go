@@ -37,7 +37,8 @@ func NewSuperSlurperJobLogService(opts ...option.RequestOption) (r *SuperSlurper
 	return
 }
 
-// Get job logs
+// Gets log entries for an R2 Super Slurper migration job, showing migration status
+// changes, errors, etc.
 func (r *SuperSlurperJobLogService) List(ctx context.Context, jobID string, params SuperSlurperJobLogListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SuperSlurperJobLogListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -63,7 +64,8 @@ func (r *SuperSlurperJobLogService) List(ctx context.Context, jobID string, para
 	return res, nil
 }
 
-// Get job logs
+// Gets log entries for an R2 Super Slurper migration job, showing migration status
+// changes, errors, etc.
 func (r *SuperSlurperJobLogService) ListAutoPaging(ctx context.Context, jobID string, params SuperSlurperJobLogListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SuperSlurperJobLogListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, jobID, params, opts...))
 }

@@ -42,7 +42,8 @@ func NewSuperSlurperJobService(opts ...option.RequestOption) (r *SuperSlurperJob
 	return
 }
 
-// Create a job
+// Creates a new R2 Super Slurper migration job to transfer objects from a source
+// bucket (e.g. S3, GCS, R2) to R2.
 func (r *SuperSlurperJobService) New(ctx context.Context, params SuperSlurperJobNewParams, opts ...option.RequestOption) (res *SuperSlurperJobNewResponse, err error) {
 	var env SuperSlurperJobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +60,7 @@ func (r *SuperSlurperJobService) New(ctx context.Context, params SuperSlurperJob
 	return
 }
 
-// List jobs
+// Lists all R2 Super Slurper migration jobs for the account with their status.
 func (r *SuperSlurperJobService) List(ctx context.Context, params SuperSlurperJobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SuperSlurperJobListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -81,12 +82,13 @@ func (r *SuperSlurperJobService) List(ctx context.Context, params SuperSlurperJo
 	return res, nil
 }
 
-// List jobs
+// Lists all R2 Super Slurper migration jobs for the account with their status.
 func (r *SuperSlurperJobService) ListAutoPaging(ctx context.Context, params SuperSlurperJobListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SuperSlurperJobListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Abort a job
+// Cancels a specific R2 Super Slurper migration job. Any objects in the middle of
+// a transfer will finish, but no new objects will start transferring.
 func (r *SuperSlurperJobService) Abort(ctx context.Context, jobID string, body SuperSlurperJobAbortParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobAbortResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -107,7 +109,9 @@ func (r *SuperSlurperJobService) Abort(ctx context.Context, jobID string, body S
 	return
 }
 
-// Abort all jobs
+// Cancels all running R2 Super Slurper migration jobs for the account. Any objects
+// in the middle of a transfer will finish, but no new objects will start
+// transferring.
 func (r *SuperSlurperJobService) AbortAll(ctx context.Context, body SuperSlurperJobAbortAllParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobAbortAllResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -124,7 +128,8 @@ func (r *SuperSlurperJobService) AbortAll(ctx context.Context, body SuperSlurper
 	return
 }
 
-// Get job details
+// Retrieves detailed status and configuration for a specific R2 Super Slurper
+// migration job.
 func (r *SuperSlurperJobService) Get(ctx context.Context, jobID string, query SuperSlurperJobGetParams, opts ...option.RequestOption) (res *SuperSlurperJobGetResponse, err error) {
 	var env SuperSlurperJobGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -145,7 +150,8 @@ func (r *SuperSlurperJobService) Get(ctx context.Context, jobID string, query Su
 	return
 }
 
-// Pause a job
+// Pauses a running R2 Super Slurper migration job. The job can be resumed later to
+// continue transferring.
 func (r *SuperSlurperJobService) Pause(ctx context.Context, jobID string, body SuperSlurperJobPauseParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobPauseResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -166,7 +172,7 @@ func (r *SuperSlurperJobService) Pause(ctx context.Context, jobID string, body S
 	return
 }
 
-// Get job progress
+// Retrieves current progress metrics for an R2 Super Slurper migration job
 func (r *SuperSlurperJobService) Progress(ctx context.Context, jobID string, query SuperSlurperJobProgressParams, opts ...option.RequestOption) (res *SuperSlurperJobProgressResponse, err error) {
 	var env SuperSlurperJobProgressResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -187,7 +193,8 @@ func (r *SuperSlurperJobService) Progress(ctx context.Context, jobID string, que
 	return
 }
 
-// Resume a job
+// Resumes a paused R2 Super Slurper migration job, continuing the transfer from
+// where it stopped.
 func (r *SuperSlurperJobService) Resume(ctx context.Context, jobID string, body SuperSlurperJobResumeParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobResumeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
