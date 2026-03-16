@@ -1976,21 +1976,24 @@ type PipelineGetV1Response struct {
 	Status string `json:"status,required"`
 	// List of streams and sinks used by this pipeline.
 	Tables []PipelineGetV1ResponseTable `json:"tables,required"`
-	JSON   pipelineGetV1ResponseJSON    `json:"-"`
+	// Indicates the reason for the failure of the Pipeline.
+	FailureReason string                    `json:"failure_reason"`
+	JSON          pipelineGetV1ResponseJSON `json:"-"`
 }
 
 // pipelineGetV1ResponseJSON contains the JSON metadata for the struct
 // [PipelineGetV1Response]
 type pipelineGetV1ResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	ModifiedAt  apijson.Field
-	Name        apijson.Field
-	Sql         apijson.Field
-	Status      apijson.Field
-	Tables      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CreatedAt     apijson.Field
+	ModifiedAt    apijson.Field
+	Name          apijson.Field
+	Sql           apijson.Field
+	Status        apijson.Field
+	Tables        apijson.Field
+	FailureReason apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *PipelineGetV1Response) UnmarshalJSON(data []byte) (err error) {
