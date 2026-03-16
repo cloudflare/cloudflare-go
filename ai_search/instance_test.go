@@ -328,6 +328,10 @@ func TestInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 				Role:    cloudflare.F(ai_search.InstanceChatCompletionsParamsMessagesRoleSystem),
 			}}),
 			AISearchOptions: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptions{
+				Cache: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsCache{
+					CacheThreshold: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
+					Enabled:        cloudflare.F(true),
+				}),
 				QueryRewrite: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),
 					Model:         cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
@@ -420,6 +424,10 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 				Role:    cloudflare.F(ai_search.InstanceSearchParamsMessagesRoleSystem),
 			}}),
 			AISearchOptions: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptions{
+				Cache: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsCache{
+					CacheThreshold: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
+					Enabled:        cloudflare.F(true),
+				}),
 				QueryRewrite: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),
 					Model:         cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
