@@ -6515,6 +6515,9 @@ type SetConfigRuleActionParameters struct {
 	OpportunisticEncryption bool `json:"opportunistic_encryption"`
 	// The Polish level to configure.
 	Polish SetConfigRuleActionParametersPolish `json:"polish"`
+	// Whether to redirect verified AI training crawlers to canonical URLs found in the
+	// HTML response.
+	RedirectsForAITraining bool `json:"redirects_for_ai_training"`
 	// The request body buffering mode.
 	RequestBodyBuffering SetConfigRuleActionParametersRequestBodyBuffering `json:"request_body_buffering"`
 	// The response body buffering mode.
@@ -6549,6 +6552,7 @@ type setConfigRuleActionParametersJSON struct {
 	Mirage                  apijson.Field
 	OpportunisticEncryption apijson.Field
 	Polish                  apijson.Field
+	RedirectsForAITraining  apijson.Field
 	RequestBodyBuffering    apijson.Field
 	ResponseBodyBuffering   apijson.Field
 	RocketLoader            apijson.Field
@@ -6891,6 +6895,9 @@ type SetConfigRuleActionParametersParam struct {
 	OpportunisticEncryption param.Field[bool] `json:"opportunistic_encryption"`
 	// The Polish level to configure.
 	Polish param.Field[SetConfigRuleActionParametersPolish] `json:"polish"`
+	// Whether to redirect verified AI training crawlers to canonical URLs found in the
+	// HTML response.
+	RedirectsForAITraining param.Field[bool] `json:"redirects_for_ai_training"`
 	// The request body buffering mode.
 	RequestBodyBuffering param.Field[SetConfigRuleActionParametersRequestBodyBuffering] `json:"request_body_buffering"`
 	// The response body buffering mode.

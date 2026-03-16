@@ -559,6 +559,7 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindImages],
 // [VersionBindingsWorkersBindingKindJson],
 // [VersionBindingsWorkersBindingKindKVNamespace],
+// [VersionBindingsWorkersBindingKindMedia],
 // [VersionBindingsWorkersBindingKindMTLSCertificate],
 // [VersionBindingsWorkersBindingKindPlainText],
 // [VersionBindingsWorkersBindingKindPipelines],
@@ -595,6 +596,7 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindImages],
 // [VersionBindingsWorkersBindingKindJson],
 // [VersionBindingsWorkersBindingKindKVNamespace],
+// [VersionBindingsWorkersBindingKindMedia],
 // [VersionBindingsWorkersBindingKindMTLSCertificate],
 // [VersionBindingsWorkersBindingKindPlainText],
 // [VersionBindingsWorkersBindingKindPipelines],
@@ -684,6 +686,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindKVNamespace{}),
 			DiscriminatorValue: "kv_namespace",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindMedia{}),
+			DiscriminatorValue: "media",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1449,6 +1456,48 @@ const (
 func (r VersionBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindMedia struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindMediaType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindMediaJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindMediaJSON contains the JSON metadata for the
+// struct [VersionBindingsWorkersBindingKindMedia]
+type versionBindingsWorkersBindingKindMediaJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindMedia) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindMediaJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindMedia) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindMediaType string
+
+const (
+	VersionBindingsWorkersBindingKindMediaTypeMedia VersionBindingsWorkersBindingKindMediaType = "media"
+)
+
+func (r VersionBindingsWorkersBindingKindMediaType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindMediaTypeMedia:
 		return true
 	}
 	return false
@@ -2361,6 +2410,7 @@ const (
 	VersionBindingsTypeImages                 VersionBindingsType = "images"
 	VersionBindingsTypeJson                   VersionBindingsType = "json"
 	VersionBindingsTypeKVNamespace            VersionBindingsType = "kv_namespace"
+	VersionBindingsTypeMedia                  VersionBindingsType = "media"
 	VersionBindingsTypeMTLSCertificate        VersionBindingsType = "mtls_certificate"
 	VersionBindingsTypePlainText              VersionBindingsType = "plain_text"
 	VersionBindingsTypePipelines              VersionBindingsType = "pipelines"
@@ -2382,7 +2432,7 @@ const (
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService:
+	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -3070,6 +3120,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindImagesParam],
 // [workers.VersionBindingsWorkersBindingKindJsonParam],
 // [workers.VersionBindingsWorkersBindingKindKVNamespaceParam],
+// [workers.VersionBindingsWorkersBindingKindMediaParam],
 // [workers.VersionBindingsWorkersBindingKindMTLSCertificateParam],
 // [workers.VersionBindingsWorkersBindingKindPlainTextParam],
 // [workers.VersionBindingsWorkersBindingKindPipelinesParam],
@@ -3301,6 +3352,19 @@ func (r VersionBindingsWorkersBindingKindKVNamespaceParam) MarshalJSON() (data [
 }
 
 func (r VersionBindingsWorkersBindingKindKVNamespaceParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindMediaParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindMediaType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindMediaParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindMediaParam) implementsVersionBindingsUnionParam() {}
 
 type VersionBindingsWorkersBindingKindMTLSCertificateParam struct {
 	// Identifier of the certificate to bind to.
