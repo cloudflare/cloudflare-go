@@ -2245,8 +2245,6 @@ type CustomHostnameNewParamsSSL struct {
 	CustomCERTBundle param.Field[[]CustomHostnameNewParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID param.Field[string] `json:"custom_csr_id"`
 	// The key for a custom uploaded certificate.
 	CustomKey param.Field[string] `json:"custom_key"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -2506,13 +2504,11 @@ type CustomHostnameListParams struct {
 	// initial custom_hostname creation. This parameter cannot be used with the
 	// 'hostname' parameter.
 	ID param.Field[string] `query:"id"`
-	// Filter by the certificate authority that issued the SSL certificate.
-	CertificateAuthority param.Field[CustomHostnameListParamsCertificateAuthority] `query:"certificate_authority"`
 	// Direction to order hostnames.
 	Direction param.Field[CustomHostnameListParamsDirection] `query:"direction"`
-	Hostname  param.Field[CustomHostnameListParamsHostname]  `query:"hostname"`
-	// Filter by the hostname's activation status.
-	HostnameStatus param.Field[CustomHostnameListParamsHostnameStatus] `query:"hostname_status"`
+	// Fully qualified domain name to match against. This parameter cannot be used with
+	// the 'id' parameter.
+	Hostname param.Field[string] `query:"hostname"`
 	// Field to order hostnames by.
 	Order param.Field[CustomHostnameListParamsOrder] `query:"order"`
 	// Page number of paginated results.
@@ -2521,10 +2517,6 @@ type CustomHostnameListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 	// Whether to filter hostnames based on if they have SSL enabled.
 	SSL param.Field[CustomHostnameListParamsSSL] `query:"ssl"`
-	// Filter by SSL certificate status.
-	SSLStatus param.Field[CustomHostnameListParamsSSLStatus] `query:"ssl_status"`
-	// Filter by whether the custom hostname is a wildcard hostname.
-	Wildcard param.Field[bool] `query:"wildcard"`
 }
 
 // URLQuery serializes [CustomHostnameListParams]'s query parameters as
@@ -2534,23 +2526,6 @@ func (r CustomHostnameListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Filter by the certificate authority that issued the SSL certificate.
-type CustomHostnameListParamsCertificateAuthority string
-
-const (
-	CustomHostnameListParamsCertificateAuthorityGoogle      CustomHostnameListParamsCertificateAuthority = "google"
-	CustomHostnameListParamsCertificateAuthorityLetsEncrypt CustomHostnameListParamsCertificateAuthority = "lets_encrypt"
-	CustomHostnameListParamsCertificateAuthoritySSLCom      CustomHostnameListParamsCertificateAuthority = "ssl_com"
-)
-
-func (r CustomHostnameListParamsCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameListParamsCertificateAuthorityGoogle, CustomHostnameListParamsCertificateAuthorityLetsEncrypt, CustomHostnameListParamsCertificateAuthoritySSLCom:
-		return true
-	}
-	return false
 }
 
 // Direction to order hostnames.
@@ -2564,51 +2539,6 @@ const (
 func (r CustomHostnameListParamsDirection) IsKnown() bool {
 	switch r {
 	case CustomHostnameListParamsDirectionAsc, CustomHostnameListParamsDirectionDesc:
-		return true
-	}
-	return false
-}
-
-type CustomHostnameListParamsHostname struct {
-	// Filters hostnames by a substring match on the hostname value. This parameter
-	// cannot be used with the 'id' parameter.
-	Contain param.Field[string] `query:"contain"`
-}
-
-// URLQuery serializes [CustomHostnameListParamsHostname]'s query parameters as
-// `url.Values`.
-func (r CustomHostnameListParamsHostname) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-// Filter by the hostname's activation status.
-type CustomHostnameListParamsHostnameStatus string
-
-const (
-	CustomHostnameListParamsHostnameStatusActive             CustomHostnameListParamsHostnameStatus = "active"
-	CustomHostnameListParamsHostnameStatusPending            CustomHostnameListParamsHostnameStatus = "pending"
-	CustomHostnameListParamsHostnameStatusActiveRedeploying  CustomHostnameListParamsHostnameStatus = "active_redeploying"
-	CustomHostnameListParamsHostnameStatusMoved              CustomHostnameListParamsHostnameStatus = "moved"
-	CustomHostnameListParamsHostnameStatusPendingDeletion    CustomHostnameListParamsHostnameStatus = "pending_deletion"
-	CustomHostnameListParamsHostnameStatusDeleted            CustomHostnameListParamsHostnameStatus = "deleted"
-	CustomHostnameListParamsHostnameStatusPendingBlocked     CustomHostnameListParamsHostnameStatus = "pending_blocked"
-	CustomHostnameListParamsHostnameStatusPendingMigration   CustomHostnameListParamsHostnameStatus = "pending_migration"
-	CustomHostnameListParamsHostnameStatusPendingProvisioned CustomHostnameListParamsHostnameStatus = "pending_provisioned"
-	CustomHostnameListParamsHostnameStatusTestPending        CustomHostnameListParamsHostnameStatus = "test_pending"
-	CustomHostnameListParamsHostnameStatusTestActive         CustomHostnameListParamsHostnameStatus = "test_active"
-	CustomHostnameListParamsHostnameStatusTestActiveApex     CustomHostnameListParamsHostnameStatus = "test_active_apex"
-	CustomHostnameListParamsHostnameStatusTestBlocked        CustomHostnameListParamsHostnameStatus = "test_blocked"
-	CustomHostnameListParamsHostnameStatusTestFailed         CustomHostnameListParamsHostnameStatus = "test_failed"
-	CustomHostnameListParamsHostnameStatusProvisioned        CustomHostnameListParamsHostnameStatus = "provisioned"
-	CustomHostnameListParamsHostnameStatusBlocked            CustomHostnameListParamsHostnameStatus = "blocked"
-)
-
-func (r CustomHostnameListParamsHostnameStatus) IsKnown() bool {
-	switch r {
-	case CustomHostnameListParamsHostnameStatusActive, CustomHostnameListParamsHostnameStatusPending, CustomHostnameListParamsHostnameStatusActiveRedeploying, CustomHostnameListParamsHostnameStatusMoved, CustomHostnameListParamsHostnameStatusPendingDeletion, CustomHostnameListParamsHostnameStatusDeleted, CustomHostnameListParamsHostnameStatusPendingBlocked, CustomHostnameListParamsHostnameStatusPendingMigration, CustomHostnameListParamsHostnameStatusPendingProvisioned, CustomHostnameListParamsHostnameStatusTestPending, CustomHostnameListParamsHostnameStatusTestActive, CustomHostnameListParamsHostnameStatusTestActiveApex, CustomHostnameListParamsHostnameStatusTestBlocked, CustomHostnameListParamsHostnameStatusTestFailed, CustomHostnameListParamsHostnameStatusProvisioned, CustomHostnameListParamsHostnameStatusBlocked:
 		return true
 	}
 	return false
@@ -2641,41 +2571,6 @@ const (
 func (r CustomHostnameListParamsSSL) IsKnown() bool {
 	switch r {
 	case CustomHostnameListParamsSSL0, CustomHostnameListParamsSSL1:
-		return true
-	}
-	return false
-}
-
-// Filter by SSL certificate status.
-type CustomHostnameListParamsSSLStatus string
-
-const (
-	CustomHostnameListParamsSSLStatusInitializing         CustomHostnameListParamsSSLStatus = "initializing"
-	CustomHostnameListParamsSSLStatusPendingValidation    CustomHostnameListParamsSSLStatus = "pending_validation"
-	CustomHostnameListParamsSSLStatusDeleted              CustomHostnameListParamsSSLStatus = "deleted"
-	CustomHostnameListParamsSSLStatusPendingIssuance      CustomHostnameListParamsSSLStatus = "pending_issuance"
-	CustomHostnameListParamsSSLStatusPendingDeployment    CustomHostnameListParamsSSLStatus = "pending_deployment"
-	CustomHostnameListParamsSSLStatusPendingDeletion      CustomHostnameListParamsSSLStatus = "pending_deletion"
-	CustomHostnameListParamsSSLStatusPendingExpiration    CustomHostnameListParamsSSLStatus = "pending_expiration"
-	CustomHostnameListParamsSSLStatusExpired              CustomHostnameListParamsSSLStatus = "expired"
-	CustomHostnameListParamsSSLStatusActive               CustomHostnameListParamsSSLStatus = "active"
-	CustomHostnameListParamsSSLStatusInitializingTimedOut CustomHostnameListParamsSSLStatus = "initializing_timed_out"
-	CustomHostnameListParamsSSLStatusValidationTimedOut   CustomHostnameListParamsSSLStatus = "validation_timed_out"
-	CustomHostnameListParamsSSLStatusIssuanceTimedOut     CustomHostnameListParamsSSLStatus = "issuance_timed_out"
-	CustomHostnameListParamsSSLStatusDeploymentTimedOut   CustomHostnameListParamsSSLStatus = "deployment_timed_out"
-	CustomHostnameListParamsSSLStatusDeletionTimedOut     CustomHostnameListParamsSSLStatus = "deletion_timed_out"
-	CustomHostnameListParamsSSLStatusPendingCleanup       CustomHostnameListParamsSSLStatus = "pending_cleanup"
-	CustomHostnameListParamsSSLStatusStagingDeployment    CustomHostnameListParamsSSLStatus = "staging_deployment"
-	CustomHostnameListParamsSSLStatusStagingActive        CustomHostnameListParamsSSLStatus = "staging_active"
-	CustomHostnameListParamsSSLStatusDeactivating         CustomHostnameListParamsSSLStatus = "deactivating"
-	CustomHostnameListParamsSSLStatusInactive             CustomHostnameListParamsSSLStatus = "inactive"
-	CustomHostnameListParamsSSLStatusBackupIssued         CustomHostnameListParamsSSLStatus = "backup_issued"
-	CustomHostnameListParamsSSLStatusHoldingDeployment    CustomHostnameListParamsSSLStatus = "holding_deployment"
-)
-
-func (r CustomHostnameListParamsSSLStatus) IsKnown() bool {
-	switch r {
-	case CustomHostnameListParamsSSLStatusInitializing, CustomHostnameListParamsSSLStatusPendingValidation, CustomHostnameListParamsSSLStatusDeleted, CustomHostnameListParamsSSLStatusPendingIssuance, CustomHostnameListParamsSSLStatusPendingDeployment, CustomHostnameListParamsSSLStatusPendingDeletion, CustomHostnameListParamsSSLStatusPendingExpiration, CustomHostnameListParamsSSLStatusExpired, CustomHostnameListParamsSSLStatusActive, CustomHostnameListParamsSSLStatusInitializingTimedOut, CustomHostnameListParamsSSLStatusValidationTimedOut, CustomHostnameListParamsSSLStatusIssuanceTimedOut, CustomHostnameListParamsSSLStatusDeploymentTimedOut, CustomHostnameListParamsSSLStatusDeletionTimedOut, CustomHostnameListParamsSSLStatusPendingCleanup, CustomHostnameListParamsSSLStatusStagingDeployment, CustomHostnameListParamsSSLStatusStagingActive, CustomHostnameListParamsSSLStatusDeactivating, CustomHostnameListParamsSSLStatusInactive, CustomHostnameListParamsSSLStatusBackupIssued, CustomHostnameListParamsSSLStatusHoldingDeployment:
 		return true
 	}
 	return false
@@ -2725,8 +2620,6 @@ type CustomHostnameEditParamsSSL struct {
 	CustomCERTBundle param.Field[[]CustomHostnameEditParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID param.Field[string] `json:"custom_csr_id"`
 	// The key for a custom uploaded certificate.
 	CustomKey param.Field[string] `json:"custom_key"`
 	// Domain control validation (DCV) method used for this hostname.

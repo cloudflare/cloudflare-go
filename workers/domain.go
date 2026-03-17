@@ -37,8 +37,8 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 	return
 }
 
-// Attaches a domain that routes traffic to a Worker.
-func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponse, err error) {
+// Attaches a Worker to a zone and hostname.
+func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
 	var env DomainUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -54,8 +54,8 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 	return
 }
 
-// Lists all domains for an account.
-func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DomainListResponse], err error) {
+// Lists all Worker Domains for an account.
+func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,15 +76,15 @@ func (r *DomainService) List(ctx context.Context, params DomainListParams, opts 
 	return res, nil
 }
 
-// Lists all domains for an account.
-func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DomainListResponse] {
+// Lists all Worker Domains for an account.
+func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Domain] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Detaches a domain from a Worker. Both the Worker and all of its previews are no
-// longer routable using this domain.
-func (r *DomainService) Delete(ctx context.Context, domainID string, body DomainDeleteParams, opts ...option.RequestOption) (res *DomainDeleteResponse, err error) {
+// Detaches a Worker from a zone and hostname.
+func (r *DomainService) Delete(ctx context.Context, domainID string, body DomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -94,12 +94,12 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, body Domain
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/workers/domains/%s", body.AccountID, domainID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
-// Gets information about a domain.
-func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponse, err error) {
+// Gets a Worker domain.
+func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
 	var env DomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -119,33 +119,27 @@ func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGe
 	return
 }
 
-type DomainUpdateResponse struct {
-	// Immutable ID of the domain.
-	ID string `json:"id,required"`
-	// ID of the TLS certificate issued for the domain.
-	CERTID string `json:"cert_id,required" format:"uuid"`
-	// Worker environment associated with the domain.
+type Domain struct {
+	// Identifer of the Worker Domain.
+	ID string `json:"id"`
+	// Worker environment associated with the zone and hostname.
 	//
 	// Deprecated: deprecated
-	Environment string `json:"environment,required"`
-	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
-	// Requests to this hostname will be routed to the configured Worker.
-	Hostname string `json:"hostname,required"`
-	// Name of the Worker associated with the domain. Requests to the configured
-	// hostname will be routed to this Worker.
-	Service string `json:"service,required"`
-	// ID of the zone containing the domain hostname.
-	ZoneID string `json:"zone_id,required"`
-	// Name of the zone containing the domain hostname.
-	ZoneName string                   `json:"zone_name,required"`
-	JSON     domainUpdateResponseJSON `json:"-"`
+	Environment string `json:"environment"`
+	// Hostname of the Worker Domain.
+	Hostname string `json:"hostname"`
+	// Worker service associated with the zone and hostname.
+	Service string `json:"service"`
+	// Identifier of the zone.
+	ZoneID string `json:"zone_id"`
+	// Name of the zone.
+	ZoneName string     `json:"zone_name"`
+	JSON     domainJSON `json:"-"`
 }
 
-// domainUpdateResponseJSON contains the JSON metadata for the struct
-// [DomainUpdateResponse]
-type domainUpdateResponseJSON struct {
+// domainJSON contains the JSON metadata for the struct [Domain]
+type domainJSON struct {
 	ID          apijson.Field
-	CERTID      apijson.Field
 	Environment apijson.Field
 	Hostname    apijson.Field
 	Service     apijson.Field
@@ -155,254 +149,25 @@ type domainUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Domain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r domainUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainListResponse struct {
-	// Immutable ID of the domain.
-	ID string `json:"id,required"`
-	// ID of the TLS certificate issued for the domain.
-	CERTID string `json:"cert_id,required" format:"uuid"`
-	// Worker environment associated with the domain.
-	//
-	// Deprecated: deprecated
-	Environment string `json:"environment,required"`
-	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
-	// Requests to this hostname will be routed to the configured Worker.
-	Hostname string `json:"hostname,required"`
-	// Name of the Worker associated with the domain. Requests to the configured
-	// hostname will be routed to this Worker.
-	Service string `json:"service,required"`
-	// ID of the zone containing the domain hostname.
-	ZoneID string `json:"zone_id,required"`
-	// Name of the zone containing the domain hostname.
-	ZoneName string                 `json:"zone_name,required"`
-	JSON     domainListResponseJSON `json:"-"`
-}
-
-// domainListResponseJSON contains the JSON metadata for the struct
-// [DomainListResponse]
-type domainListResponseJSON struct {
-	ID          apijson.Field
-	CERTID      apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainDeleteResponse struct {
-	Errors   []DomainDeleteResponseError   `json:"errors,required"`
-	Messages []DomainDeleteResponseMessage `json:"messages,required"`
-	// Whether the API call was successful.
-	Success DomainDeleteResponseSuccess `json:"success,required"`
-	JSON    domainDeleteResponseJSON    `json:"-"`
-}
-
-// domainDeleteResponseJSON contains the JSON metadata for the struct
-// [DomainDeleteResponse]
-type domainDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainDeleteResponseError struct {
-	Code             int64                            `json:"code,required"`
-	Message          string                           `json:"message,required"`
-	DocumentationURL string                           `json:"documentation_url"`
-	Source           DomainDeleteResponseErrorsSource `json:"source"`
-	JSON             domainDeleteResponseErrorJSON    `json:"-"`
-}
-
-// domainDeleteResponseErrorJSON contains the JSON metadata for the struct
-// [DomainDeleteResponseError]
-type domainDeleteResponseErrorJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DomainDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainDeleteResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainDeleteResponseErrorsSource struct {
-	Pointer string                               `json:"pointer"`
-	JSON    domainDeleteResponseErrorsSourceJSON `json:"-"`
-}
-
-// domainDeleteResponseErrorsSourceJSON contains the JSON metadata for the struct
-// [DomainDeleteResponseErrorsSource]
-type domainDeleteResponseErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainDeleteResponseErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainDeleteResponseMessage struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
-	DocumentationURL string                             `json:"documentation_url"`
-	Source           DomainDeleteResponseMessagesSource `json:"source"`
-	JSON             domainDeleteResponseMessageJSON    `json:"-"`
-}
-
-// domainDeleteResponseMessageJSON contains the JSON metadata for the struct
-// [DomainDeleteResponseMessage]
-type domainDeleteResponseMessageJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DomainDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainDeleteResponseMessageJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainDeleteResponseMessagesSource struct {
-	Pointer string                                 `json:"pointer"`
-	JSON    domainDeleteResponseMessagesSourceJSON `json:"-"`
-}
-
-// domainDeleteResponseMessagesSourceJSON contains the JSON metadata for the struct
-// [DomainDeleteResponseMessagesSource]
-type domainDeleteResponseMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainDeleteResponseMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DomainDeleteResponseSuccess bool
-
-const (
-	DomainDeleteResponseSuccessTrue DomainDeleteResponseSuccess = true
-)
-
-func (r DomainDeleteResponseSuccess) IsKnown() bool {
-	switch r {
-	case DomainDeleteResponseSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DomainGetResponse struct {
-	// Immutable ID of the domain.
-	ID string `json:"id,required"`
-	// ID of the TLS certificate issued for the domain.
-	CERTID string `json:"cert_id,required" format:"uuid"`
-	// Worker environment associated with the domain.
-	//
-	// Deprecated: deprecated
-	Environment string `json:"environment,required"`
-	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
-	// Requests to this hostname will be routed to the configured Worker.
-	Hostname string `json:"hostname,required"`
-	// Name of the Worker associated with the domain. Requests to the configured
-	// hostname will be routed to this Worker.
-	Service string `json:"service,required"`
-	// ID of the zone containing the domain hostname.
-	ZoneID string `json:"zone_id,required"`
-	// Name of the zone containing the domain hostname.
-	ZoneName string                `json:"zone_name,required"`
-	JSON     domainGetResponseJSON `json:"-"`
-}
-
-// domainGetResponseJSON contains the JSON metadata for the struct
-// [DomainGetResponse]
-type domainGetResponseJSON struct {
-	ID          apijson.Field
-	CERTID      apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainGetResponseJSON) RawJSON() string {
+func (r domainJSON) RawJSON() string {
 	return r.raw
 }
 
 type DomainUpdateParams struct {
-	// Identifier.
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
-	// Requests to this hostname will be routed to the configured Worker.
+	// Hostname of the Worker Domain.
 	Hostname param.Field[string] `json:"hostname,required"`
-	// Name of the Worker associated with the domain. Requests to the configured
-	// hostname will be routed to this Worker.
+	// Worker service associated with the zone and hostname.
 	Service param.Field[string] `json:"service,required"`
-	// Worker environment associated with the domain.
+	// Identifier of the zone.
+	ZoneID param.Field[string] `json:"zone_id,required"`
+	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `json:"environment"`
-	// ID of the zone containing the domain hostname.
-	ZoneID param.Field[string] `json:"zone_id"`
-	// Name of the zone containing the domain hostname.
-	ZoneName param.Field[string] `json:"zone_name"`
 }
 
 func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -412,9 +177,9 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 type DomainUpdateResponseEnvelope struct {
 	Errors   []DomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Domain                              `json:"result"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -423,8 +188,8 @@ type DomainUpdateResponseEnvelope struct {
 type domainUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -549,17 +314,17 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DomainListParams struct {
-	// Identifier.
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Worker environment associated with the domain.
+	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `query:"environment"`
-	// Hostname of the domain.
+	// Hostname of the Worker Domain.
 	Hostname param.Field[string] `query:"hostname"`
-	// Name of the Worker associated with the domain.
+	// Worker service associated with the zone and hostname.
 	Service param.Field[string] `query:"service"`
-	// ID of the zone containing the domain hostname.
+	// Identifier of the zone.
 	ZoneID param.Field[string] `query:"zone_id"`
-	// Name of the zone containing the domain hostname.
+	// Name of the zone.
 	ZoneName param.Field[string] `query:"zone_name"`
 }
 
@@ -572,21 +337,21 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 }
 
 type DomainDeleteParams struct {
-	// Identifier.
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DomainGetParams struct {
-	// Identifier.
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DomainGetResponseEnvelope struct {
 	Errors   []DomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainGetResponse                   `json:"result,required"`
 	// Whether the API call was successful.
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Domain                           `json:"result"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -595,8 +360,8 @@ type DomainGetResponseEnvelope struct {
 type domainGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
