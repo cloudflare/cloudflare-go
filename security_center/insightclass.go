@@ -37,7 +37,7 @@ func NewInsightClassService(opts ...option.RequestOption) (r *InsightClassServic
 	return
 }
 
-// Retrieves Security Center Insight Counts by Class
+// Retrieves Security Center insight counts aggregated by classification class.
 func (r *InsightClassService) Get(ctx context.Context, params InsightClassGetParams, opts ...option.RequestOption) (res *[]InsightClassGetResponse, err error) {
 	var env InsightClassGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

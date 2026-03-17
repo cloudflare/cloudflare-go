@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
-func TestTunnelWARPConnectorNew(t *testing.T) {
+func TestTunnelWARPConnectorNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,6 +31,7 @@ func TestTunnelWARPConnectorNew(t *testing.T) {
 	_, err := client.ZeroTrust.Tunnels.WARPConnector.New(context.TODO(), zero_trust.TunnelWARPConnectorNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Name:      cloudflare.F("blog"),
+		Ha:        cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

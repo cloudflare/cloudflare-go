@@ -47,6 +47,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/filters"
 	"github.com/cloudflare/cloudflare-go/v6/firewall"
 	"github.com/cloudflare/cloudflare-go/v6/fraud"
+	"github.com/cloudflare/cloudflare-go/v6/google_tag_gateway"
 	"github.com/cloudflare/cloudflare-go/v6/healthchecks"
 	"github.com/cloudflare/cloudflare-go/v6/hostnames"
 	"github.com/cloudflare/cloudflare-go/v6/hyperdrive"
@@ -203,6 +204,7 @@ type Client struct {
 	BotManagement               *bot_management.BotManagementService
 	Fraud                       *fraud.FraudService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
+	GoogleTagGateway            *google_tag_gateway.GoogleTagGatewayService
 	Zaraz                       *zaraz.ZarazService
 	Speed                       *speed.SpeedService
 	DCVDelegation               *dcv_delegation.DCVDelegationService
@@ -341,6 +343,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
 	r.Fraud = fraud.NewFraudService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
+	r.GoogleTagGateway = google_tag_gateway.NewGoogleTagGatewayService(opts...)
 	r.Zaraz = zaraz.NewZarazService(opts...)
 	r.Speed = speed.NewSpeedService(opts...)
 	r.DCVDelegation = dcv_delegation.NewDCVDelegationService(opts...)

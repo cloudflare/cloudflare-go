@@ -215,7 +215,6 @@ type InstanceNewResponse struct {
 	ID                   string                                  `json:"id,required"`
 	CreatedAt            time.Time                               `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                               `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                  `json:"vectorize_name,required"`
 	AIGatewayID          string                                  `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                    `json:"cache"`
@@ -255,7 +254,6 @@ type instanceNewResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -382,14 +380,15 @@ func (r instanceNewResponseCustomMetadataJSON) RawJSON() string {
 type InstanceNewResponseCustomMetadataDataType string
 
 const (
-	InstanceNewResponseCustomMetadataDataTypeText    InstanceNewResponseCustomMetadataDataType = "text"
-	InstanceNewResponseCustomMetadataDataTypeNumber  InstanceNewResponseCustomMetadataDataType = "number"
-	InstanceNewResponseCustomMetadataDataTypeBoolean InstanceNewResponseCustomMetadataDataType = "boolean"
+	InstanceNewResponseCustomMetadataDataTypeText     InstanceNewResponseCustomMetadataDataType = "text"
+	InstanceNewResponseCustomMetadataDataTypeNumber   InstanceNewResponseCustomMetadataDataType = "number"
+	InstanceNewResponseCustomMetadataDataTypeBoolean  InstanceNewResponseCustomMetadataDataType = "boolean"
+	InstanceNewResponseCustomMetadataDataTypeDatetime InstanceNewResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceNewResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseCustomMetadataDataTypeText, InstanceNewResponseCustomMetadataDataTypeNumber, InstanceNewResponseCustomMetadataDataTypeBoolean:
+	case InstanceNewResponseCustomMetadataDataTypeText, InstanceNewResponseCustomMetadataDataTypeNumber, InstanceNewResponseCustomMetadataDataTypeBoolean, InstanceNewResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -398,19 +397,20 @@ func (r InstanceNewResponseCustomMetadataDataType) IsKnown() bool {
 type InstanceNewResponseEmbeddingModel string
 
 const (
-	InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceNewResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceNewResponseEmbeddingModelCfBaaiBgeM3                      InstanceNewResponseEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceNewResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceNewResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceNewResponseEmbeddingModelEmpty                            InstanceNewResponseEmbeddingModel = ""
+	InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceNewResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
+	InstanceNewResponseEmbeddingModelCfBaaiBgeM3                           InstanceNewResponseEmbeddingModel = "@cf/baai/bge-m3"
+	InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceNewResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
+	InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceNewResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
+	InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
+	InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-small"
+	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-large"
+	InstanceNewResponseEmbeddingModelEmpty                                 InstanceNewResponseEmbeddingModel = ""
 )
 
 func (r InstanceNewResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewResponseEmbeddingModelCfBaaiBgeM3, InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceNewResponseEmbeddingModelEmpty:
+	case InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewResponseEmbeddingModelCfBaaiBgeM3, InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceNewResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -641,13 +641,13 @@ func (r instanceNewResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceNewResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceNewResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceNewResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -672,7 +672,7 @@ func (r instanceNewResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceNewResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -979,7 +979,6 @@ type InstanceUpdateResponse struct {
 	ID                   string                                     `json:"id,required"`
 	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                     `json:"vectorize_name,required"`
 	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                       `json:"cache"`
@@ -1019,7 +1018,6 @@ type instanceUpdateResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -1146,14 +1144,15 @@ func (r instanceUpdateResponseCustomMetadataJSON) RawJSON() string {
 type InstanceUpdateResponseCustomMetadataDataType string
 
 const (
-	InstanceUpdateResponseCustomMetadataDataTypeText    InstanceUpdateResponseCustomMetadataDataType = "text"
-	InstanceUpdateResponseCustomMetadataDataTypeNumber  InstanceUpdateResponseCustomMetadataDataType = "number"
-	InstanceUpdateResponseCustomMetadataDataTypeBoolean InstanceUpdateResponseCustomMetadataDataType = "boolean"
+	InstanceUpdateResponseCustomMetadataDataTypeText     InstanceUpdateResponseCustomMetadataDataType = "text"
+	InstanceUpdateResponseCustomMetadataDataTypeNumber   InstanceUpdateResponseCustomMetadataDataType = "number"
+	InstanceUpdateResponseCustomMetadataDataTypeBoolean  InstanceUpdateResponseCustomMetadataDataType = "boolean"
+	InstanceUpdateResponseCustomMetadataDataTypeDatetime InstanceUpdateResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceUpdateResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseCustomMetadataDataTypeText, InstanceUpdateResponseCustomMetadataDataTypeNumber, InstanceUpdateResponseCustomMetadataDataTypeBoolean:
+	case InstanceUpdateResponseCustomMetadataDataTypeText, InstanceUpdateResponseCustomMetadataDataTypeNumber, InstanceUpdateResponseCustomMetadataDataTypeBoolean, InstanceUpdateResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -1162,19 +1161,20 @@ func (r InstanceUpdateResponseCustomMetadataDataType) IsKnown() bool {
 type InstanceUpdateResponseEmbeddingModel string
 
 const (
-	InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceUpdateResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3                      InstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceUpdateResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceUpdateResponseEmbeddingModelEmpty                            InstanceUpdateResponseEmbeddingModel = ""
+	InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceUpdateResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
+	InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3                           InstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-m3"
+	InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
+	InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceUpdateResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
+	InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
+	InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-small"
+	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-large"
+	InstanceUpdateResponseEmbeddingModelEmpty                                 InstanceUpdateResponseEmbeddingModel = ""
 )
 
 func (r InstanceUpdateResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateResponseEmbeddingModelEmpty:
+	case InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -1406,13 +1406,13 @@ func (r instanceUpdateResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceUpdateResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceUpdateResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceUpdateResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -1437,7 +1437,7 @@ func (r instanceUpdateResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceUpdateResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -1747,7 +1747,6 @@ type InstanceListResponse struct {
 	ID                   string                                   `json:"id,required"`
 	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                   `json:"vectorize_name,required"`
 	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                     `json:"cache"`
@@ -1787,7 +1786,6 @@ type instanceListResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -1914,14 +1912,15 @@ func (r instanceListResponseCustomMetadataJSON) RawJSON() string {
 type InstanceListResponseCustomMetadataDataType string
 
 const (
-	InstanceListResponseCustomMetadataDataTypeText    InstanceListResponseCustomMetadataDataType = "text"
-	InstanceListResponseCustomMetadataDataTypeNumber  InstanceListResponseCustomMetadataDataType = "number"
-	InstanceListResponseCustomMetadataDataTypeBoolean InstanceListResponseCustomMetadataDataType = "boolean"
+	InstanceListResponseCustomMetadataDataTypeText     InstanceListResponseCustomMetadataDataType = "text"
+	InstanceListResponseCustomMetadataDataTypeNumber   InstanceListResponseCustomMetadataDataType = "number"
+	InstanceListResponseCustomMetadataDataTypeBoolean  InstanceListResponseCustomMetadataDataType = "boolean"
+	InstanceListResponseCustomMetadataDataTypeDatetime InstanceListResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceListResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceListResponseCustomMetadataDataTypeText, InstanceListResponseCustomMetadataDataTypeNumber, InstanceListResponseCustomMetadataDataTypeBoolean:
+	case InstanceListResponseCustomMetadataDataTypeText, InstanceListResponseCustomMetadataDataTypeNumber, InstanceListResponseCustomMetadataDataTypeBoolean, InstanceListResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -1930,19 +1929,20 @@ func (r InstanceListResponseCustomMetadataDataType) IsKnown() bool {
 type InstanceListResponseEmbeddingModel string
 
 const (
-	InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceListResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceListResponseEmbeddingModelCfBaaiBgeM3                      InstanceListResponseEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceListResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceListResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceListResponseEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceListResponseEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceListResponseEmbeddingModelEmpty                            InstanceListResponseEmbeddingModel = ""
+	InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceListResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
+	InstanceListResponseEmbeddingModelCfBaaiBgeM3                           InstanceListResponseEmbeddingModel = "@cf/baai/bge-m3"
+	InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceListResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
+	InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceListResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
+	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
+	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceListResponseEmbeddingModel = "openai/text-embedding-3-small"
+	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceListResponseEmbeddingModel = "openai/text-embedding-3-large"
+	InstanceListResponseEmbeddingModelEmpty                                 InstanceListResponseEmbeddingModel = ""
 )
 
 func (r InstanceListResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
+	case InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -2173,13 +2173,13 @@ func (r instanceListResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceListResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceListResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceListResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -2204,7 +2204,7 @@ func (r instanceListResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceListResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -2511,7 +2511,6 @@ type InstanceDeleteResponse struct {
 	ID                   string                                     `json:"id,required"`
 	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                     `json:"vectorize_name,required"`
 	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                       `json:"cache"`
@@ -2551,7 +2550,6 @@ type instanceDeleteResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -2678,14 +2676,15 @@ func (r instanceDeleteResponseCustomMetadataJSON) RawJSON() string {
 type InstanceDeleteResponseCustomMetadataDataType string
 
 const (
-	InstanceDeleteResponseCustomMetadataDataTypeText    InstanceDeleteResponseCustomMetadataDataType = "text"
-	InstanceDeleteResponseCustomMetadataDataTypeNumber  InstanceDeleteResponseCustomMetadataDataType = "number"
-	InstanceDeleteResponseCustomMetadataDataTypeBoolean InstanceDeleteResponseCustomMetadataDataType = "boolean"
+	InstanceDeleteResponseCustomMetadataDataTypeText     InstanceDeleteResponseCustomMetadataDataType = "text"
+	InstanceDeleteResponseCustomMetadataDataTypeNumber   InstanceDeleteResponseCustomMetadataDataType = "number"
+	InstanceDeleteResponseCustomMetadataDataTypeBoolean  InstanceDeleteResponseCustomMetadataDataType = "boolean"
+	InstanceDeleteResponseCustomMetadataDataTypeDatetime InstanceDeleteResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceDeleteResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseCustomMetadataDataTypeText, InstanceDeleteResponseCustomMetadataDataTypeNumber, InstanceDeleteResponseCustomMetadataDataTypeBoolean:
+	case InstanceDeleteResponseCustomMetadataDataTypeText, InstanceDeleteResponseCustomMetadataDataTypeNumber, InstanceDeleteResponseCustomMetadataDataTypeBoolean, InstanceDeleteResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -2694,19 +2693,20 @@ func (r InstanceDeleteResponseCustomMetadataDataType) IsKnown() bool {
 type InstanceDeleteResponseEmbeddingModel string
 
 const (
-	InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceDeleteResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3                      InstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceDeleteResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceDeleteResponseEmbeddingModelEmpty                            InstanceDeleteResponseEmbeddingModel = ""
+	InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceDeleteResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
+	InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3                           InstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-m3"
+	InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
+	InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceDeleteResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
+	InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
+	InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-small"
+	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-large"
+	InstanceDeleteResponseEmbeddingModelEmpty                                 InstanceDeleteResponseEmbeddingModel = ""
 )
 
 func (r InstanceDeleteResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceDeleteResponseEmbeddingModelEmpty:
+	case InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceDeleteResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -2938,13 +2938,13 @@ func (r instanceDeleteResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceDeleteResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceDeleteResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceDeleteResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -2969,7 +2969,7 @@ func (r instanceDeleteResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceDeleteResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -3459,7 +3459,6 @@ type InstanceReadResponse struct {
 	ID                   string                                   `json:"id,required"`
 	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	VectorizeName        string                                   `json:"vectorize_name,required"`
 	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
 	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model"`
 	Cache                bool                                     `json:"cache"`
@@ -3499,7 +3498,6 @@ type instanceReadResponseJSON struct {
 	ID                   apijson.Field
 	CreatedAt            apijson.Field
 	ModifiedAt           apijson.Field
-	VectorizeName        apijson.Field
 	AIGatewayID          apijson.Field
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
@@ -3626,14 +3624,15 @@ func (r instanceReadResponseCustomMetadataJSON) RawJSON() string {
 type InstanceReadResponseCustomMetadataDataType string
 
 const (
-	InstanceReadResponseCustomMetadataDataTypeText    InstanceReadResponseCustomMetadataDataType = "text"
-	InstanceReadResponseCustomMetadataDataTypeNumber  InstanceReadResponseCustomMetadataDataType = "number"
-	InstanceReadResponseCustomMetadataDataTypeBoolean InstanceReadResponseCustomMetadataDataType = "boolean"
+	InstanceReadResponseCustomMetadataDataTypeText     InstanceReadResponseCustomMetadataDataType = "text"
+	InstanceReadResponseCustomMetadataDataTypeNumber   InstanceReadResponseCustomMetadataDataType = "number"
+	InstanceReadResponseCustomMetadataDataTypeBoolean  InstanceReadResponseCustomMetadataDataType = "boolean"
+	InstanceReadResponseCustomMetadataDataTypeDatetime InstanceReadResponseCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceReadResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseCustomMetadataDataTypeText, InstanceReadResponseCustomMetadataDataTypeNumber, InstanceReadResponseCustomMetadataDataTypeBoolean:
+	case InstanceReadResponseCustomMetadataDataTypeText, InstanceReadResponseCustomMetadataDataTypeNumber, InstanceReadResponseCustomMetadataDataTypeBoolean, InstanceReadResponseCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -3642,19 +3641,20 @@ func (r InstanceReadResponseCustomMetadataDataType) IsKnown() bool {
 type InstanceReadResponseEmbeddingModel string
 
 const (
-	InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceReadResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceReadResponseEmbeddingModelCfBaaiBgeM3                      InstanceReadResponseEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceReadResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceReadResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small        InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large        InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceReadResponseEmbeddingModelEmpty                            InstanceReadResponseEmbeddingModel = ""
+	InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceReadResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
+	InstanceReadResponseEmbeddingModelCfBaaiBgeM3                           InstanceReadResponseEmbeddingModel = "@cf/baai/bge-m3"
+	InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceReadResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
+	InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceReadResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
+	InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
+	InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-small"
+	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-large"
+	InstanceReadResponseEmbeddingModelEmpty                                 InstanceReadResponseEmbeddingModel = ""
 )
 
 func (r InstanceReadResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceReadResponseEmbeddingModelCfBaaiBgeM3, InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceReadResponseEmbeddingModelEmpty:
+	case InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceReadResponseEmbeddingModelCfBaaiBgeM3, InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceReadResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -3885,13 +3885,13 @@ func (r instanceReadResponseRetrievalOptionsJSON) RawJSON() string {
 
 type InstanceReadResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field string `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction InstanceReadResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      instanceReadResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
@@ -3916,7 +3916,7 @@ func (r instanceReadResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceReadResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -4465,14 +4465,15 @@ func (r InstanceNewParamsCustomMetadata) MarshalJSON() (data []byte, err error) 
 type InstanceNewParamsCustomMetadataDataType string
 
 const (
-	InstanceNewParamsCustomMetadataDataTypeText    InstanceNewParamsCustomMetadataDataType = "text"
-	InstanceNewParamsCustomMetadataDataTypeNumber  InstanceNewParamsCustomMetadataDataType = "number"
-	InstanceNewParamsCustomMetadataDataTypeBoolean InstanceNewParamsCustomMetadataDataType = "boolean"
+	InstanceNewParamsCustomMetadataDataTypeText     InstanceNewParamsCustomMetadataDataType = "text"
+	InstanceNewParamsCustomMetadataDataTypeNumber   InstanceNewParamsCustomMetadataDataType = "number"
+	InstanceNewParamsCustomMetadataDataTypeBoolean  InstanceNewParamsCustomMetadataDataType = "boolean"
+	InstanceNewParamsCustomMetadataDataTypeDatetime InstanceNewParamsCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceNewParamsCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsCustomMetadataDataTypeText, InstanceNewParamsCustomMetadataDataTypeNumber, InstanceNewParamsCustomMetadataDataTypeBoolean:
+	case InstanceNewParamsCustomMetadataDataTypeText, InstanceNewParamsCustomMetadataDataTypeNumber, InstanceNewParamsCustomMetadataDataTypeBoolean, InstanceNewParamsCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -4481,19 +4482,20 @@ func (r InstanceNewParamsCustomMetadataDataType) IsKnown() bool {
 type InstanceNewParamsEmbeddingModel string
 
 const (
-	InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceNewParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceNewParamsEmbeddingModelCfBaaiBgeM3                      InstanceNewParamsEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceNewParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceNewParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small        InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large        InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceNewParamsEmbeddingModelEmpty                            InstanceNewParamsEmbeddingModel = ""
+	InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceNewParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
+	InstanceNewParamsEmbeddingModelCfBaaiBgeM3                           InstanceNewParamsEmbeddingModel = "@cf/baai/bge-m3"
+	InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceNewParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
+	InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceNewParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
+	InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
+	InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small             InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-small"
+	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large             InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-large"
+	InstanceNewParamsEmbeddingModelEmpty                                 InstanceNewParamsEmbeddingModel = ""
 )
 
 func (r InstanceNewParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewParamsEmbeddingModelCfBaaiBgeM3, InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceNewParamsEmbeddingModelEmpty:
+	case InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewParamsEmbeddingModelCfBaaiBgeM3, InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceNewParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -4622,13 +4624,13 @@ func (r InstanceNewParamsRetrievalOptions) MarshalJSON() (data []byte, err error
 
 type InstanceNewParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceNewParamsRetrievalOptionsBoostByDirection] `json:"direction"`
 }
 
@@ -4639,7 +4641,7 @@ func (r InstanceNewParamsRetrievalOptionsBoostBy) MarshalJSON() (data []byte, er
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceNewParamsRetrievalOptionsBoostByDirection string
 
 const (
@@ -4973,14 +4975,15 @@ func (r InstanceUpdateParamsCustomMetadata) MarshalJSON() (data []byte, err erro
 type InstanceUpdateParamsCustomMetadataDataType string
 
 const (
-	InstanceUpdateParamsCustomMetadataDataTypeText    InstanceUpdateParamsCustomMetadataDataType = "text"
-	InstanceUpdateParamsCustomMetadataDataTypeNumber  InstanceUpdateParamsCustomMetadataDataType = "number"
-	InstanceUpdateParamsCustomMetadataDataTypeBoolean InstanceUpdateParamsCustomMetadataDataType = "boolean"
+	InstanceUpdateParamsCustomMetadataDataTypeText     InstanceUpdateParamsCustomMetadataDataType = "text"
+	InstanceUpdateParamsCustomMetadataDataTypeNumber   InstanceUpdateParamsCustomMetadataDataType = "number"
+	InstanceUpdateParamsCustomMetadataDataTypeBoolean  InstanceUpdateParamsCustomMetadataDataType = "boolean"
+	InstanceUpdateParamsCustomMetadataDataTypeDatetime InstanceUpdateParamsCustomMetadataDataType = "datetime"
 )
 
 func (r InstanceUpdateParamsCustomMetadataDataType) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsCustomMetadataDataTypeText, InstanceUpdateParamsCustomMetadataDataTypeNumber, InstanceUpdateParamsCustomMetadataDataTypeBoolean:
+	case InstanceUpdateParamsCustomMetadataDataTypeText, InstanceUpdateParamsCustomMetadataDataTypeNumber, InstanceUpdateParamsCustomMetadataDataTypeBoolean, InstanceUpdateParamsCustomMetadataDataTypeDatetime:
 		return true
 	}
 	return false
@@ -4989,19 +4992,20 @@ func (r InstanceUpdateParamsCustomMetadataDataType) IsKnown() bool {
 type InstanceUpdateParamsEmbeddingModel string
 
 const (
-	InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b         InstanceUpdateParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3                      InstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5             InstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m       InstanceUpdateParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001 InstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small        InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large        InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceUpdateParamsEmbeddingModelEmpty                            InstanceUpdateParamsEmbeddingModel = ""
+	InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceUpdateParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
+	InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3                           InstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-m3"
+	InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
+	InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceUpdateParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
+	InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
+	InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small             InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-small"
+	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large             InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-large"
+	InstanceUpdateParamsEmbeddingModelEmpty                                 InstanceUpdateParamsEmbeddingModel = ""
 )
 
 func (r InstanceUpdateParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateParamsEmbeddingModelEmpty:
+	case InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -5130,13 +5134,13 @@ func (r InstanceUpdateParamsRetrievalOptions) MarshalJSON() (data []byte, err er
 
 type InstanceUpdateParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceUpdateParamsRetrievalOptionsBoostByDirection] `json:"direction"`
 }
 
@@ -5147,7 +5151,7 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostBy) MarshalJSON() (data []byte,
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceUpdateParamsRetrievalOptionsBoostByDirection string
 
 const (
@@ -5520,6 +5524,7 @@ func (r InstanceChatCompletionsParamsMessagesRole) IsKnown() bool {
 }
 
 type InstanceChatCompletionsParamsAISearchOptions struct {
+	Cache        param.Field[InstanceChatCompletionsParamsAISearchOptionsCache]        `json:"cache"`
 	QueryRewrite param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
 	Reranking    param.Field[InstanceChatCompletionsParamsAISearchOptionsReranking]    `json:"reranking"`
 	Retrieval    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrieval]    `json:"retrieval"`
@@ -5527,6 +5532,32 @@ type InstanceChatCompletionsParamsAISearchOptions struct {
 
 func (r InstanceChatCompletionsParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsCache struct {
+	CacheThreshold param.Field[InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold] `json:"cache_threshold"`
+	Enabled        param.Field[bool]                                                            `json:"enabled"`
+}
+
+func (r InstanceChatCompletionsParamsAISearchOptionsCache) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold string
+
+const (
+	InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold = "super_strict_match"
+	InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdCloseEnough      InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold = "close_enough"
+	InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdFlexibleFriend   InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold = "flexible_friend"
+	InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdAnythingGoes     InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold = "anything_goes"
+)
+
+func (r InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch, InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdCloseEnough, InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdFlexibleFriend, InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
 }
 
 type InstanceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
@@ -5607,9 +5638,9 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRerankingModel) IsKnown() bo
 
 type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	// Metadata fields to boost search results by. Overrides the instance-level
-	// boost_by config. Direction defaults to 'asc' for numeric fields, 'exists' for
-	// text/boolean fields. Fields must match 'timestamp' or a defined custom_metadata
-	// field.
+	// boost_by config. Direction defaults to 'asc' for numeric/datetime fields,
+	// 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
+	// custom_metadata field.
 	BoostBy          param.Field[[]InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy]    `json:"boost_by"`
 	ContextExpansion param.Field[int64]                                                             `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                            `json:"filters"`
@@ -5630,13 +5661,13 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (da
 
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
 
@@ -5647,7 +5678,7 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy) MarshalJSO
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection string
 
 const (
@@ -5821,6 +5852,7 @@ func (r InstanceSearchParamsMessagesRole) IsKnown() bool {
 }
 
 type InstanceSearchParamsAISearchOptions struct {
+	Cache        param.Field[InstanceSearchParamsAISearchOptionsCache]        `json:"cache"`
 	QueryRewrite param.Field[InstanceSearchParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
 	Reranking    param.Field[InstanceSearchParamsAISearchOptionsReranking]    `json:"reranking"`
 	Retrieval    param.Field[InstanceSearchParamsAISearchOptionsRetrieval]    `json:"retrieval"`
@@ -5828,6 +5860,32 @@ type InstanceSearchParamsAISearchOptions struct {
 
 func (r InstanceSearchParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsAISearchOptionsCache struct {
+	CacheThreshold param.Field[InstanceSearchParamsAISearchOptionsCacheCacheThreshold] `json:"cache_threshold"`
+	Enabled        param.Field[bool]                                                   `json:"enabled"`
+}
+
+func (r InstanceSearchParamsAISearchOptionsCache) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsAISearchOptionsCacheCacheThreshold string
+
+const (
+	InstanceSearchParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch InstanceSearchParamsAISearchOptionsCacheCacheThreshold = "super_strict_match"
+	InstanceSearchParamsAISearchOptionsCacheCacheThresholdCloseEnough      InstanceSearchParamsAISearchOptionsCacheCacheThreshold = "close_enough"
+	InstanceSearchParamsAISearchOptionsCacheCacheThresholdFlexibleFriend   InstanceSearchParamsAISearchOptionsCacheCacheThreshold = "flexible_friend"
+	InstanceSearchParamsAISearchOptionsCacheCacheThresholdAnythingGoes     InstanceSearchParamsAISearchOptionsCacheCacheThreshold = "anything_goes"
+)
+
+func (r InstanceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch, InstanceSearchParamsAISearchOptionsCacheCacheThresholdCloseEnough, InstanceSearchParamsAISearchOptionsCacheCacheThresholdFlexibleFriend, InstanceSearchParamsAISearchOptionsCacheCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
 }
 
 type InstanceSearchParamsAISearchOptionsQueryRewrite struct {
@@ -5908,9 +5966,9 @@ func (r InstanceSearchParamsAISearchOptionsRerankingModel) IsKnown() bool {
 
 type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	// Metadata fields to boost search results by. Overrides the instance-level
-	// boost_by config. Direction defaults to 'asc' for numeric fields, 'exists' for
-	// text/boolean fields. Fields must match 'timestamp' or a defined custom_metadata
-	// field.
+	// boost_by config. Direction defaults to 'asc' for numeric/datetime fields,
+	// 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
+	// custom_metadata field.
 	BoostBy          param.Field[[]InstanceSearchParamsAISearchOptionsRetrievalBoostBy]    `json:"boost_by"`
 	ContextExpansion param.Field[int64]                                                    `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                   `json:"filters"`
@@ -5931,13 +5989,13 @@ func (r InstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte
 
 type InstanceSearchParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric fields support asc/desc directions; text/boolean
-	// fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
+	// text/boolean fields support exists/not_exists.
 	Field param.Field[string] `json:"field,required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-	// for numeric fields, 'exists' for text/boolean fields.
+	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[InstanceSearchParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
 
@@ -5948,7 +6006,7 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalBoostBy) MarshalJSON() (data
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 // 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
-// for numeric fields, 'exists' for text/boolean fields.
+// for numeric/datetime fields, 'exists' for text/boolean fields.
 type InstanceSearchParamsAISearchOptionsRetrievalBoostByDirection string
 
 const (

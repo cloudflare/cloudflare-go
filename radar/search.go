@@ -35,7 +35,10 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 }
 
 // Searches for locations, autonomous systems, reports, bots, certificate logs,
-// certificate authorities, industries and verticals
+// certificate authorities, industries and verticals. Location names can be
+// localized by sending an `Accept-Language` HTTP header with a BCP 47 language tag
+// (e.g., `Accept-Language: pt-PT`). The full quality-value chain is supported
+// (e.g., `pt-PT,pt;q=0.9,en;q=0.8`).
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

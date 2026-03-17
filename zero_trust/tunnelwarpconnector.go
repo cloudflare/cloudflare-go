@@ -908,6 +908,9 @@ type TunnelWARPConnectorNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name,required"`
+	// Indicates that the tunnel will be created to be highly available. If omitted,
+	// defaults to false.
+	Ha param.Field[bool] `json:"ha"`
 }
 
 func (r TunnelWARPConnectorNewParams) MarshalJSON() (data []byte, err error) {

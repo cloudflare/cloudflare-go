@@ -181,27 +181,31 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	// value is 576.
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
-	Name string                                               `json:"name"`
-	JSON cfInterconnectUpdateResponseModifiedInterconnectJSON `json:"-"`
+	Name string `json:"name"`
+	// An identifier that correlates this interconnect with the corresponding V2 CNI
+	// interconnect resource.
+	VirtualPortReservationID string                                               `json:"virtual_port_reservation_id"`
+	JSON                     cfInterconnectUpdateResponseModifiedInterconnectJSON `json:"-"`
 }
 
 // cfInterconnectUpdateResponseModifiedInterconnectJSON contains the JSON metadata
 // for the struct [CfInterconnectUpdateResponseModifiedInterconnect]
 type cfInterconnectUpdateResponseModifiedInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                       apijson.Field
+	AutomaticReturnRouting   apijson.Field
+	ColoName                 apijson.Field
+	CreatedOn                apijson.Field
+	Description              apijson.Field
+	GRE                      apijson.Field
+	HealthCheck              apijson.Field
+	InterfaceAddress         apijson.Field
+	InterfaceAddress6        apijson.Field
+	ModifiedOn               apijson.Field
+	Mtu                      apijson.Field
+	Name                     apijson.Field
+	VirtualPortReservationID apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CfInterconnectUpdateResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -287,27 +291,31 @@ type CfInterconnectListResponseInterconnect struct {
 	// value is 576.
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
-	Name string                                     `json:"name"`
-	JSON cfInterconnectListResponseInterconnectJSON `json:"-"`
+	Name string `json:"name"`
+	// An identifier that correlates this interconnect with the corresponding V2 CNI
+	// interconnect resource.
+	VirtualPortReservationID string                                     `json:"virtual_port_reservation_id"`
+	JSON                     cfInterconnectListResponseInterconnectJSON `json:"-"`
 }
 
 // cfInterconnectListResponseInterconnectJSON contains the JSON metadata for the
 // struct [CfInterconnectListResponseInterconnect]
 type cfInterconnectListResponseInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                       apijson.Field
+	AutomaticReturnRouting   apijson.Field
+	ColoName                 apijson.Field
+	CreatedOn                apijson.Field
+	Description              apijson.Field
+	GRE                      apijson.Field
+	HealthCheck              apijson.Field
+	InterfaceAddress         apijson.Field
+	InterfaceAddress6        apijson.Field
+	ModifiedOn               apijson.Field
+	Mtu                      apijson.Field
+	Name                     apijson.Field
+	VirtualPortReservationID apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CfInterconnectListResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -395,27 +403,31 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	// value is 576.
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
-	Name string                                                   `json:"name"`
-	JSON cfInterconnectBulkUpdateResponseModifiedInterconnectJSON `json:"-"`
+	Name string `json:"name"`
+	// An identifier that correlates this interconnect with the corresponding V2 CNI
+	// interconnect resource.
+	VirtualPortReservationID string                                                   `json:"virtual_port_reservation_id"`
+	JSON                     cfInterconnectBulkUpdateResponseModifiedInterconnectJSON `json:"-"`
 }
 
 // cfInterconnectBulkUpdateResponseModifiedInterconnectJSON contains the JSON
 // metadata for the struct [CfInterconnectBulkUpdateResponseModifiedInterconnect]
 type cfInterconnectBulkUpdateResponseModifiedInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                       apijson.Field
+	AutomaticReturnRouting   apijson.Field
+	ColoName                 apijson.Field
+	CreatedOn                apijson.Field
+	Description              apijson.Field
+	GRE                      apijson.Field
+	HealthCheck              apijson.Field
+	InterfaceAddress         apijson.Field
+	InterfaceAddress6        apijson.Field
+	ModifiedOn               apijson.Field
+	Mtu                      apijson.Field
+	Name                     apijson.Field
+	VirtualPortReservationID apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CfInterconnectBulkUpdateResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -502,27 +514,31 @@ type CfInterconnectGetResponseInterconnect struct {
 	// value is 576.
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
-	Name string                                    `json:"name"`
-	JSON cfInterconnectGetResponseInterconnectJSON `json:"-"`
+	Name string `json:"name"`
+	// An identifier that correlates this interconnect with the corresponding V2 CNI
+	// interconnect resource.
+	VirtualPortReservationID string                                    `json:"virtual_port_reservation_id"`
+	JSON                     cfInterconnectGetResponseInterconnectJSON `json:"-"`
 }
 
 // cfInterconnectGetResponseInterconnectJSON contains the JSON metadata for the
 // struct [CfInterconnectGetResponseInterconnect]
 type cfInterconnectGetResponseInterconnectJSON struct {
-	ID                     apijson.Field
-	AutomaticReturnRouting apijson.Field
-	ColoName               apijson.Field
-	CreatedOn              apijson.Field
-	Description            apijson.Field
-	GRE                    apijson.Field
-	HealthCheck            apijson.Field
-	InterfaceAddress       apijson.Field
-	InterfaceAddress6      apijson.Field
-	ModifiedOn             apijson.Field
-	Mtu                    apijson.Field
-	Name                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	ID                       apijson.Field
+	AutomaticReturnRouting   apijson.Field
+	ColoName                 apijson.Field
+	CreatedOn                apijson.Field
+	Description              apijson.Field
+	GRE                      apijson.Field
+	HealthCheck              apijson.Field
+	InterfaceAddress         apijson.Field
+	InterfaceAddress6        apijson.Field
+	ModifiedOn               apijson.Field
+	Mtu                      apijson.Field
+	Name                     apijson.Field
+	VirtualPortReservationID apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CfInterconnectGetResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
@@ -579,8 +595,10 @@ type CfInterconnectUpdateParams struct {
 	InterfaceAddress6 param.Field[string] `json:"interface_address6"`
 	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
 	// value is 576.
-	Mtu               param.Field[int64] `json:"mtu"`
-	XMagicNewHcTarget param.Field[bool]  `header:"x-magic-new-hc-target"`
+	Mtu param.Field[int64] `json:"mtu"`
+	// The name of the interconnect. The name cannot share a name with other tunnels.
+	Name              param.Field[string] `json:"name"`
+	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 func (r CfInterconnectUpdateParams) MarshalJSON() (data []byte, err error) {

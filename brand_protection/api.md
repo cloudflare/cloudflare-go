@@ -52,3 +52,13 @@ Methods:
 
 - <code title="get /accounts/{account_id}/brand-protection/logo-matches/download">client.BrandProtection.LogoMatches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchService.Download">Download</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchDownloadParams">LogoMatchDownloadParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchDownloadResponse">LogoMatchDownloadResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/brand-protection/logo-matches">client.BrandProtection.LogoMatches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchGetParams">LogoMatchGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchGetResponse">LogoMatchGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## V2
+
+### Queries
+
+### Matches
+
+### Logos
+
+### LogoMatches

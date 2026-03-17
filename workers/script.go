@@ -1949,6 +1949,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindImages],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindMedia],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines],
@@ -2417,6 +2418,35 @@ const (
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 	switch r {
 	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMedia struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMedia) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMedia) implementsScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaTypeMedia ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaType = "media"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaTypeMedia:
 		return true
 	}
 	return false
@@ -3076,6 +3106,7 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypeImages                 ScriptUpdateParamsMetadataBindingsType = "images"
 	ScriptUpdateParamsMetadataBindingsTypeJson                   ScriptUpdateParamsMetadataBindingsType = "json"
 	ScriptUpdateParamsMetadataBindingsTypeKVNamespace            ScriptUpdateParamsMetadataBindingsType = "kv_namespace"
+	ScriptUpdateParamsMetadataBindingsTypeMedia                  ScriptUpdateParamsMetadataBindingsType = "media"
 	ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate        ScriptUpdateParamsMetadataBindingsType = "mtls_certificate"
 	ScriptUpdateParamsMetadataBindingsTypePlainText              ScriptUpdateParamsMetadataBindingsType = "plain_text"
 	ScriptUpdateParamsMetadataBindingsTypePipelines              ScriptUpdateParamsMetadataBindingsType = "pipelines"
@@ -3097,7 +3128,7 @@ const (
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule, ScriptUpdateParamsMetadataBindingsTypeVPCService:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMedia, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule, ScriptUpdateParamsMetadataBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -3893,7 +3924,9 @@ type ScriptSearchResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                    `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                    `json:"total_pages"`
 	JSON       scriptSearchResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -3904,6 +3937,7 @@ type scriptSearchResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

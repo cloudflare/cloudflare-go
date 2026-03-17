@@ -41,7 +41,7 @@ func NewAccessAIControlMcpPortalService(opts ...option.RequestOption) (r *Access
 	return
 }
 
-// Create a new MCP Portal
+// Creates a new MCP portal for managing AI tool access through Cloudflare Access.
 func (r *AccessAIControlMcpPortalService) New(ctx context.Context, params AccessAIControlMcpPortalNewParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalNewResponse, err error) {
 	var env AccessAIControlMcpPortalNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +58,7 @@ func (r *AccessAIControlMcpPortalService) New(ctx context.Context, params Access
 	return
 }
 
-// Update a MCP Portal
+// Updates an MCP portal configuration.
 func (r *AccessAIControlMcpPortalService) Update(ctx context.Context, id string, params AccessAIControlMcpPortalUpdateParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalUpdateResponse, err error) {
 	var env AccessAIControlMcpPortalUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +79,7 @@ func (r *AccessAIControlMcpPortalService) Update(ctx context.Context, id string,
 	return
 }
 
-// List MCP Portals
+// Lists all MCP portals configured for the account.
 func (r *AccessAIControlMcpPortalService) List(ctx context.Context, params AccessAIControlMcpPortalListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessAIControlMcpPortalListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -101,12 +101,12 @@ func (r *AccessAIControlMcpPortalService) List(ctx context.Context, params Acces
 	return res, nil
 }
 
-// List MCP Portals
+// Lists all MCP portals configured for the account.
 func (r *AccessAIControlMcpPortalService) ListAutoPaging(ctx context.Context, params AccessAIControlMcpPortalListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessAIControlMcpPortalListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a MCP Portal
+// Deletes an MCP portal from the account.
 func (r *AccessAIControlMcpPortalService) Delete(ctx context.Context, id string, body AccessAIControlMcpPortalDeleteParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalDeleteResponse, err error) {
 	var env AccessAIControlMcpPortalDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -150,14 +150,16 @@ func (r *AccessAIControlMcpPortalService) Read(ctx context.Context, id string, q
 
 type AccessAIControlMcpPortalNewResponse struct {
 	// portal id
-	ID          string    `json:"id,required"`
-	Hostname    string    `json:"hostname,required"`
-	Name        string    `json:"name,required"`
-	CreatedAt   time.Time `json:"created_at" format:"date-time"`
-	CreatedBy   string    `json:"created_by"`
-	Description string    `json:"description"`
-	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy  string    `json:"modified_by"`
+	ID       string `json:"id,required"`
+	Hostname string `json:"hostname,required"`
+	Name     string `json:"name,required"`
+	// Allow remote code execution in Dynamic Workers (beta)
+	AllowCodeMode bool      `json:"allow_code_mode"`
+	CreatedAt     time.Time `json:"created_at" format:"date-time"`
+	CreatedBy     string    `json:"created_by"`
+	Description   string    `json:"description"`
+	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy    string    `json:"modified_by"`
 	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
 	SecureWebGateway bool                                    `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalNewResponseJSON `json:"-"`
@@ -169,6 +171,7 @@ type accessAIControlMcpPortalNewResponseJSON struct {
 	ID               apijson.Field
 	Hostname         apijson.Field
 	Name             apijson.Field
+	AllowCodeMode    apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -189,14 +192,16 @@ func (r accessAIControlMcpPortalNewResponseJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalUpdateResponse struct {
 	// portal id
-	ID          string    `json:"id,required"`
-	Hostname    string    `json:"hostname,required"`
-	Name        string    `json:"name,required"`
-	CreatedAt   time.Time `json:"created_at" format:"date-time"`
-	CreatedBy   string    `json:"created_by"`
-	Description string    `json:"description"`
-	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy  string    `json:"modified_by"`
+	ID       string `json:"id,required"`
+	Hostname string `json:"hostname,required"`
+	Name     string `json:"name,required"`
+	// Allow remote code execution in Dynamic Workers (beta)
+	AllowCodeMode bool      `json:"allow_code_mode"`
+	CreatedAt     time.Time `json:"created_at" format:"date-time"`
+	CreatedBy     string    `json:"created_by"`
+	Description   string    `json:"description"`
+	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy    string    `json:"modified_by"`
 	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
 	SecureWebGateway bool                                       `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalUpdateResponseJSON `json:"-"`
@@ -208,6 +213,7 @@ type accessAIControlMcpPortalUpdateResponseJSON struct {
 	ID               apijson.Field
 	Hostname         apijson.Field
 	Name             apijson.Field
+	AllowCodeMode    apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -228,14 +234,17 @@ func (r accessAIControlMcpPortalUpdateResponseJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalListResponse struct {
 	// portal id
-	ID          string    `json:"id,required"`
-	Hostname    string    `json:"hostname,required"`
-	Name        string    `json:"name,required"`
-	CreatedAt   time.Time `json:"created_at" format:"date-time"`
-	CreatedBy   string    `json:"created_by"`
-	Description string    `json:"description"`
-	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy  string    `json:"modified_by"`
+	ID       string                                       `json:"id,required"`
+	Hostname string                                       `json:"hostname,required"`
+	Name     string                                       `json:"name,required"`
+	Servers  []AccessAIControlMcpPortalListResponseServer `json:"servers,required"`
+	// Allow remote code execution in Dynamic Workers (beta)
+	AllowCodeMode bool      `json:"allow_code_mode"`
+	CreatedAt     time.Time `json:"created_at" format:"date-time"`
+	CreatedBy     string    `json:"created_by"`
+	Description   string    `json:"description"`
+	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy    string    `json:"modified_by"`
 	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
 	SecureWebGateway bool                                     `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalListResponseJSON `json:"-"`
@@ -247,6 +256,8 @@ type accessAIControlMcpPortalListResponseJSON struct {
 	ID               apijson.Field
 	Hostname         apijson.Field
 	Name             apijson.Field
+	Servers          apijson.Field
+	AllowCodeMode    apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -265,16 +276,132 @@ func (r accessAIControlMcpPortalListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type AccessAIControlMcpPortalListResponseServer struct {
+	// server id
+	ID                 string                                                                      `json:"id,required"`
+	AuthType           AccessAIControlMcpPortalListResponseServersAuthType                         `json:"auth_type,required"`
+	Hostname           string                                                                      `json:"hostname,required" format:"uri"`
+	Name               string                                                                      `json:"name,required"`
+	Prompts            []map[string]interface{}                                                    `json:"prompts,required"`
+	Tools              []map[string]interface{}                                                    `json:"tools,required"`
+	UpdatedPrompts     []map[string]AccessAIControlMcpPortalListResponseServersUpdatedPromptsUnion `json:"updated_prompts,required"`
+	UpdatedTools       []map[string]AccessAIControlMcpPortalListResponseServersUpdatedToolsUnion   `json:"updated_tools,required"`
+	CreatedAt          time.Time                                                                   `json:"created_at" format:"date-time"`
+	CreatedBy          string                                                                      `json:"created_by"`
+	DefaultDisabled    bool                                                                        `json:"default_disabled"`
+	Description        string                                                                      `json:"description,nullable"`
+	Error              string                                                                      `json:"error"`
+	LastSuccessfulSync time.Time                                                                   `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                                                   `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                                                   `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                                                      `json:"modified_by"`
+	OnBehalf           bool                                                                        `json:"on_behalf"`
+	Status             string                                                                      `json:"status"`
+	JSON               accessAIControlMcpPortalListResponseServerJSON                              `json:"-"`
+}
+
+// accessAIControlMcpPortalListResponseServerJSON contains the JSON metadata for
+// the struct [AccessAIControlMcpPortalListResponseServer]
+type accessAIControlMcpPortalListResponseServerJSON struct {
+	ID                 apijson.Field
+	AuthType           apijson.Field
+	Hostname           apijson.Field
+	Name               apijson.Field
+	Prompts            apijson.Field
+	Tools              apijson.Field
+	UpdatedPrompts     apijson.Field
+	UpdatedTools       apijson.Field
+	CreatedAt          apijson.Field
+	CreatedBy          apijson.Field
+	DefaultDisabled    apijson.Field
+	Description        apijson.Field
+	Error              apijson.Field
+	LastSuccessfulSync apijson.Field
+	LastSynced         apijson.Field
+	ModifiedAt         apijson.Field
+	ModifiedBy         apijson.Field
+	OnBehalf           apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalListResponseServer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalListResponseServerJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalListResponseServersAuthType string
+
+const (
+	AccessAIControlMcpPortalListResponseServersAuthTypeOAuth           AccessAIControlMcpPortalListResponseServersAuthType = "oauth"
+	AccessAIControlMcpPortalListResponseServersAuthTypeBearer          AccessAIControlMcpPortalListResponseServersAuthType = "bearer"
+	AccessAIControlMcpPortalListResponseServersAuthTypeUnauthenticated AccessAIControlMcpPortalListResponseServersAuthType = "unauthenticated"
+)
+
+func (r AccessAIControlMcpPortalListResponseServersAuthType) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalListResponseServersAuthTypeOAuth, AccessAIControlMcpPortalListResponseServersAuthTypeBearer, AccessAIControlMcpPortalListResponseServersAuthTypeUnauthenticated:
+		return true
+	}
+	return false
+}
+
+// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
+type AccessAIControlMcpPortalListResponseServersUpdatedPromptsUnion interface {
+	ImplementsAccessAIControlMcpPortalListResponseServersUpdatedPromptsUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessAIControlMcpPortalListResponseServersUpdatedPromptsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [shared.UnionFloat] or [shared.UnionString].
+type AccessAIControlMcpPortalListResponseServersUpdatedToolsUnion interface {
+	ImplementsAccessAIControlMcpPortalListResponseServersUpdatedToolsUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessAIControlMcpPortalListResponseServersUpdatedToolsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type AccessAIControlMcpPortalDeleteResponse struct {
 	// portal id
-	ID          string    `json:"id,required"`
-	Hostname    string    `json:"hostname,required"`
-	Name        string    `json:"name,required"`
-	CreatedAt   time.Time `json:"created_at" format:"date-time"`
-	CreatedBy   string    `json:"created_by"`
-	Description string    `json:"description"`
-	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy  string    `json:"modified_by"`
+	ID       string `json:"id,required"`
+	Hostname string `json:"hostname,required"`
+	Name     string `json:"name,required"`
+	// Allow remote code execution in Dynamic Workers (beta)
+	AllowCodeMode bool      `json:"allow_code_mode"`
+	CreatedAt     time.Time `json:"created_at" format:"date-time"`
+	CreatedBy     string    `json:"created_by"`
+	Description   string    `json:"description"`
+	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy    string    `json:"modified_by"`
 	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
 	SecureWebGateway bool                                       `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalDeleteResponseJSON `json:"-"`
@@ -286,6 +413,7 @@ type accessAIControlMcpPortalDeleteResponseJSON struct {
 	ID               apijson.Field
 	Hostname         apijson.Field
 	Name             apijson.Field
+	AllowCodeMode    apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -306,15 +434,17 @@ func (r accessAIControlMcpPortalDeleteResponseJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalReadResponse struct {
 	// portal id
-	ID          string                                       `json:"id,required"`
-	Hostname    string                                       `json:"hostname,required"`
-	Name        string                                       `json:"name,required"`
-	Servers     []AccessAIControlMcpPortalReadResponseServer `json:"servers,required"`
-	CreatedAt   time.Time                                    `json:"created_at" format:"date-time"`
-	CreatedBy   string                                       `json:"created_by"`
-	Description string                                       `json:"description"`
-	ModifiedAt  time.Time                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy  string                                       `json:"modified_by"`
+	ID       string                                       `json:"id,required"`
+	Hostname string                                       `json:"hostname,required"`
+	Name     string                                       `json:"name,required"`
+	Servers  []AccessAIControlMcpPortalReadResponseServer `json:"servers,required"`
+	// Allow remote code execution in Dynamic Workers (beta)
+	AllowCodeMode bool      `json:"allow_code_mode"`
+	CreatedAt     time.Time `json:"created_at" format:"date-time"`
+	CreatedBy     string    `json:"created_by"`
+	Description   string    `json:"description"`
+	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy    string    `json:"modified_by"`
 	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
 	SecureWebGateway bool                                     `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalReadResponseJSON `json:"-"`
@@ -327,6 +457,7 @@ type accessAIControlMcpPortalReadResponseJSON struct {
 	Hostname         apijson.Field
 	Name             apijson.Field
 	Servers          apijson.Field
+	AllowCodeMode    apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -462,10 +593,12 @@ func init() {
 type AccessAIControlMcpPortalNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// portal id
-	ID          param.Field[string] `json:"id,required"`
-	Hostname    param.Field[string] `json:"hostname,required"`
-	Name        param.Field[string] `json:"name,required"`
-	Description param.Field[string] `json:"description"`
+	ID       param.Field[string] `json:"id,required"`
+	Hostname param.Field[string] `json:"hostname,required"`
+	Name     param.Field[string] `json:"name,required"`
+	// Allow remote code execution in Dynamic Workers (beta)
+	AllowCodeMode param.Field[bool]   `json:"allow_code_mode"`
+	Description   param.Field[string] `json:"description"`
 	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
 	SecureWebGateway param.Field[bool]                                      `json:"secure_web_gateway"`
 	Servers          param.Field[[]AccessAIControlMcpPortalNewParamsServer] `json:"servers"`
@@ -490,6 +623,7 @@ func (r AccessAIControlMcpPortalNewParamsServer) MarshalJSON() (data []byte, err
 
 type AccessAIControlMcpPortalNewParamsServersUpdatedPrompt struct {
 	Name        param.Field[string] `json:"name,required"`
+	Alias       param.Field[string] `json:"alias"`
 	Description param.Field[string] `json:"description"`
 	Enabled     param.Field[bool]   `json:"enabled"`
 }
@@ -500,6 +634,7 @@ func (r AccessAIControlMcpPortalNewParamsServersUpdatedPrompt) MarshalJSON() (da
 
 type AccessAIControlMcpPortalNewParamsServersUpdatedTool struct {
 	Name        param.Field[string] `json:"name,required"`
+	Alias       param.Field[string] `json:"alias"`
 	Description param.Field[string] `json:"description"`
 	Enabled     param.Field[bool]   `json:"enabled"`
 }
@@ -532,10 +667,12 @@ func (r accessAIControlMcpPortalNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalUpdateParams struct {
-	AccountID   param.Field[string] `path:"account_id,required"`
-	Description param.Field[string] `json:"description"`
-	Hostname    param.Field[string] `json:"hostname"`
-	Name        param.Field[string] `json:"name"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Allow remote code execution in Dynamic Workers (beta)
+	AllowCodeMode param.Field[bool]   `json:"allow_code_mode"`
+	Description   param.Field[string] `json:"description"`
+	Hostname      param.Field[string] `json:"hostname"`
+	Name          param.Field[string] `json:"name"`
 	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
 	SecureWebGateway param.Field[bool]                                         `json:"secure_web_gateway"`
 	Servers          param.Field[[]AccessAIControlMcpPortalUpdateParamsServer] `json:"servers"`
@@ -560,6 +697,7 @@ func (r AccessAIControlMcpPortalUpdateParamsServer) MarshalJSON() (data []byte, 
 
 type AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt struct {
 	Name        param.Field[string] `json:"name,required"`
+	Alias       param.Field[string] `json:"alias"`
 	Description param.Field[string] `json:"description"`
 	Enabled     param.Field[bool]   `json:"enabled"`
 }
@@ -570,6 +708,7 @@ func (r AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt) MarshalJSON() 
 
 type AccessAIControlMcpPortalUpdateParamsServersUpdatedTool struct {
 	Name        param.Field[string] `json:"name,required"`
+	Alias       param.Field[string] `json:"alias"`
 	Description param.Field[string] `json:"description"`
 	Enabled     param.Field[bool]   `json:"enabled"`
 }

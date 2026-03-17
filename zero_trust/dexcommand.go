@@ -455,7 +455,9 @@ type DEXCommandNewResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                     `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                     `json:"total_pages"`
 	JSON       dexCommandNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -466,6 +468,7 @@ type dexCommandNewResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
