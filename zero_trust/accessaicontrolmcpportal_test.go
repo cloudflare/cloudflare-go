@@ -32,6 +32,7 @@ func TestAccessAIControlMcpPortalNewWithOptionalParams(t *testing.T) {
 		ID:               cloudflare.F("my-mcp-portal"),
 		Hostname:         cloudflare.F("exmaple.com"),
 		Name:             cloudflare.F("My MCP Portal"),
+		AllowCodeMode:    cloudflare.F(true),
 		Description:      cloudflare.F("This is my custom MCP Portal"),
 		SecureWebGateway: cloudflare.F(false),
 		Servers: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServer{{
@@ -40,11 +41,13 @@ func TestAccessAIControlMcpPortalNewWithOptionalParams(t *testing.T) {
 			OnBehalf:        cloudflare.F(true),
 			UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServersUpdatedPrompt{{
 				Name:        cloudflare.F("name"),
+				Alias:       cloudflare.F("my-custom-alias"),
 				Description: cloudflare.F("description"),
 				Enabled:     cloudflare.F(true),
 			}}),
 			UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServersUpdatedTool{{
 				Name:        cloudflare.F("name"),
+				Alias:       cloudflare.F("my-custom-alias"),
 				Description: cloudflare.F("description"),
 				Enabled:     cloudflare.F(true),
 			}}),
@@ -77,6 +80,7 @@ func TestAccessAIControlMcpPortalUpdateWithOptionalParams(t *testing.T) {
 		"my-mcp-portal",
 		zero_trust.AccessAIControlMcpPortalUpdateParams{
 			AccountID:        cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
+			AllowCodeMode:    cloudflare.F(true),
 			Description:      cloudflare.F("This is my custom MCP Portal"),
 			Hostname:         cloudflare.F("exmaple.com"),
 			Name:             cloudflare.F("My MCP Portal"),
@@ -87,11 +91,13 @@ func TestAccessAIControlMcpPortalUpdateWithOptionalParams(t *testing.T) {
 				OnBehalf:        cloudflare.F(true),
 				UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt{{
 					Name:        cloudflare.F("name"),
+					Alias:       cloudflare.F("my-custom-alias"),
 					Description: cloudflare.F("description"),
 					Enabled:     cloudflare.F(true),
 				}}),
 				UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServersUpdatedTool{{
 					Name:        cloudflare.F("name"),
+					Alias:       cloudflare.F("my-custom-alias"),
 					Description: cloudflare.F("description"),
 					Enabled:     cloudflare.F(true),
 				}}),

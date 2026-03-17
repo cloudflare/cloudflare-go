@@ -76,6 +76,8 @@ func (UnionString) ImplementsIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHe
 func (UnionString) ImplementsIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion()         {}
 func (UnionString) ImplementsIPSECTunnelNewParamsHealthCheckTargetUnion()                      {}
 func (UnionString) ImplementsIPSECTunnelUpdateParamsHealthCheckTargetUnion()                   {}
+func (UnionString) ImplementsAccessAIControlMcpPortalListResponseServersUpdatedPromptsUnion()  {}
+func (UnionString) ImplementsAccessAIControlMcpPortalListResponseServersUpdatedToolsUnion()    {}
 func (UnionString) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedPromptsUnion()  {}
 func (UnionString) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion()    {}
 func (UnionString) ImplementsAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion()  {}
@@ -293,6 +295,8 @@ func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion(
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                    {}
 func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()             {}
 func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()          {}
+func (UnionFloat) ImplementsAccessAIControlMcpPortalListResponseServersUpdatedPromptsUnion()        {}
+func (UnionFloat) ImplementsAccessAIControlMcpPortalListResponseServersUpdatedToolsUnion()          {}
 func (UnionFloat) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedPromptsUnion()        {}
 func (UnionFloat) ImplementsAccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion()          {}
 func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                            {}
