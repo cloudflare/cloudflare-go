@@ -36,9 +36,17 @@ func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 				Enabled:          cloudflare.F(true),
 				HeadSamplingRate: cloudflare.F(1.000000),
 				Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
+					Destinations:     cloudflare.F([]string{"string"}),
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
 					InvocationLogs:   cloudflare.F(true),
+					Persist:          cloudflare.F(true),
+				}),
+				Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
+					Destinations:     cloudflare.F([]string{"string"}),
+					Enabled:          cloudflare.F(true),
+					HeadSamplingRate: cloudflare.F(1.000000),
+					Persist:          cloudflare.F(true),
 				}),
 			}),
 			Subdomain: cloudflare.F(workers.WorkerSubdomainParam{
@@ -85,9 +93,17 @@ func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
 					Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
+						Destinations:     cloudflare.F([]string{"string"}),
 						Enabled:          cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(1.000000),
 						InvocationLogs:   cloudflare.F(true),
+						Persist:          cloudflare.F(true),
+					}),
+					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
+						Destinations:     cloudflare.F([]string{"string"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(1.000000),
+						Persist:          cloudflare.F(true),
 					}),
 				}),
 				Subdomain: cloudflare.F(workers.WorkerSubdomainParam{
@@ -193,9 +209,17 @@ func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
 					Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
+						Destinations:     cloudflare.F([]string{"string"}),
 						Enabled:          cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(1.000000),
 						InvocationLogs:   cloudflare.F(true),
+						Persist:          cloudflare.F(true),
+					}),
+					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
+						Destinations:     cloudflare.F([]string{"string"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(1.000000),
+						Persist:          cloudflare.F(true),
 					}),
 				}),
 				Subdomain: cloudflare.F(workers.WorkerSubdomainParam{

@@ -2449,7 +2449,9 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingEditResponseObservabilityLogs `json:"logs,nullable"`
-	JSON scriptScriptAndVersionSettingEditResponseObservabilityJSON `json:"-"`
+	// Trace settings for the Worker.
+	Traces ScriptScriptAndVersionSettingEditResponseObservabilityTraces `json:"traces,nullable"`
+	JSON   scriptScriptAndVersionSettingEditResponseObservabilityJSON   `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseObservabilityJSON contains the JSON
@@ -2458,6 +2460,7 @@ type scriptScriptAndVersionSettingEditResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	Logs             apijson.Field
+	Traces           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2505,6 +2508,39 @@ func (r *ScriptScriptAndVersionSettingEditResponseObservabilityLogs) UnmarshalJS
 }
 
 func (r scriptScriptAndVersionSettingEditResponseObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Trace settings for the Worker.
+type ScriptScriptAndVersionSettingEditResponseObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool                                                             `json:"persist"`
+	JSON    scriptScriptAndVersionSettingEditResponseObservabilityTracesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseObservabilityTracesJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseObservabilityTraces]
+type scriptScriptAndVersionSettingEditResponseObservabilityTracesJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseObservabilityTracesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -5172,7 +5208,9 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingGetResponseObservabilityLogs `json:"logs,nullable"`
-	JSON scriptScriptAndVersionSettingGetResponseObservabilityJSON `json:"-"`
+	// Trace settings for the Worker.
+	Traces ScriptScriptAndVersionSettingGetResponseObservabilityTraces `json:"traces,nullable"`
+	JSON   scriptScriptAndVersionSettingGetResponseObservabilityJSON   `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseObservabilityJSON contains the JSON
@@ -5181,6 +5219,7 @@ type scriptScriptAndVersionSettingGetResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	Logs             apijson.Field
+	Traces           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -5228,6 +5267,39 @@ func (r *ScriptScriptAndVersionSettingGetResponseObservabilityLogs) UnmarshalJSO
 }
 
 func (r scriptScriptAndVersionSettingGetResponseObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Trace settings for the Worker.
+type ScriptScriptAndVersionSettingGetResponseObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool                                                            `json:"persist"`
+	JSON    scriptScriptAndVersionSettingGetResponseObservabilityTracesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseObservabilityTracesJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseObservabilityTraces]
+type scriptScriptAndVersionSettingGetResponseObservabilityTracesJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseObservabilityTracesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6994,6 +7066,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
+	// Trace settings for the Worker.
+	Traces param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces] `json:"traces"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
@@ -7017,6 +7091,22 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs struct {
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Trace settings for the Worker.
+type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -299,7 +299,9 @@ type ScriptObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
 	// Log settings for the Worker.
 	Logs ScriptObservabilityLogs `json:"logs,nullable"`
-	JSON scriptObservabilityJSON `json:"-"`
+	// Trace settings for the Worker.
+	Traces ScriptObservabilityTraces `json:"traces,nullable"`
+	JSON   scriptObservabilityJSON   `json:"-"`
 }
 
 // scriptObservabilityJSON contains the JSON metadata for the struct
@@ -308,6 +310,7 @@ type scriptObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	Logs             apijson.Field
+	Traces           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -354,6 +357,38 @@ func (r *ScriptObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Trace settings for the Worker.
+type ScriptObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool                          `json:"persist"`
+	JSON    scriptObservabilityTracesJSON `json:"-"`
+}
+
+// scriptObservabilityTracesJSON contains the JSON metadata for the struct
+// [ScriptObservabilityTraces]
+type scriptObservabilityTracesJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptObservabilityTracesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -627,7 +662,9 @@ type ScriptSettingObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
 	// Log settings for the Worker.
 	Logs ScriptSettingObservabilityLogs `json:"logs,nullable"`
-	JSON scriptSettingObservabilityJSON `json:"-"`
+	// Trace settings for the Worker.
+	Traces ScriptSettingObservabilityTraces `json:"traces,nullable"`
+	JSON   scriptSettingObservabilityJSON   `json:"-"`
 }
 
 // scriptSettingObservabilityJSON contains the JSON metadata for the struct
@@ -636,6 +673,7 @@ type scriptSettingObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	Logs             apijson.Field
+	Traces           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -685,6 +723,38 @@ func (r scriptSettingObservabilityLogsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Trace settings for the Worker.
+type ScriptSettingObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool                                 `json:"persist"`
+	JSON    scriptSettingObservabilityTracesJSON `json:"-"`
+}
+
+// scriptSettingObservabilityTracesJSON contains the JSON metadata for the struct
+// [ScriptSettingObservabilityTraces]
+type scriptSettingObservabilityTracesJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSettingObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingObservabilityTracesJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptSettingParam struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
@@ -709,6 +779,8 @@ type ScriptSettingObservabilityParam struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptSettingObservabilityLogsParam] `json:"logs"`
+	// Trace settings for the Worker.
+	Traces param.Field[ScriptSettingObservabilityTracesParam] `json:"traces"`
 }
 
 func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) {
@@ -732,6 +804,22 @@ type ScriptSettingObservabilityLogsParam struct {
 }
 
 func (r ScriptSettingObservabilityLogsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Trace settings for the Worker.
+type ScriptSettingObservabilityTracesParam struct {
+	// A list of destinations where traces will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
+}
+
+func (r ScriptSettingObservabilityTracesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -863,7 +951,9 @@ type ScriptUpdateResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
 	// Log settings for the Worker.
 	Logs ScriptUpdateResponseObservabilityLogs `json:"logs,nullable"`
-	JSON scriptUpdateResponseObservabilityJSON `json:"-"`
+	// Trace settings for the Worker.
+	Traces ScriptUpdateResponseObservabilityTraces `json:"traces,nullable"`
+	JSON   scriptUpdateResponseObservabilityJSON   `json:"-"`
 }
 
 // scriptUpdateResponseObservabilityJSON contains the JSON metadata for the struct
@@ -872,6 +962,7 @@ type scriptUpdateResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	Logs             apijson.Field
+	Traces           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -918,6 +1009,38 @@ func (r *ScriptUpdateResponseObservabilityLogs) UnmarshalJSON(data []byte) (err 
 }
 
 func (r scriptUpdateResponseObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Trace settings for the Worker.
+type ScriptUpdateResponseObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool                                        `json:"persist"`
+	JSON    scriptUpdateResponseObservabilityTracesJSON `json:"-"`
+}
+
+// scriptUpdateResponseObservabilityTracesJSON contains the JSON metadata for the
+// struct [ScriptUpdateResponseObservabilityTraces]
+type scriptUpdateResponseObservabilityTracesJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseObservabilityTracesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1283,7 +1406,9 @@ type ScriptListResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
 	// Log settings for the Worker.
 	Logs ScriptListResponseObservabilityLogs `json:"logs,nullable"`
-	JSON scriptListResponseObservabilityJSON `json:"-"`
+	// Trace settings for the Worker.
+	Traces ScriptListResponseObservabilityTraces `json:"traces,nullable"`
+	JSON   scriptListResponseObservabilityJSON   `json:"-"`
 }
 
 // scriptListResponseObservabilityJSON contains the JSON metadata for the struct
@@ -1292,6 +1417,7 @@ type scriptListResponseObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	Logs             apijson.Field
+	Traces           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1338,6 +1464,38 @@ func (r *ScriptListResponseObservabilityLogs) UnmarshalJSON(data []byte) (err er
 }
 
 func (r scriptListResponseObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Trace settings for the Worker.
+type ScriptListResponseObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool                                      `json:"persist"`
+	JSON    scriptListResponseObservabilityTracesJSON `json:"-"`
+}
+
+// scriptListResponseObservabilityTracesJSON contains the JSON metadata for the
+// struct [ScriptListResponseObservabilityTraces]
+type scriptListResponseObservabilityTracesJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptListResponseObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseObservabilityTracesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3238,6 +3396,8 @@ type ScriptUpdateParamsMetadataObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
+	// Trace settings for the Worker.
+	Traces param.Field[ScriptUpdateParamsMetadataObservabilityTraces] `json:"traces"`
 }
 
 func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
@@ -3261,6 +3421,22 @@ type ScriptUpdateParamsMetadataObservabilityLogs struct {
 }
 
 func (r ScriptUpdateParamsMetadataObservabilityLogs) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Trace settings for the Worker.
+type ScriptUpdateParamsMetadataObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
+}
+
+func (r ScriptUpdateParamsMetadataObservabilityTraces) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

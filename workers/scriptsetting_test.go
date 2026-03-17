@@ -44,6 +44,12 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 						HeadSamplingRate: cloudflare.F(0.100000),
 						Persist:          cloudflare.F(true),
 					}),
+					Traces: cloudflare.F(workers.ScriptSettingObservabilityTracesParam{
+						Destinations:     cloudflare.F([]string{"cloudflare"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
+						Persist:          cloudflare.F(true),
+					}),
 				}),
 				Tags: cloudflare.F([]string{"my-team", "my-public-api"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
