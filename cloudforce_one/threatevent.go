@@ -745,12 +745,13 @@ func (r ThreatEventBulkNewParamsDataIndicator) MarshalJSON() (data []byte, err e
 
 type ThreatEventEditParams struct {
 	// Account ID.
-	AccountID       param.Field[string]                   `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Dataset ID containing the event to update.
+	DatasetID       param.Field[string]                   `json:"datasetId,required"`
 	Attacker        param.Field[string]                   `json:"attacker"`
 	AttackerCountry param.Field[string]                   `json:"attackerCountry"`
 	Category        param.Field[string]                   `json:"category"`
 	CreatedAt       param.Field[time.Time]                `json:"createdAt" format:"date-time"`
-	DatasetID       param.Field[string]                   `json:"datasetId"`
 	Date            param.Field[time.Time]                `json:"date" format:"date-time"`
 	Event           param.Field[string]                   `json:"event"`
 	Indicator       param.Field[string]                   `json:"indicator"`

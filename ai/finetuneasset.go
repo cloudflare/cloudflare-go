@@ -38,7 +38,7 @@ func NewFinetuneAssetService(opts ...option.RequestOption) (r *FinetuneAssetServ
 	return
 }
 
-// Upload a Finetune Asset
+// Uploads training data assets for a Workers AI fine-tuning job.
 func (r *FinetuneAssetService) New(ctx context.Context, finetuneID string, params FinetuneAssetNewParams, opts ...option.RequestOption) (res *FinetuneAssetNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
