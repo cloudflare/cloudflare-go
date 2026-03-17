@@ -227,7 +227,9 @@ type WorkerObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs WorkerObservabilityLogs `json:"logs"`
-	JSON workerObservabilityJSON `json:"-"`
+	// Trace settings for the Worker.
+	Traces WorkerObservabilityTraces `json:"traces"`
+	JSON   workerObservabilityJSON   `json:"-"`
 }
 
 // workerObservabilityJSON contains the JSON metadata for the struct
@@ -236,6 +238,7 @@ type workerObservabilityJSON struct {
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	Logs             apijson.Field
+	Traces           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -250,6 +253,8 @@ func (r workerObservabilityJSON) RawJSON() string {
 
 // Log settings for the Worker.
 type WorkerObservabilityLogs struct {
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
 	// Whether logs are enabled for the Worker.
 	Enabled bool `json:"enabled"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%).
@@ -257,16 +262,20 @@ type WorkerObservabilityLogs struct {
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs bool                        `json:"invocation_logs"`
-	JSON           workerObservabilityLogsJSON `json:"-"`
+	InvocationLogs bool `json:"invocation_logs"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                        `json:"persist"`
+	JSON    workerObservabilityLogsJSON `json:"-"`
 }
 
 // workerObservabilityLogsJSON contains the JSON metadata for the struct
 // [WorkerObservabilityLogs]
 type workerObservabilityLogsJSON struct {
+	Destinations     apijson.Field
 	Enabled          apijson.Field
 	HeadSamplingRate apijson.Field
 	InvocationLogs   apijson.Field
+	Persist          apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -276,6 +285,38 @@ func (r *WorkerObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r workerObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Trace settings for the Worker.
+type WorkerObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate float64 `json:"head_sampling_rate"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool                          `json:"persist"`
+	JSON    workerObservabilityTracesJSON `json:"-"`
+}
+
+// workerObservabilityTracesJSON contains the JSON metadata for the struct
+// [WorkerObservabilityTraces]
+type workerObservabilityTracesJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WorkerObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerObservabilityTracesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -540,6 +581,8 @@ type WorkerObservabilityParam struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[WorkerObservabilityLogsParam] `json:"logs"`
+	// Trace settings for the Worker.
+	Traces param.Field[WorkerObservabilityTracesParam] `json:"traces"`
 }
 
 func (r WorkerObservabilityParam) MarshalJSON() (data []byte, err error) {
@@ -548,6 +591,8 @@ func (r WorkerObservabilityParam) MarshalJSON() (data []byte, err error) {
 
 // Log settings for the Worker.
 type WorkerObservabilityLogsParam struct {
+	// A list of destinations where logs will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
 	// Whether logs are enabled for the Worker.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%).
@@ -556,9 +601,27 @@ type WorkerObservabilityLogsParam struct {
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
 	InvocationLogs param.Field[bool] `json:"invocation_logs"`
+	// Whether log persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
 }
 
 func (r WorkerObservabilityLogsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Trace settings for the Worker.
+type WorkerObservabilityTracesParam struct {
+	// A list of destinations where traces will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
+}
+
+func (r WorkerObservabilityTracesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

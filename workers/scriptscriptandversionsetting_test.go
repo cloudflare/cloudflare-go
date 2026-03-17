@@ -75,6 +75,12 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 						HeadSamplingRate: cloudflare.F(0.100000),
 						Persist:          cloudflare.F(true),
 					}),
+					Traces: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces{
+						Destinations:     cloudflare.F([]string{"cloudflare"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
+						Persist:          cloudflare.F(true),
+					}),
 				}),
 				Placement: cloudflare.F[workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion](workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode{
 					Mode: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeModeSmart),

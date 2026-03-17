@@ -38,17 +38,8 @@ func NewUsageService(opts ...option.RequestOption) (r *UsageService) {
 }
 
 // Returns billable usage data for PayGo (self-serve) accounts. When no query
-// parameters are provided, returns usage for the current billing period.
-//
-// Supports two mutually exclusive query modes:
-//
-// **Billing period mode:** Use `last_year_period_start` and
-// `last_month_period_start` to query a specific billing period.
-//
-// **Date range mode:** Use `from` and `to` to query a custom date range (maximum
-// 62 days).
-//
-// This endpoint is currently in beta and access is restricted to select accounts.
+// parameters are provided, returns usage for the current billing period. This
+// endpoint is currently in beta and access is restricted to select accounts.
 func (r *UsageService) Paygo(ctx context.Context, params UsagePaygoParams, opts ...option.RequestOption) (res *[]UsagePaygoResponse, err error) {
 	var env UsagePaygoResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -123,12 +114,6 @@ type UsagePaygoParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Defines the start date for the usage query (e.g., 2025-02-01).
 	From param.Field[time.Time] `query:"from" format:"date"`
-	// Specifies the month of the billing period to query (1-12). Must be provided
-	// together with last_year_period_start. Mutually exclusive with from/to.
-	LastMonthPeriodStart param.Field[int64] `query:"last_month_period_start"`
-	// Specifies the year of the billing period to query (e.g., 2025). Must be provided
-	// together with last_month_period_start. Mutually exclusive with from/to.
-	LastYearPeriodStart param.Field[int64] `query:"last_year_period_start"`
 	// Defines the end date for the usage query (e.g., 2025-03-01).
 	To param.Field[time.Time] `query:"to" format:"date"`
 }
