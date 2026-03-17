@@ -38,7 +38,7 @@ func NewAccessAIControlMcpServerService(opts ...option.RequestOption) (r *Access
 	return
 }
 
-// Create a new MCP Server
+// Creates a new MCP portal for managing AI tool access through Cloudflare Access.
 func (r *AccessAIControlMcpServerService) New(ctx context.Context, params AccessAIControlMcpServerNewParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerNewResponse, err error) {
 	var env AccessAIControlMcpServerNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *AccessAIControlMcpServerService) New(ctx context.Context, params Access
 	return
 }
 
-// Update a MCP Server
+// Updates an MCP portal configuration.
 func (r *AccessAIControlMcpServerService) Update(ctx context.Context, id string, params AccessAIControlMcpServerUpdateParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerUpdateResponse, err error) {
 	var env AccessAIControlMcpServerUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +76,7 @@ func (r *AccessAIControlMcpServerService) Update(ctx context.Context, id string,
 	return
 }
 
-// List MCP Servers
+// Lists all MCP portals configured for the account.
 func (r *AccessAIControlMcpServerService) List(ctx context.Context, params AccessAIControlMcpServerListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessAIControlMcpServerListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -98,12 +98,12 @@ func (r *AccessAIControlMcpServerService) List(ctx context.Context, params Acces
 	return res, nil
 }
 
-// List MCP Servers
+// Lists all MCP portals configured for the account.
 func (r *AccessAIControlMcpServerService) ListAutoPaging(ctx context.Context, params AccessAIControlMcpServerListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessAIControlMcpServerListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a MCP Server
+// Deletes an MCP portal from the account.
 func (r *AccessAIControlMcpServerService) Delete(ctx context.Context, id string, body AccessAIControlMcpServerDeleteParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerDeleteResponse, err error) {
 	var env AccessAIControlMcpServerDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -124,7 +124,7 @@ func (r *AccessAIControlMcpServerService) Delete(ctx context.Context, id string,
 	return
 }
 
-// Read the details of a MCP Server
+// Retrieves gateway configuration for MCP portals.
 func (r *AccessAIControlMcpServerService) Read(ctx context.Context, id string, query AccessAIControlMcpServerReadParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerReadResponse, err error) {
 	var env AccessAIControlMcpServerReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -145,7 +145,7 @@ func (r *AccessAIControlMcpServerService) Read(ctx context.Context, id string, q
 	return
 }
 
-// Sync MCP Server Capabilities
+// Syncs an MCP server's tool catalog with the portal.
 func (r *AccessAIControlMcpServerService) Sync(ctx context.Context, id string, body AccessAIControlMcpServerSyncParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerSyncResponse, err error) {
 	var env AccessAIControlMcpServerSyncResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

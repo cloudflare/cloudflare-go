@@ -31,7 +31,7 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 		AccountID:       cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		ID:              cloudflare.F("my-mcp-server"),
 		AuthType:        cloudflare.F(zero_trust.AccessAIControlMcpServerNewParamsAuthTypeUnauthenticated),
-		Hostname:        cloudflare.F("https://exmaple.com/mcp"),
+		Hostname:        cloudflare.F("https://example.com/mcp"),
 		Name:            cloudflare.F("My MCP Server"),
 		AuthCredentials: cloudflare.F("auth_credentials"),
 		Description:     cloudflare.F("This is one remote mcp server"),
