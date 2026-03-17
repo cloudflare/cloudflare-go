@@ -36,7 +36,10 @@ func NewGeolocationService(opts ...option.RequestOption) (r *GeolocationService)
 	return
 }
 
-// Retrieves a list of geolocations.
+// Retrieves a list of geolocations. Geolocation names can be localized by sending
+// an `Accept-Language` HTTP header with a BCP 47 language tag (e.g.,
+// `Accept-Language: pt-PT`). The full quality-value chain is supported (e.g.,
+// `pt-PT,pt;q=0.9,en;q=0.8`).
 func (r *GeolocationService) List(ctx context.Context, query GeolocationListParams, opts ...option.RequestOption) (res *GeolocationListResponse, err error) {
 	var env GeolocationListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -49,7 +52,10 @@ func (r *GeolocationService) List(ctx context.Context, query GeolocationListPara
 	return
 }
 
-// Retrieves the requested Geolocation information.
+// Retrieves the requested Geolocation information. Geolocation names can be
+// localized by sending an `Accept-Language` HTTP header with a BCP 47 language tag
+// (e.g., `Accept-Language: pt-PT`). The full quality-value chain is supported
+// (e.g., `pt-PT,pt;q=0.9,en;q=0.8`).
 func (r *GeolocationService) Get(ctx context.Context, geoID string, query GeolocationGetParams, opts ...option.RequestOption) (res *GeolocationGetResponse, err error) {
 	var env GeolocationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -98,7 +104,9 @@ type GeolocationListResponseGeolocation struct {
 	// The type of the geolocation.
 	Type GeolocationListResponseGeolocationsType `json:"type,required"`
 	Code string                                  `json:"code"`
-	JSON geolocationListResponseGeolocationJSON  `json:"-"`
+	// BCP 47 locale code used for the geolocation name translation
+	Locale string                                 `json:"locale"`
+	JSON   geolocationListResponseGeolocationJSON `json:"-"`
 }
 
 // geolocationListResponseGeolocationJSON contains the JSON metadata for the struct
@@ -111,6 +119,7 @@ type geolocationListResponseGeolocationJSON struct {
 	Parent      apijson.Field
 	Type        apijson.Field
 	Code        apijson.Field
+	Locale      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -134,7 +143,9 @@ type GeolocationListResponseGeolocationsParent struct {
 	// The type of the geolocation.
 	Type GeolocationListResponseGeolocationsParentType `json:"type,required"`
 	Code string                                        `json:"code"`
-	JSON geolocationListResponseGeolocationsParentJSON `json:"-"`
+	// BCP 47 locale code used for the geolocation name translation
+	Locale string                                        `json:"locale"`
+	JSON   geolocationListResponseGeolocationsParentJSON `json:"-"`
 }
 
 // geolocationListResponseGeolocationsParentJSON contains the JSON metadata for the
@@ -147,6 +158,7 @@ type geolocationListResponseGeolocationsParentJSON struct {
 	Parent      apijson.Field
 	Type        apijson.Field
 	Code        apijson.Field
+	Locale      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -169,7 +181,9 @@ type GeolocationListResponseGeolocationsParentParent struct {
 	// The type of the geolocation.
 	Type GeolocationListResponseGeolocationsParentParentType `json:"type,required"`
 	Code string                                              `json:"code"`
-	JSON geolocationListResponseGeolocationsParentParentJSON `json:"-"`
+	// BCP 47 locale code used for the geolocation name translation
+	Locale string                                              `json:"locale"`
+	JSON   geolocationListResponseGeolocationsParentParentJSON `json:"-"`
 }
 
 // geolocationListResponseGeolocationsParentParentJSON contains the JSON metadata
@@ -181,6 +195,7 @@ type geolocationListResponseGeolocationsParentParentJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	Code        apijson.Field
+	Locale      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -276,7 +291,9 @@ type GeolocationGetResponseGeolocation struct {
 	// The type of the geolocation.
 	Type GeolocationGetResponseGeolocationType `json:"type,required"`
 	Code string                                `json:"code"`
-	JSON geolocationGetResponseGeolocationJSON `json:"-"`
+	// BCP 47 locale code used for the geolocation name translation
+	Locale string                                `json:"locale"`
+	JSON   geolocationGetResponseGeolocationJSON `json:"-"`
 }
 
 // geolocationGetResponseGeolocationJSON contains the JSON metadata for the struct
@@ -289,6 +306,7 @@ type geolocationGetResponseGeolocationJSON struct {
 	Parent      apijson.Field
 	Type        apijson.Field
 	Code        apijson.Field
+	Locale      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -312,7 +330,9 @@ type GeolocationGetResponseGeolocationParent struct {
 	// The type of the geolocation.
 	Type GeolocationGetResponseGeolocationParentType `json:"type,required"`
 	Code string                                      `json:"code"`
-	JSON geolocationGetResponseGeolocationParentJSON `json:"-"`
+	// BCP 47 locale code used for the geolocation name translation
+	Locale string                                      `json:"locale"`
+	JSON   geolocationGetResponseGeolocationParentJSON `json:"-"`
 }
 
 // geolocationGetResponseGeolocationParentJSON contains the JSON metadata for the
@@ -325,6 +345,7 @@ type geolocationGetResponseGeolocationParentJSON struct {
 	Parent      apijson.Field
 	Type        apijson.Field
 	Code        apijson.Field
+	Locale      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -347,7 +368,9 @@ type GeolocationGetResponseGeolocationParentParent struct {
 	// The type of the geolocation.
 	Type GeolocationGetResponseGeolocationParentParentType `json:"type,required"`
 	Code string                                            `json:"code"`
-	JSON geolocationGetResponseGeolocationParentParentJSON `json:"-"`
+	// BCP 47 locale code used for the geolocation name translation
+	Locale string                                            `json:"locale"`
+	JSON   geolocationGetResponseGeolocationParentParentJSON `json:"-"`
 }
 
 // geolocationGetResponseGeolocationParentParentJSON contains the JSON metadata for
@@ -359,6 +382,7 @@ type geolocationGetResponseGeolocationParentParentJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	Code        apijson.Field
+	Locale      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
