@@ -39,7 +39,7 @@ func NewFinetuneService(opts ...option.RequestOption) (r *FinetuneService) {
 	return
 }
 
-// Create a new Finetune
+// Creates a new fine-tuning job for a Workers AI model using custom training data.
 func (r *FinetuneService) New(ctx context.Context, params FinetuneNewParams, opts ...option.RequestOption) (res *FinetuneNewResponse, err error) {
 	var env FinetuneNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *FinetuneService) New(ctx context.Context, params FinetuneNewParams, opt
 	return
 }
 
-// List Finetunes
+// Lists all fine-tuning jobs created by the account, including status and metrics.
 func (r *FinetuneService) List(ctx context.Context, query FinetuneListParams, opts ...option.RequestOption) (res *FinetuneListResponse, err error) {
 	var env FinetuneListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -38,7 +38,7 @@ func NewFinetunePublicService(opts ...option.RequestOption) (r *FinetunePublicSe
 	return
 }
 
-// List Public Finetunes
+// Lists publicly available fine-tuned models that can be used with Workers AI.
 func (r *FinetunePublicService) List(ctx context.Context, params FinetunePublicListParams, opts ...option.RequestOption) (res *pagination.SinglePage[FinetunePublicListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *FinetunePublicService) List(ctx context.Context, params FinetunePublicL
 	return res, nil
 }
 
-// List Public Finetunes
+// Lists publicly available fine-tuned models that can be used with Workers AI.
 func (r *FinetunePublicService) ListAutoPaging(ctx context.Context, params FinetunePublicListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[FinetunePublicListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }

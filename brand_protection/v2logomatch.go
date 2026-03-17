@@ -3,6 +3,17 @@
 package brand_protection
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"net/url"
+	"slices"
+
+	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
@@ -23,4 +34,126 @@ func NewV2LogoMatchService(opts ...option.RequestOption) (r *V2LogoMatchService)
 	r = &V2LogoMatchService{}
 	r.Options = opts
 	return
+}
+
+// Get paginated list of logo matches for a specific brand protection logo query
+func (r *V2LogoMatchService) Get(ctx context.Context, params V2LogoMatchGetParams, opts ...option.RequestOption) (res *V2LogoMatchGetResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/v2/brand-protection/logo/matches", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	return
+}
+
+type V2LogoMatchGetResponse struct {
+	Matches []V2LogoMatchGetResponseMatch `json:"matches,required"`
+	Total   int64                         `json:"total,required"`
+	JSON    v2LogoMatchGetResponseJSON    `json:"-"`
+}
+
+// v2LogoMatchGetResponseJSON contains the JSON metadata for the struct
+// [V2LogoMatchGetResponse]
+type v2LogoMatchGetResponseJSON struct {
+	Matches     apijson.Field
+	Total       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *V2LogoMatchGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r v2LogoMatchGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type V2LogoMatchGetResponseMatch struct {
+	ID              int64                           `json:"id,required"`
+	MatchedAt       string                          `json:"matched_at,required,nullable"`
+	QueryID         int64                           `json:"query_id,required"`
+	SimilarityScore float64                         `json:"similarity_score,required"`
+	URLScanID       string                          `json:"url_scan_id,required,nullable"`
+	ContentType     string                          `json:"content_type"`
+	Domain          string                          `json:"domain,nullable"`
+	ImageData       string                          `json:"image_data"`
+	JSON            v2LogoMatchGetResponseMatchJSON `json:"-"`
+}
+
+// v2LogoMatchGetResponseMatchJSON contains the JSON metadata for the struct
+// [V2LogoMatchGetResponseMatch]
+type v2LogoMatchGetResponseMatchJSON struct {
+	ID              apijson.Field
+	MatchedAt       apijson.Field
+	QueryID         apijson.Field
+	SimilarityScore apijson.Field
+	URLScanID       apijson.Field
+	ContentType     apijson.Field
+	Domain          apijson.Field
+	ImageData       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *V2LogoMatchGetResponseMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r v2LogoMatchGetResponseMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+type V2LogoMatchGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+	QueryID   param.Field[string] `query:"query_id,required"`
+	Download  param.Field[string] `query:"download"`
+	Limit     param.Field[string] `query:"limit"`
+	Offset    param.Field[string] `query:"offset"`
+	// Sort order. Options: 'asc' (ascending) or 'desc' (descending)
+	Order param.Field[V2LogoMatchGetParamsOrder] `query:"order"`
+	// Column to sort by. Options: 'tag' or 'date'
+	OrderBy param.Field[V2LogoMatchGetParamsOrderBy] `query:"orderBy"`
+}
+
+// URLQuery serializes [V2LogoMatchGetParams]'s query parameters as `url.Values`.
+func (r V2LogoMatchGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Sort order. Options: 'asc' (ascending) or 'desc' (descending)
+type V2LogoMatchGetParamsOrder string
+
+const (
+	V2LogoMatchGetParamsOrderAsc  V2LogoMatchGetParamsOrder = "asc"
+	V2LogoMatchGetParamsOrderDesc V2LogoMatchGetParamsOrder = "desc"
+)
+
+func (r V2LogoMatchGetParamsOrder) IsKnown() bool {
+	switch r {
+	case V2LogoMatchGetParamsOrderAsc, V2LogoMatchGetParamsOrderDesc:
+		return true
+	}
+	return false
+}
+
+// Column to sort by. Options: 'tag' or 'date'
+type V2LogoMatchGetParamsOrderBy string
+
+const (
+	V2LogoMatchGetParamsOrderByTag  V2LogoMatchGetParamsOrderBy = "tag"
+	V2LogoMatchGetParamsOrderByDate V2LogoMatchGetParamsOrderBy = "date"
+)
+
+func (r V2LogoMatchGetParamsOrderBy) IsKnown() bool {
+	switch r {
+	case V2LogoMatchGetParamsOrderByTag, V2LogoMatchGetParamsOrderByDate:
+		return true
+	}
+	return false
 }

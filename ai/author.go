@@ -34,7 +34,7 @@ func NewAuthorService(opts ...option.RequestOption) (r *AuthorService) {
 	return
 }
 
-// Author Search
+// Searches Workers AI models by author or organization name.
 func (r *AuthorService) List(ctx context.Context, query AuthorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AuthorListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *AuthorService) List(ctx context.Context, query AuthorListParams, opts .
 	return res, nil
 }
 
-// Author Search
+// Searches Workers AI models by author or organization name.
 func (r *AuthorService) ListAutoPaging(ctx context.Context, query AuthorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AuthorListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }

@@ -38,7 +38,7 @@ func NewModelService(opts ...option.RequestOption) (r *ModelService) {
 	return
 }
 
-// Model Search
+// Searches Workers AI models by name or description.
 func (r *ModelService) List(ctx context.Context, params ModelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ModelListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *ModelService) List(ctx context.Context, params ModelListParams, opts ..
 	return res, nil
 }
 
-// Model Search
+// Searches Workers AI models by name or description.
 func (r *ModelService) ListAutoPaging(ctx context.Context, params ModelListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ModelListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }

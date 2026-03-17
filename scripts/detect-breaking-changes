@@ -234,6 +234,10 @@ TEST_PATHS=(
 	brand_protection/match_test.go
 	brand_protection/logo_test.go
 	brand_protection/logomatch_test.go
+	brand_protection/v2query_test.go
+	brand_protection/v2match_test.go
+	brand_protection/v2logo_test.go
+	brand_protection/v2logomatch_test.go
 	diagnostics/traceroute_test.go
 	diagnostics/endpointhealthcheck_test.go
 	images/v1_test.go

@@ -34,7 +34,7 @@ func NewTaskService(opts ...option.RequestOption) (r *TaskService) {
 	return
 }
 
-// Task Search
+// Searches Workers AI models by task type (e.g., text-generation, embeddings).
 func (r *TaskService) List(ctx context.Context, query TaskListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TaskListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *TaskService) List(ctx context.Context, query TaskListParams, opts ...op
 	return res, nil
 }
 
-// Task Search
+// Searches Workers AI models by task type (e.g., text-generation, embeddings).
 func (r *TaskService) ListAutoPaging(ctx context.Context, query TaskListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TaskListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
