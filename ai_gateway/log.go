@@ -432,8 +432,6 @@ const (
 	LogListParamsFiltersKeyEventID             LogListParamsFiltersKey = "event_id"
 	LogListParamsFiltersKeyMetadataKey         LogListParamsFiltersKey = "metadata.key"
 	LogListParamsFiltersKeyMetadataValue       LogListParamsFiltersKey = "metadata.value"
-	LogListParamsFiltersKeyPromptsPromptID     LogListParamsFiltersKey = "prompts.prompt_id"
-	LogListParamsFiltersKeyPromptsVersionID    LogListParamsFiltersKey = "prompts.version_id"
 	LogListParamsFiltersKeyAuthentication      LogListParamsFiltersKey = "authentication"
 	LogListParamsFiltersKeyWholesale           LogListParamsFiltersKey = "wholesale"
 	LogListParamsFiltersKeyCompatibilityMode   LogListParamsFiltersKey = "compatibilityMode"
@@ -442,7 +440,7 @@ const (
 
 func (r LogListParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogListParamsFiltersKeyID, LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeyRequestType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback, LogListParamsFiltersKeyEventID, LogListParamsFiltersKeyMetadataKey, LogListParamsFiltersKeyMetadataValue, LogListParamsFiltersKeyPromptsPromptID, LogListParamsFiltersKeyPromptsVersionID, LogListParamsFiltersKeyAuthentication, LogListParamsFiltersKeyWholesale, LogListParamsFiltersKeyCompatibilityMode, LogListParamsFiltersKeyDLPAction:
+	case LogListParamsFiltersKeyID, LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeyRequestType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback, LogListParamsFiltersKeyEventID, LogListParamsFiltersKeyMetadataKey, LogListParamsFiltersKeyMetadataValue, LogListParamsFiltersKeyAuthentication, LogListParamsFiltersKeyWholesale, LogListParamsFiltersKeyCompatibilityMode, LogListParamsFiltersKeyDLPAction:
 		return true
 	}
 	return false
@@ -557,8 +555,6 @@ const (
 	LogDeleteParamsFiltersKeyEventID             LogDeleteParamsFiltersKey = "event_id"
 	LogDeleteParamsFiltersKeyMetadataKey         LogDeleteParamsFiltersKey = "metadata.key"
 	LogDeleteParamsFiltersKeyMetadataValue       LogDeleteParamsFiltersKey = "metadata.value"
-	LogDeleteParamsFiltersKeyPromptsPromptID     LogDeleteParamsFiltersKey = "prompts.prompt_id"
-	LogDeleteParamsFiltersKeyPromptsVersionID    LogDeleteParamsFiltersKey = "prompts.version_id"
 	LogDeleteParamsFiltersKeyAuthentication      LogDeleteParamsFiltersKey = "authentication"
 	LogDeleteParamsFiltersKeyWholesale           LogDeleteParamsFiltersKey = "wholesale"
 	LogDeleteParamsFiltersKeyCompatibilityMode   LogDeleteParamsFiltersKey = "compatibilityMode"
@@ -567,7 +563,7 @@ const (
 
 func (r LogDeleteParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogDeleteParamsFiltersKeyID, LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeyRequestType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback, LogDeleteParamsFiltersKeyEventID, LogDeleteParamsFiltersKeyMetadataKey, LogDeleteParamsFiltersKeyMetadataValue, LogDeleteParamsFiltersKeyPromptsPromptID, LogDeleteParamsFiltersKeyPromptsVersionID, LogDeleteParamsFiltersKeyAuthentication, LogDeleteParamsFiltersKeyWholesale, LogDeleteParamsFiltersKeyCompatibilityMode, LogDeleteParamsFiltersKeyDLPAction:
+	case LogDeleteParamsFiltersKeyID, LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeyRequestType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback, LogDeleteParamsFiltersKeyEventID, LogDeleteParamsFiltersKeyMetadataKey, LogDeleteParamsFiltersKeyMetadataValue, LogDeleteParamsFiltersKeyAuthentication, LogDeleteParamsFiltersKeyWholesale, LogDeleteParamsFiltersKeyCompatibilityMode, LogDeleteParamsFiltersKeyDLPAction:
 		return true
 	}
 	return false

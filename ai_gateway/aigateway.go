@@ -171,7 +171,6 @@ type AIGatewayNewResponse struct {
 	ModifiedAt              time.Time                                 `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
-	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
 	DLP                     AIGatewayNewResponseDLP                   `json:"dlp"`
 	IsDefault               bool                                      `json:"is_default"`
@@ -180,6 +179,7 @@ type AIGatewayNewResponse struct {
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayNewResponseOtel                `json:"otel,nullable"`
+	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayNewResponseStripe                `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed
@@ -199,7 +199,6 @@ type aiGatewayNewResponseJSON struct {
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
-	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
 	IsDefault               apijson.Field
@@ -208,6 +207,7 @@ type aiGatewayNewResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
+	RateLimitingTechnique   apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -222,21 +222,6 @@ func (r *AIGatewayNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayNewResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type AIGatewayNewResponseRateLimitingTechnique string
-
-const (
-	AIGatewayNewResponseRateLimitingTechniqueFixed   AIGatewayNewResponseRateLimitingTechnique = "fixed"
-	AIGatewayNewResponseRateLimitingTechniqueSliding AIGatewayNewResponseRateLimitingTechnique = "sliding"
-)
-
-func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
-	switch r {
-	case AIGatewayNewResponseRateLimitingTechniqueFixed, AIGatewayNewResponseRateLimitingTechniqueSliding:
-		return true
-	}
-	return false
 }
 
 type AIGatewayNewResponseDLP struct {
@@ -418,6 +403,21 @@ func (r AIGatewayNewResponseOtelContentType) IsKnown() bool {
 	return false
 }
 
+type AIGatewayNewResponseRateLimitingTechnique string
+
+const (
+	AIGatewayNewResponseRateLimitingTechniqueFixed   AIGatewayNewResponseRateLimitingTechnique = "fixed"
+	AIGatewayNewResponseRateLimitingTechniqueSliding AIGatewayNewResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseRateLimitingTechniqueFixed, AIGatewayNewResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewResponseStripe struct {
 	Authorization string                                 `json:"authorization,required"`
 	UsageEvents   []AIGatewayNewResponseStripeUsageEvent `json:"usage_events,required"`
@@ -488,7 +488,6 @@ type AIGatewayUpdateResponse struct {
 	ModifiedAt              time.Time                                    `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
-	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
 	DLP                     AIGatewayUpdateResponseDLP                   `json:"dlp"`
 	IsDefault               bool                                         `json:"is_default"`
@@ -497,6 +496,7 @@ type AIGatewayUpdateResponse struct {
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayUpdateResponseOtel                `json:"otel,nullable"`
+	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayUpdateResponseStripe                `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed
@@ -516,7 +516,6 @@ type aiGatewayUpdateResponseJSON struct {
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
-	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
 	IsDefault               apijson.Field
@@ -525,6 +524,7 @@ type aiGatewayUpdateResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
+	RateLimitingTechnique   apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -539,21 +539,6 @@ func (r *AIGatewayUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayUpdateResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type AIGatewayUpdateResponseRateLimitingTechnique string
-
-const (
-	AIGatewayUpdateResponseRateLimitingTechniqueFixed   AIGatewayUpdateResponseRateLimitingTechnique = "fixed"
-	AIGatewayUpdateResponseRateLimitingTechniqueSliding AIGatewayUpdateResponseRateLimitingTechnique = "sliding"
-)
-
-func (r AIGatewayUpdateResponseRateLimitingTechnique) IsKnown() bool {
-	switch r {
-	case AIGatewayUpdateResponseRateLimitingTechniqueFixed, AIGatewayUpdateResponseRateLimitingTechniqueSliding:
-		return true
-	}
-	return false
 }
 
 type AIGatewayUpdateResponseDLP struct {
@@ -736,6 +721,21 @@ func (r AIGatewayUpdateResponseOtelContentType) IsKnown() bool {
 	return false
 }
 
+type AIGatewayUpdateResponseRateLimitingTechnique string
+
+const (
+	AIGatewayUpdateResponseRateLimitingTechniqueFixed   AIGatewayUpdateResponseRateLimitingTechnique = "fixed"
+	AIGatewayUpdateResponseRateLimitingTechniqueSliding AIGatewayUpdateResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayUpdateResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseRateLimitingTechniqueFixed, AIGatewayUpdateResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayUpdateResponseStripe struct {
 	Authorization string                                    `json:"authorization,required"`
 	UsageEvents   []AIGatewayUpdateResponseStripeUsageEvent `json:"usage_events,required"`
@@ -806,7 +806,6 @@ type AIGatewayListResponse struct {
 	ModifiedAt              time.Time                                  `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                      `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                      `json:"rate_limiting_limit,required,nullable"`
-	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                       `json:"authentication"`
 	DLP                     AIGatewayListResponseDLP                   `json:"dlp"`
 	IsDefault               bool                                       `json:"is_default"`
@@ -815,6 +814,7 @@ type AIGatewayListResponse struct {
 	Logpush                 bool                                       `json:"logpush"`
 	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayListResponseOtel                `json:"otel,nullable"`
+	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                     `json:"store_id,nullable"`
 	Stripe                  AIGatewayListResponseStripe                `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed
@@ -834,7 +834,6 @@ type aiGatewayListResponseJSON struct {
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
-	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
 	IsDefault               apijson.Field
@@ -843,6 +842,7 @@ type aiGatewayListResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
+	RateLimitingTechnique   apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -857,21 +857,6 @@ func (r *AIGatewayListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayListResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type AIGatewayListResponseRateLimitingTechnique string
-
-const (
-	AIGatewayListResponseRateLimitingTechniqueFixed   AIGatewayListResponseRateLimitingTechnique = "fixed"
-	AIGatewayListResponseRateLimitingTechniqueSliding AIGatewayListResponseRateLimitingTechnique = "sliding"
-)
-
-func (r AIGatewayListResponseRateLimitingTechnique) IsKnown() bool {
-	switch r {
-	case AIGatewayListResponseRateLimitingTechniqueFixed, AIGatewayListResponseRateLimitingTechniqueSliding:
-		return true
-	}
-	return false
 }
 
 type AIGatewayListResponseDLP struct {
@@ -1054,6 +1039,21 @@ func (r AIGatewayListResponseOtelContentType) IsKnown() bool {
 	return false
 }
 
+type AIGatewayListResponseRateLimitingTechnique string
+
+const (
+	AIGatewayListResponseRateLimitingTechniqueFixed   AIGatewayListResponseRateLimitingTechnique = "fixed"
+	AIGatewayListResponseRateLimitingTechniqueSliding AIGatewayListResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayListResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseRateLimitingTechniqueFixed, AIGatewayListResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayListResponseStripe struct {
 	Authorization string                                  `json:"authorization,required"`
 	UsageEvents   []AIGatewayListResponseStripeUsageEvent `json:"usage_events,required"`
@@ -1124,7 +1124,6 @@ type AIGatewayDeleteResponse struct {
 	ModifiedAt              time.Time                                    `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
-	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                         `json:"authentication"`
 	DLP                     AIGatewayDeleteResponseDLP                   `json:"dlp"`
 	IsDefault               bool                                         `json:"is_default"`
@@ -1133,6 +1132,7 @@ type AIGatewayDeleteResponse struct {
 	Logpush                 bool                                         `json:"logpush"`
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayDeleteResponseOtel                `json:"otel,nullable"`
+	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayDeleteResponseStripe                `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed
@@ -1152,7 +1152,6 @@ type aiGatewayDeleteResponseJSON struct {
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
-	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
 	IsDefault               apijson.Field
@@ -1161,6 +1160,7 @@ type aiGatewayDeleteResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
+	RateLimitingTechnique   apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -1175,21 +1175,6 @@ func (r *AIGatewayDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type AIGatewayDeleteResponseRateLimitingTechnique string
-
-const (
-	AIGatewayDeleteResponseRateLimitingTechniqueFixed   AIGatewayDeleteResponseRateLimitingTechnique = "fixed"
-	AIGatewayDeleteResponseRateLimitingTechniqueSliding AIGatewayDeleteResponseRateLimitingTechnique = "sliding"
-)
-
-func (r AIGatewayDeleteResponseRateLimitingTechnique) IsKnown() bool {
-	switch r {
-	case AIGatewayDeleteResponseRateLimitingTechniqueFixed, AIGatewayDeleteResponseRateLimitingTechniqueSliding:
-		return true
-	}
-	return false
 }
 
 type AIGatewayDeleteResponseDLP struct {
@@ -1372,6 +1357,21 @@ func (r AIGatewayDeleteResponseOtelContentType) IsKnown() bool {
 	return false
 }
 
+type AIGatewayDeleteResponseRateLimitingTechnique string
+
+const (
+	AIGatewayDeleteResponseRateLimitingTechniqueFixed   AIGatewayDeleteResponseRateLimitingTechnique = "fixed"
+	AIGatewayDeleteResponseRateLimitingTechniqueSliding AIGatewayDeleteResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayDeleteResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseRateLimitingTechniqueFixed, AIGatewayDeleteResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayDeleteResponseStripe struct {
 	Authorization string                                    `json:"authorization,required"`
 	UsageEvents   []AIGatewayDeleteResponseStripeUsageEvent `json:"usage_events,required"`
@@ -1442,7 +1442,6 @@ type AIGatewayGetResponse struct {
 	ModifiedAt              time.Time                                 `json:"modified_at,required" format:"date-time"`
 	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
-	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	Authentication          bool                                      `json:"authentication"`
 	DLP                     AIGatewayGetResponseDLP                   `json:"dlp"`
 	IsDefault               bool                                      `json:"is_default"`
@@ -1451,6 +1450,7 @@ type AIGatewayGetResponse struct {
 	Logpush                 bool                                      `json:"logpush"`
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayGetResponseOtel                `json:"otel,nullable"`
+	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayGetResponseStripe                `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed
@@ -1470,7 +1470,6 @@ type aiGatewayGetResponseJSON struct {
 	ModifiedAt              apijson.Field
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
-	RateLimitingTechnique   apijson.Field
 	Authentication          apijson.Field
 	DLP                     apijson.Field
 	IsDefault               apijson.Field
@@ -1479,6 +1478,7 @@ type aiGatewayGetResponseJSON struct {
 	Logpush                 apijson.Field
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
+	RateLimitingTechnique   apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -1493,21 +1493,6 @@ func (r *AIGatewayGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r aiGatewayGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type AIGatewayGetResponseRateLimitingTechnique string
-
-const (
-	AIGatewayGetResponseRateLimitingTechniqueFixed   AIGatewayGetResponseRateLimitingTechnique = "fixed"
-	AIGatewayGetResponseRateLimitingTechniqueSliding AIGatewayGetResponseRateLimitingTechnique = "sliding"
-)
-
-func (r AIGatewayGetResponseRateLimitingTechnique) IsKnown() bool {
-	switch r {
-	case AIGatewayGetResponseRateLimitingTechniqueFixed, AIGatewayGetResponseRateLimitingTechniqueSliding:
-		return true
-	}
-	return false
 }
 
 type AIGatewayGetResponseDLP struct {
@@ -1689,6 +1674,21 @@ func (r AIGatewayGetResponseOtelContentType) IsKnown() bool {
 	return false
 }
 
+type AIGatewayGetResponseRateLimitingTechnique string
+
+const (
+	AIGatewayGetResponseRateLimitingTechniqueFixed   AIGatewayGetResponseRateLimitingTechnique = "fixed"
+	AIGatewayGetResponseRateLimitingTechniqueSliding AIGatewayGetResponseRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayGetResponseRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseRateLimitingTechniqueFixed, AIGatewayGetResponseRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayGetResponseStripe struct {
 	Authorization string                                 `json:"authorization,required"`
 	UsageEvents   []AIGatewayGetResponseStripeUsageEvent `json:"usage_events,required"`
@@ -1758,12 +1758,12 @@ type AIGatewayNewParams struct {
 	CollectLogs             param.Field[bool]                                    `json:"collect_logs,required"`
 	RateLimitingInterval    param.Field[int64]                                   `json:"rate_limiting_interval,required"`
 	RateLimitingLimit       param.Field[int64]                                   `json:"rate_limiting_limit,required"`
-	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                    `json:"authentication"`
 	LogManagement           param.Field[int64]                                   `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
+	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
 	// Controls how Workers AI inference calls routed through this gateway are billed
 	WorkersAIBillingMode param.Field[AIGatewayNewParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
 	Zdr                  param.Field[bool]                                   `json:"zdr"`
@@ -1771,21 +1771,6 @@ type AIGatewayNewParams struct {
 
 func (r AIGatewayNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type AIGatewayNewParamsRateLimitingTechnique string
-
-const (
-	AIGatewayNewParamsRateLimitingTechniqueFixed   AIGatewayNewParamsRateLimitingTechnique = "fixed"
-	AIGatewayNewParamsRateLimitingTechniqueSliding AIGatewayNewParamsRateLimitingTechnique = "sliding"
-)
-
-func (r AIGatewayNewParamsRateLimitingTechnique) IsKnown() bool {
-	switch r {
-	case AIGatewayNewParamsRateLimitingTechniqueFixed, AIGatewayNewParamsRateLimitingTechniqueSliding:
-		return true
-	}
-	return false
 }
 
 type AIGatewayNewParamsLogManagementStrategy string
@@ -1798,6 +1783,21 @@ const (
 func (r AIGatewayNewParamsLogManagementStrategy) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsLogManagementStrategyStopInserting, AIGatewayNewParamsLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsRateLimitingTechnique string
+
+const (
+	AIGatewayNewParamsRateLimitingTechniqueFixed   AIGatewayNewParamsRateLimitingTechnique = "fixed"
+	AIGatewayNewParamsRateLimitingTechniqueSliding AIGatewayNewParamsRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayNewParamsRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsRateLimitingTechniqueFixed, AIGatewayNewParamsRateLimitingTechniqueSliding:
 		return true
 	}
 	return false
@@ -1849,7 +1849,6 @@ type AIGatewayUpdateParams struct {
 	CollectLogs             param.Field[bool]                                       `json:"collect_logs,required"`
 	RateLimitingInterval    param.Field[int64]                                      `json:"rate_limiting_interval,required"`
 	RateLimitingLimit       param.Field[int64]                                      `json:"rate_limiting_limit,required"`
-	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
 	Authentication          param.Field[bool]                                       `json:"authentication"`
 	DLP                     param.Field[AIGatewayUpdateParamsDLPUnion]              `json:"dlp"`
 	LogManagement           param.Field[int64]                                      `json:"log_management"`
@@ -1857,6 +1856,7 @@ type AIGatewayUpdateParams struct {
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
 	Otel                    param.Field[[]AIGatewayUpdateParamsOtel]                `json:"otel"`
+	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
 	StoreID                 param.Field[string]                                     `json:"store_id"`
 	Stripe                  param.Field[AIGatewayUpdateParamsStripe]                `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed
@@ -1866,21 +1866,6 @@ type AIGatewayUpdateParams struct {
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type AIGatewayUpdateParamsRateLimitingTechnique string
-
-const (
-	AIGatewayUpdateParamsRateLimitingTechniqueFixed   AIGatewayUpdateParamsRateLimitingTechnique = "fixed"
-	AIGatewayUpdateParamsRateLimitingTechniqueSliding AIGatewayUpdateParamsRateLimitingTechnique = "sliding"
-)
-
-func (r AIGatewayUpdateParamsRateLimitingTechnique) IsKnown() bool {
-	switch r {
-	case AIGatewayUpdateParamsRateLimitingTechniqueFixed, AIGatewayUpdateParamsRateLimitingTechniqueSliding:
-		return true
-	}
-	return false
 }
 
 type AIGatewayUpdateParamsDLP struct {
@@ -1980,6 +1965,21 @@ const (
 func (r AIGatewayUpdateParamsOtelContentType) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsOtelContentTypeJson, AIGatewayUpdateParamsOtelContentTypeProtobuf:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsRateLimitingTechnique string
+
+const (
+	AIGatewayUpdateParamsRateLimitingTechniqueFixed   AIGatewayUpdateParamsRateLimitingTechnique = "fixed"
+	AIGatewayUpdateParamsRateLimitingTechniqueSliding AIGatewayUpdateParamsRateLimitingTechnique = "sliding"
+)
+
+func (r AIGatewayUpdateParamsRateLimitingTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsRateLimitingTechniqueFixed, AIGatewayUpdateParamsRateLimitingTechniqueSliding:
 		return true
 	}
 	return false
