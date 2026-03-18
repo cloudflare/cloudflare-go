@@ -114,8 +114,11 @@ type InvestigateListResponse struct {
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
-	PostfixID              string                                         `json:"postfix_id,required"`
-	Properties             InvestigateListResponseProperties              `json:"properties,required"`
+	PostfixID  string                            `json:"postfix_id,required"`
+	Properties InvestigateListResponseProperties `json:"properties,required"`
+	// Deprecated, use `scanned_at` instead
+	//
+	// Deprecated: deprecated
 	Ts                     string                                         `json:"ts,required"`
 	AlertID                string                                         `json:"alert_id,nullable"`
 	DeliveryMode           InvestigateListResponseDeliveryMode            `json:"delivery_mode,nullable"`
@@ -131,13 +134,18 @@ type InvestigateListResponse struct {
 	PostDeliveryOperations []InvestigateListResponsePostDeliveryOperation `json:"post_delivery_operations"`
 	PostfixIDOutbound      string                                         `json:"postfix_id_outbound,nullable"`
 	Replyto                string                                         `json:"replyto,nullable"`
-	SentDate               string                                         `json:"sent_date,nullable"`
-	Subject                string                                         `json:"subject,nullable"`
-	ThreatCategories       []string                                       `json:"threat_categories,nullable"`
-	To                     []string                                       `json:"to,nullable"`
-	ToName                 []string                                       `json:"to_name,nullable"`
-	Validation             InvestigateListResponseValidation              `json:"validation,nullable"`
-	JSON                   investigateListResponseJSON                    `json:"-"`
+	ScannedAt              time.Time                                      `json:"scanned_at" format:"date-time"`
+	SentAt                 time.Time                                      `json:"sent_at" format:"date-time"`
+	// Deprecated, use `sent_at` instead
+	//
+	// Deprecated: deprecated
+	SentDate         string                            `json:"sent_date,nullable"`
+	Subject          string                            `json:"subject,nullable"`
+	ThreatCategories []string                          `json:"threat_categories,nullable"`
+	To               []string                          `json:"to,nullable"`
+	ToName           []string                          `json:"to_name,nullable"`
+	Validation       InvestigateListResponseValidation `json:"validation,nullable"`
+	JSON             investigateListResponseJSON       `json:"-"`
 }
 
 // investigateListResponseJSON contains the JSON metadata for the struct
@@ -166,6 +174,8 @@ type investigateListResponseJSON struct {
 	PostDeliveryOperations apijson.Field
 	PostfixIDOutbound      apijson.Field
 	Replyto                apijson.Field
+	ScannedAt              apijson.Field
+	SentAt                 apijson.Field
 	SentDate               apijson.Field
 	Subject                apijson.Field
 	ThreatCategories       apijson.Field
@@ -468,8 +478,11 @@ type InvestigateGetResponse struct {
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
-	PostfixID              string                                        `json:"postfix_id,required"`
-	Properties             InvestigateGetResponseProperties              `json:"properties,required"`
+	PostfixID  string                           `json:"postfix_id,required"`
+	Properties InvestigateGetResponseProperties `json:"properties,required"`
+	// Deprecated, use `scanned_at` instead
+	//
+	// Deprecated: deprecated
 	Ts                     string                                        `json:"ts,required"`
 	AlertID                string                                        `json:"alert_id,nullable"`
 	DeliveryMode           InvestigateGetResponseDeliveryMode            `json:"delivery_mode,nullable"`
@@ -485,13 +498,18 @@ type InvestigateGetResponse struct {
 	PostDeliveryOperations []InvestigateGetResponsePostDeliveryOperation `json:"post_delivery_operations"`
 	PostfixIDOutbound      string                                        `json:"postfix_id_outbound,nullable"`
 	Replyto                string                                        `json:"replyto,nullable"`
-	SentDate               string                                        `json:"sent_date,nullable"`
-	Subject                string                                        `json:"subject,nullable"`
-	ThreatCategories       []string                                      `json:"threat_categories,nullable"`
-	To                     []string                                      `json:"to,nullable"`
-	ToName                 []string                                      `json:"to_name,nullable"`
-	Validation             InvestigateGetResponseValidation              `json:"validation,nullable"`
-	JSON                   investigateGetResponseJSON                    `json:"-"`
+	ScannedAt              time.Time                                     `json:"scanned_at" format:"date-time"`
+	SentAt                 time.Time                                     `json:"sent_at" format:"date-time"`
+	// Deprecated, use `sent_at` instead
+	//
+	// Deprecated: deprecated
+	SentDate         string                           `json:"sent_date,nullable"`
+	Subject          string                           `json:"subject,nullable"`
+	ThreatCategories []string                         `json:"threat_categories,nullable"`
+	To               []string                         `json:"to,nullable"`
+	ToName           []string                         `json:"to_name,nullable"`
+	Validation       InvestigateGetResponseValidation `json:"validation,nullable"`
+	JSON             investigateGetResponseJSON       `json:"-"`
 }
 
 // investigateGetResponseJSON contains the JSON metadata for the struct
@@ -520,6 +538,8 @@ type investigateGetResponseJSON struct {
 	PostDeliveryOperations apijson.Field
 	PostfixIDOutbound      apijson.Field
 	Replyto                apijson.Field
+	ScannedAt              apijson.Field
+	SentAt                 apijson.Field
 	SentDate               apijson.Field
 	Subject                apijson.Field
 	ThreatCategories       apijson.Field
@@ -875,6 +895,8 @@ type InvestigateListParams struct {
 	// Search for messages containing individual keywords in any order within the
 	// subject.
 	Subject param.Field[string] `query:"subject"`
+	// Search for submissions instead of original messages
+	Submissions param.Field[bool] `query:"submissions"`
 }
 
 // URLQuery serializes [InvestigateListParams]'s query parameters as `url.Values`.
