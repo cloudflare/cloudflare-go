@@ -122,9 +122,13 @@ type ConnectorSnapshotLatestListResponseItem struct {
 	// Time spent in system mode (milliseconds)
 	CPUTimeSystemMs float64 `json:"cpu_time_system_ms"`
 	// Time spent in user mode (milliseconds)
-	CPUTimeUserMs float64                                             `json:"cpu_time_user_ms"`
-	DHCPLeases    []ConnectorSnapshotLatestListResponseItemsDHCPLease `json:"dhcp_leases"`
-	Disks         []ConnectorSnapshotLatestListResponseItemsDisk      `json:"disks"`
+	CPUTimeUserMs float64 `json:"cpu_time_user_ms"`
+	// Number of network operations applied during state transition
+	Delta      float64                                             `json:"delta"`
+	DHCPLeases []ConnectorSnapshotLatestListResponseItemsDHCPLease `json:"dhcp_leases"`
+	Disks      []ConnectorSnapshotLatestListResponseItemsDisk      `json:"disks"`
+	// Simulated number of network operations applied during state transition
+	Epsilon float64 `json:"epsilon"`
 	// Name of high availability state
 	HaState string `json:"ha_state"`
 	// Numeric value associated with high availability state (0 = disabled, 1 = active,
@@ -448,8 +452,10 @@ type connectorSnapshotLatestListResponseItemJSON struct {
 	CPUTimeStealMs                 apijson.Field
 	CPUTimeSystemMs                apijson.Field
 	CPUTimeUserMs                  apijson.Field
+	Delta                          apijson.Field
 	DHCPLeases                     apijson.Field
 	Disks                          apijson.Field
+	Epsilon                        apijson.Field
 	HaState                        apijson.Field
 	HaValue                        apijson.Field
 	Interfaces                     apijson.Field
