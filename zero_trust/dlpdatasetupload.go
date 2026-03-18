@@ -38,7 +38,8 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 	return
 }
 
-// Prepare to upload a new version of a dataset
+// Creates a new version of a DLP dataset, allowing you to stage changes before
+// activation. Used for single-column EDM and custom word lists.
 func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
 	var env DLPDatasetUploadNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

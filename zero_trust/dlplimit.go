@@ -34,7 +34,8 @@ func NewDLPLimitService(opts ...option.RequestOption) (r *DLPLimitService) {
 	return
 }
 
-// Fetch limits associated with DLP for account
+// Retrieves current DLP usage limits and quotas for the account, including dataset
+// limits and scan quotas.
 func (r *DLPLimitService) List(ctx context.Context, query DLPLimitListParams, opts ...option.RequestOption) (res *DLPLimitListResponse, err error) {
 	var env DLPLimitListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

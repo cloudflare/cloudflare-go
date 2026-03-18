@@ -35,7 +35,8 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 	return
 }
 
-// Get risk score info for all users in the account
+// Gets an aggregate summary of risk scores across the account, including
+// distribution and trends.
 func (r *RiskScoringSummaryService) Get(ctx context.Context, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
 	var env RiskScoringSummaryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -273,7 +274,9 @@ type RiskScoringSummaryGetResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                             `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                             `json:"total_pages"`
 	JSON       riskScoringSummaryGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -284,6 +287,7 @@ type riskScoringSummaryGetResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

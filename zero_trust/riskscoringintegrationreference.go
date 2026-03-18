@@ -35,7 +35,7 @@ func NewRiskScoringIntegrationReferenceService(opts ...option.RequestOption) (r 
 	return
 }
 
-// Get risk score integration by reference id.
+// Retrieves a Zero Trust risk score integration using its external reference ID.
 func (r *RiskScoringIntegrationReferenceService) Get(ctx context.Context, referenceID string, query RiskScoringIntegrationReferenceGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationReferenceGetResponse, err error) {
 	var env RiskScoringIntegrationReferenceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

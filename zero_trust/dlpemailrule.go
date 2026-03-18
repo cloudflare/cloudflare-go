@@ -39,7 +39,8 @@ func NewDLPEmailRuleService(opts ...option.RequestOption) (r *DLPEmailRuleServic
 	return
 }
 
-// Create email scanner rule
+// Creates a new DLP email scanning rule that defines what content patterns to
+// detect in email messages and what actions to take.
 func (r *DLPEmailRuleService) New(ctx context.Context, params DLPEmailRuleNewParams, opts ...option.RequestOption) (res *DLPEmailRuleNewResponse, err error) {
 	var env DLPEmailRuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -104,7 +105,8 @@ func (r *DLPEmailRuleService) ListAutoPaging(ctx context.Context, query DLPEmail
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete email scanner rule
+// Removes a DLP email scanning rule. The rule will no longer be applied to email
+// messages.
 func (r *DLPEmailRuleService) Delete(ctx context.Context, ruleID string, body DLPEmailRuleDeleteParams, opts ...option.RequestOption) (res *DLPEmailRuleDeleteResponse, err error) {
 	var env DLPEmailRuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,7 +127,8 @@ func (r *DLPEmailRuleService) Delete(ctx context.Context, ruleID string, body DL
 	return
 }
 
-// Update email scanner rule priorities
+// Reorders DLP email scanning rules by updating their priority values. Higher
+// priority rules are evaluated first.
 func (r *DLPEmailRuleService) BulkEdit(ctx context.Context, params DLPEmailRuleBulkEditParams, opts ...option.RequestOption) (res *DLPEmailRuleBulkEditResponse, err error) {
 	var env DLPEmailRuleBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -142,7 +145,8 @@ func (r *DLPEmailRuleService) BulkEdit(ctx context.Context, params DLPEmailRuleB
 	return
 }
 
-// Get an email scanner rule
+// Gets detailed configuration for a specific DLP email scanning rule, including
+// detection patterns and actions.
 func (r *DLPEmailRuleService) Get(ctx context.Context, ruleID string, query DLPEmailRuleGetParams, opts ...option.RequestOption) (res *DLPEmailRuleGetResponse, err error) {
 	var env DLPEmailRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

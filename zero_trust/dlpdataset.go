@@ -40,7 +40,9 @@ func NewDLPDatasetService(opts ...option.RequestOption) (r *DLPDatasetService) {
 	return
 }
 
-// Create a new dataset
+// Creates a new DLP (Data Loss Prevention) dataset for storing custom detection
+// patterns. Datasets can contain exact match data, word lists, or EDM (Exact Data
+// Match) configurations.
 func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams, opts ...option.RequestOption) (res *DatasetCreation, err error) {
 	var env DLPDatasetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +59,8 @@ func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams,
 	return
 }
 
-// Update details about a dataset
+// Updates the configuration of an existing DLP dataset, such as its name,
+// description, or detection settings.
 func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params DLPDatasetUpdateParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env DLPDatasetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -78,7 +81,8 @@ func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params
 	return
 }
 
-// Fetch all datasets
+// Lists all DLP datasets configured for the account, including custom word lists
+// and EDM datasets.
 func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Dataset], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -100,7 +104,8 @@ func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams
 	return res, nil
 }
 
-// Fetch all datasets
+// Lists all DLP datasets configured for the account, including custom word lists
+// and EDM datasets.
 func (r *DLPDatasetService) ListAutoPaging(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Dataset] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }

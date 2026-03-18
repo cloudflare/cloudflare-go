@@ -35,7 +35,8 @@ func NewDLPPayloadLogService(opts ...option.RequestOption) (r *DLPPayloadLogServ
 	return
 }
 
-// Set payload log settings
+// Enables or disables payload logging for DLP matches. When enabled, matched
+// content is stored for review.
 func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *DLPPayloadLogUpdateResponse, err error) {
 	var env DLPPayloadLogUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +53,8 @@ func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogU
 	return
 }
 
-// Get payload log settings
+// Gets the current payload logging configuration for DLP, showing whether matched
+// content is being logged.
 func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetParams, opts ...option.RequestOption) (res *DLPPayloadLogGetResponse, err error) {
 	var env DLPPayloadLogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -36,7 +36,8 @@ func NewDLPEmailAccountMappingService(opts ...option.RequestOption) (r *DLPEmail
 	return
 }
 
-// Create mapping
+// Creates a mapping between a Cloudflare account and an email provider for DLP
+// email scanning integration.
 func (r *DLPEmailAccountMappingService) New(ctx context.Context, params DLPEmailAccountMappingNewParams, opts ...option.RequestOption) (res *DLPEmailAccountMappingNewResponse, err error) {
 	var env DLPEmailAccountMappingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +54,7 @@ func (r *DLPEmailAccountMappingService) New(ctx context.Context, params DLPEmail
 	return
 }
 
-// Get mapping
+// Retrieves the email provider mapping configuration for DLP email scanning.
 func (r *DLPEmailAccountMappingService) Get(ctx context.Context, query DLPEmailAccountMappingGetParams, opts ...option.RequestOption) (res *DLPEmailAccountMappingGetResponse, err error) {
 	var env DLPEmailAccountMappingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
