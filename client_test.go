@@ -4,9 +4,12 @@ package cloudflare_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -296,5 +299,201 @@ func TestContextDeadline(t *testing.T) {
 		if diff := time.Since(deadline); diff < -30*time.Millisecond || 30*time.Millisecond < diff {
 			t.Fatalf("client did not return within 30ms of context deadline, got %s", diff)
 		}
+	}
+}
+
+// TestRetryOnUnexpectedEOF verifies that io.ErrUnexpectedEOF triggers retries.
+// This test validates the fix for APIX-435 where transport-level errors like
+// "unexpected EOF" should be retried automatically.
+func TestRetryOnUnexpectedEOF(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithMaxRetries(3), // Reduce retries for faster test
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+
+					// Fail first 2 attempts with unexpected EOF, succeed on 3rd
+					if attemptCount < 3 {
+						return nil, io.ErrUnexpectedEOF
+					}
+
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(`{"result":{"id":"test","name":"example.com"},"success":true}`)),
+						Header:     http.Header{"Content-Type": []string{"application/json"}},
+					}, nil
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err != nil {
+		t.Errorf("Expected request to succeed after retries, got error: %v", err)
+	}
+
+	if attemptCount != 3 {
+		t.Errorf("Expected 3 attempts, got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0", "1", "2"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+// TestNoRetryOnContextCanceled verifies that context.Canceled does NOT trigger retries.
+// This ensures that intentional cancellations are respected and not retried.
+func TestNoRetryOnContextCanceled(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+					return nil, context.Canceled
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err == nil {
+		t.Error("Expected context.Canceled error, got nil")
+	}
+
+	if !errors.Is(err, context.Canceled) {
+		t.Errorf("Expected context.Canceled error, got: %v", err)
+	}
+
+	if attemptCount != 1 {
+		t.Errorf("Expected exactly 1 attempt (no retries), got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+// TestNoRetryOnContextDeadlineExceeded verifies that context.DeadlineExceeded does NOT trigger retries.
+// This ensures that timeout errors are respected and not retried.
+func TestNoRetryOnContextDeadlineExceeded(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+					return nil, context.DeadlineExceeded
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err == nil {
+		t.Error("Expected context.DeadlineExceeded error, got nil")
+	}
+
+	if !errors.Is(err, context.DeadlineExceeded) {
+		t.Errorf("Expected context.DeadlineExceeded error, got: %v", err)
+	}
+
+	if attemptCount != 1 {
+		t.Errorf("Expected exactly 1 attempt (no retries), got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+// TestRetryExhaustsMaxRetriesOnTransportError verifies that transport errors
+// are retried up to MaxRetries and then fail with the original error.
+// This validates that retry exhaustion works correctly for APIX-435.
+func TestRetryExhaustsMaxRetriesOnTransportError(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithMaxRetries(3), // Use 3 retries for faster test
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+					// Always return unexpected EOF to exhaust retries
+					return nil, io.ErrUnexpectedEOF
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err == nil {
+		t.Error("Expected io.ErrUnexpectedEOF error, got nil")
+	}
+
+	if !errors.Is(err, io.ErrUnexpectedEOF) {
+		t.Errorf("Expected io.ErrUnexpectedEOF error, got: %v", err)
+	}
+
+	// Should make initial attempt + 3 retries = 4 total attempts
+	if attemptCount != 4 {
+		t.Errorf("Expected 4 attempts (initial + 3 retries), got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0", "1", "2", "3"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
 	}
 }
