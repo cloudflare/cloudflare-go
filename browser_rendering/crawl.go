@@ -283,8 +283,9 @@ type CrawlNewParamsBody struct {
 	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
 	Authenticate        param.Field[interface{}] `json:"authenticate"`
 	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool]        `json:"bestAttempt"`
-	Cookies     param.Field[interface{}] `json:"cookies"`
+	BestAttempt   param.Field[bool]        `json:"bestAttempt"`
+	Cookies       param.Field[interface{}] `json:"cookies"`
+	CrawlPurposes param.Field[interface{}] `json:"crawlPurposes"`
 	// Maximum number of levels deep the crawler will traverse from the starting URL.
 	Depth            param.Field[float64]     `json:"depth"`
 	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
@@ -356,6 +357,10 @@ type CrawlNewParamsBodyObject struct {
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
 	Cookies param.Field[[]CrawlNewParamsBodyObjectCookie] `json:"cookies"`
+	// List of crawl purposes to respect Content-Signal directives in robots.txt.
+	// Allowed values: 'search', 'ai-input', 'ai-train'. Learn more:
+	// https://contentsignals.org/. Default: ['search', 'ai-input', 'ai-train'].
+	CrawlPurposes param.Field[[]CrawlNewParamsBodyObjectCrawlPurpose] `json:"crawlPurposes"`
 	// Maximum number of levels deep the crawler will traverse from the starting URL.
 	Depth            param.Field[float64] `json:"depth"`
 	EmulateMediaType param.Field[string]  `json:"emulateMediaType"`
@@ -534,6 +539,22 @@ const (
 func (r CrawlNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
 	case CrawlNewParamsBodyObjectCookiesSourceSchemeUnset, CrawlNewParamsBodyObjectCookiesSourceSchemeNonSecure, CrawlNewParamsBodyObjectCookiesSourceSchemeSecure:
+		return true
+	}
+	return false
+}
+
+type CrawlNewParamsBodyObjectCrawlPurpose string
+
+const (
+	CrawlNewParamsBodyObjectCrawlPurposeSearch  CrawlNewParamsBodyObjectCrawlPurpose = "search"
+	CrawlNewParamsBodyObjectCrawlPurposeAIInput CrawlNewParamsBodyObjectCrawlPurpose = "ai-input"
+	CrawlNewParamsBodyObjectCrawlPurposeAITrain CrawlNewParamsBodyObjectCrawlPurpose = "ai-train"
+)
+
+func (r CrawlNewParamsBodyObjectCrawlPurpose) IsKnown() bool {
+	switch r {
+	case CrawlNewParamsBodyObjectCrawlPurposeSearch, CrawlNewParamsBodyObjectCrawlPurposeAIInput, CrawlNewParamsBodyObjectCrawlPurposeAITrain:
 		return true
 	}
 	return false

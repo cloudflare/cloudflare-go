@@ -66,6 +66,7 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 				SourceScheme: cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectCookiesSourceSchemeUnset),
 				URL:          cloudflare.F("url"),
 			}}),
+			CrawlPurposes:    cloudflare.F([]browser_rendering.CrawlNewParamsBodyObjectCrawlPurpose{browser_rendering.CrawlNewParamsBodyObjectCrawlPurposeSearch}),
 			Depth:            cloudflare.F(1.000000),
 			EmulateMediaType: cloudflare.F("emulateMediaType"),
 			Formats:          cloudflare.F([]browser_rendering.CrawlNewParamsBodyObjectFormat{browser_rendering.CrawlNewParamsBodyObjectFormatHTML}),
