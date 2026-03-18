@@ -72,19 +72,15 @@ func (r *SettingAccountService) Get(ctx context.Context, query SettingAccountGet
 
 type SettingAccountEditResponse struct {
 	ZoneDefaults SettingAccountEditResponseZoneDefaults `json:"zone_defaults,required"`
-	// Whether to enforce DNS-only records for the entire account. Omitted when account
-	// settings are unavailable.
-	EnforceDNSOnly bool                           `json:"enforce_dns_only"`
-	JSON           settingAccountEditResponseJSON `json:"-"`
+	JSON         settingAccountEditResponseJSON         `json:"-"`
 }
 
 // settingAccountEditResponseJSON contains the JSON metadata for the struct
 // [SettingAccountEditResponse]
 type settingAccountEditResponseJSON struct {
-	ZoneDefaults   apijson.Field
-	EnforceDNSOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	ZoneDefaults apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *SettingAccountEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -274,19 +270,15 @@ func (r SettingAccountEditResponseZoneDefaultsZoneMode) IsKnown() bool {
 
 type SettingAccountGetResponse struct {
 	ZoneDefaults SettingAccountGetResponseZoneDefaults `json:"zone_defaults,required"`
-	// Whether to enforce DNS-only records for the entire account. Omitted when account
-	// settings are unavailable.
-	EnforceDNSOnly bool                          `json:"enforce_dns_only"`
-	JSON           settingAccountGetResponseJSON `json:"-"`
+	JSON         settingAccountGetResponseJSON         `json:"-"`
 }
 
 // settingAccountGetResponseJSON contains the JSON metadata for the struct
 // [SettingAccountGetResponse]
 type settingAccountGetResponseJSON struct {
-	ZoneDefaults   apijson.Field
-	EnforceDNSOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	ZoneDefaults apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *SettingAccountGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -476,10 +468,8 @@ func (r SettingAccountGetResponseZoneDefaultsZoneMode) IsKnown() bool {
 
 type SettingAccountEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// Whether to enforce DNS-only records for the entire account.
-	EnforceDNSOnly param.Field[bool]                                 `json:"enforce_dns_only"`
-	ZoneDefaults   param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
+	AccountID    param.Field[string]                               `path:"account_id,required"`
+	ZoneDefaults param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
 }
 
 func (r SettingAccountEditParams) MarshalJSON() (data []byte, err error) {
