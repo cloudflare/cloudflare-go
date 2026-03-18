@@ -182,7 +182,8 @@ type AIGatewayNewResponse struct {
 	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayNewResponseStripe                `json:"stripe,nullable"`
-	// Controls how Workers AI inference calls routed through this gateway are billed
+	// Controls how Workers AI inference calls routed through this gateway are billed.
+	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayNewResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                     `json:"zdr"`
 	JSON                 aiGatewayNewResponseJSON                 `json:"-"`
@@ -462,17 +463,17 @@ func (r aiGatewayNewResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls how Workers AI inference calls routed through this gateway are billed
+// Controls how Workers AI inference calls routed through this gateway are billed.
+// Only 'postpaid' is currently supported.
 type AIGatewayNewResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayNewResponseWorkersAIBillingModePostpaid AIGatewayNewResponseWorkersAIBillingMode = "postpaid"
-	AIGatewayNewResponseWorkersAIBillingModeUnified  AIGatewayNewResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayNewResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayNewResponseWorkersAIBillingModePostpaid, AIGatewayNewResponseWorkersAIBillingModeUnified:
+	case AIGatewayNewResponseWorkersAIBillingModePostpaid:
 		return true
 	}
 	return false
@@ -499,7 +500,8 @@ type AIGatewayUpdateResponse struct {
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayUpdateResponseStripe                `json:"stripe,nullable"`
-	// Controls how Workers AI inference calls routed through this gateway are billed
+	// Controls how Workers AI inference calls routed through this gateway are billed.
+	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayUpdateResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                        `json:"zdr"`
 	JSON                 aiGatewayUpdateResponseJSON                 `json:"-"`
@@ -780,17 +782,17 @@ func (r aiGatewayUpdateResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls how Workers AI inference calls routed through this gateway are billed
+// Controls how Workers AI inference calls routed through this gateway are billed.
+// Only 'postpaid' is currently supported.
 type AIGatewayUpdateResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayUpdateResponseWorkersAIBillingModePostpaid AIGatewayUpdateResponseWorkersAIBillingMode = "postpaid"
-	AIGatewayUpdateResponseWorkersAIBillingModeUnified  AIGatewayUpdateResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayUpdateResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayUpdateResponseWorkersAIBillingModePostpaid, AIGatewayUpdateResponseWorkersAIBillingModeUnified:
+	case AIGatewayUpdateResponseWorkersAIBillingModePostpaid:
 		return true
 	}
 	return false
@@ -817,7 +819,8 @@ type AIGatewayListResponse struct {
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                     `json:"store_id,nullable"`
 	Stripe                  AIGatewayListResponseStripe                `json:"stripe,nullable"`
-	// Controls how Workers AI inference calls routed through this gateway are billed
+	// Controls how Workers AI inference calls routed through this gateway are billed.
+	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayListResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                      `json:"zdr"`
 	JSON                 aiGatewayListResponseJSON                 `json:"-"`
@@ -1098,17 +1101,17 @@ func (r aiGatewayListResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls how Workers AI inference calls routed through this gateway are billed
+// Controls how Workers AI inference calls routed through this gateway are billed.
+// Only 'postpaid' is currently supported.
 type AIGatewayListResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayListResponseWorkersAIBillingModePostpaid AIGatewayListResponseWorkersAIBillingMode = "postpaid"
-	AIGatewayListResponseWorkersAIBillingModeUnified  AIGatewayListResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayListResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayListResponseWorkersAIBillingModePostpaid, AIGatewayListResponseWorkersAIBillingModeUnified:
+	case AIGatewayListResponseWorkersAIBillingModePostpaid:
 		return true
 	}
 	return false
@@ -1135,7 +1138,8 @@ type AIGatewayDeleteResponse struct {
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                       `json:"store_id,nullable"`
 	Stripe                  AIGatewayDeleteResponseStripe                `json:"stripe,nullable"`
-	// Controls how Workers AI inference calls routed through this gateway are billed
+	// Controls how Workers AI inference calls routed through this gateway are billed.
+	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayDeleteResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                        `json:"zdr"`
 	JSON                 aiGatewayDeleteResponseJSON                 `json:"-"`
@@ -1416,17 +1420,17 @@ func (r aiGatewayDeleteResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls how Workers AI inference calls routed through this gateway are billed
+// Controls how Workers AI inference calls routed through this gateway are billed.
+// Only 'postpaid' is currently supported.
 type AIGatewayDeleteResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayDeleteResponseWorkersAIBillingModePostpaid AIGatewayDeleteResponseWorkersAIBillingMode = "postpaid"
-	AIGatewayDeleteResponseWorkersAIBillingModeUnified  AIGatewayDeleteResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayDeleteResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayDeleteResponseWorkersAIBillingModePostpaid, AIGatewayDeleteResponseWorkersAIBillingModeUnified:
+	case AIGatewayDeleteResponseWorkersAIBillingModePostpaid:
 		return true
 	}
 	return false
@@ -1453,7 +1457,8 @@ type AIGatewayGetResponse struct {
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
 	StoreID                 string                                    `json:"store_id,nullable"`
 	Stripe                  AIGatewayGetResponseStripe                `json:"stripe,nullable"`
-	// Controls how Workers AI inference calls routed through this gateway are billed
+	// Controls how Workers AI inference calls routed through this gateway are billed.
+	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayGetResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                     `json:"zdr"`
 	JSON                 aiGatewayGetResponseJSON                 `json:"-"`
@@ -1733,17 +1738,17 @@ func (r aiGatewayGetResponseStripeUsageEventJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls how Workers AI inference calls routed through this gateway are billed
+// Controls how Workers AI inference calls routed through this gateway are billed.
+// Only 'postpaid' is currently supported.
 type AIGatewayGetResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayGetResponseWorkersAIBillingModePostpaid AIGatewayGetResponseWorkersAIBillingMode = "postpaid"
-	AIGatewayGetResponseWorkersAIBillingModeUnified  AIGatewayGetResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayGetResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayGetResponseWorkersAIBillingModePostpaid, AIGatewayGetResponseWorkersAIBillingModeUnified:
+	case AIGatewayGetResponseWorkersAIBillingModePostpaid:
 		return true
 	}
 	return false
@@ -1764,7 +1769,8 @@ type AIGatewayNewParams struct {
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
 	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
-	// Controls how Workers AI inference calls routed through this gateway are billed
+	// Controls how Workers AI inference calls routed through this gateway are billed.
+	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode param.Field[AIGatewayNewParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
 	Zdr                  param.Field[bool]                                   `json:"zdr"`
 }
@@ -1803,17 +1809,17 @@ func (r AIGatewayNewParamsRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
-// Controls how Workers AI inference calls routed through this gateway are billed
+// Controls how Workers AI inference calls routed through this gateway are billed.
+// Only 'postpaid' is currently supported.
 type AIGatewayNewParamsWorkersAIBillingMode string
 
 const (
 	AIGatewayNewParamsWorkersAIBillingModePostpaid AIGatewayNewParamsWorkersAIBillingMode = "postpaid"
-	AIGatewayNewParamsWorkersAIBillingModeUnified  AIGatewayNewParamsWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayNewParamsWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayNewParamsWorkersAIBillingModePostpaid, AIGatewayNewParamsWorkersAIBillingModeUnified:
+	case AIGatewayNewParamsWorkersAIBillingModePostpaid:
 		return true
 	}
 	return false
@@ -1859,7 +1865,8 @@ type AIGatewayUpdateParams struct {
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
 	StoreID                 param.Field[string]                                     `json:"store_id"`
 	Stripe                  param.Field[AIGatewayUpdateParamsStripe]                `json:"stripe"`
-	// Controls how Workers AI inference calls routed through this gateway are billed
+	// Controls how Workers AI inference calls routed through this gateway are billed.
+	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode param.Field[AIGatewayUpdateParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
 	Zdr                  param.Field[bool]                                      `json:"zdr"`
 }
@@ -2002,17 +2009,17 @@ func (r AIGatewayUpdateParamsStripeUsageEvent) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// Controls how Workers AI inference calls routed through this gateway are billed
+// Controls how Workers AI inference calls routed through this gateway are billed.
+// Only 'postpaid' is currently supported.
 type AIGatewayUpdateParamsWorkersAIBillingMode string
 
 const (
 	AIGatewayUpdateParamsWorkersAIBillingModePostpaid AIGatewayUpdateParamsWorkersAIBillingMode = "postpaid"
-	AIGatewayUpdateParamsWorkersAIBillingModeUnified  AIGatewayUpdateParamsWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayUpdateParamsWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayUpdateParamsWorkersAIBillingModePostpaid, AIGatewayUpdateParamsWorkersAIBillingModeUnified:
+	case AIGatewayUpdateParamsWorkersAIBillingModePostpaid:
 		return true
 	}
 	return false

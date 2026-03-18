@@ -97,10 +97,14 @@ func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params Inve
 }
 
 type InvestigateMoveNewResponse struct {
+	// Deprecated, use `completed_at` instead
+	//
+	// Deprecated: deprecated
 	CompletedTimestamp time.Time `json:"completed_timestamp,required" format:"date-time"`
 	// Deprecated: deprecated
 	ItemCount   int64                          `json:"item_count,required"`
 	Success     bool                           `json:"success,required"`
+	CompletedAt time.Time                      `json:"completed_at" format:"date-time"`
 	Destination string                         `json:"destination,nullable"`
 	MessageID   string                         `json:"message_id,nullable"`
 	Operation   string                         `json:"operation,nullable"`
@@ -115,6 +119,7 @@ type investigateMoveNewResponseJSON struct {
 	CompletedTimestamp apijson.Field
 	ItemCount          apijson.Field
 	Success            apijson.Field
+	CompletedAt        apijson.Field
 	Destination        apijson.Field
 	MessageID          apijson.Field
 	Operation          apijson.Field
@@ -133,10 +138,14 @@ func (r investigateMoveNewResponseJSON) RawJSON() string {
 }
 
 type InvestigateMoveBulkResponse struct {
+	// Deprecated, use `completed_at` instead
+	//
+	// Deprecated: deprecated
 	CompletedTimestamp time.Time `json:"completed_timestamp,required" format:"date-time"`
 	// Deprecated: deprecated
 	ItemCount   int64                           `json:"item_count,required"`
 	Success     bool                            `json:"success,required"`
+	CompletedAt time.Time                       `json:"completed_at" format:"date-time"`
 	Destination string                          `json:"destination,nullable"`
 	MessageID   string                          `json:"message_id,nullable"`
 	Operation   string                          `json:"operation,nullable"`
@@ -151,6 +160,7 @@ type investigateMoveBulkResponseJSON struct {
 	CompletedTimestamp apijson.Field
 	ItemCount          apijson.Field
 	Success            apijson.Field
+	CompletedAt        apijson.Field
 	Destination        apijson.Field
 	MessageID          apijson.Field
 	Operation          apijson.Field
