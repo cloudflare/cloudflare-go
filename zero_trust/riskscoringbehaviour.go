@@ -34,7 +34,8 @@ func NewRiskScoringBehaviourService(opts ...option.RequestOption) (r *RiskScorin
 	return
 }
 
-// Update configuration for risk behaviors
+// Updates risk score behavior configurations, defining weights and thresholds for
+// risk calculation.
 func (r *RiskScoringBehaviourService) Update(ctx context.Context, params RiskScoringBehaviourUpdateParams, opts ...option.RequestOption) (res *RiskScoringBehaviourUpdateResponse, err error) {
 	var env RiskScoringBehaviourUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,7 +52,8 @@ func (r *RiskScoringBehaviourService) Update(ctx context.Context, params RiskSco
 	return
 }
 
-// Get all behaviors and associated configuration
+// Retrieves configured risk score behaviors that define how user actions affect
+// their overall risk score.
 func (r *RiskScoringBehaviourService) Get(ctx context.Context, query RiskScoringBehaviourGetParams, opts ...option.RequestOption) (res *RiskScoringBehaviourGetResponse, err error) {
 	var env RiskScoringBehaviourGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

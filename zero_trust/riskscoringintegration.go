@@ -38,7 +38,8 @@ func NewRiskScoringIntegrationService(opts ...option.RequestOption) (r *RiskScor
 	return
 }
 
-// Create new risk score integration.
+// Creates a new Zero Trust risk score integration, connecting external risk
+// signals to Cloudflare's risk scoring system.
 func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScoringIntegrationNewParams, opts ...option.RequestOption) (res *RiskScoringIntegrationNewResponse, err error) {
 	var env RiskScoringIntegrationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -77,7 +78,7 @@ func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationI
 	return
 }
 
-// List all risk score integrations for the account.
+// Lists all configured Zero Trust risk score integrations for the account.
 func (r *RiskScoringIntegrationService) List(ctx context.Context, query RiskScoringIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RiskScoringIntegrationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -99,12 +100,13 @@ func (r *RiskScoringIntegrationService) List(ctx context.Context, query RiskScor
 	return res, nil
 }
 
-// List all risk score integrations for the account.
+// Lists all configured Zero Trust risk score integrations for the account.
 func (r *RiskScoringIntegrationService) ListAutoPaging(ctx context.Context, query RiskScoringIntegrationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RiskScoringIntegrationListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a risk score integration.
+// Removes a Zero Trust risk score integration, disconnecting the external risk
+// signal source.
 func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationID string, body RiskScoringIntegrationDeleteParams, opts ...option.RequestOption) (res *RiskScoringIntegrationDeleteResponse, err error) {
 	var env RiskScoringIntegrationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

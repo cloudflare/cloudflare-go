@@ -41,7 +41,8 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 	return
 }
 
-// Get risk event/score information for a specific user
+// Retrieves the detailed risk score breakdown for a specific user, including
+// contributing factors.
 func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
 	var env RiskScoringGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -62,7 +63,7 @@ func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskS
 	return
 }
 
-// Clear the risk score for a particular user
+// Resets risk scores for specified users, clearing their accumulated risk history.
 func (r *RiskScoringService) Reset(ctx context.Context, userID string, body RiskScoringResetParams, opts ...option.RequestOption) (res *RiskScoringResetResponse, err error) {
 	var env RiskScoringResetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -328,7 +329,9 @@ type RiskScoringGetResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                      `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                      `json:"total_pages"`
 	JSON       riskScoringGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -339,6 +342,7 @@ type riskScoringGetResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
