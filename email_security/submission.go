@@ -69,6 +69,9 @@ type SubmissionListResponse struct {
 	RequestedTs          time.Time                                  `json:"requested_ts,required" format:"date-time"`
 	SubmissionID         string                                     `json:"submission_id,required"`
 	CustomerStatus       SubmissionListResponseCustomerStatus       `json:"customer_status"`
+	EscalatedAs          SubmissionListResponseEscalatedAs          `json:"escalated_as,nullable"`
+	EscalatedAt          time.Time                                  `json:"escalated_at,nullable" format:"date-time"`
+	EscalatedBy          string                                     `json:"escalated_by,nullable"`
 	OriginalDisposition  SubmissionListResponseOriginalDisposition  `json:"original_disposition,nullable"`
 	OriginalEdfHash      string                                     `json:"original_edf_hash,nullable"`
 	Outcome              string                                     `json:"outcome,nullable"`
@@ -87,6 +90,9 @@ type submissionListResponseJSON struct {
 	RequestedTs          apijson.Field
 	SubmissionID         apijson.Field
 	CustomerStatus       apijson.Field
+	EscalatedAs          apijson.Field
+	EscalatedAt          apijson.Field
+	EscalatedBy          apijson.Field
 	OriginalDisposition  apijson.Field
 	OriginalEdfHash      apijson.Field
 	Outcome              apijson.Field
@@ -119,6 +125,29 @@ const (
 func (r SubmissionListResponseCustomerStatus) IsKnown() bool {
 	switch r {
 	case SubmissionListResponseCustomerStatusEscalated, SubmissionListResponseCustomerStatusReviewed, SubmissionListResponseCustomerStatusUnreviewed:
+		return true
+	}
+	return false
+}
+
+type SubmissionListResponseEscalatedAs string
+
+const (
+	SubmissionListResponseEscalatedAsMalicious    SubmissionListResponseEscalatedAs = "MALICIOUS"
+	SubmissionListResponseEscalatedAsMaliciousBec SubmissionListResponseEscalatedAs = "MALICIOUS-BEC"
+	SubmissionListResponseEscalatedAsSuspicious   SubmissionListResponseEscalatedAs = "SUSPICIOUS"
+	SubmissionListResponseEscalatedAsSpoof        SubmissionListResponseEscalatedAs = "SPOOF"
+	SubmissionListResponseEscalatedAsSpam         SubmissionListResponseEscalatedAs = "SPAM"
+	SubmissionListResponseEscalatedAsBulk         SubmissionListResponseEscalatedAs = "BULK"
+	SubmissionListResponseEscalatedAsEncrypted    SubmissionListResponseEscalatedAs = "ENCRYPTED"
+	SubmissionListResponseEscalatedAsExternal     SubmissionListResponseEscalatedAs = "EXTERNAL"
+	SubmissionListResponseEscalatedAsUnknown      SubmissionListResponseEscalatedAs = "UNKNOWN"
+	SubmissionListResponseEscalatedAsNone         SubmissionListResponseEscalatedAs = "NONE"
+)
+
+func (r SubmissionListResponseEscalatedAs) IsKnown() bool {
+	switch r {
+	case SubmissionListResponseEscalatedAsMalicious, SubmissionListResponseEscalatedAsMaliciousBec, SubmissionListResponseEscalatedAsSuspicious, SubmissionListResponseEscalatedAsSpoof, SubmissionListResponseEscalatedAsSpam, SubmissionListResponseEscalatedAsBulk, SubmissionListResponseEscalatedAsEncrypted, SubmissionListResponseEscalatedAsExternal, SubmissionListResponseEscalatedAsUnknown, SubmissionListResponseEscalatedAsNone:
 		return true
 	}
 	return false
