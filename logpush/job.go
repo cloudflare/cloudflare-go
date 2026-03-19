@@ -469,7 +469,7 @@ type OutputOptions struct {
 	// filtering, and regardless of the current `sample_interval` of the data.
 	SampleRate float64 `json:"sample_rate,nullable"`
 	// String to specify the format for timestamps, such as `unixnano`, `unix`,
-	// `rfc3339` or `rfc3339nano`.
+	// `rfc3339`, `rfc3339ms` or `rfc3339ns`.
 	TimestampFormat OutputOptionsTimestampFormat `json:"timestamp_format"`
 	JSON            outputOptionsJSON            `json:"-"`
 }
@@ -519,19 +519,20 @@ func (r OutputOptionsOutputType) IsKnown() bool {
 }
 
 // String to specify the format for timestamps, such as `unixnano`, `unix`,
-// `rfc3339` or `rfc3339nano`.
+// `rfc3339`, `rfc3339ms` or `rfc3339ns`.
 type OutputOptionsTimestampFormat string
 
 const (
-	OutputOptionsTimestampFormatUnixnano    OutputOptionsTimestampFormat = "unixnano"
-	OutputOptionsTimestampFormatUnix        OutputOptionsTimestampFormat = "unix"
-	OutputOptionsTimestampFormatRfc3339     OutputOptionsTimestampFormat = "rfc3339"
-	OutputOptionsTimestampFormatRfc3339nano OutputOptionsTimestampFormat = "rfc3339nano"
+	OutputOptionsTimestampFormatUnixnano  OutputOptionsTimestampFormat = "unixnano"
+	OutputOptionsTimestampFormatUnix      OutputOptionsTimestampFormat = "unix"
+	OutputOptionsTimestampFormatRfc3339   OutputOptionsTimestampFormat = "rfc3339"
+	OutputOptionsTimestampFormatRfc3339ms OutputOptionsTimestampFormat = "rfc3339ms"
+	OutputOptionsTimestampFormatRfc3339ns OutputOptionsTimestampFormat = "rfc3339ns"
 )
 
 func (r OutputOptionsTimestampFormat) IsKnown() bool {
 	switch r {
-	case OutputOptionsTimestampFormatUnixnano, OutputOptionsTimestampFormatUnix, OutputOptionsTimestampFormatRfc3339, OutputOptionsTimestampFormatRfc3339nano:
+	case OutputOptionsTimestampFormatUnixnano, OutputOptionsTimestampFormatUnix, OutputOptionsTimestampFormatRfc3339, OutputOptionsTimestampFormatRfc3339ms, OutputOptionsTimestampFormatRfc3339ns:
 		return true
 	}
 	return false
@@ -572,7 +573,7 @@ type OutputOptionsParam struct {
 	// filtering, and regardless of the current `sample_interval` of the data.
 	SampleRate param.Field[float64] `json:"sample_rate"`
 	// String to specify the format for timestamps, such as `unixnano`, `unix`,
-	// `rfc3339` or `rfc3339nano`.
+	// `rfc3339`, `rfc3339ms` or `rfc3339ns`.
 	TimestampFormat param.Field[OutputOptionsTimestampFormat] `json:"timestamp_format"`
 }
 
