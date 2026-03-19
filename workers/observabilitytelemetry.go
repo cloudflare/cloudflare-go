@@ -156,11 +156,11 @@ type ObservabilityTelemetryQueryResponse struct {
 	// The statistics object contains information about query performance from the
 	// database, it does not include any network latency
 	Statistics   ObservabilityTelemetryQueryResponseStatistics              `json:"statistics,required"`
+	Agents       []ObservabilityTelemetryQueryResponseAgent                 `json:"agents"`
 	Calculations []ObservabilityTelemetryQueryResponseCalculation           `json:"calculations"`
 	Compare      []ObservabilityTelemetryQueryResponseCompare               `json:"compare"`
 	Events       ObservabilityTelemetryQueryResponseEvents                  `json:"events"`
 	Invocations  map[string][]ObservabilityTelemetryQueryResponseInvocation `json:"invocations"`
-	Patterns     []ObservabilityTelemetryQueryResponsePattern               `json:"patterns"`
 	Traces       []ObservabilityTelemetryQueryResponseTrace                 `json:"traces"`
 	JSON         observabilityTelemetryQueryResponseJSON                    `json:"-"`
 }
@@ -170,11 +170,11 @@ type ObservabilityTelemetryQueryResponse struct {
 type observabilityTelemetryQueryResponseJSON struct {
 	Run          apijson.Field
 	Statistics   apijson.Field
+	Agents       apijson.Field
 	Calculations apijson.Field
 	Compare      apijson.Field
 	Events       apijson.Field
 	Invocations  apijson.Field
-	Patterns     apijson.Field
 	Traces       apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -190,43 +190,37 @@ func (r observabilityTelemetryQueryResponseJSON) RawJSON() string {
 
 // A Workers Observability Query Object
 type ObservabilityTelemetryQueryResponseRun struct {
-	ID        string `json:"id,required"`
-	AccountID string `json:"accountId,required"`
-	Dry       bool   `json:"dry,required"`
-	// Deprecated: deprecated
-	EnvironmentID string                                       `json:"environmentId,required"`
-	Granularity   float64                                      `json:"granularity,required"`
-	Query         ObservabilityTelemetryQueryResponseRunQuery  `json:"query,required"`
-	Status        ObservabilityTelemetryQueryResponseRunStatus `json:"status,required"`
+	ID          string                                       `json:"id,required"`
+	AccountID   string                                       `json:"accountId,required"`
+	Dry         bool                                         `json:"dry,required"`
+	Granularity float64                                      `json:"granularity,required"`
+	Query       ObservabilityTelemetryQueryResponseRunQuery  `json:"query,required"`
+	Status      ObservabilityTelemetryQueryResponseRunStatus `json:"status,required"`
 	// Time range for the query execution
-	Timeframe ObservabilityTelemetryQueryResponseRunTimeframe `json:"timeframe,required"`
-	UserID    string                                          `json:"userId,required"`
-	// Deprecated: deprecated
-	WorkspaceID string                                           `json:"workspaceId,required"`
-	Created     string                                           `json:"created"`
-	Statistics  ObservabilityTelemetryQueryResponseRunStatistics `json:"statistics"`
-	Updated     string                                           `json:"updated"`
-	JSON        observabilityTelemetryQueryResponseRunJSON       `json:"-"`
+	Timeframe  ObservabilityTelemetryQueryResponseRunTimeframe  `json:"timeframe,required"`
+	UserID     string                                           `json:"userId,required"`
+	Created    string                                           `json:"created"`
+	Statistics ObservabilityTelemetryQueryResponseRunStatistics `json:"statistics"`
+	Updated    string                                           `json:"updated"`
+	JSON       observabilityTelemetryQueryResponseRunJSON       `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseRunJSON contains the JSON metadata for the
 // struct [ObservabilityTelemetryQueryResponseRun]
 type observabilityTelemetryQueryResponseRunJSON struct {
-	ID            apijson.Field
-	AccountID     apijson.Field
-	Dry           apijson.Field
-	EnvironmentID apijson.Field
-	Granularity   apijson.Field
-	Query         apijson.Field
-	Status        apijson.Field
-	Timeframe     apijson.Field
-	UserID        apijson.Field
-	WorkspaceID   apijson.Field
-	Created       apijson.Field
-	Statistics    apijson.Field
-	Updated       apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID          apijson.Field
+	AccountID   apijson.Field
+	Dry         apijson.Field
+	Granularity apijson.Field
+	Query       apijson.Field
+	Status      apijson.Field
+	Timeframe   apijson.Field
+	UserID      apijson.Field
+	Created     apijson.Field
+	Statistics  apijson.Field
+	Updated     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ObservabilityTelemetryQueryResponseRun) UnmarshalJSON(data []byte) (err error) {
@@ -288,7 +282,8 @@ type ObservabilityTelemetryQueryResponseRunQueryParameters struct {
 	Datasets []string `json:"datasets"`
 	// Set a Flag to describe how to combine the filters on the query.
 	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFilterCombination `json:"filterCombination"`
-	// Configure the Filters to apply to the query.
+	// Configure the Filters to apply to the query. Supports nested groups via kind:
+	// 'group'. Maximum nesting depth is 4.
 	Filters []ObservabilityTelemetryQueryResponseRunQueryParametersFilter `json:"filters"`
 	// Define how to group the results of the query.
 	GroupBys []ObservabilityTelemetryQueryResponseRunQueryParametersGroupBy `json:"groupBys"`
@@ -330,9 +325,11 @@ func (r observabilityTelemetryQueryResponseRunQueryParametersJSON) RawJSON() str
 type ObservabilityTelemetryQueryResponseRunQueryParametersCalculation struct {
 	Operator ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator `json:"operator,required"`
 	Alias    string                                                                    `json:"alias"`
-	Key      string                                                                    `json:"key"`
-	KeyType  ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsKeyType  `json:"keyType"`
-	JSON     observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON      `json:"-"`
+	// The key to use for the calculation. This key must exist in the logs. Use the
+	// observability_keys response to confirm. Do not guess keys.
+	Key     string                                                                   `json:"key"`
+	KeyType ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsKeyType `json:"keyType"`
+	JSON    observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON     `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON contains
@@ -440,32 +437,332 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFilterCombination) 
 	return false
 }
 
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFilter struct {
-	Key       string                                                                 `json:"key,required"`
-	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation  `json:"operation,required"`
-	Type      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersType       `json:"type,required"`
-	Value     ObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion `json:"value"`
-	JSON      observabilityTelemetryQueryResponseRunQueryParametersFilterJSON        `json:"-"`
+	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination `json:"filterCombination"`
+	// This field can have the runtime type of [[]interface{}].
+	Filters interface{} `json:"filters"`
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       string                                                                `json:"key"`
+	Kind      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind      `json:"kind"`
+	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation `json:"operation"`
+	Type      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersType      `json:"type"`
+	// This field can have the runtime type of
+	// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion].
+	Value interface{}                                                     `json:"value"`
+	JSON  observabilityTelemetryQueryResponseRunQueryParametersFilterJSON `json:"-"`
+	union ObservabilityTelemetryQueryResponseRunQueryParametersFiltersUnion
 }
 
 // observabilityTelemetryQueryResponseRunQueryParametersFilterJSON contains the
 // JSON metadata for the struct
 // [ObservabilityTelemetryQueryResponseRunQueryParametersFilter]
 type observabilityTelemetryQueryResponseRunQueryParametersFilterJSON struct {
+	FilterCombination apijson.Field
+	Filters           apijson.Field
+	Key               apijson.Field
+	Kind              apijson.Field
+	Operation         apijson.Field
+	Type              apijson.Field
+	Value             apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r observabilityTelemetryQueryResponseRunQueryParametersFilterJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ObservabilityTelemetryQueryResponseRunQueryParametersFilter) UnmarshalJSON(data []byte) (err error) {
+	*r = ObservabilityTelemetryQueryResponseRunQueryParametersFilter{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject],
+// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf].
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFilter) AsUnion() ObservabilityTelemetryQueryResponseRunQueryParametersFiltersUnion {
+	return r.union
+}
+
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+//
+// Union satisfied by
+// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject] or
+// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf].
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersUnion interface {
+	implementsObservabilityTelemetryQueryResponseRunQueryParametersFilter()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityTelemetryQueryResponseRunQueryParametersFiltersUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf{}),
+		},
+	)
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject struct {
+	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination `json:"filterCombination,required"`
+	Filters           []interface{}                                                                       `json:"filters,required"`
+	Kind              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKind              `json:"kind,required"`
+	JSON              observabilityTelemetryQueryResponseRunQueryParametersFiltersObjectJSON              `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseRunQueryParametersFiltersObjectJSON contains
+// the JSON metadata for the struct
+// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject]
+type observabilityTelemetryQueryResponseRunQueryParametersFiltersObjectJSON struct {
+	FilterCombination apijson.Field
+	Filters           apijson.Field
+	Kind              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityTelemetryQueryResponseRunQueryParametersFiltersObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject) implementsObservabilityTelemetryQueryResponseRunQueryParametersFilter() {
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationAnd          ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination = "and"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationOr           ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination = "or"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationAndUppercase ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination = "AND"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationOrUppercase  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationAnd, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationOr, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationAndUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKind string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKindGroup ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKind = "group"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKindGroup:
+		return true
+	}
+	return false
+}
+
+// Filtering best practices: use observability_keys and observability_values to
+// confirm available fields and values. If searching for errors, filter for
+// $metadata.error exists.
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf struct {
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       string                                                                                              `json:"key,required"`
+	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation `json:"operation,required"`
+	Type      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType      `json:"type,required"`
+	Kind      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind      `json:"kind"`
+	// Filter comparison value. IMPORTANT: must match actual values in your logs.
+	// Verify using previous query results or the /values endpoint. Ensure value type
+	// matches the field type. String comparisons are case-sensitive unless using
+	// specific operations. Regex uses ClickHouse RE2 syntax (no
+	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+	// boundary.
+	Value ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion `json:"value"`
+	JSON  observabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafJSON       `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafJSON
+// contains the JSON metadata for the struct
+// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf]
+type observabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafJSON struct {
 	Key         apijson.Field
 	Operation   apijson.Field
 	Type        apijson.Field
+	Kind        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservabilityTelemetryQueryResponseRunQueryParametersFilter) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityTelemetryQueryResponseRunQueryParametersFilterJSON) RawJSON() string {
+func (r observabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryQueryResponseRunQueryParametersFilter() {
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "includes"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "regex"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "exists"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "is_null"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIn                  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "in"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIn               ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "not_in"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEq                  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "eq"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNeq                 ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "neq"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGt                  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "gt"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGte                 ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "gte"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLt                  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "lt"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLte                 ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "lte"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEquals              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "="
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals           ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "!="
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreater             ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = ">"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals     ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = ">="
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLess                ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "<"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals        ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "<="
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase   ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "INCLUDES"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex          ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "MATCH_REGEX"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase     ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "EXISTS"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist        ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "IN"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafTypeString  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType = "string"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafTypeNumber  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType = "number"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafTypeBoolean ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType = "boolean"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafTypeString, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafTypeNumber, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafTypeBoolean:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKindFilter ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind = "filter"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKindFilter:
+		return true
+	}
+	return false
+}
+
+// Filter comparison value. IMPORTANT: must match actual values in your logs.
+// Verify using previous query results or the /values endpoint. Ensure value type
+// matches the field type. String comparisons are case-sensitive unless using
+// specific operations. Regex uses ClickHouse RE2 syntax (no
+// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+// boundary.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat] or
+// [shared.UnionBool].
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion interface {
+	ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationAnd          ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination = "and"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationOr           ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination = "or"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationAndUppercase ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination = "AND"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationOrUppercase  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationAnd, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationOr, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationAndUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKindGroup  ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind = "group"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKindFilter ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind = "filter"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKindGroup, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKindFilter:
+		return true
+	}
+	return false
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation string
@@ -523,35 +820,6 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersType) IsKnow
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat] or
-// [shared.UnionBool].
-type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion interface {
-	ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseRunQueryParametersFiltersValueUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParametersGroupBy struct {
@@ -641,10 +909,10 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersHavingsOperation) I
 
 // Define an expression to search using full-text search.
 type ObservabilityTelemetryQueryResponseRunQueryParametersNeedle struct {
-	Value     ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion `json:"value,required"`
-	IsRegex   bool                                                                  `json:"isRegex"`
-	MatchCase bool                                                                  `json:"matchCase"`
-	JSON      observabilityTelemetryQueryResponseRunQueryParametersNeedleJSON       `json:"-"`
+	Value     ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValue `json:"value,required"`
+	IsRegex   bool                                                             `json:"isRegex"`
+	MatchCase bool                                                             `json:"matchCase"`
+	JSON      observabilityTelemetryQueryResponseRunQueryParametersNeedleJSON  `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseRunQueryParametersNeedleJSON contains the
@@ -666,33 +934,24 @@ func (r observabilityTelemetryQueryResponseRunQueryParametersNeedleJSON) RawJSON
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString], [shared.UnionFloat] or
-// [shared.UnionBool].
-type ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion interface {
-	ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion()
+type ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValue struct {
+	JSON observabilityTelemetryQueryResponseRunQueryParametersNeedleValueJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
+// observabilityTelemetryQueryResponseRunQueryParametersNeedleValueJSON contains
+// the JSON metadata for the struct
+// [ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValue]
+type observabilityTelemetryQueryResponseRunQueryParametersNeedleValueJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityTelemetryQueryResponseRunQueryParametersNeedleValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure the order of the results returned by the query.
@@ -845,6 +1104,41 @@ func (r observabilityTelemetryQueryResponseStatisticsJSON) RawJSON() string {
 	return r.raw
 }
 
+type ObservabilityTelemetryQueryResponseAgent struct {
+	AgentClass      string                                       `json:"agentClass,required"`
+	EventTypeCounts map[string]float64                           `json:"eventTypeCounts,required"`
+	FirstEventMs    float64                                      `json:"firstEventMs,required"`
+	HasErrors       bool                                         `json:"hasErrors,required"`
+	LastEventMs     float64                                      `json:"lastEventMs,required"`
+	Namespace       string                                       `json:"namespace,required"`
+	Service         string                                       `json:"service,required"`
+	TotalEvents     float64                                      `json:"totalEvents,required"`
+	JSON            observabilityTelemetryQueryResponseAgentJSON `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseAgentJSON contains the JSON metadata for the
+// struct [ObservabilityTelemetryQueryResponseAgent]
+type observabilityTelemetryQueryResponseAgentJSON struct {
+	AgentClass      apijson.Field
+	EventTypeCounts apijson.Field
+	FirstEventMs    apijson.Field
+	HasErrors       apijson.Field
+	LastEventMs     apijson.Field
+	Namespace       apijson.Field
+	Service         apijson.Field
+	TotalEvents     apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseAgent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityTelemetryQueryResponseAgentJSON) RawJSON() string {
+	return r.raw
+}
+
 type ObservabilityTelemetryQueryResponseCalculation struct {
 	Aggregates  []ObservabilityTelemetryQueryResponseCalculationsAggregate `json:"aggregates,required"`
 	Calculation string                                                     `json:"calculation,required"`
@@ -980,12 +1274,12 @@ func (r observabilityTelemetryQueryResponseCalculationsSeriesJSON) RawJSON() str
 
 type ObservabilityTelemetryQueryResponseCalculationsSeriesData struct {
 	Count          float64                                                          `json:"count,required"`
-	FirstSeen      string                                                           `json:"firstSeen,required"`
 	Interval       float64                                                          `json:"interval,required"`
-	LastSeen       string                                                           `json:"lastSeen,required"`
 	SampleInterval float64                                                          `json:"sampleInterval,required"`
 	Value          float64                                                          `json:"value,required"`
+	FirstSeen      string                                                           `json:"firstSeen"`
 	Groups         []ObservabilityTelemetryQueryResponseCalculationsSeriesDataGroup `json:"groups"`
+	LastSeen       string                                                           `json:"lastSeen"`
 	JSON           observabilityTelemetryQueryResponseCalculationsSeriesDataJSON    `json:"-"`
 }
 
@@ -994,12 +1288,12 @@ type ObservabilityTelemetryQueryResponseCalculationsSeriesData struct {
 // [ObservabilityTelemetryQueryResponseCalculationsSeriesData]
 type observabilityTelemetryQueryResponseCalculationsSeriesDataJSON struct {
 	Count          apijson.Field
-	FirstSeen      apijson.Field
 	Interval       apijson.Field
-	LastSeen       apijson.Field
 	SampleInterval apijson.Field
 	Value          apijson.Field
+	FirstSeen      apijson.Field
 	Groups         apijson.Field
+	LastSeen       apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -1199,12 +1493,12 @@ func (r observabilityTelemetryQueryResponseCompareSeriesJSON) RawJSON() string {
 
 type ObservabilityTelemetryQueryResponseCompareSeriesData struct {
 	Count          float64                                                     `json:"count,required"`
-	FirstSeen      string                                                      `json:"firstSeen,required"`
 	Interval       float64                                                     `json:"interval,required"`
-	LastSeen       string                                                      `json:"lastSeen,required"`
 	SampleInterval float64                                                     `json:"sampleInterval,required"`
 	Value          float64                                                     `json:"value,required"`
+	FirstSeen      string                                                      `json:"firstSeen"`
 	Groups         []ObservabilityTelemetryQueryResponseCompareSeriesDataGroup `json:"groups"`
+	LastSeen       string                                                      `json:"lastSeen"`
 	JSON           observabilityTelemetryQueryResponseCompareSeriesDataJSON    `json:"-"`
 }
 
@@ -1212,12 +1506,12 @@ type ObservabilityTelemetryQueryResponseCompareSeriesData struct {
 // metadata for the struct [ObservabilityTelemetryQueryResponseCompareSeriesData]
 type observabilityTelemetryQueryResponseCompareSeriesDataJSON struct {
 	Count          apijson.Field
-	FirstSeen      apijson.Field
 	Interval       apijson.Field
-	LastSeen       apijson.Field
 	SampleInterval apijson.Field
 	Value          apijson.Field
+	FirstSeen      apijson.Field
 	Groups         apijson.Field
+	LastSeen       apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -1347,6 +1641,7 @@ func (r observabilityTelemetryQueryResponseEventsEventJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
+	// Unique event ID. Use as the cursor for offset-based pagination.
 	ID              string                                                      `json:"id,required"`
 	Account         string                                                      `json:"account"`
 	CloudService    string                                                      `json:"cloudService"`
@@ -1441,8 +1736,7 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	DispatchNamespace        string      `json:"dispatchNamespace"`
 	DurableObjectID          string      `json:"durableObjectId"`
 	Entrypoint               string      `json:"entrypoint"`
-	// This field can have the runtime type of
-	// [map[string]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion].
+	// This field can have the runtime type of [map[string]interface{}].
 	Event          interface{}                                                          `json:"event"`
 	ExecutionModel ObservabilityTelemetryQueryResponseEventsEventsWorkersExecutionModel `json:"executionModel"`
 	Outcome        string                                                               `json:"outcome"`
@@ -1525,17 +1819,17 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
-	EventType       ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType             `json:"eventType,required"`
-	RequestID       string                                                                            `json:"requestId,required"`
-	ScriptName      string                                                                            `json:"scriptName,required"`
-	DurableObjectID string                                                                            `json:"durableObjectId"`
-	Entrypoint      string                                                                            `json:"entrypoint"`
-	Event           map[string]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion `json:"event"`
-	ExecutionModel  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel        `json:"executionModel"`
-	Outcome         string                                                                            `json:"outcome"`
-	ScriptVersion   ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion         `json:"scriptVersion"`
-	Truncated       bool                                                                              `json:"truncated"`
-	JSON            observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON                  `json:"-"`
+	EventType       ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType      `json:"eventType,required"`
+	RequestID       string                                                                     `json:"requestId,required"`
+	ScriptName      string                                                                     `json:"scriptName,required"`
+	DurableObjectID string                                                                     `json:"durableObjectId"`
+	Entrypoint      string                                                                     `json:"entrypoint"`
+	Event           map[string]interface{}                                                     `json:"event"`
+	ExecutionModel  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel `json:"executionModel"`
+	Outcome         string                                                                     `json:"outcome"`
+	ScriptVersion   ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion  `json:"scriptVersion"`
+	Truncated       bool                                                                       `json:"truncated"`
+	JSON            observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON           `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON contains the
@@ -1588,150 +1882,6 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType) I
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap].
-type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion interface {
-	ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap{}),
-		},
-	)
-}
-
-type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap map[string]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapUnionItem
-
-func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMap) ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventUnion() {
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap].
-type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapUnionItem interface {
-	ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapUnionItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap{}),
-		},
-	)
-}
-
-type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap map[string]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapUnionItem
-
-func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMap) ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapUnionItem() {
-}
-
-// Union satisfied by
-// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArray],
-// [shared.UnionString], [shared.UnionFloat] or [shared.UnionBool].
-type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapUnionItem interface {
-	ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapUnionItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
-}
-
-type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArray []ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArrayUnionItem
-
-func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArray) ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapUnionItem() {
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat] or
-// [shared.UnionBool].
-type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArrayUnionItem interface {
-	ImplementsObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArrayUnionItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventMapMapArrayUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
 }
 
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel string
@@ -1895,11 +2045,11 @@ type ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates struct {
 	// Deprecated: deprecated
 	Count int64 `json:"_count,required"`
 	// Deprecated: deprecated
-	FirstSeen string `json:"_firstSeen,required"`
+	Interval float64 `json:"_interval,required"`
 	// Deprecated: deprecated
-	Interval int64 `json:"_interval,required"`
+	FirstSeen string `json:"_firstSeen"`
 	// Deprecated: deprecated
-	LastSeen string `json:"_lastSeen,required"`
+	LastSeen string `json:"_lastSeen"`
 	// Deprecated: deprecated
 	Bin  interface{}                                                       `json:"bin"`
 	JSON observabilityTelemetryQueryResponseEventsSeriesDataAggregatesJSON `json:"-"`
@@ -1910,8 +2060,8 @@ type ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates struct {
 // [ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates]
 type observabilityTelemetryQueryResponseEventsSeriesDataAggregatesJSON struct {
 	Count       apijson.Field
-	FirstSeen   apijson.Field
 	Interval    apijson.Field
+	FirstSeen   apijson.Field
 	LastSeen    apijson.Field
 	Bin         apijson.Field
 	raw         string
@@ -1992,6 +2142,7 @@ func (r observabilityTelemetryQueryResponseInvocationJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
+	// Unique event ID. Use as the cursor for offset-based pagination.
 	ID              string                                                     `json:"id,required"`
 	Account         string                                                     `json:"account"`
 	CloudService    string                                                     `json:"cloudService"`
@@ -2085,8 +2236,7 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	DispatchNamespace        string      `json:"dispatchNamespace"`
 	DurableObjectID          string      `json:"durableObjectId"`
 	Entrypoint               string      `json:"entrypoint"`
-	// This field can have the runtime type of
-	// [map[string]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion].
+	// This field can have the runtime type of [map[string]interface{}].
 	Event          interface{}                                                         `json:"event"`
 	ExecutionModel ObservabilityTelemetryQueryResponseInvocationsWorkersExecutionModel `json:"executionModel"`
 	Outcome        string                                                              `json:"outcome"`
@@ -2168,17 +2318,17 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
-	EventType       ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType             `json:"eventType,required"`
-	RequestID       string                                                                           `json:"requestId,required"`
-	ScriptName      string                                                                           `json:"scriptName,required"`
-	DurableObjectID string                                                                           `json:"durableObjectId"`
-	Entrypoint      string                                                                           `json:"entrypoint"`
-	Event           map[string]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion `json:"event"`
-	ExecutionModel  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel        `json:"executionModel"`
-	Outcome         string                                                                           `json:"outcome"`
-	ScriptVersion   ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion         `json:"scriptVersion"`
-	Truncated       bool                                                                             `json:"truncated"`
-	JSON            observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON                  `json:"-"`
+	EventType       ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType      `json:"eventType,required"`
+	RequestID       string                                                                    `json:"requestId,required"`
+	ScriptName      string                                                                    `json:"scriptName,required"`
+	DurableObjectID string                                                                    `json:"durableObjectId"`
+	Entrypoint      string                                                                    `json:"entrypoint"`
+	Event           map[string]interface{}                                                    `json:"event"`
+	ExecutionModel  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel `json:"executionModel"`
+	Outcome         string                                                                    `json:"outcome"`
+	ScriptVersion   ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion  `json:"scriptVersion"`
+	Truncated       bool                                                                      `json:"truncated"`
+	JSON            observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON           `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON contains the
@@ -2231,150 +2381,6 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType) Is
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap].
-type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion interface {
-	ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap{}),
-		},
-	)
-}
-
-type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap map[string]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapUnionItem
-
-func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMap) ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventUnion() {
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
-// or [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap].
-type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapUnionItem interface {
-	ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapUnionItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap{}),
-		},
-	)
-}
-
-type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap map[string]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapUnionItem
-
-func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMap) ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapUnionItem() {
-}
-
-// Union satisfied by
-// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArray],
-// [shared.UnionString], [shared.UnionFloat] or [shared.UnionBool].
-type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapUnionItem interface {
-	ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapUnionItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
-}
-
-type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArray []ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArrayUnionItem
-
-func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArray) ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapUnionItem() {
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat] or
-// [shared.UnionBool].
-type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArrayUnionItem interface {
-	ImplementsObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArrayUnionItem()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventMapMapArrayUnionItem)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
 }
 
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel string
@@ -2454,138 +2460,6 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersExecutionModel) IsK
 		return true
 	}
 	return false
-}
-
-type ObservabilityTelemetryQueryResponsePattern struct {
-	Count   float64                                             `json:"count,required"`
-	Pattern string                                              `json:"pattern,required"`
-	Series  []ObservabilityTelemetryQueryResponsePatternsSeries `json:"series,required"`
-	Service string                                              `json:"service,required"`
-	JSON    observabilityTelemetryQueryResponsePatternJSON      `json:"-"`
-}
-
-// observabilityTelemetryQueryResponsePatternJSON contains the JSON metadata for
-// the struct [ObservabilityTelemetryQueryResponsePattern]
-type observabilityTelemetryQueryResponsePatternJSON struct {
-	Count       apijson.Field
-	Pattern     apijson.Field
-	Series      apijson.Field
-	Service     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ObservabilityTelemetryQueryResponsePattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r observabilityTelemetryQueryResponsePatternJSON) RawJSON() string {
-	return r.raw
-}
-
-type ObservabilityTelemetryQueryResponsePatternsSeries struct {
-	Data ObservabilityTelemetryQueryResponsePatternsSeriesData `json:"data,required"`
-	Time string                                                `json:"time,required"`
-	JSON observabilityTelemetryQueryResponsePatternsSeriesJSON `json:"-"`
-}
-
-// observabilityTelemetryQueryResponsePatternsSeriesJSON contains the JSON metadata
-// for the struct [ObservabilityTelemetryQueryResponsePatternsSeries]
-type observabilityTelemetryQueryResponsePatternsSeriesJSON struct {
-	Data        apijson.Field
-	Time        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ObservabilityTelemetryQueryResponsePatternsSeries) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r observabilityTelemetryQueryResponsePatternsSeriesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ObservabilityTelemetryQueryResponsePatternsSeriesData struct {
-	Count          float64                                                      `json:"count,required"`
-	Interval       float64                                                      `json:"interval,required"`
-	SampleInterval float64                                                      `json:"sampleInterval,required"`
-	Value          float64                                                      `json:"value,required"`
-	Groups         []ObservabilityTelemetryQueryResponsePatternsSeriesDataGroup `json:"groups"`
-	JSON           observabilityTelemetryQueryResponsePatternsSeriesDataJSON    `json:"-"`
-}
-
-// observabilityTelemetryQueryResponsePatternsSeriesDataJSON contains the JSON
-// metadata for the struct [ObservabilityTelemetryQueryResponsePatternsSeriesData]
-type observabilityTelemetryQueryResponsePatternsSeriesDataJSON struct {
-	Count          apijson.Field
-	Interval       apijson.Field
-	SampleInterval apijson.Field
-	Value          apijson.Field
-	Groups         apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *ObservabilityTelemetryQueryResponsePatternsSeriesData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r observabilityTelemetryQueryResponsePatternsSeriesDataJSON) RawJSON() string {
-	return r.raw
-}
-
-type ObservabilityTelemetryQueryResponsePatternsSeriesDataGroup struct {
-	Key   string                                                                `json:"key,required"`
-	Value ObservabilityTelemetryQueryResponsePatternsSeriesDataGroupsValueUnion `json:"value,required"`
-	JSON  observabilityTelemetryQueryResponsePatternsSeriesDataGroupJSON        `json:"-"`
-}
-
-// observabilityTelemetryQueryResponsePatternsSeriesDataGroupJSON contains the JSON
-// metadata for the struct
-// [ObservabilityTelemetryQueryResponsePatternsSeriesDataGroup]
-type observabilityTelemetryQueryResponsePatternsSeriesDataGroupJSON struct {
-	Key         apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ObservabilityTelemetryQueryResponsePatternsSeriesDataGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r observabilityTelemetryQueryResponsePatternsSeriesDataGroupJSON) RawJSON() string {
-	return r.raw
-}
-
-// Union satisfied by [shared.UnionString], [shared.UnionFloat] or
-// [shared.UnionBool].
-type ObservabilityTelemetryQueryResponsePatternsSeriesDataGroupsValueUnion interface {
-	ImplementsObservabilityTelemetryQueryResponsePatternsSeriesDataGroupsValueUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ObservabilityTelemetryQueryResponsePatternsSeriesDataGroupsValueUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
 }
 
 type ObservabilityTelemetryQueryResponseTrace struct {
@@ -2698,13 +2572,19 @@ func init() {
 }
 
 type ObservabilityTelemetryKeysParams struct {
-	AccountID param.Field[string]                                   `path:"account_id,required"`
-	Datasets  param.Field[[]string]                                 `json:"datasets"`
-	Filters   param.Field[[]ObservabilityTelemetryKeysParamsFilter] `json:"filters"`
-	From      param.Field[float64]                                  `json:"from"`
-	// Search for a specific substring in the keys.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Leave this empty to use the default datasets
+	Datasets param.Field[[]string] `json:"datasets"`
+	// Apply filters to narrow key discovery. Supports nested groups via kind: 'group'.
+	// Maximum nesting depth is 4.
+	Filters param.Field[[]ObservabilityTelemetryKeysParamsFilterUnion] `json:"filters"`
+	From    param.Field[float64]                                       `json:"from"`
+	// If the user suggests a key, use this to narrow down the list of keys returned.
+	// Make sure matchCase is false to avoid case sensitivity issues.
 	KeyNeedle param.Field[ObservabilityTelemetryKeysParamsKeyNeedle] `json:"keyNeedle"`
-	Limit     param.Field[float64]                                   `json:"limit"`
+	// Advanced usage: set limit=1000+ to retrieve comprehensive key options without
+	// needing additional filtering.
+	Limit param.Field[float64] `json:"limit"`
 	// Search for a specific substring in any of the events
 	Needle param.Field[ObservabilityTelemetryKeysParamsNeedle] `json:"needle"`
 	To     param.Field[float64]                                `json:"to"`
@@ -2714,15 +2594,222 @@ func (r ObservabilityTelemetryKeysParams) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
 type ObservabilityTelemetryKeysParamsFilter struct {
-	Key       param.Field[string]                                            `json:"key,required"`
-	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersOperation]  `json:"operation,required"`
-	Type      param.Field[ObservabilityTelemetryKeysParamsFiltersType]       `json:"type,required"`
-	Value     param.Field[ObservabilityTelemetryKeysParamsFiltersValueUnion] `json:"value"`
+	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersFilterCombination] `json:"filterCombination"`
+	Filters           param.Field[interface{}]                                              `json:"filters"`
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       param.Field[string]                                           `json:"key"`
+	Kind      param.Field[ObservabilityTelemetryKeysParamsFiltersKind]      `json:"kind"`
+	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersOperation] `json:"operation"`
+	Type      param.Field[ObservabilityTelemetryKeysParamsFiltersType]      `json:"type"`
+	Value     param.Field[interface{}]                                      `json:"value"`
 }
 
 func (r ObservabilityTelemetryKeysParamsFilter) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryKeysParamsFilter) implementsObservabilityTelemetryKeysParamsFilterUnion() {
+}
+
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+//
+// Satisfied by [workers.ObservabilityTelemetryKeysParamsFiltersObject],
+// [workers.ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf],
+// [ObservabilityTelemetryKeysParamsFilter].
+type ObservabilityTelemetryKeysParamsFilterUnion interface {
+	implementsObservabilityTelemetryKeysParamsFilterUnion()
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObject struct {
+	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination] `json:"filterCombination,required"`
+	Filters           param.Field[[]interface{}]                                                  `json:"filters,required"`
+	Kind              param.Field[ObservabilityTelemetryKeysParamsFiltersObjectKind]              `json:"kind,required"`
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObject) implementsObservabilityTelemetryKeysParamsFilterUnion() {
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationAnd          ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination = "and"
+	ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationOr           ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination = "or"
+	ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationAndUppercase ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination = "AND"
+	ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationOrUppercase  ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationAnd, ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationOr, ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationAndUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObjectKind string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectKindGroup ObservabilityTelemetryKeysParamsFiltersObjectKind = "group"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectKindGroup:
+		return true
+	}
+	return false
+}
+
+// Filtering best practices: use observability_keys and observability_values to
+// confirm available fields and values. If searching for errors, filter for
+// $metadata.error exists.
+type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf struct {
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       param.Field[string]                                                                         `json:"key,required"`
+	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation,required"`
+	Type      param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type,required"`
+	Kind      param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
+	// Filter comparison value. IMPORTANT: must match actual values in your logs.
+	// Verify using previous query results or the /values endpoint. Ensure value type
+	// matches the field type. String comparisons are case-sensitive unless using
+	// specific operations. Regex uses ClickHouse RE2 syntax (no
+	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+	// boundary.
+	Value param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryKeysParamsFilterUnion() {
+}
+
+type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "includes"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "regex"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "exists"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "is_null"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIn                  ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "in"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIn               ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "not_in"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEq                  ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "eq"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNeq                 ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "neq"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGt                  ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "gt"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGte                 ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "gte"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLt                  ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "lt"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLte                 ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "lte"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEquals              ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "="
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals           ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "!="
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreater             ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = ">"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals     ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = ">="
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLess                ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "<"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals        ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "<="
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase   ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "INCLUDES"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude      ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex          ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "MATCH_REGEX"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase     ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "EXISTS"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist        ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "IN"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafTypeString  ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType = "string"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafTypeNumber  ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType = "number"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafTypeBoolean ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType = "boolean"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafTypeString, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafTypeNumber, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafTypeBoolean:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKindFilter ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind = "filter"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKindFilter:
+		return true
+	}
+	return false
+}
+
+// Filter comparison value. IMPORTANT: must match actual values in your logs.
+// Verify using previous query results or the /values endpoint. Ensure value type
+// matches the field type. String comparisons are case-sensitive unless using
+// specific operations. Regex uses ClickHouse RE2 syntax (no
+// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+// boundary.
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion interface {
+	ImplementsObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion()
+}
+
+type ObservabilityTelemetryKeysParamsFiltersFilterCombination string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersFilterCombinationAnd          ObservabilityTelemetryKeysParamsFiltersFilterCombination = "and"
+	ObservabilityTelemetryKeysParamsFiltersFilterCombinationOr           ObservabilityTelemetryKeysParamsFiltersFilterCombination = "or"
+	ObservabilityTelemetryKeysParamsFiltersFilterCombinationAndUppercase ObservabilityTelemetryKeysParamsFiltersFilterCombination = "AND"
+	ObservabilityTelemetryKeysParamsFiltersFilterCombinationOrUppercase  ObservabilityTelemetryKeysParamsFiltersFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersFilterCombinationAnd, ObservabilityTelemetryKeysParamsFiltersFilterCombinationOr, ObservabilityTelemetryKeysParamsFiltersFilterCombinationAndUppercase, ObservabilityTelemetryKeysParamsFiltersFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryKeysParamsFiltersKind string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersKindGroup  ObservabilityTelemetryKeysParamsFiltersKind = "group"
+	ObservabilityTelemetryKeysParamsFiltersKindFilter ObservabilityTelemetryKeysParamsFiltersKind = "filter"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersKindGroup, ObservabilityTelemetryKeysParamsFiltersKindFilter:
+		return true
+	}
+	return false
 }
 
 type ObservabilityTelemetryKeysParamsFiltersOperation string
@@ -2782,12 +2869,8 @@ func (r ObservabilityTelemetryKeysParamsFiltersType) IsKnown() bool {
 	return false
 }
 
-// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
-type ObservabilityTelemetryKeysParamsFiltersValueUnion interface {
-	ImplementsObservabilityTelemetryKeysParamsFiltersValueUnion()
-}
-
-// Search for a specific substring in the keys.
+// If the user suggests a key, use this to narrow down the list of keys returned.
+// Make sure matchCase is false to avoid case sensitivity issues.
 type ObservabilityTelemetryKeysParamsKeyNeedle struct {
 	Value     param.Field[ObservabilityTelemetryKeysParamsKeyNeedleValueUnion] `json:"value,required"`
 	IsRegex   param.Field[bool]                                                `json:"isRegex"`
@@ -2823,7 +2906,9 @@ type ObservabilityTelemetryQueryParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Unique identifier for the query to execute
 	QueryID param.Field[string] `json:"queryId,required"`
-	// Time range for the query execution
+	// Timeframe for your query using Unix timestamps in milliseconds. Provide from/to
+	// epoch ms; narrower timeframes provide faster responses and more specific
+	// results.
 	Timeframe param.Field[ObservabilityTelemetryQueryParamsTimeframe] `json:"timeframe,required"`
 	// Whether to include timeseties data in the response
 	Chart param.Field[bool] `json:"chart"`
@@ -2832,25 +2917,27 @@ type ObservabilityTelemetryQueryParams struct {
 	// Whether to perform a dry run without saving the results of the query. Useful for
 	// validation
 	Dry param.Field[bool] `json:"dry"`
-	// Time granularity for aggregating results (in milliseconds). Controls the
-	// bucketing of time-series data
+	// This is only used when the view is calculations. Leaving it empty lets Workers
+	// Observability detect the correct granularity.
 	Granularity param.Field[float64] `json:"granularity"`
 	// Whether to ignore time-series data in the results and return only aggregated
 	// values
 	IgnoreSeries param.Field[bool] `json:"ignoreSeries"`
-	// Maximum number of events to return.
+	// Use this limit to cap the number of events returned when the view is events.
 	Limit param.Field[float64] `json:"limit"`
-	// Cursor for pagination to retrieve the next set of results
+	// Cursor pagination for event/trace/invocation views. Pass the last item's
+	// $metadata.id as the next offset.
 	Offset param.Field[string] `json:"offset"`
-	// Number of events to skip for pagination. Used in conjunction with offset
+	// Numeric offset for pattern results (top-N list). Use with limit to page pattern
+	// groups; not used by cursor pagination.
 	OffsetBy param.Field[float64] `json:"offsetBy"`
 	// Direction for offset-based pagination (e.g., 'next', 'prev')
 	OffsetDirection param.Field[string] `json:"offsetDirection"`
 	// Optional parameters to pass to the query execution
 	Parameters param.Field[ObservabilityTelemetryQueryParamsParameters] `json:"parameters"`
-	// Type of pattern to search for when using pattern-based views
-	PatternType param.Field[ObservabilityTelemetryQueryParamsPatternType] `json:"patternType"`
-	// View type for presenting the query results.
+	// Examples by view type. Events: show errors for a worker in the last 30 minutes.
+	// Calculations: p99 of wall time or count by status code. Invocations: find a
+	// specific request that resulted in a 500.
 	View param.Field[ObservabilityTelemetryQueryParamsView] `json:"view"`
 }
 
@@ -2858,7 +2945,9 @@ func (r ObservabilityTelemetryQueryParams) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// Time range for the query execution
+// Timeframe for your query using Unix timestamps in milliseconds. Provide from/to
+// epoch ms; narrower timeframes provide faster responses and more specific
+// results.
 type ObservabilityTelemetryQueryParamsTimeframe struct {
 	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
 	From param.Field[float64] `json:"from,required"`
@@ -2878,8 +2967,9 @@ type ObservabilityTelemetryQueryParamsParameters struct {
 	Datasets param.Field[[]string] `json:"datasets"`
 	// Set a Flag to describe how to combine the filters on the query.
 	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFilterCombination] `json:"filterCombination"`
-	// Configure the Filters to apply to the query.
-	Filters param.Field[[]ObservabilityTelemetryQueryParamsParametersFilter] `json:"filters"`
+	// Configure the Filters to apply to the query. Supports nested groups via kind:
+	// 'group'. Maximum nesting depth is 4.
+	Filters param.Field[[]ObservabilityTelemetryQueryParamsParametersFilterUnion] `json:"filters"`
 	// Define how to group the results of the query.
 	GroupBys param.Field[[]ObservabilityTelemetryQueryParamsParametersGroupBy] `json:"groupBys"`
 	// Configure the Having clauses that filter on calculations in the query result.
@@ -2899,8 +2989,10 @@ func (r ObservabilityTelemetryQueryParamsParameters) MarshalJSON() (data []byte,
 type ObservabilityTelemetryQueryParamsParametersCalculation struct {
 	Operator param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsOperator] `json:"operator,required"`
 	Alias    param.Field[string]                                                          `json:"alias"`
-	Key      param.Field[string]                                                          `json:"key"`
-	KeyType  param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsKeyType]  `json:"keyType"`
+	// The key to use for the calculation. This key must exist in the logs. Use the
+	// observability_keys response to confirm. Do not guess keys.
+	Key     param.Field[string]                                                         `json:"key"`
+	KeyType param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsKeyType] `json:"keyType"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersCalculation) MarshalJSON() (data []byte, err error) {
@@ -2992,15 +3084,222 @@ func (r ObservabilityTelemetryQueryParamsParametersFilterCombination) IsKnown() 
 	return false
 }
 
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
 type ObservabilityTelemetryQueryParamsParametersFilter struct {
-	Key       param.Field[string]                                                       `json:"key,required"`
-	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersOperation]  `json:"operation,required"`
-	Type      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersType]       `json:"type,required"`
-	Value     param.Field[ObservabilityTelemetryQueryParamsParametersFiltersValueUnion] `json:"value"`
+	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination] `json:"filterCombination"`
+	Filters           param.Field[interface{}]                                                         `json:"filters"`
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       param.Field[string]                                                      `json:"key"`
+	Kind      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersKind]      `json:"kind"`
+	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersOperation] `json:"operation"`
+	Type      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersType]      `json:"type"`
+	Value     param.Field[interface{}]                                                 `json:"value"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersFilter) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFilter) implementsObservabilityTelemetryQueryParamsParametersFilterUnion() {
+}
+
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+//
+// Satisfied by [workers.ObservabilityTelemetryQueryParamsParametersFiltersObject],
+// [workers.ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeaf],
+// [ObservabilityTelemetryQueryParamsParametersFilter].
+type ObservabilityTelemetryQueryParamsParametersFilterUnion interface {
+	implementsObservabilityTelemetryQueryParamsParametersFilterUnion()
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObject struct {
+	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination] `json:"filterCombination,required"`
+	Filters           param.Field[[]interface{}]                                                             `json:"filters,required"`
+	Kind              param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectKind]              `json:"kind,required"`
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObject) implementsObservabilityTelemetryQueryParamsParametersFilterUnion() {
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationAnd          ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination = "and"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationOr           ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination = "or"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationAndUppercase ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination = "AND"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationOrUppercase  ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationAnd, ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationOr, ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationAndUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectKind string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectKindGroup ObservabilityTelemetryQueryParamsParametersFiltersObjectKind = "group"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectKindGroup:
+		return true
+	}
+	return false
+}
+
+// Filtering best practices: use observability_keys and observability_values to
+// confirm available fields and values. If searching for errors, filter for
+// $metadata.error exists.
+type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeaf struct {
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       param.Field[string]                                                                                    `json:"key,required"`
+	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation] `json:"operation,required"`
+	Type      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType]      `json:"type,required"`
+	Kind      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
+	// Filter comparison value. IMPORTANT: must match actual values in your logs.
+	// Verify using previous query results or the /values endpoint. Ensure value type
+	// matches the field type. String comparisons are case-sensitive unless using
+	// specific operations. Regex uses ClickHouse RE2 syntax (no
+	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+	// boundary.
+	Value param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeaf) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryQueryParamsParametersFilterUnion() {
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "includes"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "regex"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "exists"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "is_null"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIn                  ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "in"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIn               ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "not_in"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEq                  ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "eq"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNeq                 ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "neq"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGt                  ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "gt"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGte                 ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "gte"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLt                  ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "lt"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLte                 ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "lte"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEquals              ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "="
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals           ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "!="
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreater             ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = ">"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals     ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = ">="
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLess                ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "<"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals        ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "<="
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase   ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "INCLUDES"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude      ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex          ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "MATCH_REGEX"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase     ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "EXISTS"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist        ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "IN"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafTypeString  ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType = "string"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafTypeNumber  ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType = "number"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafTypeBoolean ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType = "boolean"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafTypeString, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafTypeNumber, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafTypeBoolean:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKindFilter ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind = "filter"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKindFilter:
+		return true
+	}
+	return false
+}
+
+// Filter comparison value. IMPORTANT: must match actual values in your logs.
+// Verify using previous query results or the /values endpoint. Ensure value type
+// matches the field type. String comparisons are case-sensitive unless using
+// specific operations. Regex uses ClickHouse RE2 syntax (no
+// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+// boundary.
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion interface {
+	ImplementsObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion()
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationAnd          ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination = "and"
+	ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationOr           ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination = "or"
+	ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationAndUppercase ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination = "AND"
+	ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationOrUppercase  ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationAnd, ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationOr, ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationAndUppercase, ObservabilityTelemetryQueryParamsParametersFiltersFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersKind string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersKindGroup  ObservabilityTelemetryQueryParamsParametersFiltersKind = "group"
+	ObservabilityTelemetryQueryParamsParametersFiltersKindFilter ObservabilityTelemetryQueryParamsParametersFiltersKind = "filter"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersKindGroup, ObservabilityTelemetryQueryParamsParametersFiltersKindFilter:
+		return true
+	}
+	return false
 }
 
 type ObservabilityTelemetryQueryParamsParametersFiltersOperation string
@@ -3058,11 +3357,6 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
-type ObservabilityTelemetryQueryParamsParametersFiltersValueUnion interface {
-	ImplementsObservabilityTelemetryQueryParamsParametersFiltersValueUnion()
 }
 
 type ObservabilityTelemetryQueryParamsParametersGroupBy struct {
@@ -3163,23 +3457,9 @@ func (r ObservabilityTelemetryQueryParamsParametersOrderByOrder) IsKnown() bool 
 	return false
 }
 
-// Type of pattern to search for when using pattern-based views
-type ObservabilityTelemetryQueryParamsPatternType string
-
-const (
-	ObservabilityTelemetryQueryParamsPatternTypeMessage ObservabilityTelemetryQueryParamsPatternType = "message"
-	ObservabilityTelemetryQueryParamsPatternTypeError   ObservabilityTelemetryQueryParamsPatternType = "error"
-)
-
-func (r ObservabilityTelemetryQueryParamsPatternType) IsKnown() bool {
-	switch r {
-	case ObservabilityTelemetryQueryParamsPatternTypeMessage, ObservabilityTelemetryQueryParamsPatternTypeError:
-		return true
-	}
-	return false
-}
-
-// View type for presenting the query results.
+// Examples by view type. Events: show errors for a worker in the last 30 minutes.
+// Calculations: p99 of wall time or count by status code. Invocations: find a
+// specific request that resulted in a 500.
 type ObservabilityTelemetryQueryParamsView string
 
 const (
@@ -3188,12 +3468,12 @@ const (
 	ObservabilityTelemetryQueryParamsViewCalculations ObservabilityTelemetryQueryParamsView = "calculations"
 	ObservabilityTelemetryQueryParamsViewInvocations  ObservabilityTelemetryQueryParamsView = "invocations"
 	ObservabilityTelemetryQueryParamsViewRequests     ObservabilityTelemetryQueryParamsView = "requests"
-	ObservabilityTelemetryQueryParamsViewPatterns     ObservabilityTelemetryQueryParamsView = "patterns"
+	ObservabilityTelemetryQueryParamsViewAgents       ObservabilityTelemetryQueryParamsView = "agents"
 )
 
 func (r ObservabilityTelemetryQueryParamsView) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryParamsViewTraces, ObservabilityTelemetryQueryParamsViewEvents, ObservabilityTelemetryQueryParamsViewCalculations, ObservabilityTelemetryQueryParamsViewInvocations, ObservabilityTelemetryQueryParamsViewRequests, ObservabilityTelemetryQueryParamsViewPatterns:
+	case ObservabilityTelemetryQueryParamsViewTraces, ObservabilityTelemetryQueryParamsViewEvents, ObservabilityTelemetryQueryParamsViewCalculations, ObservabilityTelemetryQueryParamsViewInvocations, ObservabilityTelemetryQueryParamsViewRequests, ObservabilityTelemetryQueryParamsViewAgents:
 		return true
 	}
 	return false
@@ -3297,13 +3577,16 @@ func (r ObservabilityTelemetryQueryResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ObservabilityTelemetryValuesParams struct {
-	AccountID param.Field[string]                                      `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Leave this empty to use the default datasets
 	Datasets  param.Field[[]string]                                    `json:"datasets,required"`
 	Key       param.Field[string]                                      `json:"key,required"`
 	Timeframe param.Field[ObservabilityTelemetryValuesParamsTimeframe] `json:"timeframe,required"`
 	Type      param.Field[ObservabilityTelemetryValuesParamsType]      `json:"type,required"`
-	Filters   param.Field[[]ObservabilityTelemetryValuesParamsFilter]  `json:"filters"`
-	Limit     param.Field[float64]                                     `json:"limit"`
+	// Apply filters before listing values. Supports nested groups via kind: 'group'.
+	// Maximum nesting depth is 4.
+	Filters param.Field[[]ObservabilityTelemetryValuesParamsFilterUnion] `json:"filters"`
+	Limit   param.Field[float64]                                         `json:"limit"`
 	// Search for a specific substring in the event.
 	Needle param.Field[ObservabilityTelemetryValuesParamsNeedle] `json:"needle"`
 }
@@ -3337,15 +3620,222 @@ func (r ObservabilityTelemetryValuesParamsType) IsKnown() bool {
 	return false
 }
 
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
 type ObservabilityTelemetryValuesParamsFilter struct {
-	Key       param.Field[string]                                              `json:"key,required"`
-	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersOperation]  `json:"operation,required"`
-	Type      param.Field[ObservabilityTelemetryValuesParamsFiltersType]       `json:"type,required"`
-	Value     param.Field[ObservabilityTelemetryValuesParamsFiltersValueUnion] `json:"value"`
+	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersFilterCombination] `json:"filterCombination"`
+	Filters           param.Field[interface{}]                                                `json:"filters"`
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       param.Field[string]                                             `json:"key"`
+	Kind      param.Field[ObservabilityTelemetryValuesParamsFiltersKind]      `json:"kind"`
+	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersOperation] `json:"operation"`
+	Type      param.Field[ObservabilityTelemetryValuesParamsFiltersType]      `json:"type"`
+	Value     param.Field[interface{}]                                        `json:"value"`
 }
 
 func (r ObservabilityTelemetryValuesParamsFilter) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryValuesParamsFilter) implementsObservabilityTelemetryValuesParamsFilterUnion() {
+}
+
+// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+//
+// Satisfied by [workers.ObservabilityTelemetryValuesParamsFiltersObject],
+// [workers.ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf],
+// [ObservabilityTelemetryValuesParamsFilter].
+type ObservabilityTelemetryValuesParamsFilterUnion interface {
+	implementsObservabilityTelemetryValuesParamsFilterUnion()
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObject struct {
+	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination] `json:"filterCombination,required"`
+	Filters           param.Field[[]interface{}]                                                    `json:"filters,required"`
+	Kind              param.Field[ObservabilityTelemetryValuesParamsFiltersObjectKind]              `json:"kind,required"`
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObject) implementsObservabilityTelemetryValuesParamsFilterUnion() {
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationAnd          ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination = "and"
+	ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationOr           ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination = "or"
+	ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationAndUppercase ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination = "AND"
+	ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationOrUppercase  ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationAnd, ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationOr, ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationAndUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObjectKind string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectKindGroup ObservabilityTelemetryValuesParamsFiltersObjectKind = "group"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectKindGroup:
+		return true
+	}
+	return false
+}
+
+// Filtering best practices: use observability_keys and observability_values to
+// confirm available fields and values. If searching for errors, filter for
+// $metadata.error exists.
+type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf struct {
+	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
+	// previous query results or the observability_keys response. Preferred keys:
+	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
+	// $metadata.error.
+	Key       param.Field[string]                                                                           `json:"key,required"`
+	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation,required"`
+	Type      param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type,required"`
+	Kind      param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
+	// Filter comparison value. IMPORTANT: must match actual values in your logs.
+	// Verify using previous query results or the /values endpoint. Ensure value type
+	// matches the field type. String comparisons are case-sensitive unless using
+	// specific operations. Regex uses ClickHouse RE2 syntax (no
+	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+	// boundary.
+	Value param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryValuesParamsFilterUnion() {
+}
+
+type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "includes"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "regex"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "exists"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "is_null"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIn                  ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "in"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIn               ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "not_in"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEq                  ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "eq"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNeq                 ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "neq"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGt                  ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "gt"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGte                 ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "gte"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLt                  ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "lt"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLte                 ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "lte"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEquals              ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "="
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals           ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "!="
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreater             ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = ">"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals     ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = ">="
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLess                ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "<"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals        ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "<="
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase   ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "INCLUDES"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude      ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex          ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "MATCH_REGEX"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase     ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "EXISTS"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist        ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "IN"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafTypeString  ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType = "string"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafTypeNumber  ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType = "number"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafTypeBoolean ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType = "boolean"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafTypeString, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafTypeNumber, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafTypeBoolean:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKindFilter ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind = "filter"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKindFilter:
+		return true
+	}
+	return false
+}
+
+// Filter comparison value. IMPORTANT: must match actual values in your logs.
+// Verify using previous query results or the /values endpoint. Ensure value type
+// matches the field type. String comparisons are case-sensitive unless using
+// specific operations. Regex uses ClickHouse RE2 syntax (no
+// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
+// boundary.
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion interface {
+	ImplementsObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion()
+}
+
+type ObservabilityTelemetryValuesParamsFiltersFilterCombination string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersFilterCombinationAnd          ObservabilityTelemetryValuesParamsFiltersFilterCombination = "and"
+	ObservabilityTelemetryValuesParamsFiltersFilterCombinationOr           ObservabilityTelemetryValuesParamsFiltersFilterCombination = "or"
+	ObservabilityTelemetryValuesParamsFiltersFilterCombinationAndUppercase ObservabilityTelemetryValuesParamsFiltersFilterCombination = "AND"
+	ObservabilityTelemetryValuesParamsFiltersFilterCombinationOrUppercase  ObservabilityTelemetryValuesParamsFiltersFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersFilterCombinationAnd, ObservabilityTelemetryValuesParamsFiltersFilterCombinationOr, ObservabilityTelemetryValuesParamsFiltersFilterCombinationAndUppercase, ObservabilityTelemetryValuesParamsFiltersFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryValuesParamsFiltersKind string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersKindGroup  ObservabilityTelemetryValuesParamsFiltersKind = "group"
+	ObservabilityTelemetryValuesParamsFiltersKindFilter ObservabilityTelemetryValuesParamsFiltersKind = "filter"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersKindGroup, ObservabilityTelemetryValuesParamsFiltersKindFilter:
+		return true
+	}
+	return false
 }
 
 type ObservabilityTelemetryValuesParamsFiltersOperation string
@@ -3403,11 +3893,6 @@ func (r ObservabilityTelemetryValuesParamsFiltersType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
-type ObservabilityTelemetryValuesParamsFiltersValueUnion interface {
-	ImplementsObservabilityTelemetryValuesParamsFiltersValueUnion()
 }
 
 // Search for a specific substring in the event.
