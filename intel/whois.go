@@ -37,7 +37,8 @@ func NewWhoisService(opts ...option.RequestOption) (r *WhoisService) {
 	return
 }
 
-// Get WHOIS Record
+// Retrieves WHOIS registration data for a domain, including registrant and
+// nameserver information.
 func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *WhoisGetResponse, err error) {
 	var env WhoisGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
