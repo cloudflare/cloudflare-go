@@ -66,44 +66,53 @@ func (r *SubmissionService) ListAutoPaging(ctx context.Context, params Submissio
 }
 
 type SubmissionListResponse struct {
-	RequestedTs          time.Time                                  `json:"requested_ts,required" format:"date-time"`
-	SubmissionID         string                                     `json:"submission_id,required"`
-	CustomerStatus       SubmissionListResponseCustomerStatus       `json:"customer_status"`
-	EscalatedAs          SubmissionListResponseEscalatedAs          `json:"escalated_as,nullable"`
-	EscalatedAt          time.Time                                  `json:"escalated_at,nullable" format:"date-time"`
-	EscalatedBy          string                                     `json:"escalated_by,nullable"`
-	OriginalDisposition  SubmissionListResponseOriginalDisposition  `json:"original_disposition,nullable"`
-	OriginalEdfHash      string                                     `json:"original_edf_hash,nullable"`
-	Outcome              string                                     `json:"outcome,nullable"`
-	OutcomeDisposition   SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition,nullable"`
-	RequestedBy          string                                     `json:"requested_by,nullable"`
-	RequestedDisposition SubmissionListResponseRequestedDisposition `json:"requested_disposition,nullable"`
-	Status               string                                     `json:"status,nullable"`
-	Subject              string                                     `json:"subject,nullable"`
-	Type                 string                                     `json:"type,nullable"`
-	JSON                 submissionListResponseJSON                 `json:"-"`
+	// deprecated as of 2026-04-01, use `requested_at` instead.
+	//
+	// Deprecated: deprecated
+	RequestedTs           time.Time                                  `json:"requested_ts,required" format:"date-time"`
+	SubmissionID          string                                     `json:"submission_id,required"`
+	CustomerStatus        SubmissionListResponseCustomerStatus       `json:"customer_status,nullable"`
+	EscalatedAs           SubmissionListResponseEscalatedAs          `json:"escalated_as,nullable"`
+	EscalatedAt           time.Time                                  `json:"escalated_at,nullable" format:"date-time"`
+	EscalatedBy           string                                     `json:"escalated_by,nullable"`
+	EscalatedSubmissionID string                                     `json:"escalated_submission_id,nullable"`
+	OriginalDisposition   SubmissionListResponseOriginalDisposition  `json:"original_disposition,nullable"`
+	OriginalEdfHash       string                                     `json:"original_edf_hash,nullable"`
+	OriginalPostfixID     string                                     `json:"original_postfix_id,nullable"`
+	Outcome               string                                     `json:"outcome,nullable"`
+	OutcomeDisposition    SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition,nullable"`
+	RequestedAt           time.Time                                  `json:"requested_at,nullable" format:"date-time"`
+	RequestedBy           string                                     `json:"requested_by,nullable"`
+	RequestedDisposition  SubmissionListResponseRequestedDisposition `json:"requested_disposition,nullable"`
+	Status                string                                     `json:"status,nullable"`
+	Subject               string                                     `json:"subject,nullable"`
+	Type                  string                                     `json:"type,nullable"`
+	JSON                  submissionListResponseJSON                 `json:"-"`
 }
 
 // submissionListResponseJSON contains the JSON metadata for the struct
 // [SubmissionListResponse]
 type submissionListResponseJSON struct {
-	RequestedTs          apijson.Field
-	SubmissionID         apijson.Field
-	CustomerStatus       apijson.Field
-	EscalatedAs          apijson.Field
-	EscalatedAt          apijson.Field
-	EscalatedBy          apijson.Field
-	OriginalDisposition  apijson.Field
-	OriginalEdfHash      apijson.Field
-	Outcome              apijson.Field
-	OutcomeDisposition   apijson.Field
-	RequestedBy          apijson.Field
-	RequestedDisposition apijson.Field
-	Status               apijson.Field
-	Subject              apijson.Field
-	Type                 apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	RequestedTs           apijson.Field
+	SubmissionID          apijson.Field
+	CustomerStatus        apijson.Field
+	EscalatedAs           apijson.Field
+	EscalatedAt           apijson.Field
+	EscalatedBy           apijson.Field
+	EscalatedSubmissionID apijson.Field
+	OriginalDisposition   apijson.Field
+	OriginalEdfHash       apijson.Field
+	OriginalPostfixID     apijson.Field
+	Outcome               apijson.Field
+	OutcomeDisposition    apijson.Field
+	RequestedAt           apijson.Field
+	RequestedBy           apijson.Field
+	RequestedDisposition  apijson.Field
+	Status                apijson.Field
+	Subject               apijson.Field
+	Type                  apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *SubmissionListResponse) UnmarshalJSON(data []byte) (err error) {
