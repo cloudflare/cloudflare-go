@@ -41,6 +41,9 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		Logpush:                 cloudflare.F(true),
 		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
+		RetryBackoff:            cloudflare.F(ai_gateway.AIGatewayNewParamsRetryBackoffConstant),
+		RetryDelay:              cloudflare.F(int64(0)),
+		RetryMaxAttempts:        cloudflare.F(int64(1)),
 		WorkersAIBillingMode:    cloudflare.F(ai_gateway.AIGatewayNewParamsWorkersAIBillingModePostpaid),
 		Zdr:                     cloudflare.F(true),
 	})
@@ -95,6 +98,9 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 				ContentType: cloudflare.F(ai_gateway.AIGatewayUpdateParamsOtelContentTypeJson),
 			}}),
 			RateLimitingTechnique: cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
+			RetryBackoff:          cloudflare.F(ai_gateway.AIGatewayUpdateParamsRetryBackoffConstant),
+			RetryDelay:            cloudflare.F(int64(0)),
+			RetryMaxAttempts:      cloudflare.F(int64(1)),
 			StoreID:               cloudflare.F("store_id"),
 			Stripe: cloudflare.F(ai_gateway.AIGatewayUpdateParamsStripe{
 				Authorization: cloudflare.F("authorization"),

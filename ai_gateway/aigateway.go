@@ -180,8 +180,14 @@ type AIGatewayNewResponse struct {
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayNewResponseOtel                `json:"otel,nullable"`
 	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
-	StoreID                 string                                    `json:"store_id,nullable"`
-	Stripe                  AIGatewayNewResponseStripe                `json:"stripe,nullable"`
+	// Backoff strategy for retry delays
+	RetryBackoff AIGatewayNewResponseRetryBackoff `json:"retry_backoff,nullable"`
+	// Delay between retry attempts in milliseconds (0-5000)
+	RetryDelay int64 `json:"retry_delay,nullable"`
+	// Maximum number of retry attempts for failed requests (1-5)
+	RetryMaxAttempts int64                      `json:"retry_max_attempts,nullable"`
+	StoreID          string                     `json:"store_id,nullable"`
+	Stripe           AIGatewayNewResponseStripe `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayNewResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -209,6 +215,9 @@ type aiGatewayNewResponseJSON struct {
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
 	RateLimitingTechnique   apijson.Field
+	RetryBackoff            apijson.Field
+	RetryDelay              apijson.Field
+	RetryMaxAttempts        apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -419,6 +428,23 @@ func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+// Backoff strategy for retry delays
+type AIGatewayNewResponseRetryBackoff string
+
+const (
+	AIGatewayNewResponseRetryBackoffConstant    AIGatewayNewResponseRetryBackoff = "constant"
+	AIGatewayNewResponseRetryBackoffLinear      AIGatewayNewResponseRetryBackoff = "linear"
+	AIGatewayNewResponseRetryBackoffExponential AIGatewayNewResponseRetryBackoff = "exponential"
+)
+
+func (r AIGatewayNewResponseRetryBackoff) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseRetryBackoffConstant, AIGatewayNewResponseRetryBackoffLinear, AIGatewayNewResponseRetryBackoffExponential:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewResponseStripe struct {
 	Authorization string                                 `json:"authorization,required"`
 	UsageEvents   []AIGatewayNewResponseStripeUsageEvent `json:"usage_events,required"`
@@ -498,8 +524,14 @@ type AIGatewayUpdateResponse struct {
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayUpdateResponseOtel                `json:"otel,nullable"`
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
-	StoreID                 string                                       `json:"store_id,nullable"`
-	Stripe                  AIGatewayUpdateResponseStripe                `json:"stripe,nullable"`
+	// Backoff strategy for retry delays
+	RetryBackoff AIGatewayUpdateResponseRetryBackoff `json:"retry_backoff,nullable"`
+	// Delay between retry attempts in milliseconds (0-5000)
+	RetryDelay int64 `json:"retry_delay,nullable"`
+	// Maximum number of retry attempts for failed requests (1-5)
+	RetryMaxAttempts int64                         `json:"retry_max_attempts,nullable"`
+	StoreID          string                        `json:"store_id,nullable"`
+	Stripe           AIGatewayUpdateResponseStripe `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayUpdateResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -527,6 +559,9 @@ type aiGatewayUpdateResponseJSON struct {
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
 	RateLimitingTechnique   apijson.Field
+	RetryBackoff            apijson.Field
+	RetryDelay              apijson.Field
+	RetryMaxAttempts        apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -738,6 +773,23 @@ func (r AIGatewayUpdateResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+// Backoff strategy for retry delays
+type AIGatewayUpdateResponseRetryBackoff string
+
+const (
+	AIGatewayUpdateResponseRetryBackoffConstant    AIGatewayUpdateResponseRetryBackoff = "constant"
+	AIGatewayUpdateResponseRetryBackoffLinear      AIGatewayUpdateResponseRetryBackoff = "linear"
+	AIGatewayUpdateResponseRetryBackoffExponential AIGatewayUpdateResponseRetryBackoff = "exponential"
+)
+
+func (r AIGatewayUpdateResponseRetryBackoff) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseRetryBackoffConstant, AIGatewayUpdateResponseRetryBackoffLinear, AIGatewayUpdateResponseRetryBackoffExponential:
+		return true
+	}
+	return false
+}
+
 type AIGatewayUpdateResponseStripe struct {
 	Authorization string                                    `json:"authorization,required"`
 	UsageEvents   []AIGatewayUpdateResponseStripeUsageEvent `json:"usage_events,required"`
@@ -817,8 +869,14 @@ type AIGatewayListResponse struct {
 	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayListResponseOtel                `json:"otel,nullable"`
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
-	StoreID                 string                                     `json:"store_id,nullable"`
-	Stripe                  AIGatewayListResponseStripe                `json:"stripe,nullable"`
+	// Backoff strategy for retry delays
+	RetryBackoff AIGatewayListResponseRetryBackoff `json:"retry_backoff,nullable"`
+	// Delay between retry attempts in milliseconds (0-5000)
+	RetryDelay int64 `json:"retry_delay,nullable"`
+	// Maximum number of retry attempts for failed requests (1-5)
+	RetryMaxAttempts int64                       `json:"retry_max_attempts,nullable"`
+	StoreID          string                      `json:"store_id,nullable"`
+	Stripe           AIGatewayListResponseStripe `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayListResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -846,6 +904,9 @@ type aiGatewayListResponseJSON struct {
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
 	RateLimitingTechnique   apijson.Field
+	RetryBackoff            apijson.Field
+	RetryDelay              apijson.Field
+	RetryMaxAttempts        apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -1057,6 +1118,23 @@ func (r AIGatewayListResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+// Backoff strategy for retry delays
+type AIGatewayListResponseRetryBackoff string
+
+const (
+	AIGatewayListResponseRetryBackoffConstant    AIGatewayListResponseRetryBackoff = "constant"
+	AIGatewayListResponseRetryBackoffLinear      AIGatewayListResponseRetryBackoff = "linear"
+	AIGatewayListResponseRetryBackoffExponential AIGatewayListResponseRetryBackoff = "exponential"
+)
+
+func (r AIGatewayListResponseRetryBackoff) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseRetryBackoffConstant, AIGatewayListResponseRetryBackoffLinear, AIGatewayListResponseRetryBackoffExponential:
+		return true
+	}
+	return false
+}
+
 type AIGatewayListResponseStripe struct {
 	Authorization string                                  `json:"authorization,required"`
 	UsageEvents   []AIGatewayListResponseStripeUsageEvent `json:"usage_events,required"`
@@ -1136,8 +1214,14 @@ type AIGatewayDeleteResponse struct {
 	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayDeleteResponseOtel                `json:"otel,nullable"`
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
-	StoreID                 string                                       `json:"store_id,nullable"`
-	Stripe                  AIGatewayDeleteResponseStripe                `json:"stripe,nullable"`
+	// Backoff strategy for retry delays
+	RetryBackoff AIGatewayDeleteResponseRetryBackoff `json:"retry_backoff,nullable"`
+	// Delay between retry attempts in milliseconds (0-5000)
+	RetryDelay int64 `json:"retry_delay,nullable"`
+	// Maximum number of retry attempts for failed requests (1-5)
+	RetryMaxAttempts int64                         `json:"retry_max_attempts,nullable"`
+	StoreID          string                        `json:"store_id,nullable"`
+	Stripe           AIGatewayDeleteResponseStripe `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayDeleteResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -1165,6 +1249,9 @@ type aiGatewayDeleteResponseJSON struct {
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
 	RateLimitingTechnique   apijson.Field
+	RetryBackoff            apijson.Field
+	RetryDelay              apijson.Field
+	RetryMaxAttempts        apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -1376,6 +1463,23 @@ func (r AIGatewayDeleteResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+// Backoff strategy for retry delays
+type AIGatewayDeleteResponseRetryBackoff string
+
+const (
+	AIGatewayDeleteResponseRetryBackoffConstant    AIGatewayDeleteResponseRetryBackoff = "constant"
+	AIGatewayDeleteResponseRetryBackoffLinear      AIGatewayDeleteResponseRetryBackoff = "linear"
+	AIGatewayDeleteResponseRetryBackoffExponential AIGatewayDeleteResponseRetryBackoff = "exponential"
+)
+
+func (r AIGatewayDeleteResponseRetryBackoff) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseRetryBackoffConstant, AIGatewayDeleteResponseRetryBackoffLinear, AIGatewayDeleteResponseRetryBackoffExponential:
+		return true
+	}
+	return false
+}
+
 type AIGatewayDeleteResponseStripe struct {
 	Authorization string                                    `json:"authorization,required"`
 	UsageEvents   []AIGatewayDeleteResponseStripeUsageEvent `json:"usage_events,required"`
@@ -1455,8 +1559,14 @@ type AIGatewayGetResponse struct {
 	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	Otel                    []AIGatewayGetResponseOtel                `json:"otel,nullable"`
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,nullable"`
-	StoreID                 string                                    `json:"store_id,nullable"`
-	Stripe                  AIGatewayGetResponseStripe                `json:"stripe,nullable"`
+	// Backoff strategy for retry delays
+	RetryBackoff AIGatewayGetResponseRetryBackoff `json:"retry_backoff,nullable"`
+	// Delay between retry attempts in milliseconds (0-5000)
+	RetryDelay int64 `json:"retry_delay,nullable"`
+	// Maximum number of retry attempts for failed requests (1-5)
+	RetryMaxAttempts int64                      `json:"retry_max_attempts,nullable"`
+	StoreID          string                     `json:"store_id,nullable"`
+	Stripe           AIGatewayGetResponseStripe `json:"stripe,nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayGetResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -1484,6 +1594,9 @@ type aiGatewayGetResponseJSON struct {
 	LogpushPublicKey        apijson.Field
 	Otel                    apijson.Field
 	RateLimitingTechnique   apijson.Field
+	RetryBackoff            apijson.Field
+	RetryDelay              apijson.Field
+	RetryMaxAttempts        apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -1694,6 +1807,23 @@ func (r AIGatewayGetResponseRateLimitingTechnique) IsKnown() bool {
 	return false
 }
 
+// Backoff strategy for retry delays
+type AIGatewayGetResponseRetryBackoff string
+
+const (
+	AIGatewayGetResponseRetryBackoffConstant    AIGatewayGetResponseRetryBackoff = "constant"
+	AIGatewayGetResponseRetryBackoffLinear      AIGatewayGetResponseRetryBackoff = "linear"
+	AIGatewayGetResponseRetryBackoffExponential AIGatewayGetResponseRetryBackoff = "exponential"
+)
+
+func (r AIGatewayGetResponseRetryBackoff) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseRetryBackoffConstant, AIGatewayGetResponseRetryBackoffLinear, AIGatewayGetResponseRetryBackoffExponential:
+		return true
+	}
+	return false
+}
+
 type AIGatewayGetResponseStripe struct {
 	Authorization string                                 `json:"authorization,required"`
 	UsageEvents   []AIGatewayGetResponseStripeUsageEvent `json:"usage_events,required"`
@@ -1769,6 +1899,12 @@ type AIGatewayNewParams struct {
 	Logpush                 param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
 	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
+	// Backoff strategy for retry delays
+	RetryBackoff param.Field[AIGatewayNewParamsRetryBackoff] `json:"retry_backoff"`
+	// Delay between retry attempts in milliseconds (0-5000)
+	RetryDelay param.Field[int64] `json:"retry_delay"`
+	// Maximum number of retry attempts for failed requests (1-5)
+	RetryMaxAttempts param.Field[int64] `json:"retry_max_attempts"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode param.Field[AIGatewayNewParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
@@ -1804,6 +1940,23 @@ const (
 func (r AIGatewayNewParamsRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsRateLimitingTechniqueFixed, AIGatewayNewParamsRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+// Backoff strategy for retry delays
+type AIGatewayNewParamsRetryBackoff string
+
+const (
+	AIGatewayNewParamsRetryBackoffConstant    AIGatewayNewParamsRetryBackoff = "constant"
+	AIGatewayNewParamsRetryBackoffLinear      AIGatewayNewParamsRetryBackoff = "linear"
+	AIGatewayNewParamsRetryBackoffExponential AIGatewayNewParamsRetryBackoff = "exponential"
+)
+
+func (r AIGatewayNewParamsRetryBackoff) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsRetryBackoffConstant, AIGatewayNewParamsRetryBackoffLinear, AIGatewayNewParamsRetryBackoffExponential:
 		return true
 	}
 	return false
@@ -1863,8 +2016,14 @@ type AIGatewayUpdateParams struct {
 	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
 	Otel                    param.Field[[]AIGatewayUpdateParamsOtel]                `json:"otel"`
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
-	StoreID                 param.Field[string]                                     `json:"store_id"`
-	Stripe                  param.Field[AIGatewayUpdateParamsStripe]                `json:"stripe"`
+	// Backoff strategy for retry delays
+	RetryBackoff param.Field[AIGatewayUpdateParamsRetryBackoff] `json:"retry_backoff"`
+	// Delay between retry attempts in milliseconds (0-5000)
+	RetryDelay param.Field[int64] `json:"retry_delay"`
+	// Maximum number of retry attempts for failed requests (1-5)
+	RetryMaxAttempts param.Field[int64]                       `json:"retry_max_attempts"`
+	StoreID          param.Field[string]                      `json:"store_id"`
+	Stripe           param.Field[AIGatewayUpdateParamsStripe] `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode param.Field[AIGatewayUpdateParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
@@ -1987,6 +2146,23 @@ const (
 func (r AIGatewayUpdateParamsRateLimitingTechnique) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsRateLimitingTechniqueFixed, AIGatewayUpdateParamsRateLimitingTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+// Backoff strategy for retry delays
+type AIGatewayUpdateParamsRetryBackoff string
+
+const (
+	AIGatewayUpdateParamsRetryBackoffConstant    AIGatewayUpdateParamsRetryBackoff = "constant"
+	AIGatewayUpdateParamsRetryBackoffLinear      AIGatewayUpdateParamsRetryBackoff = "linear"
+	AIGatewayUpdateParamsRetryBackoffExponential AIGatewayUpdateParamsRetryBackoff = "exponential"
+)
+
+func (r AIGatewayUpdateParamsRetryBackoff) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsRetryBackoffConstant, AIGatewayUpdateParamsRetryBackoffLinear, AIGatewayUpdateParamsRetryBackoffExponential:
 		return true
 	}
 	return false
