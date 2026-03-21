@@ -215,7 +215,10 @@ type StoreNewParams struct {
 }
 
 func (r StoreNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	if len(r.Body) > 0 {
+		return apijson.MarshalRoot(r.Body[0])
+	}
+	return apijson.MarshalRoot(StoreNewParamsBody{})
 }
 
 type StoreNewParamsBody struct {
