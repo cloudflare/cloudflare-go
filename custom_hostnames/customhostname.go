@@ -2508,6 +2508,8 @@ type CustomHostnameListParams struct {
 	ID param.Field[string] `query:"id"`
 	// Filter by the certificate authority that issued the SSL certificate.
 	CertificateAuthority param.Field[CustomHostnameListParamsCertificateAuthority] `query:"certificate_authority"`
+	// Filter by custom origin server name.
+	CustomOriginServer param.Field[string] `query:"custom_origin_server"`
 	// Direction to order hostnames.
 	Direction param.Field[CustomHostnameListParamsDirection] `query:"direction"`
 	Hostname  param.Field[CustomHostnameListParamsHostname]  `query:"hostname"`
