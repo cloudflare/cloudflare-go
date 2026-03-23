@@ -115,6 +115,9 @@ TEST_PATHS=(
 	email_routing/rule_test.go
 	email_routing/rulecatchall_test.go
 	email_routing/address_test.go
+	email_sending/emailsending_test.go
+	email_sending/subdomain_test.go
+	email_sending/subdomaindns_test.go
 	filters/filter_test.go
 	firewall/lockdown_test.go
 	firewall/rule_test.go

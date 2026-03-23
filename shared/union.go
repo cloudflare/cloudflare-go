@@ -13,8 +13,13 @@ func (UnionTime) ImplementsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsReceivedGetParamsEndUnion()   {}
-func (UnionString) ImplementsReceivedGetParamsStartUnion() {}
+func (UnionString) ImplementsEmailSendingSendParamsFromUnion()    {}
+func (UnionString) ImplementsEmailSendingSendParamsToUnion()      {}
+func (UnionString) ImplementsEmailSendingSendParamsBccUnion()     {}
+func (UnionString) ImplementsEmailSendingSendParamsCcUnion()      {}
+func (UnionString) ImplementsEmailSendingSendParamsReplyToUnion() {}
+func (UnionString) ImplementsReceivedGetParamsEndUnion()          {}
+func (UnionString) ImplementsReceivedGetParamsStartUnion()        {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion() {
