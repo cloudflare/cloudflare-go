@@ -33,6 +33,7 @@ func TestThreatEventCategoryNewWithOptionalParams(t *testing.T) {
 		KillChain:   cloudflare.F(0.000000),
 		Name:        cloudflare.F("name"),
 		MitreAttack: cloudflare.F([]string{"T1234"}),
+		MitreCapec:  cloudflare.F([]string{"123"}),
 		Shortname:   cloudflare.F("shortname"),
 	})
 	if err != nil {
@@ -122,6 +123,7 @@ func TestThreatEventCategoryEditWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("account_id"),
 			KillChain:   cloudflare.F(0.000000),
 			MitreAttack: cloudflare.F([]string{"T1234"}),
+			MitreCapec:  cloudflare.F([]string{"123"}),
 			Name:        cloudflare.F("name"),
 			Shortname:   cloudflare.F("shortname"),
 		},

@@ -5442,6 +5442,9 @@ type SetCacheSettingsRuleActionParameters struct {
 	RespectStrongEtags bool `json:"respect_strong_etags"`
 	// When to serve stale content from cache.
 	ServeStale SetCacheSettingsRuleActionParametersServeStale `json:"serve_stale"`
+	// Configuration for shared dictionary compression. When set, Cloudflare injects
+	// Use-As-Dictionary headers on matching cacheable responses.
+	SharedDictionary SetCacheSettingsRuleActionParametersSharedDictionary `json:"shared_dictionary"`
 	// Whether to strip ETag headers from the origin response before caching.
 	StripEtags bool `json:"strip_etags"`
 	// Whether to strip Last-Modified headers from the origin response before caching.
@@ -5465,6 +5468,7 @@ type setCacheSettingsRuleActionParametersJSON struct {
 	ReadTimeout              apijson.Field
 	RespectStrongEtags       apijson.Field
 	ServeStale               apijson.Field
+	SharedDictionary         apijson.Field
 	StripEtags               apijson.Field
 	StripLastModified        apijson.Field
 	StripSetCookie           apijson.Field
@@ -5981,6 +5985,31 @@ func (r setCacheSettingsRuleActionParametersServeStaleJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configuration for shared dictionary compression. When set, Cloudflare injects
+// Use-As-Dictionary headers on matching cacheable responses.
+type SetCacheSettingsRuleActionParametersSharedDictionary struct {
+	// URL pattern for the Use-As-Dictionary match field. This pattern specifies which
+	// URLs can use this response as a dictionary.
+	MatchPattern string                                                   `json:"match_pattern,required"`
+	JSON         setCacheSettingsRuleActionParametersSharedDictionaryJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersSharedDictionaryJSON contains the JSON
+// metadata for the struct [SetCacheSettingsRuleActionParametersSharedDictionary]
+type setCacheSettingsRuleActionParametersSharedDictionaryJSON struct {
+	MatchPattern apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersSharedDictionary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersSharedDictionaryJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configuration for exposed credential checking.
 type SetCacheSettingsRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
@@ -6125,6 +6154,9 @@ type SetCacheSettingsRuleActionParametersParam struct {
 	RespectStrongEtags param.Field[bool] `json:"respect_strong_etags"`
 	// When to serve stale content from cache.
 	ServeStale param.Field[SetCacheSettingsRuleActionParametersServeStaleParam] `json:"serve_stale"`
+	// Configuration for shared dictionary compression. When set, Cloudflare injects
+	// Use-As-Dictionary headers on matching cacheable responses.
+	SharedDictionary param.Field[SetCacheSettingsRuleActionParametersSharedDictionaryParam] `json:"shared_dictionary"`
 	// Whether to strip ETag headers from the origin response before caching.
 	StripEtags param.Field[bool] `json:"strip_etags"`
 	// Whether to strip Last-Modified headers from the origin response before caching.
@@ -6343,6 +6375,18 @@ type SetCacheSettingsRuleActionParametersServeStaleParam struct {
 }
 
 func (r SetCacheSettingsRuleActionParametersServeStaleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configuration for shared dictionary compression. When set, Cloudflare injects
+// Use-As-Dictionary headers on matching cacheable responses.
+type SetCacheSettingsRuleActionParametersSharedDictionaryParam struct {
+	// URL pattern for the Use-As-Dictionary match field. This pattern specifies which
+	// URLs can use this response as a dictionary.
+	MatchPattern param.Field[string] `json:"match_pattern,required"`
+}
+
+func (r SetCacheSettingsRuleActionParametersSharedDictionaryParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -155,6 +155,7 @@ type ThreatEventNewResponse struct {
 	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
 	KillChain       float64                    `json:"killChain,required"`
 	MitreAttack     []string                   `json:"mitreAttack,required"`
+	MitreCapec      []string                   `json:"mitreCapec,required"`
 	NumReferenced   float64                    `json:"numReferenced,required"`
 	NumReferences   float64                    `json:"numReferences,required"`
 	RawID           string                     `json:"rawId,required"`
@@ -187,6 +188,7 @@ type threatEventNewResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -226,6 +228,7 @@ type ThreatEventListResponse struct {
 	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
 	KillChain       float64                     `json:"killChain,required"`
 	MitreAttack     []string                    `json:"mitreAttack,required"`
+	MitreCapec      []string                    `json:"mitreCapec,required"`
 	NumReferenced   float64                     `json:"numReferenced,required"`
 	NumReferences   float64                     `json:"numReferences,required"`
 	RawID           string                      `json:"rawId,required"`
@@ -258,6 +261,7 @@ type threatEventListResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -392,6 +396,7 @@ type ThreatEventEditResponse struct {
 	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
 	KillChain       float64                     `json:"killChain,required"`
 	MitreAttack     []string                    `json:"mitreAttack,required"`
+	MitreCapec      []string                    `json:"mitreCapec,required"`
 	NumReferenced   float64                     `json:"numReferenced,required"`
 	NumReferences   float64                     `json:"numReferences,required"`
 	RawID           string                      `json:"rawId,required"`
@@ -424,6 +429,7 @@ type threatEventEditResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -463,6 +469,7 @@ type ThreatEventGetResponse struct {
 	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
 	KillChain       float64                    `json:"killChain,required"`
 	MitreAttack     []string                   `json:"mitreAttack,required"`
+	MitreCapec      []string                   `json:"mitreCapec,required"`
 	NumReferenced   float64                    `json:"numReferenced,required"`
 	NumReferences   float64                    `json:"numReferences,required"`
 	RawID           string                     `json:"rawId,required"`
@@ -495,6 +502,7 @@ type threatEventGetResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -629,8 +637,15 @@ func (r ThreatEventListParamsOrder) IsKnown() bool {
 }
 
 type ThreatEventListParamsSearch struct {
-	Field param.Field[string]                                `query:"field"`
-	Op    param.Field[ThreatEventListParamsSearchOp]         `query:"op"`
+	// Event field to search on. Allowed: attacker, attackerCountry, category,
+	// createdAt, date, event, indicator, indicatorType, killChain, mitreAttack, tags,
+	// targetCountry, targetIndustry, tlp, uuid.
+	Field param.Field[string] `query:"field"`
+	// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
+	// {field:'tags', op:'in', value:['malware','apt']}.
+	Op param.Field[ThreatEventListParamsSearchOp] `query:"op"`
+	// Search value. String or number for most operators. Array for 'in' operator (max
+	// 100 items).
 	Value param.Field[ThreatEventListParamsSearchValueUnion] `query:"value"`
 }
 
@@ -643,6 +658,8 @@ func (r ThreatEventListParamsSearch) URLQuery() (v url.Values) {
 	})
 }
 
+// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
+// {field:'tags', op:'in', value:['malware','apt']}.
 type ThreatEventListParamsSearchOp string
 
 const (
@@ -668,6 +685,9 @@ func (r ThreatEventListParamsSearchOp) IsKnown() bool {
 	return false
 }
 
+// Search value. String or number for most operators. Array for 'in' operator (max
+// 100 items).
+//
 // Satisfied by [shared.UnionString], [shared.UnionFloat],
 // [cloudforce_one.ThreatEventListParamsSearchValueArray].
 type ThreatEventListParamsSearchValueUnion interface {
