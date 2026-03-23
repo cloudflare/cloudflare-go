@@ -44,6 +44,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/durable_objects"
 	"github.com/cloudflare/cloudflare-go/v6/email_routing"
 	"github.com/cloudflare/cloudflare-go/v6/email_security"
+	"github.com/cloudflare/cloudflare-go/v6/email_sending"
 	"github.com/cloudflare/cloudflare-go/v6/filters"
 	"github.com/cloudflare/cloudflare-go/v6/firewall"
 	"github.com/cloudflare/cloudflare-go/v6/fraud"
@@ -142,6 +143,7 @@ type Client struct {
 	DNS                    *dns.DNSService
 	EmailSecurity          *email_security.EmailSecurityService
 	EmailRouting           *email_routing.EmailRoutingService
+	EmailSending           *email_sending.EmailSendingService
 	// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 	// See
 	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
@@ -289,6 +291,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DNS = dns.NewDNSService(opts...)
 	r.EmailSecurity = email_security.NewEmailSecurityService(opts...)
 	r.EmailRouting = email_routing.NewEmailRoutingService(opts...)
+	r.EmailSending = email_sending.NewEmailSendingService(opts...)
 	r.Filters = filters.NewFilterService(opts...)
 	r.Firewall = firewall.NewFirewallService(opts...)
 	r.Healthchecks = healthchecks.NewHealthcheckService(opts...)

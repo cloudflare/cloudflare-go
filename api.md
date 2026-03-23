@@ -74,6 +74,8 @@
 
 # [EmailRouting](email_routing/api.md)
 
+# [EmailSending](email_sending/api.md)
+
 # [Filters](filters/api.md)
 
 # [Firewall](firewall/api.md)
