@@ -83,6 +83,7 @@ func TestCustomHostnameListWithOptionalParams(t *testing.T) {
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:                   cloudflare.F("0d89c70d-ad9f-4843-b99f-6cc0252067e9"),
 		CertificateAuthority: cloudflare.F(custom_hostnames.CustomHostnameListParamsCertificateAuthorityGoogle),
+		CustomOriginServer:   cloudflare.F("origin2.example.com"),
 		Direction:            cloudflare.F(custom_hostnames.CustomHostnameListParamsDirectionDesc),
 		Hostname: cloudflare.F(custom_hostnames.CustomHostnameListParamsHostname{
 			Contain: cloudflare.F("example.com"),
