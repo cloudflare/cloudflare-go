@@ -113,6 +113,7 @@ type ThreatEventCategoryNewResponse struct {
 	Name        string                             `json:"name,required"`
 	UUID        string                             `json:"uuid,required"`
 	MitreAttack []string                           `json:"mitreAttack"`
+	MitreCapec  []string                           `json:"mitreCapec"`
 	Shortname   string                             `json:"shortname"`
 	JSON        threatEventCategoryNewResponseJSON `json:"-"`
 }
@@ -124,6 +125,7 @@ type threatEventCategoryNewResponseJSON struct {
 	Name        apijson.Field
 	UUID        apijson.Field
 	MitreAttack apijson.Field
+	MitreCapec  apijson.Field
 	Shortname   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -142,6 +144,7 @@ type ThreatEventCategoryListResponse struct {
 	Name        string                              `json:"name,required"`
 	UUID        string                              `json:"uuid,required"`
 	MitreAttack []string                            `json:"mitreAttack"`
+	MitreCapec  []string                            `json:"mitreCapec"`
 	Shortname   string                              `json:"shortname"`
 	JSON        threatEventCategoryListResponseJSON `json:"-"`
 }
@@ -153,6 +156,7 @@ type threatEventCategoryListResponseJSON struct {
 	Name        apijson.Field
 	UUID        apijson.Field
 	MitreAttack apijson.Field
+	MitreCapec  apijson.Field
 	Shortname   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -192,6 +196,7 @@ type ThreatEventCategoryEditResponse struct {
 	Name        string                              `json:"name,required"`
 	UUID        string                              `json:"uuid,required"`
 	MitreAttack []string                            `json:"mitreAttack"`
+	MitreCapec  []string                            `json:"mitreCapec"`
 	Shortname   string                              `json:"shortname"`
 	JSON        threatEventCategoryEditResponseJSON `json:"-"`
 }
@@ -203,6 +208,7 @@ type threatEventCategoryEditResponseJSON struct {
 	Name        apijson.Field
 	UUID        apijson.Field
 	MitreAttack apijson.Field
+	MitreCapec  apijson.Field
 	Shortname   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -221,6 +227,7 @@ type ThreatEventCategoryGetResponse struct {
 	Name        string                             `json:"name,required"`
 	UUID        string                             `json:"uuid,required"`
 	MitreAttack []string                           `json:"mitreAttack"`
+	MitreCapec  []string                           `json:"mitreCapec"`
 	Shortname   string                             `json:"shortname"`
 	JSON        threatEventCategoryGetResponseJSON `json:"-"`
 }
@@ -232,6 +239,7 @@ type threatEventCategoryGetResponseJSON struct {
 	Name        apijson.Field
 	UUID        apijson.Field
 	MitreAttack apijson.Field
+	MitreCapec  apijson.Field
 	Shortname   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -251,6 +259,7 @@ type ThreatEventCategoryNewParams struct {
 	KillChain   param.Field[float64]  `json:"killChain,required"`
 	Name        param.Field[string]   `json:"name,required"`
 	MitreAttack param.Field[[]string] `json:"mitreAttack"`
+	MitreCapec  param.Field[[]string] `json:"mitreCapec"`
 	Shortname   param.Field[string]   `json:"shortname"`
 }
 
@@ -285,6 +294,7 @@ type ThreatEventCategoryEditParams struct {
 	AccountID   param.Field[string]   `path:"account_id,required"`
 	KillChain   param.Field[float64]  `json:"killChain"`
 	MitreAttack param.Field[[]string] `json:"mitreAttack"`
+	MitreCapec  param.Field[[]string] `json:"mitreCapec"`
 	Name        param.Field[string]   `json:"name"`
 	Shortname   param.Field[string]   `json:"shortname"`
 }
