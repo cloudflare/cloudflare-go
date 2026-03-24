@@ -851,8 +851,11 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
-	IndexName param.Field[string]      `json:"index_name"`
-	Json      param.Field[interface{}] `json:"json"`
+	IndexName param.Field[string] `json:"index_name"`
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName param.Field[string]      `json:"instance_name"`
+	Json         param.Field[interface{}] `json:"json"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -860,7 +863,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
@@ -910,6 +914,8 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 //
 // Satisfied by
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAI],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearch],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser],
@@ -969,6 +975,75 @@ const (
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearch struct {
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName param.Field[string] `json:"instance_name,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchType] `json:"type,required"`
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
+	Namespace param.Field[string] `json:"namespace"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearch) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchType string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchTypeAISearch DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchType = "ai_search"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchTypeAISearch:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespace struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
+	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
+	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
+	// chat) to all instances within the namespace.
+	Namespace param.Field[string] `json:"namespace,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceType] `json:"type,required"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespace) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespace) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceType string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceTypeAISearchNamespace DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceType = "ai_search_namespace"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceTypeAISearchNamespace:
 		return true
 	}
 	return false
@@ -2067,6 +2142,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataBindingsType string
 
 const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI                     DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "ai"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearch               DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "ai_search"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearchNamespace      DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "ai_search_namespace"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine        DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "analytics_engine"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets                 DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "assets"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser                DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "browser"
@@ -2101,7 +2178,7 @@ const (
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMedia, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeRatelimit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVPCService:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearch, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMedia, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeRatelimit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVPCService:
 		return true
 	}
 	return false
