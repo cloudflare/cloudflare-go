@@ -192,7 +192,13 @@ TEST_PATHS=(
 	api_gateway/configuration_test.go
 	api_gateway/discovery_test.go
 	api_gateway/discoveryoperation_test.go
+	api_gateway/label_test.go
+	api_gateway/labeluser_test.go
+	api_gateway/labeluserresourceoperation_test.go
+	api_gateway/labelmanaged_test.go
+	api_gateway/labelmanagedresourceoperation_test.go
 	api_gateway/operation_test.go
+	api_gateway/operationlabel_test.go
 	api_gateway/operationschemavalidation_test.go
 	api_gateway/schema_test.go
 	api_gateway/settingschemavalidation_test.go

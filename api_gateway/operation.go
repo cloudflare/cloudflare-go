@@ -29,6 +29,7 @@ import (
 // the [NewOperationService] method instead.
 type OperationService struct {
 	Options []option.RequestOption
+	Labels  *OperationLabelService
 	// Deprecated: Use the
 	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingOperationService]
 	// service instead
@@ -41,6 +42,7 @@ type OperationService struct {
 func NewOperationService(opts ...option.RequestOption) (r *OperationService) {
 	r = &OperationService{}
 	r.Options = opts
+	r.Labels = NewOperationLabelService(opts...)
 	r.SchemaValidation = NewOperationSchemaValidationService(opts...)
 	return
 }
