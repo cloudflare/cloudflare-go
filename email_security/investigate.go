@@ -934,11 +934,12 @@ const (
 	InvestigateListParamsMessageActionPreview            InvestigateListParamsMessageAction = "PREVIEW"
 	InvestigateListParamsMessageActionQuarantineReleased InvestigateListParamsMessageAction = "QUARANTINE_RELEASED"
 	InvestigateListParamsMessageActionMoved              InvestigateListParamsMessageAction = "MOVED"
+	InvestigateListParamsMessageActionSubmitted          InvestigateListParamsMessageAction = "SUBMITTED"
 )
 
 func (r InvestigateListParamsMessageAction) IsKnown() bool {
 	switch r {
-	case InvestigateListParamsMessageActionPreview, InvestigateListParamsMessageActionQuarantineReleased, InvestigateListParamsMessageActionMoved:
+	case InvestigateListParamsMessageActionPreview, InvestigateListParamsMessageActionQuarantineReleased, InvestigateListParamsMessageActionMoved, InvestigateListParamsMessageActionSubmitted:
 		return true
 	}
 	return false
