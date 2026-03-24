@@ -16,6 +16,7 @@ type APIGatewayService struct {
 	Options        []option.RequestOption
 	Configurations *ConfigurationService
 	Discovery      *DiscoveryService
+	Labels         *LabelService
 	Operations     *OperationService
 	Schemas        *SchemaService
 	// Deprecated: Use the
@@ -37,6 +38,7 @@ func NewAPIGatewayService(opts ...option.RequestOption) (r *APIGatewayService) {
 	r.Options = opts
 	r.Configurations = NewConfigurationService(opts...)
 	r.Discovery = NewDiscoveryService(opts...)
+	r.Labels = NewLabelService(opts...)
 	r.Operations = NewOperationService(opts...)
 	r.Schemas = NewSchemaService(opts...)
 	r.Settings = NewSettingService(opts...)
