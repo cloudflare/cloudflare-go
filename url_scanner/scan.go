@@ -1185,6 +1185,7 @@ type ScanGetResponseMetaProcessors struct {
 	Phishing         ScanGetResponseMetaProcessorsPhishing         `json:"phishing,required"`
 	RadarRank        ScanGetResponseMetaProcessorsRadarRank        `json:"radarRank,required"`
 	Wappa            ScanGetResponseMetaProcessorsWappa            `json:"wappa,required"`
+	PhishingV2       ScanGetResponseMetaProcessorsPhishingV2       `json:"phishing_v2"`
 	RobotsTXT        ScanGetResponseMetaProcessorsRobotsTXT        `json:"robotsTxt"`
 	URLCategories    ScanGetResponseMetaProcessorsURLCategories    `json:"urlCategories"`
 	JSON             scanGetResponseMetaProcessorsJSON             `json:"-"`
@@ -1200,6 +1201,7 @@ type scanGetResponseMetaProcessorsJSON struct {
 	Phishing         apijson.Field
 	RadarRank        apijson.Field
 	Wappa            apijson.Field
+	PhishingV2       apijson.Field
 	RobotsTXT        apijson.Field
 	URLCategories    apijson.Field
 	raw              string
@@ -1597,6 +1599,27 @@ func (r *ScanGetResponseMetaProcessorsWappaDataConfidence) UnmarshalJSON(data []
 }
 
 func (r scanGetResponseMetaProcessorsWappaDataConfidenceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsPhishingV2 struct {
+	Data []string                                    `json:"data,required"`
+	JSON scanGetResponseMetaProcessorsPhishingV2JSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsPhishingV2JSON contains the JSON metadata for the
+// struct [ScanGetResponseMetaProcessorsPhishingV2]
+type scanGetResponseMetaProcessorsPhishingV2JSON struct {
+	Data        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsPhishingV2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsPhishingV2JSON) RawJSON() string {
 	return r.raw
 }
 
