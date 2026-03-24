@@ -302,7 +302,6 @@ type DynamicRoutingNewResponseDeployment struct {
 	CreatedAt    string                                  `json:"created_at,required"`
 	DeploymentID string                                  `json:"deployment_id,required"`
 	VersionID    string                                  `json:"version_id,required"`
-	Comment      string                                  `json:"comment,nullable"`
 	JSON         dynamicRoutingNewResponseDeploymentJSON `json:"-"`
 }
 
@@ -312,7 +311,6 @@ type dynamicRoutingNewResponseDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -525,7 +523,6 @@ type DynamicRoutingNewResponseVersion struct {
 	CreatedAt string                                 `json:"created_at,required"`
 	Data      string                                 `json:"data,required"`
 	VersionID string                                 `json:"version_id,required"`
-	Comment   string                                 `json:"comment,nullable"`
 	JSON      dynamicRoutingNewResponseVersionJSON   `json:"-"`
 }
 
@@ -536,7 +533,6 @@ type dynamicRoutingNewResponseVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -628,7 +624,6 @@ type DynamicRoutingUpdateResponseRouteDeployment struct {
 	CreatedAt    string                                          `json:"created_at,required"`
 	DeploymentID string                                          `json:"deployment_id,required"`
 	VersionID    string                                          `json:"version_id,required"`
-	Comment      string                                          `json:"comment,nullable"`
 	JSON         dynamicRoutingUpdateResponseRouteDeploymentJSON `json:"-"`
 }
 
@@ -638,7 +633,6 @@ type dynamicRoutingUpdateResponseRouteDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -853,7 +847,6 @@ type DynamicRoutingUpdateResponseRouteVersion struct {
 	CreatedAt string                                         `json:"created_at,required"`
 	Data      string                                         `json:"data,required"`
 	VersionID string                                         `json:"version_id,required"`
-	Comment   string                                         `json:"comment,nullable"`
 	JSON      dynamicRoutingUpdateResponseRouteVersionJSON   `json:"-"`
 }
 
@@ -864,7 +857,6 @@ type dynamicRoutingUpdateResponseRouteVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -985,7 +977,6 @@ type DynamicRoutingListResponseDataRoutesDeployment struct {
 	CreatedAt    string                                             `json:"created_at,required"`
 	DeploymentID string                                             `json:"deployment_id,required"`
 	VersionID    string                                             `json:"version_id,required"`
-	Comment      string                                             `json:"comment,nullable"`
 	JSON         dynamicRoutingListResponseDataRoutesDeploymentJSON `json:"-"`
 }
 
@@ -995,7 +986,6 @@ type dynamicRoutingListResponseDataRoutesDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -1211,7 +1201,6 @@ type DynamicRoutingListResponseDataRoutesVersion struct {
 	CreatedAt string                                            `json:"created_at,required"`
 	Data      string                                            `json:"data,required"`
 	VersionID string                                            `json:"version_id,required"`
-	Comment   string                                            `json:"comment,nullable"`
 	JSON      dynamicRoutingListResponseDataRoutesVersionJSON   `json:"-"`
 }
 
@@ -1222,7 +1211,6 @@ type dynamicRoutingListResponseDataRoutesVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1972,7 +1960,6 @@ type DynamicRoutingGetResponseDeployment struct {
 	CreatedAt    string                                  `json:"created_at,required"`
 	DeploymentID string                                  `json:"deployment_id,required"`
 	VersionID    string                                  `json:"version_id,required"`
-	Comment      string                                  `json:"comment,nullable"`
 	JSON         dynamicRoutingGetResponseDeploymentJSON `json:"-"`
 }
 
@@ -1982,7 +1969,6 @@ type dynamicRoutingGetResponseDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -2195,7 +2181,6 @@ type DynamicRoutingGetResponseVersion struct {
 	CreatedAt string                                 `json:"created_at,required"`
 	Data      string                                 `json:"data,required"`
 	VersionID string                                 `json:"version_id,required"`
-	Comment   string                                 `json:"comment,nullable"`
 	JSON      dynamicRoutingGetResponseVersionJSON   `json:"-"`
 }
 
@@ -2206,7 +2191,6 @@ type dynamicRoutingGetResponseVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2244,7 +2228,6 @@ type DynamicRoutingGetVersionResponse struct {
 	ModifiedAt time.Time                                 `json:"modified_at,required" format:"date-time"`
 	Name       string                                    `json:"name,required"`
 	VersionID  string                                    `json:"version_id,required"`
-	Comment    string                                    `json:"comment,nullable"`
 	JSON       dynamicRoutingGetVersionResponseJSON      `json:"-"`
 }
 
@@ -2260,7 +2243,6 @@ type dynamicRoutingGetVersionResponseJSON struct {
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2541,7 +2523,6 @@ type DynamicRoutingListDeploymentsResponseDataDeployment struct {
 	CreatedAt    string                                                  `json:"created_at,required"`
 	DeploymentID string                                                  `json:"deployment_id,required"`
 	VersionID    string                                                  `json:"version_id,required"`
-	Comment      string                                                  `json:"comment,nullable"`
 	JSON         dynamicRoutingListDeploymentsResponseDataDeploymentJSON `json:"-"`
 }
 
@@ -2551,7 +2532,6 @@ type dynamicRoutingListDeploymentsResponseDataDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -2621,7 +2601,6 @@ type DynamicRoutingListVersionsResponseDataVersion struct {
 	CreatedAt string                                               `json:"created_at,required"`
 	Data      string                                               `json:"data,required"`
 	VersionID string                                               `json:"version_id,required"`
-	Comment   string                                               `json:"comment,nullable"`
 	JSON      dynamicRoutingListVersionsResponseDataVersionJSON    `json:"-"`
 }
 
@@ -2632,7 +2611,6 @@ type dynamicRoutingListVersionsResponseDataVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2820,7 +2798,6 @@ func (r dynamicRoutingDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type DynamicRoutingNewDeploymentParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Comment   param.Field[string] `json:"comment,required"`
 	VersionID param.Field[string] `json:"version_id,required"`
 }
 
@@ -2853,7 +2830,6 @@ func (r dynamicRoutingNewDeploymentResponseEnvelopeJSON) RawJSON() string {
 
 type DynamicRoutingNewVersionParams struct {
 	AccountID param.Field[string]                                       `path:"account_id,required"`
-	Comment   param.Field[string]                                       `json:"comment,required"`
 	Elements  param.Field[[]DynamicRoutingNewVersionParamsElementUnion] `json:"elements,required"`
 }
 

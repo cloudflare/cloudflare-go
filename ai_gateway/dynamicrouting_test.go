@@ -162,7 +162,6 @@ func TestDynamicRoutingNewDeployment(t *testing.T) {
 		"54442216",
 		ai_gateway.DynamicRoutingNewDeploymentParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
-			Comment:   cloudflare.F("Route Deployment Comment"),
 			VersionID: cloudflare.F("54442216"),
 		},
 	)
@@ -194,7 +193,6 @@ func TestDynamicRoutingNewVersion(t *testing.T) {
 		"54442216",
 		ai_gateway.DynamicRoutingNewVersionParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
-			Comment:   cloudflare.F("Route Version Comment"),
 			Elements: cloudflare.F([]ai_gateway.DynamicRoutingNewVersionParamsElementUnion{ai_gateway.DynamicRoutingNewVersionParamsElementsObject{
 				ID: cloudflare.F("id"),
 				Outputs: cloudflare.F(ai_gateway.DynamicRoutingNewVersionParamsElementsObjectOutputs{
