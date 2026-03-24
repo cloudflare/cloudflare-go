@@ -433,6 +433,9 @@ type VersionBinding struct {
 	Format VersionBindingsFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName string `json:"instance_name"`
 	// This field can have the runtime type of [interface{}].
 	Json interface{} `json:"json"`
 	// The
@@ -441,7 +444,8 @@ type VersionBinding struct {
 	Jurisdiction VersionBindingsJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
@@ -506,6 +510,7 @@ type versionBindingJSON struct {
 	Environment                 apijson.Field
 	Format                      apijson.Field
 	IndexName                   apijson.Field
+	InstanceName                apijson.Field
 	Json                        apijson.Field
 	Jurisdiction                apijson.Field
 	KeyJwk                      apijson.Field
@@ -547,6 +552,8 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [VersionBindingsWorkersBindingKindAI],
+// [VersionBindingsWorkersBindingKindAISearch],
+// [VersionBindingsWorkersBindingKindAISearchNamespace],
 // [VersionBindingsWorkersBindingKindAnalyticsEngine],
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
@@ -584,6 +591,8 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // A binding to allow the Worker to communicate with resources.
 //
 // Union satisfied by [VersionBindingsWorkersBindingKindAI],
+// [VersionBindingsWorkersBindingKindAISearch],
+// [VersionBindingsWorkersBindingKindAISearchNamespace],
 // [VersionBindingsWorkersBindingKindAnalyticsEngine],
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
@@ -626,6 +635,16 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindAI{}),
 			DiscriminatorValue: "ai",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindAISearch{}),
+			DiscriminatorValue: "ai_search",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindAISearchNamespace{}),
+			DiscriminatorValue: "ai_search_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -817,6 +836,104 @@ const (
 func (r VersionBindingsWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindAITypeAI:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindAISearch struct {
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName string `json:"instance_name,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindAISearchType `json:"type,required"`
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
+	Namespace string                                        `json:"namespace"`
+	JSON      versionBindingsWorkersBindingKindAISearchJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindAISearchJSON contains the JSON metadata for the
+// struct [VersionBindingsWorkersBindingKindAISearch]
+type versionBindingsWorkersBindingKindAISearchJSON struct {
+	InstanceName apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	Namespace    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindAISearch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindAISearchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindAISearch) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindAISearchType string
+
+const (
+	VersionBindingsWorkersBindingKindAISearchTypeAISearch VersionBindingsWorkersBindingKindAISearchType = "ai_search"
+)
+
+func (r VersionBindingsWorkersBindingKindAISearchType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindAISearchTypeAISearch:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindAISearchNamespace struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
+	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
+	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
+	// chat) to all instances within the namespace.
+	Namespace string `json:"namespace,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindAISearchNamespaceType `json:"type,required"`
+	JSON versionBindingsWorkersBindingKindAISearchNamespaceJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindAISearchNamespaceJSON contains the JSON
+// metadata for the struct [VersionBindingsWorkersBindingKindAISearchNamespace]
+type versionBindingsWorkersBindingKindAISearchNamespaceJSON struct {
+	Name        apijson.Field
+	Namespace   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindAISearchNamespace) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindAISearchNamespaceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindAISearchNamespace) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindAISearchNamespaceType string
+
+const (
+	VersionBindingsWorkersBindingKindAISearchNamespaceTypeAISearchNamespace VersionBindingsWorkersBindingKindAISearchNamespaceType = "ai_search_namespace"
+)
+
+func (r VersionBindingsWorkersBindingKindAISearchNamespaceType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindAISearchNamespaceTypeAISearchNamespace:
 		return true
 	}
 	return false
@@ -2398,6 +2515,8 @@ type VersionBindingsType string
 
 const (
 	VersionBindingsTypeAI                     VersionBindingsType = "ai"
+	VersionBindingsTypeAISearch               VersionBindingsType = "ai_search"
+	VersionBindingsTypeAISearchNamespace      VersionBindingsType = "ai_search_namespace"
 	VersionBindingsTypeAnalyticsEngine        VersionBindingsType = "analytics_engine"
 	VersionBindingsTypeAssets                 VersionBindingsType = "assets"
 	VersionBindingsTypeBrowser                VersionBindingsType = "browser"
@@ -2432,7 +2551,7 @@ const (
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService:
+	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService:
 		return true
 	}
 	return false
@@ -3051,8 +3170,11 @@ type VersionBindingParam struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[VersionBindingsFormat] `json:"format"`
 	// Name of the Vectorize index to bind to.
-	IndexName param.Field[string]      `json:"index_name"`
-	Json      param.Field[interface{}] `json:"json"`
+	IndexName param.Field[string] `json:"index_name"`
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName param.Field[string]      `json:"instance_name"`
+	Json         param.Field[interface{}] `json:"json"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -3060,7 +3182,8 @@ type VersionBindingParam struct {
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string]      `json:"key_base64"`
 	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
@@ -3108,6 +3231,8 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // A binding to allow the Worker to communicate with resources.
 //
 // Satisfied by [workers.VersionBindingsWorkersBindingKindAIParam],
+// [workers.VersionBindingsWorkersBindingKindAISearchParam],
+// [workers.VersionBindingsWorkersBindingKindAISearchNamespaceParam],
 // [workers.VersionBindingsWorkersBindingKindAnalyticsEngineParam],
 // [workers.VersionBindingsWorkersBindingKindAssetsParam],
 // [workers.VersionBindingsWorkersBindingKindBrowserParam],
@@ -3155,6 +3280,44 @@ func (r VersionBindingsWorkersBindingKindAIParam) MarshalJSON() (data []byte, er
 }
 
 func (r VersionBindingsWorkersBindingKindAIParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindAISearchParam struct {
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName param.Field[string] `json:"instance_name,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindAISearchType] `json:"type,required"`
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
+	Namespace param.Field[string] `json:"namespace"`
+}
+
+func (r VersionBindingsWorkersBindingKindAISearchParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindAISearchParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindAISearchNamespaceParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
+	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
+	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
+	// chat) to all instances within the namespace.
+	Namespace param.Field[string] `json:"namespace,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindAISearchNamespaceType] `json:"type,required"`
+}
+
+func (r VersionBindingsWorkersBindingKindAISearchNamespaceParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindAISearchNamespaceParam) implementsVersionBindingsUnionParam() {
+}
 
 type VersionBindingsWorkersBindingKindAnalyticsEngineParam struct {
 	// The name of the dataset to bind to.

@@ -109,6 +109,9 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Format DispatchNamespaceScriptBindingGetResponseFormat `json:"format"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName string `json:"instance_name"`
 	// This field can have the runtime type of [interface{}].
 	Json interface{} `json:"json"`
 	// The
@@ -117,7 +120,8 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Jurisdiction DispatchNamespaceScriptBindingGetResponseJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [interface{}].
 	KeyJwk interface{} `json:"key_jwk"`
-	// The name of the dispatch namespace.
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
@@ -183,6 +187,7 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	Environment                 apijson.Field
 	Format                      apijson.Field
 	IndexName                   apijson.Field
+	InstanceName                apijson.Field
 	Json                        apijson.Field
 	Jurisdiction                apijson.Field
 	KeyJwk                      apijson.Field
@@ -225,6 +230,8 @@ func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (
 //
 // Possible runtime types of the union are
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
@@ -263,6 +270,8 @@ func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceSc
 //
 // Union satisfied by
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch],
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets],
 // [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser],
@@ -305,6 +314,16 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI{}),
 			DiscriminatorValue: "ai",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch{}),
+			DiscriminatorValue: "ai_search",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace{}),
+			DiscriminatorValue: "ai_search_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -498,6 +517,108 @@ const (
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAITypeAI:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch struct {
+	// The user-chosen instance name. Must exist at deploy time. The worker can search,
+	// chat, update, and manage items/jobs on this instance.
+	InstanceName string `json:"instance_name,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchType `json:"type,required"`
+	// The namespace the instance belongs to. Defaults to "default" if omitted.
+	// Customers who don't use namespaces can simply omit this field.
+	Namespace string                                                                  `json:"namespace"`
+	JSON      dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchJSON struct {
+	InstanceName apijson.Field
+	Name         apijson.Field
+	Type         apijson.Field
+	Namespace    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchTypeAISearch DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchType = "ai_search"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchTypeAISearch:
+		return true
+	}
+	return false
+}
+
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
+	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
+	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
+	// chat) to all instances within the namespace.
+	Namespace string `json:"namespace,required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceType `json:"type,required"`
+	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceJSON struct {
+	Name        apijson.Field
+	Namespace   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace) implementsDispatchNamespaceScriptBindingGetResponse() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceTypeAISearchNamespace DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceType = "ai_search_namespace"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceTypeAISearchNamespace:
 		return true
 	}
 	return false
@@ -2139,6 +2260,8 @@ type DispatchNamespaceScriptBindingGetResponseType string
 
 const (
 	DispatchNamespaceScriptBindingGetResponseTypeAI                     DispatchNamespaceScriptBindingGetResponseType = "ai"
+	DispatchNamespaceScriptBindingGetResponseTypeAISearch               DispatchNamespaceScriptBindingGetResponseType = "ai_search"
+	DispatchNamespaceScriptBindingGetResponseTypeAISearchNamespace      DispatchNamespaceScriptBindingGetResponseType = "ai_search_namespace"
 	DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine        DispatchNamespaceScriptBindingGetResponseType = "analytics_engine"
 	DispatchNamespaceScriptBindingGetResponseTypeAssets                 DispatchNamespaceScriptBindingGetResponseType = "assets"
 	DispatchNamespaceScriptBindingGetResponseTypeBrowser                DispatchNamespaceScriptBindingGetResponseType = "browser"
@@ -2173,7 +2296,7 @@ const (
 
 func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDataBlob, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeInherit, DispatchNamespaceScriptBindingGetResponseTypeImages, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMedia, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeRatelimit, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeSendEmail, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTextBlob, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey, DispatchNamespaceScriptBindingGetResponseTypeWorkflow, DispatchNamespaceScriptBindingGetResponseTypeWasmModule, DispatchNamespaceScriptBindingGetResponseTypeVPCService:
+	case DispatchNamespaceScriptBindingGetResponseTypeAI, DispatchNamespaceScriptBindingGetResponseTypeAISearch, DispatchNamespaceScriptBindingGetResponseTypeAISearchNamespace, DispatchNamespaceScriptBindingGetResponseTypeAnalyticsEngine, DispatchNamespaceScriptBindingGetResponseTypeAssets, DispatchNamespaceScriptBindingGetResponseTypeBrowser, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDataBlob, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeHyperdrive, DispatchNamespaceScriptBindingGetResponseTypeInherit, DispatchNamespaceScriptBindingGetResponseTypeImages, DispatchNamespaceScriptBindingGetResponseTypeJson, DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeMedia, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate, DispatchNamespaceScriptBindingGetResponseTypePlainText, DispatchNamespaceScriptBindingGetResponseTypePipelines, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeRatelimit, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeSecretText, DispatchNamespaceScriptBindingGetResponseTypeSendEmail, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeTextBlob, DispatchNamespaceScriptBindingGetResponseTypeVectorize, DispatchNamespaceScriptBindingGetResponseTypeVersionMetadata, DispatchNamespaceScriptBindingGetResponseTypeSecretsStoreSecret, DispatchNamespaceScriptBindingGetResponseTypeSecretKey, DispatchNamespaceScriptBindingGetResponseTypeWorkflow, DispatchNamespaceScriptBindingGetResponseTypeWasmModule, DispatchNamespaceScriptBindingGetResponseTypeVPCService:
 		return true
 	}
 	return false
