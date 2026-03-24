@@ -450,6 +450,9 @@ type OutputOptions struct {
 	// is no option to add all fields at once, so you must specify all the fields names
 	// you are interested in.
 	FieldNames []string `json:"field_names"`
+	// If set to true, subrequests will be merged into the parent request. Only
+	// supported for the `http_requests` dataset.
+	MergeSubrequests bool `json:"merge_subrequests,nullable"`
 	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
 	// for the rest of the settings, depending on the chosen output type. Some
 	// formatting rules, like string quoting, are different between output types.
@@ -476,20 +479,21 @@ type OutputOptions struct {
 
 // outputOptionsJSON contains the JSON metadata for the struct [OutputOptions]
 type outputOptionsJSON struct {
-	BatchPrefix     apijson.Field
-	BatchSuffix     apijson.Field
-	Cve2021_44228   apijson.Field
-	FieldDelimiter  apijson.Field
-	FieldNames      apijson.Field
-	OutputType      apijson.Field
-	RecordDelimiter apijson.Field
-	RecordPrefix    apijson.Field
-	RecordSuffix    apijson.Field
-	RecordTemplate  apijson.Field
-	SampleRate      apijson.Field
-	TimestampFormat apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	BatchPrefix      apijson.Field
+	BatchSuffix      apijson.Field
+	Cve2021_44228    apijson.Field
+	FieldDelimiter   apijson.Field
+	FieldNames       apijson.Field
+	MergeSubrequests apijson.Field
+	OutputType       apijson.Field
+	RecordDelimiter  apijson.Field
+	RecordPrefix     apijson.Field
+	RecordSuffix     apijson.Field
+	RecordTemplate   apijson.Field
+	SampleRate       apijson.Field
+	TimestampFormat  apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *OutputOptions) UnmarshalJSON(data []byte) (err error) {
@@ -554,6 +558,9 @@ type OutputOptionsParam struct {
 	// is no option to add all fields at once, so you must specify all the fields names
 	// you are interested in.
 	FieldNames param.Field[[]string] `json:"field_names"`
+	// If set to true, subrequests will be merged into the parent request. Only
+	// supported for the `http_requests` dataset.
+	MergeSubrequests param.Field[bool] `json:"merge_subrequests"`
 	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
 	// for the rest of the settings, depending on the chosen output type. Some
 	// formatting rules, like string quoting, are different between output types.
