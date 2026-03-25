@@ -45,7 +45,10 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		EmbeddingModel:      cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
 		FusionMethod:        cloudflare.F(ai_search.InstanceNewParamsFusionMethodMax),
 		HybridSearchEnabled: cloudflare.F(true),
-		MaxNumResults:       cloudflare.F(int64(1)),
+		IndexingOptions: cloudflare.F(ai_search.InstanceNewParamsIndexingOptions{
+			KeywordTokenizer: cloudflare.F(ai_search.InstanceNewParamsIndexingOptionsKeywordTokenizerPorter),
+		}),
+		MaxNumResults: cloudflare.F(int64(1)),
 		Metadata: cloudflare.F(ai_search.InstanceNewParamsMetadata{
 			CreatedFromAISearchWizard: cloudflare.F(true),
 			WorkerDomain:              cloudflare.F("worker_domain"),
@@ -159,7 +162,10 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			EmbeddingModel:      cloudflare.F(ai_search.InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
 			FusionMethod:        cloudflare.F(ai_search.InstanceUpdateParamsFusionMethodMax),
 			HybridSearchEnabled: cloudflare.F(true),
-			MaxNumResults:       cloudflare.F(int64(1)),
+			IndexingOptions: cloudflare.F(ai_search.InstanceUpdateParamsIndexingOptions{
+				KeywordTokenizer: cloudflare.F(ai_search.InstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter),
+			}),
+			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.InstanceUpdateParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
 				WorkerDomain:              cloudflare.F("worker_domain"),
@@ -261,6 +267,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AISearch.Instances.List(context.TODO(), ai_search.InstanceListParams{
 		AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+		Namespace:        cloudflare.F("x"),
 		OrderBy:          cloudflare.F(ai_search.InstanceListParamsOrderByCreatedAt),
 		OrderByDirection: cloudflare.F(ai_search.InstanceListParamsOrderByDirectionAsc),
 		Page:             cloudflare.F(int64(1)),
