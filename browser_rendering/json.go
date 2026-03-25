@@ -241,6 +241,7 @@ func (r JsonNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err err
 }
 
 type JsonNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                     `json:"name,required"`
 	Value        param.Field[string]                                     `json:"value,required"`
 	Domain       param.Field[string]                                     `json:"domain"`
@@ -313,7 +314,7 @@ type JsonNewParamsBodyObjectCustomAI struct {
 	// Authorization token for the AI model: `Bearer <token>`.
 	Authorization param.Field[string] `json:"authorization,required"`
 	// AI model to use for the request. Must be formed as `<provider>/<model_name>`,
-	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`
+	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`.
 	Model param.Field[string] `json:"model,required"`
 }
 
@@ -416,7 +417,7 @@ func (r JsonNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 type JsonNewParamsBodyObjectResponseFormat struct {
 	Type param.Field[string] `json:"type,required"`
 	// Schema for the response format. More information here:
-	// https://developers.cloudflare.com/workers-ai/json-mode/
+	// https://developers.cloudflare.com/workers-ai/json-mode/.
 	JsonSchema param.Field[map[string]JsonNewParamsBodyObjectResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
@@ -494,7 +495,7 @@ func (r JsonNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 
 type JsonNewResponseEnvelope struct {
 	Result JsonNewResponse `json:"result,required"`
-	// Response status
+	// Response status.
 	Success bool                            `json:"success,required"`
 	Errors  []JsonNewResponseEnvelopeErrors `json:"errors"`
 	JSON    jsonNewResponseEnvelopeJSON     `json:"-"`
@@ -519,9 +520,9 @@ func (r jsonNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type JsonNewResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                            `json:"message,required"`
 	JSON    jsonNewResponseEnvelopeErrorsJSON `json:"-"`
 }

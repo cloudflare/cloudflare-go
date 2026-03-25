@@ -424,10 +424,9 @@ type InstanceGetResponseStep struct {
 	Error    interface{} `json:"error"`
 	Finished bool        `json:"finished"`
 	Name     string      `json:"name"`
-	// This field can have the runtime type of [interface{}].
-	Output  interface{} `json:"output"`
-	Start   time.Time   `json:"start" format:"date-time"`
-	Success bool        `json:"success,nullable"`
+	Output   string      `json:"output,nullable"`
+	Start    time.Time   `json:"start" format:"date-time"`
+	Success  bool        `json:"success,nullable"`
 	// This field can have the runtime type of [InstanceGetResponseStepsObjectTrigger].
 	Trigger interface{}                 `json:"trigger"`
 	JSON    instanceGetResponseStepJSON `json:"-"`
@@ -510,7 +509,7 @@ type InstanceGetResponseStepsObject struct {
 	Config   InstanceGetResponseStepsObjectConfig    `json:"config,required"`
 	End      time.Time                               `json:"end,required,nullable" format:"date-time"`
 	Name     string                                  `json:"name,required"`
-	Output   interface{}                             `json:"output,required"`
+	Output   string                                  `json:"output,required,nullable"`
 	Start    time.Time                               `json:"start,required" format:"date-time"`
 	Success  bool                                    `json:"success,required,nullable"`
 	Type     InstanceGetResponseStepsObjectType      `json:"type,required"`

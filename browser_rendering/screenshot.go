@@ -51,7 +51,7 @@ func (r *ScreenshotService) New(ctx context.Context, params ScreenshotNewParams,
 }
 
 type ScreenshotNewResponse struct {
-	// Response status
+	// Response status.
 	Success bool                         `json:"success,required"`
 	Errors  []ScreenshotNewResponseError `json:"errors"`
 	JSON    screenshotNewResponseJSON    `json:"-"`
@@ -75,9 +75,9 @@ func (r screenshotNewResponseJSON) RawJSON() string {
 }
 
 type ScreenshotNewResponseError struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                         `json:"message,required"`
 	JSON    screenshotNewResponseErrorJSON `json:"-"`
 }
@@ -282,6 +282,7 @@ func (r ScreenshotNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, e
 }
 
 type ScreenshotNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                           `json:"name,required"`
 	Value        param.Field[string]                                           `json:"value,required"`
 	Domain       param.Field[string]                                           `json:"domain"`

@@ -55,7 +55,7 @@ func (r *ScrapeService) New(ctx context.Context, params ScrapeNewParams, opts ..
 
 type ScrapeNewResponse struct {
 	Results ScrapeNewResponseResults `json:"results,required"`
-	// Selector
+	// Selector.
 	Selector string                `json:"selector,required"`
 	JSON     scrapeNewResponseJSON `json:"-"`
 }
@@ -79,17 +79,17 @@ func (r scrapeNewResponseJSON) RawJSON() string {
 
 type ScrapeNewResponseResults struct {
 	Attributes []ScrapeNewResponseResultsAttribute `json:"attributes,required"`
-	// Element height
+	// Element height.
 	Height float64 `json:"height,required"`
-	// Html content
+	// HTML content.
 	HTML string `json:"html,required"`
-	// Element left
+	// Element left.
 	Left float64 `json:"left,required"`
-	// Text content
+	// Text content.
 	Text string `json:"text,required"`
-	// Element top
+	// Element top.
 	Top float64 `json:"top,required"`
-	// Element width
+	// Element width.
 	Width float64                      `json:"width,required"`
 	JSON  scrapeNewResponseResultsJSON `json:"-"`
 }
@@ -117,9 +117,9 @@ func (r scrapeNewResponseResultsJSON) RawJSON() string {
 }
 
 type ScrapeNewResponseResultsAttribute struct {
-	// Attribute name
+	// Attribute name.
 	Name string `json:"name,required"`
-	// Attribute value
+	// Attribute value.
 	Value string                                `json:"value,required"`
 	JSON  scrapeNewResponseResultsAttributeJSON `json:"-"`
 }
@@ -327,6 +327,7 @@ func (r ScrapeNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err e
 }
 
 type ScrapeNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                       `json:"name,required"`
 	Value        param.Field[string]                                       `json:"value,required"`
 	Domain       param.Field[string]                                       `json:"domain"`
@@ -544,7 +545,7 @@ func (r ScrapeNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 
 type ScrapeNewResponseEnvelope struct {
 	Result []ScrapeNewResponse `json:"result,required"`
-	// Response status
+	// Response status.
 	Success bool                              `json:"success,required"`
 	Errors  []ScrapeNewResponseEnvelopeErrors `json:"errors"`
 	JSON    scrapeNewResponseEnvelopeJSON     `json:"-"`
@@ -569,9 +570,9 @@ func (r scrapeNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScrapeNewResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                              `json:"message,required"`
 	JSON    scrapeNewResponseEnvelopeErrorsJSON `json:"-"`
 }

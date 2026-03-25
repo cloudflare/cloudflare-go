@@ -229,6 +229,7 @@ func (r PDFNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err erro
 }
 
 type PDFNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                    `json:"name,required"`
 	Value        param.Field[string]                                    `json:"value,required"`
 	Domain       param.Field[string]                                    `json:"domain"`

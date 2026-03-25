@@ -232,39 +232,34 @@ func (r observabilityTelemetryQueryResponseRunJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseRunQuery struct {
-	// ID of the query
-	ID          string `json:"id,required"`
+	ID string `json:"id,required"`
+	// If the query wasn't explcitly saved
+	Adhoc       bool   `json:"adhoc,required"`
 	Created     string `json:"created,required"`
+	CreatedBy   string `json:"createdBy,required"`
 	Description string `json:"description,required,nullable"`
-	// ID of your environment
-	EnvironmentID string `json:"environmentId,required"`
-	// Flag for alerts automatically created
-	Generated bool `json:"generated,required,nullable"`
 	// Query name
-	Name       string                                                `json:"name,required,nullable"`
+	Name       string                                                `json:"name,required"`
 	Parameters ObservabilityTelemetryQueryResponseRunQueryParameters `json:"parameters,required"`
 	Updated    string                                                `json:"updated,required"`
-	UserID     string                                                `json:"userId,required"`
-	// ID of your workspace
-	WorkspaceID string                                          `json:"workspaceId,required"`
-	JSON        observabilityTelemetryQueryResponseRunQueryJSON `json:"-"`
+	UpdatedBy  string                                                `json:"updatedBy,required"`
+	JSON       observabilityTelemetryQueryResponseRunQueryJSON       `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseRunQueryJSON contains the JSON metadata for
 // the struct [ObservabilityTelemetryQueryResponseRunQuery]
 type observabilityTelemetryQueryResponseRunQueryJSON struct {
-	ID            apijson.Field
-	Created       apijson.Field
-	Description   apijson.Field
-	EnvironmentID apijson.Field
-	Generated     apijson.Field
-	Name          apijson.Field
-	Parameters    apijson.Field
-	Updated       apijson.Field
-	UserID        apijson.Field
-	WorkspaceID   apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID          apijson.Field
+	Adhoc       apijson.Field
+	Created     apijson.Field
+	CreatedBy   apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Parameters  apijson.Field
+	Updated     apijson.Field
+	UpdatedBy   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ObservabilityTelemetryQueryResponseRunQuery) UnmarshalJSON(data []byte) (err error) {
@@ -283,7 +278,7 @@ type ObservabilityTelemetryQueryResponseRunQueryParameters struct {
 	// Set a Flag to describe how to combine the filters on the query.
 	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFilterCombination `json:"filterCombination"`
 	// Configure the Filters to apply to the query. Supports nested groups via kind:
-	// 'group'. Maximum nesting depth is 4.
+	// 'group'.
 	Filters []ObservabilityTelemetryQueryResponseRunQueryParametersFilter `json:"filters"`
 	// Define how to group the results of the query.
 	GroupBys []ObservabilityTelemetryQueryResponseRunQueryParametersGroupBy `json:"groupBys"`
@@ -325,11 +320,9 @@ func (r observabilityTelemetryQueryResponseRunQueryParametersJSON) RawJSON() str
 type ObservabilityTelemetryQueryResponseRunQueryParametersCalculation struct {
 	Operator ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator `json:"operator,required"`
 	Alias    string                                                                    `json:"alias"`
-	// The key to use for the calculation. This key must exist in the logs. Use the
-	// observability_keys response to confirm. Do not guess keys.
-	Key     string                                                                   `json:"key"`
-	KeyType ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsKeyType `json:"keyType"`
-	JSON    observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON     `json:"-"`
+	Key      string                                                                    `json:"key"`
+	KeyType  ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsKeyType  `json:"keyType"`
+	JSON     observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON      `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON contains
@@ -437,7 +430,7 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFilterCombination) 
 	return false
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFilter struct {
 	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination `json:"filterCombination"`
 	// This field can have the runtime type of [[]interface{}].
@@ -496,7 +489,7 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFilter) AsUnion() O
 	return r.union
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 //
 // Union satisfied by
 // [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject] or
@@ -1873,12 +1866,13 @@ const (
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeTail      ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType = "tail"
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeRpc       ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType = "rpc"
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeWebsocket ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType = "websocket"
+	ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeWorkflow  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType = "workflow"
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeUnknown   ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType = "unknown"
 )
 
 func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeFetch, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeScheduled, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeAlarm, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeCron, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeQueue, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeEmail, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeTail, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeRpc, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeWebsocket, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeUnknown:
+	case ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeFetch, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeScheduled, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeAlarm, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeCron, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeQueue, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeEmail, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeTail, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeRpc, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeWebsocket, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeWorkflow, ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventTypeUnknown:
 		return true
 	}
 	return false
@@ -1937,12 +1931,13 @@ const (
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeTail      ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType = "tail"
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeRpc       ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType = "rpc"
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeWebsocket ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType = "websocket"
+	ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeWorkflow  ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType = "workflow"
 	ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeUnknown   ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType = "unknown"
 )
 
 func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeFetch, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeScheduled, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeAlarm, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeCron, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeQueue, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeEmail, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeTail, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeRpc, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeWebsocket, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeUnknown:
+	case ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeFetch, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeScheduled, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeAlarm, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeCron, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeQueue, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeEmail, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeTail, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeRpc, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeWebsocket, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeWorkflow, ObservabilityTelemetryQueryResponseEventsEventsWorkersEventTypeUnknown:
 		return true
 	}
 	return false
@@ -2372,12 +2367,13 @@ const (
 	ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeTail      ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType = "tail"
 	ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeRpc       ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType = "rpc"
 	ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeWebsocket ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType = "websocket"
+	ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeWorkflow  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType = "workflow"
 	ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeUnknown   ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType = "unknown"
 )
 
 func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeFetch, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeScheduled, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeAlarm, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeCron, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeQueue, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeEmail, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeTail, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeRpc, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeWebsocket, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeUnknown:
+	case ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeFetch, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeScheduled, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeAlarm, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeCron, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeQueue, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeEmail, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeTail, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeRpc, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeWebsocket, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeWorkflow, ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventTypeUnknown:
 		return true
 	}
 	return false
@@ -2436,12 +2432,13 @@ const (
 	ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeTail      ObservabilityTelemetryQueryResponseInvocationsWorkersEventType = "tail"
 	ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeRpc       ObservabilityTelemetryQueryResponseInvocationsWorkersEventType = "rpc"
 	ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeWebsocket ObservabilityTelemetryQueryResponseInvocationsWorkersEventType = "websocket"
+	ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeWorkflow  ObservabilityTelemetryQueryResponseInvocationsWorkersEventType = "workflow"
 	ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeUnknown   ObservabilityTelemetryQueryResponseInvocationsWorkersEventType = "unknown"
 )
 
 func (r ObservabilityTelemetryQueryResponseInvocationsWorkersEventType) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeFetch, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeScheduled, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeAlarm, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeCron, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeQueue, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeEmail, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeTail, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeRpc, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeWebsocket, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeUnknown:
+	case ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeFetch, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeScheduled, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeAlarm, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeCron, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeQueue, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeEmail, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeTail, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeRpc, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeWebsocket, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeWorkflow, ObservabilityTelemetryQueryResponseInvocationsWorkersEventTypeUnknown:
 		return true
 	}
 	return false
