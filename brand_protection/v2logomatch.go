@@ -114,7 +114,7 @@ type V2LogoMatchGetParams struct {
 	Offset    param.Field[string] `query:"offset"`
 	// Sort order. Options: 'asc' (ascending) or 'desc' (descending)
 	Order param.Field[V2LogoMatchGetParamsOrder] `query:"order"`
-	// Column to sort by. Options: 'tag' or 'date'
+	// Column to sort by. Options: 'matchedAt', 'domain', or 'similarityScore'
 	OrderBy param.Field[V2LogoMatchGetParamsOrderBy] `query:"orderBy"`
 }
 
@@ -142,17 +142,18 @@ func (r V2LogoMatchGetParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Column to sort by. Options: 'tag' or 'date'
+// Column to sort by. Options: 'matchedAt', 'domain', or 'similarityScore'
 type V2LogoMatchGetParamsOrderBy string
 
 const (
-	V2LogoMatchGetParamsOrderByTag  V2LogoMatchGetParamsOrderBy = "tag"
-	V2LogoMatchGetParamsOrderByDate V2LogoMatchGetParamsOrderBy = "date"
+	V2LogoMatchGetParamsOrderByMatchedAt       V2LogoMatchGetParamsOrderBy = "matchedAt"
+	V2LogoMatchGetParamsOrderByDomain          V2LogoMatchGetParamsOrderBy = "domain"
+	V2LogoMatchGetParamsOrderBySimilarityScore V2LogoMatchGetParamsOrderBy = "similarityScore"
 )
 
 func (r V2LogoMatchGetParamsOrderBy) IsKnown() bool {
 	switch r {
-	case V2LogoMatchGetParamsOrderByTag, V2LogoMatchGetParamsOrderByDate:
+	case V2LogoMatchGetParamsOrderByMatchedAt, V2LogoMatchGetParamsOrderByDomain, V2LogoMatchGetParamsOrderBySimilarityScore:
 		return true
 	}
 	return false
