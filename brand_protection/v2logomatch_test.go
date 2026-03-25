@@ -34,7 +34,7 @@ func TestV2LogoMatchGetWithOptionalParams(t *testing.T) {
 		Limit:     cloudflare.F("limit"),
 		Offset:    cloudflare.F("offset"),
 		Order:     cloudflare.F(brand_protection.V2LogoMatchGetParamsOrderAsc),
-		OrderBy:   cloudflare.F(brand_protection.V2LogoMatchGetParamsOrderByTag),
+		OrderBy:   cloudflare.F(brand_protection.V2LogoMatchGetParamsOrderByMatchedAt),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
