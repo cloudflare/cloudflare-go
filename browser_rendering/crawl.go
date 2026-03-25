@@ -98,9 +98,9 @@ func (r *CrawlService) Get(ctx context.Context, jobID string, params CrawlGetPar
 }
 
 type CrawlDeleteResponse struct {
-	// The ID of the cancelled job
+	// The ID of the cancelled job.
 	JobID string `json:"job_id,required"`
-	// Cancellation confirmation message
+	// Cancellation confirmation message.
 	Message string                  `json:"message,required"`
 	JSON    crawlDeleteResponseJSON `json:"-"`
 }
@@ -476,6 +476,7 @@ func (r CrawlNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err er
 }
 
 type CrawlNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                      `json:"name,required"`
 	Value        param.Field[string]                                      `json:"value,required"`
 	Domain       param.Field[string]                                      `json:"domain"`
@@ -655,7 +656,7 @@ type CrawlNewParamsBodyObjectJsonOptionsCustomAI struct {
 	// Authorization token for the AI model: `Bearer <token>`.
 	Authorization param.Field[string] `json:"authorization,required"`
 	// AI model to use for the request. Must be formed as `<provider>/<model_name>`,
-	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`
+	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`.
 	Model param.Field[string] `json:"model,required"`
 }
 
@@ -666,7 +667,7 @@ func (r CrawlNewParamsBodyObjectJsonOptionsCustomAI) MarshalJSON() (data []byte,
 type CrawlNewParamsBodyObjectJsonOptionsResponseFormat struct {
 	Type param.Field[string] `json:"type,required"`
 	// Schema for the response format. More information here:
-	// https://developers.cloudflare.com/workers-ai/json-mode/
+	// https://developers.cloudflare.com/workers-ai/json-mode/.
 	JsonSchema param.Field[map[string]CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
@@ -865,9 +866,9 @@ func (r CrawlNewParamsBodySource) IsKnown() bool {
 }
 
 type CrawlNewResponseEnvelope struct {
-	// Crawl job id
+	// Crawl job ID.
 	Result string `json:"result,required"`
-	// Response status
+	// Response status.
 	Success bool                             `json:"success,required"`
 	Errors  []CrawlNewResponseEnvelopeErrors `json:"errors"`
 	JSON    crawlNewResponseEnvelopeJSON     `json:"-"`
@@ -892,9 +893,9 @@ func (r crawlNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CrawlNewResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                             `json:"message,required"`
 	JSON    crawlNewResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -923,7 +924,7 @@ type CrawlDeleteParams struct {
 
 type CrawlDeleteResponseEnvelope struct {
 	Result CrawlDeleteResponse `json:"result,required"`
-	// Response status
+	// Response status.
 	Success bool                                `json:"success,required"`
 	Errors  []CrawlDeleteResponseEnvelopeErrors `json:"errors"`
 	JSON    crawlDeleteResponseEnvelopeJSON     `json:"-"`
@@ -948,9 +949,9 @@ func (r crawlDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CrawlDeleteResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                                `json:"message,required"`
 	JSON    crawlDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -1015,7 +1016,7 @@ func (r CrawlGetParamsStatus) IsKnown() bool {
 
 type CrawlGetResponseEnvelope struct {
 	Result CrawlGetResponse `json:"result,required"`
-	// Response status
+	// Response status.
 	Success bool                             `json:"success,required"`
 	Errors  []CrawlGetResponseEnvelopeErrors `json:"errors"`
 	JSON    crawlGetResponseEnvelopeJSON     `json:"-"`
@@ -1040,9 +1041,9 @@ func (r crawlGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CrawlGetResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                             `json:"message,required"`
 	JSON    crawlGetResponseEnvelopeErrorsJSON `json:"-"`
 }

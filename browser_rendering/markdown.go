@@ -229,6 +229,7 @@ func (r MarkdownNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err
 }
 
 type MarkdownNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                         `json:"name,required"`
 	Value        param.Field[string]                                         `json:"value,required"`
 	Domain       param.Field[string]                                         `json:"domain"`
@@ -445,10 +446,10 @@ func (r MarkdownNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 }
 
 type MarkdownNewResponseEnvelope struct {
-	// Response status
+	// Response status.
 	Success bool                                `json:"success,required"`
 	Errors  []MarkdownNewResponseEnvelopeErrors `json:"errors"`
-	// Markdown
+	// Markdown content.
 	Result string                          `json:"result"`
 	JSON   markdownNewResponseEnvelopeJSON `json:"-"`
 }
@@ -472,9 +473,9 @@ func (r markdownNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MarkdownNewResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                                `json:"message,required"`
 	JSON    markdownNewResponseEnvelopeErrorsJSON `json:"-"`
 }

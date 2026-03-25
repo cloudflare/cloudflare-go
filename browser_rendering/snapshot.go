@@ -56,9 +56,9 @@ func (r *SnapshotService) New(ctx context.Context, params SnapshotNewParams, opt
 }
 
 type SnapshotNewResponse struct {
-	// HTML content
+	// HTML content.
 	Content string `json:"content,required"`
-	// Base64 encoded image
+	// Base64 encoded image.
 	Screenshot string                  `json:"screenshot,required"`
 	JSON       snapshotNewResponseJSON `json:"-"`
 }
@@ -258,6 +258,7 @@ func (r SnapshotNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err
 }
 
 type SnapshotNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                         `json:"name,required"`
 	Value        param.Field[string]                                         `json:"value,required"`
 	Domain       param.Field[string]                                         `json:"domain"`
@@ -518,7 +519,7 @@ func (r SnapshotNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 
 type SnapshotNewResponseEnvelope struct {
 	Meta SnapshotNewResponseEnvelopeMeta `json:"meta,required"`
-	// Response status
+	// Response status.
 	Success bool                                `json:"success,required"`
 	Errors  []SnapshotNewResponseEnvelopeErrors `json:"errors"`
 	Result  SnapshotNewResponse                 `json:"result"`
@@ -568,9 +569,9 @@ func (r snapshotNewResponseEnvelopeMetaJSON) RawJSON() string {
 }
 
 type SnapshotNewResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                                `json:"message,required"`
 	JSON    snapshotNewResponseEnvelopeErrorsJSON `json:"-"`
 }

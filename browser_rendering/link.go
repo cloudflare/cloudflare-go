@@ -233,6 +233,7 @@ func (r LinkNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err err
 }
 
 type LinkNewParamsBodyObjectCookie struct {
+	// Cookie name.
 	Name         param.Field[string]                                     `json:"name,required"`
 	Value        param.Field[string]                                     `json:"value,required"`
 	Domain       param.Field[string]                                     `json:"domain"`
@@ -450,7 +451,7 @@ func (r LinkNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 
 type LinkNewResponseEnvelope struct {
 	Result []string `json:"result,required"`
-	// Response status
+	// Response status.
 	Success bool                            `json:"success,required"`
 	Errors  []LinkNewResponseEnvelopeErrors `json:"errors"`
 	JSON    linkNewResponseEnvelopeJSON     `json:"-"`
@@ -475,9 +476,9 @@ func (r linkNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LinkNewResponseEnvelopeErrors struct {
-	// Error code
+	// Error code.
 	Code float64 `json:"code,required"`
-	// Error Message
+	// Error message.
 	Message string                            `json:"message,required"`
 	JSON    linkNewResponseEnvelopeErrorsJSON `json:"-"`
 }
