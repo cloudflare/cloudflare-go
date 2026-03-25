@@ -38,11 +38,7 @@ func NewLogAuditService(opts ...option.RequestOption) (r *LogAuditService) {
 	return
 }
 
-// Gets a list of audit logs for an account. <br /> <br /> This is the beta release
-// of Audit Logs Version 2. Since this is a beta version, there may be gaps or
-// missing entries in the available audit logs. Be aware of the following
-// limitations. <br /> <ul> <li>Audit logs are available only for the past 30 days.
-// <br /></li> <li>Error handling is not yet implemented. <br /> </li> </ul>
+// Gets a list of audit logs for an account.
 func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[LogAuditListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -64,11 +60,7 @@ func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, o
 	return res, nil
 }
 
-// Gets a list of audit logs for an account. <br /> <br /> This is the beta release
-// of Audit Logs Version 2. Since this is a beta version, there may be gaps or
-// missing entries in the available audit logs. Be aware of the following
-// limitations. <br /> <ul> <li>Audit logs are available only for the past 30 days.
-// <br /></li> <li>Error handling is not yet implemented. <br /> </li> </ul>
+// Gets a list of audit logs for an account.
 func (r *LogAuditService) ListAutoPaging(ctx context.Context, params LogAuditListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[LogAuditListResponse] {
 	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, params, opts...))
 }
@@ -180,10 +172,10 @@ type LogAuditListResponseActor struct {
 	// The email of the actor who performed the action.
 	Email string `json:"email" format:"email"`
 	// The IP address of the request that performed the action.
-	IPAddress string `json:"ip_address" format:"ipv4 | ipv6"`
-	// Filters by the API token ID when the actor context is an api_token.
+	IPAddress string `json:"ip_address"`
+	// The API token ID when the actor context is an api_token or oauth.
 	TokenID string `json:"token_id"`
-	// Filters by the API token name when the actor context is an api_token.
+	// The API token name when the actor context is an api_token or oauth.
 	TokenName string `json:"token_name"`
 	// The type of actor.
 	Type LogAuditListResponseActorType `json:"type"`
@@ -743,7 +735,7 @@ func (r LogAuditListParamsResourceProduct) URLQuery() (v url.Values) {
 
 type LogAuditListParamsResourceScope struct {
 	// Filters out audit logs by the resource scope, specifying whether the resource is
-	// associated with an user, an account, or a zone.
+	// associated with an user, an account, a zone, or a membership.
 	Not param.Field[[]LogAuditListParamsResourceScopeNot] `query:"not"`
 }
 
@@ -759,14 +751,15 @@ func (r LogAuditListParamsResourceScope) URLQuery() (v url.Values) {
 type LogAuditListParamsResourceScopeNot string
 
 const (
-	LogAuditListParamsResourceScopeNotAccounts LogAuditListParamsResourceScopeNot = "accounts"
-	LogAuditListParamsResourceScopeNotUser     LogAuditListParamsResourceScopeNot = "user"
-	LogAuditListParamsResourceScopeNotZones    LogAuditListParamsResourceScopeNot = "zones"
+	LogAuditListParamsResourceScopeNotAccounts    LogAuditListParamsResourceScopeNot = "accounts"
+	LogAuditListParamsResourceScopeNotUser        LogAuditListParamsResourceScopeNot = "user"
+	LogAuditListParamsResourceScopeNotZones       LogAuditListParamsResourceScopeNot = "zones"
+	LogAuditListParamsResourceScopeNotMemberships LogAuditListParamsResourceScopeNot = "memberships"
 )
 
 func (r LogAuditListParamsResourceScopeNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsResourceScopeNotAccounts, LogAuditListParamsResourceScopeNotUser, LogAuditListParamsResourceScopeNotZones:
+	case LogAuditListParamsResourceScopeNotAccounts, LogAuditListParamsResourceScopeNotUser, LogAuditListParamsResourceScopeNotZones, LogAuditListParamsResourceScopeNotMemberships:
 		return true
 	}
 	return false
