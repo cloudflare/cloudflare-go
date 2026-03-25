@@ -211,33 +211,35 @@ func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceSt
 }
 
 type InstanceNewResponse struct {
-	// Use your AI Search ID.
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID                   string                                  `json:"id,required"`
 	CreatedAt            time.Time                               `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                               `json:"modified_at,required" format:"date-time"`
 	AIGatewayID          string                                  `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model"`
+	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model,nullable"`
 	Cache                bool                                    `json:"cache"`
 	CacheThreshold       InstanceNewResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                   `json:"chunk_overlap"`
 	ChunkSize            int64                                   `json:"chunk_size"`
 	CreatedBy            string                                  `json:"created_by,nullable"`
 	CustomMetadata       []InstanceNewResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model"`
+	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                    `json:"enable"`
 	FusionMethod         InstanceNewResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                    `json:"hybrid_search_enabled"`
+	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options,nullable"`
 	LastActivity         time.Time                               `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                   `json:"max_num_results"`
 	Metadata             InstanceNewResponseMetadata             `json:"metadata"`
 	ModifiedBy           string                                  `json:"modified_by,nullable"`
+	Namespace            string                                  `json:"namespace,nullable"`
 	Paused               bool                                    `json:"paused"`
 	PublicEndpointID     string                                  `json:"public_endpoint_id,nullable"`
 	PublicEndpointParams InstanceNewResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                    `json:"reranking"`
-	RerankingModel       InstanceNewResponseRerankingModel       `json:"reranking_model"`
+	RerankingModel       InstanceNewResponseRerankingModel       `json:"reranking_model,nullable"`
 	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model"`
+	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                    `json:"rewrite_query"`
 	ScoreThreshold       float64                                 `json:"score_threshold"`
 	Source               string                                  `json:"source"`
@@ -266,10 +268,12 @@ type instanceNewResponseJSON struct {
 	Enable               apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -426,6 +430,50 @@ const (
 func (r InstanceNewResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceNewResponseFusionMethodMax, InstanceNewResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+type InstanceNewResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceNewResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceNewResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceNewResponseIndexingOptionsJSON contains the JSON metadata for the struct
+// [InstanceNewResponseIndexingOptions]
+type instanceNewResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceNewResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceNewResponseIndexingOptionsKeywordTokenizerPorter  InstanceNewResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceNewResponseIndexingOptionsKeywordTokenizerTrigram InstanceNewResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceNewResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseIndexingOptionsKeywordTokenizerPorter, InstanceNewResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -975,33 +1023,35 @@ func (r InstanceNewResponseType) IsKnown() bool {
 }
 
 type InstanceUpdateResponse struct {
-	// Use your AI Search ID.
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID                   string                                     `json:"id,required"`
 	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
 	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model"`
+	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model,nullable"`
 	Cache                bool                                       `json:"cache"`
 	CacheThreshold       InstanceUpdateResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                      `json:"chunk_overlap"`
 	ChunkSize            int64                                      `json:"chunk_size"`
 	CreatedBy            string                                     `json:"created_by,nullable"`
 	CustomMetadata       []InstanceUpdateResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model"`
+	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                       `json:"enable"`
 	FusionMethod         InstanceUpdateResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
+	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options,nullable"`
 	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
 	Metadata             InstanceUpdateResponseMetadata             `json:"metadata"`
 	ModifiedBy           string                                     `json:"modified_by,nullable"`
+	Namespace            string                                     `json:"namespace,nullable"`
 	Paused               bool                                       `json:"paused"`
 	PublicEndpointID     string                                     `json:"public_endpoint_id,nullable"`
 	PublicEndpointParams InstanceUpdateResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
-	RerankingModel       InstanceUpdateResponseRerankingModel       `json:"reranking_model"`
+	RerankingModel       InstanceUpdateResponseRerankingModel       `json:"reranking_model,nullable"`
 	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model"`
+	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
 	Source               string                                     `json:"source"`
@@ -1030,10 +1080,12 @@ type instanceUpdateResponseJSON struct {
 	Enable               apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -1190,6 +1242,50 @@ const (
 func (r InstanceUpdateResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceUpdateResponseFusionMethodMax, InstanceUpdateResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+type InstanceUpdateResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceUpdateResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceUpdateResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceUpdateResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceUpdateResponseIndexingOptions]
+type instanceUpdateResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceUpdateResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceUpdateResponseIndexingOptionsKeywordTokenizerPorter  InstanceUpdateResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceUpdateResponseIndexingOptionsKeywordTokenizerTrigram InstanceUpdateResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceUpdateResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseIndexingOptionsKeywordTokenizerPorter, InstanceUpdateResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -1743,33 +1839,35 @@ func (r InstanceUpdateResponseType) IsKnown() bool {
 }
 
 type InstanceListResponse struct {
-	// Use your AI Search ID.
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID                   string                                   `json:"id,required"`
 	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
 	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model"`
+	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model,nullable"`
 	Cache                bool                                     `json:"cache"`
 	CacheThreshold       InstanceListResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                    `json:"chunk_overlap"`
 	ChunkSize            int64                                    `json:"chunk_size"`
 	CreatedBy            string                                   `json:"created_by,nullable"`
 	CustomMetadata       []InstanceListResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model"`
+	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                     `json:"enable"`
 	FusionMethod         InstanceListResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
+	IndexingOptions      InstanceListResponseIndexingOptions      `json:"indexing_options,nullable"`
 	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
 	Metadata             InstanceListResponseMetadata             `json:"metadata"`
 	ModifiedBy           string                                   `json:"modified_by,nullable"`
+	Namespace            string                                   `json:"namespace,nullable"`
 	Paused               bool                                     `json:"paused"`
 	PublicEndpointID     string                                   `json:"public_endpoint_id,nullable"`
 	PublicEndpointParams InstanceListResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
-	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model"`
+	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model,nullable"`
 	RetrievalOptions     InstanceListResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model"`
+	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
 	Source               string                                   `json:"source"`
@@ -1798,10 +1896,12 @@ type instanceListResponseJSON struct {
 	Enable               apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -1958,6 +2058,50 @@ const (
 func (r InstanceListResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceListResponseFusionMethodMax, InstanceListResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+type InstanceListResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceListResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceListResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceListResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceListResponseIndexingOptions]
+type instanceListResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceListResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceListResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceListResponseIndexingOptionsKeywordTokenizerPorter  InstanceListResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceListResponseIndexingOptionsKeywordTokenizerTrigram InstanceListResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceListResponseIndexingOptionsKeywordTokenizerPorter, InstanceListResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -2507,33 +2651,35 @@ func (r InstanceListResponseType) IsKnown() bool {
 }
 
 type InstanceDeleteResponse struct {
-	// Use your AI Search ID.
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID                   string                                     `json:"id,required"`
 	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
 	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model"`
+	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model,nullable"`
 	Cache                bool                                       `json:"cache"`
 	CacheThreshold       InstanceDeleteResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                      `json:"chunk_overlap"`
 	ChunkSize            int64                                      `json:"chunk_size"`
 	CreatedBy            string                                     `json:"created_by,nullable"`
 	CustomMetadata       []InstanceDeleteResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model"`
+	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                       `json:"enable"`
 	FusionMethod         InstanceDeleteResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
+	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options,nullable"`
 	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
 	Metadata             InstanceDeleteResponseMetadata             `json:"metadata"`
 	ModifiedBy           string                                     `json:"modified_by,nullable"`
+	Namespace            string                                     `json:"namespace,nullable"`
 	Paused               bool                                       `json:"paused"`
 	PublicEndpointID     string                                     `json:"public_endpoint_id,nullable"`
 	PublicEndpointParams InstanceDeleteResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
-	RerankingModel       InstanceDeleteResponseRerankingModel       `json:"reranking_model"`
+	RerankingModel       InstanceDeleteResponseRerankingModel       `json:"reranking_model,nullable"`
 	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model"`
+	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
 	Source               string                                     `json:"source"`
@@ -2562,10 +2708,12 @@ type instanceDeleteResponseJSON struct {
 	Enable               apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -2722,6 +2870,50 @@ const (
 func (r InstanceDeleteResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceDeleteResponseFusionMethodMax, InstanceDeleteResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+type InstanceDeleteResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceDeleteResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceDeleteResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceDeleteResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceDeleteResponseIndexingOptions]
+type instanceDeleteResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceDeleteResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceDeleteResponseIndexingOptionsKeywordTokenizerPorter  InstanceDeleteResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceDeleteResponseIndexingOptionsKeywordTokenizerTrigram InstanceDeleteResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceDeleteResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseIndexingOptionsKeywordTokenizerPorter, InstanceDeleteResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -3426,17 +3618,19 @@ func (r instanceChatCompletionsResponseChunksItemJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChunksScoringDetails struct {
-	KeywordRank    float64                                                 `json:"keyword_rank"`
-	KeywordScore   float64                                                 `json:"keyword_score"`
-	RerankingScore float64                                                 `json:"reranking_score"`
-	VectorRank     float64                                                 `json:"vector_rank"`
-	VectorScore    float64                                                 `json:"vector_score"`
-	JSON           instanceChatCompletionsResponseChunksScoringDetailsJSON `json:"-"`
+	FusionMethod   InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod `json:"fusion_method"`
+	KeywordRank    float64                                                         `json:"keyword_rank"`
+	KeywordScore   float64                                                         `json:"keyword_score"`
+	RerankingScore float64                                                         `json:"reranking_score"`
+	VectorRank     float64                                                         `json:"vector_rank"`
+	VectorScore    float64                                                         `json:"vector_score"`
+	JSON           instanceChatCompletionsResponseChunksScoringDetailsJSON         `json:"-"`
 }
 
 // instanceChatCompletionsResponseChunksScoringDetailsJSON contains the JSON
 // metadata for the struct [InstanceChatCompletionsResponseChunksScoringDetails]
 type instanceChatCompletionsResponseChunksScoringDetailsJSON struct {
+	FusionMethod   apijson.Field
 	KeywordRank    apijson.Field
 	KeywordScore   apijson.Field
 	RerankingScore apijson.Field
@@ -3454,34 +3648,51 @@ func (r instanceChatCompletionsResponseChunksScoringDetailsJSON) RawJSON() strin
 	return r.raw
 }
 
+type InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod string
+
+const (
+	InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodRrf InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod = "rrf"
+	InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodMax InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod = "max"
+)
+
+func (r InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodRrf, InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodMax:
+		return true
+	}
+	return false
+}
+
 type InstanceReadResponse struct {
-	// Use your AI Search ID.
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID                   string                                   `json:"id,required"`
 	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
 	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
 	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model"`
+	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model,nullable"`
 	Cache                bool                                     `json:"cache"`
 	CacheThreshold       InstanceReadResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                    `json:"chunk_overlap"`
 	ChunkSize            int64                                    `json:"chunk_size"`
 	CreatedBy            string                                   `json:"created_by,nullable"`
 	CustomMetadata       []InstanceReadResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model"`
+	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                     `json:"enable"`
 	FusionMethod         InstanceReadResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
+	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options,nullable"`
 	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
 	Metadata             InstanceReadResponseMetadata             `json:"metadata"`
 	ModifiedBy           string                                   `json:"modified_by,nullable"`
+	Namespace            string                                   `json:"namespace,nullable"`
 	Paused               bool                                     `json:"paused"`
 	PublicEndpointID     string                                   `json:"public_endpoint_id,nullable"`
 	PublicEndpointParams InstanceReadResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
-	RerankingModel       InstanceReadResponseRerankingModel       `json:"reranking_model"`
+	RerankingModel       InstanceReadResponseRerankingModel       `json:"reranking_model,nullable"`
 	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model"`
+	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
 	Source               string                                   `json:"source"`
@@ -3510,10 +3721,12 @@ type instanceReadResponseJSON struct {
 	Enable               apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -3670,6 +3883,50 @@ const (
 func (r InstanceReadResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceReadResponseFusionMethodMax, InstanceReadResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+type InstanceReadResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceReadResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceReadResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceReadResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceReadResponseIndexingOptions]
+type instanceReadResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceReadResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceReadResponseIndexingOptionsKeywordTokenizerPorter  InstanceReadResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceReadResponseIndexingOptionsKeywordTokenizerTrigram InstanceReadResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceReadResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseIndexingOptionsKeywordTokenizerPorter, InstanceReadResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -4298,17 +4555,19 @@ func (r instanceSearchResponseChunksItemJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunksScoringDetails struct {
-	KeywordRank    float64                                        `json:"keyword_rank"`
-	KeywordScore   float64                                        `json:"keyword_score"`
-	RerankingScore float64                                        `json:"reranking_score"`
-	VectorRank     float64                                        `json:"vector_rank"`
-	VectorScore    float64                                        `json:"vector_score"`
-	JSON           instanceSearchResponseChunksScoringDetailsJSON `json:"-"`
+	FusionMethod   InstanceSearchResponseChunksScoringDetailsFusionMethod `json:"fusion_method"`
+	KeywordRank    float64                                                `json:"keyword_rank"`
+	KeywordScore   float64                                                `json:"keyword_score"`
+	RerankingScore float64                                                `json:"reranking_score"`
+	VectorRank     float64                                                `json:"vector_rank"`
+	VectorScore    float64                                                `json:"vector_score"`
+	JSON           instanceSearchResponseChunksScoringDetailsJSON         `json:"-"`
 }
 
 // instanceSearchResponseChunksScoringDetailsJSON contains the JSON metadata for
 // the struct [InstanceSearchResponseChunksScoringDetails]
 type instanceSearchResponseChunksScoringDetailsJSON struct {
+	FusionMethod   apijson.Field
 	KeywordRank    apijson.Field
 	KeywordScore   apijson.Field
 	RerankingScore apijson.Field
@@ -4326,12 +4585,28 @@ func (r instanceSearchResponseChunksScoringDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
+type InstanceSearchResponseChunksScoringDetailsFusionMethod string
+
+const (
+	InstanceSearchResponseChunksScoringDetailsFusionMethodRrf InstanceSearchResponseChunksScoringDetailsFusionMethod = "rrf"
+	InstanceSearchResponseChunksScoringDetailsFusionMethodMax InstanceSearchResponseChunksScoringDetailsFusionMethod = "max"
+)
+
+func (r InstanceSearchResponseChunksScoringDetailsFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceSearchResponseChunksScoringDetailsFusionMethodRrf, InstanceSearchResponseChunksScoringDetailsFusionMethodMax:
+		return true
+	}
+	return false
+}
+
 type InstanceStatsResponse struct {
 	Completed         int64                     `json:"completed"`
 	Error             int64                     `json:"error"`
 	FileEmbedErrors   map[string]interface{}    `json:"file_embed_errors"`
 	IndexSourceErrors map[string]interface{}    `json:"index_source_errors"`
 	LastActivity      time.Time                 `json:"last_activity" format:"date-time"`
+	Outdated          int64                     `json:"outdated"`
 	Queued            int64                     `json:"queued"`
 	Running           int64                     `json:"running"`
 	Skipped           int64                     `json:"skipped"`
@@ -4346,6 +4621,7 @@ type instanceStatsResponseJSON struct {
 	FileEmbedErrors   apijson.Field
 	IndexSourceErrors apijson.Field
 	LastActivity      apijson.Field
+	Outdated          apijson.Field
 	Queued            apijson.Field
 	Running           apijson.Field
 	Skipped           apijson.Field
@@ -4363,7 +4639,7 @@ func (r instanceStatsResponseJSON) RawJSON() string {
 
 type InstanceNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Use your AI Search ID.
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID                   param.Field[string]                                `json:"id,required"`
 	AIGatewayID          param.Field[string]                                `json:"ai_gateway_id"`
 	AISearchModel        param.Field[InstanceNewParamsAISearchModel]        `json:"ai_search_model"`
@@ -4376,6 +4652,7 @@ type InstanceNewParams struct {
 	EmbeddingModel       param.Field[InstanceNewParamsEmbeddingModel]       `json:"embedding_model"`
 	FusionMethod         param.Field[InstanceNewParamsFusionMethod]         `json:"fusion_method"`
 	HybridSearchEnabled  param.Field[bool]                                  `json:"hybrid_search_enabled"`
+	IndexingOptions      param.Field[InstanceNewParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
 	Metadata             param.Field[InstanceNewParamsMetadata]             `json:"metadata"`
 	PublicEndpointParams param.Field[InstanceNewParamsPublicEndpointParams] `json:"public_endpoint_params"`
@@ -4511,6 +4788,37 @@ const (
 func (r InstanceNewParamsFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceNewParamsFusionMethodMax, InstanceNewParamsFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+type InstanceNewParamsIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer param.Field[InstanceNewParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+}
+
+func (r InstanceNewParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceNewParamsIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceNewParamsIndexingOptionsKeywordTokenizerPorter  InstanceNewParamsIndexingOptionsKeywordTokenizer = "porter"
+	InstanceNewParamsIndexingOptionsKeywordTokenizerTrigram InstanceNewParamsIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceNewParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsIndexingOptionsKeywordTokenizerPorter, InstanceNewParamsIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -4882,6 +5190,7 @@ type InstanceUpdateParams struct {
 	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]       `json:"embedding_model"`
 	FusionMethod                   param.Field[InstanceUpdateParamsFusionMethod]         `json:"fusion_method"`
 	HybridSearchEnabled            param.Field[bool]                                     `json:"hybrid_search_enabled"`
+	IndexingOptions                param.Field[InstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
 	Metadata                       param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
 	Paused                         param.Field[bool]                                     `json:"paused"`
@@ -5021,6 +5330,37 @@ const (
 func (r InstanceUpdateParamsFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceUpdateParamsFusionMethodMax, InstanceUpdateParamsFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+type InstanceUpdateParamsIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer param.Field[InstanceUpdateParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+}
+
+func (r InstanceUpdateParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceUpdateParamsIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter  InstanceUpdateParamsIndexingOptionsKeywordTokenizer = "porter"
+	InstanceUpdateParamsIndexingOptionsKeywordTokenizerTrigram InstanceUpdateParamsIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceUpdateParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter, InstanceUpdateParamsIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -5407,6 +5747,7 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	Namespace param.Field[string] `query:"namespace"`
 	// Order By Column Name
 	OrderBy param.Field[InstanceListParamsOrderBy] `query:"order_by"`
 	// Order By Direction
