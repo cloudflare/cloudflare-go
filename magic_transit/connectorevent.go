@@ -144,7 +144,9 @@ type ConnectorEventGetResponse struct {
 	// Sequence number, used to order events with the same timestamp
 	N float64 `json:"n,required"`
 	// Time the Event was recorded (seconds since the Unix epoch)
-	T    float64                       `json:"t,required"`
+	T float64 `json:"t,required"`
+	// Version
+	V    string                        `json:"v"`
 	JSON connectorEventGetResponseJSON `json:"-"`
 }
 
@@ -154,6 +156,7 @@ type connectorEventGetResponseJSON struct {
 	E           apijson.Field
 	N           apijson.Field
 	T           apijson.Field
+	V           apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -653,10 +653,8 @@ type ConnectorSnapshotLatestListResponseItemsDHCPLease struct {
 	// IP Address that was leased
 	IPAddress string `json:"ip_address,required"`
 	// MAC Address of the device the IP Address was leased to
-	MacAddress string `json:"mac_address,required"`
-	// Connector identifier
-	ConnectorID string                                                `json:"connector_id"`
-	JSON        connectorSnapshotLatestListResponseItemsDHCPLeaseJSON `json:"-"`
+	MacAddress string                                                `json:"mac_address,required"`
+	JSON       connectorSnapshotLatestListResponseItemsDHCPLeaseJSON `json:"-"`
 }
 
 // connectorSnapshotLatestListResponseItemsDHCPLeaseJSON contains the JSON metadata
@@ -668,7 +666,6 @@ type connectorSnapshotLatestListResponseItemsDHCPLeaseJSON struct {
 	InterfaceName apijson.Field
 	IPAddress     apijson.Field
 	MacAddress    apijson.Field
-	ConnectorID   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -711,8 +708,6 @@ type ConnectorSnapshotLatestListResponseItemsDisk struct {
 	Writes float64 `json:"writes,required"`
 	// Writes merged
 	WritesMerged float64 `json:"writes_merged,required"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
 	// Discards completed successfully
 	Discards float64 `json:"discards"`
 	// Discards merged
@@ -745,7 +740,6 @@ type connectorSnapshotLatestListResponseItemsDiskJSON struct {
 	WeightedTimeInProgressMs apijson.Field
 	Writes                   apijson.Field
 	WritesMerged             apijson.Field
-	ConnectorID              apijson.Field
 	Discards                 apijson.Field
 	DiscardsMerged           apijson.Field
 	Flushes                  apijson.Field
@@ -769,9 +763,7 @@ type ConnectorSnapshotLatestListResponseItemsInterface struct {
 	// Name of the network interface
 	Name string `json:"name,required"`
 	// UP/DOWN state of the network interface
-	Operstate string `json:"operstate,required"`
-	// Connector identifier
-	ConnectorID string                                                        `json:"connector_id"`
+	Operstate   string                                                        `json:"operstate,required"`
 	IPAddresses []ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress `json:"ip_addresses"`
 	// Speed of the network interface (bits per second)
 	Speed float64                                               `json:"speed"`
@@ -783,7 +775,6 @@ type ConnectorSnapshotLatestListResponseItemsInterface struct {
 type connectorSnapshotLatestListResponseItemsInterfaceJSON struct {
 	Name        apijson.Field
 	Operstate   apijson.Field
-	ConnectorID apijson.Field
 	IPAddresses apijson.Field
 	Speed       apijson.Field
 	raw         string
@@ -803,10 +794,8 @@ type ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress struct {
 	// Name of the network interface
 	InterfaceName string `json:"interface_name,required"`
 	// IP address of the network interface
-	IPAddress string `json:"ip_address,required"`
-	// Connector identifier
-	ConnectorID string                                                          `json:"connector_id"`
-	JSON        connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON `json:"-"`
+	IPAddress string                                                          `json:"ip_address,required"`
+	JSON      connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON `json:"-"`
 }
 
 // connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON contains the
@@ -815,7 +804,6 @@ type ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress struct {
 type connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON struct {
 	InterfaceName apijson.Field
 	IPAddress     apijson.Field
-	ConnectorID   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -840,8 +828,6 @@ type ConnectorSnapshotLatestListResponseItemsMount struct {
 	Name string `json:"name,required"`
 	// Available disk size (bytes)
 	AvailableBytes float64 `json:"available_bytes"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
 	// Determines whether the disk is read-only
 	IsReadOnly bool `json:"is_read_only"`
 	// Determines whether the disk is removable
@@ -859,7 +845,6 @@ type connectorSnapshotLatestListResponseItemsMountJSON struct {
 	MountPoint     apijson.Field
 	Name           apijson.Field
 	AvailableBytes apijson.Field
-	ConnectorID    apijson.Field
 	IsReadOnly     apijson.Field
 	IsRemovable    apijson.Field
 	TotalBytes     apijson.Field
@@ -910,9 +895,7 @@ type ConnectorSnapshotLatestListResponseItemsNetdev struct {
 	// FIFO overruns
 	SentFifo float64 `json:"sent_fifo,required"`
 	// Total packets transmitted
-	SentPackets float64 `json:"sent_packets,required"`
-	// Connector identifier
-	ConnectorID string                                             `json:"connector_id"`
+	SentPackets float64                                            `json:"sent_packets,required"`
 	JSON        connectorSnapshotLatestListResponseItemsNetdevJSON `json:"-"`
 }
 
@@ -936,7 +919,6 @@ type connectorSnapshotLatestListResponseItemsNetdevJSON struct {
 	SentErrs       apijson.Field
 	SentFifo       apijson.Field
 	SentPackets    apijson.Field
-	ConnectorID    apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -953,8 +935,6 @@ func (r connectorSnapshotLatestListResponseItemsNetdevJSON) RawJSON() string {
 type ConnectorSnapshotLatestListResponseItemsThermal struct {
 	// Sensor identifier for the component
 	Label string `json:"label,required"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
 	// Critical failure temperature of the component (degrees Celsius)
 	CriticalCelcius float64 `json:"critical_celcius"`
 	// Current temperature of the component (degrees Celsius)
@@ -968,7 +948,6 @@ type ConnectorSnapshotLatestListResponseItemsThermal struct {
 // for the struct [ConnectorSnapshotLatestListResponseItemsThermal]
 type connectorSnapshotLatestListResponseItemsThermalJSON struct {
 	Label           apijson.Field
-	ConnectorID     apijson.Field
 	CriticalCelcius apijson.Field
 	CurrentCelcius  apijson.Field
 	MaxCelcius      apijson.Field
@@ -995,8 +974,6 @@ type ConnectorSnapshotLatestListResponseItemsTunnel struct {
 	InterfaceName string `json:"interface_name,required"`
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id,required"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
 	// MTU as measured between the two ends of the tunnel
 	ProbedMtu float64 `json:"probed_mtu"`
 	// Number of recent healthy pings for this tunnel
@@ -1013,7 +990,6 @@ type connectorSnapshotLatestListResponseItemsTunnelJSON struct {
 	HealthValue          apijson.Field
 	InterfaceName        apijson.Field
 	TunnelID             apijson.Field
-	ConnectorID          apijson.Field
 	ProbedMtu            apijson.Field
 	RecentHealthyPings   apijson.Field
 	RecentUnhealthyPings apijson.Field
