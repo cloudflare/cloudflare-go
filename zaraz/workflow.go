@@ -51,7 +51,7 @@ func (r *WorkflowService) Get(ctx context.Context, query WorkflowGetParams, opts
 	return
 }
 
-// Zaraz workflow
+// Zaraz workflow.
 type Workflow string
 
 const (
@@ -75,9 +75,9 @@ type WorkflowGetParams struct {
 type WorkflowGetResponseEnvelope struct {
 	Errors   []WorkflowGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkflowGetResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz workflow
+	// Zaraz workflow.
 	Result Workflow `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                            `json:"success,required"`
 	JSON    workflowGetResponseEnvelopeJSON `json:"-"`
 }

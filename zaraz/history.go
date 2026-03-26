@@ -85,15 +85,15 @@ func (r *HistoryService) ListAutoPaging(ctx context.Context, params HistoryListP
 }
 
 type HistoryListResponse struct {
-	// ID of the configuration
+	// ID of the configuration.
 	ID int64 `json:"id,required"`
-	// Date and time the configuration was created
+	// Date and time the configuration was created.
 	CreatedAt time.Time `json:"createdAt,required" format:"date-time"`
-	// Configuration description provided by the user who published this configuration
+	// Configuration description provided by the user who published this configuration.
 	Description string `json:"description,required"`
-	// Date and time the configuration was last updated
+	// Date and time the configuration was last updated.
 	UpdatedAt time.Time `json:"updatedAt,required" format:"date-time"`
-	// Alpha-numeric ID of the account user who published the configuration
+	// Alpha-numeric ID of the account user who published the configuration.
 	UserID string                  `json:"userId,required"`
 	JSON   historyListResponseJSON `json:"-"`
 }
@@ -132,9 +132,9 @@ func (r HistoryUpdateParams) MarshalJSON() (data []byte, err error) {
 type HistoryUpdateResponseEnvelope struct {
 	Errors   []HistoryUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HistoryUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz configuration
+	// Zaraz configuration.
 	Result Configuration `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                              `json:"success,required"`
 	JSON    historyUpdateResponseEnvelopeJSON `json:"-"`
 }
