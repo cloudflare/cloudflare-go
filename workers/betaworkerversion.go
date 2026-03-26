@@ -449,6 +449,9 @@ type VersionBinding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID string `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -479,6 +482,8 @@ type VersionBinding struct {
 	StoreID string `json:"store_id"`
 	// The text value to use.
 	Text string `json:"text"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID string `json:"tunnel_id"`
 	// This field can have the runtime type of
 	// [[]VersionBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
@@ -516,6 +521,7 @@ type versionBindingJSON struct {
 	KeyJwk                      apijson.Field
 	Namespace                   apijson.Field
 	NamespaceID                 apijson.Field
+	NetworkID                   apijson.Field
 	OldName                     apijson.Field
 	Outbound                    apijson.Field
 	Part                        apijson.Field
@@ -528,6 +534,7 @@ type versionBindingJSON struct {
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
+	TunnelID                    apijson.Field
 	Usages                      apijson.Field
 	VersionID                   apijson.Field
 	WorkflowName                apijson.Field
@@ -583,7 +590,8 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindSecretKey],
 // [VersionBindingsWorkersBindingKindWorkflow],
 // [VersionBindingsWorkersBindingKindWasmModule],
-// [VersionBindingsWorkersBindingKindVPCService].
+// [VersionBindingsWorkersBindingKindVPCService],
+// [VersionBindingsWorkersBindingKindVPCNetwork].
 func (r VersionBinding) AsUnion() VersionBindingsUnion {
 	return r.union
 }
@@ -621,8 +629,9 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindSecretsStoreSecret],
 // [VersionBindingsWorkersBindingKindSecretKey],
 // [VersionBindingsWorkersBindingKindWorkflow],
-// [VersionBindingsWorkersBindingKindWasmModule] or
-// [VersionBindingsWorkersBindingKindVPCService].
+// [VersionBindingsWorkersBindingKindWasmModule],
+// [VersionBindingsWorkersBindingKindVPCService] or
+// [VersionBindingsWorkersBindingKindVPCNetwork].
 type VersionBindingsUnion interface {
 	implementsVersionBinding()
 }
@@ -795,6 +804,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindVPCService{}),
 			DiscriminatorValue: "vpc_service",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindVPCNetwork{}),
+			DiscriminatorValue: "vpc_network",
 		},
 	)
 }
@@ -2510,6 +2524,55 @@ func (r VersionBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
 	return false
 }
 
+type VersionBindingsWorkersBindingKindVPCNetwork struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindVPCNetworkType `json:"type,required"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID string `json:"network_id"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID string                                          `json:"tunnel_id"`
+	JSON     versionBindingsWorkersBindingKindVPCNetworkJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindVPCNetworkJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindVPCNetwork]
+type versionBindingsWorkersBindingKindVPCNetworkJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	NetworkID   apijson.Field
+	TunnelID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindVPCNetwork) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindVPCNetworkJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindVPCNetwork) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindVPCNetworkType string
+
+const (
+	VersionBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork VersionBindingsWorkersBindingKindVPCNetworkType = "vpc_network"
+)
+
+func (r VersionBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type VersionBindingsType string
 
@@ -2547,11 +2610,12 @@ const (
 	VersionBindingsTypeWorkflow               VersionBindingsType = "workflow"
 	VersionBindingsTypeWasmModule             VersionBindingsType = "wasm_module"
 	VersionBindingsTypeVPCService             VersionBindingsType = "vpc_service"
+	VersionBindingsTypeVPCNetwork             VersionBindingsType = "vpc_network"
 )
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService:
+	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -3187,6 +3251,9 @@ type VersionBindingParam struct {
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID param.Field[string] `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -3212,8 +3279,10 @@ type VersionBindingParam struct {
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
-	Text   param.Field[string]      `json:"text"`
-	Usages param.Field[interface{}] `json:"usages"`
+	Text param.Field[string] `json:"text"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID param.Field[string]      `json:"tunnel_id"`
+	Usages   param.Field[interface{}] `json:"usages"`
 	// Identifier for the version to inherit the binding from, which can be the version
 	// ID or the literal "latest" to inherit from the latest version. Defaults to
 	// inheriting the binding from the latest version.
@@ -3263,6 +3332,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindWorkflowParam],
 // [workers.VersionBindingsWorkersBindingKindWasmModuleParam],
 // [workers.VersionBindingsWorkersBindingKindVPCServiceParam],
+// [workers.VersionBindingsWorkersBindingKindVPCNetworkParam],
 // [VersionBindingParam].
 type VersionBindingsUnionParam interface {
 	implementsVersionBindingsUnionParam()
@@ -3837,6 +3907,24 @@ func (r VersionBindingsWorkersBindingKindVPCServiceParam) MarshalJSON() (data []
 }
 
 func (r VersionBindingsWorkersBindingKindVPCServiceParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindVPCNetworkParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindVPCNetworkType] `json:"type,required"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID param.Field[string] `json:"network_id"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID param.Field[string] `json:"tunnel_id"`
+}
+
+func (r VersionBindingsWorkersBindingKindVPCNetworkParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindVPCNetworkParam) implementsVersionBindingsUnionParam() {}
 
 // Resource limits enforced at runtime.
 type VersionLimitsParam struct {
