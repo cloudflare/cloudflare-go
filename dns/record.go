@@ -2732,8 +2732,9 @@ type MXRecord struct {
 	Comment string `json:"comment"`
 	// A valid mail server hostname.
 	Content string `json:"content" format:"hostname"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -2829,8 +2830,9 @@ type MXRecordParam struct {
 	Comment param.Field[string] `json:"comment"`
 	// A valid mail server hostname.
 	Content param.Field[string] `json:"content" format:"hostname"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -3400,8 +3402,9 @@ type RecordResponse struct {
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting bool `json:"private_routing"`
@@ -4892,8 +4895,9 @@ func (r SRVRecordType) IsKnown() bool {
 type SRVRecordData struct {
 	// The port of the service.
 	Port float64 `json:"port"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// A valid hostname.
 	Target string `json:"target" format:"hostname"`
@@ -4993,8 +4997,9 @@ func (r SRVRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 type SRVRecordDataParam struct {
 	// The port of the service.
 	Port param.Field[float64] `json:"port"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// A valid hostname.
 	Target param.Field[string] `json:"target" format:"hostname"`
@@ -5799,8 +5804,9 @@ type URIRecord struct {
 	Content string `json:"content"`
 	// Components of a URI record.
 	Data URIRecordData `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -5922,8 +5928,9 @@ type URIRecordParam struct {
 	Comment param.Field[string] `json:"comment"`
 	// Components of a URI record.
 	Data param.Field[URIRecordDataParam] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -6262,8 +6269,9 @@ type RecordNewParamsBody struct {
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -6553,8 +6561,9 @@ type RecordUpdateParamsBody struct {
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -7116,8 +7125,9 @@ type RecordBatchParamsPost struct {
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -7407,8 +7417,9 @@ type RecordEditParamsBody struct {
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -8171,8 +8182,9 @@ type RecordScanReviewParamsAccept struct {
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
