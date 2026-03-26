@@ -225,6 +225,9 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID string `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -255,6 +258,8 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	StoreID string `json:"store_id"`
 	// The text value to use.
 	Text string `json:"text"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID string `json:"tunnel_id"`
 	// This field can have the runtime type of
 	// [[]ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
@@ -293,6 +298,7 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	KeyJwk                      apijson.Field
 	Namespace                   apijson.Field
 	NamespaceID                 apijson.Field
+	NetworkID                   apijson.Field
 	OldName                     apijson.Field
 	Outbound                    apijson.Field
 	Part                        apijson.Field
@@ -305,6 +311,7 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
+	TunnelID                    apijson.Field
 	Usages                      apijson.Field
 	VersionID                   apijson.Field
 	WorkflowName                apijson.Field
@@ -361,7 +368,8 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwork].
 func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScriptAndVersionSettingEditResponseBindingsUnion {
 	return r.union
 }
@@ -400,9 +408,10 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindSecretKey],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWorkflow],
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule]
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindWasmModule],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService]
 // or
-// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService].
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwork].
 type ScriptScriptAndVersionSettingEditResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingEditResponseBinding()
 }
@@ -575,6 +584,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCService{}),
 			DiscriminatorValue: "vpc_service",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwork{}),
+			DiscriminatorValue: "vpc_network",
 		},
 	)
 }
@@ -2356,6 +2370,57 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCSe
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwork struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkType `json:"type,required"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID string `json:"network_id"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID string                                                                            `json:"tunnel_id"`
+	JSON     scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwork]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	NetworkID   apijson.Field
+	TunnelID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwork) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwork) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkType string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkType = "vpc_network"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditResponseBindingsType string
 
@@ -2393,11 +2458,12 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditResponseBindingsType = "workflow"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule             ScriptScriptAndVersionSettingEditResponseBindingsType = "wasm_module"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCService             ScriptScriptAndVersionSettingEditResponseBindingsType = "vpc_service"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCNetwork             ScriptScriptAndVersionSettingEditResponseBindingsType = "vpc_network"
 )
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit, ScriptScriptAndVersionSettingEditResponseBindingsTypeImages, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMedia, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCService:
+	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit, ScriptScriptAndVersionSettingEditResponseBindingsTypeImages, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMedia, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCService, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -3107,6 +3173,9 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID string `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -3137,6 +3206,8 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	StoreID string `json:"store_id"`
 	// The text value to use.
 	Text string `json:"text"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID string `json:"tunnel_id"`
 	// This field can have the runtime type of
 	// [[]ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
@@ -3175,6 +3246,7 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	KeyJwk                      apijson.Field
 	Namespace                   apijson.Field
 	NamespaceID                 apijson.Field
+	NetworkID                   apijson.Field
 	OldName                     apijson.Field
 	Outbound                    apijson.Field
 	Part                        apijson.Field
@@ -3187,6 +3259,7 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
 	Text                        apijson.Field
+	TunnelID                    apijson.Field
 	Usages                      apijson.Field
 	VersionID                   apijson.Field
 	WorkflowName                apijson.Field
@@ -3243,7 +3316,8 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwork].
 func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptAndVersionSettingGetResponseBindingsUnion {
 	return r.union
 }
@@ -3282,9 +3356,10 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindSecretKey],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWorkflow],
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule]
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindWasmModule],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService]
 // or
-// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService].
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwork].
 type ScriptScriptAndVersionSettingGetResponseBindingsUnion interface {
 	implementsScriptScriptAndVersionSettingGetResponseBinding()
 }
@@ -3457,6 +3532,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCService{}),
 			DiscriminatorValue: "vpc_service",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwork{}),
+			DiscriminatorValue: "vpc_network",
 		},
 	)
 }
@@ -5238,6 +5318,57 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCSer
 	return false
 }
 
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwork struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkType `json:"type,required"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID string `json:"network_id"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID string                                                                           `json:"tunnel_id"`
+	JSON     scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwork]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	NetworkID   apijson.Field
+	TunnelID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwork) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwork) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkType string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkType = "vpc_network"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingGetResponseBindingsType string
 
@@ -5275,11 +5406,12 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow               ScriptScriptAndVersionSettingGetResponseBindingsType = "workflow"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule             ScriptScriptAndVersionSettingGetResponseBindingsType = "wasm_module"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCService             ScriptScriptAndVersionSettingGetResponseBindingsType = "vpc_service"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCNetwork             ScriptScriptAndVersionSettingGetResponseBindingsType = "vpc_network"
 )
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit, ScriptScriptAndVersionSettingGetResponseBindingsTypeImages, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMedia, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCService:
+	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit, ScriptScriptAndVersionSettingGetResponseBindingsTypeImages, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMedia, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCService, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -5968,6 +6100,9 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID param.Field[string] `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -5993,8 +6128,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
-	Text   param.Field[string]      `json:"text"`
-	Usages param.Field[interface{}] `json:"usages"`
+	Text param.Field[string] `json:"text"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID param.Field[string]      `json:"tunnel_id"`
+	Usages   param.Field[interface{}] `json:"usages"`
 	// Identifier for the version to inherit the binding from, which can be the version
 	// ID or the literal "latest" to inherit from the latest version. Defaults to
 	// inheriting the binding from the latest version.
@@ -6046,6 +6183,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCService],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetwork],
 // [ScriptScriptAndVersionSettingEditParamsSettingsBinding].
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingUnion interface {
 	implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion()
@@ -7237,6 +7375,40 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetwork struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType] `json:"type,required"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID param.Field[string] `json:"network_id"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID param.Field[string] `json:"tunnel_id"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetwork) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetwork) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType = "vpc_network"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsType string
 
@@ -7274,11 +7446,12 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "workflow"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "wasm_module"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCService             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "vpc_service"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCNetwork             ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "vpc_network"
 )
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearch, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMedia, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCService:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearch, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMedia, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCNetwork:
 		return true
 	}
 	return false

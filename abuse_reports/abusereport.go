@@ -505,7 +505,8 @@ type AbuseReportNewParamsBody struct {
 	// size of the field should not exceed 2000 characters. Each individual
 	// port/protocol should not exceed 100 characters. The list should not have more
 	// than 30 unique ports and protocols.
-	PortsProtocols param.Field[string] `json:"ports_protocols"`
+	PortsProtocols param.Field[string]      `json:"ports_protocols"`
+	RegWhoRequest  param.Field[interface{}] `json:"reg_who_request"`
 	// Text containing 2 characters
 	ReportedCountry param.Field[string] `json:"reported_country"`
 	// Text not exceeding 255 characters
@@ -1240,6 +1241,8 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Company param.Field[string] `json:"company"`
+	// ICANN-mandated fields for registrar WHOIS data disclosure requests.
+	RegWhoRequest param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequest] `json:"reg_who_request"`
 	// Text containing 2 characters
 	ReportedCountry param.Field[string] `json:"reported_country"`
 	// Text not exceeding 255 characters
@@ -1286,6 +1289,89 @@ const (
 func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotification) IsKnown() bool {
 	switch r {
 	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSend, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationSendAnon, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificationNone:
+		return true
+	}
+	return false
+}
+
+// ICANN-mandated fields for registrar WHOIS data disclosure requests.
+type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequest struct {
+	// Optional authorization statement or power of attorney per ICANN 10.2.1.3.
+	RegWhoAuthorizationStatement param.Field[string] `json:"reg_who_authorization_statement"`
+	// Affirmation that the request is made in good faith per ICANN 10.2.4.
+	RegWhoGoodFaithAffirmation param.Field[bool] `json:"reg_who_good_faith_affirmation"`
+	// Agreement to process data lawfully per ICANN 10.2.5.
+	RegWhoLawfulProcessingAgreement param.Field[bool] `json:"reg_who_lawful_processing_agreement"`
+	// Legal rights and rationale for the request per ICANN 10.2.3.
+	RegWhoLegalBasis param.Field[string] `json:"reg_who_legal_basis"`
+	// The type of WHOIS data request per ICANN procedure.
+	RegWhoRequestType param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType] `json:"reg_who_request_type"`
+	// The specific WHOIS data elements being requested per ICANN 10.2.2.
+	RegWhoRequestedDataElements param.Field[[]AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement] `json:"reg_who_requested_data_elements"`
+	// The nature of the requestor per ICANN 10.2.1.2.
+	RegWhoRequestorType param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType] `json:"reg_who_requestor_type"`
+}
+
+func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of WHOIS data request per ICANN procedure.
+type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestTypeDisclosure   AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType = "disclosure"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestTypeInvalidWhois AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType = "invalid_whois"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestTypeDisclosure, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestTypeInvalidWhois:
+		return true
+	}
+	return false
+}
+
+type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantName         AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_name"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantOrganization AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_organization"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantEmail        AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_email"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantPhone        AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_phone"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddress      AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_address"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminName              AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_name"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminOrganization      AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_organization"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminEmail             AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_email"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminPhone             AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_phone"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminAddress           AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_address"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechName               AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_name"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechOrganization       AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_organization"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechEmail              AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_email"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechPhone              AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_phone"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechAddress            AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_address"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddress, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminAddress, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechAddress:
+		return true
+	}
+	return false
+}
+
+// The nature of the requestor per ICANN 10.2.1.2.
+type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType string
+
+const (
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorTypeGovernment  AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType = "government"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorTypeCorporation AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType = "corporation"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorTypeIndividual  AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType = "individual"
+)
+
+func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType) IsKnown() bool {
+	switch r {
+	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorTypeGovernment, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorTypeCorporation, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorTypeIndividual:
 		return true
 	}
 	return false

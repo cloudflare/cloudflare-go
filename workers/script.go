@@ -2055,6 +2055,9 @@ type ScriptUpdateParamsMetadataBinding struct {
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID param.Field[string] `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -2080,8 +2083,10 @@ type ScriptUpdateParamsMetadataBinding struct {
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
 	// The text value to use.
-	Text   param.Field[string]      `json:"text"`
-	Usages param.Field[interface{}] `json:"usages"`
+	Text param.Field[string] `json:"text"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID param.Field[string]      `json:"tunnel_id"`
+	Usages   param.Field[interface{}] `json:"usages"`
 	// Identifier for the version to inherit the binding from, which can be the version
 	// ID or the literal "latest" to inherit from the latest version. Defaults to
 	// inheriting the binding from the latest version.
@@ -2131,6 +2136,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModule],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCService],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetwork],
 // [ScriptUpdateParamsMetadataBinding].
 type ScriptUpdateParamsMetadataBindingUnion interface {
 	implementsScriptUpdateParamsMetadataBindingUnion()
@@ -3322,6 +3328,40 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType) IsKn
 	return false
 }
 
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetwork struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType] `json:"type,required"`
+	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
+	// Mutually exclusive with tunnel_id.
+	NetworkID param.Field[string] `json:"network_id"`
+	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
+	TunnelID param.Field[string] `json:"tunnel_id"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetwork) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetwork) implementsScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType = "vpc_network"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type ScriptUpdateParamsMetadataBindingsType string
 
@@ -3359,11 +3399,12 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypeWorkflow               ScriptUpdateParamsMetadataBindingsType = "workflow"
 	ScriptUpdateParamsMetadataBindingsTypeWasmModule             ScriptUpdateParamsMetadataBindingsType = "wasm_module"
 	ScriptUpdateParamsMetadataBindingsTypeVPCService             ScriptUpdateParamsMetadataBindingsType = "vpc_service"
+	ScriptUpdateParamsMetadataBindingsTypeVPCNetwork             ScriptUpdateParamsMetadataBindingsType = "vpc_network"
 )
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAISearch, ScriptUpdateParamsMetadataBindingsTypeAISearchNamespace, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMedia, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule, ScriptUpdateParamsMetadataBindingsTypeVPCService:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAISearch, ScriptUpdateParamsMetadataBindingsTypeAISearchNamespace, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMedia, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule, ScriptUpdateParamsMetadataBindingsTypeVPCService, ScriptUpdateParamsMetadataBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
