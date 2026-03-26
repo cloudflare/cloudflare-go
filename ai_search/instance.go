@@ -225,6 +225,7 @@ type InstanceNewResponse struct {
 	CustomMetadata       []InstanceNewResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                    `json:"enable"`
+	EngineVersion        float64                                 `json:"engine_version"`
 	FusionMethod         InstanceNewResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                    `json:"hybrid_search_enabled"`
 	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options,nullable"`
@@ -242,11 +243,11 @@ type InstanceNewResponse struct {
 	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                    `json:"rewrite_query"`
 	ScoreThreshold       float64                                 `json:"score_threshold"`
-	Source               string                                  `json:"source"`
+	Source               string                                  `json:"source,nullable"`
 	SourceParams         InstanceNewResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                  `json:"status"`
 	TokenID              string                                  `json:"token_id" format:"uuid"`
-	Type                 InstanceNewResponseType                 `json:"type"`
+	Type                 InstanceNewResponseType                 `json:"type,nullable"`
 	JSON                 instanceNewResponseJSON                 `json:"-"`
 }
 
@@ -266,6 +267,7 @@ type instanceNewResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	IndexingOptions      apijson.Field
@@ -663,9 +665,11 @@ type InstanceNewResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceNewResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceNewResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -738,19 +742,21 @@ func (r InstanceNewResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceNewResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceNewResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceNewResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceNewResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceNewResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceNewResponseRetrievalOptionsKeywordMatchModeAnd InstanceNewResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceNewResponseRetrievalOptionsKeywordMatchModeOr  InstanceNewResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceNewResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceNewResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceNewResponseRetrievalOptionsKeywordMatchModeAnd, InstanceNewResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -1037,6 +1043,7 @@ type InstanceUpdateResponse struct {
 	CustomMetadata       []InstanceUpdateResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                       `json:"enable"`
+	EngineVersion        float64                                    `json:"engine_version"`
 	FusionMethod         InstanceUpdateResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
 	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options,nullable"`
@@ -1054,11 +1061,11 @@ type InstanceUpdateResponse struct {
 	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source"`
+	Source               string                                     `json:"source,nullable"`
 	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceUpdateResponseType                 `json:"type"`
+	Type                 InstanceUpdateResponseType                 `json:"type,nullable"`
 	JSON                 instanceUpdateResponseJSON                 `json:"-"`
 }
 
@@ -1078,6 +1085,7 @@ type instanceUpdateResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	IndexingOptions      apijson.Field
@@ -1476,9 +1484,11 @@ type InstanceUpdateResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceUpdateResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -1551,19 +1561,21 @@ func (r InstanceUpdateResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeAnd InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeOr  InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceUpdateResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceUpdateResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceUpdateResponseRetrievalOptionsKeywordMatchModeAnd, InstanceUpdateResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -1853,6 +1865,7 @@ type InstanceListResponse struct {
 	CustomMetadata       []InstanceListResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                     `json:"enable"`
+	EngineVersion        float64                                  `json:"engine_version"`
 	FusionMethod         InstanceListResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
 	IndexingOptions      InstanceListResponseIndexingOptions      `json:"indexing_options,nullable"`
@@ -1870,11 +1883,11 @@ type InstanceListResponse struct {
 	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source"`
+	Source               string                                   `json:"source,nullable"`
 	SourceParams         InstanceListResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceListResponseType                 `json:"type"`
+	Type                 InstanceListResponseType                 `json:"type,nullable"`
 	JSON                 instanceListResponseJSON                 `json:"-"`
 }
 
@@ -1894,6 +1907,7 @@ type instanceListResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	IndexingOptions      apijson.Field
@@ -2291,9 +2305,11 @@ type InstanceListResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceListResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceListResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -2366,19 +2382,21 @@ func (r InstanceListResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceListResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceListResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceListResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceListResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceListResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceListResponseRetrievalOptionsKeywordMatchModeAnd InstanceListResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceListResponseRetrievalOptionsKeywordMatchModeOr  InstanceListResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceListResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceListResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceListResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceListResponseRetrievalOptionsKeywordMatchModeAnd, InstanceListResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -2665,6 +2683,7 @@ type InstanceDeleteResponse struct {
 	CustomMetadata       []InstanceDeleteResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                       `json:"enable"`
+	EngineVersion        float64                                    `json:"engine_version"`
 	FusionMethod         InstanceDeleteResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
 	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options,nullable"`
@@ -2682,11 +2701,11 @@ type InstanceDeleteResponse struct {
 	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source"`
+	Source               string                                     `json:"source,nullable"`
 	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceDeleteResponseType                 `json:"type"`
+	Type                 InstanceDeleteResponseType                 `json:"type,nullable"`
 	JSON                 instanceDeleteResponseJSON                 `json:"-"`
 }
 
@@ -2706,6 +2725,7 @@ type instanceDeleteResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	IndexingOptions      apijson.Field
@@ -3104,9 +3124,11 @@ type InstanceDeleteResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceDeleteResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -3179,19 +3201,21 @@ func (r InstanceDeleteResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeAnd InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeOr  InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceDeleteResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceDeleteResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceDeleteResponseRetrievalOptionsKeywordMatchModeAnd, InstanceDeleteResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -3678,6 +3702,7 @@ type InstanceReadResponse struct {
 	CustomMetadata       []InstanceReadResponseCustomMetadata     `json:"custom_metadata"`
 	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model,nullable"`
 	Enable               bool                                     `json:"enable"`
+	EngineVersion        float64                                  `json:"engine_version"`
 	FusionMethod         InstanceReadResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
 	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options,nullable"`
@@ -3695,11 +3720,11 @@ type InstanceReadResponse struct {
 	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model,nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source"`
+	Source               string                                   `json:"source,nullable"`
 	SourceParams         InstanceReadResponseSourceParams         `json:"source_params,nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceReadResponseType                 `json:"type"`
+	Type                 InstanceReadResponseType                 `json:"type,nullable"`
 	JSON                 instanceReadResponseJSON                 `json:"-"`
 }
 
@@ -3719,6 +3744,7 @@ type instanceReadResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
 	IndexingOptions      apijson.Field
@@ -4116,9 +4142,11 @@ type InstanceReadResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceReadResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceReadResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -4191,19 +4219,21 @@ func (r InstanceReadResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceReadResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceReadResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceReadResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceReadResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceReadResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceReadResponseRetrievalOptionsKeywordMatchModeAnd InstanceReadResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceReadResponseRetrievalOptionsKeywordMatchModeOr  InstanceReadResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceReadResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceReadResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceReadResponseRetrievalOptionsKeywordMatchModeAnd, InstanceReadResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -4920,9 +4950,11 @@ type InstanceNewParamsRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy param.Field[[]InstanceNewParamsRetrievalOptionsBoostBy] `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -4967,19 +4999,21 @@ func (r InstanceNewParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceNewParamsRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceNewParamsRetrievalOptionsKeywordMatchModeExactMatch InstanceNewParamsRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceNewParamsRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceNewParamsRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceNewParamsRetrievalOptionsKeywordMatchModeAnd InstanceNewParamsRetrievalOptionsKeywordMatchMode = "and"
+	InstanceNewParamsRetrievalOptionsKeywordMatchModeOr  InstanceNewParamsRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceNewParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsRetrievalOptionsKeywordMatchModeExactMatch, InstanceNewParamsRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceNewParamsRetrievalOptionsKeywordMatchModeAnd, InstanceNewParamsRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -5462,9 +5496,11 @@ type InstanceUpdateParamsRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy param.Field[[]InstanceUpdateParamsRetrievalOptionsBoostBy] `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5509,19 +5545,21 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeExactMatch InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeAnd InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "and"
+	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeOr  InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceUpdateParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsRetrievalOptionsKeywordMatchModeExactMatch, InstanceUpdateParamsRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceUpdateParamsRetrievalOptionsKeywordMatchModeAnd, InstanceUpdateParamsRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -5986,9 +6024,11 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                             `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                            `json:"filters"`
 	FusionMethod     param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
@@ -6052,19 +6092,21 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKno
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
-	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "exact_match"
-	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "fuzzy_match"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeAnd InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "and"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeOr  InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "or"
 )
 
 func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch, InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch:
+	case InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeAnd, InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -6314,9 +6356,11 @@ type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                    `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                   `json:"filters"`
 	FusionMethod     param.Field[InstanceSearchParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                      `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                        `json:"max_num_results"`
@@ -6380,19 +6424,21 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
-	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "exact_match"
-	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "fuzzy_match"
+	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeAnd InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "and"
+	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeOr  InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "or"
 )
 
 func (r InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch, InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch:
+	case InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeAnd, InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeOr:
 		return true
 	}
 	return false
