@@ -98,7 +98,10 @@ type Script struct {
 	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
 	// The cryptomining score of the JavaScript content.
 	CryptominingScore int64 `json:"cryptomining_score,nullable"`
-	// The dataflow score of the JavaScript content.
+	// The dataflow score of the JavaScript content. This field has been deprecated in
+	// favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
 	DataflowScore           int64 `json:"dataflow_score,nullable"`
 	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
 	// The timestamp of when the script was last fetched.
@@ -114,7 +117,10 @@ type Script struct {
 	MaliciousURLCategories    []string `json:"malicious_url_categories"`
 	// The malware score of the JavaScript content.
 	MalwareScore int64 `json:"malware_score,nullable"`
-	// The obfuscation score of the JavaScript content.
+	// The obfuscation score of the JavaScript content. This field has been deprecated
+	// in favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
 	ObfuscationScore     int64      `json:"obfuscation_score,nullable"`
 	PageURLs             []string   `json:"page_urls"`
 	URLReportedMalicious bool       `json:"url_reported_malicious"`
@@ -167,7 +173,10 @@ type ScriptGetResponse struct {
 	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
 	// The cryptomining score of the JavaScript content.
 	CryptominingScore int64 `json:"cryptomining_score,nullable"`
-	// The dataflow score of the JavaScript content.
+	// The dataflow score of the JavaScript content. This field has been deprecated in
+	// favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
 	DataflowScore           int64 `json:"dataflow_score,nullable"`
 	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
 	// The timestamp of when the script was last fetched.
@@ -183,7 +192,10 @@ type ScriptGetResponse struct {
 	MaliciousURLCategories    []string `json:"malicious_url_categories"`
 	// The malware score of the JavaScript content.
 	MalwareScore int64 `json:"malware_score,nullable"`
-	// The obfuscation score of the JavaScript content.
+	// The obfuscation score of the JavaScript content. This field has been deprecated
+	// in favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
 	ObfuscationScore     int64                      `json:"obfuscation_score,nullable"`
 	PageURLs             []string                   `json:"page_urls"`
 	URLReportedMalicious bool                       `json:"url_reported_malicious"`
@@ -232,7 +244,10 @@ func (r scriptGetResponseJSON) RawJSON() string {
 type ScriptGetResponseVersion struct {
 	// The cryptomining score of the JavaScript content.
 	CryptominingScore int64 `json:"cryptomining_score,nullable"`
-	// The dataflow score of the JavaScript content.
+	// The dataflow score of the JavaScript content. This field has been deprecated in
+	// favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
 	DataflowScore int64 `json:"dataflow_score,nullable"`
 	// The timestamp of when the script was last fetched.
 	FetchedAt string `json:"fetched_at,nullable"`
@@ -244,7 +259,10 @@ type ScriptGetResponseVersion struct {
 	MagecartScore int64 `json:"magecart_score,nullable"`
 	// The malware score of the JavaScript content.
 	MalwareScore int64 `json:"malware_score,nullable"`
-	// The obfuscation score of the JavaScript content.
+	// The obfuscation score of the JavaScript content. This field has been deprecated
+	// in favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
 	ObfuscationScore int64                        `json:"obfuscation_score,nullable"`
 	JSON             scriptGetResponseVersionJSON `json:"-"`
 }

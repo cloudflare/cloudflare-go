@@ -66,7 +66,7 @@ type PublishNewResponseEnvelope struct {
 	Errors   []PublishNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PublishNewResponseEnvelopeMessages `json:"messages,required"`
 	Result   string                               `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                           `json:"success,required"`
 	JSON    publishNewResponseEnvelopeJSON `json:"-"`
 }

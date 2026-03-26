@@ -59,9 +59,9 @@ type DefaultGetParams struct {
 type DefaultGetResponseEnvelope struct {
 	Errors   []DefaultGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DefaultGetResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz configuration
+	// Zaraz configuration.
 	Result Configuration `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                           `json:"success,required"`
 	JSON    defaultGetResponseEnvelopeJSON `json:"-"`
 }

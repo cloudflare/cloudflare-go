@@ -57,15 +57,15 @@ func (r *HistoryConfigService) Get(ctx context.Context, params HistoryConfigGetP
 type HistoryConfigGetResponse map[string]HistoryConfigGetResponseItem
 
 type HistoryConfigGetResponseItem struct {
-	// ID of the configuration
+	// ID of the configuration.
 	ID int64 `json:"id,required"`
-	// Zaraz configuration
+	// Zaraz configuration.
 	Config Configuration `json:"config,required"`
-	// Date and time the configuration was created
+	// Date and time the configuration was created.
 	CreatedAt time.Time `json:"createdAt,required" format:"date-time"`
-	// Date and time the configuration was last updated
+	// Date and time the configuration was last updated.
 	UpdatedAt time.Time `json:"updatedAt,required" format:"date-time"`
-	// Alpha-numeric ID of the account user who published the configuration
+	// Alpha-numeric ID of the account user who published the configuration.
 	UserID string                           `json:"userId,required"`
 	JSON   historyConfigGetResponseItemJSON `json:"-"`
 }
@@ -93,7 +93,7 @@ func (r historyConfigGetResponseItemJSON) RawJSON() string {
 type HistoryConfigGetParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// Comma separated list of Zaraz configuration IDs
+	// Comma separated list of Zaraz configuration IDs.
 	IDs param.Field[[]int64] `query:"ids,required"`
 }
 
@@ -108,9 +108,9 @@ func (r HistoryConfigGetParams) URLQuery() (v url.Values) {
 type HistoryConfigGetResponseEnvelope struct {
 	Errors   []HistoryConfigGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HistoryConfigGetResponseEnvelopeMessages `json:"messages,required"`
-	// Object where keys are numericc onfiguration IDs
+	// Object where keys are numeric configuration IDs.
 	Result HistoryConfigGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success bool                                 `json:"success,required"`
 	JSON    historyConfigGetResponseEnvelopeJSON `json:"-"`
 }
