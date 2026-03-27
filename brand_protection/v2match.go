@@ -36,7 +36,9 @@ func NewV2MatchService(opts ...option.RequestOption) (r *V2MatchService) {
 	return
 }
 
-// Get paginated list of domain matches for a specific brand protection query
+// Get paginated list of domain matches for one or more brand protection queries.
+// When multiple query_ids are provided (comma-separated), matches are deduplicated
+// across queries and each match includes a matched_queries array.
 func (r *V2MatchService) Get(ctx context.Context, params V2MatchGetParams, opts ...option.RequestOption) (res *V2MatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -79,7 +81,13 @@ type V2MatchGetResponseMatch struct {
 	ScanStatus       string                               `json:"scan_status,required"`
 	ScanSubmissionID int64                                `json:"scan_submission_id,required,nullable"`
 	Source           string                               `json:"source,required,nullable"`
-	JSON             v2MatchGetResponseMatchJSON          `json:"-"`
+	// All underlying match row IDs for this domain. Only present when multiple
+	// query_ids are requested.
+	MatchIDs []int64 `json:"match_ids"`
+	// List of query IDs that produced this match. Only present when multiple query_ids
+	// are requested.
+	MatchedQueries []int64                     `json:"matched_queries"`
+	JSON           v2MatchGetResponseMatchJSON `json:"-"`
 }
 
 // v2MatchGetResponseMatchJSON contains the JSON metadata for the struct
@@ -92,6 +100,8 @@ type v2MatchGetResponseMatchJSON struct {
 	ScanStatus       apijson.Field
 	ScanSubmissionID apijson.Field
 	Source           apijson.Field
+	MatchIDs         apijson.Field
+	MatchedQueries   apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -126,8 +136,13 @@ func (r v2MatchGetResponseMatchesPublicScansJSON) RawJSON() string {
 }
 
 type V2MatchGetParams struct {
-	AccountID        param.Field[string] `path:"account_id,required"`
-	QueryID          param.Field[string] `query:"query_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Query ID or comma-separated list of Query IDs. When multiple IDs are provided,
+	// matches are deduplicated across queries and each match includes matched_queries
+	// and match_ids arrays.
+	QueryID param.Field[[]string] `query:"query_id,required"`
+	// Filter matches by domain name (substring match)
+	DomainSearch     param.Field[string] `query:"domain_search"`
 	IncludeDismissed param.Field[string] `query:"include_dismissed"`
 	IncludeDomainID  param.Field[string] `query:"include_domain_id"`
 	Limit            param.Field[string] `query:"limit"`

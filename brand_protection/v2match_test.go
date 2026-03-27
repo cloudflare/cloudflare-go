@@ -29,7 +29,8 @@ func TestV2MatchGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.BrandProtection.V2.Matches.Get(context.TODO(), brand_protection.V2MatchGetParams{
 		AccountID:        cloudflare.F("x"),
-		QueryID:          cloudflare.F("x"),
+		QueryID:          cloudflare.F([]string{"string"}),
+		DomainSearch:     cloudflare.F("domain_search"),
 		IncludeDismissed: cloudflare.F("include_dismissed"),
 		IncludeDomainID:  cloudflare.F("include_domain_id"),
 		Limit:            cloudflare.F("limit"),
