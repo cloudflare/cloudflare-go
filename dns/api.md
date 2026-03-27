@@ -89,6 +89,12 @@ Methods:
 - <code title="post /zones/{zone_id}/dns_records/scan/review">client.DNS.Records.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns#RecordService.ScanReview">ScanReview</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns#RecordScanReviewParams">RecordScanReviewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns#RecordScanReviewResponse">RecordScanReviewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="post /zones/{zone_id}/dns_records/scan/trigger">client.DNS.Records.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns#RecordService.ScanTrigger">ScanTrigger</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns#RecordScanTriggerParams">RecordScanTriggerParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/dns#RecordScanTriggerResponse">RecordScanTriggerResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## Usage
+
+### Zone
+
+### Account
+
 ## Settings
 
 ### Zone
