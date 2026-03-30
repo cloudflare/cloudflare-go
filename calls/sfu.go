@@ -43,15 +43,15 @@ func (r *SFUService) New(ctx context.Context, params SFUNewParams, opts ...optio
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/apps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Edit details for a single app.
@@ -60,19 +60,19 @@ func (r *SFUService) Update(ctx context.Context, appID string, params SFUUpdateP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all apps in the Cloudflare account
@@ -82,7 +82,7 @@ func (r *SFUService) List(ctx context.Context, query SFUListParams, opts ...opti
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/apps", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -108,19 +108,19 @@ func (r *SFUService) Delete(ctx context.Context, appID string, body SFUDeletePar
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", body.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches details for a single Calls app.
@@ -129,19 +129,19 @@ func (r *SFUService) Get(ctx context.Context, appID string, query SFUGetParams, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", query.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SFUNewResponse struct {
@@ -301,7 +301,7 @@ func (r sfuGetResponseJSON) RawJSON() string {
 
 type SFUNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short description of Calls app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
@@ -311,10 +311,10 @@ func (r SFUNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SFUNewResponseEnvelope struct {
-	Errors   []SFUNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SFUNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SFUNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SFUNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SFUNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SFUNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SFUNewResponse                `json:"result"`
 	JSON    sfuNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -339,8 +339,8 @@ func (r sfuNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SFUNewResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           SFUNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             sfuNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -387,8 +387,8 @@ func (r sfuNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SFUNewResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           SFUNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             sfuNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -451,7 +451,7 @@ func (r SFUNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SFUUpdateParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short description of Calls app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
@@ -461,10 +461,10 @@ func (r SFUUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SFUUpdateResponseEnvelope struct {
-	Errors   []SFUUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SFUUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SFUUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SFUUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SFUUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SFUUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SFUUpdateResponse                `json:"result"`
 	JSON    sfuUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -489,8 +489,8 @@ func (r sfuUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SFUUpdateResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           SFUUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             sfuUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -537,8 +537,8 @@ func (r sfuUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SFUUpdateResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           SFUUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             sfuUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -601,19 +601,19 @@ func (r SFUUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SFUListParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SFUDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SFUDeleteResponseEnvelope struct {
-	Errors   []SFUDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SFUDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SFUDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SFUDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SFUDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SFUDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SFUDeleteResponse                `json:"result"`
 	JSON    sfuDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -638,8 +638,8 @@ func (r sfuDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SFUDeleteResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           SFUDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             sfuDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -686,8 +686,8 @@ func (r sfuDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SFUDeleteResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           SFUDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             sfuDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -750,14 +750,14 @@ func (r SFUDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SFUGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SFUGetResponseEnvelope struct {
-	Errors   []SFUGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SFUGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SFUGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SFUGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SFUGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SFUGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SFUGetResponse                `json:"result"`
 	JSON    sfuGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -782,8 +782,8 @@ func (r sfuGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SFUGetResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           SFUGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             sfuGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -830,8 +830,8 @@ func (r sfuGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SFUGetResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           SFUGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             sfuGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -44,10 +44,10 @@ func (r *DatasetService) List(ctx context.Context, query DatasetListParams, opts
 	path := "radar/datasets"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves an URL to download a single dataset.
@@ -57,10 +57,10 @@ func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadPar
 	path := "radar/datasets/download"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the CSV content of a given dataset by alias or ID. When getting the
@@ -71,15 +71,15 @@ func (r *DatasetService) Get(ctx context.Context, alias string, opts ...option.R
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
 	if alias == "" {
 		err = errors.New("missing required alias parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("radar/datasets/%s", alias)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type DatasetListResponse struct {
-	Datasets []DatasetListResponseDataset `json:"datasets,required"`
+	Datasets []DatasetListResponseDataset `json:"datasets" api:"required"`
 	JSON     datasetListResponseJSON      `json:"-"`
 }
 
@@ -100,12 +100,12 @@ func (r datasetListResponseJSON) RawJSON() string {
 }
 
 type DatasetListResponseDataset struct {
-	ID          int64                          `json:"id,required"`
-	Description string                         `json:"description,required"`
-	Meta        interface{}                    `json:"meta,required"`
-	Tags        []string                       `json:"tags,required"`
-	Title       string                         `json:"title,required"`
-	Type        string                         `json:"type,required"`
+	ID          int64                          `json:"id" api:"required"`
+	Description string                         `json:"description" api:"required"`
+	Meta        interface{}                    `json:"meta" api:"required"`
+	Tags        []string                       `json:"tags" api:"required"`
+	Title       string                         `json:"title" api:"required"`
+	Type        string                         `json:"type" api:"required"`
 	JSON        datasetListResponseDatasetJSON `json:"-"`
 }
 
@@ -131,7 +131,7 @@ func (r datasetListResponseDatasetJSON) RawJSON() string {
 }
 
 type DatasetDownloadResponse struct {
-	Dataset DatasetDownloadResponseDataset `json:"dataset,required"`
+	Dataset DatasetDownloadResponseDataset `json:"dataset" api:"required"`
 	JSON    datasetDownloadResponseJSON    `json:"-"`
 }
 
@@ -152,7 +152,7 @@ func (r datasetDownloadResponseJSON) RawJSON() string {
 }
 
 type DatasetDownloadResponseDataset struct {
-	URL  string                             `json:"url,required"`
+	URL  string                             `json:"url" api:"required"`
 	JSON datasetDownloadResponseDatasetJSON `json:"-"`
 }
 
@@ -226,8 +226,8 @@ func (r DatasetListParamsFormat) IsKnown() bool {
 }
 
 type DatasetListResponseEnvelope struct {
-	Result  DatasetListResponse             `json:"result,required"`
-	Success bool                            `json:"success,required"`
+	Result  DatasetListResponse             `json:"result" api:"required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    datasetListResponseEnvelopeJSON `json:"-"`
 }
 
@@ -249,7 +249,7 @@ func (r datasetListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetDownloadParams struct {
-	DatasetID param.Field[int64] `json:"datasetId,required"`
+	DatasetID param.Field[int64] `json:"datasetId" api:"required"`
 	// Format in which results will be returned.
 	Format param.Field[DatasetDownloadParamsFormat] `query:"format"`
 }
@@ -283,7 +283,7 @@ func (r DatasetDownloadParamsFormat) IsKnown() bool {
 }
 
 type DatasetDownloadResponseEnvelope struct {
-	Result DatasetDownloadResponse             `json:"result,required"`
+	Result DatasetDownloadResponse             `json:"result" api:"required"`
 	JSON   datasetDownloadResponseEnvelopeJSON `json:"-"`
 }
 

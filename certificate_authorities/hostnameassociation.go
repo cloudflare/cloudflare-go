@@ -42,15 +42,15 @@ func (r *HostnameAssociationService) Update(ctx context.Context, params Hostname
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Hostname Associations
@@ -59,15 +59,15 @@ func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAss
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HostnameAssociation = string
@@ -130,8 +130,8 @@ func (r hostnameAssociationGetResponseJSON) RawJSON() string {
 
 type HostnameAssociationUpdateParams struct {
 	// Identifier.
-	ZoneID                 param.Field[string]         `path:"zone_id,required"`
-	TLSHostnameAssociation TLSHostnameAssociationParam `json:"tls_hostname_association,required"`
+	ZoneID                 param.Field[string]         `path:"zone_id" api:"required"`
+	TLSHostnameAssociation TLSHostnameAssociationParam `json:"tls_hostname_association" api:"required"`
 }
 
 func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -139,10 +139,10 @@ func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type HostnameAssociationUpdateResponseEnvelope struct {
-	Errors   []HostnameAssociationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameAssociationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []HostnameAssociationUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []HostnameAssociationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success HostnameAssociationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameAssociationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  HostnameAssociationUpdateResponse                `json:"result"`
 	JSON    hostnameAssociationUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -167,8 +167,8 @@ func (r hostnameAssociationUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type HostnameAssociationUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           HostnameAssociationUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             hostnameAssociationUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -215,8 +215,8 @@ func (r hostnameAssociationUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type HostnameAssociationUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           HostnameAssociationUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             hostnameAssociationUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -280,7 +280,7 @@ func (r HostnameAssociationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type HostnameAssociationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The UUID to match against for a certificate that was uploaded to the mTLS
 	// Certificate Management endpoint. If no mtls_certificate_id is given, the results
 	// will be the hostnames associated to your active Cloudflare Managed CA.
@@ -297,10 +297,10 @@ func (r HostnameAssociationGetParams) URLQuery() (v url.Values) {
 }
 
 type HostnameAssociationGetResponseEnvelope struct {
-	Errors   []HostnameAssociationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameAssociationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []HostnameAssociationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []HostnameAssociationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success HostnameAssociationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameAssociationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  HostnameAssociationGetResponse                `json:"result"`
 	JSON    hostnameAssociationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -325,8 +325,8 @@ func (r hostnameAssociationGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type HostnameAssociationGetResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           HostnameAssociationGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             hostnameAssociationGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -373,8 +373,8 @@ func (r hostnameAssociationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type HostnameAssociationGetResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           HostnameAssociationGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             hostnameAssociationGetResponseEnvelopeMessagesJSON   `json:"-"`

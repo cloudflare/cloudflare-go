@@ -43,15 +43,15 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update an existing network monitoring configuration, requires the entire
@@ -61,15 +61,15 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete an existing network monitoring configuration.
@@ -78,15 +78,15 @@ func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update fields in an existing network monitoring configuration.
@@ -95,15 +95,15 @@ func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists default sampling, router IPs and warp devices for account.
@@ -112,25 +112,25 @@ func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/config", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Configuration struct {
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
+	DefaultSampling float64 `json:"default_sampling" api:"required"`
 	// The account name.
-	Name        string                    `json:"name,required"`
-	RouterIPs   []string                  `json:"router_ips,required"`
-	WARPDevices []ConfigurationWARPDevice `json:"warp_devices,required"`
+	Name        string                    `json:"name" api:"required"`
+	RouterIPs   []string                  `json:"router_ips" api:"required"`
+	WARPDevices []ConfigurationWARPDevice `json:"warp_devices" api:"required"`
 	JSON        configurationJSON         `json:"-"`
 }
 
@@ -155,12 +155,12 @@ func (r configurationJSON) RawJSON() string {
 // Object representing a warp device with an ID and name.
 type ConfigurationWARPDevice struct {
 	// Unique identifier for the warp device.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Name of the warp device.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
 	// Only /32 addresses are currently supported.
-	RouterIP string                      `json:"router_ip,required"`
+	RouterIP string                      `json:"router_ip" api:"required"`
 	JSON     configurationWARPDeviceJSON `json:"-"`
 }
 
@@ -183,12 +183,12 @@ func (r configurationWARPDeviceJSON) RawJSON() string {
 }
 
 type ConfigNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
-	DefaultSampling param.Field[float64] `json:"default_sampling,required"`
+	DefaultSampling param.Field[float64] `json:"default_sampling" api:"required"`
 	// The account name.
-	Name        param.Field[string]                      `json:"name,required"`
+	Name        param.Field[string]                      `json:"name" api:"required"`
 	RouterIPs   param.Field[[]string]                    `json:"router_ips"`
 	WARPDevices param.Field[[]ConfigNewParamsWARPDevice] `json:"warp_devices"`
 }
@@ -200,12 +200,12 @@ func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
 // Object representing a warp device with an ID and name.
 type ConfigNewParamsWARPDevice struct {
 	// Unique identifier for the warp device.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Name of the warp device.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
 	// Only /32 addresses are currently supported.
-	RouterIP param.Field[string] `json:"router_ip,required"`
+	RouterIP param.Field[string] `json:"router_ip" api:"required"`
 }
 
 func (r ConfigNewParamsWARPDevice) MarshalJSON() (data []byte, err error) {
@@ -213,11 +213,11 @@ func (r ConfigNewParamsWARPDevice) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Configuration         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Configuration         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -256,12 +256,12 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
-	DefaultSampling param.Field[float64] `json:"default_sampling,required"`
+	DefaultSampling param.Field[float64] `json:"default_sampling" api:"required"`
 	// The account name.
-	Name        param.Field[string]                         `json:"name,required"`
+	Name        param.Field[string]                         `json:"name" api:"required"`
 	RouterIPs   param.Field[[]string]                       `json:"router_ips"`
 	WARPDevices param.Field[[]ConfigUpdateParamsWARPDevice] `json:"warp_devices"`
 }
@@ -273,12 +273,12 @@ func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 // Object representing a warp device with an ID and name.
 type ConfigUpdateParamsWARPDevice struct {
 	// Unique identifier for the warp device.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Name of the warp device.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
 	// Only /32 addresses are currently supported.
-	RouterIP param.Field[string] `json:"router_ip,required"`
+	RouterIP param.Field[string] `json:"router_ip" api:"required"`
 }
 
 func (r ConfigUpdateParamsWARPDevice) MarshalJSON() (data []byte, err error) {
@@ -286,11 +286,11 @@ func (r ConfigUpdateParamsWARPDevice) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Configuration         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Configuration         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -329,15 +329,15 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Configuration         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Configuration         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -376,7 +376,7 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
 	DefaultSampling param.Field[float64] `json:"default_sampling"`
@@ -393,12 +393,12 @@ func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
 // Object representing a warp device with an ID and name.
 type ConfigEditParamsWARPDevice struct {
 	// Unique identifier for the warp device.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Name of the warp device.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
 	// Only /32 addresses are currently supported.
-	RouterIP param.Field[string] `json:"router_ip,required"`
+	RouterIP param.Field[string] `json:"router_ip" api:"required"`
 }
 
 func (r ConfigEditParamsWARPDevice) MarshalJSON() (data []byte, err error) {
@@ -406,11 +406,11 @@ func (r ConfigEditParamsWARPDevice) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Configuration         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Configuration         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -449,15 +449,15 @@ func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Configuration         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Configuration         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`
 }
 

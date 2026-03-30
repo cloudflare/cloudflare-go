@@ -45,7 +45,7 @@ func (r *LogAuditService) List(ctx context.Context, params LogAuditListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/logs/audit", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -339,15 +339,15 @@ func (r logAuditListResponseZoneJSON) RawJSON() string {
 
 type LogAuditListParams struct {
 	// The unique id that identifies the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Limits the returned results to logs older than the specified date. This can be a
 	// date string 2019-04-30 (interpreted in UTC) or an absolute timestamp that
 	// conforms to RFC3339.
-	Before param.Field[time.Time] `query:"before,required" format:"date"`
+	Before param.Field[time.Time] `query:"before" api:"required" format:"date"`
 	// Limits the returned results to logs newer than the specified date. This can be a
 	// date string 2019-04-30 (interpreted in UTC) or an absolute timestamp that
 	// conforms to RFC3339.
-	Since          param.Field[time.Time]                        `query:"since,required" format:"date"`
+	Since          param.Field[time.Time]                        `query:"since" api:"required" format:"date"`
 	ID             param.Field[LogAuditListParamsID]             `query:"id"`
 	AccountName    param.Field[LogAuditListParamsAccountName]    `query:"account_name"`
 	ActionResult   param.Field[LogAuditListParamsActionResult]   `query:"action_result"`

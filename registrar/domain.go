@@ -43,19 +43,19 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if domainName == "" {
 		err = errors.New("missing required domain_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", params.AccountID, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List domains handled by Registrar.
@@ -65,7 +65,7 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/registrar/domains", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -91,19 +91,19 @@ func (r *DomainService) Get(ctx context.Context, domainName string, query Domain
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if domainName == "" {
 		err = errors.New("missing required domain_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", query.AccountID, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Domain struct {
@@ -167,23 +167,23 @@ func (r domainJSON) RawJSON() string {
 // Shows contact information for domain registrant.
 type DomainRegistrantContact struct {
 	// Address.
-	Address string `json:"address,required"`
+	Address string `json:"address" api:"required"`
 	// City.
-	City string `json:"city,required"`
+	City string `json:"city" api:"required"`
 	// The country in which the user lives.
-	Country string `json:"country,required,nullable"`
+	Country string `json:"country" api:"required,nullable"`
 	// User's first name
-	FirstName string `json:"first_name,required,nullable"`
+	FirstName string `json:"first_name" api:"required,nullable"`
 	// User's last name
-	LastName string `json:"last_name,required,nullable"`
+	LastName string `json:"last_name" api:"required,nullable"`
 	// Name of organization.
-	Organization string `json:"organization,required"`
+	Organization string `json:"organization" api:"required"`
 	// User's telephone number
-	Phone string `json:"phone,required,nullable"`
+	Phone string `json:"phone" api:"required,nullable"`
 	// State.
-	State string `json:"state,required"`
+	State string `json:"state" api:"required"`
 	// The zipcode or postal code where the user lives.
-	Zip string `json:"zip,required,nullable"`
+	Zip string `json:"zip" api:"required,nullable"`
 	// Contact Identifier.
 	ID string `json:"id"`
 	// Optional address line for unit, floor, suite, etc.
@@ -358,7 +358,7 @@ type DomainGetResponse = interface{}
 
 type DomainUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Auto-renew controls whether subscription is automatically renewed upon domain
 	// expiration.
 	AutoRenew param.Field[bool] `json:"auto_renew"`
@@ -373,11 +373,11 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DomainUpdateResponse  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DomainUpdateResponse  `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DomainUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -417,20 +417,20 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DomainListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DomainGetResponse     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DomainGetResponse     `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
 }
 

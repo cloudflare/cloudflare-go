@@ -43,15 +43,15 @@ func (r *MonitorGroupService) New(ctx context.Context, params MonitorGroupNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitor_groups", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify a configured monitor group.
@@ -60,19 +60,19 @@ func (r *MonitorGroupService) Update(ctx context.Context, monitorGroupID string,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorGroupID == "" {
 		err = errors.New("missing required monitor_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitor_groups/%s", params.AccountID, monitorGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List configured monitor groups.
@@ -82,7 +82,7 @@ func (r *MonitorGroupService) List(ctx context.Context, query MonitorGroupListPa
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitor_groups", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -108,19 +108,19 @@ func (r *MonitorGroupService) Delete(ctx context.Context, monitorGroupID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorGroupID == "" {
 		err = errors.New("missing required monitor_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitor_groups/%s", body.AccountID, monitorGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Apply changes to an existing monitor group, overwriting the supplied properties.
@@ -129,19 +129,19 @@ func (r *MonitorGroupService) Edit(ctx context.Context, monitorGroupID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorGroupID == "" {
 		err = errors.New("missing required monitor_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitor_groups/%s", params.AccountID, monitorGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single configured monitor group.
@@ -150,29 +150,29 @@ func (r *MonitorGroupService) Get(ctx context.Context, monitorGroupID string, qu
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorGroupID == "" {
 		err = errors.New("missing required monitor_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitor_groups/%s", query.AccountID, monitorGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type MonitorGroup struct {
 	// The ID of the Monitor Group to use for checking the health of origins within
 	// this pool.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A short description of the monitor group
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// List of monitors in this group
-	Members []MonitorGroupMember `json:"members,required"`
+	Members []MonitorGroupMember `json:"members" api:"required"`
 	// The timestamp of when the monitor group was created
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The timestamp of when the monitor group was last updated
@@ -201,14 +201,14 @@ func (r monitorGroupJSON) RawJSON() string {
 
 type MonitorGroupMember struct {
 	// Whether this monitor is enabled in the group
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	MonitorID string `json:"monitor_id,required"`
+	MonitorID string `json:"monitor_id" api:"required"`
 	// Whether this monitor is used for monitoring only (does not affect pool health)
-	MonitoringOnly bool `json:"monitoring_only,required"`
+	MonitoringOnly bool `json:"monitoring_only" api:"required"`
 	// Whether this monitor must be healthy for the pool to be considered healthy
-	MustBeHealthy bool `json:"must_be_healthy,required"`
+	MustBeHealthy bool `json:"must_be_healthy" api:"required"`
 	// The timestamp of when the monitor was added to the group
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The timestamp of when the monitor group member was last updated
@@ -240,11 +240,11 @@ func (r monitorGroupMemberJSON) RawJSON() string {
 type MonitorGroupParam struct {
 	// The ID of the Monitor Group to use for checking the health of origins within
 	// this pool.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// A short description of the monitor group
-	Description param.Field[string] `json:"description,required"`
+	Description param.Field[string] `json:"description" api:"required"`
 	// List of monitors in this group
-	Members param.Field[[]MonitorGroupMemberParam] `json:"members,required"`
+	Members param.Field[[]MonitorGroupMemberParam] `json:"members" api:"required"`
 }
 
 func (r MonitorGroupParam) MarshalJSON() (data []byte, err error) {
@@ -253,14 +253,14 @@ func (r MonitorGroupParam) MarshalJSON() (data []byte, err error) {
 
 type MonitorGroupMemberParam struct {
 	// Whether this monitor is enabled in the group
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	MonitorID param.Field[string] `json:"monitor_id,required"`
+	MonitorID param.Field[string] `json:"monitor_id" api:"required"`
 	// Whether this monitor is used for monitoring only (does not affect pool health)
-	MonitoringOnly param.Field[bool] `json:"monitoring_only,required"`
+	MonitoringOnly param.Field[bool] `json:"monitoring_only" api:"required"`
 	// Whether this monitor must be healthy for the pool to be considered healthy
-	MustBeHealthy param.Field[bool] `json:"must_be_healthy,required"`
+	MustBeHealthy param.Field[bool] `json:"must_be_healthy" api:"required"`
 }
 
 func (r MonitorGroupMemberParam) MarshalJSON() (data []byte, err error) {
@@ -269,8 +269,8 @@ func (r MonitorGroupMemberParam) MarshalJSON() (data []byte, err error) {
 
 type MonitorGroupNewParams struct {
 	// Identifier.
-	AccountID    param.Field[string] `path:"account_id,required"`
-	MonitorGroup MonitorGroupParam   `json:"monitor_group,required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
+	MonitorGroup MonitorGroupParam   `json:"monitor_group" api:"required"`
 }
 
 func (r MonitorGroupNewParams) MarshalJSON() (data []byte, err error) {
@@ -278,11 +278,11 @@ func (r MonitorGroupNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MonitorGroupNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MonitorGroup          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   MonitorGroup          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorGroupNewResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorGroupNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorGroupNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -322,8 +322,8 @@ func (r MonitorGroupNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupUpdateParams struct {
 	// Identifier.
-	AccountID    param.Field[string] `path:"account_id,required"`
-	MonitorGroup MonitorGroupParam   `json:"monitor_group,required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
+	MonitorGroup MonitorGroupParam   `json:"monitor_group" api:"required"`
 }
 
 func (r MonitorGroupUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -331,11 +331,11 @@ func (r MonitorGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MonitorGroupUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MonitorGroup          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   MonitorGroup          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorGroupUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorGroupUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -375,20 +375,20 @@ func (r MonitorGroupUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorGroupDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorGroupDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MonitorGroup          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   MonitorGroup          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorGroupDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorGroupDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -428,8 +428,8 @@ func (r MonitorGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupEditParams struct {
 	// Identifier.
-	AccountID    param.Field[string] `path:"account_id,required"`
-	MonitorGroup MonitorGroupParam   `json:"monitor_group,required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
+	MonitorGroup MonitorGroupParam   `json:"monitor_group" api:"required"`
 }
 
 func (r MonitorGroupEditParams) MarshalJSON() (data []byte, err error) {
@@ -437,11 +437,11 @@ func (r MonitorGroupEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MonitorGroupEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MonitorGroup          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   MonitorGroup          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorGroupEditResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorGroupEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorGroupEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -481,15 +481,15 @@ func (r MonitorGroupEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorGroupGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MonitorGroup          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   MonitorGroup          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorGroupGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorGroupGetResponseEnvelopeJSON    `json:"-"`
 }
 

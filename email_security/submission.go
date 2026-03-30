@@ -45,7 +45,7 @@ func (r *SubmissionService) List(ctx context.Context, params SubmissionListParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/submissions", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -69,24 +69,24 @@ type SubmissionListResponse struct {
 	// deprecated as of 2026-04-01, use `requested_at` instead.
 	//
 	// Deprecated: deprecated
-	RequestedTs           time.Time                                  `json:"requested_ts,required" format:"date-time"`
-	SubmissionID          string                                     `json:"submission_id,required"`
-	CustomerStatus        SubmissionListResponseCustomerStatus       `json:"customer_status,nullable"`
-	EscalatedAs           SubmissionListResponseEscalatedAs          `json:"escalated_as,nullable"`
-	EscalatedAt           time.Time                                  `json:"escalated_at,nullable" format:"date-time"`
-	EscalatedBy           string                                     `json:"escalated_by,nullable"`
-	EscalatedSubmissionID string                                     `json:"escalated_submission_id,nullable"`
-	OriginalDisposition   SubmissionListResponseOriginalDisposition  `json:"original_disposition,nullable"`
-	OriginalEdfHash       string                                     `json:"original_edf_hash,nullable"`
-	OriginalPostfixID     string                                     `json:"original_postfix_id,nullable"`
-	Outcome               string                                     `json:"outcome,nullable"`
-	OutcomeDisposition    SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition,nullable"`
-	RequestedAt           time.Time                                  `json:"requested_at,nullable" format:"date-time"`
-	RequestedBy           string                                     `json:"requested_by,nullable"`
-	RequestedDisposition  SubmissionListResponseRequestedDisposition `json:"requested_disposition,nullable"`
-	Status                string                                     `json:"status,nullable"`
-	Subject               string                                     `json:"subject,nullable"`
-	Type                  string                                     `json:"type,nullable"`
+	RequestedTs           time.Time                                  `json:"requested_ts" api:"required" format:"date-time"`
+	SubmissionID          string                                     `json:"submission_id" api:"required"`
+	CustomerStatus        SubmissionListResponseCustomerStatus       `json:"customer_status" api:"nullable"`
+	EscalatedAs           SubmissionListResponseEscalatedAs          `json:"escalated_as" api:"nullable"`
+	EscalatedAt           time.Time                                  `json:"escalated_at" api:"nullable" format:"date-time"`
+	EscalatedBy           string                                     `json:"escalated_by" api:"nullable"`
+	EscalatedSubmissionID string                                     `json:"escalated_submission_id" api:"nullable"`
+	OriginalDisposition   SubmissionListResponseOriginalDisposition  `json:"original_disposition" api:"nullable"`
+	OriginalEdfHash       string                                     `json:"original_edf_hash" api:"nullable"`
+	OriginalPostfixID     string                                     `json:"original_postfix_id" api:"nullable"`
+	Outcome               string                                     `json:"outcome" api:"nullable"`
+	OutcomeDisposition    SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition" api:"nullable"`
+	RequestedAt           time.Time                                  `json:"requested_at" api:"nullable" format:"date-time"`
+	RequestedBy           string                                     `json:"requested_by" api:"nullable"`
+	RequestedDisposition  SubmissionListResponseRequestedDisposition `json:"requested_disposition" api:"nullable"`
+	Status                string                                     `json:"status" api:"nullable"`
+	Subject               string                                     `json:"subject" api:"nullable"`
+	Type                  string                                     `json:"type" api:"nullable"`
 	JSON                  submissionListResponseJSON                 `json:"-"`
 }
 
@@ -233,7 +233,7 @@ func (r SubmissionListResponseRequestedDisposition) IsKnown() bool {
 
 type SubmissionListParams struct {
 	// Account Identifier
-	AccountID      param.Field[string]                             `path:"account_id,required"`
+	AccountID      param.Field[string]                             `path:"account_id" api:"required"`
 	CustomerStatus param.Field[SubmissionListParamsCustomerStatus] `query:"customer_status"`
 	// The end of the search date range. Defaults to `now` if not provided.
 	End                 param.Field[time.Time]                               `query:"end" format:"date-time"`

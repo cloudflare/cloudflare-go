@@ -52,24 +52,24 @@ func (r *ZarazService) Update(ctx context.Context, params ZarazUpdateParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/workflow", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ButtonTextTranslation struct {
 	// Object where keys are language codes.
-	AcceptAll map[string]string `json:"accept_all,required"`
+	AcceptAll map[string]string `json:"accept_all" api:"required"`
 	// Object where keys are language codes.
-	ConfirmMyChoices map[string]string `json:"confirm_my_choices,required"`
+	ConfirmMyChoices map[string]string `json:"confirm_my_choices" api:"required"`
 	// Object where keys are language codes.
-	RejectAll map[string]string         `json:"reject_all,required"`
+	RejectAll map[string]string         `json:"reject_all" api:"required"`
 	JSON      buttonTextTranslationJSON `json:"-"`
 }
 
@@ -93,11 +93,11 @@ func (r buttonTextTranslationJSON) RawJSON() string {
 
 type ButtonTextTranslationParam struct {
 	// Object where keys are language codes.
-	AcceptAll param.Field[map[string]string] `json:"accept_all,required"`
+	AcceptAll param.Field[map[string]string] `json:"accept_all" api:"required"`
 	// Object where keys are language codes.
-	ConfirmMyChoices param.Field[map[string]string] `json:"confirm_my_choices,required"`
+	ConfirmMyChoices param.Field[map[string]string] `json:"confirm_my_choices" api:"required"`
 	// Object where keys are language codes.
-	RejectAll param.Field[map[string]string] `json:"reject_all,required"`
+	RejectAll param.Field[map[string]string] `json:"reject_all" api:"required"`
 }
 
 func (r ButtonTextTranslationParam) MarshalJSON() (data []byte, err error) {
@@ -106,13 +106,13 @@ func (r ButtonTextTranslationParam) MarshalJSON() (data []byte, err error) {
 
 type NeoEvent struct {
 	// Tool event type.
-	ActionType string `json:"actionType,required"`
+	ActionType string `json:"actionType" api:"required"`
 	// List of blocking triggers IDs.
-	BlockingTriggers []string `json:"blockingTriggers,required"`
+	BlockingTriggers []string `json:"blockingTriggers" api:"required"`
 	// Event payload.
-	Data interface{} `json:"data,required"`
+	Data interface{} `json:"data" api:"required"`
 	// List of firing triggers IDs.
-	FiringTriggers []string     `json:"firingTriggers,required"`
+	FiringTriggers []string     `json:"firingTriggers" api:"required"`
 	JSON           neoEventJSON `json:"-"`
 }
 
@@ -136,13 +136,13 @@ func (r neoEventJSON) RawJSON() string {
 
 type NeoEventParam struct {
 	// Tool event type.
-	ActionType param.Field[string] `json:"actionType,required"`
+	ActionType param.Field[string] `json:"actionType" api:"required"`
 	// List of blocking triggers IDs.
-	BlockingTriggers param.Field[[]string] `json:"blockingTriggers,required"`
+	BlockingTriggers param.Field[[]string] `json:"blockingTriggers" api:"required"`
 	// Event payload.
-	Data param.Field[interface{}] `json:"data,required"`
+	Data param.Field[interface{}] `json:"data" api:"required"`
 	// List of firing triggers IDs.
-	FiringTriggers param.Field[[]string] `json:"firingTriggers,required"`
+	FiringTriggers param.Field[[]string] `json:"firingTriggers" api:"required"`
 }
 
 func (r NeoEventParam) MarshalJSON() (data []byte, err error) {
@@ -151,9 +151,9 @@ func (r NeoEventParam) MarshalJSON() (data []byte, err error) {
 
 type ZarazUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Zaraz workflow.
-	Workflow Workflow `json:"workflow,required"`
+	Workflow Workflow `json:"workflow" api:"required"`
 }
 
 func (r ZarazUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -161,12 +161,12 @@ func (r ZarazUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZarazUpdateResponseEnvelope struct {
-	Errors   []ZarazUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZarazUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZarazUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZarazUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Zaraz workflow.
-	Result Workflow `json:"result,required"`
+	Result Workflow `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    zarazUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -190,8 +190,8 @@ func (r zarazUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZarazUpdateResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           ZarazUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zarazUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -238,8 +238,8 @@ func (r zarazUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZarazUpdateResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           ZarazUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zarazUpdateResponseEnvelopeMessagesJSON   `json:"-"`

@@ -43,15 +43,15 @@ func (r *GatewayPacfileService) New(ctx context.Context, params GatewayPacfileNe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/pacfiles", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a configured Zero Trust Gateway PAC file.
@@ -60,19 +60,19 @@ func (r *GatewayPacfileService) Update(ctx context.Context, pacfileID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if pacfileID == "" {
 		err = errors.New("missing required pacfile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/pacfiles/%s", params.AccountID, pacfileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all Zero Trust Gateway PAC files for an account.
@@ -82,7 +82,7 @@ func (r *GatewayPacfileService) List(ctx context.Context, query GatewayPacfileLi
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/pacfiles", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -108,19 +108,19 @@ func (r *GatewayPacfileService) Delete(ctx context.Context, pacfileID string, bo
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if pacfileID == "" {
 		err = errors.New("missing required pacfile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/pacfiles/%s", body.AccountID, pacfileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a single Zero Trust Gateway PAC file.
@@ -129,19 +129,19 @@ func (r *GatewayPacfileService) Get(ctx context.Context, pacfileID string, query
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if pacfileID == "" {
 		err = errors.New("missing required pacfile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/pacfiles/%s", query.AccountID, pacfileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GatewayPacfileNewResponse struct {
@@ -304,11 +304,11 @@ func (r gatewayPacfileGetResponseJSON) RawJSON() string {
 }
 
 type GatewayPacfileNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Actual contents of the PAC file
-	Contents param.Field[string] `json:"contents,required"`
+	Contents param.Field[string] `json:"contents" api:"required"`
 	// Name of the PAC file.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Detailed description of the PAC file.
 	Description param.Field[string] `json:"description"`
 	// URL-friendly version of the PAC file name. If not provided, it will be
@@ -321,10 +321,10 @@ func (r GatewayPacfileNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayPacfileNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayPacfileNewResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayPacfileNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayPacfileNewResponse                `json:"result"`
 	JSON    gatewayPacfileNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -364,13 +364,13 @@ func (r GatewayPacfileNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Actual contents of the PAC file
-	Contents param.Field[string] `json:"contents,required"`
+	Contents param.Field[string] `json:"contents" api:"required"`
 	// Detailed description of the PAC file.
-	Description param.Field[string] `json:"description,required"`
+	Description param.Field[string] `json:"description" api:"required"`
 	// Name of the PAC file.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r GatewayPacfileUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -378,10 +378,10 @@ func (r GatewayPacfileUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayPacfileUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayPacfileUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayPacfileUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayPacfileUpdateResponse                `json:"result"`
 	JSON    gatewayPacfileUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -421,18 +421,18 @@ func (r GatewayPacfileUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayPacfileDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayPacfileDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayPacfileDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayPacfileDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayPacfileDeleteResponse                `json:"result"`
 	JSON    gatewayPacfileDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -472,14 +472,14 @@ func (r GatewayPacfileDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayPacfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayPacfileGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayPacfileGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayPacfileGetResponse                `json:"result"`
 	JSON    gatewayPacfileGetResponseEnvelopeJSON    `json:"-"`
 }

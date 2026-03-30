@@ -42,23 +42,23 @@ func (r *TunnelWARPConnectorConnectorService) Get(ctx context.Context, tunnelID 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s/connectors/%s", query.AccountID, tunnelID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A WARP Connector client that maintains a connection to a Cloudflare data center.
@@ -158,16 +158,16 @@ func (r TunnelWARPConnectorConnectorGetResponseHaStatus) IsKnown() bool {
 
 type TunnelWARPConnectorConnectorGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelWARPConnectorConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A WARP Connector client that maintains a connection to a Cloudflare data center.
-	Result TunnelWARPConnectorConnectorGetResponse `json:"result,required"`
+	Result TunnelWARPConnectorConnectorGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelWARPConnectorConnectorGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelWARPConnectorConnectorGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelWARPConnectorConnectorGetResponseEnvelopeJSON    `json:"-"`
 }
 

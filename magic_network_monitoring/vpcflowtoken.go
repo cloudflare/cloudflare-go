@@ -41,28 +41,28 @@ func (r *VPCFlowTokenService) New(ctx context.Context, body VPCFlowTokenNewParam
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/vpc-flows/token", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type VPCFlowTokenNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type VPCFlowTokenNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Authentication token to be used for VPC Flows export authentication.
-	Result string `json:"result,required"`
+	Result string `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success VPCFlowTokenNewResponseEnvelopeSuccess `json:"success,required"`
+	Success VPCFlowTokenNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    vpcFlowTokenNewResponseEnvelopeJSON    `json:"-"`
 }
 

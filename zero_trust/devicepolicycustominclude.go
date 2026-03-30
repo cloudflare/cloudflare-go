@@ -43,11 +43,11 @@ func (r *DevicePolicyCustomIncludeService) Update(ctx context.Context, policyID 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/include", params.AccountID, policyID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -76,11 +76,11 @@ func (r *DevicePolicyCustomIncludeService) Get(ctx context.Context, policyID str
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/include", query.AccountID, policyID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -102,8 +102,8 @@ func (r *DevicePolicyCustomIncludeService) GetAutoPaging(ctx context.Context, po
 }
 
 type DevicePolicyCustomIncludeUpdateParams struct {
-	AccountID param.Field[string]            `path:"account_id,required"`
-	Body      []SplitTunnelIncludeUnionParam `json:"body,required"`
+	AccountID param.Field[string]            `path:"account_id" api:"required"`
+	Body      []SplitTunnelIncludeUnionParam `json:"body" api:"required"`
 }
 
 func (r DevicePolicyCustomIncludeUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -111,5 +111,5 @@ func (r DevicePolicyCustomIncludeUpdateParams) MarshalJSON() (data []byte, err e
 }
 
 type DevicePolicyCustomIncludeGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

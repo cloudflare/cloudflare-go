@@ -47,15 +47,15 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_subscriptions/subscriptions", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update an existing event subscription
@@ -64,19 +64,19 @@ func (r *SubscriptionService) Update(ctx context.Context, subscriptionID string,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subscriptionID == "" {
 		err = errors.New("missing required subscription_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_subscriptions/subscriptions/%s", params.AccountID, subscriptionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a paginated list of event subscriptions with optional sorting and filtering
@@ -86,7 +86,7 @@ func (r *SubscriptionService) List(ctx context.Context, params SubscriptionListP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_subscriptions/subscriptions", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -112,19 +112,19 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subscriptionID == "" {
 		err = errors.New("missing required subscription_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_subscriptions/subscriptions/%s", body.AccountID, subscriptionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get details about an existing event subscription
@@ -133,38 +133,38 @@ func (r *SubscriptionService) Get(ctx context.Context, subscriptionID string, qu
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subscriptionID == "" {
 		err = errors.New("missing required subscription_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_subscriptions/subscriptions/%s", query.AccountID, subscriptionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SubscriptionNewResponse struct {
 	// Unique identifier for the subscription
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the subscription was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Destination configuration for the subscription
-	Destination SubscriptionNewResponseDestination `json:"destination,required"`
+	Destination SubscriptionNewResponseDestination `json:"destination" api:"required"`
 	// Whether the subscription is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// List of event types this subscription handles
-	Events []string `json:"events,required"`
+	Events []string `json:"events" api:"required"`
 	// When the subscription was last modified
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Name of the subscription
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Source configuration for the subscription
-	Source SubscriptionNewResponseSource `json:"source,required"`
+	Source SubscriptionNewResponseSource `json:"source" api:"required"`
 	JSON   subscriptionNewResponseJSON   `json:"-"`
 }
 
@@ -194,9 +194,9 @@ func (r subscriptionNewResponseJSON) RawJSON() string {
 // Destination configuration for the subscription
 type SubscriptionNewResponseDestination struct {
 	// ID of the target queue
-	QueueID string `json:"queue_id,required"`
+	QueueID string `json:"queue_id" api:"required"`
 	// Type of destination
-	Type SubscriptionNewResponseDestinationType `json:"type,required"`
+	Type SubscriptionNewResponseDestinationType `json:"type" api:"required"`
 	JSON subscriptionNewResponseDestinationJSON `json:"-"`
 }
 
@@ -692,21 +692,21 @@ func (r SubscriptionNewResponseSourceType) IsKnown() bool {
 
 type SubscriptionUpdateResponse struct {
 	// Unique identifier for the subscription
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the subscription was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Destination configuration for the subscription
-	Destination SubscriptionUpdateResponseDestination `json:"destination,required"`
+	Destination SubscriptionUpdateResponseDestination `json:"destination" api:"required"`
 	// Whether the subscription is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// List of event types this subscription handles
-	Events []string `json:"events,required"`
+	Events []string `json:"events" api:"required"`
 	// When the subscription was last modified
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Name of the subscription
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Source configuration for the subscription
-	Source SubscriptionUpdateResponseSource `json:"source,required"`
+	Source SubscriptionUpdateResponseSource `json:"source" api:"required"`
 	JSON   subscriptionUpdateResponseJSON   `json:"-"`
 }
 
@@ -736,9 +736,9 @@ func (r subscriptionUpdateResponseJSON) RawJSON() string {
 // Destination configuration for the subscription
 type SubscriptionUpdateResponseDestination struct {
 	// ID of the target queue
-	QueueID string `json:"queue_id,required"`
+	QueueID string `json:"queue_id" api:"required"`
 	// Type of destination
-	Type SubscriptionUpdateResponseDestinationType `json:"type,required"`
+	Type SubscriptionUpdateResponseDestinationType `json:"type" api:"required"`
 	JSON subscriptionUpdateResponseDestinationJSON `json:"-"`
 }
 
@@ -1238,21 +1238,21 @@ func (r SubscriptionUpdateResponseSourceType) IsKnown() bool {
 
 type SubscriptionListResponse struct {
 	// Unique identifier for the subscription
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the subscription was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Destination configuration for the subscription
-	Destination SubscriptionListResponseDestination `json:"destination,required"`
+	Destination SubscriptionListResponseDestination `json:"destination" api:"required"`
 	// Whether the subscription is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// List of event types this subscription handles
-	Events []string `json:"events,required"`
+	Events []string `json:"events" api:"required"`
 	// When the subscription was last modified
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Name of the subscription
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Source configuration for the subscription
-	Source SubscriptionListResponseSource `json:"source,required"`
+	Source SubscriptionListResponseSource `json:"source" api:"required"`
 	JSON   subscriptionListResponseJSON   `json:"-"`
 }
 
@@ -1282,9 +1282,9 @@ func (r subscriptionListResponseJSON) RawJSON() string {
 // Destination configuration for the subscription
 type SubscriptionListResponseDestination struct {
 	// ID of the target queue
-	QueueID string `json:"queue_id,required"`
+	QueueID string `json:"queue_id" api:"required"`
 	// Type of destination
-	Type SubscriptionListResponseDestinationType `json:"type,required"`
+	Type SubscriptionListResponseDestinationType `json:"type" api:"required"`
 	JSON subscriptionListResponseDestinationJSON `json:"-"`
 }
 
@@ -1782,21 +1782,21 @@ func (r SubscriptionListResponseSourceType) IsKnown() bool {
 
 type SubscriptionDeleteResponse struct {
 	// Unique identifier for the subscription
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the subscription was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Destination configuration for the subscription
-	Destination SubscriptionDeleteResponseDestination `json:"destination,required"`
+	Destination SubscriptionDeleteResponseDestination `json:"destination" api:"required"`
 	// Whether the subscription is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// List of event types this subscription handles
-	Events []string `json:"events,required"`
+	Events []string `json:"events" api:"required"`
 	// When the subscription was last modified
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Name of the subscription
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Source configuration for the subscription
-	Source SubscriptionDeleteResponseSource `json:"source,required"`
+	Source SubscriptionDeleteResponseSource `json:"source" api:"required"`
 	JSON   subscriptionDeleteResponseJSON   `json:"-"`
 }
 
@@ -1826,9 +1826,9 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 // Destination configuration for the subscription
 type SubscriptionDeleteResponseDestination struct {
 	// ID of the target queue
-	QueueID string `json:"queue_id,required"`
+	QueueID string `json:"queue_id" api:"required"`
 	// Type of destination
-	Type SubscriptionDeleteResponseDestinationType `json:"type,required"`
+	Type SubscriptionDeleteResponseDestinationType `json:"type" api:"required"`
 	JSON subscriptionDeleteResponseDestinationJSON `json:"-"`
 }
 
@@ -2328,21 +2328,21 @@ func (r SubscriptionDeleteResponseSourceType) IsKnown() bool {
 
 type SubscriptionGetResponse struct {
 	// Unique identifier for the subscription
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the subscription was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Destination configuration for the subscription
-	Destination SubscriptionGetResponseDestination `json:"destination,required"`
+	Destination SubscriptionGetResponseDestination `json:"destination" api:"required"`
 	// Whether the subscription is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// List of event types this subscription handles
-	Events []string `json:"events,required"`
+	Events []string `json:"events" api:"required"`
 	// When the subscription was last modified
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Name of the subscription
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Source configuration for the subscription
-	Source SubscriptionGetResponseSource `json:"source,required"`
+	Source SubscriptionGetResponseSource `json:"source" api:"required"`
 	JSON   subscriptionGetResponseJSON   `json:"-"`
 }
 
@@ -2372,9 +2372,9 @@ func (r subscriptionGetResponseJSON) RawJSON() string {
 // Destination configuration for the subscription
 type SubscriptionGetResponseDestination struct {
 	// ID of the target queue
-	QueueID string `json:"queue_id,required"`
+	QueueID string `json:"queue_id" api:"required"`
 	// Type of destination
-	Type SubscriptionGetResponseDestinationType `json:"type,required"`
+	Type SubscriptionGetResponseDestinationType `json:"type" api:"required"`
 	JSON subscriptionGetResponseDestinationJSON `json:"-"`
 }
 
@@ -2870,7 +2870,7 @@ func (r SubscriptionGetResponseSourceType) IsKnown() bool {
 
 type SubscriptionNewParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Destination configuration for the subscription
 	Destination param.Field[SubscriptionNewParamsDestination] `json:"destination"`
 	// Whether the subscription is active
@@ -2890,9 +2890,9 @@ func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
 // Destination configuration for the subscription
 type SubscriptionNewParamsDestination struct {
 	// ID of the target queue
-	QueueID param.Field[string] `json:"queue_id,required"`
+	QueueID param.Field[string] `json:"queue_id" api:"required"`
 	// Type of destination
-	Type param.Field[SubscriptionNewParamsDestinationType] `json:"type,required"`
+	Type param.Field[SubscriptionNewParamsDestinationType] `json:"type" api:"required"`
 }
 
 func (r SubscriptionNewParamsDestination) MarshalJSON() (data []byte, err error) {
@@ -3234,7 +3234,7 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionUpdateParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Destination configuration for the subscription
 	Destination param.Field[SubscriptionUpdateParamsDestination] `json:"destination"`
 	// Whether the subscription is active
@@ -3252,9 +3252,9 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 // Destination configuration for the subscription
 type SubscriptionUpdateParamsDestination struct {
 	// ID of the target queue
-	QueueID param.Field[string] `json:"queue_id,required"`
+	QueueID param.Field[string] `json:"queue_id" api:"required"`
 	// Type of destination
-	Type param.Field[SubscriptionUpdateParamsDestinationType] `json:"type,required"`
+	Type param.Field[SubscriptionUpdateParamsDestinationType] `json:"type" api:"required"`
 }
 
 func (r SubscriptionUpdateParamsDestination) MarshalJSON() (data []byte, err error) {
@@ -3321,7 +3321,7 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionListParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction
 	Direction param.Field[SubscriptionListParamsDirection] `query:"direction"`
 	// Field to sort by
@@ -3376,7 +3376,7 @@ func (r SubscriptionListParamsOrder) IsKnown() bool {
 
 type SubscriptionDeleteParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SubscriptionDeleteResponseEnvelope struct {
@@ -3424,7 +3424,7 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionGetParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SubscriptionGetResponseEnvelope struct {

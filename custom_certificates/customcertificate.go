@@ -48,15 +48,15 @@ func (r *CustomCertificateService) New(ctx context.Context, params CustomCertifi
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List, search, and filter all of your custom SSL certificates. The higher
@@ -68,7 +68,7 @@ func (r *CustomCertificateService) List(ctx context.Context, params CustomCertif
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -96,19 +96,19 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customCertificateID == "" {
 		err = errors.New("missing required custom_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", body.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Upload a new private key and/or PEM/CRT for the SSL certificate. Note: PATCHing
@@ -119,19 +119,19 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customCertificateID == "" {
 		err = errors.New("missing required custom_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details for a specific custom SSL certificate, including certificate
@@ -142,26 +142,26 @@ func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID 
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customCertificateID == "" {
 		err = errors.New("missing required custom_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", query.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CustomCertificate struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Identifier.
-	ZoneID string `json:"zone_id,required"`
+	ZoneID string `json:"zone_id" api:"required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -357,11 +357,11 @@ func (r customCertificateDeleteResponseJSON) RawJSON() string {
 
 type CustomCertificateNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
-	Certificate param.Field[string] `json:"certificate,required"`
+	Certificate param.Field[string] `json:"certificate" api:"required"`
 	// The zone's private key.
-	PrivateKey param.Field[string] `json:"private_key,required"`
+	PrivateKey param.Field[string] `json:"private_key" api:"required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -434,10 +434,10 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []CustomCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomCertificateNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomCertificateNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomCertificate                           `json:"result"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -462,8 +462,8 @@ func (r customCertificateNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomCertificateNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           CustomCertificateNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customCertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -510,8 +510,8 @@ func (r customCertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomCertificateNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           CustomCertificateNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customCertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -574,7 +574,7 @@ func (r CustomCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomCertificateListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether to match all search requirements or at least one (any).
 	Match param.Field[CustomCertificateListParamsMatch] `query:"match"`
 	// Page number of paginated results.
@@ -631,14 +631,14 @@ func (r CustomCertificateListParamsStatus) IsKnown() bool {
 
 type CustomCertificateDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {
-	Errors   []CustomCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomCertificateDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomCertificateDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomCertificateDeleteResponse                `json:"result"`
 	JSON    customCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -663,8 +663,8 @@ func (r customCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomCertificateDeleteResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           CustomCertificateDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customCertificateDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -711,8 +711,8 @@ func (r customCertificateDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type CustomCertificateDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           CustomCertificateDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customCertificateDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -775,7 +775,7 @@ func (r CustomCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomCertificateEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -832,10 +832,10 @@ func (r CustomCertificateEditParamsDeploy) IsKnown() bool {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []CustomCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomCertificateEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomCertificateEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomCertificate                            `json:"result"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -860,8 +860,8 @@ func (r customCertificateEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomCertificateEditResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CustomCertificateEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customCertificateEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -908,8 +908,8 @@ func (r customCertificateEditResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type CustomCertificateEditResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           CustomCertificateEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customCertificateEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -972,14 +972,14 @@ func (r CustomCertificateEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomCertificateGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []CustomCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomCertificateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomCertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomCertificate                           `json:"result"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1004,8 +1004,8 @@ func (r customCertificateGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomCertificateGetResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           CustomCertificateGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customCertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1052,8 +1052,8 @@ func (r customCertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomCertificateGetResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           CustomCertificateGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customCertificateGetResponseEnvelopeMessagesJSON   `json:"-"`

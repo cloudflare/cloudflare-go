@@ -42,15 +42,15 @@ func (r *VideoService) StorageUsage(ctx context.Context, params VideoStorageUsag
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/storage-usage", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type VideoStorageUsageResponse struct {
@@ -86,7 +86,7 @@ func (r videoStorageUsageResponseJSON) RawJSON() string {
 
 type VideoStorageUsageParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `query:"creator"`
 }
@@ -101,10 +101,10 @@ func (r VideoStorageUsageParams) URLQuery() (v url.Values) {
 }
 
 type VideoStorageUsageResponseEnvelope struct {
-	Errors   []VideoStorageUsageResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []VideoStorageUsageResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []VideoStorageUsageResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []VideoStorageUsageResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success VideoStorageUsageResponseEnvelopeSuccess `json:"success,required"`
+	Success VideoStorageUsageResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  VideoStorageUsageResponse                `json:"result"`
 	JSON    videoStorageUsageResponseEnvelopeJSON    `json:"-"`
 }
@@ -129,8 +129,8 @@ func (r videoStorageUsageResponseEnvelopeJSON) RawJSON() string {
 }
 
 type VideoStorageUsageResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           VideoStorageUsageResponseEnvelopeErrorsSource `json:"source"`
 	JSON             videoStorageUsageResponseEnvelopeErrorsJSON   `json:"-"`
@@ -177,8 +177,8 @@ func (r videoStorageUsageResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type VideoStorageUsageResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           VideoStorageUsageResponseEnvelopeMessagesSource `json:"source"`
 	JSON             videoStorageUsageResponseEnvelopeMessagesJSON   `json:"-"`

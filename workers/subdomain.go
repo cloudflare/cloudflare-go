@@ -40,15 +40,15 @@ func (r *SubdomainService) Update(ctx context.Context, params SubdomainUpdatePar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/subdomain", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes a Workers subdomain for an account.
@@ -57,11 +57,11 @@ func (r *SubdomainService) Delete(ctx context.Context, body SubdomainDeleteParam
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/subdomain", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Returns a Workers subdomain for an account.
@@ -70,19 +70,19 @@ func (r *SubdomainService) Get(ctx context.Context, query SubdomainGetParams, op
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/subdomain", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SubdomainUpdateResponse struct {
-	Subdomain string                      `json:"subdomain,required"`
+	Subdomain string                      `json:"subdomain" api:"required"`
 	JSON      subdomainUpdateResponseJSON `json:"-"`
 }
 
@@ -103,7 +103,7 @@ func (r subdomainUpdateResponseJSON) RawJSON() string {
 }
 
 type SubdomainGetResponse struct {
-	Subdomain string                   `json:"subdomain,required"`
+	Subdomain string                   `json:"subdomain" api:"required"`
 	JSON      subdomainGetResponseJSON `json:"-"`
 }
 
@@ -125,8 +125,8 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 
 type SubdomainUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Subdomain param.Field[string] `json:"subdomain,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Subdomain param.Field[string] `json:"subdomain" api:"required"`
 }
 
 func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -134,11 +134,11 @@ func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubdomainUpdateResponseEnvelope struct {
-	Errors   []SubdomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubdomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SubdomainUpdateResponse                   `json:"result,required"`
+	Errors   []SubdomainUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SubdomainUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   SubdomainUpdateResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SubdomainUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SubdomainUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subdomainUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -162,8 +162,8 @@ func (r subdomainUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SubdomainUpdateResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           SubdomainUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             subdomainUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -210,8 +210,8 @@ func (r subdomainUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SubdomainUpdateResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           SubdomainUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             subdomainUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -274,20 +274,20 @@ func (r SubdomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubdomainDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SubdomainGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SubdomainGetResponseEnvelope struct {
-	Errors   []SubdomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubdomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SubdomainGetResponse                   `json:"result,required"`
+	Errors   []SubdomainGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SubdomainGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   SubdomainGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SubdomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SubdomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subdomainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -311,8 +311,8 @@ func (r subdomainGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SubdomainGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           SubdomainGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             subdomainGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -359,8 +359,8 @@ func (r subdomainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SubdomainGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           SubdomainGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             subdomainGetResponseEnvelopeMessagesJSON   `json:"-"`

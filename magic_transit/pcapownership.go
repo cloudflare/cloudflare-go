@@ -42,15 +42,15 @@ func (r *PCAPOwnershipService) New(ctx context.Context, params PCAPOwnershipNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes buckets added to the packet captures API.
@@ -59,15 +59,15 @@ func (r *PCAPOwnershipService) Delete(ctx context.Context, ownershipID string, b
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if ownershipID == "" {
 		err = errors.New("missing required ownership_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/%s", body.AccountID, ownershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // List all buckets configured for use with PCAPs API.
@@ -77,7 +77,7 @@ func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetPa
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -103,28 +103,28 @@ func (r *PCAPOwnershipService) Validate(ctx context.Context, params PCAPOwnershi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/validate", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Ownership struct {
 	// The bucket ID associated with the packet captures API.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf string `json:"destination_conf,required"`
+	DestinationConf string `json:"destination_conf" api:"required"`
 	// The ownership challenge filename stored in the bucket.
-	Filename string `json:"filename,required"`
+	Filename string `json:"filename" api:"required"`
 	// The status of the ownership challenge. Can be pending, success or failed.
-	Status OwnershipStatus `json:"status,required"`
+	Status OwnershipStatus `json:"status" api:"required"`
 	// The RFC 3339 timestamp when the bucket was added to packet captures API.
-	Submitted string `json:"submitted,required"`
+	Submitted string `json:"submitted" api:"required"`
 	// The RFC 3339 timestamp when the bucket was validated.
 	Validated string        `json:"validated"`
 	JSON      ownershipJSON `json:"-"`
@@ -169,9 +169,9 @@ func (r OwnershipStatus) IsKnown() bool {
 
 type PCAPOwnershipNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf param.Field[string] `json:"destination_conf,required"`
+	DestinationConf param.Field[string] `json:"destination_conf" api:"required"`
 }
 
 func (r PCAPOwnershipNewParams) MarshalJSON() (data []byte, err error) {
@@ -179,11 +179,11 @@ func (r PCAPOwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPOwnershipNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Ownership             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Ownership             `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PCAPOwnershipNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PCAPOwnershipNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    pcapOwnershipNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -223,21 +223,21 @@ func (r PCAPOwnershipNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PCAPOwnershipDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PCAPOwnershipGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PCAPOwnershipValidateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf param.Field[string] `json:"destination_conf,required"`
+	DestinationConf param.Field[string] `json:"destination_conf" api:"required"`
 	// The ownership challenge filename stored in the bucket.
-	OwnershipChallenge param.Field[string] `json:"ownership_challenge,required"`
+	OwnershipChallenge param.Field[string] `json:"ownership_challenge" api:"required"`
 }
 
 func (r PCAPOwnershipValidateParams) MarshalJSON() (data []byte, err error) {
@@ -245,11 +245,11 @@ func (r PCAPOwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPOwnershipValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Ownership             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Ownership             `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PCAPOwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
+	Success PCAPOwnershipValidateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeJSON    `json:"-"`
 }
 

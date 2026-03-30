@@ -42,35 +42,35 @@ func (r *EventDetailService) Get(ctx context.Context, waitingRoomID string, even
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s/details", query.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EventQueryParam struct {
 	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime param.Field[string] `json:"event_end_time,required"`
+	EventEndTime param.Field[string] `json:"event_end_time" api:"required"`
 	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
 	// users will be processed with the event's configuration. The start time must be
 	// at least one minute before `event_end_time`.
-	EventStartTime param.Field[string] `json:"event_start_time,required"`
+	EventStartTime param.Field[string] `json:"event_start_time" api:"required"`
 	// A unique name to identify the event. Only alphanumeric characters, hyphens and
 	// underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// If set, the event will override the waiting room's `custom_page_html` property
 	// while it is active. If null, the event will inherit it.
 	CustomPageHTML param.Field[string] `json:"custom_page_html"`
@@ -176,7 +176,7 @@ type EventDetailGetResponse struct {
 	// An ISO 8601 timestamp that marks when to begin queueing all users before the
 	// event starts. The prequeue must start at least five minutes before
 	// `event_start_time`.
-	PrequeueStartTime string `json:"prequeue_start_time,nullable"`
+	PrequeueStartTime string `json:"prequeue_start_time" api:"nullable"`
 	QueueingMethod    string `json:"queueing_method"`
 	SessionDuration   int64  `json:"session_duration"`
 	// If enabled, users in the prequeue will be shuffled randomly at the
@@ -226,11 +226,11 @@ func (r eventDetailGetResponseJSON) RawJSON() string {
 
 type EventDetailGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type EventDetailGetResponseEnvelope struct {
-	Result EventDetailGetResponse             `json:"result,required"`
+	Result EventDetailGetResponse             `json:"result" api:"required"`
 	JSON   eventDetailGetResponseEnvelopeJSON `json:"-"`
 }
 

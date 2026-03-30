@@ -61,15 +61,15 @@ func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists short-lived certificate CAs and their public keys.
@@ -137,15 +137,15 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, b
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a short-lived certificate CA and its public key.
@@ -172,15 +172,15 @@ func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, quer
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CA struct {
@@ -241,10 +241,10 @@ type AccessApplicationCANewParams struct {
 }
 
 type AccessApplicationCANewResponseEnvelope struct {
-	Errors   []AccessApplicationCANewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCANewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationCANewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationCANewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CA                                            `json:"result"`
 	JSON    accessApplicationCANewResponseEnvelopeJSON    `json:"-"`
 }
@@ -269,8 +269,8 @@ func (r accessApplicationCANewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationCANewResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessApplicationCANewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationCANewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -317,8 +317,8 @@ func (r accessApplicationCANewResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type AccessApplicationCANewResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AccessApplicationCANewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationCANewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -407,10 +407,10 @@ type AccessApplicationCADeleteParams struct {
 }
 
 type AccessApplicationCADeleteResponseEnvelope struct {
-	Errors   []AccessApplicationCADeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCADeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationCADeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationCADeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationCADeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationCADeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationCADeleteResponse                `json:"result"`
 	JSON    accessApplicationCADeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -435,8 +435,8 @@ func (r accessApplicationCADeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationCADeleteResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           AccessApplicationCADeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationCADeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -483,8 +483,8 @@ func (r accessApplicationCADeleteResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type AccessApplicationCADeleteResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           AccessApplicationCADeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationCADeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -554,10 +554,10 @@ type AccessApplicationCAGetParams struct {
 }
 
 type AccessApplicationCAGetResponseEnvelope struct {
-	Errors   []AccessApplicationCAGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCAGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationCAGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationCAGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CA                                            `json:"result"`
 	JSON    accessApplicationCAGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -582,8 +582,8 @@ func (r accessApplicationCAGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationCAGetResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessApplicationCAGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationCAGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -630,8 +630,8 @@ func (r accessApplicationCAGetResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type AccessApplicationCAGetResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AccessApplicationCAGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationCAGetResponseEnvelopeMessagesJSON   `json:"-"`

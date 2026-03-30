@@ -54,15 +54,15 @@ func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured waiting room.
@@ -71,19 +71,19 @@ func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists waiting rooms for account or zone.
@@ -133,19 +133,19 @@ func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, b
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", body.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patches a configured waiting room.
@@ -154,19 +154,19 @@ func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single configured waiting room.
@@ -175,19 +175,19 @@ func (r *WaitingRoomService) Get(ctx context.Context, waitingRoomID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", query.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AdditionalRoutes struct {
@@ -333,22 +333,22 @@ type QueryParam struct {
 	// The host name to which the waiting room will be applied (no wildcards). Please
 	// do not include the scheme (http:// or https://). The host and path combination
 	// must be unique.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// A unique name to identify the waiting room. Only alphanumeric characters,
 	// hyphens and underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Sets the number of new users that will be let into the route every minute. This
 	// value is used as baseline for the number of users that are let in per minute. So
 	// it is possible that there is a little more or little less traffic coming to the
 	// route based on the traffic patterns at that time around the world.
-	NewUsersPerMinute param.Field[int64] `json:"new_users_per_minute,required"`
+	NewUsersPerMinute param.Field[int64] `json:"new_users_per_minute" api:"required"`
 	// Sets the total number of active user sessions on the route at a point in time. A
 	// route is a combination of host and path on which a waiting room is available.
 	// This value is used as a baseline for the total number of active user sessions on
 	// the route. It is possible to have a situation where there are more or less
 	// active users sessions on the route based on the traffic patterns at that time
 	// around the world.
-	TotalActiveUsers param.Field[int64] `json:"total_active_users,required"`
+	TotalActiveUsers param.Field[int64] `json:"total_active_users" api:"required"`
 	// Only available for the Waiting Room Advanced subscription. Additional hostname
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
@@ -996,9 +996,9 @@ type WaitingRoom struct {
 	// route based on the traffic patterns at that time around the world.
 	NewUsersPerMinute int64 `json:"new_users_per_minute"`
 	// An ISO 8601 timestamp that marks when the next event will begin queueing.
-	NextEventPrequeueStartTime string `json:"next_event_prequeue_start_time,nullable"`
+	NextEventPrequeueStartTime string `json:"next_event_prequeue_start_time" api:"nullable"`
 	// An ISO 8601 timestamp that marks when the next event will start.
-	NextEventStartTime string `json:"next_event_start_time,nullable"`
+	NextEventStartTime string `json:"next_event_start_time" api:"nullable"`
 	// Sets the path within the host to enable the waiting room on. The waiting room
 	// will be enabled for all subpaths as well. If there are two waiting rooms on the
 	// same subpath, the waiting room for the most specific path will be chosen.
@@ -1300,8 +1300,8 @@ func (r waitingRoomDeleteResponseJSON) RawJSON() string {
 
 type WaitingRoomNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Query  QueryParam          `json:"query,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Query  QueryParam          `json:"query" api:"required"`
 }
 
 func (r WaitingRoomNewParams) MarshalJSON() (data []byte, err error) {
@@ -1309,7 +1309,7 @@ func (r WaitingRoomNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomNewResponseEnvelope struct {
-	Result WaitingRoom                        `json:"result,required"`
+	Result WaitingRoom                        `json:"result" api:"required"`
 	JSON   waitingRoomNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1331,8 +1331,8 @@ func (r waitingRoomNewResponseEnvelopeJSON) RawJSON() string {
 
 type WaitingRoomUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Query  QueryParam          `json:"query,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Query  QueryParam          `json:"query" api:"required"`
 }
 
 func (r WaitingRoomUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1340,7 +1340,7 @@ func (r WaitingRoomUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomUpdateResponseEnvelope struct {
-	Result WaitingRoom                           `json:"result,required"`
+	Result WaitingRoom                           `json:"result" api:"required"`
 	JSON   waitingRoomUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1381,11 +1381,11 @@ func (r WaitingRoomListParams) URLQuery() (v url.Values) {
 
 type WaitingRoomDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type WaitingRoomDeleteResponseEnvelope struct {
-	Result WaitingRoomDeleteResponse             `json:"result,required"`
+	Result WaitingRoomDeleteResponse             `json:"result" api:"required"`
 	JSON   waitingRoomDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1407,8 +1407,8 @@ func (r waitingRoomDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type WaitingRoomEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Query  QueryParam          `json:"query,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Query  QueryParam          `json:"query" api:"required"`
 }
 
 func (r WaitingRoomEditParams) MarshalJSON() (data []byte, err error) {
@@ -1416,7 +1416,7 @@ func (r WaitingRoomEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomEditResponseEnvelope struct {
-	Result WaitingRoom                         `json:"result,required"`
+	Result WaitingRoom                         `json:"result" api:"required"`
 	JSON   waitingRoomEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1438,11 +1438,11 @@ func (r waitingRoomEditResponseEnvelopeJSON) RawJSON() string {
 
 type WaitingRoomGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type WaitingRoomGetResponseEnvelope struct {
-	Result WaitingRoom                        `json:"result,required"`
+	Result WaitingRoom                        `json:"result" api:"required"`
 	JSON   waitingRoomGetResponseEnvelopeJSON `json:"-"`
 }
 

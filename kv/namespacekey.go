@@ -47,11 +47,11 @@ func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, para
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/keys", params.AccountID, namespaceID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -80,19 +80,19 @@ func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk/delete", params.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve up to 100 KV pairs from the namespace. Keys must contain text-based
@@ -105,19 +105,19 @@ func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk/get", params.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Write multiple keys and values at once. Body should be an array of up to 10,000
@@ -133,19 +133,19 @@ func (r *NamespaceKeyService) BulkUpdate(ctx context.Context, namespaceID string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A name for a value. A value stored under a given key may be retrieved via the
@@ -153,7 +153,7 @@ func (r *NamespaceKeyService) BulkUpdate(ctx context.Context, namespaceID string
 type Key struct {
 	// A key's name. The name may be at most 512 bytes. All printable, non-whitespace
 	// characters are valid. Use percent-encoding to define key names as part of a URL.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The time, measured in number of seconds since the UNIX epoch, at which the key
 	// will expire. This property is omitted for keys that will not expire.
 	Expiration float64 `json:"expiration"`
@@ -357,9 +357,9 @@ func (r NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadata) implement
 
 type NamespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValue struct {
 	// The metadata associated with the key.
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The value associated with the key.
-	Value interface{} `json:"value,required"`
+	Value interface{} `json:"value" api:"required"`
 	// Expires the key at a certain time, measured in number of seconds since the UNIX
 	// epoch.
 	Expiration float64                                                                `json:"expiration"`
@@ -412,7 +412,7 @@ func (r namespaceKeyBulkUpdateResponseJSON) RawJSON() string {
 
 type NamespaceKeyListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records if the amount of list results was limited by the limit
 	// parameter. A valid value for the cursor can be obtained from the `cursors`
@@ -436,8 +436,8 @@ func (r NamespaceKeyListParams) URLQuery() (v url.Values) {
 
 type NamespaceKeyBulkDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      []string            `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      []string            `json:"body" api:"required"`
 }
 
 func (r NamespaceKeyBulkDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -445,11 +445,11 @@ func (r NamespaceKeyBulkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceKeyBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success NamespaceKeyBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceKeyBulkDeleteResponse                `json:"result,nullable"`
+	Success NamespaceKeyBulkDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  NamespaceKeyBulkDeleteResponse                `json:"result" api:"nullable"`
 	JSON    namespaceKeyBulkDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -489,9 +489,9 @@ func (r NamespaceKeyBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceKeyBulkGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of keys to retrieve (maximum of 100).
-	Keys param.Field[[]string] `json:"keys,required"`
+	Keys param.Field[[]string] `json:"keys" api:"required"`
 	// Whether to parse JSON values in the response.
 	Type param.Field[NamespaceKeyBulkGetParamsType] `json:"type"`
 	// Whether to include metadata in the response.
@@ -519,11 +519,11 @@ func (r NamespaceKeyBulkGetParamsType) IsKnown() bool {
 }
 
 type NamespaceKeyBulkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success NamespaceKeyBulkGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceKeyBulkGetResponse                `json:"result,nullable"`
+	Success NamespaceKeyBulkGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  NamespaceKeyBulkGetResponse                `json:"result" api:"nullable"`
 	JSON    namespaceKeyBulkGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -563,8 +563,8 @@ func (r NamespaceKeyBulkGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceKeyBulkUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string]                `path:"account_id,required"`
-	Body      []NamespaceKeyBulkUpdateParamsBody `json:"body,required"`
+	AccountID param.Field[string]                `path:"account_id" api:"required"`
+	Body      []NamespaceKeyBulkUpdateParamsBody `json:"body" api:"required"`
 }
 
 func (r NamespaceKeyBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -574,9 +574,9 @@ func (r NamespaceKeyBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 type NamespaceKeyBulkUpdateParamsBody struct {
 	// A key's name. The name may be at most 512 bytes. All printable, non-whitespace
 	// characters are valid.
-	Key param.Field[string] `json:"key,required"`
+	Key param.Field[string] `json:"key" api:"required"`
 	// A UTF-8 encoded string to be stored, up to 25 MiB in length.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 	// Indicates whether or not the server should base64 decode the value before
 	// storing it. Useful for writing values that wouldn't otherwise be valid JSON
 	// strings, such as images.
@@ -595,11 +595,11 @@ func (r NamespaceKeyBulkUpdateParamsBody) MarshalJSON() (data []byte, err error)
 }
 
 type NamespaceKeyBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success NamespaceKeyBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceKeyBulkUpdateResponse                `json:"result,nullable"`
+	Success NamespaceKeyBulkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  NamespaceKeyBulkUpdateResponse                `json:"result" api:"nullable"`
 	JSON    namespaceKeyBulkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

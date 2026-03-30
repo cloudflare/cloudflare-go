@@ -41,33 +41,33 @@ func (r *LabelUserResourceOperationService) Update(ctx context.Context, name str
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if name == "" {
 		err = errors.New("missing required name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels/user/%s/resources/operation", params.ZoneID, name)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type LabelUserResourceOperationUpdateResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelUserResourceOperationUpdateResponseSource `json:"source,required"`
+	Source LabelUserResourceOperationUpdateResponseSource `json:"source" api:"required"`
 	// Provides counts of what resources are linked to this label
 	MappedResources interface{}                                  `json:"mapped_resources"`
 	JSON            labelUserResourceOperationUpdateResponseJSON `json:"-"`
@@ -114,9 +114,9 @@ func (r LabelUserResourceOperationUpdateResponseSource) IsKnown() bool {
 
 type LabelUserResourceOperationUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Operation IDs selector
-	Selector param.Field[LabelUserResourceOperationUpdateParamsSelector] `json:"selector,required"`
+	Selector param.Field[LabelUserResourceOperationUpdateParamsSelector] `json:"selector" api:"required"`
 }
 
 func (r LabelUserResourceOperationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -125,7 +125,7 @@ func (r LabelUserResourceOperationUpdateParams) MarshalJSON() (data []byte, err 
 
 // Operation IDs selector
 type LabelUserResourceOperationUpdateParamsSelector struct {
-	Include param.Field[LabelUserResourceOperationUpdateParamsSelectorInclude] `json:"include,required"`
+	Include param.Field[LabelUserResourceOperationUpdateParamsSelectorInclude] `json:"include" api:"required"`
 }
 
 func (r LabelUserResourceOperationUpdateParamsSelector) MarshalJSON() (data []byte, err error) {
@@ -133,7 +133,7 @@ func (r LabelUserResourceOperationUpdateParamsSelector) MarshalJSON() (data []by
 }
 
 type LabelUserResourceOperationUpdateParamsSelectorInclude struct {
-	OperationIDs param.Field[[]string] `json:"operation_ids,required"`
+	OperationIDs param.Field[[]string] `json:"operation_ids" api:"required"`
 }
 
 func (r LabelUserResourceOperationUpdateParamsSelectorInclude) MarshalJSON() (data []byte, err error) {
@@ -141,11 +141,11 @@ func (r LabelUserResourceOperationUpdateParamsSelectorInclude) MarshalJSON() (da
 }
 
 type LabelUserResourceOperationUpdateResponseEnvelope struct {
-	Errors   Message                                  `json:"errors,required"`
-	Messages Message                                  `json:"messages,required"`
-	Result   LabelUserResourceOperationUpdateResponse `json:"result,required"`
+	Errors   Message                                  `json:"errors" api:"required"`
+	Messages Message                                  `json:"messages" api:"required"`
+	Result   LabelUserResourceOperationUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LabelUserResourceOperationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success LabelUserResourceOperationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    labelUserResourceOperationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

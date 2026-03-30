@@ -43,15 +43,15 @@ func (r *AnalyticsService) GetOrgAnalytics(ctx context.Context, appID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/analytics/daywise", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type AnalyticsGetOrgAnalyticsResponse struct {
@@ -218,7 +218,7 @@ func (r analyticsGetOrgAnalyticsResponseDataSessionStatsDayStatJSON) RawJSON() s
 
 type AnalyticsGetOrgAnalyticsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// end date in YYYY-MM-DD format
 	EndDate param.Field[string] `query:"end_date"`
 	// start date in YYYY-MM-DD format

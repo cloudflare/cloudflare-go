@@ -44,15 +44,15 @@ func (r *AccessInfrastructureTargetService) New(ctx context.Context, params Acce
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update target
@@ -61,19 +61,19 @@ func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if targetID == "" {
 		err = errors.New("missing required target_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/%s", params.AccountID, targetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists and sorts an account’s targets. Filters are optional and are ANDed
@@ -84,7 +84,7 @@ func (r *AccessInfrastructureTargetService) List(ctx context.Context, params Acc
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -111,15 +111,15 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if targetID == "" {
 		err = errors.New("missing required target_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/%s", body.AccountID, targetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Removes one or more targets.
@@ -130,11 +130,11 @@ func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Removes one or more targets.
@@ -143,11 +143,11 @@ func (r *AccessInfrastructureTargetService) BulkDeleteV2(ctx context.Context, pa
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch_delete", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
-	return
+	return err
 }
 
 // Adds one or more targets.
@@ -157,7 +157,7 @@ func (r *AccessInfrastructureTargetService) BulkUpdate(ctx context.Context, para
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -183,32 +183,32 @@ func (r *AccessInfrastructureTargetService) Get(ctx context.Context, targetID st
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if targetID == "" {
 		err = errors.New("missing required target_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/infrastructure/targets/%s", query.AccountID, targetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessInfrastructureTargetNewResponse struct {
 	// Target identifier
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Date and time at which the target was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A non-unique field that refers to a target
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP AccessInfrastructureTargetNewResponseIP `json:"ip,required"`
+	IP AccessInfrastructureTargetNewResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                 `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
 	JSON       accessInfrastructureTargetNewResponseJSON `json:"-"`
 }
 
@@ -314,15 +314,15 @@ func (r accessInfrastructureTargetNewResponseIpipv6JSON) RawJSON() string {
 
 type AccessInfrastructureTargetUpdateResponse struct {
 	// Target identifier
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Date and time at which the target was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A non-unique field that refers to a target
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP AccessInfrastructureTargetUpdateResponseIP `json:"ip,required"`
+	IP AccessInfrastructureTargetUpdateResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                    `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time                                    `json:"modified_at" api:"required" format:"date-time"`
 	JSON       accessInfrastructureTargetUpdateResponseJSON `json:"-"`
 }
 
@@ -428,15 +428,15 @@ func (r accessInfrastructureTargetUpdateResponseIpipv6JSON) RawJSON() string {
 
 type AccessInfrastructureTargetListResponse struct {
 	// Target identifier
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Date and time at which the target was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A non-unique field that refers to a target
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP AccessInfrastructureTargetListResponseIP `json:"ip,required"`
+	IP AccessInfrastructureTargetListResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                  `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
 	JSON       accessInfrastructureTargetListResponseJSON `json:"-"`
 }
 
@@ -542,15 +542,15 @@ func (r accessInfrastructureTargetListResponseIpipv6JSON) RawJSON() string {
 
 type AccessInfrastructureTargetBulkUpdateResponse struct {
 	// Target identifier
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Date and time at which the target was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A non-unique field that refers to a target
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP AccessInfrastructureTargetBulkUpdateResponseIP `json:"ip,required"`
+	IP AccessInfrastructureTargetBulkUpdateResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                        `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time                                        `json:"modified_at" api:"required" format:"date-time"`
 	JSON       accessInfrastructureTargetBulkUpdateResponseJSON `json:"-"`
 }
 
@@ -656,15 +656,15 @@ func (r accessInfrastructureTargetBulkUpdateResponseIpipv6JSON) RawJSON() string
 
 type AccessInfrastructureTargetGetResponse struct {
 	// Target identifier
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Date and time at which the target was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A non-unique field that refers to a target
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP AccessInfrastructureTargetGetResponseIP `json:"ip,required"`
+	IP AccessInfrastructureTargetGetResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                 `json:"modified_at,required" format:"date-time"`
+	ModifiedAt time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
 	JSON       accessInfrastructureTargetGetResponseJSON `json:"-"`
 }
 
@@ -770,13 +770,13 @@ func (r accessInfrastructureTargetGetResponseIpipv6JSON) RawJSON() string {
 
 type AccessInfrastructureTargetNewParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A non-unique field that refers to a target. Case insensitive, maximum length of
 	// 255 characters, supports the use of special characters dash and period, does not
 	// support spaces, and must start and end with an alphanumeric character.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP param.Field[AccessInfrastructureTargetNewParamsIP] `json:"ip,required"`
+	IP param.Field[AccessInfrastructureTargetNewParamsIP] `json:"ip" api:"required"`
 }
 
 func (r AccessInfrastructureTargetNewParams) MarshalJSON() (data []byte, err error) {
@@ -822,10 +822,10 @@ func (r AccessInfrastructureTargetNewParamsIPIPV6) MarshalJSON() (data []byte, e
 }
 
 type AccessInfrastructureTargetNewResponseEnvelope struct {
-	Errors   []AccessInfrastructureTargetNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessInfrastructureTargetNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessInfrastructureTargetNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessInfrastructureTargetNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessInfrastructureTargetNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessInfrastructureTargetNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessInfrastructureTargetNewResponse                `json:"result"`
 	JSON    accessInfrastructureTargetNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -850,8 +850,8 @@ func (r accessInfrastructureTargetNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessInfrastructureTargetNewResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           AccessInfrastructureTargetNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessInfrastructureTargetNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -899,8 +899,8 @@ func (r accessInfrastructureTargetNewResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type AccessInfrastructureTargetNewResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           AccessInfrastructureTargetNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessInfrastructureTargetNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -964,13 +964,13 @@ func (r AccessInfrastructureTargetNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessInfrastructureTargetUpdateParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A non-unique field that refers to a target. Case insensitive, maximum length of
 	// 255 characters, supports the use of special characters dash and period, does not
 	// support spaces, and must start and end with an alphanumeric character.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP param.Field[AccessInfrastructureTargetUpdateParamsIP] `json:"ip,required"`
+	IP param.Field[AccessInfrastructureTargetUpdateParamsIP] `json:"ip" api:"required"`
 }
 
 func (r AccessInfrastructureTargetUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1016,10 +1016,10 @@ func (r AccessInfrastructureTargetUpdateParamsIPIPV6) MarshalJSON() (data []byte
 }
 
 type AccessInfrastructureTargetUpdateResponseEnvelope struct {
-	Errors   []AccessInfrastructureTargetUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessInfrastructureTargetUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessInfrastructureTargetUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessInfrastructureTargetUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessInfrastructureTargetUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessInfrastructureTargetUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessInfrastructureTargetUpdateResponse                `json:"result"`
 	JSON    accessInfrastructureTargetUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1044,8 +1044,8 @@ func (r accessInfrastructureTargetUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessInfrastructureTargetUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           AccessInfrastructureTargetUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessInfrastructureTargetUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1093,8 +1093,8 @@ func (r accessInfrastructureTargetUpdateResponseEnvelopeErrorsSourceJSON) RawJSO
 }
 
 type AccessInfrastructureTargetUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                          `json:"code,required"`
-	Message          string                                                         `json:"message,required"`
+	Code             int64                                                          `json:"code" api:"required"`
+	Message          string                                                         `json:"message" api:"required"`
 	DocumentationURL string                                                         `json:"documentation_url"`
 	Source           AccessInfrastructureTargetUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessInfrastructureTargetUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1159,7 +1159,7 @@ func (r AccessInfrastructureTargetUpdateResponseEnvelopeSuccess) IsKnown() bool 
 
 type AccessInfrastructureTargetListParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Date and time at which the target was created after (inclusive)
 	CreatedAfter param.Field[time.Time] `query:"created_after" format:"date-time"`
 	// Date and time at which the target was created before (inclusive)
@@ -1252,19 +1252,19 @@ func (r AccessInfrastructureTargetListParamsOrder) IsKnown() bool {
 
 type AccessInfrastructureTargetDeleteParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessInfrastructureTargetBulkDeleteParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessInfrastructureTargetBulkDeleteV2Params struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List of target IDs to bulk delete
-	TargetIDs param.Field[[]string] `json:"target_ids,required" format:"uuid"`
+	TargetIDs param.Field[[]string] `json:"target_ids" api:"required" format:"uuid"`
 }
 
 func (r AccessInfrastructureTargetBulkDeleteV2Params) MarshalJSON() (data []byte, err error) {
@@ -1273,8 +1273,8 @@ func (r AccessInfrastructureTargetBulkDeleteV2Params) MarshalJSON() (data []byte
 
 type AccessInfrastructureTargetBulkUpdateParams struct {
 	// Account identifier
-	AccountID param.Field[string]                              `path:"account_id,required"`
-	Body      []AccessInfrastructureTargetBulkUpdateParamsBody `json:"body,required"`
+	AccountID param.Field[string]                              `path:"account_id" api:"required"`
+	Body      []AccessInfrastructureTargetBulkUpdateParamsBody `json:"body" api:"required"`
 }
 
 func (r AccessInfrastructureTargetBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1285,9 +1285,9 @@ type AccessInfrastructureTargetBulkUpdateParamsBody struct {
 	// A non-unique field that refers to a target. Case insensitive, maximum length of
 	// 255 characters, supports the use of special characters dash and period, does not
 	// support spaces, and must start and end with an alphanumeric character.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
-	IP param.Field[AccessInfrastructureTargetBulkUpdateParamsBodyIP] `json:"ip,required"`
+	IP param.Field[AccessInfrastructureTargetBulkUpdateParamsBodyIP] `json:"ip" api:"required"`
 }
 
 func (r AccessInfrastructureTargetBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -1334,14 +1334,14 @@ func (r AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV6) MarshalJSON() (dat
 
 type AccessInfrastructureTargetGetParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessInfrastructureTargetGetResponseEnvelope struct {
-	Errors   []AccessInfrastructureTargetGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessInfrastructureTargetGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessInfrastructureTargetGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessInfrastructureTargetGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessInfrastructureTargetGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessInfrastructureTargetGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessInfrastructureTargetGetResponse                `json:"result"`
 	JSON    accessInfrastructureTargetGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1366,8 +1366,8 @@ func (r accessInfrastructureTargetGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessInfrastructureTargetGetResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           AccessInfrastructureTargetGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessInfrastructureTargetGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1415,8 +1415,8 @@ func (r accessInfrastructureTargetGetResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type AccessInfrastructureTargetGetResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           AccessInfrastructureTargetGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessInfrastructureTargetGetResponseEnvelopeMessagesJSON   `json:"-"`

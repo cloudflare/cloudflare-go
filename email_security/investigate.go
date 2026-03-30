@@ -62,7 +62,7 @@ func (r *InvestigateService) List(ctx context.Context, params InvestigateListPar
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -91,60 +91,60 @@ func (r *InvestigateService) Get(ctx context.Context, postfixID string, query In
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if postfixID == "" {
 		err = errors.New("missing required postfix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s", query.AccountID, postfixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InvestigateListResponse struct {
-	ID                string      `json:"id,required"`
-	ActionLog         interface{} `json:"action_log,required"`
-	ClientRecipients  []string    `json:"client_recipients,required"`
-	DetectionReasons  []string    `json:"detection_reasons,required"`
-	IsPhishSubmission bool        `json:"is_phish_submission,required"`
-	IsQuarantined     bool        `json:"is_quarantined,required"`
+	ID                string      `json:"id" api:"required"`
+	ActionLog         interface{} `json:"action_log" api:"required"`
+	ClientRecipients  []string    `json:"client_recipients" api:"required"`
+	DetectionReasons  []string    `json:"detection_reasons" api:"required"`
+	IsPhishSubmission bool        `json:"is_phish_submission" api:"required"`
+	IsQuarantined     bool        `json:"is_quarantined" api:"required"`
 	// The identifier of the message.
-	PostfixID  string                            `json:"postfix_id,required"`
-	Properties InvestigateListResponseProperties `json:"properties,required"`
+	PostfixID  string                            `json:"postfix_id" api:"required"`
+	Properties InvestigateListResponseProperties `json:"properties" api:"required"`
 	// Deprecated, use `scanned_at` instead
 	//
 	// Deprecated: deprecated
-	Ts                     string                                         `json:"ts,required"`
-	AlertID                string                                         `json:"alert_id,nullable"`
-	DeliveryMode           InvestigateListResponseDeliveryMode            `json:"delivery_mode,nullable"`
-	EdfHash                string                                         `json:"edf_hash,nullable"`
-	EnvelopeFrom           string                                         `json:"envelope_from,nullable"`
-	EnvelopeTo             []string                                       `json:"envelope_to,nullable"`
-	FinalDisposition       InvestigateListResponseFinalDisposition        `json:"final_disposition,nullable"`
-	Findings               []InvestigateListResponseFinding               `json:"findings,nullable"`
-	From                   string                                         `json:"from,nullable"`
-	FromName               string                                         `json:"from_name,nullable"`
-	HtmltextStructureHash  string                                         `json:"htmltext_structure_hash,nullable"`
-	MessageID              string                                         `json:"message_id,nullable"`
+	Ts                     string                                         `json:"ts" api:"required"`
+	AlertID                string                                         `json:"alert_id" api:"nullable"`
+	DeliveryMode           InvestigateListResponseDeliveryMode            `json:"delivery_mode" api:"nullable"`
+	EdfHash                string                                         `json:"edf_hash" api:"nullable"`
+	EnvelopeFrom           string                                         `json:"envelope_from" api:"nullable"`
+	EnvelopeTo             []string                                       `json:"envelope_to" api:"nullable"`
+	FinalDisposition       InvestigateListResponseFinalDisposition        `json:"final_disposition" api:"nullable"`
+	Findings               []InvestigateListResponseFinding               `json:"findings" api:"nullable"`
+	From                   string                                         `json:"from" api:"nullable"`
+	FromName               string                                         `json:"from_name" api:"nullable"`
+	HtmltextStructureHash  string                                         `json:"htmltext_structure_hash" api:"nullable"`
+	MessageID              string                                         `json:"message_id" api:"nullable"`
 	PostDeliveryOperations []InvestigateListResponsePostDeliveryOperation `json:"post_delivery_operations"`
-	PostfixIDOutbound      string                                         `json:"postfix_id_outbound,nullable"`
-	Replyto                string                                         `json:"replyto,nullable"`
+	PostfixIDOutbound      string                                         `json:"postfix_id_outbound" api:"nullable"`
+	Replyto                string                                         `json:"replyto" api:"nullable"`
 	ScannedAt              time.Time                                      `json:"scanned_at" format:"date-time"`
 	SentAt                 time.Time                                      `json:"sent_at" format:"date-time"`
 	// Deprecated, use `sent_at` instead
 	//
 	// Deprecated: deprecated
-	SentDate         string                            `json:"sent_date,nullable"`
-	Subject          string                            `json:"subject,nullable"`
-	ThreatCategories []string                          `json:"threat_categories,nullable"`
-	To               []string                          `json:"to,nullable"`
-	ToName           []string                          `json:"to_name,nullable"`
-	Validation       InvestigateListResponseValidation `json:"validation,nullable"`
+	SentDate         string                            `json:"sent_date" api:"nullable"`
+	Subject          string                            `json:"subject" api:"nullable"`
+	ThreatCategories []string                          `json:"threat_categories" api:"nullable"`
+	To               []string                          `json:"to" api:"nullable"`
+	ToName           []string                          `json:"to_name" api:"nullable"`
+	Validation       InvestigateListResponseValidation `json:"validation" api:"nullable"`
 	JSON             investigateListResponseJSON       `json:"-"`
 }
 
@@ -313,15 +313,15 @@ func (r InvestigateListResponseFinalDisposition) IsKnown() bool {
 }
 
 type InvestigateListResponseFinding struct {
-	Attachment string                                   `json:"attachment,nullable"`
-	Detail     string                                   `json:"detail,nullable"`
-	Detection  InvestigateListResponseFindingsDetection `json:"detection,nullable"`
-	Field      string                                   `json:"field,nullable"`
-	Name       string                                   `json:"name,nullable"`
-	Portion    string                                   `json:"portion,nullable"`
-	Reason     string                                   `json:"reason,nullable"`
-	Score      float64                                  `json:"score,nullable"`
-	Value      string                                   `json:"value,nullable"`
+	Attachment string                                   `json:"attachment" api:"nullable"`
+	Detail     string                                   `json:"detail" api:"nullable"`
+	Detection  InvestigateListResponseFindingsDetection `json:"detection" api:"nullable"`
+	Field      string                                   `json:"field" api:"nullable"`
+	Name       string                                   `json:"name" api:"nullable"`
+	Portion    string                                   `json:"portion" api:"nullable"`
+	Reason     string                                   `json:"reason" api:"nullable"`
+	Score      float64                                  `json:"score" api:"nullable"`
+	Value      string                                   `json:"value" api:"nullable"`
 	JSON       investigateListResponseFindingJSON       `json:"-"`
 }
 
@@ -390,10 +390,10 @@ func (r InvestigateListResponsePostDeliveryOperation) IsKnown() bool {
 }
 
 type InvestigateListResponseValidation struct {
-	Comment string                                 `json:"comment,nullable"`
-	DKIM    InvestigateListResponseValidationDKIM  `json:"dkim,nullable"`
-	DMARC   InvestigateListResponseValidationDMARC `json:"dmarc,nullable"`
-	SPF     InvestigateListResponseValidationSPF   `json:"spf,nullable"`
+	Comment string                                 `json:"comment" api:"nullable"`
+	DKIM    InvestigateListResponseValidationDKIM  `json:"dkim" api:"nullable"`
+	DMARC   InvestigateListResponseValidationDMARC `json:"dmarc" api:"nullable"`
+	SPF     InvestigateListResponseValidationSPF   `json:"spf" api:"nullable"`
 	JSON    investigateListResponseValidationJSON  `json:"-"`
 }
 
@@ -471,44 +471,44 @@ func (r InvestigateListResponseValidationSPF) IsKnown() bool {
 }
 
 type InvestigateGetResponse struct {
-	ID                string      `json:"id,required"`
-	ActionLog         interface{} `json:"action_log,required"`
-	ClientRecipients  []string    `json:"client_recipients,required"`
-	DetectionReasons  []string    `json:"detection_reasons,required"`
-	IsPhishSubmission bool        `json:"is_phish_submission,required"`
-	IsQuarantined     bool        `json:"is_quarantined,required"`
+	ID                string      `json:"id" api:"required"`
+	ActionLog         interface{} `json:"action_log" api:"required"`
+	ClientRecipients  []string    `json:"client_recipients" api:"required"`
+	DetectionReasons  []string    `json:"detection_reasons" api:"required"`
+	IsPhishSubmission bool        `json:"is_phish_submission" api:"required"`
+	IsQuarantined     bool        `json:"is_quarantined" api:"required"`
 	// The identifier of the message.
-	PostfixID  string                           `json:"postfix_id,required"`
-	Properties InvestigateGetResponseProperties `json:"properties,required"`
+	PostfixID  string                           `json:"postfix_id" api:"required"`
+	Properties InvestigateGetResponseProperties `json:"properties" api:"required"`
 	// Deprecated, use `scanned_at` instead
 	//
 	// Deprecated: deprecated
-	Ts                     string                                        `json:"ts,required"`
-	AlertID                string                                        `json:"alert_id,nullable"`
-	DeliveryMode           InvestigateGetResponseDeliveryMode            `json:"delivery_mode,nullable"`
-	EdfHash                string                                        `json:"edf_hash,nullable"`
-	EnvelopeFrom           string                                        `json:"envelope_from,nullable"`
-	EnvelopeTo             []string                                      `json:"envelope_to,nullable"`
-	FinalDisposition       InvestigateGetResponseFinalDisposition        `json:"final_disposition,nullable"`
-	Findings               []InvestigateGetResponseFinding               `json:"findings,nullable"`
-	From                   string                                        `json:"from,nullable"`
-	FromName               string                                        `json:"from_name,nullable"`
-	HtmltextStructureHash  string                                        `json:"htmltext_structure_hash,nullable"`
-	MessageID              string                                        `json:"message_id,nullable"`
+	Ts                     string                                        `json:"ts" api:"required"`
+	AlertID                string                                        `json:"alert_id" api:"nullable"`
+	DeliveryMode           InvestigateGetResponseDeliveryMode            `json:"delivery_mode" api:"nullable"`
+	EdfHash                string                                        `json:"edf_hash" api:"nullable"`
+	EnvelopeFrom           string                                        `json:"envelope_from" api:"nullable"`
+	EnvelopeTo             []string                                      `json:"envelope_to" api:"nullable"`
+	FinalDisposition       InvestigateGetResponseFinalDisposition        `json:"final_disposition" api:"nullable"`
+	Findings               []InvestigateGetResponseFinding               `json:"findings" api:"nullable"`
+	From                   string                                        `json:"from" api:"nullable"`
+	FromName               string                                        `json:"from_name" api:"nullable"`
+	HtmltextStructureHash  string                                        `json:"htmltext_structure_hash" api:"nullable"`
+	MessageID              string                                        `json:"message_id" api:"nullable"`
 	PostDeliveryOperations []InvestigateGetResponsePostDeliveryOperation `json:"post_delivery_operations"`
-	PostfixIDOutbound      string                                        `json:"postfix_id_outbound,nullable"`
-	Replyto                string                                        `json:"replyto,nullable"`
+	PostfixIDOutbound      string                                        `json:"postfix_id_outbound" api:"nullable"`
+	Replyto                string                                        `json:"replyto" api:"nullable"`
 	ScannedAt              time.Time                                     `json:"scanned_at" format:"date-time"`
 	SentAt                 time.Time                                     `json:"sent_at" format:"date-time"`
 	// Deprecated, use `sent_at` instead
 	//
 	// Deprecated: deprecated
-	SentDate         string                           `json:"sent_date,nullable"`
-	Subject          string                           `json:"subject,nullable"`
-	ThreatCategories []string                         `json:"threat_categories,nullable"`
-	To               []string                         `json:"to,nullable"`
-	ToName           []string                         `json:"to_name,nullable"`
-	Validation       InvestigateGetResponseValidation `json:"validation,nullable"`
+	SentDate         string                           `json:"sent_date" api:"nullable"`
+	Subject          string                           `json:"subject" api:"nullable"`
+	ThreatCategories []string                         `json:"threat_categories" api:"nullable"`
+	To               []string                         `json:"to" api:"nullable"`
+	ToName           []string                         `json:"to_name" api:"nullable"`
+	Validation       InvestigateGetResponseValidation `json:"validation" api:"nullable"`
 	JSON             investigateGetResponseJSON       `json:"-"`
 }
 
@@ -677,15 +677,15 @@ func (r InvestigateGetResponseFinalDisposition) IsKnown() bool {
 }
 
 type InvestigateGetResponseFinding struct {
-	Attachment string                                  `json:"attachment,nullable"`
-	Detail     string                                  `json:"detail,nullable"`
-	Detection  InvestigateGetResponseFindingsDetection `json:"detection,nullable"`
-	Field      string                                  `json:"field,nullable"`
-	Name       string                                  `json:"name,nullable"`
-	Portion    string                                  `json:"portion,nullable"`
-	Reason     string                                  `json:"reason,nullable"`
-	Score      float64                                 `json:"score,nullable"`
-	Value      string                                  `json:"value,nullable"`
+	Attachment string                                  `json:"attachment" api:"nullable"`
+	Detail     string                                  `json:"detail" api:"nullable"`
+	Detection  InvestigateGetResponseFindingsDetection `json:"detection" api:"nullable"`
+	Field      string                                  `json:"field" api:"nullable"`
+	Name       string                                  `json:"name" api:"nullable"`
+	Portion    string                                  `json:"portion" api:"nullable"`
+	Reason     string                                  `json:"reason" api:"nullable"`
+	Score      float64                                 `json:"score" api:"nullable"`
+	Value      string                                  `json:"value" api:"nullable"`
 	JSON       investigateGetResponseFindingJSON       `json:"-"`
 }
 
@@ -754,10 +754,10 @@ func (r InvestigateGetResponsePostDeliveryOperation) IsKnown() bool {
 }
 
 type InvestigateGetResponseValidation struct {
-	Comment string                                `json:"comment,nullable"`
-	DKIM    InvestigateGetResponseValidationDKIM  `json:"dkim,nullable"`
-	DMARC   InvestigateGetResponseValidationDMARC `json:"dmarc,nullable"`
-	SPF     InvestigateGetResponseValidationSPF   `json:"spf,nullable"`
+	Comment string                                `json:"comment" api:"nullable"`
+	DKIM    InvestigateGetResponseValidationDKIM  `json:"dkim" api:"nullable"`
+	DMARC   InvestigateGetResponseValidationDMARC `json:"dmarc" api:"nullable"`
+	SPF     InvestigateGetResponseValidationSPF   `json:"spf" api:"nullable"`
 	JSON    investigateGetResponseValidationJSON  `json:"-"`
 }
 
@@ -836,7 +836,7 @@ func (r InvestigateGetResponseValidationSPF) IsKnown() bool {
 
 type InvestigateListParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Determines if the message action log is included in the response.
 	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
@@ -947,14 +947,14 @@ func (r InvestigateListParamsMessageAction) IsKnown() bool {
 
 type InvestigateGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InvestigateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   InvestigateGetResponse             `json:"result,required"`
-	Success  bool                               `json:"success,required"`
+	Errors   []shared.ResponseInfo              `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo              `json:"messages" api:"required"`
+	Result   InvestigateGetResponse             `json:"result" api:"required"`
+	Success  bool                               `json:"success" api:"required"`
 	JSON     investigateGetResponseEnvelopeJSON `json:"-"`
 }
 

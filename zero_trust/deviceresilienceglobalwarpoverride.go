@@ -43,15 +43,15 @@ func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/resilience/disconnect", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch the Global WARP override state.
@@ -60,15 +60,15 @@ func (r *DeviceResilienceGlobalWARPOverrideService) Get(ctx context.Context, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/resilience/disconnect", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DeviceResilienceGlobalWARPOverrideNewResponse struct {
@@ -122,9 +122,9 @@ func (r deviceResilienceGlobalWARPOverrideGetResponseJSON) RawJSON() string {
 }
 
 type DeviceResilienceGlobalWARPOverrideNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Disconnects all devices on the account using Global WARP override.
-	Disconnect param.Field[bool] `json:"disconnect,required"`
+	Disconnect param.Field[bool] `json:"disconnect" api:"required"`
 	// Reasoning for setting the Global WARP override state. This will be surfaced in
 	// the audit log.
 	Justification param.Field[string] `json:"justification"`
@@ -135,11 +135,11 @@ func (r DeviceResilienceGlobalWARPOverrideNewParams) MarshalJSON() (data []byte,
 }
 
 type DeviceResilienceGlobalWARPOverrideNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                         `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   DeviceResilienceGlobalWARPOverrideNewResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                         `json:"messages" api:"required"`
+	Result   DeviceResilienceGlobalWARPOverrideNewResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceResilienceGlobalWARPOverrideNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -178,15 +178,15 @@ func (r DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess) IsKnown() 
 }
 
 type DeviceResilienceGlobalWARPOverrideGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceResilienceGlobalWARPOverrideGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                         `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   DeviceResilienceGlobalWARPOverrideGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                         `json:"messages" api:"required"`
+	Result   DeviceResilienceGlobalWARPOverrideGetResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceResilienceGlobalWARPOverrideGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -37,7 +37,7 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 type DevicePolicyCertificates struct {
 	// The current status of the device policy certificate provisioning feature for
 	// WARP clients.
-	Enabled bool                         `json:"enabled,required"`
+	Enabled bool                         `json:"enabled" api:"required"`
 	JSON    devicePolicyCertificatesJSON `json:"-"`
 }
 
@@ -60,7 +60,7 @@ func (r devicePolicyCertificatesJSON) RawJSON() string {
 type DevicePolicyCertificatesParam struct {
 	// The current status of the device policy certificate provisioning feature for
 	// WARP clients.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r DevicePolicyCertificatesParam) MarshalJSON() (data []byte, err error) {
@@ -69,7 +69,7 @@ func (r DevicePolicyCertificatesParam) MarshalJSON() (data []byte, err error) {
 
 type FallbackDomain struct {
 	// The domain suffix to match when resolving locally.
-	Suffix string `json:"suffix,required"`
+	Suffix string `json:"suffix" api:"required"`
 	// A description of the fallback domain, displayed in the client UI.
 	Description string `json:"description"`
 	// A list of IP addresses to handle domain resolution.
@@ -96,7 +96,7 @@ func (r fallbackDomainJSON) RawJSON() string {
 
 type FallbackDomainParam struct {
 	// The domain suffix to match when resolving locally.
-	Suffix param.Field[string] `json:"suffix,required"`
+	Suffix param.Field[string] `json:"suffix" api:"required"`
 	// A description of the fallback domain, displayed in the client UI.
 	Description param.Field[string] `json:"description"`
 	// A list of IP addresses to handle domain resolution.
@@ -334,7 +334,7 @@ func init() {
 type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
-	Address string `json:"address,required"`
+	Address string `json:"address" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description string                                                          `json:"description"`
 	JSON        splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressJSON `json:"-"`
@@ -363,7 +363,7 @@ func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress) implementsS
 type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost struct {
 	// The domain name to exclude from the tunnel. If `host` is present, `address` must
 	// not be present.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description string                                                       `json:"description"`
 	JSON        splitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostJSON `json:"-"`
@@ -417,7 +417,7 @@ type SplitTunnelExcludeUnionParam interface {
 type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
-	Address param.Field[string] `json:"address,required"`
+	Address param.Field[string] `json:"address" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description param.Field[string] `json:"description"`
 }
@@ -432,7 +432,7 @@ func (r SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam) implem
 type SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostParam struct {
 	// The domain name to exclude from the tunnel. If `host` is present, `address` must
 	// not be present.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description param.Field[string] `json:"description"`
 }
@@ -514,7 +514,7 @@ func init() {
 type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress struct {
 	// The address in CIDR format to include in the tunnel. If `address` is present,
 	// `host` must not be present.
-	Address string `json:"address,required"`
+	Address string `json:"address" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description string                                                          `json:"description"`
 	JSON        splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressJSON `json:"-"`
@@ -543,7 +543,7 @@ func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress) implementsS
 type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost struct {
 	// The domain name to include in the tunnel. If `host` is present, `address` must
 	// not be present.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description string                                                       `json:"description"`
 	JSON        splitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostJSON `json:"-"`
@@ -597,7 +597,7 @@ type SplitTunnelIncludeUnionParam interface {
 type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam struct {
 	// The address in CIDR format to include in the tunnel. If `address` is present,
 	// `host` must not be present.
-	Address param.Field[string] `json:"address,required"`
+	Address param.Field[string] `json:"address" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description param.Field[string] `json:"description"`
 }
@@ -612,7 +612,7 @@ func (r SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam) implem
 type SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostParam struct {
 	// The domain name to include in the tunnel. If `host` is present, `address` must
 	// not be present.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// A description of the Split Tunnel item, displayed in the client UI.
 	Description param.Field[string] `json:"description"`
 }

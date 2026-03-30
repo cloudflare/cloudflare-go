@@ -42,15 +42,15 @@ func (r *SSOService) New(ctx context.Context, params SSONewParams, opts ...optio
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/sso_connectors", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update SSO connector state
@@ -59,19 +59,19 @@ func (r *SSOService) Update(ctx context.Context, ssoConnectorID string, params S
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ssoConnectorID == "" {
 		err = errors.New("missing required sso_connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/sso_connectors/%s", params.AccountID, ssoConnectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get all SSO connectors
@@ -81,7 +81,7 @@ func (r *SSOService) List(ctx context.Context, query SSOListParams, opts ...opti
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/sso_connectors", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -107,19 +107,19 @@ func (r *SSOService) Delete(ctx context.Context, ssoConnectorID string, body SSO
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ssoConnectorID == "" {
 		err = errors.New("missing required sso_connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/sso_connectors/%s", body.AccountID, ssoConnectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Begin SSO connector verification
@@ -127,15 +127,15 @@ func (r *SSOService) BeginVerification(ctx context.Context, ssoConnectorID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ssoConnectorID == "" {
 		err = errors.New("missing required sso_connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/sso_connectors/%s/begin_verification", body.AccountID, ssoConnectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get single SSO connector
@@ -144,19 +144,19 @@ func (r *SSOService) Get(ctx context.Context, ssoConnectorID string, query SSOGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ssoConnectorID == "" {
 		err = errors.New("missing required sso_connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/sso_connectors/%s", query.AccountID, ssoConnectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SSONewResponse struct {
@@ -402,7 +402,7 @@ func (r SSOListResponseVerificationStatus) IsKnown() bool {
 
 type SSODeleteResponse struct {
 	// Identifier
-	ID   string                `json:"id,required"`
+	ID   string                `json:"id" api:"required"`
 	JSON ssoDeleteResponseJSON `json:"-"`
 }
 
@@ -423,10 +423,10 @@ func (r ssoDeleteResponseJSON) RawJSON() string {
 }
 
 type SSOBeginVerificationResponse struct {
-	Errors   []SSOBeginVerificationResponseError   `json:"errors,required"`
-	Messages []SSOBeginVerificationResponseMessage `json:"messages,required"`
+	Errors   []SSOBeginVerificationResponseError   `json:"errors" api:"required"`
+	Messages []SSOBeginVerificationResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SSOBeginVerificationResponseSuccess `json:"success,required"`
+	Success SSOBeginVerificationResponseSuccess `json:"success" api:"required"`
 	JSON    ssoBeginVerificationResponseJSON    `json:"-"`
 }
 
@@ -449,8 +449,8 @@ func (r ssoBeginVerificationResponseJSON) RawJSON() string {
 }
 
 type SSOBeginVerificationResponseError struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           SSOBeginVerificationResponseErrorsSource `json:"source"`
 	JSON             ssoBeginVerificationResponseErrorJSON    `json:"-"`
@@ -497,8 +497,8 @@ func (r ssoBeginVerificationResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type SSOBeginVerificationResponseMessage struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           SSOBeginVerificationResponseMessagesSource `json:"source"`
 	JSON             ssoBeginVerificationResponseMessageJSON    `json:"-"`
@@ -641,9 +641,9 @@ func (r SSOGetResponseVerificationStatus) IsKnown() bool {
 
 type SSONewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Email domain of the new SSO connector
-	EmailDomain param.Field[string] `json:"email_domain,required"`
+	EmailDomain param.Field[string] `json:"email_domain" api:"required"`
 	// Begin the verification process after creation
 	BeginVerification param.Field[bool] `json:"begin_verification"`
 	// Controls the display of FedRAMP language to the user during SSO login
@@ -655,10 +655,10 @@ func (r SSONewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SSONewResponseEnvelope struct {
-	Errors   []SSONewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSONewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SSONewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SSONewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SSONewResponseEnvelopeSuccess `json:"success,required"`
+	Success SSONewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SSONewResponse                `json:"result"`
 	JSON    ssoNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -683,8 +683,8 @@ func (r ssoNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SSONewResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           SSONewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ssoNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -731,8 +731,8 @@ func (r ssoNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SSONewResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           SSONewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ssoNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -795,7 +795,7 @@ func (r SSONewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SSOUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// SSO Connector enabled state
 	Enabled param.Field[bool] `json:"enabled"`
 	// Controls the display of FedRAMP language to the user during SSO login
@@ -807,10 +807,10 @@ func (r SSOUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SSOUpdateResponseEnvelope struct {
-	Errors   []SSOUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSOUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SSOUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SSOUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SSOUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SSOUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SSOUpdateResponse                `json:"result"`
 	JSON    ssoUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -835,8 +835,8 @@ func (r ssoUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SSOUpdateResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           SSOUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ssoUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -883,8 +883,8 @@ func (r ssoUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SSOUpdateResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           SSOUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ssoUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -947,20 +947,20 @@ func (r SSOUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SSOListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SSODeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SSODeleteResponseEnvelope struct {
-	Errors   []SSODeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSODeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SSODeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SSODeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SSODeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  SSODeleteResponse                `json:"result,nullable"`
+	Success SSODeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  SSODeleteResponse                `json:"result" api:"nullable"`
 	JSON    ssoDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -984,8 +984,8 @@ func (r ssoDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SSODeleteResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           SSODeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ssoDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1032,8 +1032,8 @@ func (r ssoDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SSODeleteResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           SSODeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ssoDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1096,19 +1096,19 @@ func (r SSODeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SSOBeginVerificationParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SSOGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SSOGetResponseEnvelope struct {
-	Errors   []SSOGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSOGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SSOGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SSOGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SSOGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SSOGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SSOGetResponse                `json:"result"`
 	JSON    ssoGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1133,8 +1133,8 @@ func (r ssoGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SSOGetResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           SSOGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ssoGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1181,8 +1181,8 @@ func (r ssoGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SSOGetResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           SSOGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ssoGetResponseEnvelopeMessagesJSON   `json:"-"`

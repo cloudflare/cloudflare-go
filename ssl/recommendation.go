@@ -45,27 +45,27 @@ func (r *RecommendationService) Get(ctx context.Context, query RecommendationGet
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/recommendation", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RecommendationGetResponse struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether this setting can be updated or not.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Current setting of the automatic SSL/TLS.
-	Value RecommendationGetResponseValue `json:"value,required"`
+	Value RecommendationGetResponseValue `json:"value" api:"required"`
 	// Next time this zone will be scanned by the Automatic SSL/TLS.
-	NextScheduledScan time.Time                     `json:"next_scheduled_scan,nullable" format:"date-time"`
+	NextScheduledScan time.Time                     `json:"next_scheduled_scan" api:"nullable" format:"date-time"`
 	JSON              recommendationGetResponseJSON `json:"-"`
 }
 
@@ -106,15 +106,15 @@ func (r RecommendationGetResponseValue) IsKnown() bool {
 }
 
 type RecommendationGetParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RecommendationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   RecommendationGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   RecommendationGetResponse `json:"result" api:"required"`
 	// Indicates the API call's success or failure.
-	Success bool                                  `json:"success,required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    recommendationGetResponseEnvelopeJSON `json:"-"`
 }
 

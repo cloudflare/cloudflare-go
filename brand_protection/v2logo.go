@@ -41,11 +41,11 @@ func (r *V2LogoService) New(ctx context.Context, params V2LogoNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/v2/brand-protection/logo/queries", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete a saved brand protection logo query. Returns 404 if the query ID doesn't
@@ -54,15 +54,15 @@ func (r *V2LogoService) Delete(ctx context.Context, queryID string, body V2LogoD
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queryID == "" {
 		err = errors.New("missing required query_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/v2/brand-protection/logo/queries/%s", body.AccountID, queryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get all saved brand protection logo queries for an account. Optionally specify
@@ -72,16 +72,16 @@ func (r *V2LogoService) Get(ctx context.Context, params V2LogoGetParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/v2/brand-protection/logo/queries", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type V2LogoNewResponse struct {
-	Message string                `json:"message,required"`
-	Success bool                  `json:"success,required"`
+	Message string                `json:"message" api:"required"`
+	Success bool                  `json:"success" api:"required"`
 	QueryID int64                 `json:"query_id"`
 	JSON    v2LogoNewResponseJSON `json:"-"`
 }
@@ -105,8 +105,8 @@ func (r v2LogoNewResponseJSON) RawJSON() string {
 }
 
 type V2LogoDeleteResponse struct {
-	Message string                   `json:"message,required"`
-	Success bool                     `json:"success,required"`
+	Message string                   `json:"message" api:"required"`
+	Success bool                     `json:"success" api:"required"`
 	JSON    v2LogoDeleteResponseJSON `json:"-"`
 }
 
@@ -128,11 +128,11 @@ func (r v2LogoDeleteResponseJSON) RawJSON() string {
 }
 
 type V2LogoGetResponse struct {
-	ID                  int64   `json:"id,required"`
-	R2Path              string  `json:"r2_path,required"`
-	SimilarityThreshold float64 `json:"similarity_threshold,required"`
-	Tag                 string  `json:"tag,required"`
-	UploadedAt          string  `json:"uploaded_at,required,nullable"`
+	ID                  int64   `json:"id" api:"required"`
+	R2Path              string  `json:"r2_path" api:"required"`
+	SimilarityThreshold float64 `json:"similarity_threshold" api:"required"`
+	Tag                 string  `json:"tag" api:"required"`
+	UploadedAt          string  `json:"uploaded_at" api:"required,nullable"`
 	// MIME type of the image (only present when download=true)
 	ContentType string `json:"content_type"`
 	// Base64-encoded image data (only present when download=true)
@@ -163,14 +163,14 @@ func (r v2LogoGetResponseJSON) RawJSON() string {
 }
 
 type V2LogoNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Base64 encoded image data. Can include data URI prefix (e.g.,
 	// 'data:image/png;base64,...') or just the base64 string.
-	ImageData param.Field[string] `json:"image_data,required"`
+	ImageData param.Field[string] `json:"image_data" api:"required"`
 	// Minimum similarity score (0-1) required for visual matches
-	SimilarityThreshold param.Field[float64] `json:"similarity_threshold,required"`
+	SimilarityThreshold param.Field[float64] `json:"similarity_threshold" api:"required"`
 	// Unique identifier for the logo query
-	Tag param.Field[string] `json:"tag,required"`
+	Tag param.Field[string] `json:"tag" api:"required"`
 	// If true, search historic scanned images for matches above the similarity
 	// threshold
 	SearchLookback param.Field[bool] `json:"search_lookback"`
@@ -181,11 +181,11 @@ func (r V2LogoNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V2LogoDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V2LogoGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional query ID to retrieve a specific logo query
 	ID param.Field[string] `query:"id"`
 	// If true, include base64-encoded image data in the response

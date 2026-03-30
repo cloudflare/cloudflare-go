@@ -41,15 +41,15 @@ func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/logpush/edge/jobs", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists Instant Logs jobs for a zone.
@@ -59,7 +59,7 @@ func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...opti
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/logpush/edge/jobs", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -116,7 +116,7 @@ func (r instantLogpushJobJSON) RawJSON() string {
 
 type EdgeNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Comma-separated list of fields.
 	Fields param.Field[string] `json:"fields"`
 	// Filters to drill down into specific events.
@@ -131,11 +131,11 @@ func (r EdgeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EdgeNewResponseEnvelope struct {
-	Errors   []EdgeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EdgeNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EdgeNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EdgeNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EdgeNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  InstantLogpushJob              `json:"result,nullable"`
+	Success EdgeNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  InstantLogpushJob              `json:"result" api:"nullable"`
 	JSON    edgeNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -159,8 +159,8 @@ func (r edgeNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EdgeNewResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           EdgeNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             edgeNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -207,8 +207,8 @@ func (r edgeNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type EdgeNewResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           EdgeNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             edgeNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -271,5 +271,5 @@ func (r EdgeNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type EdgeGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

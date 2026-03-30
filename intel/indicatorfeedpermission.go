@@ -40,15 +40,15 @@ func (r *IndicatorFeedPermissionService) New(ctx context.Context, params Indicat
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/add", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists current access permissions for custom threat indicator feeds.
@@ -57,15 +57,15 @@ func (r *IndicatorFeedPermissionService) List(ctx context.Context, query Indicat
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/view", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Revokes access permissions for a custom threat indicator feed.
@@ -74,15 +74,15 @@ func (r *IndicatorFeedPermissionService) Delete(ctx context.Context, params Indi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/remove", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type IndicatorFeedPermissionNewResponse struct {
@@ -168,7 +168,7 @@ func (r indicatorFeedPermissionDeleteResponseJSON) RawJSON() string {
 
 type IndicatorFeedPermissionNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The Cloudflare account tag of the account to change permissions on
 	AccountTag param.Field[string] `json:"account_tag"`
 	// The ID of the feed to add/remove permissions on
@@ -180,10 +180,10 @@ func (r IndicatorFeedPermissionNewParams) MarshalJSON() (data []byte, err error)
 }
 
 type IndicatorFeedPermissionNewResponseEnvelope struct {
-	Errors   []IndicatorFeedPermissionNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedPermissionNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IndicatorFeedPermissionNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IndicatorFeedPermissionNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IndicatorFeedPermissionNewResponseEnvelopeSuccess `json:"success,required"`
+	Success IndicatorFeedPermissionNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  IndicatorFeedPermissionNewResponse                `json:"result"`
 	JSON    indicatorFeedPermissionNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -208,8 +208,8 @@ func (r indicatorFeedPermissionNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IndicatorFeedPermissionNewResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           IndicatorFeedPermissionNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             indicatorFeedPermissionNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -256,8 +256,8 @@ func (r indicatorFeedPermissionNewResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type IndicatorFeedPermissionNewResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           IndicatorFeedPermissionNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             indicatorFeedPermissionNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -321,14 +321,14 @@ func (r IndicatorFeedPermissionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndicatorFeedPermissionListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndicatorFeedPermissionListResponseEnvelope struct {
-	Errors   []IndicatorFeedPermissionListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedPermissionListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IndicatorFeedPermissionListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IndicatorFeedPermissionListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IndicatorFeedPermissionListResponseEnvelopeSuccess `json:"success,required"`
+	Success IndicatorFeedPermissionListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  []IndicatorFeedPermissionListResponse              `json:"result"`
 	JSON    indicatorFeedPermissionListResponseEnvelopeJSON    `json:"-"`
 }
@@ -353,8 +353,8 @@ func (r indicatorFeedPermissionListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IndicatorFeedPermissionListResponseEnvelopeErrors struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           IndicatorFeedPermissionListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             indicatorFeedPermissionListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -402,8 +402,8 @@ func (r indicatorFeedPermissionListResponseEnvelopeErrorsSourceJSON) RawJSON() s
 }
 
 type IndicatorFeedPermissionListResponseEnvelopeMessages struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           IndicatorFeedPermissionListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             indicatorFeedPermissionListResponseEnvelopeMessagesJSON   `json:"-"`
@@ -467,7 +467,7 @@ func (r IndicatorFeedPermissionListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndicatorFeedPermissionDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The Cloudflare account tag of the account to change permissions on
 	AccountTag param.Field[string] `json:"account_tag"`
 	// The ID of the feed to add/remove permissions on
@@ -479,10 +479,10 @@ func (r IndicatorFeedPermissionDeleteParams) MarshalJSON() (data []byte, err err
 }
 
 type IndicatorFeedPermissionDeleteResponseEnvelope struct {
-	Errors   []IndicatorFeedPermissionDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedPermissionDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IndicatorFeedPermissionDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IndicatorFeedPermissionDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IndicatorFeedPermissionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success IndicatorFeedPermissionDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  IndicatorFeedPermissionDeleteResponse                `json:"result"`
 	JSON    indicatorFeedPermissionDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -507,8 +507,8 @@ func (r indicatorFeedPermissionDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IndicatorFeedPermissionDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           IndicatorFeedPermissionDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             indicatorFeedPermissionDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -556,8 +556,8 @@ func (r indicatorFeedPermissionDeleteResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type IndicatorFeedPermissionDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           IndicatorFeedPermissionDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             indicatorFeedPermissionDeleteResponseEnvelopeMessagesJSON   `json:"-"`

@@ -44,7 +44,7 @@ func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetS
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/devices", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -66,52 +66,52 @@ func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params
 
 type DEXFleetStatusDeviceListResponse struct {
 	// Cloudflare colo
-	Colo string `json:"colo,required"`
+	Colo string `json:"colo" api:"required"`
 	// Device identifier (UUID v4)
-	DeviceID string `json:"deviceId,required"`
+	DeviceID string `json:"deviceId" api:"required"`
 	// The mode under which the WARP client is run
-	Mode string `json:"mode,required"`
+	Mode string `json:"mode" api:"required"`
 	// Operating system
-	Platform string `json:"platform,required"`
+	Platform string `json:"platform" api:"required"`
 	// Network status
-	Status string `json:"status,required"`
+	Status string `json:"status" api:"required"`
 	// Timestamp in ISO format
-	Timestamp string `json:"timestamp,required"`
+	Timestamp string `json:"timestamp" api:"required"`
 	// WARP client version
-	Version         string                                          `json:"version,required"`
-	AlwaysOn        bool                                            `json:"alwaysOn,nullable"`
-	BatteryCharging bool                                            `json:"batteryCharging,nullable"`
-	BatteryCycles   int64                                           `json:"batteryCycles,nullable"`
-	BatteryPct      float64                                         `json:"batteryPct,nullable"`
-	ConnectionType  string                                          `json:"connectionType,nullable"`
-	CPUPct          float64                                         `json:"cpuPct,nullable"`
-	CPUPctByApp     [][]DEXFleetStatusDeviceListResponseCPUPctByApp `json:"cpuPctByApp,nullable"`
+	Version         string                                          `json:"version" api:"required"`
+	AlwaysOn        bool                                            `json:"alwaysOn" api:"nullable"`
+	BatteryCharging bool                                            `json:"batteryCharging" api:"nullable"`
+	BatteryCycles   int64                                           `json:"batteryCycles" api:"nullable"`
+	BatteryPct      float64                                         `json:"batteryPct" api:"nullable"`
+	ConnectionType  string                                          `json:"connectionType" api:"nullable"`
+	CPUPct          float64                                         `json:"cpuPct" api:"nullable"`
+	CPUPctByApp     [][]DEXFleetStatusDeviceListResponseCPUPctByApp `json:"cpuPctByApp" api:"nullable"`
 	DeviceIPV4      DEXFleetStatusDeviceListResponseDeviceIPV4      `json:"deviceIpv4"`
 	DeviceIPV6      DEXFleetStatusDeviceListResponseDeviceIPV6      `json:"deviceIpv6"`
 	// Device identifier (human readable)
 	DeviceName         string                                      `json:"deviceName"`
-	DiskReadBps        int64                                       `json:"diskReadBps,nullable"`
-	DiskUsagePct       float64                                     `json:"diskUsagePct,nullable"`
-	DiskWriteBps       int64                                       `json:"diskWriteBps,nullable"`
-	DOHSubdomain       string                                      `json:"dohSubdomain,nullable"`
-	EstimatedLossPct   float64                                     `json:"estimatedLossPct,nullable"`
-	FirewallEnabled    bool                                        `json:"firewallEnabled,nullable"`
+	DiskReadBps        int64                                       `json:"diskReadBps" api:"nullable"`
+	DiskUsagePct       float64                                     `json:"diskUsagePct" api:"nullable"`
+	DiskWriteBps       int64                                       `json:"diskWriteBps" api:"nullable"`
+	DOHSubdomain       string                                      `json:"dohSubdomain" api:"nullable"`
+	EstimatedLossPct   float64                                     `json:"estimatedLossPct" api:"nullable"`
+	FirewallEnabled    bool                                        `json:"firewallEnabled" api:"nullable"`
 	GatewayIPV4        DEXFleetStatusDeviceListResponseGatewayIPV4 `json:"gatewayIpv4"`
 	GatewayIPV6        DEXFleetStatusDeviceListResponseGatewayIPV6 `json:"gatewayIpv6"`
-	HandshakeLatencyMs float64                                     `json:"handshakeLatencyMs,nullable"`
+	HandshakeLatencyMs float64                                     `json:"handshakeLatencyMs" api:"nullable"`
 	ISPIPV4            DEXFleetStatusDeviceListResponseISPIPV4     `json:"ispIpv4"`
 	ISPIPV6            DEXFleetStatusDeviceListResponseISPIPV6     `json:"ispIpv6"`
-	Metal              string                                      `json:"metal,nullable"`
-	NetworkRcvdBps     int64                                       `json:"networkRcvdBps,nullable"`
-	NetworkSentBps     int64                                       `json:"networkSentBps,nullable"`
-	NetworkSsid        string                                      `json:"networkSsid,nullable"`
+	Metal              string                                      `json:"metal" api:"nullable"`
+	NetworkRcvdBps     int64                                       `json:"networkRcvdBps" api:"nullable"`
+	NetworkSentBps     int64                                       `json:"networkSentBps" api:"nullable"`
+	NetworkSsid        string                                      `json:"networkSsid" api:"nullable"`
 	// User contact email address
 	PersonEmail     string                                              `json:"personEmail"`
-	RamAvailableKB  int64                                               `json:"ramAvailableKb,nullable"`
-	RamUsedPct      float64                                             `json:"ramUsedPct,nullable"`
-	RamUsedPctByApp [][]DEXFleetStatusDeviceListResponseRamUsedPctByApp `json:"ramUsedPctByApp,nullable"`
-	SwitchLocked    bool                                                `json:"switchLocked,nullable"`
-	WifiStrengthDbm int64                                               `json:"wifiStrengthDbm,nullable"`
+	RamAvailableKB  int64                                               `json:"ramAvailableKb" api:"nullable"`
+	RamUsedPct      float64                                             `json:"ramUsedPct" api:"nullable"`
+	RamUsedPctByApp [][]DEXFleetStatusDeviceListResponseRamUsedPctByApp `json:"ramUsedPctByApp" api:"nullable"`
+	SwitchLocked    bool                                                `json:"switchLocked" api:"nullable"`
+	WifiStrengthDbm int64                                               `json:"wifiStrengthDbm" api:"nullable"`
 	JSON            dexFleetStatusDeviceListResponseJSON                `json:"-"`
 }
 
@@ -192,12 +192,12 @@ func (r dexFleetStatusDeviceListResponseCPUPctByAppJSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseDeviceIPV4 struct {
-	Address  string                                             `json:"address,nullable"`
-	ASN      int64                                              `json:"asn,nullable"`
-	Aso      string                                             `json:"aso,nullable"`
+	Address  string                                             `json:"address" api:"nullable"`
+	ASN      int64                                              `json:"asn" api:"nullable"`
+	Aso      string                                             `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseDeviceIPV4Location `json:"location"`
-	Netmask  string                                             `json:"netmask,nullable"`
-	Version  string                                             `json:"version,nullable"`
+	Netmask  string                                             `json:"netmask" api:"nullable"`
+	Version  string                                             `json:"version" api:"nullable"`
 	JSON     dexFleetStatusDeviceListResponseDeviceIPV4JSON     `json:"-"`
 }
 
@@ -223,10 +223,10 @@ func (r dexFleetStatusDeviceListResponseDeviceIPV4JSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseDeviceIPV4Location struct {
-	City       string                                                 `json:"city,nullable"`
-	CountryISO string                                                 `json:"country_iso,nullable"`
-	StateISO   string                                                 `json:"state_iso,nullable"`
-	Zip        string                                                 `json:"zip,nullable"`
+	City       string                                                 `json:"city" api:"nullable"`
+	CountryISO string                                                 `json:"country_iso" api:"nullable"`
+	StateISO   string                                                 `json:"state_iso" api:"nullable"`
+	Zip        string                                                 `json:"zip" api:"nullable"`
 	JSON       dexFleetStatusDeviceListResponseDeviceIPV4LocationJSON `json:"-"`
 }
 
@@ -250,12 +250,12 @@ func (r dexFleetStatusDeviceListResponseDeviceIPV4LocationJSON) RawJSON() string
 }
 
 type DEXFleetStatusDeviceListResponseDeviceIPV6 struct {
-	Address  string                                             `json:"address,nullable"`
-	ASN      int64                                              `json:"asn,nullable"`
-	Aso      string                                             `json:"aso,nullable"`
+	Address  string                                             `json:"address" api:"nullable"`
+	ASN      int64                                              `json:"asn" api:"nullable"`
+	Aso      string                                             `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseDeviceIPV6Location `json:"location"`
-	Netmask  string                                             `json:"netmask,nullable"`
-	Version  string                                             `json:"version,nullable"`
+	Netmask  string                                             `json:"netmask" api:"nullable"`
+	Version  string                                             `json:"version" api:"nullable"`
 	JSON     dexFleetStatusDeviceListResponseDeviceIPV6JSON     `json:"-"`
 }
 
@@ -281,10 +281,10 @@ func (r dexFleetStatusDeviceListResponseDeviceIPV6JSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseDeviceIPV6Location struct {
-	City       string                                                 `json:"city,nullable"`
-	CountryISO string                                                 `json:"country_iso,nullable"`
-	StateISO   string                                                 `json:"state_iso,nullable"`
-	Zip        string                                                 `json:"zip,nullable"`
+	City       string                                                 `json:"city" api:"nullable"`
+	CountryISO string                                                 `json:"country_iso" api:"nullable"`
+	StateISO   string                                                 `json:"state_iso" api:"nullable"`
+	Zip        string                                                 `json:"zip" api:"nullable"`
 	JSON       dexFleetStatusDeviceListResponseDeviceIPV6LocationJSON `json:"-"`
 }
 
@@ -308,12 +308,12 @@ func (r dexFleetStatusDeviceListResponseDeviceIPV6LocationJSON) RawJSON() string
 }
 
 type DEXFleetStatusDeviceListResponseGatewayIPV4 struct {
-	Address  string                                              `json:"address,nullable"`
-	ASN      int64                                               `json:"asn,nullable"`
-	Aso      string                                              `json:"aso,nullable"`
+	Address  string                                              `json:"address" api:"nullable"`
+	ASN      int64                                               `json:"asn" api:"nullable"`
+	Aso      string                                              `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseGatewayIPV4Location `json:"location"`
-	Netmask  string                                              `json:"netmask,nullable"`
-	Version  string                                              `json:"version,nullable"`
+	Netmask  string                                              `json:"netmask" api:"nullable"`
+	Version  string                                              `json:"version" api:"nullable"`
 	JSON     dexFleetStatusDeviceListResponseGatewayIPV4JSON     `json:"-"`
 }
 
@@ -339,10 +339,10 @@ func (r dexFleetStatusDeviceListResponseGatewayIPV4JSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseGatewayIPV4Location struct {
-	City       string                                                  `json:"city,nullable"`
-	CountryISO string                                                  `json:"country_iso,nullable"`
-	StateISO   string                                                  `json:"state_iso,nullable"`
-	Zip        string                                                  `json:"zip,nullable"`
+	City       string                                                  `json:"city" api:"nullable"`
+	CountryISO string                                                  `json:"country_iso" api:"nullable"`
+	StateISO   string                                                  `json:"state_iso" api:"nullable"`
+	Zip        string                                                  `json:"zip" api:"nullable"`
 	JSON       dexFleetStatusDeviceListResponseGatewayIPV4LocationJSON `json:"-"`
 }
 
@@ -366,12 +366,12 @@ func (r dexFleetStatusDeviceListResponseGatewayIPV4LocationJSON) RawJSON() strin
 }
 
 type DEXFleetStatusDeviceListResponseGatewayIPV6 struct {
-	Address  string                                              `json:"address,nullable"`
-	ASN      int64                                               `json:"asn,nullable"`
-	Aso      string                                              `json:"aso,nullable"`
+	Address  string                                              `json:"address" api:"nullable"`
+	ASN      int64                                               `json:"asn" api:"nullable"`
+	Aso      string                                              `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseGatewayIPV6Location `json:"location"`
-	Netmask  string                                              `json:"netmask,nullable"`
-	Version  string                                              `json:"version,nullable"`
+	Netmask  string                                              `json:"netmask" api:"nullable"`
+	Version  string                                              `json:"version" api:"nullable"`
 	JSON     dexFleetStatusDeviceListResponseGatewayIPV6JSON     `json:"-"`
 }
 
@@ -397,10 +397,10 @@ func (r dexFleetStatusDeviceListResponseGatewayIPV6JSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseGatewayIPV6Location struct {
-	City       string                                                  `json:"city,nullable"`
-	CountryISO string                                                  `json:"country_iso,nullable"`
-	StateISO   string                                                  `json:"state_iso,nullable"`
-	Zip        string                                                  `json:"zip,nullable"`
+	City       string                                                  `json:"city" api:"nullable"`
+	CountryISO string                                                  `json:"country_iso" api:"nullable"`
+	StateISO   string                                                  `json:"state_iso" api:"nullable"`
+	Zip        string                                                  `json:"zip" api:"nullable"`
 	JSON       dexFleetStatusDeviceListResponseGatewayIPV6LocationJSON `json:"-"`
 }
 
@@ -424,12 +424,12 @@ func (r dexFleetStatusDeviceListResponseGatewayIPV6LocationJSON) RawJSON() strin
 }
 
 type DEXFleetStatusDeviceListResponseISPIPV4 struct {
-	Address  string                                          `json:"address,nullable"`
-	ASN      int64                                           `json:"asn,nullable"`
-	Aso      string                                          `json:"aso,nullable"`
+	Address  string                                          `json:"address" api:"nullable"`
+	ASN      int64                                           `json:"asn" api:"nullable"`
+	Aso      string                                          `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseISPIPV4Location `json:"location"`
-	Netmask  string                                          `json:"netmask,nullable"`
-	Version  string                                          `json:"version,nullable"`
+	Netmask  string                                          `json:"netmask" api:"nullable"`
+	Version  string                                          `json:"version" api:"nullable"`
 	JSON     dexFleetStatusDeviceListResponseIspipv4JSON     `json:"-"`
 }
 
@@ -455,10 +455,10 @@ func (r dexFleetStatusDeviceListResponseIspipv4JSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseISPIPV4Location struct {
-	City       string                                              `json:"city,nullable"`
-	CountryISO string                                              `json:"country_iso,nullable"`
-	StateISO   string                                              `json:"state_iso,nullable"`
-	Zip        string                                              `json:"zip,nullable"`
+	City       string                                              `json:"city" api:"nullable"`
+	CountryISO string                                              `json:"country_iso" api:"nullable"`
+	StateISO   string                                              `json:"state_iso" api:"nullable"`
+	Zip        string                                              `json:"zip" api:"nullable"`
 	JSON       dexFleetStatusDeviceListResponseIspipv4LocationJSON `json:"-"`
 }
 
@@ -482,12 +482,12 @@ func (r dexFleetStatusDeviceListResponseIspipv4LocationJSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseISPIPV6 struct {
-	Address  string                                          `json:"address,nullable"`
-	ASN      int64                                           `json:"asn,nullable"`
-	Aso      string                                          `json:"aso,nullable"`
+	Address  string                                          `json:"address" api:"nullable"`
+	ASN      int64                                           `json:"asn" api:"nullable"`
+	Aso      string                                          `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseISPIPV6Location `json:"location"`
-	Netmask  string                                          `json:"netmask,nullable"`
-	Version  string                                          `json:"version,nullable"`
+	Netmask  string                                          `json:"netmask" api:"nullable"`
+	Version  string                                          `json:"version" api:"nullable"`
 	JSON     dexFleetStatusDeviceListResponseIspipv6JSON     `json:"-"`
 }
 
@@ -513,10 +513,10 @@ func (r dexFleetStatusDeviceListResponseIspipv6JSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseISPIPV6Location struct {
-	City       string                                              `json:"city,nullable"`
-	CountryISO string                                              `json:"country_iso,nullable"`
-	StateISO   string                                              `json:"state_iso,nullable"`
-	Zip        string                                              `json:"zip,nullable"`
+	City       string                                              `json:"city" api:"nullable"`
+	CountryISO string                                              `json:"country_iso" api:"nullable"`
+	StateISO   string                                              `json:"state_iso" api:"nullable"`
+	Zip        string                                              `json:"zip" api:"nullable"`
 	JSON       dexFleetStatusDeviceListResponseIspipv6LocationJSON `json:"-"`
 }
 
@@ -563,15 +563,15 @@ func (r dexFleetStatusDeviceListResponseRamUsedPctByAppJSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Time range beginning in ISO format
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// Page number
-	Page param.Field[float64] `query:"page,required"`
+	Page param.Field[float64] `query:"page" api:"required"`
 	// Number of results per page
-	PerPage param.Field[float64] `query:"per_page,required"`
+	PerPage param.Field[float64] `query:"per_page" api:"required"`
 	// Time range end in ISO format
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 	// Cloudflare colo
 	Colo param.Field[string] `query:"colo"`
 	// Device-specific ID, given as UUID v4

@@ -47,7 +47,7 @@ func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/history", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -135,7 +135,7 @@ func (r HistoryMechanismType) IsKnown() bool {
 
 type HistoryListParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Limit the returned results to history records older than the specified date.
 	// This must be a timestamp that conforms to RFC3339.
 	Before param.Field[time.Time] `query:"before" format:"date-time"`

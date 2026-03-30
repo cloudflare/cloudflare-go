@@ -40,11 +40,11 @@ func (r *ReceivedFieldService) Get(ctx context.Context, query ReceivedFieldGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/logs/received/fields", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ReceivedFieldGetResponse struct {
@@ -70,5 +70,5 @@ func (r receivedFieldGetResponseJSON) RawJSON() string {
 
 type ReceivedFieldGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

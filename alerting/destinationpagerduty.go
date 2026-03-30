@@ -41,15 +41,15 @@ func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationP
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes all the PagerDuty Services connected to the account.
@@ -57,11 +57,11 @@ func (r *DestinationPagerdutyService) Delete(ctx context.Context, body Destinati
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a list of all configured PagerDuty services.
@@ -71,7 +71,7 @@ func (r *DestinationPagerdutyService) Get(ctx context.Context, query Destination
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -97,19 +97,19 @@ func (r *DestinationPagerdutyService) Link(ctx context.Context, tokenID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tokenID == "" {
 		err = errors.New("missing required token_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect/%s", query.AccountID, tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Pagerduty struct {
@@ -159,10 +159,10 @@ func (r destinationPagerdutyNewResponseJSON) RawJSON() string {
 }
 
 type DestinationPagerdutyDeleteResponse struct {
-	Errors   []DestinationPagerdutyDeleteResponseError   `json:"errors,required"`
-	Messages []DestinationPagerdutyDeleteResponseMessage `json:"messages,required"`
+	Errors   []DestinationPagerdutyDeleteResponseError   `json:"errors" api:"required"`
+	Messages []DestinationPagerdutyDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success DestinationPagerdutyDeleteResponseSuccess `json:"success,required"`
+	Success DestinationPagerdutyDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    destinationPagerdutyDeleteResponseJSON    `json:"-"`
 }
 
@@ -185,7 +185,7 @@ func (r destinationPagerdutyDeleteResponseJSON) RawJSON() string {
 }
 
 type DestinationPagerdutyDeleteResponseError struct {
-	Message string                                      `json:"message,required"`
+	Message string                                      `json:"message" api:"required"`
 	Code    int64                                       `json:"code"`
 	JSON    destinationPagerdutyDeleteResponseErrorJSON `json:"-"`
 }
@@ -208,7 +208,7 @@ func (r destinationPagerdutyDeleteResponseErrorJSON) RawJSON() string {
 }
 
 type DestinationPagerdutyDeleteResponseMessage struct {
-	Message string                                        `json:"message,required"`
+	Message string                                        `json:"message" api:"required"`
 	Code    int64                                         `json:"code"`
 	JSON    destinationPagerdutyDeleteResponseMessageJSON `json:"-"`
 }
@@ -269,14 +269,14 @@ func (r destinationPagerdutyLinkResponseJSON) RawJSON() string {
 
 type DestinationPagerdutyNewParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationPagerdutyNewResponseEnvelope struct {
-	Errors   []DestinationPagerdutyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationPagerdutyNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DestinationPagerdutyNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DestinationPagerdutyNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success DestinationPagerdutyNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DestinationPagerdutyNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DestinationPagerdutyNewResponse                `json:"result"`
 	JSON    destinationPagerdutyNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -301,7 +301,7 @@ func (r destinationPagerdutyNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DestinationPagerdutyNewResponseEnvelopeErrors struct {
-	Message string                                            `json:"message,required"`
+	Message string                                            `json:"message" api:"required"`
 	Code    int64                                             `json:"code"`
 	JSON    destinationPagerdutyNewResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -324,7 +324,7 @@ func (r destinationPagerdutyNewResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type DestinationPagerdutyNewResponseEnvelopeMessages struct {
-	Message string                                              `json:"message,required"`
+	Message string                                              `json:"message" api:"required"`
 	Code    int64                                               `json:"code"`
 	JSON    destinationPagerdutyNewResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -363,24 +363,24 @@ func (r DestinationPagerdutyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DestinationPagerdutyDeleteParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationPagerdutyGetParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationPagerdutyLinkParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationPagerdutyLinkResponseEnvelope struct {
-	Errors   []DestinationPagerdutyLinkResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationPagerdutyLinkResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DestinationPagerdutyLinkResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DestinationPagerdutyLinkResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success DestinationPagerdutyLinkResponseEnvelopeSuccess `json:"success,required"`
+	Success DestinationPagerdutyLinkResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DestinationPagerdutyLinkResponse                `json:"result"`
 	JSON    destinationPagerdutyLinkResponseEnvelopeJSON    `json:"-"`
 }
@@ -405,7 +405,7 @@ func (r destinationPagerdutyLinkResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DestinationPagerdutyLinkResponseEnvelopeErrors struct {
-	Message string                                             `json:"message,required"`
+	Message string                                             `json:"message" api:"required"`
 	Code    int64                                              `json:"code"`
 	JSON    destinationPagerdutyLinkResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -428,7 +428,7 @@ func (r destinationPagerdutyLinkResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type DestinationPagerdutyLinkResponseEnvelopeMessages struct {
-	Message string                                               `json:"message,required"`
+	Message string                                               `json:"message" api:"required"`
 	Code    int64                                                `json:"code"`
 	JSON    destinationPagerdutyLinkResponseEnvelopeMessagesJSON `json:"-"`
 }

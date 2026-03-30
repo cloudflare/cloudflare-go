@@ -46,20 +46,20 @@ func (r *RankingDomainService) Get(ctx context.Context, domain string, query Ran
 	opts = slices.Concat(r.Options, opts)
 	if domain == "" {
 		err = errors.New("missing required domain parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("radar/ranking/domain/%s", domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RankingDomainGetResponse struct {
-	Details0 RankingDomainGetResponseDetails0 `json:"details_0,required"`
-	Meta     RankingDomainGetResponseMeta     `json:"meta,required"`
+	Details0 RankingDomainGetResponseDetails0 `json:"details_0" api:"required"`
+	Meta     RankingDomainGetResponseMeta     `json:"meta" api:"required"`
 	JSON     rankingDomainGetResponseJSON     `json:"-"`
 }
 
@@ -81,7 +81,7 @@ func (r rankingDomainGetResponseJSON) RawJSON() string {
 }
 
 type RankingDomainGetResponseDetails0 struct {
-	Categories []RankingDomainGetResponseDetails0Category `json:"categories,required"`
+	Categories []RankingDomainGetResponseDetails0Category `json:"categories" api:"required"`
 	// Only available in POPULAR ranking for the most recent ranking.
 	Bucket       string                                        `json:"bucket"`
 	Rank         int64                                         `json:"rank"`
@@ -109,9 +109,9 @@ func (r rankingDomainGetResponseDetails0JSON) RawJSON() string {
 }
 
 type RankingDomainGetResponseDetails0Category struct {
-	ID              int64                                        `json:"id,required"`
-	Name            string                                       `json:"name,required"`
-	SuperCategoryID int64                                        `json:"superCategoryId,required"`
+	ID              int64                                        `json:"id" api:"required"`
+	Name            string                                       `json:"name" api:"required"`
+	SuperCategoryID int64                                        `json:"superCategoryId" api:"required"`
 	JSON            rankingDomainGetResponseDetails0CategoryJSON `json:"-"`
 }
 
@@ -134,9 +134,9 @@ func (r rankingDomainGetResponseDetails0CategoryJSON) RawJSON() string {
 }
 
 type RankingDomainGetResponseDetails0TopLocation struct {
-	LocationCode string                                          `json:"locationCode,required"`
-	LocationName string                                          `json:"locationName,required"`
-	Rank         int64                                           `json:"rank,required"`
+	LocationCode string                                          `json:"locationCode" api:"required"`
+	LocationName string                                          `json:"locationName" api:"required"`
+	Rank         int64                                           `json:"rank" api:"required"`
 	JSON         rankingDomainGetResponseDetails0TopLocationJSON `json:"-"`
 }
 
@@ -159,7 +159,7 @@ func (r rankingDomainGetResponseDetails0TopLocationJSON) RawJSON() string {
 }
 
 type RankingDomainGetResponseMeta struct {
-	DateRange []RankingDomainGetResponseMetaDateRange `json:"dateRange,required"`
+	DateRange []RankingDomainGetResponseMetaDateRange `json:"dateRange" api:"required"`
 	JSON      rankingDomainGetResponseMetaJSON        `json:"-"`
 }
 
@@ -181,9 +181,9 @@ func (r rankingDomainGetResponseMetaJSON) RawJSON() string {
 
 type RankingDomainGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                 `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                 `json:"startTime" api:"required" format:"date-time"`
 	JSON      rankingDomainGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -261,8 +261,8 @@ func (r RankingDomainGetParamsRankingType) IsKnown() bool {
 }
 
 type RankingDomainGetResponseEnvelope struct {
-	Result  RankingDomainGetResponse             `json:"result,required"`
-	Success bool                                 `json:"success,required"`
+	Result  RankingDomainGetResponse             `json:"result" api:"required"`
+	Success bool                                 `json:"success" api:"required"`
 	JSON    rankingDomainGetResponseEnvelopeJSON `json:"-"`
 }
 

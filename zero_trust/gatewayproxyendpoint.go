@@ -45,15 +45,15 @@ func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayPro
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all Zero Trust Gateway proxy endpoints for an account.
@@ -63,7 +63,7 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -89,19 +89,19 @@ func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointI
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if proxyEndpointID == "" {
 		err = errors.New("missing required proxy_endpoint_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", body.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a configured Zero Trust Gateway proxy endpoint.
@@ -110,19 +110,19 @@ func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if proxyEndpointID == "" {
 		err = errors.New("missing required proxy_endpoint_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a single Zero Trust Gateway proxy endpoint.
@@ -131,19 +131,19 @@ func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if proxyEndpointID == "" {
 		err = errors.New("missing required proxy_endpoint_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", query.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GatewayIPs = string
@@ -152,7 +152,7 @@ type GatewayIPsParam = string
 
 type ProxyEndpoint struct {
 	// Specify the name of the proxy endpoint.
-	Name      string    `json:"name,required"`
+	Name      string    `json:"name" api:"required"`
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// This field can have the runtime type of [[]GatewayIPs].
@@ -227,9 +227,9 @@ func init() {
 
 type ProxyEndpointZeroTrustGatewayProxyEndpointIP struct {
 	// Specify the list of CIDRs to restrict ingress connections.
-	IPs []GatewayIPs `json:"ips,required"`
+	IPs []GatewayIPs `json:"ips" api:"required"`
 	// Specify the name of the proxy endpoint.
-	Name      string    `json:"name,required"`
+	Name      string    `json:"name" api:"required"`
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The proxy endpoint kind
@@ -281,9 +281,9 @@ func (r ProxyEndpointZeroTrustGatewayProxyEndpointIPKind) IsKnown() bool {
 
 type ProxyEndpointZeroTrustGatewayProxyEndpointIdentity struct {
 	// The proxy endpoint kind
-	Kind ProxyEndpointZeroTrustGatewayProxyEndpointIdentityKind `json:"kind,required"`
+	Kind ProxyEndpointZeroTrustGatewayProxyEndpointIdentityKind `json:"kind" api:"required"`
 	// Specify the name of the proxy endpoint.
-	Name      string    `json:"name,required"`
+	Name      string    `json:"name" api:"required"`
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Specify the subdomain to use as the destination in the proxy client.
@@ -349,8 +349,8 @@ func (r ProxyEndpointKind) IsKnown() bool {
 type GatewayProxyEndpointDeleteResponse = interface{}
 
 type GatewayProxyEndpointNewParams struct {
-	AccountID param.Field[string]                    `path:"account_id,required"`
-	Body      GatewayProxyEndpointNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]                    `path:"account_id" api:"required"`
+	Body      GatewayProxyEndpointNewParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
@@ -359,7 +359,7 @@ func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
 
 type GatewayProxyEndpointNewParamsBody struct {
 	// Specify the name of the proxy endpoint.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The proxy endpoint kind
 	Kind param.Field[GatewayProxyEndpointNewParamsBodyKind] `json:"kind"`
 }
@@ -380,7 +380,7 @@ type GatewayProxyEndpointNewParamsBodyUnion interface {
 
 type GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreate struct {
 	// Specify the name of the proxy endpoint.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The proxy endpoint kind
 	Kind param.Field[GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreateKind] `json:"kind"`
 }
@@ -409,9 +409,9 @@ func (r GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreateKi
 
 type GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreate struct {
 	// The proxy endpoint kind
-	Kind param.Field[GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreateKind] `json:"kind,required"`
+	Kind param.Field[GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreateKind] `json:"kind" api:"required"`
 	// Specify the name of the proxy endpoint.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreate) MarshalJSON() (data []byte, err error) {
@@ -453,10 +453,10 @@ func (r GatewayProxyEndpointNewParamsBodyKind) IsKnown() bool {
 }
 
 type GatewayProxyEndpointNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ProxyEndpoint                                  `json:"result"`
 	JSON    gatewayProxyEndpointNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -496,18 +496,18 @@ func (r GatewayProxyEndpointNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayProxyEndpointDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayProxyEndpointDeleteResponse                `json:"result"`
 	JSON    gatewayProxyEndpointDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -547,7 +547,7 @@ func (r GatewayProxyEndpointDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list of CIDRs to restrict ingress connections.
 	IPs param.Field[[]GatewayIPsParam] `json:"ips"`
 	// Specify the name of the proxy endpoint.
@@ -559,10 +559,10 @@ func (r GatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayProxyEndpointEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ProxyEndpoint                                   `json:"result"`
 	JSON    gatewayProxyEndpointEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -602,14 +602,14 @@ func (r GatewayProxyEndpointEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayProxyEndpointGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayProxyEndpointGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayProxyEndpointGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ProxyEndpoint                                  `json:"result"`
 	JSON    gatewayProxyEndpointGetResponseEnvelopeJSON    `json:"-"`
 }

@@ -72,19 +72,19 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a list of uploaded workers.
@@ -94,7 +94,7 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -120,19 +120,19 @@ func (r *ScriptService) Delete(ctx context.Context, scriptName string, params Sc
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch raw script content for your worker. Note this is the original script
@@ -142,15 +142,15 @@ func (r *ScriptService) Get(ctx context.Context, scriptName string, query Script
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/javascript")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Search for Workers in an account.
@@ -159,15 +159,15 @@ func (r *ScriptService) Search(ctx context.Context, params ScriptSearchParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts-search", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Script struct {
@@ -222,9 +222,9 @@ type Script struct {
 	// The immutable ID of the script.
 	Tag string `json:"tag"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags,nullable"`
+	Tags []string `json:"tags" api:"nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
+	TailConsumers []ConsumerScript `json:"tail_consumers" api:"nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel ScriptUsageModel `json:"usage_model"`
 	JSON       scriptJSON       `json:"-"`
@@ -293,14 +293,14 @@ func (r scriptNamedHandlerJSON) RawJSON() string {
 // Observability settings for the Worker.
 type ScriptObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
-	Logs ScriptObservabilityLogs `json:"logs,nullable"`
+	Logs ScriptObservabilityLogs `json:"logs" api:"nullable"`
 	// Trace settings for the Worker.
-	Traces ScriptObservabilityTraces `json:"traces,nullable"`
+	Traces ScriptObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptObservabilityJSON   `json:"-"`
 }
 
@@ -326,15 +326,15 @@ func (r scriptObservabilityJSON) RawJSON() string {
 // Log settings for the Worker.
 type ScriptObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs bool `json:"invocation_logs,required"`
+	InvocationLogs bool `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether log persistence is enabled for the Worker.
 	Persist bool                        `json:"persist"`
 	JSON    scriptObservabilityLogsJSON `json:"-"`
@@ -367,7 +367,7 @@ type ScriptObservabilityTraces struct {
 	// Whether traces are enabled for the Worker.
 	Enabled bool `json:"enabled"`
 	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool                          `json:"persist"`
 	JSON    scriptObservabilityTracesJSON `json:"-"`
@@ -507,7 +507,7 @@ func init() {
 type ScriptPlacementObject struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode ScriptPlacementObjectMode `json:"mode,required"`
+	Mode ScriptPlacementObjectMode `json:"mode" api:"required"`
 	// The last time the script was analyzed for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
@@ -627,11 +627,11 @@ type ScriptSetting struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// Observability settings for the Worker.
-	Observability ScriptSettingObservability `json:"observability,nullable"`
+	Observability ScriptSettingObservability `json:"observability" api:"nullable"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags,nullable"`
+	Tags []string `json:"tags" api:"nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript  `json:"tail_consumers,nullable"`
+	TailConsumers []ConsumerScript  `json:"tail_consumers" api:"nullable"`
 	JSON          scriptSettingJSON `json:"-"`
 }
 
@@ -656,14 +656,14 @@ func (r scriptSettingJSON) RawJSON() string {
 // Observability settings for the Worker.
 type ScriptSettingObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
-	Logs ScriptSettingObservabilityLogs `json:"logs,nullable"`
+	Logs ScriptSettingObservabilityLogs `json:"logs" api:"nullable"`
 	// Trace settings for the Worker.
-	Traces ScriptSettingObservabilityTraces `json:"traces,nullable"`
+	Traces ScriptSettingObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptSettingObservabilityJSON   `json:"-"`
 }
 
@@ -689,15 +689,15 @@ func (r scriptSettingObservabilityJSON) RawJSON() string {
 // Log settings for the Worker.
 type ScriptSettingObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs bool `json:"invocation_logs,required"`
+	InvocationLogs bool `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether log persistence is enabled for the Worker.
 	Persist bool                               `json:"persist"`
 	JSON    scriptSettingObservabilityLogsJSON `json:"-"`
@@ -730,7 +730,7 @@ type ScriptSettingObservabilityTraces struct {
 	// Whether traces are enabled for the Worker.
 	Enabled bool `json:"enabled"`
 	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool                                 `json:"persist"`
 	JSON    scriptSettingObservabilityTracesJSON `json:"-"`
@@ -773,7 +773,7 @@ func (r ScriptSettingParam) MarshalJSON() (data []byte, err error) {
 // Observability settings for the Worker.
 type ScriptSettingObservabilityParam struct {
 	// Whether observability is enabled for the Worker.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
@@ -790,11 +790,11 @@ func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) 
 // Log settings for the Worker.
 type ScriptSettingObservabilityLogsParam struct {
 	// Whether logs are enabled for the Worker.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	InvocationLogs param.Field[bool] `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations param.Field[[]string] `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
@@ -824,7 +824,7 @@ func (r ScriptSettingObservabilityTracesParam) MarshalJSON() (data []byte, err e
 }
 
 type ScriptUpdateResponse struct {
-	StartupTimeMs int64 `json:"startup_time_ms,required"`
+	StartupTimeMs int64 `json:"startup_time_ms" api:"required"`
 	// The name used to identify the script.
 	ID string `json:"id"`
 	// Date indicating targeted support in the Workers runtime. Backwards incompatible
@@ -871,9 +871,9 @@ type ScriptUpdateResponse struct {
 	// The immutable ID of the script.
 	Tag string `json:"tag"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags,nullable"`
+	Tags []string `json:"tags" api:"nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
+	TailConsumers []ConsumerScript `json:"tail_consumers" api:"nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel ScriptUpdateResponseUsageModel `json:"usage_model"`
 	JSON       scriptUpdateResponseJSON       `json:"-"`
@@ -945,14 +945,14 @@ func (r scriptUpdateResponseNamedHandlerJSON) RawJSON() string {
 // Observability settings for the Worker.
 type ScriptUpdateResponseObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
-	Logs ScriptUpdateResponseObservabilityLogs `json:"logs,nullable"`
+	Logs ScriptUpdateResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Trace settings for the Worker.
-	Traces ScriptUpdateResponseObservabilityTraces `json:"traces,nullable"`
+	Traces ScriptUpdateResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptUpdateResponseObservabilityJSON   `json:"-"`
 }
 
@@ -978,15 +978,15 @@ func (r scriptUpdateResponseObservabilityJSON) RawJSON() string {
 // Log settings for the Worker.
 type ScriptUpdateResponseObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs bool `json:"invocation_logs,required"`
+	InvocationLogs bool `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether log persistence is enabled for the Worker.
 	Persist bool                                      `json:"persist"`
 	JSON    scriptUpdateResponseObservabilityLogsJSON `json:"-"`
@@ -1019,7 +1019,7 @@ type ScriptUpdateResponseObservabilityTraces struct {
 	// Whether traces are enabled for the Worker.
 	Enabled bool `json:"enabled"`
 	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool                                        `json:"persist"`
 	JSON    scriptUpdateResponseObservabilityTracesJSON `json:"-"`
@@ -1164,7 +1164,7 @@ func init() {
 type ScriptUpdateResponsePlacementObject struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode ScriptUpdateResponsePlacementObjectMode `json:"mode,required"`
+	Mode ScriptUpdateResponsePlacementObjectMode `json:"mode" api:"required"`
 	// The last time the script was analyzed for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
@@ -1323,13 +1323,13 @@ type ScriptListResponse struct {
 	// Deprecated: deprecated
 	PlacementStatus ScriptListResponsePlacementStatus `json:"placement_status"`
 	// Routes associated with the Worker.
-	Routes []ScriptListResponseRoute `json:"routes,nullable"`
+	Routes []ScriptListResponseRoute `json:"routes" api:"nullable"`
 	// The immutable ID of the script.
 	Tag string `json:"tag"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags,nullable"`
+	Tags []string `json:"tags" api:"nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers,nullable"`
+	TailConsumers []ConsumerScript `json:"tail_consumers" api:"nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel ScriptListResponseUsageModel `json:"usage_model"`
 	JSON       scriptListResponseJSON       `json:"-"`
@@ -1400,14 +1400,14 @@ func (r scriptListResponseNamedHandlerJSON) RawJSON() string {
 // Observability settings for the Worker.
 type ScriptListResponseObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
-	Logs ScriptListResponseObservabilityLogs `json:"logs,nullable"`
+	Logs ScriptListResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Trace settings for the Worker.
-	Traces ScriptListResponseObservabilityTraces `json:"traces,nullable"`
+	Traces ScriptListResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptListResponseObservabilityJSON   `json:"-"`
 }
 
@@ -1433,15 +1433,15 @@ func (r scriptListResponseObservabilityJSON) RawJSON() string {
 // Log settings for the Worker.
 type ScriptListResponseObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs bool `json:"invocation_logs,required"`
+	InvocationLogs bool `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether log persistence is enabled for the Worker.
 	Persist bool                                    `json:"persist"`
 	JSON    scriptListResponseObservabilityLogsJSON `json:"-"`
@@ -1474,7 +1474,7 @@ type ScriptListResponseObservabilityTraces struct {
 	// Whether traces are enabled for the Worker.
 	Enabled bool `json:"enabled"`
 	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool                                      `json:"persist"`
 	JSON    scriptListResponseObservabilityTracesJSON `json:"-"`
@@ -1619,7 +1619,7 @@ func init() {
 type ScriptListResponsePlacementObject struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode ScriptListResponsePlacementObjectMode `json:"mode,required"`
+	Mode ScriptListResponsePlacementObjectMode `json:"mode" api:"required"`
 	// The last time the script was analyzed for
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	LastAnalyzedAt time.Time `json:"last_analyzed_at" format:"date-time"`
@@ -1720,10 +1720,10 @@ func (r ScriptListResponsePlacementStatus) IsKnown() bool {
 
 type ScriptListResponseRoute struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
+	Pattern string `json:"pattern" api:"required"`
 	// Name of the script to run if the route matches.
 	Script string                      `json:"script"`
 	JSON   scriptListResponseRouteJSON `json:"-"`
@@ -1768,13 +1768,13 @@ type ScriptDeleteResponse = interface{}
 
 type ScriptSearchResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the script was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Name of the script, used in URLs and route configuration.
-	ScriptName string `json:"script_name,required"`
+	ScriptName string `json:"script_name" api:"required"`
 	// Whether the environment is the default environment.
 	EnvironmentIsDefault bool `json:"environment_is_default"`
 	// Name of the environment.
@@ -1808,9 +1808,9 @@ func (r scriptSearchResponseJSON) RawJSON() string {
 
 type ScriptUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata,required"`
+	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata" api:"required"`
 	// When set to "strict", the upload will fail if any `inherit` type bindings cannot
 	// be resolved against the previous version of the Worker. Without this,
 	// unresolvable inherit bindings are silently dropped.
@@ -2010,9 +2010,9 @@ func (r ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray) ImplementsScr
 // A binding to allow the Worker to communicate with resources.
 type ScriptUpdateParamsMetadataBinding struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsType] `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
 	ID                          param.Field[string]      `json:"id"`
 	Algorithm                   param.Field[interface{}] `json:"algorithm"`
@@ -2144,9 +2144,9 @@ type ScriptUpdateParamsMetadataBindingUnion interface {
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) MarshalJSON() (data []byte, err error) {
@@ -2174,11 +2174,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType) IsKnown() bo
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearch struct {
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
 	// chat, update, and manage items/jobs on this instance.
-	InstanceName param.Field[string] `json:"instance_name,required"`
+	InstanceName param.Field[string] `json:"instance_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchType] `json:"type" api:"required"`
 	// The namespace the instance belongs to. Defaults to "default" if omitted.
 	// Customers who don't use namespaces can simply omit this field.
 	Namespace param.Field[string] `json:"namespace"`
@@ -2208,14 +2208,14 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchType) IsKnow
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
 	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
 	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
 	// chat) to all instances within the namespace.
-	Namespace param.Field[string] `json:"namespace,required"`
+	Namespace param.Field[string] `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespace) MarshalJSON() (data []byte, err error) {
@@ -2242,11 +2242,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAISearchNamespaceTyp
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
-	Dataset param.Field[string] `json:"dataset,required"`
+	Dataset param.Field[string] `json:"dataset" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) MarshalJSON() (data []byte, err error) {
@@ -2273,9 +2273,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType)
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) MarshalJSON() (data []byte, err error) {
@@ -2302,9 +2302,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType) IsKnown(
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowser) MarshalJSON() (data []byte, err error) {
@@ -2331,11 +2331,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserType) IsKnown
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) MarshalJSON() (data []byte, err error) {
@@ -2362,14 +2362,14 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type) IsKnown() bo
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDataBlob struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the data content. Only accepted for
 	// `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDataBlobType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDataBlobType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDataBlob) MarshalJSON() (data []byte, err error) {
@@ -2396,11 +2396,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDataBlobType) IsKnow
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the dispatch namespace.
-	Namespace param.Field[string] `json:"namespace,required"`
+	Namespace param.Field[string] `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType] `json:"type" api:"required"`
 	// Outbound worker.
 	Outbound param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound] `json:"outbound"`
 }
@@ -2442,7 +2442,7 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOut
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
 	// Name of the parameter.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundParam) MarshalJSON() (data []byte, err error) {
@@ -2465,9 +2465,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOut
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type" api:"required"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
 	// The dispatch namespace the Durable Object script belongs to.
@@ -2505,11 +2505,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDurableObjectNamespa
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) MarshalJSON() (data []byte, err error) {
@@ -2536,9 +2536,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType) IsKn
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindInherit struct {
 	// The name of the inherited binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindInheritType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindInheritType] `json:"type" api:"required"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -2573,9 +2573,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindInheritType) IsKnown
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindImages struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindImagesType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindImagesType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindImages) MarshalJSON() (data []byte, err error) {
@@ -2602,11 +2602,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindImagesType) IsKnown(
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json param.Field[interface{}] `json:"json,required"`
+	Json param.Field[interface{}] `json:"json" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
@@ -2633,11 +2633,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType) IsKnown() 
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Namespace identifier tag.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) MarshalJSON() (data []byte, err error) {
@@ -2664,9 +2664,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType) IsK
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMedia struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMedia) MarshalJSON() (data []byte, err error) {
@@ -2693,11 +2693,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMediaType) IsKnown()
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate) MarshalJSON() (data []byte, err error) {
@@ -2724,11 +2724,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificateType)
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The text value to use.
-	Text param.Field[string] `json:"text,required"`
+	Text param.Field[string] `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) MarshalJSON() (data []byte, err error) {
@@ -2755,11 +2755,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType) IsKno
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the Pipeline to bind to.
-	Pipeline param.Field[string] `json:"pipeline,required"`
+	Pipeline param.Field[string] `json:"pipeline" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines) MarshalJSON() (data []byte, err error) {
@@ -2786,11 +2786,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType) IsKno
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the Queue to bind to.
-	QueueName param.Field[string] `json:"queue_name,required"`
+	QueueName param.Field[string] `json:"queue_name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) MarshalJSON() (data []byte, err error) {
@@ -2817,13 +2817,13 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType) IsKnown()
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Identifier of the rate limit namespace to bind to.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// The rate limit configuration.
-	Simple param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple] `json:"simple,required"`
+	Simple param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple] `json:"simple" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit) MarshalJSON() (data []byte, err error) {
@@ -2836,9 +2836,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit) implement
 // The rate limit configuration.
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple struct {
 	// The limit (requests per period).
-	Limit param.Field[float64] `json:"limit,required"`
+	Limit param.Field[float64] `json:"limit" api:"required"`
 	// The period in seconds.
-	Period param.Field[int64] `json:"period,required"`
+	Period param.Field[int64] `json:"period" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple) MarshalJSON() (data []byte, err error) {
@@ -2862,11 +2862,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitType) IsKno
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
-	BucketName param.Field[string] `json:"bucket_name,required"`
+	BucketName param.Field[string] `json:"bucket_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketType] `json:"type" api:"required"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -2916,11 +2916,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The secret value to use.
-	Text param.Field[string] `json:"text,required"`
+	Text param.Field[string] `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
@@ -2947,9 +2947,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTextType) IsKn
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmail struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmailType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmailType] `json:"type" api:"required"`
 	// List of allowed destination addresses.
 	AllowedDestinationAddresses param.Field[[]string] `json:"allowed_destination_addresses" format:"email"`
 	// List of allowed sender addresses.
@@ -2982,11 +2982,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSendEmailType) IsKno
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindService struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of Worker to bind to.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType] `json:"type" api:"required"`
 	// Entrypoint to invoke on the target Worker.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
@@ -3017,14 +3017,14 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType) IsKnown
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the text content. Only accepted for
 	// `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlobType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlobType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlob) MarshalJSON() (data []byte, err error) {
@@ -3051,11 +3051,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTextBlobType) IsKnow
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
-	IndexName param.Field[string] `json:"index_name,required"`
+	IndexName param.Field[string] `json:"index_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) MarshalJSON() (data []byte, err error) {
@@ -3082,9 +3082,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType) IsKno
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) MarshalJSON() (data []byte, err error) {
@@ -3111,13 +3111,13 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType)
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the secret in the store.
-	SecretName param.Field[string] `json:"secret_name,required"`
+	SecretName param.Field[string] `json:"secret_name" api:"required"`
 	// ID of the store containing the secret.
-	StoreID param.Field[string] `json:"store_id,required"`
+	StoreID param.Field[string] `json:"store_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecret) MarshalJSON() (data []byte, err error) {
@@ -3145,17 +3145,17 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretsStoreSecretTy
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm param.Field[interface{}] `json:"algorithm,required"`
+	Algorithm param.Field[interface{}] `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
+	Format param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyFormat] `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyType] `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages param.Field[[]ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
+	Usages param.Field[[]ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage] `json:"usages" api:"required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
 	// Key data in
@@ -3228,11 +3228,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretKeyUsage) IsKn
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType] `json:"type" api:"required"`
 	// Name of the Workflow to bind to.
-	WorkflowName param.Field[string] `json:"workflow_name,required"`
+	WorkflowName param.Field[string] `json:"workflow_name" api:"required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
 	// this script.
 	ClassName param.Field[string] `json:"class_name"`
@@ -3265,14 +3265,14 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWorkflowType) IsKnow
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModule struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the WebAssembly module content. Only accepted
 	// for `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModuleType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModuleType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModule) MarshalJSON() (data []byte, err error) {
@@ -3299,11 +3299,11 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindWasmModuleType) IsKn
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCService struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Identifier of the VPC service to bind to.
-	ServiceID param.Field[string] `json:"service_id,required"`
+	ServiceID param.Field[string] `json:"service_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType] `json:"type" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCService) MarshalJSON() (data []byte, err error) {
@@ -3330,9 +3330,9 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCServiceType) IsKn
 
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetwork struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType] `json:"type,required"`
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -3508,7 +3508,7 @@ func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) imple
 // Observability settings for the Worker.
 type ScriptUpdateParamsMetadataObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
@@ -3525,11 +3525,11 @@ func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err
 // Log settings for the Worker.
 type ScriptUpdateParamsMetadataObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	InvocationLogs param.Field[bool] `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations param.Field[[]string] `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
@@ -3600,7 +3600,7 @@ type ScriptUpdateParamsMetadataPlacementUnion interface {
 type ScriptUpdateParamsMetadataPlacementObject struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode param.Field[ScriptUpdateParamsMetadataPlacementObjectMode] `json:"mode,required"`
+	Mode param.Field[ScriptUpdateParamsMetadataPlacementObjectMode] `json:"mode" api:"required"`
 }
 
 func (r ScriptUpdateParamsMetadataPlacementObject) MarshalJSON() (data []byte, err error) {
@@ -3714,11 +3714,11 @@ func (r ScriptUpdateParamsBindingsInherit) IsKnown() bool {
 }
 
 type ScriptUpdateResponseEnvelope struct {
-	Errors   []ScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptUpdateResponse                   `json:"result,required"`
+	Errors   []ScriptUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptUpdateResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3742,8 +3742,8 @@ func (r scriptUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptUpdateResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ScriptUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3790,8 +3790,8 @@ func (r scriptUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptUpdateResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ScriptUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3854,7 +3854,7 @@ func (r ScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter scripts by tags. Format: comma-separated list of tag:allowed pairs where
 	// allowed is 'yes' or 'no'.
 	Tags param.Field[string] `query:"tags"`
@@ -3870,7 +3870,7 @@ func (r ScriptListParams) URLQuery() (v url.Values) {
 
 type ScriptDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
 	// objects will be deleted along with the script.
@@ -3886,11 +3886,11 @@ func (r ScriptDeleteParams) URLQuery() (v url.Values) {
 }
 
 type ScriptDeleteResponseEnvelope struct {
-	Errors   []ScriptDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ScriptDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptDeleteResponse                `json:"result,nullable"`
+	Success ScriptDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ScriptDeleteResponse                `json:"result" api:"nullable"`
 	JSON    scriptDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3914,8 +3914,8 @@ func (r scriptDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptDeleteResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ScriptDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3962,8 +3962,8 @@ func (r scriptDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptDeleteResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ScriptDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -4026,12 +4026,12 @@ func (r ScriptDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptSearchParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Worker ID (also called tag) to search for. Only exact matches are returned.
 	ID param.Field[string] `query:"id"`
 	// Worker name to search for. Both exact and partial matches are returned.
@@ -4070,11 +4070,11 @@ func (r ScriptSearchParamsOrderBy) IsKnown() bool {
 }
 
 type ScriptSearchResponseEnvelope struct {
-	Errors   []ScriptSearchResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSearchResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ScriptSearchResponse                 `json:"result,required"`
+	Errors   []ScriptSearchResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSearchResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   []ScriptSearchResponse                 `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success    ScriptSearchResponseEnvelopeSuccess    `json:"success,required"`
+	Success    ScriptSearchResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo ScriptSearchResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       scriptSearchResponseEnvelopeJSON       `json:"-"`
 }
@@ -4100,8 +4100,8 @@ func (r scriptSearchResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSearchResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ScriptSearchResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSearchResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4148,8 +4148,8 @@ func (r scriptSearchResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSearchResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ScriptSearchResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSearchResponseEnvelopeMessagesJSON   `json:"-"`

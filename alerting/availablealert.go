@@ -40,15 +40,15 @@ func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertLi
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/available_alerts", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AvailableAlertListResponse map[string][]AvailableAlertListResponseItem
@@ -87,14 +87,14 @@ func (r availableAlertListResponseItemJSON) RawJSON() string {
 
 type AvailableAlertListParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AvailableAlertListResponseEnvelope struct {
-	Errors   []AvailableAlertListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AvailableAlertListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AvailableAlertListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AvailableAlertListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success AvailableAlertListResponseEnvelopeSuccess `json:"success,required"`
+	Success AvailableAlertListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AvailableAlertListResponse                `json:"result"`
 	JSON    availableAlertListResponseEnvelopeJSON    `json:"-"`
 }
@@ -119,7 +119,7 @@ func (r availableAlertListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AvailableAlertListResponseEnvelopeErrors struct {
-	Message string                                       `json:"message,required"`
+	Message string                                       `json:"message" api:"required"`
 	Code    int64                                        `json:"code"`
 	JSON    availableAlertListResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -142,7 +142,7 @@ func (r availableAlertListResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type AvailableAlertListResponseEnvelopeMessages struct {
-	Message string                                         `json:"message,required"`
+	Message string                                         `json:"message" api:"required"`
 	Code    int64                                          `json:"code"`
 	JSON    availableAlertListResponseEnvelopeMessagesJSON `json:"-"`
 }

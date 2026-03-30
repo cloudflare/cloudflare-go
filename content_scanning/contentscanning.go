@@ -45,15 +45,15 @@ func (r *ContentScanningService) New(ctx context.Context, params ContentScanning
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update the Content Scanning status.
@@ -62,15 +62,15 @@ func (r *ContentScanningService) Update(ctx context.Context, params ContentScann
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disable Content Scanning.
@@ -79,15 +79,15 @@ func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanni
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/disable", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Enable Content Scanning.
@@ -96,15 +96,15 @@ func (r *ContentScanningService) Enable(ctx context.Context, body ContentScannin
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/enable", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve the current status of Content Scanning.
@@ -113,15 +113,15 @@ func (r *ContentScanningService) Get(ctx context.Context, query ContentScanningG
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Defines the status for Content Scanning.
@@ -208,9 +208,9 @@ func (r contentScanningGetResponseJSON) RawJSON() string {
 
 type ContentScanningNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The status value for Content Scanning.
-	Value param.Field[ContentScanningNewParamsValue] `json:"value,required"`
+	Value param.Field[ContentScanningNewParamsValue] `json:"value" api:"required"`
 }
 
 func (r ContentScanningNewParams) MarshalJSON() (data []byte, err error) {
@@ -234,12 +234,12 @@ func (r ContentScanningNewParamsValue) IsKnown() bool {
 }
 
 type ContentScanningNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines the status for Content Scanning.
-	Result ContentScanningNewResponse `json:"result,required"`
+	Result ContentScanningNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ContentScanningNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ContentScanningNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    contentScanningNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -279,9 +279,9 @@ func (r ContentScanningNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningUpdateParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The status value for Content Scanning.
-	Value param.Field[ContentScanningUpdateParamsValue] `json:"value,required"`
+	Value param.Field[ContentScanningUpdateParamsValue] `json:"value" api:"required"`
 }
 
 func (r ContentScanningUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -305,12 +305,12 @@ func (r ContentScanningUpdateParamsValue) IsKnown() bool {
 }
 
 type ContentScanningUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines the status for Content Scanning.
-	Result ContentScanningUpdateResponse `json:"result,required"`
+	Result ContentScanningUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ContentScanningUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ContentScanningUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    contentScanningUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -350,15 +350,15 @@ func (r ContentScanningUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningDisableParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ContentScanningDisableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ContentScanningDisableResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo          `json:"messages" api:"required"`
+	Result   ContentScanningDisableResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ContentScanningDisableResponseEnvelopeSuccess `json:"success,required"`
+	Success ContentScanningDisableResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    contentScanningDisableResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -398,15 +398,15 @@ func (r ContentScanningDisableResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningEnableParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ContentScanningEnableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   ContentScanningEnableResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo         `json:"messages" api:"required"`
+	Result   ContentScanningEnableResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ContentScanningEnableResponseEnvelopeSuccess `json:"success,required"`
+	Success ContentScanningEnableResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    contentScanningEnableResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -446,16 +446,16 @@ func (r ContentScanningEnableResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ContentScanningGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines the status for Content Scanning.
-	Result ContentScanningGetResponse `json:"result,required"`
+	Result ContentScanningGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ContentScanningGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ContentScanningGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    contentScanningGetResponseEnvelopeJSON    `json:"-"`
 }
 

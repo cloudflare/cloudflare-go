@@ -40,15 +40,15 @@ func (r *URLNormalizationService) Update(ctx context.Context, params URLNormaliz
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/url_normalization", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes the URL Normalization settings.
@@ -57,11 +57,11 @@ func (r *URLNormalizationService) Delete(ctx context.Context, body URLNormalizat
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/url_normalization", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Fetches the current URL Normalization settings.
@@ -70,23 +70,23 @@ func (r *URLNormalizationService) Get(ctx context.Context, query URLNormalizatio
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/url_normalization", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A result.
 type URLNormalizationUpdateResponse struct {
 	// The scope of the URL normalization.
-	Scope URLNormalizationUpdateResponseScope `json:"scope,required"`
+	Scope URLNormalizationUpdateResponseScope `json:"scope" api:"required"`
 	// The type of URL normalization performed by Cloudflare.
-	Type URLNormalizationUpdateResponseType `json:"type,required"`
+	Type URLNormalizationUpdateResponseType `json:"type" api:"required"`
 	JSON urlNormalizationUpdateResponseJSON `json:"-"`
 }
 
@@ -143,9 +143,9 @@ func (r URLNormalizationUpdateResponseType) IsKnown() bool {
 // A result.
 type URLNormalizationGetResponse struct {
 	// The scope of the URL normalization.
-	Scope URLNormalizationGetResponseScope `json:"scope,required"`
+	Scope URLNormalizationGetResponseScope `json:"scope" api:"required"`
 	// The type of URL normalization performed by Cloudflare.
-	Type URLNormalizationGetResponseType `json:"type,required"`
+	Type URLNormalizationGetResponseType `json:"type" api:"required"`
 	JSON urlNormalizationGetResponseJSON `json:"-"`
 }
 
@@ -201,11 +201,11 @@ func (r URLNormalizationGetResponseType) IsKnown() bool {
 
 type URLNormalizationUpdateParams struct {
 	// The unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The scope of the URL normalization.
-	Scope param.Field[URLNormalizationUpdateParamsScope] `json:"scope,required"`
+	Scope param.Field[URLNormalizationUpdateParamsScope] `json:"scope" api:"required"`
 	// The type of URL normalization performed by Cloudflare.
-	Type param.Field[URLNormalizationUpdateParamsType] `json:"type,required"`
+	Type param.Field[URLNormalizationUpdateParamsType] `json:"type" api:"required"`
 }
 
 func (r URLNormalizationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -248,13 +248,13 @@ func (r URLNormalizationUpdateParamsType) IsKnown() bool {
 // A response object.
 type URLNormalizationUpdateResponseEnvelope struct {
 	// A list of error messages.
-	Errors []URLNormalizationUpdateResponseEnvelopeErrors `json:"errors,required"`
+	Errors []URLNormalizationUpdateResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
-	Messages []URLNormalizationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Messages []URLNormalizationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A result.
-	Result URLNormalizationUpdateResponse `json:"result,required"`
+	Result URLNormalizationUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success URLNormalizationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success URLNormalizationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    urlNormalizationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -280,7 +280,7 @@ func (r urlNormalizationUpdateResponseEnvelopeJSON) RawJSON() string {
 // A message.
 type URLNormalizationUpdateResponseEnvelopeErrors struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -309,7 +309,7 @@ func (r urlNormalizationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 // The source of this message.
 type URLNormalizationUpdateResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                 `json:"pointer,required"`
+	Pointer string                                                 `json:"pointer" api:"required"`
 	JSON    urlNormalizationUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
@@ -332,7 +332,7 @@ func (r urlNormalizationUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string
 // A message.
 type URLNormalizationUpdateResponseEnvelopeMessages struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -361,7 +361,7 @@ func (r urlNormalizationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 // The source of this message.
 type URLNormalizationUpdateResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                   `json:"pointer,required"`
+	Pointer string                                                   `json:"pointer" api:"required"`
 	JSON    urlNormalizationUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 
@@ -398,24 +398,24 @@ func (r URLNormalizationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type URLNormalizationDeleteParams struct {
 	// The unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type URLNormalizationGetParams struct {
 	// The unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 // A response object.
 type URLNormalizationGetResponseEnvelope struct {
 	// A list of error messages.
-	Errors []URLNormalizationGetResponseEnvelopeErrors `json:"errors,required"`
+	Errors []URLNormalizationGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
-	Messages []URLNormalizationGetResponseEnvelopeMessages `json:"messages,required"`
+	Messages []URLNormalizationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A result.
-	Result URLNormalizationGetResponse `json:"result,required"`
+	Result URLNormalizationGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success URLNormalizationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success URLNormalizationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    urlNormalizationGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -441,7 +441,7 @@ func (r urlNormalizationGetResponseEnvelopeJSON) RawJSON() string {
 // A message.
 type URLNormalizationGetResponseEnvelopeErrors struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -470,7 +470,7 @@ func (r urlNormalizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
 // The source of this message.
 type URLNormalizationGetResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                              `json:"pointer,required"`
+	Pointer string                                              `json:"pointer" api:"required"`
 	JSON    urlNormalizationGetResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
@@ -493,7 +493,7 @@ func (r urlNormalizationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 // A message.
 type URLNormalizationGetResponseEnvelopeMessages struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -522,7 +522,7 @@ func (r urlNormalizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 // The source of this message.
 type URLNormalizationGetResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                `json:"pointer,required"`
+	Pointer string                                                `json:"pointer" api:"required"`
 	JSON    urlNormalizationGetResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 

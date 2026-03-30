@@ -45,15 +45,15 @@ func (r *ASNService) DayReport(ctx context.Context, asnID int64, params ASNDayRe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/botnet_feed/asn/%v/day_report", params.AccountID, asnID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets all the data the botnet threat feed tracking database has for a given ASN
@@ -63,15 +63,15 @@ func (r *ASNService) FullReport(ctx context.Context, asnID int64, query ASNFullR
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/botnet_feed/asn/%v/full_report", query.AccountID, asnID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ASNDayReportResponse struct {
@@ -126,7 +126,7 @@ func (r asnFullReportResponseJSON) RawJSON() string {
 
 type ASNDayReportParams struct {
 	// Identifier.
-	AccountID param.Field[string]    `path:"account_id,required"`
+	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	Date      param.Field[time.Time] `query:"date" format:"date-time"`
 }
 
@@ -139,10 +139,10 @@ func (r ASNDayReportParams) URLQuery() (v url.Values) {
 }
 
 type ASNDayReportResponseEnvelope struct {
-	Errors   []ASNDayReportResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ASNDayReportResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ASNDayReportResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ASNDayReportResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ASNDayReportResponseEnvelopeSuccess `json:"success,required"`
+	Success ASNDayReportResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ASNDayReportResponse                `json:"result"`
 	JSON    asnDayReportResponseEnvelopeJSON    `json:"-"`
 }
@@ -167,8 +167,8 @@ func (r asnDayReportResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ASNDayReportResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ASNDayReportResponseEnvelopeErrorsSource `json:"source"`
 	JSON             asnDayReportResponseEnvelopeErrorsJSON   `json:"-"`
@@ -215,8 +215,8 @@ func (r asnDayReportResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ASNDayReportResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ASNDayReportResponseEnvelopeMessagesSource `json:"source"`
 	JSON             asnDayReportResponseEnvelopeMessagesJSON   `json:"-"`
@@ -279,14 +279,14 @@ func (r ASNDayReportResponseEnvelopeSuccess) IsKnown() bool {
 
 type ASNFullReportParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ASNFullReportResponseEnvelope struct {
-	Errors   []ASNFullReportResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ASNFullReportResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ASNFullReportResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ASNFullReportResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ASNFullReportResponseEnvelopeSuccess `json:"success,required"`
+	Success ASNFullReportResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ASNFullReportResponse                `json:"result"`
 	JSON    asnFullReportResponseEnvelopeJSON    `json:"-"`
 }
@@ -311,8 +311,8 @@ func (r asnFullReportResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ASNFullReportResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           ASNFullReportResponseEnvelopeErrorsSource `json:"source"`
 	JSON             asnFullReportResponseEnvelopeErrorsJSON   `json:"-"`
@@ -359,8 +359,8 @@ func (r asnFullReportResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ASNFullReportResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           ASNFullReportResponseEnvelopeMessagesSource `json:"source"`
 	JSON             asnFullReportResponseEnvelopeMessagesJSON   `json:"-"`

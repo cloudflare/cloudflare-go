@@ -41,19 +41,19 @@ func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if signingKeyName == "" {
 		err = errors.New("missing required signing_key_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists your signing keys. These can be found on your Cloudflare Images dashboard.
@@ -62,15 +62,15 @@ func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/keys", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete signing key with specified name. Returns all keys available. When last
@@ -80,19 +80,19 @@ func (r *V1KeyService) Delete(ctx context.Context, signingKeyName string, body V
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if signingKeyName == "" {
 		err = errors.New("missing required signing_key_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Key struct {
@@ -184,15 +184,15 @@ func (r v1KeyDeleteResponseJSON) RawJSON() string {
 
 type V1KeyUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V1KeyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1KeyUpdateResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   V1KeyUpdateResponse   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1KeyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success V1KeyUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1KeyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -232,15 +232,15 @@ func (r V1KeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1KeyListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V1KeyListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1KeyListResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   V1KeyListResponse     `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1KeyListResponseEnvelopeSuccess `json:"success,required"`
+	Success V1KeyListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1KeyListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -280,15 +280,15 @@ func (r V1KeyListResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1KeyDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V1KeyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1KeyDeleteResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   V1KeyDeleteResponse   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success V1KeyDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1KeyDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

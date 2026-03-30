@@ -47,7 +47,7 @@ func (r *AccessLogSCIMUpdateService) List(ctx context.Context, params AccessLogS
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/logs/scim/updates", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -123,9 +123,9 @@ func (r accessLogSCIMUpdateListResponseJSON) RawJSON() string {
 
 type AccessLogSCIMUpdateListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The unique Id of the IdP that has SCIM enabled.
-	IdPID param.Field[[]string] `query:"idp_id,required"`
+	IdPID param.Field[[]string] `query:"idp_id" api:"required"`
 	// The unique Cloudflare-generated Id of the SCIM resource.
 	CfResourceID param.Field[string] `query:"cf_resource_id"`
 	// The chronological order used to sort the logs.

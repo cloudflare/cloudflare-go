@@ -42,11 +42,11 @@ func (r *OrganizationProfileService) Update(ctx context.Context, organizationID 
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("organizations/%s/profile", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, nil, opts...)
-	return
+	return err
 }
 
 // Get an organizations profile if it exists. (Currently in Closed Beta - see
@@ -56,19 +56,19 @@ func (r *OrganizationProfileService) Get(ctx context.Context, organizationID str
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s/profile", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OrganizationProfileUpdateParams struct {
-	AccountProfile accounts.AccountProfileParam `json:"account_profile,required"`
+	AccountProfile accounts.AccountProfileParam `json:"account_profile" api:"required"`
 }
 
 func (r OrganizationProfileUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -76,10 +76,10 @@ func (r OrganizationProfileUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OrganizationProfileGetResponseEnvelope struct {
-	Errors   []interface{}                                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   accounts.AccountProfile                       `json:"result,required"`
-	Success  OrganizationProfileGetResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []interface{}                                 `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                         `json:"messages" api:"required"`
+	Result   accounts.AccountProfile                       `json:"result" api:"required"`
+	Success  OrganizationProfileGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON     organizationProfileGetResponseEnvelopeJSON    `json:"-"`
 }
 

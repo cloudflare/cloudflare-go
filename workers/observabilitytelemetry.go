@@ -45,7 +45,7 @@ func (r *ObservabilityTelemetryService) Keys(ctx context.Context, params Observa
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/observability/telemetry/keys", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -71,15 +71,15 @@ func (r *ObservabilityTelemetryService) Query(ctx context.Context, params Observ
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/observability/telemetry/query", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List unique values found in your events.
@@ -89,7 +89,7 @@ func (r *ObservabilityTelemetryService) Values(ctx context.Context, params Obser
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/observability/telemetry/values", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -110,9 +110,9 @@ func (r *ObservabilityTelemetryService) ValuesAutoPaging(ctx context.Context, pa
 }
 
 type ObservabilityTelemetryKeysResponse struct {
-	Key        string                                 `json:"key,required"`
-	LastSeenAt float64                                `json:"lastSeenAt,required"`
-	Type       ObservabilityTelemetryKeysResponseType `json:"type,required"`
+	Key        string                                 `json:"key" api:"required"`
+	LastSeenAt float64                                `json:"lastSeenAt" api:"required"`
+	Type       ObservabilityTelemetryKeysResponseType `json:"type" api:"required"`
 	JSON       observabilityTelemetryKeysResponseJSON `json:"-"`
 }
 
@@ -152,10 +152,10 @@ func (r ObservabilityTelemetryKeysResponseType) IsKnown() bool {
 
 type ObservabilityTelemetryQueryResponse struct {
 	// A Workers Observability Query Object
-	Run ObservabilityTelemetryQueryResponseRun `json:"run,required"`
+	Run ObservabilityTelemetryQueryResponseRun `json:"run" api:"required"`
 	// The statistics object contains information about query performance from the
 	// database, it does not include any network latency
-	Statistics   ObservabilityTelemetryQueryResponseStatistics              `json:"statistics,required"`
+	Statistics   ObservabilityTelemetryQueryResponseStatistics              `json:"statistics" api:"required"`
 	Agents       []ObservabilityTelemetryQueryResponseAgent                 `json:"agents"`
 	Calculations []ObservabilityTelemetryQueryResponseCalculation           `json:"calculations"`
 	Compare      []ObservabilityTelemetryQueryResponseCompare               `json:"compare"`
@@ -190,15 +190,15 @@ func (r observabilityTelemetryQueryResponseJSON) RawJSON() string {
 
 // A Workers Observability Query Object
 type ObservabilityTelemetryQueryResponseRun struct {
-	ID          string                                       `json:"id,required"`
-	AccountID   string                                       `json:"accountId,required"`
-	Dry         bool                                         `json:"dry,required"`
-	Granularity float64                                      `json:"granularity,required"`
-	Query       ObservabilityTelemetryQueryResponseRunQuery  `json:"query,required"`
-	Status      ObservabilityTelemetryQueryResponseRunStatus `json:"status,required"`
+	ID          string                                       `json:"id" api:"required"`
+	AccountID   string                                       `json:"accountId" api:"required"`
+	Dry         bool                                         `json:"dry" api:"required"`
+	Granularity float64                                      `json:"granularity" api:"required"`
+	Query       ObservabilityTelemetryQueryResponseRunQuery  `json:"query" api:"required"`
+	Status      ObservabilityTelemetryQueryResponseRunStatus `json:"status" api:"required"`
 	// Time range for the query execution
-	Timeframe  ObservabilityTelemetryQueryResponseRunTimeframe  `json:"timeframe,required"`
-	UserID     string                                           `json:"userId,required"`
+	Timeframe  ObservabilityTelemetryQueryResponseRunTimeframe  `json:"timeframe" api:"required"`
+	UserID     string                                           `json:"userId" api:"required"`
 	Created    string                                           `json:"created"`
 	Statistics ObservabilityTelemetryQueryResponseRunStatistics `json:"statistics"`
 	Updated    string                                           `json:"updated"`
@@ -232,17 +232,17 @@ func (r observabilityTelemetryQueryResponseRunJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseRunQuery struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// If the query wasn't explcitly saved
-	Adhoc       bool   `json:"adhoc,required"`
-	Created     string `json:"created,required"`
-	CreatedBy   string `json:"createdBy,required"`
-	Description string `json:"description,required,nullable"`
+	Adhoc       bool   `json:"adhoc" api:"required"`
+	Created     string `json:"created" api:"required"`
+	CreatedBy   string `json:"createdBy" api:"required"`
+	Description string `json:"description" api:"required,nullable"`
 	// Query name
-	Name       string                                                `json:"name,required"`
-	Parameters ObservabilityTelemetryQueryResponseRunQueryParameters `json:"parameters,required"`
-	Updated    string                                                `json:"updated,required"`
-	UpdatedBy  string                                                `json:"updatedBy,required"`
+	Name       string                                                `json:"name" api:"required"`
+	Parameters ObservabilityTelemetryQueryResponseRunQueryParameters `json:"parameters" api:"required"`
+	Updated    string                                                `json:"updated" api:"required"`
+	UpdatedBy  string                                                `json:"updatedBy" api:"required"`
 	JSON       observabilityTelemetryQueryResponseRunQueryJSON       `json:"-"`
 }
 
@@ -318,7 +318,7 @@ func (r observabilityTelemetryQueryResponseRunQueryParametersJSON) RawJSON() str
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParametersCalculation struct {
-	Operator ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator `json:"operator,required"`
+	Operator ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator `json:"operator" api:"required"`
 	Alias    string                                                                    `json:"alias"`
 	Key      string                                                                    `json:"key"`
 	KeyType  ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsKeyType  `json:"keyType"`
@@ -514,9 +514,9 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObject struct {
-	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination `json:"filterCombination,required"`
-	Filters           []interface{}                                                                       `json:"filters,required"`
-	Kind              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKind              `json:"kind,required"`
+	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectFilterCombination `json:"filterCombination" api:"required"`
+	Filters           []interface{}                                                                       `json:"filters" api:"required"`
+	Kind              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKind              `json:"kind" api:"required"`
 	JSON              observabilityTelemetryQueryResponseRunQueryParametersFiltersObjectJSON              `json:"-"`
 }
 
@@ -581,9 +581,9 @@ type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservab
 	// previous query results or the observability_keys response. Preferred keys:
 	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
 	// $metadata.error.
-	Key       string                                                                                              `json:"key,required"`
-	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation `json:"operation,required"`
-	Type      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType      `json:"type,required"`
+	Key       string                                                                                              `json:"key" api:"required"`
+	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation `json:"operation" api:"required"`
+	Type      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType      `json:"type" api:"required"`
 	Kind      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind      `json:"kind"`
 	// Filter comparison value. IMPORTANT: must match actual values in your logs.
 	// Verify using previous query results or the /values endpoint. Ensure value type
@@ -816,8 +816,8 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersType) IsKnow
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParametersGroupBy struct {
-	Type  ObservabilityTelemetryQueryResponseRunQueryParametersGroupBysType `json:"type,required"`
-	Value string                                                            `json:"value,required"`
+	Type  ObservabilityTelemetryQueryResponseRunQueryParametersGroupBysType `json:"type" api:"required"`
+	Value string                                                            `json:"value" api:"required"`
 	JSON  observabilityTelemetryQueryResponseRunQueryParametersGroupByJSON  `json:"-"`
 }
 
@@ -856,9 +856,9 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersGroupBysType) IsKno
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParametersHaving struct {
-	Key       string                                                                `json:"key,required"`
-	Operation ObservabilityTelemetryQueryResponseRunQueryParametersHavingsOperation `json:"operation,required"`
-	Value     float64                                                               `json:"value,required"`
+	Key       string                                                                `json:"key" api:"required"`
+	Operation ObservabilityTelemetryQueryResponseRunQueryParametersHavingsOperation `json:"operation" api:"required"`
+	Value     float64                                                               `json:"value" api:"required"`
 	JSON      observabilityTelemetryQueryResponseRunQueryParametersHavingJSON       `json:"-"`
 }
 
@@ -902,7 +902,7 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersHavingsOperation) I
 
 // Define an expression to search using full-text search.
 type ObservabilityTelemetryQueryResponseRunQueryParametersNeedle struct {
-	Value     ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValue `json:"value,required"`
+	Value     ObservabilityTelemetryQueryResponseRunQueryParametersNeedleValue `json:"value" api:"required"`
 	IsRegex   bool                                                             `json:"isRegex"`
 	MatchCase bool                                                             `json:"matchCase"`
 	JSON      observabilityTelemetryQueryResponseRunQueryParametersNeedleJSON  `json:"-"`
@@ -950,7 +950,7 @@ func (r observabilityTelemetryQueryResponseRunQueryParametersNeedleValueJSON) Ra
 // Configure the order of the results returned by the query.
 type ObservabilityTelemetryQueryResponseRunQueryParametersOrderBy struct {
 	// Configure which Calculation to order the results by.
-	Value string `json:"value,required"`
+	Value string `json:"value" api:"required"`
 	// Set the order of the results
 	Order ObservabilityTelemetryQueryResponseRunQueryParametersOrderByOrder `json:"order"`
 	JSON  observabilityTelemetryQueryResponseRunQueryParametersOrderByJSON  `json:"-"`
@@ -1008,9 +1008,9 @@ func (r ObservabilityTelemetryQueryResponseRunStatus) IsKnown() bool {
 // Time range for the query execution
 type ObservabilityTelemetryQueryResponseRunTimeframe struct {
 	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
-	From float64 `json:"from,required"`
+	From float64 `json:"from" api:"required"`
 	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
-	To   float64                                             `json:"to,required"`
+	To   float64                                             `json:"to" api:"required"`
 	JSON observabilityTelemetryQueryResponseRunTimeframeJSON `json:"-"`
 }
 
@@ -1033,11 +1033,11 @@ func (r observabilityTelemetryQueryResponseRunTimeframeJSON) RawJSON() string {
 
 type ObservabilityTelemetryQueryResponseRunStatistics struct {
 	// Number of uncompressed bytes read from the table.
-	BytesRead float64 `json:"bytes_read,required"`
+	BytesRead float64 `json:"bytes_read" api:"required"`
 	// Time in seconds for the query to run.
-	Elapsed float64 `json:"elapsed,required"`
+	Elapsed float64 `json:"elapsed" api:"required"`
 	// Number of rows scanned from the table.
-	RowsRead float64 `json:"rows_read,required"`
+	RowsRead float64 `json:"rows_read" api:"required"`
 	// The level of Adaptive Bit Rate (ABR) sampling used for the query. If empty the
 	// ABR level is 1
 	AbrLevel float64                                              `json:"abr_level"`
@@ -1067,11 +1067,11 @@ func (r observabilityTelemetryQueryResponseRunStatisticsJSON) RawJSON() string {
 // database, it does not include any network latency
 type ObservabilityTelemetryQueryResponseStatistics struct {
 	// Number of uncompressed bytes read from the table.
-	BytesRead float64 `json:"bytes_read,required"`
+	BytesRead float64 `json:"bytes_read" api:"required"`
 	// Time in seconds for the query to run.
-	Elapsed float64 `json:"elapsed,required"`
+	Elapsed float64 `json:"elapsed" api:"required"`
 	// Number of rows scanned from the table.
-	RowsRead float64 `json:"rows_read,required"`
+	RowsRead float64 `json:"rows_read" api:"required"`
 	// The level of Adaptive Bit Rate (ABR) sampling used for the query. If empty the
 	// ABR level is 1
 	AbrLevel float64                                           `json:"abr_level"`
@@ -1098,14 +1098,14 @@ func (r observabilityTelemetryQueryResponseStatisticsJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseAgent struct {
-	AgentClass      string                                       `json:"agentClass,required"`
-	EventTypeCounts map[string]float64                           `json:"eventTypeCounts,required"`
-	FirstEventMs    float64                                      `json:"firstEventMs,required"`
-	HasErrors       bool                                         `json:"hasErrors,required"`
-	LastEventMs     float64                                      `json:"lastEventMs,required"`
-	Namespace       string                                       `json:"namespace,required"`
-	Service         string                                       `json:"service,required"`
-	TotalEvents     float64                                      `json:"totalEvents,required"`
+	AgentClass      string                                       `json:"agentClass" api:"required"`
+	EventTypeCounts map[string]float64                           `json:"eventTypeCounts" api:"required"`
+	FirstEventMs    float64                                      `json:"firstEventMs" api:"required"`
+	HasErrors       bool                                         `json:"hasErrors" api:"required"`
+	LastEventMs     float64                                      `json:"lastEventMs" api:"required"`
+	Namespace       string                                       `json:"namespace" api:"required"`
+	Service         string                                       `json:"service" api:"required"`
+	TotalEvents     float64                                      `json:"totalEvents" api:"required"`
 	JSON            observabilityTelemetryQueryResponseAgentJSON `json:"-"`
 }
 
@@ -1133,9 +1133,9 @@ func (r observabilityTelemetryQueryResponseAgentJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseCalculation struct {
-	Aggregates  []ObservabilityTelemetryQueryResponseCalculationsAggregate `json:"aggregates,required"`
-	Calculation string                                                     `json:"calculation,required"`
-	Series      []ObservabilityTelemetryQueryResponseCalculationsSeries    `json:"series,required"`
+	Aggregates  []ObservabilityTelemetryQueryResponseCalculationsAggregate `json:"aggregates" api:"required"`
+	Calculation string                                                     `json:"calculation" api:"required"`
+	Series      []ObservabilityTelemetryQueryResponseCalculationsSeries    `json:"series" api:"required"`
 	Alias       string                                                     `json:"alias"`
 	JSON        observabilityTelemetryQueryResponseCalculationJSON         `json:"-"`
 }
@@ -1160,10 +1160,10 @@ func (r observabilityTelemetryQueryResponseCalculationJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseCalculationsAggregate struct {
-	Count          float64                                                          `json:"count,required"`
-	Interval       float64                                                          `json:"interval,required"`
-	SampleInterval float64                                                          `json:"sampleInterval,required"`
-	Value          float64                                                          `json:"value,required"`
+	Count          float64                                                          `json:"count" api:"required"`
+	Interval       float64                                                          `json:"interval" api:"required"`
+	SampleInterval float64                                                          `json:"sampleInterval" api:"required"`
+	Value          float64                                                          `json:"value" api:"required"`
 	Groups         []ObservabilityTelemetryQueryResponseCalculationsAggregatesGroup `json:"groups"`
 	JSON           observabilityTelemetryQueryResponseCalculationsAggregateJSON     `json:"-"`
 }
@@ -1190,8 +1190,8 @@ func (r observabilityTelemetryQueryResponseCalculationsAggregateJSON) RawJSON() 
 }
 
 type ObservabilityTelemetryQueryResponseCalculationsAggregatesGroup struct {
-	Key   string                                                                    `json:"key,required"`
-	Value ObservabilityTelemetryQueryResponseCalculationsAggregatesGroupsValueUnion `json:"value,required"`
+	Key   string                                                                    `json:"key" api:"required"`
+	Value ObservabilityTelemetryQueryResponseCalculationsAggregatesGroupsValueUnion `json:"value" api:"required"`
 	JSON  observabilityTelemetryQueryResponseCalculationsAggregatesGroupJSON        `json:"-"`
 }
 
@@ -1243,8 +1243,8 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseCalculationsSeries struct {
-	Data []ObservabilityTelemetryQueryResponseCalculationsSeriesData `json:"data,required"`
-	Time string                                                      `json:"time,required"`
+	Data []ObservabilityTelemetryQueryResponseCalculationsSeriesData `json:"data" api:"required"`
+	Time string                                                      `json:"time" api:"required"`
 	JSON observabilityTelemetryQueryResponseCalculationsSeriesJSON   `json:"-"`
 }
 
@@ -1266,10 +1266,10 @@ func (r observabilityTelemetryQueryResponseCalculationsSeriesJSON) RawJSON() str
 }
 
 type ObservabilityTelemetryQueryResponseCalculationsSeriesData struct {
-	Count          float64                                                          `json:"count,required"`
-	Interval       float64                                                          `json:"interval,required"`
-	SampleInterval float64                                                          `json:"sampleInterval,required"`
-	Value          float64                                                          `json:"value,required"`
+	Count          float64                                                          `json:"count" api:"required"`
+	Interval       float64                                                          `json:"interval" api:"required"`
+	SampleInterval float64                                                          `json:"sampleInterval" api:"required"`
+	Value          float64                                                          `json:"value" api:"required"`
 	FirstSeen      string                                                           `json:"firstSeen"`
 	Groups         []ObservabilityTelemetryQueryResponseCalculationsSeriesDataGroup `json:"groups"`
 	LastSeen       string                                                           `json:"lastSeen"`
@@ -1300,8 +1300,8 @@ func (r observabilityTelemetryQueryResponseCalculationsSeriesDataJSON) RawJSON()
 }
 
 type ObservabilityTelemetryQueryResponseCalculationsSeriesDataGroup struct {
-	Key   string                                                                    `json:"key,required"`
-	Value ObservabilityTelemetryQueryResponseCalculationsSeriesDataGroupsValueUnion `json:"value,required"`
+	Key   string                                                                    `json:"key" api:"required"`
+	Value ObservabilityTelemetryQueryResponseCalculationsSeriesDataGroupsValueUnion `json:"value" api:"required"`
 	JSON  observabilityTelemetryQueryResponseCalculationsSeriesDataGroupJSON        `json:"-"`
 }
 
@@ -1353,9 +1353,9 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseCompare struct {
-	Aggregates  []ObservabilityTelemetryQueryResponseCompareAggregate `json:"aggregates,required"`
-	Calculation string                                                `json:"calculation,required"`
-	Series      []ObservabilityTelemetryQueryResponseCompareSeries    `json:"series,required"`
+	Aggregates  []ObservabilityTelemetryQueryResponseCompareAggregate `json:"aggregates" api:"required"`
+	Calculation string                                                `json:"calculation" api:"required"`
+	Series      []ObservabilityTelemetryQueryResponseCompareSeries    `json:"series" api:"required"`
 	Alias       string                                                `json:"alias"`
 	JSON        observabilityTelemetryQueryResponseCompareJSON        `json:"-"`
 }
@@ -1380,10 +1380,10 @@ func (r observabilityTelemetryQueryResponseCompareJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseCompareAggregate struct {
-	Count          float64                                                     `json:"count,required"`
-	Interval       float64                                                     `json:"interval,required"`
-	SampleInterval float64                                                     `json:"sampleInterval,required"`
-	Value          float64                                                     `json:"value,required"`
+	Count          float64                                                     `json:"count" api:"required"`
+	Interval       float64                                                     `json:"interval" api:"required"`
+	SampleInterval float64                                                     `json:"sampleInterval" api:"required"`
+	Value          float64                                                     `json:"value" api:"required"`
 	Groups         []ObservabilityTelemetryQueryResponseCompareAggregatesGroup `json:"groups"`
 	JSON           observabilityTelemetryQueryResponseCompareAggregateJSON     `json:"-"`
 }
@@ -1409,8 +1409,8 @@ func (r observabilityTelemetryQueryResponseCompareAggregateJSON) RawJSON() strin
 }
 
 type ObservabilityTelemetryQueryResponseCompareAggregatesGroup struct {
-	Key   string                                                               `json:"key,required"`
-	Value ObservabilityTelemetryQueryResponseCompareAggregatesGroupsValueUnion `json:"value,required"`
+	Key   string                                                               `json:"key" api:"required"`
+	Value ObservabilityTelemetryQueryResponseCompareAggregatesGroupsValueUnion `json:"value" api:"required"`
 	JSON  observabilityTelemetryQueryResponseCompareAggregatesGroupJSON        `json:"-"`
 }
 
@@ -1462,8 +1462,8 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseCompareSeries struct {
-	Data []ObservabilityTelemetryQueryResponseCompareSeriesData `json:"data,required"`
-	Time string                                                 `json:"time,required"`
+	Data []ObservabilityTelemetryQueryResponseCompareSeriesData `json:"data" api:"required"`
+	Time string                                                 `json:"time" api:"required"`
 	JSON observabilityTelemetryQueryResponseCompareSeriesJSON   `json:"-"`
 }
 
@@ -1485,10 +1485,10 @@ func (r observabilityTelemetryQueryResponseCompareSeriesJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseCompareSeriesData struct {
-	Count          float64                                                     `json:"count,required"`
-	Interval       float64                                                     `json:"interval,required"`
-	SampleInterval float64                                                     `json:"sampleInterval,required"`
-	Value          float64                                                     `json:"value,required"`
+	Count          float64                                                     `json:"count" api:"required"`
+	Interval       float64                                                     `json:"interval" api:"required"`
+	SampleInterval float64                                                     `json:"sampleInterval" api:"required"`
+	Value          float64                                                     `json:"value" api:"required"`
 	FirstSeen      string                                                      `json:"firstSeen"`
 	Groups         []ObservabilityTelemetryQueryResponseCompareSeriesDataGroup `json:"groups"`
 	LastSeen       string                                                      `json:"lastSeen"`
@@ -1518,8 +1518,8 @@ func (r observabilityTelemetryQueryResponseCompareSeriesDataJSON) RawJSON() stri
 }
 
 type ObservabilityTelemetryQueryResponseCompareSeriesDataGroup struct {
-	Key   string                                                               `json:"key,required"`
-	Value ObservabilityTelemetryQueryResponseCompareSeriesDataGroupsValueUnion `json:"value,required"`
+	Key   string                                                               `json:"key" api:"required"`
+	Value ObservabilityTelemetryQueryResponseCompareSeriesDataGroupsValueUnion `json:"value" api:"required"`
 	JSON  observabilityTelemetryQueryResponseCompareSeriesDataGroupJSON        `json:"-"`
 }
 
@@ -1599,10 +1599,10 @@ func (r observabilityTelemetryQueryResponseEventsJSON) RawJSON() string {
 
 // The data structure of a telemetry event
 type ObservabilityTelemetryQueryResponseEventsEvent struct {
-	Metadata  ObservabilityTelemetryQueryResponseEventsEventsMetadata `json:"$metadata,required"`
-	Dataset   string                                                  `json:"dataset,required"`
-	Source    interface{}                                             `json:"source,required"`
-	Timestamp int64                                                   `json:"timestamp,required"`
+	Metadata  ObservabilityTelemetryQueryResponseEventsEventsMetadata `json:"$metadata" api:"required"`
+	Dataset   string                                                  `json:"dataset" api:"required"`
+	Source    interface{}                                             `json:"source" api:"required"`
+	Timestamp int64                                                   `json:"timestamp" api:"required"`
 	// Cloudflare Containers event information enriches your logs so you can easily
 	// identify and debug issues.
 	Containers interface{} `json:"$containers"`
@@ -1635,7 +1635,7 @@ func (r observabilityTelemetryQueryResponseEventsEventJSON) RawJSON() string {
 
 type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 	// Unique event ID. Use as the cursor for offset-based pagination.
-	ID              string                                                      `json:"id,required"`
+	ID              string                                                      `json:"id" api:"required"`
 	Account         string                                                      `json:"account"`
 	CloudService    string                                                      `json:"cloudService"`
 	ColdStart       int64                                                       `json:"coldStart"`
@@ -1719,9 +1719,9 @@ func (r observabilityTelemetryQueryResponseEventsEventsMetadataJSON) RawJSON() s
 // Cloudflare Workers event information enriches your logs so you can easily
 // identify and debug issues.
 type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
-	EventType  ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType `json:"eventType,required"`
-	RequestID  string                                                          `json:"requestId,required"`
-	ScriptName string                                                          `json:"scriptName,required"`
+	EventType  ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType `json:"eventType" api:"required"`
+	RequestID  string                                                          `json:"requestId" api:"required"`
+	ScriptName string                                                          `json:"scriptName" api:"required"`
 	CPUTimeMs  float64                                                         `json:"cpuTimeMs"`
 	// This field can have the runtime type of
 	// [[]ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectDiagnosticsChannelEvent].
@@ -1812,9 +1812,9 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
-	EventType       ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType      `json:"eventType,required"`
-	RequestID       string                                                                     `json:"requestId,required"`
-	ScriptName      string                                                                     `json:"scriptName,required"`
+	EventType       ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType      `json:"eventType" api:"required"`
+	RequestID       string                                                                     `json:"requestId" api:"required"`
+	ScriptName      string                                                                     `json:"scriptName" api:"required"`
 	DurableObjectID string                                                                     `json:"durableObjectId"`
 	Entrypoint      string                                                                     `json:"entrypoint"`
 	Event           map[string]interface{}                                                     `json:"event"`
@@ -1959,8 +1959,8 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersExecutionModel) Is
 }
 
 type ObservabilityTelemetryQueryResponseEventsField struct {
-	Key  string                                             `json:"key,required"`
-	Type string                                             `json:"type,required"`
+	Key  string                                             `json:"key" api:"required"`
+	Type string                                             `json:"type" api:"required"`
 	JSON observabilityTelemetryQueryResponseEventsFieldJSON `json:"-"`
 }
 
@@ -1982,8 +1982,8 @@ func (r observabilityTelemetryQueryResponseEventsFieldJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseEventsSeries struct {
-	Data []ObservabilityTelemetryQueryResponseEventsSeriesData `json:"data,required"`
-	Time string                                                `json:"time,required"`
+	Data []ObservabilityTelemetryQueryResponseEventsSeriesData `json:"data" api:"required"`
+	Time string                                                `json:"time" api:"required"`
 	JSON observabilityTelemetryQueryResponseEventsSeriesJSON   `json:"-"`
 }
 
@@ -2005,10 +2005,10 @@ func (r observabilityTelemetryQueryResponseEventsSeriesJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseEventsSeriesData struct {
-	Aggregates     ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates `json:"aggregates,required"`
-	Count          float64                                                       `json:"count,required"`
-	Interval       float64                                                       `json:"interval,required"`
-	SampleInterval float64                                                       `json:"sampleInterval,required"`
+	Aggregates     ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates `json:"aggregates" api:"required"`
+	Count          float64                                                       `json:"count" api:"required"`
+	Interval       float64                                                       `json:"interval" api:"required"`
+	SampleInterval float64                                                       `json:"sampleInterval" api:"required"`
 	Errors         float64                                                       `json:"errors"`
 	// Groups in the query results.
 	Groups map[string]ObservabilityTelemetryQueryResponseEventsSeriesDataGroupsUnion `json:"groups"`
@@ -2038,9 +2038,9 @@ func (r observabilityTelemetryQueryResponseEventsSeriesDataJSON) RawJSON() strin
 
 type ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates struct {
 	// Deprecated: deprecated
-	Count int64 `json:"_count,required"`
+	Count int64 `json:"_count" api:"required"`
 	// Deprecated: deprecated
-	Interval float64 `json:"_interval,required"`
+	Interval float64 `json:"_interval" api:"required"`
 	// Deprecated: deprecated
 	FirstSeen string `json:"_firstSeen"`
 	// Deprecated: deprecated
@@ -2102,10 +2102,10 @@ func init() {
 
 // The data structure of a telemetry event
 type ObservabilityTelemetryQueryResponseInvocation struct {
-	Metadata  ObservabilityTelemetryQueryResponseInvocationsMetadata `json:"$metadata,required"`
-	Dataset   string                                                 `json:"dataset,required"`
-	Source    interface{}                                            `json:"source,required"`
-	Timestamp int64                                                  `json:"timestamp,required"`
+	Metadata  ObservabilityTelemetryQueryResponseInvocationsMetadata `json:"$metadata" api:"required"`
+	Dataset   string                                                 `json:"dataset" api:"required"`
+	Source    interface{}                                            `json:"source" api:"required"`
+	Timestamp int64                                                  `json:"timestamp" api:"required"`
 	// Cloudflare Containers event information enriches your logs so you can easily
 	// identify and debug issues.
 	Containers interface{} `json:"$containers"`
@@ -2138,7 +2138,7 @@ func (r observabilityTelemetryQueryResponseInvocationJSON) RawJSON() string {
 
 type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 	// Unique event ID. Use as the cursor for offset-based pagination.
-	ID              string                                                     `json:"id,required"`
+	ID              string                                                     `json:"id" api:"required"`
 	Account         string                                                     `json:"account"`
 	CloudService    string                                                     `json:"cloudService"`
 	ColdStart       int64                                                      `json:"coldStart"`
@@ -2221,9 +2221,9 @@ func (r observabilityTelemetryQueryResponseInvocationsMetadataJSON) RawJSON() st
 // Cloudflare Workers event information enriches your logs so you can easily
 // identify and debug issues.
 type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
-	EventType  ObservabilityTelemetryQueryResponseInvocationsWorkersEventType `json:"eventType,required"`
-	RequestID  string                                                         `json:"requestId,required"`
-	ScriptName string                                                         `json:"scriptName,required"`
+	EventType  ObservabilityTelemetryQueryResponseInvocationsWorkersEventType `json:"eventType" api:"required"`
+	RequestID  string                                                         `json:"requestId" api:"required"`
+	ScriptName string                                                         `json:"scriptName" api:"required"`
 	CPUTimeMs  float64                                                        `json:"cpuTimeMs"`
 	// This field can have the runtime type of
 	// [[]ObservabilityTelemetryQueryResponseInvocationsWorkersObjectDiagnosticsChannelEvent].
@@ -2313,9 +2313,9 @@ func init() {
 }
 
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
-	EventType       ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType      `json:"eventType,required"`
-	RequestID       string                                                                    `json:"requestId,required"`
-	ScriptName      string                                                                    `json:"scriptName,required"`
+	EventType       ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType      `json:"eventType" api:"required"`
+	RequestID       string                                                                    `json:"requestId" api:"required"`
+	ScriptName      string                                                                    `json:"scriptName" api:"required"`
 	DurableObjectID string                                                                    `json:"durableObjectId"`
 	Entrypoint      string                                                                    `json:"entrypoint"`
 	Event           map[string]interface{}                                                    `json:"event"`
@@ -2460,14 +2460,14 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersExecutionModel) IsK
 }
 
 type ObservabilityTelemetryQueryResponseTrace struct {
-	RootSpanName        string                                       `json:"rootSpanName,required"`
-	RootTransactionName string                                       `json:"rootTransactionName,required"`
-	Service             []string                                     `json:"service,required"`
-	Spans               float64                                      `json:"spans,required"`
-	TraceDurationMs     float64                                      `json:"traceDurationMs,required"`
-	TraceEndMs          float64                                      `json:"traceEndMs,required"`
-	TraceID             string                                       `json:"traceId,required"`
-	TraceStartMs        float64                                      `json:"traceStartMs,required"`
+	RootSpanName        string                                       `json:"rootSpanName" api:"required"`
+	RootTransactionName string                                       `json:"rootTransactionName" api:"required"`
+	Service             []string                                     `json:"service" api:"required"`
+	Spans               float64                                      `json:"spans" api:"required"`
+	TraceDurationMs     float64                                      `json:"traceDurationMs" api:"required"`
+	TraceEndMs          float64                                      `json:"traceEndMs" api:"required"`
+	TraceID             string                                       `json:"traceId" api:"required"`
+	TraceStartMs        float64                                      `json:"traceStartMs" api:"required"`
 	Errors              []string                                     `json:"errors"`
 	JSON                observabilityTelemetryQueryResponseTraceJSON `json:"-"`
 }
@@ -2497,10 +2497,10 @@ func (r observabilityTelemetryQueryResponseTraceJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryValuesResponse struct {
-	Dataset string                                         `json:"dataset,required"`
-	Key     string                                         `json:"key,required"`
-	Type    ObservabilityTelemetryValuesResponseType       `json:"type,required"`
-	Value   ObservabilityTelemetryValuesResponseValueUnion `json:"value,required"`
+	Dataset string                                         `json:"dataset" api:"required"`
+	Key     string                                         `json:"key" api:"required"`
+	Type    ObservabilityTelemetryValuesResponseType       `json:"type" api:"required"`
+	Value   ObservabilityTelemetryValuesResponseValueUnion `json:"value" api:"required"`
 	JSON    observabilityTelemetryValuesResponseJSON       `json:"-"`
 }
 
@@ -2569,7 +2569,7 @@ func init() {
 }
 
 type ObservabilityTelemetryKeysParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Leave this empty to use the default datasets
 	Datasets param.Field[[]string] `json:"datasets"`
 	// Apply filters to narrow key discovery. Supports nested groups via kind: 'group'.
@@ -2623,9 +2623,9 @@ type ObservabilityTelemetryKeysParamsFilterUnion interface {
 }
 
 type ObservabilityTelemetryKeysParamsFiltersObject struct {
-	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination] `json:"filterCombination,required"`
-	Filters           param.Field[[]interface{}]                                                  `json:"filters,required"`
-	Kind              param.Field[ObservabilityTelemetryKeysParamsFiltersObjectKind]              `json:"kind,required"`
+	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
+	Filters           param.Field[[]interface{}]                                                  `json:"filters" api:"required"`
+	Kind              param.Field[ObservabilityTelemetryKeysParamsFiltersObjectKind]              `json:"kind" api:"required"`
 }
 
 func (r ObservabilityTelemetryKeysParamsFiltersObject) MarshalJSON() (data []byte, err error) {
@@ -2674,9 +2674,9 @@ type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf struc
 	// previous query results or the observability_keys response. Preferred keys:
 	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
 	// $metadata.error.
-	Key       param.Field[string]                                                                         `json:"key,required"`
-	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation,required"`
-	Type      param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type,required"`
+	Key       param.Field[string]                                                                         `json:"key" api:"required"`
+	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
+	Type      param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type" api:"required"`
 	Kind      param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
 	// Filter comparison value. IMPORTANT: must match actual values in your logs.
 	// Verify using previous query results or the /values endpoint. Ensure value type
@@ -2869,7 +2869,7 @@ func (r ObservabilityTelemetryKeysParamsFiltersType) IsKnown() bool {
 // If the user suggests a key, use this to narrow down the list of keys returned.
 // Make sure matchCase is false to avoid case sensitivity issues.
 type ObservabilityTelemetryKeysParamsKeyNeedle struct {
-	Value     param.Field[ObservabilityTelemetryKeysParamsKeyNeedleValueUnion] `json:"value,required"`
+	Value     param.Field[ObservabilityTelemetryKeysParamsKeyNeedleValueUnion] `json:"value" api:"required"`
 	IsRegex   param.Field[bool]                                                `json:"isRegex"`
 	MatchCase param.Field[bool]                                                `json:"matchCase"`
 }
@@ -2885,7 +2885,7 @@ type ObservabilityTelemetryKeysParamsKeyNeedleValueUnion interface {
 
 // Search for a specific substring in any of the events
 type ObservabilityTelemetryKeysParamsNeedle struct {
-	Value     param.Field[ObservabilityTelemetryKeysParamsNeedleValueUnion] `json:"value,required"`
+	Value     param.Field[ObservabilityTelemetryKeysParamsNeedleValueUnion] `json:"value" api:"required"`
 	IsRegex   param.Field[bool]                                             `json:"isRegex"`
 	MatchCase param.Field[bool]                                             `json:"matchCase"`
 }
@@ -2900,13 +2900,13 @@ type ObservabilityTelemetryKeysParamsNeedleValueUnion interface {
 }
 
 type ObservabilityTelemetryQueryParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Unique identifier for the query to execute
-	QueryID param.Field[string] `json:"queryId,required"`
+	QueryID param.Field[string] `json:"queryId" api:"required"`
 	// Timeframe for your query using Unix timestamps in milliseconds. Provide from/to
 	// epoch ms; narrower timeframes provide faster responses and more specific
 	// results.
-	Timeframe param.Field[ObservabilityTelemetryQueryParamsTimeframe] `json:"timeframe,required"`
+	Timeframe param.Field[ObservabilityTelemetryQueryParamsTimeframe] `json:"timeframe" api:"required"`
 	// Whether to include timeseties data in the response
 	Chart param.Field[bool] `json:"chart"`
 	// Whether to include comparison data with previous time periods
@@ -2947,9 +2947,9 @@ func (r ObservabilityTelemetryQueryParams) MarshalJSON() (data []byte, err error
 // results.
 type ObservabilityTelemetryQueryParamsTimeframe struct {
 	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
-	From param.Field[float64] `json:"from,required"`
+	From param.Field[float64] `json:"from" api:"required"`
 	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
-	To param.Field[float64] `json:"to,required"`
+	To param.Field[float64] `json:"to" api:"required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsTimeframe) MarshalJSON() (data []byte, err error) {
@@ -2984,7 +2984,7 @@ func (r ObservabilityTelemetryQueryParamsParameters) MarshalJSON() (data []byte,
 }
 
 type ObservabilityTelemetryQueryParamsParametersCalculation struct {
-	Operator param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsOperator] `json:"operator,required"`
+	Operator param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsOperator] `json:"operator" api:"required"`
 	Alias    param.Field[string]                                                          `json:"alias"`
 	// The key to use for the calculation. This key must exist in the logs. Use the
 	// observability_keys response to confirm. Do not guess keys.
@@ -3113,9 +3113,9 @@ type ObservabilityTelemetryQueryParamsParametersFilterUnion interface {
 }
 
 type ObservabilityTelemetryQueryParamsParametersFiltersObject struct {
-	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination] `json:"filterCombination,required"`
-	Filters           param.Field[[]interface{}]                                                             `json:"filters,required"`
-	Kind              param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectKind]              `json:"kind,required"`
+	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
+	Filters           param.Field[[]interface{}]                                                             `json:"filters" api:"required"`
+	Kind              param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectKind]              `json:"kind" api:"required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersFiltersObject) MarshalJSON() (data []byte, err error) {
@@ -3164,9 +3164,9 @@ type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilte
 	// previous query results or the observability_keys response. Preferred keys:
 	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
 	// $metadata.error.
-	Key       param.Field[string]                                                                                    `json:"key,required"`
-	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation] `json:"operation,required"`
-	Type      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType]      `json:"type,required"`
+	Key       param.Field[string]                                                                                    `json:"key" api:"required"`
+	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
+	Type      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType]      `json:"type" api:"required"`
 	Kind      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
 	// Filter comparison value. IMPORTANT: must match actual values in your logs.
 	// Verify using previous query results or the /values endpoint. Ensure value type
@@ -3357,8 +3357,8 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersType) IsKnown() bool {
 }
 
 type ObservabilityTelemetryQueryParamsParametersGroupBy struct {
-	Type  param.Field[ObservabilityTelemetryQueryParamsParametersGroupBysType] `json:"type,required"`
-	Value param.Field[string]                                                  `json:"value,required"`
+	Type  param.Field[ObservabilityTelemetryQueryParamsParametersGroupBysType] `json:"type" api:"required"`
+	Value param.Field[string]                                                  `json:"value" api:"required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersGroupBy) MarshalJSON() (data []byte, err error) {
@@ -3382,9 +3382,9 @@ func (r ObservabilityTelemetryQueryParamsParametersGroupBysType) IsKnown() bool 
 }
 
 type ObservabilityTelemetryQueryParamsParametersHaving struct {
-	Key       param.Field[string]                                                      `json:"key,required"`
-	Operation param.Field[ObservabilityTelemetryQueryParamsParametersHavingsOperation] `json:"operation,required"`
-	Value     param.Field[float64]                                                     `json:"value,required"`
+	Key       param.Field[string]                                                      `json:"key" api:"required"`
+	Operation param.Field[ObservabilityTelemetryQueryParamsParametersHavingsOperation] `json:"operation" api:"required"`
+	Value     param.Field[float64]                                                     `json:"value" api:"required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersHaving) MarshalJSON() (data []byte, err error) {
@@ -3412,7 +3412,7 @@ func (r ObservabilityTelemetryQueryParamsParametersHavingsOperation) IsKnown() b
 
 // Define an expression to search using full-text search.
 type ObservabilityTelemetryQueryParamsParametersNeedle struct {
-	Value     param.Field[ObservabilityTelemetryQueryParamsParametersNeedleValueUnion] `json:"value,required"`
+	Value     param.Field[ObservabilityTelemetryQueryParamsParametersNeedleValueUnion] `json:"value" api:"required"`
 	IsRegex   param.Field[bool]                                                        `json:"isRegex"`
 	MatchCase param.Field[bool]                                                        `json:"matchCase"`
 }
@@ -3429,7 +3429,7 @@ type ObservabilityTelemetryQueryParamsParametersNeedleValueUnion interface {
 // Configure the order of the results returned by the query.
 type ObservabilityTelemetryQueryParamsParametersOrderBy struct {
 	// Configure which Calculation to order the results by.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 	// Set the order of the results
 	Order param.Field[ObservabilityTelemetryQueryParamsParametersOrderByOrder] `json:"order"`
 }
@@ -3477,10 +3477,10 @@ func (r ObservabilityTelemetryQueryParamsView) IsKnown() bool {
 }
 
 type ObservabilityTelemetryQueryResponseEnvelope struct {
-	Errors   []ObservabilityTelemetryQueryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ObservabilityTelemetryQueryResponseEnvelopeMessages `json:"messages,required"`
-	Result   ObservabilityTelemetryQueryResponse                   `json:"result,required"`
-	Success  ObservabilityTelemetryQueryResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []ObservabilityTelemetryQueryResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ObservabilityTelemetryQueryResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ObservabilityTelemetryQueryResponse                   `json:"result" api:"required"`
+	Success  ObservabilityTelemetryQueryResponseEnvelopeSuccess    `json:"success" api:"required"`
 	JSON     observabilityTelemetryQueryResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -3504,7 +3504,7 @@ func (r observabilityTelemetryQueryResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseEnvelopeErrors struct {
-	Message string                                                `json:"message,required"`
+	Message string                                                `json:"message" api:"required"`
 	JSON    observabilityTelemetryQueryResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -3525,7 +3525,7 @@ func (r observabilityTelemetryQueryResponseEnvelopeErrorsJSON) RawJSON() string 
 }
 
 type ObservabilityTelemetryQueryResponseEnvelopeMessages struct {
-	Message ObservabilityTelemetryQueryResponseEnvelopeMessagesMessage `json:"message,required"`
+	Message ObservabilityTelemetryQueryResponseEnvelopeMessagesMessage `json:"message" api:"required"`
 	JSON    observabilityTelemetryQueryResponseEnvelopeMessagesJSON    `json:"-"`
 }
 
@@ -3574,12 +3574,12 @@ func (r ObservabilityTelemetryQueryResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ObservabilityTelemetryValuesParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Leave this empty to use the default datasets
-	Datasets  param.Field[[]string]                                    `json:"datasets,required"`
-	Key       param.Field[string]                                      `json:"key,required"`
-	Timeframe param.Field[ObservabilityTelemetryValuesParamsTimeframe] `json:"timeframe,required"`
-	Type      param.Field[ObservabilityTelemetryValuesParamsType]      `json:"type,required"`
+	Datasets  param.Field[[]string]                                    `json:"datasets" api:"required"`
+	Key       param.Field[string]                                      `json:"key" api:"required"`
+	Timeframe param.Field[ObservabilityTelemetryValuesParamsTimeframe] `json:"timeframe" api:"required"`
+	Type      param.Field[ObservabilityTelemetryValuesParamsType]      `json:"type" api:"required"`
 	// Apply filters before listing values. Supports nested groups via kind: 'group'.
 	// Maximum nesting depth is 4.
 	Filters param.Field[[]ObservabilityTelemetryValuesParamsFilterUnion] `json:"filters"`
@@ -3593,8 +3593,8 @@ func (r ObservabilityTelemetryValuesParams) MarshalJSON() (data []byte, err erro
 }
 
 type ObservabilityTelemetryValuesParamsTimeframe struct {
-	From param.Field[float64] `json:"from,required"`
-	To   param.Field[float64] `json:"to,required"`
+	From param.Field[float64] `json:"from" api:"required"`
+	To   param.Field[float64] `json:"to" api:"required"`
 }
 
 func (r ObservabilityTelemetryValuesParamsTimeframe) MarshalJSON() (data []byte, err error) {
@@ -3649,9 +3649,9 @@ type ObservabilityTelemetryValuesParamsFilterUnion interface {
 }
 
 type ObservabilityTelemetryValuesParamsFiltersObject struct {
-	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination] `json:"filterCombination,required"`
-	Filters           param.Field[[]interface{}]                                                    `json:"filters,required"`
-	Kind              param.Field[ObservabilityTelemetryValuesParamsFiltersObjectKind]              `json:"kind,required"`
+	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
+	Filters           param.Field[[]interface{}]                                                    `json:"filters" api:"required"`
+	Kind              param.Field[ObservabilityTelemetryValuesParamsFiltersObjectKind]              `json:"kind" api:"required"`
 }
 
 func (r ObservabilityTelemetryValuesParamsFiltersObject) MarshalJSON() (data []byte, err error) {
@@ -3700,9 +3700,9 @@ type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf str
 	// previous query results or the observability_keys response. Preferred keys:
 	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
 	// $metadata.error.
-	Key       param.Field[string]                                                                           `json:"key,required"`
-	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation,required"`
-	Type      param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type,required"`
+	Key       param.Field[string]                                                                           `json:"key" api:"required"`
+	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
+	Type      param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type" api:"required"`
 	Kind      param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
 	// Filter comparison value. IMPORTANT: must match actual values in your logs.
 	// Verify using previous query results or the /values endpoint. Ensure value type
@@ -3894,7 +3894,7 @@ func (r ObservabilityTelemetryValuesParamsFiltersType) IsKnown() bool {
 
 // Search for a specific substring in the event.
 type ObservabilityTelemetryValuesParamsNeedle struct {
-	Value     param.Field[ObservabilityTelemetryValuesParamsNeedleValueUnion] `json:"value,required"`
+	Value     param.Field[ObservabilityTelemetryValuesParamsNeedleValueUnion] `json:"value" api:"required"`
 	IsRegex   param.Field[bool]                                               `json:"isRegex"`
 	MatchCase param.Field[bool]                                               `json:"matchCase"`
 }

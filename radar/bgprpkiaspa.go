@@ -44,10 +44,10 @@ func (r *BGPRPKIASPAService) Changes(ctx context.Context, query BGPRPKIASPAChang
 	path := "radar/bgp/rpki/aspa/changes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves current or historical ASPA (Autonomous System Provider Authorization)
@@ -59,10 +59,10 @@ func (r *BGPRPKIASPAService) Snapshot(ctx context.Context, query BGPRPKIASPASnap
 	path := "radar/bgp/rpki/aspa/snapshot"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves ASPA (Autonomous System Provider Authorization) object count over
@@ -74,16 +74,16 @@ func (r *BGPRPKIASPAService) Timeseries(ctx context.Context, query BGPRPKIASPATi
 	path := "radar/bgp/rpki/aspa/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BgprpkiaspaChangesResponse struct {
-	ASNInfo BgprpkiaspaChangesResponseASNInfo  `json:"asnInfo,required"`
-	Changes []BgprpkiaspaChangesResponseChange `json:"changes,required"`
-	Meta    BgprpkiaspaChangesResponseMeta     `json:"meta,required"`
+	ASNInfo BgprpkiaspaChangesResponseASNInfo  `json:"asnInfo" api:"required"`
+	Changes []BgprpkiaspaChangesResponseChange `json:"changes" api:"required"`
+	Meta    BgprpkiaspaChangesResponseMeta     `json:"meta" api:"required"`
 	JSON    bgprpkiaspaChangesResponseJSON     `json:"-"`
 }
 
@@ -106,7 +106,7 @@ func (r bgprpkiaspaChangesResponseJSON) RawJSON() string {
 }
 
 type BgprpkiaspaChangesResponseASNInfo struct {
-	Number13335 BgprpkiaspaChangesResponseASNInfo13335 `json:"13335,required"`
+	Number13335 BgprpkiaspaChangesResponseASNInfo13335 `json:"13335" api:"required"`
 	JSON        bgprpkiaspaChangesResponseASNInfoJSON  `json:"-"`
 }
 
@@ -128,11 +128,11 @@ func (r bgprpkiaspaChangesResponseASNInfoJSON) RawJSON() string {
 
 type BgprpkiaspaChangesResponseASNInfo13335 struct {
 	// ASN number.
-	ASN int64 `json:"asn,required"`
+	ASN int64 `json:"asn" api:"required"`
 	// Alpha-2 country code.
-	Country string `json:"country,required"`
+	Country string `json:"country" api:"required"`
 	// AS name.
-	Name string                                     `json:"name,required"`
+	Name string                                     `json:"name" api:"required"`
 	JSON bgprpkiaspaChangesResponseASNInfo13335JSON `json:"-"`
 }
 
@@ -156,18 +156,18 @@ func (r bgprpkiaspaChangesResponseASNInfo13335JSON) RawJSON() string {
 
 type BgprpkiaspaChangesResponseChange struct {
 	// Number of new ASPA objects created.
-	CustomersAdded int64 `json:"customersAdded,required"`
+	CustomersAdded int64 `json:"customersAdded" api:"required"`
 	// Number of ASPA objects deleted.
-	CustomersRemoved int64 `json:"customersRemoved,required"`
+	CustomersRemoved int64 `json:"customersRemoved" api:"required"`
 	// Date of the changes in ISO 8601 format.
-	Date    time.Time                                `json:"date,required" format:"date-time"`
-	Entries []BgprpkiaspaChangesResponseChangesEntry `json:"entries,required"`
+	Date    time.Time                                `json:"date" api:"required" format:"date-time"`
+	Entries []BgprpkiaspaChangesResponseChangesEntry `json:"entries" api:"required"`
 	// Number of providers added to existing objects.
-	ProvidersAdded int64 `json:"providersAdded,required"`
+	ProvidersAdded int64 `json:"providersAdded" api:"required"`
 	// Number of providers removed from existing objects.
-	ProvidersRemoved int64 `json:"providersRemoved,required"`
+	ProvidersRemoved int64 `json:"providersRemoved" api:"required"`
 	// Running total of active ASPA objects after this day.
-	TotalCount int64                                `json:"totalCount,required"`
+	TotalCount int64                                `json:"totalCount" api:"required"`
 	JSON       bgprpkiaspaChangesResponseChangeJSON `json:"-"`
 }
 
@@ -195,9 +195,9 @@ func (r bgprpkiaspaChangesResponseChangeJSON) RawJSON() string {
 
 type BgprpkiaspaChangesResponseChangesEntry struct {
 	// The customer ASN affected.
-	CustomerASN int64                                        `json:"customerAsn,required"`
-	Providers   []int64                                      `json:"providers,required"`
-	Type        BgprpkiaspaChangesResponseChangesEntriesType `json:"type,required"`
+	CustomerASN int64                                        `json:"customerAsn" api:"required"`
+	Providers   []int64                                      `json:"providers" api:"required"`
+	Type        BgprpkiaspaChangesResponseChangesEntriesType `json:"type" api:"required"`
 	JSON        bgprpkiaspaChangesResponseChangesEntryJSON   `json:"-"`
 }
 
@@ -238,9 +238,9 @@ func (r BgprpkiaspaChangesResponseChangesEntriesType) IsKnown() bool {
 
 type BgprpkiaspaChangesResponseMeta struct {
 	// Timestamp of the underlying data.
-	DataTime time.Time `json:"dataTime,required" format:"date-time"`
+	DataTime time.Time `json:"dataTime" api:"required" format:"date-time"`
 	// Timestamp when the query was executed.
-	QueryTime time.Time                          `json:"queryTime,required" format:"date-time"`
+	QueryTime time.Time                          `json:"queryTime" api:"required" format:"date-time"`
 	JSON      bgprpkiaspaChangesResponseMetaJSON `json:"-"`
 }
 
@@ -262,9 +262,9 @@ func (r bgprpkiaspaChangesResponseMetaJSON) RawJSON() string {
 }
 
 type BgprpkiaspaSnapshotResponse struct {
-	ASNInfo     BgprpkiaspaSnapshotResponseASNInfo      `json:"asnInfo,required"`
-	ASPAObjects []BgprpkiaspaSnapshotResponseASPAObject `json:"aspaObjects,required"`
-	Meta        BgprpkiaspaSnapshotResponseMeta         `json:"meta,required"`
+	ASNInfo     BgprpkiaspaSnapshotResponseASNInfo      `json:"asnInfo" api:"required"`
+	ASPAObjects []BgprpkiaspaSnapshotResponseASPAObject `json:"aspaObjects" api:"required"`
+	Meta        BgprpkiaspaSnapshotResponseMeta         `json:"meta" api:"required"`
 	JSON        bgprpkiaspaSnapshotResponseJSON         `json:"-"`
 }
 
@@ -287,7 +287,7 @@ func (r bgprpkiaspaSnapshotResponseJSON) RawJSON() string {
 }
 
 type BgprpkiaspaSnapshotResponseASNInfo struct {
-	Number13335 BgprpkiaspaSnapshotResponseASNInfo13335 `json:"13335,required"`
+	Number13335 BgprpkiaspaSnapshotResponseASNInfo13335 `json:"13335" api:"required"`
 	JSON        bgprpkiaspaSnapshotResponseASNInfoJSON  `json:"-"`
 }
 
@@ -309,11 +309,11 @@ func (r bgprpkiaspaSnapshotResponseASNInfoJSON) RawJSON() string {
 
 type BgprpkiaspaSnapshotResponseASNInfo13335 struct {
 	// ASN number.
-	ASN int64 `json:"asn,required"`
+	ASN int64 `json:"asn" api:"required"`
 	// Alpha-2 country code.
-	Country string `json:"country,required"`
+	Country string `json:"country" api:"required"`
 	// AS name.
-	Name string                                      `json:"name,required"`
+	Name string                                      `json:"name" api:"required"`
 	JSON bgprpkiaspaSnapshotResponseASNInfo13335JSON `json:"-"`
 }
 
@@ -337,8 +337,8 @@ func (r bgprpkiaspaSnapshotResponseASNInfo13335JSON) RawJSON() string {
 
 type BgprpkiaspaSnapshotResponseASPAObject struct {
 	// The customer ASN publishing the ASPA object.
-	CustomerASN int64                                     `json:"customerAsn,required"`
-	Providers   []int64                                   `json:"providers,required"`
+	CustomerASN int64                                     `json:"customerAsn" api:"required"`
+	Providers   []int64                                   `json:"providers" api:"required"`
 	JSON        bgprpkiaspaSnapshotResponseASPAObjectJSON `json:"-"`
 }
 
@@ -361,11 +361,11 @@ func (r bgprpkiaspaSnapshotResponseASPAObjectJSON) RawJSON() string {
 
 type BgprpkiaspaSnapshotResponseMeta struct {
 	// Timestamp of the underlying data.
-	DataTime time.Time `json:"dataTime,required" format:"date-time"`
+	DataTime time.Time `json:"dataTime" api:"required" format:"date-time"`
 	// Timestamp when the query was executed.
-	QueryTime time.Time `json:"queryTime,required" format:"date-time"`
+	QueryTime time.Time `json:"queryTime" api:"required" format:"date-time"`
 	// Total number of ASPA objects.
-	TotalCount int64                               `json:"totalCount,required"`
+	TotalCount int64                               `json:"totalCount" api:"required"`
 	JSON       bgprpkiaspaSnapshotResponseMetaJSON `json:"-"`
 }
 
@@ -388,8 +388,8 @@ func (r bgprpkiaspaSnapshotResponseMetaJSON) RawJSON() string {
 }
 
 type BgprpkiaspaTimeseriesResponse struct {
-	Meta   BgprpkiaspaTimeseriesResponseMeta   `json:"meta,required"`
-	Serie0 BgprpkiaspaTimeseriesResponseSerie0 `json:"serie_0,required"`
+	Meta   BgprpkiaspaTimeseriesResponseMeta   `json:"meta" api:"required"`
+	Serie0 BgprpkiaspaTimeseriesResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   bgprpkiaspaTimeseriesResponseJSON   `json:"-"`
 }
 
@@ -412,9 +412,9 @@ func (r bgprpkiaspaTimeseriesResponseJSON) RawJSON() string {
 
 type BgprpkiaspaTimeseriesResponseMeta struct {
 	// Timestamp of the underlying data.
-	DataTime time.Time `json:"dataTime,required" format:"date-time"`
+	DataTime time.Time `json:"dataTime" api:"required" format:"date-time"`
 	// Timestamp when the query was executed.
-	QueryTime time.Time                             `json:"queryTime,required" format:"date-time"`
+	QueryTime time.Time                             `json:"queryTime" api:"required" format:"date-time"`
 	JSON      bgprpkiaspaTimeseriesResponseMetaJSON `json:"-"`
 }
 
@@ -436,8 +436,8 @@ func (r bgprpkiaspaTimeseriesResponseMetaJSON) RawJSON() string {
 }
 
 type BgprpkiaspaTimeseriesResponseSerie0 struct {
-	Timestamps []time.Time                             `json:"timestamps,required" format:"date-time"`
-	Values     []string                                `json:"values,required"`
+	Timestamps []time.Time                             `json:"timestamps" api:"required" format:"date-time"`
+	Values     []string                                `json:"values" api:"required"`
 	JSON       bgprpkiaspaTimeseriesResponseSerie0JSON `json:"-"`
 }
 
@@ -497,8 +497,8 @@ func (r BgprpkiaspaChangesParamsFormat) IsKnown() bool {
 }
 
 type BgprpkiaspaChangesResponseEnvelope struct {
-	Result  BgprpkiaspaChangesResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  BgprpkiaspaChangesResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    bgprpkiaspaChangesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -558,8 +558,8 @@ func (r BgprpkiaspaSnapshotParamsFormat) IsKnown() bool {
 }
 
 type BgprpkiaspaSnapshotResponseEnvelope struct {
-	Result  BgprpkiaspaSnapshotResponse             `json:"result,required"`
-	Success bool                                    `json:"success,required"`
+	Result  BgprpkiaspaSnapshotResponse             `json:"result" api:"required"`
+	Success bool                                    `json:"success" api:"required"`
 	JSON    bgprpkiaspaSnapshotResponseEnvelopeJSON `json:"-"`
 }
 
@@ -641,8 +641,8 @@ func (r BgprpkiaspaTimeseriesParamsRir) IsKnown() bool {
 }
 
 type BgprpkiaspaTimeseriesResponseEnvelope struct {
-	Result  BgprpkiaspaTimeseriesResponse             `json:"result,required"`
-	Success bool                                      `json:"success,required"`
+	Result  BgprpkiaspaTimeseriesResponse             `json:"result" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    bgprpkiaspaTimeseriesResponseEnvelopeJSON `json:"-"`
 }
 

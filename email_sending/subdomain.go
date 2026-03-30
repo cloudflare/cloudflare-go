@@ -46,15 +46,15 @@ func (r *SubdomainService) New(ctx context.Context, params SubdomainNewParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/sending/subdomains", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all sending-enabled subdomains for the zone.
@@ -64,7 +64,7 @@ func (r *SubdomainService) List(ctx context.Context, query SubdomainListParams, 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/sending/subdomains", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -90,15 +90,15 @@ func (r *SubdomainService) Delete(ctx context.Context, subdomainID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if subdomainID == "" {
 		err = errors.New("missing required subdomain_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/sending/subdomains/%s", body.ZoneID, subdomainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Gets information for a specific sending subdomain.
@@ -107,28 +107,28 @@ func (r *SubdomainService) Get(ctx context.Context, subdomainID string, query Su
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if subdomainID == "" {
 		err = errors.New("missing required subdomain_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/sending/subdomains/%s", query.ZoneID, subdomainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SubdomainNewResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled,required"`
+	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
 	// The subdomain domain name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
-	Tag string `json:"tag,required"`
+	Tag string `json:"tag" api:"required"`
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
@@ -168,11 +168,11 @@ func (r subdomainNewResponseJSON) RawJSON() string {
 
 type SubdomainListResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled,required"`
+	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
 	// The subdomain domain name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
-	Tag string `json:"tag,required"`
+	Tag string `json:"tag" api:"required"`
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
@@ -211,10 +211,10 @@ func (r subdomainListResponseJSON) RawJSON() string {
 }
 
 type SubdomainDeleteResponse struct {
-	Errors   []SubdomainDeleteResponseError   `json:"errors,required"`
-	Messages []SubdomainDeleteResponseMessage `json:"messages,required"`
+	Errors   []SubdomainDeleteResponseError   `json:"errors" api:"required"`
+	Messages []SubdomainDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SubdomainDeleteResponseSuccess `json:"success,required"`
+	Success SubdomainDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    subdomainDeleteResponseJSON    `json:"-"`
 }
 
@@ -237,8 +237,8 @@ func (r subdomainDeleteResponseJSON) RawJSON() string {
 }
 
 type SubdomainDeleteResponseError struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           SubdomainDeleteResponseErrorsSource `json:"source"`
 	JSON             subdomainDeleteResponseErrorJSON    `json:"-"`
@@ -285,8 +285,8 @@ func (r subdomainDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type SubdomainDeleteResponseMessage struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           SubdomainDeleteResponseMessagesSource `json:"source"`
 	JSON             subdomainDeleteResponseMessageJSON    `json:"-"`
@@ -349,11 +349,11 @@ func (r SubdomainDeleteResponseSuccess) IsKnown() bool {
 
 type SubdomainGetResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled,required"`
+	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
 	// The subdomain domain name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
-	Tag string `json:"tag,required"`
+	Tag string `json:"tag" api:"required"`
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
@@ -393,9 +393,9 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 
 type SubdomainNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The subdomain name. Must be within the zone.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r SubdomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -403,10 +403,10 @@ func (r SubdomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubdomainNewResponseEnvelope struct {
-	Errors   []SubdomainNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubdomainNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SubdomainNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SubdomainNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SubdomainNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SubdomainNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SubdomainNewResponse                `json:"result"`
 	JSON    subdomainNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -431,8 +431,8 @@ func (r subdomainNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SubdomainNewResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           SubdomainNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             subdomainNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -479,8 +479,8 @@ func (r subdomainNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SubdomainNewResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           SubdomainNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             subdomainNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -543,24 +543,24 @@ func (r SubdomainNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubdomainListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubdomainDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubdomainGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubdomainGetResponseEnvelope struct {
-	Errors   []SubdomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubdomainGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SubdomainGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SubdomainGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SubdomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SubdomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SubdomainGetResponse                `json:"result"`
 	JSON    subdomainGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -585,8 +585,8 @@ func (r subdomainGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SubdomainGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           SubdomainGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             subdomainGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -633,8 +633,8 @@ func (r subdomainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SubdomainGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           SubdomainGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             subdomainGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -46,15 +46,15 @@ func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, o
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/variants", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Variant support enables caching variants of images with certain file extensions
@@ -67,15 +67,15 @@ func (r *VariantService) Edit(ctx context.Context, params VariantEditParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/variants", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Variant support enables caching variants of images with certain file extensions
@@ -88,24 +88,24 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/variants", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type VariantDeleteResponse struct {
 	// The identifier of the caching setting.
-	ID VariantDeleteResponseID `json:"id,required"`
+	ID VariantDeleteResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                 `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       variantDeleteResponseJSON `json:"-"`
 }
 
@@ -144,13 +144,13 @@ func (r VariantDeleteResponseID) IsKnown() bool {
 
 type VariantEditResponse struct {
 	// The identifier of the caching setting.
-	ID VariantEditResponseID `json:"id,required"`
+	ID VariantEditResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the zone setting.
-	Value VariantEditResponseValue `json:"value,required"`
+	Value VariantEditResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time               `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time               `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       variantEditResponseJSON `json:"-"`
 }
 
@@ -254,13 +254,13 @@ func (r variantEditResponseValueJSON) RawJSON() string {
 
 type VariantGetResponse struct {
 	// The identifier of the caching setting.
-	ID VariantGetResponseID `json:"id,required"`
+	ID VariantGetResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the zone setting.
-	Value VariantGetResponseValue `json:"value,required"`
+	Value VariantGetResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time              `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       variantGetResponseJSON `json:"-"`
 }
 
@@ -364,14 +364,14 @@ func (r variantGetResponseValueJSON) RawJSON() string {
 
 type VariantDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type VariantDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success VariantDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  VariantDeleteResponse                `json:"result"`
 	JSON    variantDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -412,9 +412,9 @@ func (r VariantDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type VariantEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Value of the zone setting.
-	Value param.Field[VariantEditParamsValue] `json:"value,required"`
+	Value param.Field[VariantEditParamsValue] `json:"value" api:"required"`
 }
 
 func (r VariantEditParams) MarshalJSON() (data []byte, err error) {
@@ -463,10 +463,10 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 }
 
 type VariantEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success VariantEditResponseEnvelopeSuccess `json:"success,required"`
+	Success VariantEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  VariantEditResponse                `json:"result"`
 	JSON    variantEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -507,14 +507,14 @@ func (r VariantEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type VariantGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type VariantGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success VariantGetResponseEnvelopeSuccess `json:"success,required"`
+	Success VariantGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  VariantGetResponse                `json:"result"`
 	JSON    variantGetResponseEnvelopeJSON    `json:"-"`
 }

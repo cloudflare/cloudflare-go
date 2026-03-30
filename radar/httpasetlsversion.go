@@ -44,16 +44,16 @@ func (r *HTTPAseTLSVersionService) Get(ctx context.Context, tlsVersion HTTPAseTL
 	path := fmt.Sprintf("radar/http/top/ases/tls_version/%v", tlsVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPAseTLSVersionGetResponse struct {
 	// Metadata for the results.
-	Meta HTTPAseTLSVersionGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPAseTLSVersionGetResponseTop0 `json:"top_0,required"`
+	Meta HTTPAseTLSVersionGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []HTTPAseTLSVersionGetResponseTop0 `json:"top_0" api:"required"`
 	JSON httpAseTLSVersionGetResponseJSON   `json:"-"`
 }
 
@@ -76,15 +76,15 @@ func (r httpAseTLSVersionGetResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPAseTLSVersionGetResponseMeta struct {
-	ConfidenceInfo HTTPAseTLSVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []HTTPAseTLSVersionGetResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo HTTPAseTLSVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []HTTPAseTLSVersionGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPAseTLSVersionGetResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPAseTLSVersionGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPAseTLSVersionGetResponseMetaUnit `json:"units,required"`
+	Units []HTTPAseTLSVersionGetResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpAseTLSVersionGetResponseMetaJSON   `json:"-"`
 }
 
@@ -109,9 +109,9 @@ func (r httpAseTLSVersionGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPAseTLSVersionGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                              `json:"level,required"`
+	Level int64                                              `json:"level" api:"required"`
 	JSON  httpAseTLSVersionGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -135,15 +135,15 @@ func (r httpAseTLSVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                              `json:"description,required"`
-	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                              `json:"description" api:"required"`
+	EndDate     time.Time                                                           `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
-	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpAseTLSVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -231,9 +231,9 @@ func (r HTTPAseTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType) IsKn
 
 type HTTPAseTLSVersionGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                     `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                     `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpAseTLSVersionGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -278,8 +278,8 @@ func (r HTTPAseTLSVersionGetResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPAseTLSVersionGetResponseMetaUnit struct {
-	Name  string                                   `json:"name,required"`
-	Value string                                   `json:"value,required"`
+	Name  string                                   `json:"name" api:"required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  httpAseTLSVersionGetResponseMetaUnitJSON `json:"-"`
 }
 
@@ -301,10 +301,10 @@ func (r httpAseTLSVersionGetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPAseTLSVersionGetResponseTop0 struct {
-	ClientASN    int64  `json:"clientASN,required"`
-	ClientAsName string `json:"clientASName,required"`
+	ClientASN    int64  `json:"clientASN" api:"required"`
+	ClientAsName string `json:"clientASName" api:"required"`
 	// A numeric string.
-	Value string                               `json:"value,required"`
+	Value string                               `json:"value" api:"required"`
 	JSON  httpAseTLSVersionGetResponseTop0JSON `json:"-"`
 }
 
@@ -535,8 +535,8 @@ func (r HTTPAseTLSVersionGetParamsOS) IsKnown() bool {
 }
 
 type HTTPAseTLSVersionGetResponseEnvelope struct {
-	Result  HTTPAseTLSVersionGetResponse             `json:"result,required"`
-	Success bool                                     `json:"success,required"`
+	Result  HTTPAseTLSVersionGetResponse             `json:"result" api:"required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    httpAseTLSVersionGetResponseEnvelopeJSON `json:"-"`
 }
 

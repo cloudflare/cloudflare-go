@@ -43,11 +43,11 @@ func (r *AccountProfileService) Update(ctx context.Context, params AccountProfil
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/profile", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, nil, opts...)
-	return
+	return err
 }
 
 // Retrieves the profile information for a specific Cloudflare account, including
@@ -58,23 +58,23 @@ func (r *AccountProfileService) Get(ctx context.Context, query AccountProfileGet
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/profile", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccountProfile struct {
-	BusinessAddress  string             `json:"business_address,required"`
-	BusinessEmail    string             `json:"business_email,required"`
-	BusinessName     string             `json:"business_name,required"`
-	BusinessPhone    string             `json:"business_phone,required"`
-	ExternalMetadata string             `json:"external_metadata,required"`
+	BusinessAddress  string             `json:"business_address" api:"required"`
+	BusinessEmail    string             `json:"business_email" api:"required"`
+	BusinessName     string             `json:"business_name" api:"required"`
+	BusinessPhone    string             `json:"business_phone" api:"required"`
+	ExternalMetadata string             `json:"external_metadata" api:"required"`
 	JSON             accountProfileJSON `json:"-"`
 }
 
@@ -98,11 +98,11 @@ func (r accountProfileJSON) RawJSON() string {
 }
 
 type AccountProfileParam struct {
-	BusinessAddress  param.Field[string] `json:"business_address,required"`
-	BusinessEmail    param.Field[string] `json:"business_email,required"`
-	BusinessName     param.Field[string] `json:"business_name,required"`
-	BusinessPhone    param.Field[string] `json:"business_phone,required"`
-	ExternalMetadata param.Field[string] `json:"external_metadata,required"`
+	BusinessAddress  param.Field[string] `json:"business_address" api:"required"`
+	BusinessEmail    param.Field[string] `json:"business_email" api:"required"`
+	BusinessName     param.Field[string] `json:"business_name" api:"required"`
+	BusinessPhone    param.Field[string] `json:"business_phone" api:"required"`
+	ExternalMetadata param.Field[string] `json:"external_metadata" api:"required"`
 }
 
 func (r AccountProfileParam) MarshalJSON() (data []byte, err error) {
@@ -110,8 +110,8 @@ func (r AccountProfileParam) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountProfileUpdateParams struct {
-	AccountID      param.Field[string] `path:"account_id,required"`
-	AccountProfile AccountProfileParam `json:"account_profile,required"`
+	AccountID      param.Field[string] `path:"account_id" api:"required"`
+	AccountProfile AccountProfileParam `json:"account_profile" api:"required"`
 }
 
 func (r AccountProfileUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -119,14 +119,14 @@ func (r AccountProfileUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountProfileGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccountProfileGetResponseEnvelope struct {
-	Errors   []interface{}                            `json:"errors,required"`
-	Messages []shared.ResponseInfo                    `json:"messages,required"`
-	Result   AccountProfile                           `json:"result,required"`
-	Success  AccountProfileGetResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []interface{}                            `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                    `json:"messages" api:"required"`
+	Result   AccountProfile                           `json:"result" api:"required"`
+	Success  AccountProfileGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON     accountProfileGetResponseEnvelopeJSON    `json:"-"`
 }
 

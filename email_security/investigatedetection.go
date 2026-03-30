@@ -42,30 +42,30 @@ func (r *InvestigateDetectionService) Get(ctx context.Context, postfixID string,
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if postfixID == "" {
 		err = errors.New("missing required postfix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/detections", query.AccountID, postfixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InvestigateDetectionGetResponse struct {
-	Action           string                                          `json:"action,required"`
-	Attachments      []InvestigateDetectionGetResponseAttachment     `json:"attachments,required"`
-	Headers          []InvestigateDetectionGetResponseHeader         `json:"headers,required"`
-	Links            []InvestigateDetectionGetResponseLink           `json:"links,required"`
-	SenderInfo       InvestigateDetectionGetResponseSenderInfo       `json:"sender_info,required"`
-	ThreatCategories []InvestigateDetectionGetResponseThreatCategory `json:"threat_categories,required"`
-	Validation       InvestigateDetectionGetResponseValidation       `json:"validation,required"`
-	FinalDisposition InvestigateDetectionGetResponseFinalDisposition `json:"final_disposition,nullable"`
+	Action           string                                          `json:"action" api:"required"`
+	Attachments      []InvestigateDetectionGetResponseAttachment     `json:"attachments" api:"required"`
+	Headers          []InvestigateDetectionGetResponseHeader         `json:"headers" api:"required"`
+	Links            []InvestigateDetectionGetResponseLink           `json:"links" api:"required"`
+	SenderInfo       InvestigateDetectionGetResponseSenderInfo       `json:"sender_info" api:"required"`
+	ThreatCategories []InvestigateDetectionGetResponseThreatCategory `json:"threat_categories" api:"required"`
+	Validation       InvestigateDetectionGetResponseValidation       `json:"validation" api:"required"`
+	FinalDisposition InvestigateDetectionGetResponseFinalDisposition `json:"final_disposition" api:"nullable"`
 	JSON             investigateDetectionGetResponseJSON             `json:"-"`
 }
 
@@ -93,11 +93,11 @@ func (r investigateDetectionGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateDetectionGetResponseAttachment struct {
-	Size        int64                                               `json:"size,required"`
-	ContentType string                                              `json:"content_type,nullable"`
-	Detection   InvestigateDetectionGetResponseAttachmentsDetection `json:"detection,nullable"`
-	Encrypted   bool                                                `json:"encrypted,nullable"`
-	Name        string                                              `json:"name,nullable"`
+	Size        int64                                               `json:"size" api:"required"`
+	ContentType string                                              `json:"content_type" api:"nullable"`
+	Detection   InvestigateDetectionGetResponseAttachmentsDetection `json:"detection" api:"nullable"`
+	Encrypted   bool                                                `json:"encrypted" api:"nullable"`
+	Name        string                                              `json:"name" api:"nullable"`
 	JSON        investigateDetectionGetResponseAttachmentJSON       `json:"-"`
 }
 
@@ -145,8 +145,8 @@ func (r InvestigateDetectionGetResponseAttachmentsDetection) IsKnown() bool {
 }
 
 type InvestigateDetectionGetResponseHeader struct {
-	Name  string                                    `json:"name,required"`
-	Value string                                    `json:"value,required"`
+	Name  string                                    `json:"name" api:"required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  investigateDetectionGetResponseHeaderJSON `json:"-"`
 }
 
@@ -168,8 +168,8 @@ func (r investigateDetectionGetResponseHeaderJSON) RawJSON() string {
 }
 
 type InvestigateDetectionGetResponseLink struct {
-	Href string                                  `json:"href,required"`
-	Text string                                  `json:"text,nullable"`
+	Href string                                  `json:"href" api:"required"`
+	Text string                                  `json:"text" api:"nullable"`
 	JSON investigateDetectionGetResponseLinkJSON `json:"-"`
 }
 
@@ -192,12 +192,12 @@ func (r investigateDetectionGetResponseLinkJSON) RawJSON() string {
 
 type InvestigateDetectionGetResponseSenderInfo struct {
 	// The name of the autonomous system.
-	AsName string `json:"as_name,nullable"`
+	AsName string `json:"as_name" api:"nullable"`
 	// The number of the autonomous system.
-	AsNumber int64                                         `json:"as_number,nullable"`
-	Geo      string                                        `json:"geo,nullable"`
-	IP       string                                        `json:"ip,nullable"`
-	Pld      string                                        `json:"pld,nullable"`
+	AsNumber int64                                         `json:"as_number" api:"nullable"`
+	Geo      string                                        `json:"geo" api:"nullable"`
+	IP       string                                        `json:"ip" api:"nullable"`
+	Pld      string                                        `json:"pld" api:"nullable"`
 	JSON     investigateDetectionGetResponseSenderInfoJSON `json:"-"`
 }
 
@@ -222,9 +222,9 @@ func (r investigateDetectionGetResponseSenderInfoJSON) RawJSON() string {
 }
 
 type InvestigateDetectionGetResponseThreatCategory struct {
-	ID          int64                                             `json:"id,required"`
-	Description string                                            `json:"description,nullable"`
-	Name        string                                            `json:"name,nullable"`
+	ID          int64                                             `json:"id" api:"required"`
+	Description string                                            `json:"description" api:"nullable"`
+	Name        string                                            `json:"name" api:"nullable"`
 	JSON        investigateDetectionGetResponseThreatCategoryJSON `json:"-"`
 }
 
@@ -247,10 +247,10 @@ func (r investigateDetectionGetResponseThreatCategoryJSON) RawJSON() string {
 }
 
 type InvestigateDetectionGetResponseValidation struct {
-	Comment string                                         `json:"comment,nullable"`
-	DKIM    InvestigateDetectionGetResponseValidationDKIM  `json:"dkim,nullable"`
-	DMARC   InvestigateDetectionGetResponseValidationDMARC `json:"dmarc,nullable"`
-	SPF     InvestigateDetectionGetResponseValidationSPF   `json:"spf,nullable"`
+	Comment string                                         `json:"comment" api:"nullable"`
+	DKIM    InvestigateDetectionGetResponseValidationDKIM  `json:"dkim" api:"nullable"`
+	DMARC   InvestigateDetectionGetResponseValidationDMARC `json:"dmarc" api:"nullable"`
+	SPF     InvestigateDetectionGetResponseValidationSPF   `json:"spf" api:"nullable"`
 	JSON    investigateDetectionGetResponseValidationJSON  `json:"-"`
 }
 
@@ -352,14 +352,14 @@ func (r InvestigateDetectionGetResponseFinalDisposition) IsKnown() bool {
 
 type InvestigateDetectionGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InvestigateDetectionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   InvestigateDetectionGetResponse             `json:"result,required"`
-	Success  bool                                        `json:"success,required"`
+	Errors   []shared.ResponseInfo                       `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                       `json:"messages" api:"required"`
+	Result   InvestigateDetectionGetResponse             `json:"result" api:"required"`
+	Success  bool                                        `json:"success" api:"required"`
 	JSON     investigateDetectionGetResponseEnvelopeJSON `json:"-"`
 }
 

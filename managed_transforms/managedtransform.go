@@ -40,15 +40,15 @@ func (r *ManagedTransformService) List(ctx context.Context, query ManagedTransfo
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/managed_headers", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disables all Managed Transforms.
@@ -57,11 +57,11 @@ func (r *ManagedTransformService) Delete(ctx context.Context, body ManagedTransf
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/managed_headers", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Updates the status of one or more Managed Transforms.
@@ -70,23 +70,23 @@ func (r *ManagedTransformService) Edit(ctx context.Context, params ManagedTransf
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/managed_headers", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A result.
 type ManagedTransformListResponse struct {
 	// The list of Managed Request Transforms.
-	ManagedRequestHeaders []ManagedTransformListResponseManagedRequestHeader `json:"managed_request_headers,required"`
+	ManagedRequestHeaders []ManagedTransformListResponseManagedRequestHeader `json:"managed_request_headers" api:"required"`
 	// The list of Managed Response Transforms.
-	ManagedResponseHeaders []ManagedTransformListResponseManagedResponseHeader `json:"managed_response_headers,required"`
+	ManagedResponseHeaders []ManagedTransformListResponseManagedResponseHeader `json:"managed_response_headers" api:"required"`
 	JSON                   managedTransformListResponseJSON                    `json:"-"`
 }
 
@@ -110,12 +110,12 @@ func (r managedTransformListResponseJSON) RawJSON() string {
 // A Managed Transform object.
 type ManagedTransformListResponseManagedRequestHeader struct {
 	// The human-readable identifier of the Managed Transform.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HasConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                             `json:"conflicts_with"`
 	JSON          managedTransformListResponseManagedRequestHeaderJSON `json:"-"`
@@ -143,12 +143,12 @@ func (r managedTransformListResponseManagedRequestHeaderJSON) RawJSON() string {
 // A Managed Transform object.
 type ManagedTransformListResponseManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HasConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                              `json:"conflicts_with"`
 	JSON          managedTransformListResponseManagedResponseHeaderJSON `json:"-"`
@@ -176,9 +176,9 @@ func (r managedTransformListResponseManagedResponseHeaderJSON) RawJSON() string 
 // A result.
 type ManagedTransformEditResponse struct {
 	// The list of Managed Request Transforms.
-	ManagedRequestHeaders []ManagedTransformEditResponseManagedRequestHeader `json:"managed_request_headers,required"`
+	ManagedRequestHeaders []ManagedTransformEditResponseManagedRequestHeader `json:"managed_request_headers" api:"required"`
 	// The list of Managed Response Transforms.
-	ManagedResponseHeaders []ManagedTransformEditResponseManagedResponseHeader `json:"managed_response_headers,required"`
+	ManagedResponseHeaders []ManagedTransformEditResponseManagedResponseHeader `json:"managed_response_headers" api:"required"`
 	JSON                   managedTransformEditResponseJSON                    `json:"-"`
 }
 
@@ -202,12 +202,12 @@ func (r managedTransformEditResponseJSON) RawJSON() string {
 // A Managed Transform object.
 type ManagedTransformEditResponseManagedRequestHeader struct {
 	// The human-readable identifier of the Managed Transform.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HasConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                             `json:"conflicts_with"`
 	JSON          managedTransformEditResponseManagedRequestHeaderJSON `json:"-"`
@@ -235,12 +235,12 @@ func (r managedTransformEditResponseManagedRequestHeaderJSON) RawJSON() string {
 // A Managed Transform object.
 type ManagedTransformEditResponseManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether the Managed Transform conflicts with the currently-enabled Managed
 	// Transforms.
-	HasConflict bool `json:"has_conflict,required"`
+	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
 	ConflictsWith []string                                              `json:"conflicts_with"`
 	JSON          managedTransformEditResponseManagedResponseHeaderJSON `json:"-"`
@@ -267,19 +267,19 @@ func (r managedTransformEditResponseManagedResponseHeaderJSON) RawJSON() string 
 
 type ManagedTransformListParams struct {
 	// The unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 // A response object.
 type ManagedTransformListResponseEnvelope struct {
 	// A list of error messages.
-	Errors []ManagedTransformListResponseEnvelopeErrors `json:"errors,required"`
+	Errors []ManagedTransformListResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
-	Messages []ManagedTransformListResponseEnvelopeMessages `json:"messages,required"`
+	Messages []ManagedTransformListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A result.
-	Result ManagedTransformListResponse `json:"result,required"`
+	Result ManagedTransformListResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ManagedTransformListResponseEnvelopeSuccess `json:"success,required"`
+	Success ManagedTransformListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    managedTransformListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -305,7 +305,7 @@ func (r managedTransformListResponseEnvelopeJSON) RawJSON() string {
 // A message.
 type ManagedTransformListResponseEnvelopeErrors struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -334,7 +334,7 @@ func (r managedTransformListResponseEnvelopeErrorsJSON) RawJSON() string {
 // The source of this message.
 type ManagedTransformListResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                               `json:"pointer,required"`
+	Pointer string                                               `json:"pointer" api:"required"`
 	JSON    managedTransformListResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
@@ -357,7 +357,7 @@ func (r managedTransformListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 // A message.
 type ManagedTransformListResponseEnvelopeMessages struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -386,7 +386,7 @@ func (r managedTransformListResponseEnvelopeMessagesJSON) RawJSON() string {
 // The source of this message.
 type ManagedTransformListResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                 `json:"pointer,required"`
+	Pointer string                                                 `json:"pointer" api:"required"`
 	JSON    managedTransformListResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 
@@ -423,16 +423,16 @@ func (r ManagedTransformListResponseEnvelopeSuccess) IsKnown() bool {
 
 type ManagedTransformDeleteParams struct {
 	// The unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ManagedTransformEditParams struct {
 	// The unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The list of Managed Request Transforms.
-	ManagedRequestHeaders param.Field[[]ManagedTransformEditParamsManagedRequestHeader] `json:"managed_request_headers,required"`
+	ManagedRequestHeaders param.Field[[]ManagedTransformEditParamsManagedRequestHeader] `json:"managed_request_headers" api:"required"`
 	// The list of Managed Response Transforms.
-	ManagedResponseHeaders param.Field[[]ManagedTransformEditParamsManagedResponseHeader] `json:"managed_response_headers,required"`
+	ManagedResponseHeaders param.Field[[]ManagedTransformEditParamsManagedResponseHeader] `json:"managed_response_headers" api:"required"`
 }
 
 func (r ManagedTransformEditParams) MarshalJSON() (data []byte, err error) {
@@ -442,9 +442,9 @@ func (r ManagedTransformEditParams) MarshalJSON() (data []byte, err error) {
 // A Managed Transform object.
 type ManagedTransformEditParamsManagedRequestHeader struct {
 	// The human-readable identifier of the Managed Transform.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r ManagedTransformEditParamsManagedRequestHeader) MarshalJSON() (data []byte, err error) {
@@ -454,9 +454,9 @@ func (r ManagedTransformEditParamsManagedRequestHeader) MarshalJSON() (data []by
 // A Managed Transform object.
 type ManagedTransformEditParamsManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r ManagedTransformEditParamsManagedResponseHeader) MarshalJSON() (data []byte, err error) {
@@ -466,13 +466,13 @@ func (r ManagedTransformEditParamsManagedResponseHeader) MarshalJSON() (data []b
 // A response object.
 type ManagedTransformEditResponseEnvelope struct {
 	// A list of error messages.
-	Errors []ManagedTransformEditResponseEnvelopeErrors `json:"errors,required"`
+	Errors []ManagedTransformEditResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
-	Messages []ManagedTransformEditResponseEnvelopeMessages `json:"messages,required"`
+	Messages []ManagedTransformEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A result.
-	Result ManagedTransformEditResponse `json:"result,required"`
+	Result ManagedTransformEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ManagedTransformEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ManagedTransformEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    managedTransformEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -498,7 +498,7 @@ func (r managedTransformEditResponseEnvelopeJSON) RawJSON() string {
 // A message.
 type ManagedTransformEditResponseEnvelopeErrors struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -527,7 +527,7 @@ func (r managedTransformEditResponseEnvelopeErrorsJSON) RawJSON() string {
 // The source of this message.
 type ManagedTransformEditResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                               `json:"pointer,required"`
+	Pointer string                                               `json:"pointer" api:"required"`
 	JSON    managedTransformEditResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
@@ -550,7 +550,7 @@ func (r managedTransformEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 // A message.
 type ManagedTransformEditResponseEnvelopeMessages struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -579,7 +579,7 @@ func (r managedTransformEditResponseEnvelopeMessagesJSON) RawJSON() string {
 // The source of this message.
 type ManagedTransformEditResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                 `json:"pointer,required"`
+	Pointer string                                                 `json:"pointer" api:"required"`
 	JSON    managedTransformEditResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 

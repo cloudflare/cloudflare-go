@@ -46,15 +46,15 @@ func (r *SinkService) New(ctx context.Context, params SinkNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/sinks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List/Filter Sinks in Account.
@@ -64,7 +64,7 @@ func (r *SinkService) List(ctx context.Context, params SinkListParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/sinks", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -90,15 +90,15 @@ func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDele
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if sinkID == "" {
 		err = errors.New("missing required sink_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/sinks/%s", params.AccountID, sinkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
-	return
+	return err
 }
 
 // Get Sink Details.
@@ -107,30 +107,30 @@ func (r *SinkService) Get(ctx context.Context, sinkID string, query SinkGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if sinkID == "" {
 		err = errors.New("missing required sink_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/sinks/%s", query.AccountID, sinkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SinkNewResponse struct {
 	// Indicates a unique identifier for this sink.
-	ID         string    `json:"id,required"`
-	CreatedAt  time.Time `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ID         string    `json:"id" api:"required"`
+	CreatedAt  time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Defines the name of the Sink.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies the type of sink.
-	Type SinkNewResponseType `json:"type,required"`
+	Type SinkNewResponseType `json:"type" api:"required"`
 	// R2 Data Catalog Sink
 	Config SinkNewResponseConfig `json:"config"`
 	Format SinkNewResponseFormat `json:"format"`
@@ -179,9 +179,9 @@ func (r SinkNewResponseType) IsKnown() bool {
 // R2 Data Catalog Sink
 type SinkNewResponseConfig struct {
 	// Cloudflare Account ID for the bucket
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Authentication token
 	Token string `json:"token" format:"var-str"`
 	// This field can have the runtime type of
@@ -275,10 +275,10 @@ func init() {
 
 type SinkNewResponseConfigCloudflarePipelinesR2Table struct {
 	// Cloudflare Account ID for the bucket
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket      string                                                     `json:"bucket,required"`
-	Credentials SinkNewResponseConfigCloudflarePipelinesR2TableCredentials `json:"credentials,required"`
+	Bucket      string                                                     `json:"bucket" api:"required"`
+	Credentials SinkNewResponseConfigCloudflarePipelinesR2TableCredentials `json:"credentials" api:"required"`
 	// Controls filename prefix/suffix and strategy.
 	FileNaming SinkNewResponseConfigCloudflarePipelinesR2TableFileNaming `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
@@ -319,9 +319,9 @@ func (r SinkNewResponseConfigCloudflarePipelinesR2Table) implementsSinkNewRespon
 
 type SinkNewResponseConfigCloudflarePipelinesR2TableCredentials struct {
 	// Cloudflare Account ID for the bucket
-	AccessKeyID string `json:"access_key_id,required" format:"var-str"`
+	AccessKeyID string `json:"access_key_id" api:"required" format:"var-str"`
 	// Cloudflare Account ID for the bucket
-	SecretAccessKey string                                                         `json:"secret_access_key,required" format:"var-str"`
+	SecretAccessKey string                                                         `json:"secret_access_key" api:"required" format:"var-str"`
 	JSON            sinkNewResponseConfigCloudflarePipelinesR2TableCredentialsJSON `json:"-"`
 }
 
@@ -448,13 +448,13 @@ func (r sinkNewResponseConfigCloudflarePipelinesR2TableRollingPolicyJSON) RawJSO
 // R2 Data Catalog Sink
 type SinkNewResponseConfigCloudflarePipelinesR2DataCatalogTable struct {
 	// Authentication token
-	Token string `json:"token,required" format:"var-str"`
+	Token string `json:"token" api:"required" format:"var-str"`
 	// Cloudflare Account ID
-	AccountID string `json:"account_id,required" format:"uri"`
+	AccountID string `json:"account_id" api:"required" format:"uri"`
 	// The R2 Bucket that hosts this catalog
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Table name
-	TableName string `json:"table_name,required"`
+	TableName string `json:"table_name" api:"required"`
 	// Table namespace
 	Namespace string `json:"namespace"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
@@ -518,10 +518,10 @@ func (r sinkNewResponseConfigCloudflarePipelinesR2DataCatalogTableRollingPolicyJ
 }
 
 type SinkNewResponseFormat struct {
-	Type            SinkNewResponseFormatType            `json:"type,required"`
+	Type            SinkNewResponseFormatType            `json:"type" api:"required"`
 	Compression     SinkNewResponseFormatCompression     `json:"compression"`
 	DecimalEncoding SinkNewResponseFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat SinkNewResponseFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                 `json:"unstructured"`
 	JSON            sinkNewResponseFormatJSON            `json:"-"`
@@ -587,7 +587,7 @@ func init() {
 }
 
 type SinkNewResponseFormatJson struct {
-	Type            SinkNewResponseFormatJsonType            `json:"type,required"`
+	Type            SinkNewResponseFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding SinkNewResponseFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat SinkNewResponseFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                     `json:"unstructured"`
@@ -661,9 +661,9 @@ func (r SinkNewResponseFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkNewResponseFormatParquet struct {
-	Type          SinkNewResponseFormatParquetType        `json:"type,required"`
+	Type          SinkNewResponseFormatParquetType        `json:"type" api:"required"`
 	Compression   SinkNewResponseFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                   `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                   `json:"row_group_bytes" api:"nullable"`
 	JSON          sinkNewResponseFormatParquetJSON        `json:"-"`
 }
 
@@ -786,7 +786,7 @@ func (r SinkNewResponseFormatTimestampFormat) IsKnown() bool {
 type SinkNewResponseSchema struct {
 	Fields   []SinkNewResponseSchemaField `json:"fields"`
 	Format   SinkNewResponseSchemaFormat  `json:"format"`
-	Inferred bool                         `json:"inferred,nullable"`
+	Inferred bool                         `json:"inferred" api:"nullable"`
 	JSON     sinkNewResponseSchemaJSON    `json:"-"`
 }
 
@@ -809,8 +809,8 @@ func (r sinkNewResponseSchemaJSON) RawJSON() string {
 }
 
 type SinkNewResponseSchemaField struct {
-	Type        SinkNewResponseSchemaFieldsType `json:"type,required"`
-	MetadataKey string                          `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsType `json:"type" api:"required"`
+	MetadataKey string                          `json:"metadata_key" api:"nullable"`
 	Name        string                          `json:"name"`
 	Required    bool                            `json:"required"`
 	SqlName     string                          `json:"sql_name"`
@@ -931,8 +931,8 @@ func init() {
 }
 
 type SinkNewResponseSchemaFieldsInt32 struct {
-	Type        SinkNewResponseSchemaFieldsInt32Type `json:"type,required"`
-	MetadataKey string                               `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsInt32Type `json:"type" api:"required"`
+	MetadataKey string                               `json:"metadata_key" api:"nullable"`
 	Name        string                               `json:"name"`
 	Required    bool                                 `json:"required"`
 	SqlName     string                               `json:"sql_name"`
@@ -976,8 +976,8 @@ func (r SinkNewResponseSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsInt64 struct {
-	Type        SinkNewResponseSchemaFieldsInt64Type `json:"type,required"`
-	MetadataKey string                               `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsInt64Type `json:"type" api:"required"`
+	MetadataKey string                               `json:"metadata_key" api:"nullable"`
 	Name        string                               `json:"name"`
 	Required    bool                                 `json:"required"`
 	SqlName     string                               `json:"sql_name"`
@@ -1021,8 +1021,8 @@ func (r SinkNewResponseSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsFloat32 struct {
-	Type        SinkNewResponseSchemaFieldsFloat32Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsFloat32Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -1066,8 +1066,8 @@ func (r SinkNewResponseSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsFloat64 struct {
-	Type        SinkNewResponseSchemaFieldsFloat64Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsFloat64Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -1111,8 +1111,8 @@ func (r SinkNewResponseSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsBool struct {
-	Type        SinkNewResponseSchemaFieldsBoolType `json:"type,required"`
-	MetadataKey string                              `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsBoolType `json:"type" api:"required"`
+	MetadataKey string                              `json:"metadata_key" api:"nullable"`
 	Name        string                              `json:"name"`
 	Required    bool                                `json:"required"`
 	SqlName     string                              `json:"sql_name"`
@@ -1156,8 +1156,8 @@ func (r SinkNewResponseSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsString struct {
-	Type        SinkNewResponseSchemaFieldsStringType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsStringType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -1201,8 +1201,8 @@ func (r SinkNewResponseSchemaFieldsStringType) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsBinary struct {
-	Type        SinkNewResponseSchemaFieldsBinaryType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsBinaryType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -1246,8 +1246,8 @@ func (r SinkNewResponseSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsTimestamp struct {
-	Type        SinkNewResponseSchemaFieldsTimestampType `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsTimestampType `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -1310,8 +1310,8 @@ func (r SinkNewResponseSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFieldsJson struct {
-	Type        SinkNewResponseSchemaFieldsJsonType `json:"type,required"`
-	MetadataKey string                              `json:"metadata_key,nullable"`
+	Type        SinkNewResponseSchemaFieldsJsonType `json:"type" api:"required"`
+	MetadataKey string                              `json:"metadata_key" api:"nullable"`
 	Name        string                              `json:"name"`
 	Required    bool                                `json:"required"`
 	SqlName     string                              `json:"sql_name"`
@@ -1438,10 +1438,10 @@ func (r SinkNewResponseSchemaFieldsUnit) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFormat struct {
-	Type            SinkNewResponseSchemaFormatType            `json:"type,required"`
+	Type            SinkNewResponseSchemaFormatType            `json:"type" api:"required"`
 	Compression     SinkNewResponseSchemaFormatCompression     `json:"compression"`
 	DecimalEncoding SinkNewResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                      `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                      `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat SinkNewResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                       `json:"unstructured"`
 	JSON            sinkNewResponseSchemaFormatJSON            `json:"-"`
@@ -1507,7 +1507,7 @@ func init() {
 }
 
 type SinkNewResponseSchemaFormatJson struct {
-	Type            SinkNewResponseSchemaFormatJsonType            `json:"type,required"`
+	Type            SinkNewResponseSchemaFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding SinkNewResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat SinkNewResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                           `json:"unstructured"`
@@ -1581,9 +1581,9 @@ func (r SinkNewResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkNewResponseSchemaFormatParquet struct {
-	Type          SinkNewResponseSchemaFormatParquetType        `json:"type,required"`
+	Type          SinkNewResponseSchemaFormatParquetType        `json:"type" api:"required"`
 	Compression   SinkNewResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                         `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                         `json:"row_group_bytes" api:"nullable"`
 	JSON          sinkNewResponseSchemaFormatParquetJSON        `json:"-"`
 }
 
@@ -1705,13 +1705,13 @@ func (r SinkNewResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type SinkListResponse struct {
 	// Indicates a unique identifier for this sink.
-	ID         string    `json:"id,required"`
-	CreatedAt  time.Time `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ID         string    `json:"id" api:"required"`
+	CreatedAt  time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Defines the name of the Sink.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies the type of sink.
-	Type SinkListResponseType `json:"type,required"`
+	Type SinkListResponseType `json:"type" api:"required"`
 	// Defines the configuration of the R2 Sink.
 	Config SinkListResponseConfig `json:"config"`
 	Format SinkListResponseFormat `json:"format"`
@@ -1761,9 +1761,9 @@ func (r SinkListResponseType) IsKnown() bool {
 // Defines the configuration of the R2 Sink.
 type SinkListResponseConfig struct {
 	// Cloudflare Account ID for the bucket
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// This field can have the runtime type of
 	// [SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNaming].
 	FileNaming interface{} `json:"file_naming"`
@@ -1851,9 +1851,9 @@ func init() {
 // R2 Sink public configuration.
 type SinkListResponseConfigCloudflarePipelinesR2TablePublic struct {
 	// Cloudflare Account ID for the bucket
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Controls filename prefix/suffix and strategy.
 	FileNaming SinkListResponseConfigCloudflarePipelinesR2TablePublicFileNaming `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
@@ -1996,11 +1996,11 @@ func (r sinkListResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON)
 // R2 Data Catalog Sink public configuration.
 type SinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublic struct {
 	// Cloudflare Account ID
-	AccountID string `json:"account_id,required" format:"uri"`
+	AccountID string `json:"account_id" api:"required" format:"uri"`
 	// The R2 Bucket that hosts this catalog
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Table name
-	TableName string `json:"table_name,required"`
+	TableName string `json:"table_name" api:"required"`
 	// Table namespace
 	Namespace string `json:"namespace"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
@@ -2063,10 +2063,10 @@ func (r sinkListResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRolling
 }
 
 type SinkListResponseFormat struct {
-	Type            SinkListResponseFormatType            `json:"type,required"`
+	Type            SinkListResponseFormatType            `json:"type" api:"required"`
 	Compression     SinkListResponseFormatCompression     `json:"compression"`
 	DecimalEncoding SinkListResponseFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                 `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                 `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat SinkListResponseFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                  `json:"unstructured"`
 	JSON            sinkListResponseFormatJSON            `json:"-"`
@@ -2132,7 +2132,7 @@ func init() {
 }
 
 type SinkListResponseFormatJson struct {
-	Type            SinkListResponseFormatJsonType            `json:"type,required"`
+	Type            SinkListResponseFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding SinkListResponseFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat SinkListResponseFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                      `json:"unstructured"`
@@ -2206,9 +2206,9 @@ func (r SinkListResponseFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkListResponseFormatParquet struct {
-	Type          SinkListResponseFormatParquetType        `json:"type,required"`
+	Type          SinkListResponseFormatParquetType        `json:"type" api:"required"`
 	Compression   SinkListResponseFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                    `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                    `json:"row_group_bytes" api:"nullable"`
 	JSON          sinkListResponseFormatParquetJSON        `json:"-"`
 }
 
@@ -2331,7 +2331,7 @@ func (r SinkListResponseFormatTimestampFormat) IsKnown() bool {
 type SinkListResponseSchema struct {
 	Fields   []SinkListResponseSchemaField `json:"fields"`
 	Format   SinkListResponseSchemaFormat  `json:"format"`
-	Inferred bool                          `json:"inferred,nullable"`
+	Inferred bool                          `json:"inferred" api:"nullable"`
 	JSON     sinkListResponseSchemaJSON    `json:"-"`
 }
 
@@ -2354,8 +2354,8 @@ func (r sinkListResponseSchemaJSON) RawJSON() string {
 }
 
 type SinkListResponseSchemaField struct {
-	Type        SinkListResponseSchemaFieldsType `json:"type,required"`
-	MetadataKey string                           `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsType `json:"type" api:"required"`
+	MetadataKey string                           `json:"metadata_key" api:"nullable"`
 	Name        string                           `json:"name"`
 	Required    bool                             `json:"required"`
 	SqlName     string                           `json:"sql_name"`
@@ -2476,8 +2476,8 @@ func init() {
 }
 
 type SinkListResponseSchemaFieldsInt32 struct {
-	Type        SinkListResponseSchemaFieldsInt32Type `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsInt32Type `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -2521,8 +2521,8 @@ func (r SinkListResponseSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsInt64 struct {
-	Type        SinkListResponseSchemaFieldsInt64Type `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsInt64Type `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -2566,8 +2566,8 @@ func (r SinkListResponseSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsFloat32 struct {
-	Type        SinkListResponseSchemaFieldsFloat32Type `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsFloat32Type `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -2611,8 +2611,8 @@ func (r SinkListResponseSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsFloat64 struct {
-	Type        SinkListResponseSchemaFieldsFloat64Type `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsFloat64Type `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -2656,8 +2656,8 @@ func (r SinkListResponseSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsBool struct {
-	Type        SinkListResponseSchemaFieldsBoolType `json:"type,required"`
-	MetadataKey string                               `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsBoolType `json:"type" api:"required"`
+	MetadataKey string                               `json:"metadata_key" api:"nullable"`
 	Name        string                               `json:"name"`
 	Required    bool                                 `json:"required"`
 	SqlName     string                               `json:"sql_name"`
@@ -2701,8 +2701,8 @@ func (r SinkListResponseSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsString struct {
-	Type        SinkListResponseSchemaFieldsStringType `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsStringType `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -2746,8 +2746,8 @@ func (r SinkListResponseSchemaFieldsStringType) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsBinary struct {
-	Type        SinkListResponseSchemaFieldsBinaryType `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsBinaryType `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -2791,8 +2791,8 @@ func (r SinkListResponseSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsTimestamp struct {
-	Type        SinkListResponseSchemaFieldsTimestampType `json:"type,required"`
-	MetadataKey string                                    `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsTimestampType `json:"type" api:"required"`
+	MetadataKey string                                    `json:"metadata_key" api:"nullable"`
 	Name        string                                    `json:"name"`
 	Required    bool                                      `json:"required"`
 	SqlName     string                                    `json:"sql_name"`
@@ -2855,8 +2855,8 @@ func (r SinkListResponseSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFieldsJson struct {
-	Type        SinkListResponseSchemaFieldsJsonType `json:"type,required"`
-	MetadataKey string                               `json:"metadata_key,nullable"`
+	Type        SinkListResponseSchemaFieldsJsonType `json:"type" api:"required"`
+	MetadataKey string                               `json:"metadata_key" api:"nullable"`
 	Name        string                               `json:"name"`
 	Required    bool                                 `json:"required"`
 	SqlName     string                               `json:"sql_name"`
@@ -2983,10 +2983,10 @@ func (r SinkListResponseSchemaFieldsUnit) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFormat struct {
-	Type            SinkListResponseSchemaFormatType            `json:"type,required"`
+	Type            SinkListResponseSchemaFormatType            `json:"type" api:"required"`
 	Compression     SinkListResponseSchemaFormatCompression     `json:"compression"`
 	DecimalEncoding SinkListResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                       `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                       `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat SinkListResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                        `json:"unstructured"`
 	JSON            sinkListResponseSchemaFormatJSON            `json:"-"`
@@ -3052,7 +3052,7 @@ func init() {
 }
 
 type SinkListResponseSchemaFormatJson struct {
-	Type            SinkListResponseSchemaFormatJsonType            `json:"type,required"`
+	Type            SinkListResponseSchemaFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding SinkListResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat SinkListResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                            `json:"unstructured"`
@@ -3126,9 +3126,9 @@ func (r SinkListResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkListResponseSchemaFormatParquet struct {
-	Type          SinkListResponseSchemaFormatParquetType        `json:"type,required"`
+	Type          SinkListResponseSchemaFormatParquetType        `json:"type" api:"required"`
 	Compression   SinkListResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                          `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                          `json:"row_group_bytes" api:"nullable"`
 	JSON          sinkListResponseSchemaFormatParquetJSON        `json:"-"`
 }
 
@@ -3250,13 +3250,13 @@ func (r SinkListResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type SinkGetResponse struct {
 	// Indicates a unique identifier for this sink.
-	ID         string    `json:"id,required"`
-	CreatedAt  time.Time `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time `json:"modified_at,required" format:"date-time"`
+	ID         string    `json:"id" api:"required"`
+	CreatedAt  time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
 	// Defines the name of the Sink.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies the type of sink.
-	Type SinkGetResponseType `json:"type,required"`
+	Type SinkGetResponseType `json:"type" api:"required"`
 	// Defines the configuration of the R2 Sink.
 	Config SinkGetResponseConfig `json:"config"`
 	Format SinkGetResponseFormat `json:"format"`
@@ -3305,9 +3305,9 @@ func (r SinkGetResponseType) IsKnown() bool {
 // Defines the configuration of the R2 Sink.
 type SinkGetResponseConfig struct {
 	// Cloudflare Account ID for the bucket
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// This field can have the runtime type of
 	// [SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNaming].
 	FileNaming interface{} `json:"file_naming"`
@@ -3395,9 +3395,9 @@ func init() {
 // R2 Sink public configuration.
 type SinkGetResponseConfigCloudflarePipelinesR2TablePublic struct {
 	// Cloudflare Account ID for the bucket
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Controls filename prefix/suffix and strategy.
 	FileNaming SinkGetResponseConfigCloudflarePipelinesR2TablePublicFileNaming `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
@@ -3540,11 +3540,11 @@ func (r sinkGetResponseConfigCloudflarePipelinesR2TablePublicRollingPolicyJSON) 
 // R2 Data Catalog Sink public configuration.
 type SinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublic struct {
 	// Cloudflare Account ID
-	AccountID string `json:"account_id,required" format:"uri"`
+	AccountID string `json:"account_id" api:"required" format:"uri"`
 	// The R2 Bucket that hosts this catalog
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Table name
-	TableName string `json:"table_name,required"`
+	TableName string `json:"table_name" api:"required"`
 	// Table namespace
 	Namespace string `json:"namespace"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
@@ -3607,10 +3607,10 @@ func (r sinkGetResponseConfigCloudflarePipelinesR2DataCatalogTablePublicRollingP
 }
 
 type SinkGetResponseFormat struct {
-	Type            SinkGetResponseFormatType            `json:"type,required"`
+	Type            SinkGetResponseFormatType            `json:"type" api:"required"`
 	Compression     SinkGetResponseFormatCompression     `json:"compression"`
 	DecimalEncoding SinkGetResponseFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat SinkGetResponseFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                 `json:"unstructured"`
 	JSON            sinkGetResponseFormatJSON            `json:"-"`
@@ -3676,7 +3676,7 @@ func init() {
 }
 
 type SinkGetResponseFormatJson struct {
-	Type            SinkGetResponseFormatJsonType            `json:"type,required"`
+	Type            SinkGetResponseFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding SinkGetResponseFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat SinkGetResponseFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                     `json:"unstructured"`
@@ -3750,9 +3750,9 @@ func (r SinkGetResponseFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkGetResponseFormatParquet struct {
-	Type          SinkGetResponseFormatParquetType        `json:"type,required"`
+	Type          SinkGetResponseFormatParquetType        `json:"type" api:"required"`
 	Compression   SinkGetResponseFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                   `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                   `json:"row_group_bytes" api:"nullable"`
 	JSON          sinkGetResponseFormatParquetJSON        `json:"-"`
 }
 
@@ -3875,7 +3875,7 @@ func (r SinkGetResponseFormatTimestampFormat) IsKnown() bool {
 type SinkGetResponseSchema struct {
 	Fields   []SinkGetResponseSchemaField `json:"fields"`
 	Format   SinkGetResponseSchemaFormat  `json:"format"`
-	Inferred bool                         `json:"inferred,nullable"`
+	Inferred bool                         `json:"inferred" api:"nullable"`
 	JSON     sinkGetResponseSchemaJSON    `json:"-"`
 }
 
@@ -3898,8 +3898,8 @@ func (r sinkGetResponseSchemaJSON) RawJSON() string {
 }
 
 type SinkGetResponseSchemaField struct {
-	Type        SinkGetResponseSchemaFieldsType `json:"type,required"`
-	MetadataKey string                          `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsType `json:"type" api:"required"`
+	MetadataKey string                          `json:"metadata_key" api:"nullable"`
 	Name        string                          `json:"name"`
 	Required    bool                            `json:"required"`
 	SqlName     string                          `json:"sql_name"`
@@ -4020,8 +4020,8 @@ func init() {
 }
 
 type SinkGetResponseSchemaFieldsInt32 struct {
-	Type        SinkGetResponseSchemaFieldsInt32Type `json:"type,required"`
-	MetadataKey string                               `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsInt32Type `json:"type" api:"required"`
+	MetadataKey string                               `json:"metadata_key" api:"nullable"`
 	Name        string                               `json:"name"`
 	Required    bool                                 `json:"required"`
 	SqlName     string                               `json:"sql_name"`
@@ -4065,8 +4065,8 @@ func (r SinkGetResponseSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsInt64 struct {
-	Type        SinkGetResponseSchemaFieldsInt64Type `json:"type,required"`
-	MetadataKey string                               `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsInt64Type `json:"type" api:"required"`
+	MetadataKey string                               `json:"metadata_key" api:"nullable"`
 	Name        string                               `json:"name"`
 	Required    bool                                 `json:"required"`
 	SqlName     string                               `json:"sql_name"`
@@ -4110,8 +4110,8 @@ func (r SinkGetResponseSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsFloat32 struct {
-	Type        SinkGetResponseSchemaFieldsFloat32Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsFloat32Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -4155,8 +4155,8 @@ func (r SinkGetResponseSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsFloat64 struct {
-	Type        SinkGetResponseSchemaFieldsFloat64Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsFloat64Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -4200,8 +4200,8 @@ func (r SinkGetResponseSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsBool struct {
-	Type        SinkGetResponseSchemaFieldsBoolType `json:"type,required"`
-	MetadataKey string                              `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsBoolType `json:"type" api:"required"`
+	MetadataKey string                              `json:"metadata_key" api:"nullable"`
 	Name        string                              `json:"name"`
 	Required    bool                                `json:"required"`
 	SqlName     string                              `json:"sql_name"`
@@ -4245,8 +4245,8 @@ func (r SinkGetResponseSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsString struct {
-	Type        SinkGetResponseSchemaFieldsStringType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsStringType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -4290,8 +4290,8 @@ func (r SinkGetResponseSchemaFieldsStringType) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsBinary struct {
-	Type        SinkGetResponseSchemaFieldsBinaryType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsBinaryType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -4335,8 +4335,8 @@ func (r SinkGetResponseSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsTimestamp struct {
-	Type        SinkGetResponseSchemaFieldsTimestampType `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsTimestampType `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -4399,8 +4399,8 @@ func (r SinkGetResponseSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFieldsJson struct {
-	Type        SinkGetResponseSchemaFieldsJsonType `json:"type,required"`
-	MetadataKey string                              `json:"metadata_key,nullable"`
+	Type        SinkGetResponseSchemaFieldsJsonType `json:"type" api:"required"`
+	MetadataKey string                              `json:"metadata_key" api:"nullable"`
 	Name        string                              `json:"name"`
 	Required    bool                                `json:"required"`
 	SqlName     string                              `json:"sql_name"`
@@ -4527,10 +4527,10 @@ func (r SinkGetResponseSchemaFieldsUnit) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFormat struct {
-	Type            SinkGetResponseSchemaFormatType            `json:"type,required"`
+	Type            SinkGetResponseSchemaFormatType            `json:"type" api:"required"`
 	Compression     SinkGetResponseSchemaFormatCompression     `json:"compression"`
 	DecimalEncoding SinkGetResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                      `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                      `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat SinkGetResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                       `json:"unstructured"`
 	JSON            sinkGetResponseSchemaFormatJSON            `json:"-"`
@@ -4596,7 +4596,7 @@ func init() {
 }
 
 type SinkGetResponseSchemaFormatJson struct {
-	Type            SinkGetResponseSchemaFormatJsonType            `json:"type,required"`
+	Type            SinkGetResponseSchemaFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding SinkGetResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat SinkGetResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                           `json:"unstructured"`
@@ -4670,9 +4670,9 @@ func (r SinkGetResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkGetResponseSchemaFormatParquet struct {
-	Type          SinkGetResponseSchemaFormatParquetType        `json:"type,required"`
+	Type          SinkGetResponseSchemaFormatParquetType        `json:"type" api:"required"`
 	Compression   SinkGetResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                         `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                         `json:"row_group_bytes" api:"nullable"`
 	JSON          sinkGetResponseSchemaFormatParquetJSON        `json:"-"`
 }
 
@@ -4794,11 +4794,11 @@ func (r SinkGetResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type SinkNewParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Defines the name of the Sink.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Specifies the type of sink.
-	Type param.Field[SinkNewParamsType] `json:"type,required"`
+	Type param.Field[SinkNewParamsType] `json:"type" api:"required"`
 	// Defines the configuration of the R2 Sink.
 	Config param.Field[SinkNewParamsConfigUnion] `json:"config"`
 	Format param.Field[SinkNewParamsFormatUnion] `json:"format"`
@@ -4828,9 +4828,9 @@ func (r SinkNewParamsType) IsKnown() bool {
 // Defines the configuration of the R2 Sink.
 type SinkNewParamsConfig struct {
 	// Cloudflare Account ID for the bucket
-	AccountID param.Field[string] `json:"account_id,required"`
+	AccountID param.Field[string] `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket param.Field[string] `json:"bucket,required"`
+	Bucket param.Field[string] `json:"bucket" api:"required"`
 	// Authentication token
 	Token       param.Field[string]      `json:"token" format:"var-str"`
 	Credentials param.Field[interface{}] `json:"credentials"`
@@ -4864,10 +4864,10 @@ type SinkNewParamsConfigUnion interface {
 
 type SinkNewParamsConfigCloudflarePipelinesR2Table struct {
 	// Cloudflare Account ID for the bucket
-	AccountID param.Field[string] `json:"account_id,required"`
+	AccountID param.Field[string] `json:"account_id" api:"required"`
 	// R2 Bucket to write to
-	Bucket      param.Field[string]                                                   `json:"bucket,required"`
-	Credentials param.Field[SinkNewParamsConfigCloudflarePipelinesR2TableCredentials] `json:"credentials,required"`
+	Bucket      param.Field[string]                                                   `json:"bucket" api:"required"`
+	Credentials param.Field[SinkNewParamsConfigCloudflarePipelinesR2TableCredentials] `json:"credentials" api:"required"`
 	// Controls filename prefix/suffix and strategy.
 	FileNaming param.Field[SinkNewParamsConfigCloudflarePipelinesR2TableFileNaming] `json:"file_naming"`
 	// Jurisdiction this bucket is hosted in
@@ -4888,9 +4888,9 @@ func (r SinkNewParamsConfigCloudflarePipelinesR2Table) implementsSinkNewParamsCo
 
 type SinkNewParamsConfigCloudflarePipelinesR2TableCredentials struct {
 	// Cloudflare Account ID for the bucket
-	AccessKeyID param.Field[string] `json:"access_key_id,required" format:"var-str"`
+	AccessKeyID param.Field[string] `json:"access_key_id" api:"required" format:"var-str"`
 	// Cloudflare Account ID for the bucket
-	SecretAccessKey param.Field[string] `json:"secret_access_key,required" format:"var-str"`
+	SecretAccessKey param.Field[string] `json:"secret_access_key" api:"required" format:"var-str"`
 }
 
 func (r SinkNewParamsConfigCloudflarePipelinesR2TableCredentials) MarshalJSON() (data []byte, err error) {
@@ -4956,13 +4956,13 @@ func (r SinkNewParamsConfigCloudflarePipelinesR2TableRollingPolicy) MarshalJSON(
 // R2 Data Catalog Sink
 type SinkNewParamsConfigCloudflarePipelinesR2DataCatalogTable struct {
 	// Authentication token
-	Token param.Field[string] `json:"token,required" format:"var-str"`
+	Token param.Field[string] `json:"token" api:"required" format:"var-str"`
 	// Cloudflare Account ID
-	AccountID param.Field[string] `json:"account_id,required" format:"uri"`
+	AccountID param.Field[string] `json:"account_id" api:"required" format:"uri"`
 	// The R2 Bucket that hosts this catalog
-	Bucket param.Field[string] `json:"bucket,required"`
+	Bucket param.Field[string] `json:"bucket" api:"required"`
 	// Table name
-	TableName param.Field[string] `json:"table_name,required"`
+	TableName param.Field[string] `json:"table_name" api:"required"`
 	// Table namespace
 	Namespace param.Field[string] `json:"namespace"`
 	// Rolling policy for file sinks (when & why to close a file and open a new one).
@@ -4991,7 +4991,7 @@ func (r SinkNewParamsConfigCloudflarePipelinesR2DataCatalogTableRollingPolicy) M
 }
 
 type SinkNewParamsFormat struct {
-	Type            param.Field[SinkNewParamsFormatType]            `json:"type,required"`
+	Type            param.Field[SinkNewParamsFormatType]            `json:"type" api:"required"`
 	Compression     param.Field[SinkNewParamsFormatCompression]     `json:"compression"`
 	DecimalEncoding param.Field[SinkNewParamsFormatDecimalEncoding] `json:"decimal_encoding"`
 	RowGroupBytes   param.Field[int64]                              `json:"row_group_bytes"`
@@ -5012,7 +5012,7 @@ type SinkNewParamsFormatUnion interface {
 }
 
 type SinkNewParamsFormatJson struct {
-	Type            param.Field[SinkNewParamsFormatJsonType]            `json:"type,required"`
+	Type            param.Field[SinkNewParamsFormatJsonType]            `json:"type" api:"required"`
 	DecimalEncoding param.Field[SinkNewParamsFormatJsonDecimalEncoding] `json:"decimal_encoding"`
 	TimestampFormat param.Field[SinkNewParamsFormatJsonTimestampFormat] `json:"timestamp_format"`
 	Unstructured    param.Field[bool]                                   `json:"unstructured"`
@@ -5070,7 +5070,7 @@ func (r SinkNewParamsFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkNewParamsFormatParquet struct {
-	Type          param.Field[SinkNewParamsFormatParquetType]        `json:"type,required"`
+	Type          param.Field[SinkNewParamsFormatParquetType]        `json:"type" api:"required"`
 	Compression   param.Field[SinkNewParamsFormatParquetCompression] `json:"compression"`
 	RowGroupBytes param.Field[int64]                                 `json:"row_group_bytes"`
 }
@@ -5188,7 +5188,7 @@ func (r SinkNewParamsSchema) MarshalJSON() (data []byte, err error) {
 }
 
 type SinkNewParamsSchemaField struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsType] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                        `json:"metadata_key"`
 	Name        param.Field[string]                        `json:"name"`
 	Required    param.Field[bool]                          `json:"required"`
@@ -5218,7 +5218,7 @@ type SinkNewParamsSchemaFieldUnion interface {
 }
 
 type SinkNewParamsSchemaFieldsInt32 struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsInt32Type] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsInt32Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                             `json:"metadata_key"`
 	Name        param.Field[string]                             `json:"name"`
 	Required    param.Field[bool]                               `json:"required"`
@@ -5246,7 +5246,7 @@ func (r SinkNewParamsSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsInt64 struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsInt64Type] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsInt64Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                             `json:"metadata_key"`
 	Name        param.Field[string]                             `json:"name"`
 	Required    param.Field[bool]                               `json:"required"`
@@ -5274,7 +5274,7 @@ func (r SinkNewParamsSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsFloat32 struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsFloat32Type] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsFloat32Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                               `json:"metadata_key"`
 	Name        param.Field[string]                               `json:"name"`
 	Required    param.Field[bool]                                 `json:"required"`
@@ -5302,7 +5302,7 @@ func (r SinkNewParamsSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsFloat64 struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsFloat64Type] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsFloat64Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                               `json:"metadata_key"`
 	Name        param.Field[string]                               `json:"name"`
 	Required    param.Field[bool]                                 `json:"required"`
@@ -5330,7 +5330,7 @@ func (r SinkNewParamsSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsBool struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsBoolType] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsBoolType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                            `json:"metadata_key"`
 	Name        param.Field[string]                            `json:"name"`
 	Required    param.Field[bool]                              `json:"required"`
@@ -5358,7 +5358,7 @@ func (r SinkNewParamsSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsString struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsStringType] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsStringType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                              `json:"metadata_key"`
 	Name        param.Field[string]                              `json:"name"`
 	Required    param.Field[bool]                                `json:"required"`
@@ -5386,7 +5386,7 @@ func (r SinkNewParamsSchemaFieldsStringType) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsBinary struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsBinaryType] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsBinaryType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                              `json:"metadata_key"`
 	Name        param.Field[string]                              `json:"name"`
 	Required    param.Field[bool]                                `json:"required"`
@@ -5414,7 +5414,7 @@ func (r SinkNewParamsSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsTimestamp struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsTimestampType] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsTimestampType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                                 `json:"metadata_key"`
 	Name        param.Field[string]                                 `json:"name"`
 	Required    param.Field[bool]                                   `json:"required"`
@@ -5460,7 +5460,7 @@ func (r SinkNewParamsSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFieldsJson struct {
-	Type        param.Field[SinkNewParamsSchemaFieldsJsonType] `json:"type,required"`
+	Type        param.Field[SinkNewParamsSchemaFieldsJsonType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                            `json:"metadata_key"`
 	Name        param.Field[string]                            `json:"name"`
 	Required    param.Field[bool]                              `json:"required"`
@@ -5547,7 +5547,7 @@ func (r SinkNewParamsSchemaFieldsUnit) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFormat struct {
-	Type            param.Field[SinkNewParamsSchemaFormatType]            `json:"type,required"`
+	Type            param.Field[SinkNewParamsSchemaFormatType]            `json:"type" api:"required"`
 	Compression     param.Field[SinkNewParamsSchemaFormatCompression]     `json:"compression"`
 	DecimalEncoding param.Field[SinkNewParamsSchemaFormatDecimalEncoding] `json:"decimal_encoding"`
 	RowGroupBytes   param.Field[int64]                                    `json:"row_group_bytes"`
@@ -5568,7 +5568,7 @@ type SinkNewParamsSchemaFormatUnion interface {
 }
 
 type SinkNewParamsSchemaFormatJson struct {
-	Type            param.Field[SinkNewParamsSchemaFormatJsonType]            `json:"type,required"`
+	Type            param.Field[SinkNewParamsSchemaFormatJsonType]            `json:"type" api:"required"`
 	DecimalEncoding param.Field[SinkNewParamsSchemaFormatJsonDecimalEncoding] `json:"decimal_encoding"`
 	TimestampFormat param.Field[SinkNewParamsSchemaFormatJsonTimestampFormat] `json:"timestamp_format"`
 	Unstructured    param.Field[bool]                                         `json:"unstructured"`
@@ -5626,7 +5626,7 @@ func (r SinkNewParamsSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type SinkNewParamsSchemaFormatParquet struct {
-	Type          param.Field[SinkNewParamsSchemaFormatParquetType]        `json:"type,required"`
+	Type          param.Field[SinkNewParamsSchemaFormatParquetType]        `json:"type" api:"required"`
 	Compression   param.Field[SinkNewParamsSchemaFormatParquetCompression] `json:"compression"`
 	RowGroupBytes param.Field[int64]                                       `json:"row_group_bytes"`
 }
@@ -5734,9 +5734,9 @@ func (r SinkNewParamsSchemaFormatTimestampFormat) IsKnown() bool {
 }
 
 type SinkNewResponseEnvelope struct {
-	Result SinkNewResponse `json:"result,required"`
+	Result SinkNewResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                        `json:"success,required"`
+	Success bool                        `json:"success" api:"required"`
 	JSON    sinkNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5759,7 +5759,7 @@ func (r sinkNewResponseEnvelopeJSON) RawJSON() string {
 
 type SinkListParams struct {
 	// Specifies the public ID of the account.
-	AccountID  param.Field[string]  `path:"account_id,required"`
+	AccountID  param.Field[string]  `path:"account_id" api:"required"`
 	Page       param.Field[float64] `query:"page"`
 	PerPage    param.Field[float64] `query:"per_page"`
 	PipelineID param.Field[string]  `query:"pipeline_id"`
@@ -5775,7 +5775,7 @@ func (r SinkListParams) URLQuery() (v url.Values) {
 
 type SinkDeleteParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Delete sink forcefully, including deleting any dependent pipelines.
 	Force param.Field[string] `query:"force"`
 }
@@ -5790,13 +5790,13 @@ func (r SinkDeleteParams) URLQuery() (v url.Values) {
 
 type SinkGetParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SinkGetResponseEnvelope struct {
-	Result SinkGetResponse `json:"result,required"`
+	Result SinkGetResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                        `json:"success,required"`
+	Success bool                        `json:"success" api:"required"`
 	JSON    sinkGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -44,15 +44,15 @@ func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNames
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a list of Workers for Platforms namespaces.
@@ -62,7 +62,7 @@ func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNames
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -88,19 +88,19 @@ func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s", body.AccountID, dispatchNamespace)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a Workers for Platforms namespace.
@@ -109,19 +109,19 @@ func (r *DispatchNamespaceService) Get(ctx context.Context, dispatchNamespace st
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s", query.AccountID, dispatchNamespace)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DispatchNamespaceNewResponse struct {
@@ -269,7 +269,7 @@ func (r dispatchNamespaceGetResponseJSON) RawJSON() string {
 
 type DispatchNamespaceNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the dispatch namespace.
 	Name param.Field[string] `json:"name"`
 }
@@ -279,10 +279,10 @@ func (r DispatchNamespaceNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DispatchNamespaceNewResponseEnvelope struct {
-	Errors   []DispatchNamespaceNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DispatchNamespaceNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DispatchNamespaceNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DispatchNamespaceNewResponse                `json:"result"`
 	JSON    dispatchNamespaceNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -307,8 +307,8 @@ func (r dispatchNamespaceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DispatchNamespaceNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           DispatchNamespaceNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -355,8 +355,8 @@ func (r dispatchNamespaceNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DispatchNamespaceNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DispatchNamespaceNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -419,20 +419,20 @@ func (r DispatchNamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DispatchNamespaceListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceDeleteResponseEnvelope struct {
-	Errors   []DispatchNamespaceDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DispatchNamespaceDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DispatchNamespaceDeleteResponse                `json:"result,nullable"`
+	Success DispatchNamespaceDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  DispatchNamespaceDeleteResponse                `json:"result" api:"nullable"`
 	JSON    dispatchNamespaceDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -456,8 +456,8 @@ func (r dispatchNamespaceDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DispatchNamespaceDeleteResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           DispatchNamespaceDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -504,8 +504,8 @@ func (r dispatchNamespaceDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type DispatchNamespaceDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           DispatchNamespaceDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -568,14 +568,14 @@ func (r DispatchNamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DispatchNamespaceGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceGetResponseEnvelope struct {
-	Errors   []DispatchNamespaceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DispatchNamespaceGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DispatchNamespaceGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DispatchNamespaceGetResponse                `json:"result"`
 	JSON    dispatchNamespaceGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -600,8 +600,8 @@ func (r dispatchNamespaceGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DispatchNamespaceGetResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           DispatchNamespaceGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -648,8 +648,8 @@ func (r dispatchNamespaceGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DispatchNamespaceGetResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DispatchNamespaceGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceGetResponseEnvelopeMessagesJSON   `json:"-"`

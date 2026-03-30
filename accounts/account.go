@@ -59,10 +59,10 @@ func (r *AccountService) New(ctx context.Context, body AccountNewParams, opts ..
 	path := "accounts"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update an existing account.
@@ -71,15 +71,15 @@ func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all accounts you have ownership or verified access to.
@@ -113,15 +113,15 @@ func (r *AccountService) Delete(ctx context.Context, body AccountDeleteParams, o
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information about a specific account that you are a member of.
@@ -130,23 +130,23 @@ func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Account struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account name
-	Name string      `json:"name,required"`
-	Type AccountType `json:"type,required"`
+	Name string      `json:"name" api:"required"`
+	Type AccountType `json:"type" api:"required"`
 	// Timestamp for the creation of the account
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Parent container details
@@ -245,10 +245,10 @@ func (r accountSettingsJSON) RawJSON() string {
 
 type AccountParam struct {
 	// Identifier
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Account name
-	Name param.Field[string]      `json:"name,required"`
-	Type param.Field[AccountType] `json:"type,required"`
+	Name param.Field[string]      `json:"name" api:"required"`
+	Type param.Field[AccountType] `json:"type" api:"required"`
 	// Parent container details
 	ManagedBy param.Field[AccountManagedByParam] `json:"managed_by"`
 	// Account settings
@@ -282,7 +282,7 @@ func (r AccountSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type AccountDeleteResponse struct {
 	// Identifier
-	ID   string                    `json:"id,required"`
+	ID   string                    `json:"id" api:"required"`
 	JSON accountDeleteResponseJSON `json:"-"`
 }
 
@@ -304,7 +304,7 @@ func (r accountDeleteResponseJSON) RawJSON() string {
 
 type AccountNewParams struct {
 	// Account name
-	Name param.Field[string]               `json:"name,required"`
+	Name param.Field[string]               `json:"name" api:"required"`
 	Type param.Field[AccountNewParamsType] `json:"type"`
 	// information related to the tenant unit, and optionally, an id of the unit to
 	// create the account on. see
@@ -344,10 +344,10 @@ func (r AccountNewParamsUnit) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountNewResponseEnvelope struct {
-	Errors   []AccountNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccountNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccountNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccountNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Account                           `json:"result"`
 	JSON    accountNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -372,8 +372,8 @@ func (r accountNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountNewResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AccountNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -420,8 +420,8 @@ func (r accountNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountNewResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AccountNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -484,8 +484,8 @@ func (r AccountNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Account   AccountParam        `json:"account,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Account   AccountParam        `json:"account" api:"required"`
 }
 
 func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -493,10 +493,10 @@ func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []AccountUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccountUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccountUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Account                              `json:"result"`
 	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -521,8 +521,8 @@ func (r accountUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountUpdateResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AccountUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -569,8 +569,8 @@ func (r accountUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountUpdateResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccountUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -668,15 +668,15 @@ func (r AccountListParamsDirection) IsKnown() bool {
 
 type AccountDeleteParams struct {
 	// The account ID of the account to be deleted
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccountDeleteResponseEnvelope struct {
-	Errors   []AccountDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccountDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccountDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccountDeleteResponse                `json:"result,nullable"`
+	Success AccountDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  AccountDeleteResponse                `json:"result" api:"nullable"`
 	JSON    accountDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -700,8 +700,8 @@ func (r accountDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountDeleteResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AccountDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -748,8 +748,8 @@ func (r accountDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountDeleteResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccountDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -812,14 +812,14 @@ func (r AccountDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccountGetResponseEnvelope struct {
-	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccountGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Account                           `json:"result"`
 	JSON    accountGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -844,8 +844,8 @@ func (r accountGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AccountGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -892,8 +892,8 @@ func (r accountGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AccountGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountGetResponseEnvelopeMessagesJSON   `json:"-"`

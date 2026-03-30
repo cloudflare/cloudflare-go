@@ -41,24 +41,24 @@ func (r *InvestigateRawService) Get(ctx context.Context, postfixID string, query
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if postfixID == "" {
 		err = errors.New("missing required postfix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/raw", query.AccountID, postfixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InvestigateRawGetResponse struct {
 	// A UTF-8 encoded eml file of the email.
-	Raw  string                        `json:"raw,required"`
+	Raw  string                        `json:"raw" api:"required"`
 	JSON investigateRawGetResponseJSON `json:"-"`
 }
 
@@ -80,14 +80,14 @@ func (r investigateRawGetResponseJSON) RawJSON() string {
 
 type InvestigateRawGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InvestigateRawGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   InvestigateRawGetResponse             `json:"result,required"`
-	Success  bool                                  `json:"success,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                 `json:"messages" api:"required"`
+	Result   InvestigateRawGetResponse             `json:"result" api:"required"`
+	Success  bool                                  `json:"success" api:"required"`
 	JSON     investigateRawGetResponseEnvelopeJSON `json:"-"`
 }
 

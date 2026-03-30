@@ -41,19 +41,19 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/ack", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Push a batch of message to a Queue
@@ -61,15 +61,15 @@ func (r *MessageService) BulkPush(ctx context.Context, queueID string, params Me
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/batch", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Pull a batch of messages from a Queue
@@ -78,19 +78,19 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/pull", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Push a message to a Queue
@@ -98,15 +98,15 @@ func (r *MessageService) Push(ctx context.Context, queueID string, params Messag
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type MessageAckResponse struct {
@@ -277,7 +277,7 @@ func (r MessagePushResponseSuccess) IsKnown() bool {
 
 type MessageAckParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string]                  `path:"account_id,required"`
+	AccountID param.Field[string]                  `path:"account_id" api:"required"`
 	Acks      param.Field[[]MessageAckParamsAck]   `json:"acks"`
 	Retries   param.Field[[]MessageAckParamsRetry] `json:"retries"`
 }
@@ -354,7 +354,7 @@ func (r MessageAckResponseEnvelopeSuccess) IsKnown() bool {
 
 type MessageBulkPushParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The number of seconds to wait for attempting to deliver this batch to consumers
 	DelaySeconds param.Field[float64]                             `json:"delay_seconds"`
 	Messages     param.Field[[]MessageBulkPushParamsMessageUnion] `json:"messages"`
@@ -460,7 +460,7 @@ func (r MessageBulkPushParamsMessagesContentType) IsKnown() bool {
 
 type MessagePullParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The maximum number of messages to include in a batch.
 	BatchSize param.Field[float64] `json:"batch_size"`
 	// The number of milliseconds that a message is exclusively leased. After the
@@ -517,7 +517,7 @@ func (r MessagePullResponseEnvelopeSuccess) IsKnown() bool {
 
 type MessagePushParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string]        `path:"account_id,required"`
+	AccountID param.Field[string]        `path:"account_id" api:"required"`
 	Body      MessagePushParamsBodyUnion `json:"body"`
 }
 

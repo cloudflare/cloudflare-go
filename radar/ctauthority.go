@@ -43,10 +43,10 @@ func (r *CTAuthorityService) List(ctx context.Context, query CTAuthorityListPara
 	path := "radar/ct/authorities"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the requested CA information.
@@ -55,19 +55,19 @@ func (r *CTAuthorityService) Get(ctx context.Context, caSlug string, query CTAut
 	opts = slices.Concat(r.Options, opts)
 	if caSlug == "" {
 		err = errors.New("missing required ca_slug parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("radar/ct/authorities/%s", caSlug)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CTAuthorityListResponse struct {
-	CertificateAuthorities []CTAuthorityListResponseCertificateAuthority `json:"certificateAuthorities,required"`
+	CertificateAuthorities []CTAuthorityListResponseCertificateAuthority `json:"certificateAuthorities" api:"required"`
 	JSON                   ctAuthorityListResponseJSON                   `json:"-"`
 }
 
@@ -89,24 +89,24 @@ func (r ctAuthorityListResponseJSON) RawJSON() string {
 
 type CTAuthorityListResponseCertificateAuthority struct {
 	// Specifies the type of certificate in the trust chain.
-	CertificateRecordType CTAuthorityListResponseCertificateAuthoritiesCertificateRecordType `json:"certificateRecordType,required"`
+	CertificateRecordType CTAuthorityListResponseCertificateAuthoritiesCertificateRecordType `json:"certificateRecordType" api:"required"`
 	// The two-letter ISO country code where the CA organization is based.
-	Country string `json:"country,required"`
+	Country string `json:"country" api:"required"`
 	// The full country name corresponding to the country code.
-	CountryName string `json:"countryName,required"`
+	CountryName string `json:"countryName" api:"required"`
 	// The full name of the certificate authority (CA).
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The organization that owns and operates the CA.
-	Owner string `json:"owner,required"`
+	Owner string `json:"owner" api:"required"`
 	// The name of the parent/root certificate authority that issued this intermediate
 	// certificate.
-	ParentName string `json:"parentName,required"`
+	ParentName string `json:"parentName" api:"required"`
 	// The SHA-256 fingerprint of the parent certificate.
-	ParentSha256Fingerprint string `json:"parentSha256Fingerprint,required"`
+	ParentSha256Fingerprint string `json:"parentSha256Fingerprint" api:"required"`
 	// The current revocation status of a Certificate Authority (CA) certificate.
-	RevocationStatus CTAuthorityListResponseCertificateAuthoritiesRevocationStatus `json:"revocationStatus,required"`
+	RevocationStatus CTAuthorityListResponseCertificateAuthoritiesRevocationStatus `json:"revocationStatus" api:"required"`
 	// The SHA-256 fingerprint of the intermediate certificate.
-	Sha256Fingerprint string                                          `json:"sha256Fingerprint,required"`
+	Sha256Fingerprint string                                          `json:"sha256Fingerprint" api:"required"`
 	JSON              ctAuthorityListResponseCertificateAuthorityJSON `json:"-"`
 }
 
@@ -168,7 +168,7 @@ func (r CTAuthorityListResponseCertificateAuthoritiesRevocationStatus) IsKnown()
 }
 
 type CTAuthorityGetResponse struct {
-	CertificateAuthority CTAuthorityGetResponseCertificateAuthority `json:"certificateAuthority,required"`
+	CertificateAuthority CTAuthorityGetResponseCertificateAuthority `json:"certificateAuthority" api:"required"`
 	JSON                 ctAuthorityGetResponseJSON                 `json:"-"`
 }
 
@@ -190,42 +190,42 @@ func (r ctAuthorityGetResponseJSON) RawJSON() string {
 
 type CTAuthorityGetResponseCertificateAuthority struct {
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	AppleStatus CTAuthorityGetResponseCertificateAuthorityAppleStatus `json:"appleStatus,required"`
+	AppleStatus CTAuthorityGetResponseCertificateAuthorityAppleStatus `json:"appleStatus" api:"required"`
 	// The authorityKeyIdentifier value extracted from the certificate PEM.
-	AuthorityKeyIdentifier string `json:"authorityKeyIdentifier,required"`
+	AuthorityKeyIdentifier string `json:"authorityKeyIdentifier" api:"required"`
 	// Specifies the type of certificate in the trust chain.
-	CertificateRecordType CTAuthorityGetResponseCertificateAuthorityCertificateRecordType `json:"certificateRecordType,required"`
+	CertificateRecordType CTAuthorityGetResponseCertificateAuthorityCertificateRecordType `json:"certificateRecordType" api:"required"`
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	ChromeStatus CTAuthorityGetResponseCertificateAuthorityChromeStatus `json:"chromeStatus,required"`
+	ChromeStatus CTAuthorityGetResponseCertificateAuthorityChromeStatus `json:"chromeStatus" api:"required"`
 	// The two-letter ISO country code where the CA organization is based.
-	Country string `json:"country,required"`
+	Country string `json:"country" api:"required"`
 	// The full country name corresponding to the country code.
-	CountryName string `json:"countryName,required"`
+	CountryName string `json:"countryName" api:"required"`
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	MicrosoftStatus CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus `json:"microsoftStatus,required"`
+	MicrosoftStatus CTAuthorityGetResponseCertificateAuthorityMicrosoftStatus `json:"microsoftStatus" api:"required"`
 	// The inclusion status of a Certificate Authority (CA) in the trust store.
-	MozillaStatus CTAuthorityGetResponseCertificateAuthorityMozillaStatus `json:"mozillaStatus,required"`
+	MozillaStatus CTAuthorityGetResponseCertificateAuthorityMozillaStatus `json:"mozillaStatus" api:"required"`
 	// The full name of the certificate authority (CA).
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The organization that owns and operates the CA.
-	Owner string `json:"owner,required"`
+	Owner string `json:"owner" api:"required"`
 	// The name of the parent/root certificate authority that issued this intermediate
 	// certificate.
-	ParentName string `json:"parentName,required"`
+	ParentName string `json:"parentName" api:"required"`
 	// The SHA-256 fingerprint of the parent certificate.
-	ParentSha256Fingerprint string `json:"parentSha256Fingerprint,required"`
+	ParentSha256Fingerprint string `json:"parentSha256Fingerprint" api:"required"`
 	// CAs from the same owner.
-	Related []CTAuthorityGetResponseCertificateAuthorityRelated `json:"related,required"`
+	Related []CTAuthorityGetResponseCertificateAuthorityRelated `json:"related" api:"required"`
 	// The current revocation status of a Certificate Authority (CA) certificate.
-	RevocationStatus CTAuthorityGetResponseCertificateAuthorityRevocationStatus `json:"revocationStatus,required"`
+	RevocationStatus CTAuthorityGetResponseCertificateAuthorityRevocationStatus `json:"revocationStatus" api:"required"`
 	// The SHA-256 fingerprint of the intermediate certificate.
-	Sha256Fingerprint string `json:"sha256Fingerprint,required"`
+	Sha256Fingerprint string `json:"sha256Fingerprint" api:"required"`
 	// The subjectKeyIdentifier value extracted from the certificate PEM.
-	SubjectKeyIdentifier string `json:"subjectKeyIdentifier,required"`
+	SubjectKeyIdentifier string `json:"subjectKeyIdentifier" api:"required"`
 	// The start date of the certificate’s validity period (ISO format).
-	ValidFrom string `json:"validFrom,required"`
+	ValidFrom string `json:"validFrom" api:"required"`
 	// The end date of the certificate’s validity period (ISO format).
-	ValidTo string                                         `json:"validTo,required"`
+	ValidTo string                                         `json:"validTo" api:"required"`
 	JSON    ctAuthorityGetResponseCertificateAuthorityJSON `json:"-"`
 }
 
@@ -364,13 +364,13 @@ func (r CTAuthorityGetResponseCertificateAuthorityMozillaStatus) IsKnown() bool 
 
 type CTAuthorityGetResponseCertificateAuthorityRelated struct {
 	// Specifies the type of certificate in the trust chain.
-	CertificateRecordType CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType `json:"certificateRecordType,required"`
+	CertificateRecordType CTAuthorityGetResponseCertificateAuthorityRelatedCertificateRecordType `json:"certificateRecordType" api:"required"`
 	// The full name of the certificate authority (CA).
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The current revocation status of a Certificate Authority (CA) certificate.
-	RevocationStatus CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus `json:"revocationStatus,required"`
+	RevocationStatus CTAuthorityGetResponseCertificateAuthorityRelatedRevocationStatus `json:"revocationStatus" api:"required"`
 	// The SHA-256 fingerprint of the intermediate certificate.
-	Sha256Fingerprint string                                                `json:"sha256Fingerprint,required"`
+	Sha256Fingerprint string                                                `json:"sha256Fingerprint" api:"required"`
 	JSON              ctAuthorityGetResponseCertificateAuthorityRelatedJSON `json:"-"`
 }
 
@@ -477,8 +477,8 @@ func (r CTAuthorityListParamsFormat) IsKnown() bool {
 }
 
 type CTAuthorityListResponseEnvelope struct {
-	Result  CTAuthorityListResponse             `json:"result,required"`
-	Success bool                                `json:"success,required"`
+	Result  CTAuthorityListResponse             `json:"result" api:"required"`
+	Success bool                                `json:"success" api:"required"`
 	JSON    ctAuthorityListResponseEnvelopeJSON `json:"-"`
 }
 
@@ -529,8 +529,8 @@ func (r CTAuthorityGetParamsFormat) IsKnown() bool {
 }
 
 type CTAuthorityGetResponseEnvelope struct {
-	Result  CTAuthorityGetResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  CTAuthorityGetResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    ctAuthorityGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -39,18 +39,18 @@ func (r *MiscategorizationService) New(ctx context.Context, params Miscategoriza
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/miscategorization", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type MiscategorizationNewResponse struct {
-	Errors   []MiscategorizationNewResponseError   `json:"errors,required"`
-	Messages []MiscategorizationNewResponseMessage `json:"messages,required"`
+	Errors   []MiscategorizationNewResponseError   `json:"errors" api:"required"`
+	Messages []MiscategorizationNewResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MiscategorizationNewResponseSuccess `json:"success,required"`
+	Success MiscategorizationNewResponseSuccess `json:"success" api:"required"`
 	JSON    miscategorizationNewResponseJSON    `json:"-"`
 }
 
@@ -73,8 +73,8 @@ func (r miscategorizationNewResponseJSON) RawJSON() string {
 }
 
 type MiscategorizationNewResponseError struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           MiscategorizationNewResponseErrorsSource `json:"source"`
 	JSON             miscategorizationNewResponseErrorJSON    `json:"-"`
@@ -121,8 +121,8 @@ func (r miscategorizationNewResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type MiscategorizationNewResponseMessage struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           MiscategorizationNewResponseMessagesSource `json:"source"`
 	JSON             miscategorizationNewResponseMessageJSON    `json:"-"`
@@ -185,7 +185,7 @@ func (r MiscategorizationNewResponseSuccess) IsKnown() bool {
 
 type MiscategorizationNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Content category IDs to add.
 	ContentAdds param.Field[[]int64] `json:"content_adds"`
 	// Content category IDs to remove.

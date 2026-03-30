@@ -44,19 +44,19 @@ func (r *SettingOperationService) Update(ctx context.Context, operationID string
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings/operations/%s", params.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all per-operation schema validation settings configured for the zone.
@@ -66,7 +66,7 @@ func (r *SettingOperationService) List(ctx context.Context, params SettingOperat
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings/operations", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -93,19 +93,19 @@ func (r *SettingOperationService) Delete(ctx context.Context, operationID string
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings/operations/%s", body.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates schema validation settings for multiple API operations in a single
@@ -115,15 +115,15 @@ func (r *SettingOperationService) BulkEdit(ctx context.Context, params SettingOp
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings/operations", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the schema validation settings configured for a specific API
@@ -133,19 +133,19 @@ func (r *SettingOperationService) Get(ctx context.Context, operationID string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings/operations/%s", query.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingOperationUpdateResponse struct {
@@ -157,9 +157,9 @@ type SettingOperationUpdateResponse struct {
 	//   - `"block"` - deny access to the site when request does not conform to schema
 	//     for this operation
 	//   - `"none"` - will skip mitigation for this operation
-	MitigationAction SettingOperationUpdateResponseMitigationAction `json:"mitigation_action,required"`
+	MitigationAction SettingOperationUpdateResponseMitigationAction `json:"mitigation_action" api:"required"`
 	// UUID.
-	OperationID string                             `json:"operation_id,required"`
+	OperationID string                             `json:"operation_id" api:"required"`
 	JSON        settingOperationUpdateResponseJSON `json:"-"`
 }
 
@@ -213,9 +213,9 @@ type SettingOperationListResponse struct {
 	//   - `"block"` - deny access to the site when request does not conform to schema
 	//     for this operation
 	//   - `"none"` - will skip mitigation for this operation
-	MitigationAction SettingOperationListResponseMitigationAction `json:"mitigation_action,required"`
+	MitigationAction SettingOperationListResponseMitigationAction `json:"mitigation_action" api:"required"`
 	// UUID.
-	OperationID string                           `json:"operation_id,required"`
+	OperationID string                           `json:"operation_id" api:"required"`
 	JSON        settingOperationListResponseJSON `json:"-"`
 }
 
@@ -293,9 +293,9 @@ type SettingOperationBulkEditResponseItem struct {
 	//   - `"block"` - deny access to the site when request does not conform to schema
 	//     for this operation
 	//   - `"none"` - will skip mitigation for this operation
-	MitigationAction SettingOperationBulkEditResponseItemMitigationAction `json:"mitigation_action,required"`
+	MitigationAction SettingOperationBulkEditResponseItemMitigationAction `json:"mitigation_action" api:"required"`
 	// UUID.
-	OperationID string                                   `json:"operation_id,required"`
+	OperationID string                                   `json:"operation_id" api:"required"`
 	JSON        settingOperationBulkEditResponseItemJSON `json:"-"`
 }
 
@@ -349,9 +349,9 @@ type SettingOperationGetResponse struct {
 	//   - `"block"` - deny access to the site when request does not conform to schema
 	//     for this operation
 	//   - `"none"` - will skip mitigation for this operation
-	MitigationAction SettingOperationGetResponseMitigationAction `json:"mitigation_action,required"`
+	MitigationAction SettingOperationGetResponseMitigationAction `json:"mitigation_action" api:"required"`
 	// UUID.
-	OperationID string                          `json:"operation_id,required"`
+	OperationID string                          `json:"operation_id" api:"required"`
 	JSON        settingOperationGetResponseJSON `json:"-"`
 }
 
@@ -398,7 +398,7 @@ func (r SettingOperationGetResponseMitigationAction) IsKnown() bool {
 
 type SettingOperationUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When set, this applies a mitigation action to this operation
 	//
 	//   - `"log"` - log request when request does not conform to schema for this
@@ -407,7 +407,7 @@ type SettingOperationUpdateParams struct {
 	//     for this operation
 	//   - `"none"` - will skip mitigation for this operation
 	//   - `null` - clears any mitigation action
-	MitigationAction param.Field[SettingOperationUpdateParamsMitigationAction] `json:"mitigation_action,required"`
+	MitigationAction param.Field[SettingOperationUpdateParamsMitigationAction] `json:"mitigation_action" api:"required"`
 }
 
 func (r SettingOperationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -439,11 +439,11 @@ func (r SettingOperationUpdateParamsMitigationAction) IsKnown() bool {
 }
 
 type SettingOperationUpdateResponseEnvelope struct {
-	Errors   api_gateway.Message            `json:"errors,required"`
-	Messages api_gateway.Message            `json:"messages,required"`
-	Result   SettingOperationUpdateResponse `json:"result,required"`
+	Errors   api_gateway.Message            `json:"errors" api:"required"`
+	Messages api_gateway.Message            `json:"messages" api:"required"`
+	Result   SettingOperationUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingOperationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingOperationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingOperationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -483,7 +483,7 @@ func (r SettingOperationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingOperationListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`
 	// Maximum number of results per page.
@@ -501,15 +501,15 @@ func (r SettingOperationListParams) URLQuery() (v url.Values) {
 
 type SettingOperationDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SettingOperationDeleteResponseEnvelope struct {
-	Errors   api_gateway.Message            `json:"errors,required"`
-	Messages api_gateway.Message            `json:"messages,required"`
-	Result   SettingOperationDeleteResponse `json:"result,required"`
+	Errors   api_gateway.Message            `json:"errors" api:"required"`
+	Messages api_gateway.Message            `json:"messages" api:"required"`
+	Result   SettingOperationDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingOperationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingOperationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingOperationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -549,8 +549,8 @@ func (r SettingOperationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingOperationBulkEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string]                           `path:"zone_id,required"`
-	Body   map[string]SettingOperationBulkEditParamsBody `json:"body,required"`
+	ZoneID param.Field[string]                           `path:"zone_id" api:"required"`
+	Body   map[string]SettingOperationBulkEditParamsBody `json:"body" api:"required"`
 }
 
 func (r SettingOperationBulkEditParams) MarshalJSON() (data []byte, err error) {
@@ -593,12 +593,12 @@ func (r SettingOperationBulkEditParamsBodyMitigationAction) IsKnown() bool {
 }
 
 type SettingOperationBulkEditResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
 	// Operation ID to per operation setting mapping
-	Result SettingOperationBulkEditResponse `json:"result,required"`
+	Result SettingOperationBulkEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingOperationBulkEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingOperationBulkEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingOperationBulkEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -638,15 +638,15 @@ func (r SettingOperationBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingOperationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SettingOperationGetResponseEnvelope struct {
-	Errors   api_gateway.Message         `json:"errors,required"`
-	Messages api_gateway.Message         `json:"messages,required"`
-	Result   SettingOperationGetResponse `json:"result,required"`
+	Errors   api_gateway.Message         `json:"errors" api:"required"`
+	Messages api_gateway.Message         `json:"messages" api:"required"`
+	Result   SettingOperationGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingOperationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingOperationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingOperationGetResponseEnvelopeJSON    `json:"-"`
 }
 

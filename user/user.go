@@ -51,10 +51,10 @@ func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...opt
 	path := "user"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // User Details
@@ -64,10 +64,10 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 	path := "user"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type UserEditResponse struct {
@@ -76,9 +76,9 @@ type UserEditResponse struct {
 	// Lists the betas that the user is participating in.
 	Betas []string `json:"betas"`
 	// The country in which the user lives.
-	Country string `json:"country,nullable"`
+	Country string `json:"country" api:"nullable"`
 	// User's first name
-	FirstName string `json:"first_name,nullable"`
+	FirstName string `json:"first_name" api:"nullable"`
 	// Indicates whether user has any business zones
 	HasBusinessZones bool `json:"has_business_zones"`
 	// Indicates whether user has any enterprise zones
@@ -86,12 +86,12 @@ type UserEditResponse struct {
 	// Indicates whether user has any pro zones
 	HasProZones bool `json:"has_pro_zones"`
 	// User's last name
-	LastName      string         `json:"last_name,nullable"`
+	LastName      string         `json:"last_name" api:"nullable"`
 	Organizations []Organization `json:"organizations"`
 	// Indicates whether user has been suspended
 	Suspended bool `json:"suspended"`
 	// User's telephone number
-	Telephone string `json:"telephone,nullable"`
+	Telephone string `json:"telephone" api:"nullable"`
 	// Indicates whether two-factor authentication is enabled for the user account.
 	// Does not apply to API authentication.
 	TwoFactorAuthenticationEnabled bool `json:"two_factor_authentication_enabled"`
@@ -99,7 +99,7 @@ type UserEditResponse struct {
 	// that the user is a member of.
 	TwoFactorAuthenticationLocked bool `json:"two_factor_authentication_locked"`
 	// The zipcode or postal code where the user lives.
-	Zipcode string               `json:"zipcode,nullable"`
+	Zipcode string               `json:"zipcode" api:"nullable"`
 	JSON    userEditResponseJSON `json:"-"`
 }
 
@@ -138,9 +138,9 @@ type UserGetResponse struct {
 	// Lists the betas that the user is participating in.
 	Betas []string `json:"betas"`
 	// The country in which the user lives.
-	Country string `json:"country,nullable"`
+	Country string `json:"country" api:"nullable"`
 	// User's first name
-	FirstName string `json:"first_name,nullable"`
+	FirstName string `json:"first_name" api:"nullable"`
 	// Indicates whether user has any business zones
 	HasBusinessZones bool `json:"has_business_zones"`
 	// Indicates whether user has any enterprise zones
@@ -148,12 +148,12 @@ type UserGetResponse struct {
 	// Indicates whether user has any pro zones
 	HasProZones bool `json:"has_pro_zones"`
 	// User's last name
-	LastName      string         `json:"last_name,nullable"`
+	LastName      string         `json:"last_name" api:"nullable"`
 	Organizations []Organization `json:"organizations"`
 	// Indicates whether user has been suspended
 	Suspended bool `json:"suspended"`
 	// User's telephone number
-	Telephone string `json:"telephone,nullable"`
+	Telephone string `json:"telephone" api:"nullable"`
 	// Indicates whether two-factor authentication is enabled for the user account.
 	// Does not apply to API authentication.
 	TwoFactorAuthenticationEnabled bool `json:"two_factor_authentication_enabled"`
@@ -161,7 +161,7 @@ type UserGetResponse struct {
 	// that the user is a member of.
 	TwoFactorAuthenticationLocked bool `json:"two_factor_authentication_locked"`
 	// The zipcode or postal code where the user lives.
-	Zipcode string              `json:"zipcode,nullable"`
+	Zipcode string              `json:"zipcode" api:"nullable"`
 	JSON    userGetResponseJSON `json:"-"`
 }
 
@@ -211,10 +211,10 @@ func (r UserEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserEditResponseEnvelope struct {
-	Errors   []UserEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
+	Success UserEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  UserEditResponse                `json:"result"`
 	JSON    userEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -239,8 +239,8 @@ func (r userEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserEditResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           UserEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -287,8 +287,8 @@ func (r userEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UserEditResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           UserEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -350,10 +350,10 @@ func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserGetResponseEnvelope struct {
-	Errors   []UserGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
+	Success UserGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  UserGetResponse                `json:"result"`
 	JSON    userGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -378,8 +378,8 @@ func (r userGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserGetResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           UserGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -426,8 +426,8 @@ func (r userGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UserGetResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           UserGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userGetResponseEnvelopeMessagesJSON   `json:"-"`

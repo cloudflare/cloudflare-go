@@ -44,27 +44,27 @@ func (r *ASNService) Get(ctx context.Context, asn shared.ASNParam, query ASNGetP
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", query.AccountID, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ASNGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ASNGetResponseEnvelope struct {
-	Errors   []ASNGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ASNGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ASNGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ASNGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ASNGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ASNGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  shared.ASN                    `json:"result"`
 	JSON    asnGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -89,8 +89,8 @@ func (r asnGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ASNGetResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           ASNGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             asnGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -137,8 +137,8 @@ func (r asnGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ASNGetResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           ASNGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             asnGetResponseEnvelopeMessagesJSON   `json:"-"`

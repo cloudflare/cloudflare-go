@@ -70,26 +70,26 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 // details.
 func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ...option.RequestOption) (err error) {
 	if params.TusResumable.Present {
-		opts = append(opts, option.WithHeader("Tus-Resumable", fmt.Sprintf("%s", params.TusResumable)))
+		opts = append(opts, option.WithHeader("Tus-Resumable", fmt.Sprintf("%v", params.TusResumable)))
 	}
 	if params.UploadLength.Present {
-		opts = append(opts, option.WithHeader("Upload-Length", fmt.Sprintf("%s", params.UploadLength)))
+		opts = append(opts, option.WithHeader("Upload-Length", fmt.Sprintf("%v", params.UploadLength)))
 	}
 	if params.UploadCreator.Present {
-		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
+		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%v", params.UploadCreator)))
 	}
 	if params.UploadMetadata.Present {
-		opts = append(opts, option.WithHeader("Upload-Metadata", fmt.Sprintf("%s", params.UploadMetadata)))
+		opts = append(opts, option.WithHeader("Upload-Metadata", fmt.Sprintf("%v", params.UploadMetadata)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
-	return
+	return err
 }
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
@@ -100,7 +100,7 @@ func (r *StreamService) List(ctx context.Context, params StreamListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -127,15 +127,15 @@ func (r *StreamService) Delete(ctx context.Context, identifier string, body Stre
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Edit details for a single video.
@@ -144,19 +144,19 @@ func (r *StreamService) Edit(ctx context.Context, identifier string, params Stre
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches details for a single video.
@@ -165,19 +165,19 @@ func (r *StreamService) Get(ctx context.Context, identifier string, query Stream
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AllowedOrigins = string
@@ -400,14 +400,14 @@ func (r VideoStatusState) IsKnown() bool {
 
 type StreamNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 	// Specifies the TUS protocol version. This value must be included in every upload
 	// request. Notes: The only supported version of TUS protocol is 1.0.0.
-	TusResumable param.Field[StreamNewParamsTusResumable] `header:"Tus-Resumable,required"`
+	TusResumable param.Field[StreamNewParamsTusResumable] `header:"Tus-Resumable" api:"required"`
 	// Indicates the size of the entire upload in bytes. The value must be a
 	// non-negative integer.
-	UploadLength param.Field[int64] `header:"Upload-Length,required"`
+	UploadLength param.Field[int64] `header:"Upload-Length" api:"required"`
 	// Provisions a URL to let your end users upload videos directly to Cloudflare
 	// Stream without exposing your API token to clients.
 	DirectUser param.Field[bool] `query:"direct_user"`
@@ -450,7 +450,7 @@ func (r StreamNewParamsTusResumable) IsKnown() bool {
 
 type StreamListParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Lists videos in ascending order of creation.
 	Asc param.Field[bool] `query:"asc"`
 	// A user-defined identifier for the media creator.
@@ -504,12 +504,12 @@ func (r StreamListParamsStatus) IsKnown() bool {
 
 type StreamDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type StreamEditParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -546,10 +546,10 @@ func (r StreamEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StreamEditResponseEnvelope struct {
-	Errors   []StreamEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []StreamEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StreamEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success StreamEditResponseEnvelopeSuccess `json:"success,required"`
+	Success StreamEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Video                             `json:"result"`
 	JSON    streamEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -574,8 +574,8 @@ func (r streamEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type StreamEditResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           StreamEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             streamEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -622,8 +622,8 @@ func (r streamEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type StreamEditResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           StreamEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             streamEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -686,14 +686,14 @@ func (r StreamEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type StreamGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type StreamGetResponseEnvelope struct {
-	Errors   []StreamGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []StreamGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StreamGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success StreamGetResponseEnvelopeSuccess `json:"success,required"`
+	Success StreamGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Video                            `json:"result"`
 	JSON    streamGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -718,8 +718,8 @@ func (r streamGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type StreamGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           StreamGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             streamGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -766,8 +766,8 @@ func (r streamGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type StreamGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           StreamGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             streamGetResponseEnvelopeMessagesJSON   `json:"-"`

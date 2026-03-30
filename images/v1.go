@@ -59,15 +59,15 @@ func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List up to 100 images with one request. Use the optional parameters below to get
@@ -80,7 +80,7 @@ func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...optio
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -110,19 +110,19 @@ func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeletePar
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if imageID == "" {
 		err = errors.New("missing required image_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", body.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update image access control. On access control change, all copies of the image
@@ -132,19 +132,19 @@ func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if imageID == "" {
 		err = errors.New("missing required image_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch details for a single image.
@@ -153,26 +153,26 @@ func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if imageID == "" {
 		err = errors.New("missing required image_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", query.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Image struct {
 	// Image unique identifier.
 	ID string `json:"id"`
 	// Can set the creator field with an internal user ID.
-	Creator string `json:"creator,nullable"`
+	Creator string `json:"creator" api:"nullable"`
 	// Image file name.
 	Filename string `json:"filename"`
 	// User modifiable key-value store. Can be used for keeping references to another
@@ -231,7 +231,7 @@ func (r v1ListResponseJSON) RawJSON() string {
 
 type V1NewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional custom unique identifier for your image.
 	ID param.Field[string] `json:"id"`
 	// Can set the creator field with an internal user ID.
@@ -264,11 +264,11 @@ func (r V1NewParams) MarshalMultipart() (data []byte, contentType string, err er
 }
 
 type V1NewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Image                 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1NewResponseEnvelopeSuccess `json:"success,required"`
+	Success V1NewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1NewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -308,7 +308,7 @@ func (r V1NewResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1ListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Internal user ID set within the creator field. Setting to empty string "" will
 	// return images where creator field is not set
 	Creator param.Field[string] `query:"creator"`
@@ -328,15 +328,15 @@ func (r V1ListParams) URLQuery() (v url.Values) {
 
 type V1DeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V1DeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success V1DeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -376,7 +376,7 @@ func (r V1DeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1EditParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Can set the creator field with an internal user ID.
 	Creator param.Field[string] `json:"creator"`
 	// User modifiable key-value store. Can be used for keeping references to another
@@ -393,11 +393,11 @@ func (r V1EditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1EditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Image                 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1EditResponseEnvelopeSuccess `json:"success,required"`
+	Success V1EditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1EditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -437,15 +437,15 @@ func (r V1EditResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1GetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V1GetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Image                 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1GetResponseEnvelopeSuccess `json:"success,required"`
+	Success V1GetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1GetResponseEnvelopeJSON    `json:"-"`
 }
 

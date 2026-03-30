@@ -46,10 +46,10 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 
 type DigitalExperienceMonitor struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the policy is the default for the account
-	Default bool                         `json:"default,required"`
-	Name    string                       `json:"name,required"`
+	Default bool                         `json:"default" api:"required"`
+	Name    string                       `json:"name" api:"required"`
 	JSON    digitalExperienceMonitorJSON `json:"-"`
 }
 
@@ -72,11 +72,11 @@ func (r digitalExperienceMonitorJSON) RawJSON() string {
 }
 
 type NetworkPath struct {
-	Slots []NetworkPathSlot `json:"slots,required"`
+	Slots []NetworkPathSlot `json:"slots" api:"required"`
 	// Specifies the sampling applied, if any, to the slots response. When sampled,
 	// results shown represent the first test run to the start of each sampling
 	// interval.
-	Sampling NetworkPathSampling `json:"sampling,nullable"`
+	Sampling NetworkPathSampling `json:"sampling" api:"nullable"`
 	JSON     networkPathJSON     `json:"-"`
 }
 
@@ -98,16 +98,16 @@ func (r networkPathJSON) RawJSON() string {
 
 type NetworkPathSlot struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Round trip time in ms of the client to app mile
-	ClientToAppRTTMs int64 `json:"clientToAppRttMs,required,nullable"`
+	ClientToAppRTTMs int64 `json:"clientToAppRttMs" api:"required,nullable"`
 	// Round trip time in ms of the client to Cloudflare egress mile
-	ClientToCfEgressRTTMs int64 `json:"clientToCfEgressRttMs,required,nullable"`
+	ClientToCfEgressRTTMs int64 `json:"clientToCfEgressRttMs" api:"required,nullable"`
 	// Round trip time in ms of the client to Cloudflare ingress mile
-	ClientToCfIngressRTTMs int64  `json:"clientToCfIngressRttMs,required,nullable"`
-	Timestamp              string `json:"timestamp,required"`
+	ClientToCfIngressRTTMs int64  `json:"clientToCfIngressRttMs" api:"required,nullable"`
+	Timestamp              string `json:"timestamp" api:"required"`
 	// Round trip time in ms of the client to ISP mile
-	ClientToISPRTTMs int64               `json:"clientToIspRttMs,nullable"`
+	ClientToISPRTTMs int64               `json:"clientToIspRttMs" api:"nullable"`
 	JSON             networkPathSlotJSON `json:"-"`
 }
 
@@ -135,8 +135,8 @@ func (r networkPathSlotJSON) RawJSON() string {
 // results shown represent the first test run to the start of each sampling
 // interval.
 type NetworkPathSampling struct {
-	Unit  NetworkPathSamplingUnit `json:"unit,required"`
-	Value int64                   `json:"value,required"`
+	Unit  NetworkPathSamplingUnit `json:"unit" api:"required"`
+	Value int64                   `json:"value" api:"required"`
 	JSON  networkPathSamplingJSON `json:"-"`
 }
 
@@ -173,13 +173,13 @@ func (r NetworkPathSamplingUnit) IsKnown() bool {
 
 type NetworkPathResponse struct {
 	// API Resource UUID tag.
-	ID         string `json:"id,required"`
+	ID         string `json:"id" api:"required"`
 	DeviceName string `json:"deviceName"`
 	// The interval at which the Traceroute synthetic application test is set to run.
 	Interval    string                  `json:"interval"`
 	Kind        NetworkPathResponseKind `json:"kind"`
 	Name        string                  `json:"name"`
-	NetworkPath NetworkPath             `json:"networkPath,nullable"`
+	NetworkPath NetworkPath             `json:"networkPath" api:"nullable"`
 	// The host of the Traceroute synthetic application test
 	URL  string                  `json:"url"`
 	JSON networkPathResponseJSON `json:"-"`
@@ -223,13 +223,13 @@ func (r NetworkPathResponseKind) IsKnown() bool {
 
 type Percentiles struct {
 	// p50 observed in the time period
-	P50 float64 `json:"p50,nullable"`
+	P50 float64 `json:"p50" api:"nullable"`
 	// p90 observed in the time period
-	P90 float64 `json:"p90,nullable"`
+	P90 float64 `json:"p90" api:"nullable"`
 	// p95 observed in the time period
-	P95 float64 `json:"p95,nullable"`
+	P95 float64 `json:"p95" api:"nullable"`
 	// p99 observed in the time period
-	P99  float64         `json:"p99,nullable"`
+	P99  float64         `json:"p99" api:"nullable"`
 	JSON percentilesJSON `json:"-"`
 }
 

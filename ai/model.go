@@ -45,7 +45,7 @@ func (r *ModelService) List(ctx context.Context, params ModelListParams, opts ..
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/models/search", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -68,7 +68,7 @@ func (r *ModelService) ListAutoPaging(ctx context.Context, params ModelListParam
 type ModelListResponse = interface{}
 
 type ModelListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter by Author
 	Author param.Field[string] `query:"author"`
 	// Filter to hide experimental models

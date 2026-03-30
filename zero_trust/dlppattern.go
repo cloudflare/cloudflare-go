@@ -43,19 +43,19 @@ func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValid
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DLPPatternValidateResponse struct {
-	Valid bool                           `json:"valid,required"`
+	Valid bool                           `json:"valid" api:"required"`
 	JSON  dlpPatternValidateResponseJSON `json:"-"`
 }
 
@@ -76,8 +76,8 @@ func (r dlpPatternValidateResponseJSON) RawJSON() string {
 }
 
 type DLPPatternValidateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Regex     param.Field[string] `json:"regex,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Regex     param.Field[string] `json:"regex" api:"required"`
 	// Maximum number of bytes that the regular expression can match.
 	//
 	// If this is `null` then there is no limit on the length. Patterns can use `*` and
@@ -95,10 +95,10 @@ func (r DLPPatternValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPatternValidateResponseEnvelope struct {
-	Errors   []DLPPatternValidateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPPatternValidateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPPatternValidateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPPatternValidateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPPatternValidateResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPPatternValidateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DLPPatternValidateResponse                `json:"result"`
 	JSON    dlpPatternValidateResponseEnvelopeJSON    `json:"-"`
 }
@@ -123,8 +123,8 @@ func (r dlpPatternValidateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPPatternValidateResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           DLPPatternValidateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpPatternValidateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -171,8 +171,8 @@ func (r dlpPatternValidateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPPatternValidateResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           DLPPatternValidateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpPatternValidateResponseEnvelopeMessagesJSON   `json:"-"`

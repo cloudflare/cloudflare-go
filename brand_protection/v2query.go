@@ -41,20 +41,20 @@ func (r *V2QueryService) Get(ctx context.Context, params V2QueryGetParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/v2/brand-protection/domain/queries", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type V2QueryGetResponse struct {
-	Created    string                       `json:"created,required"`
-	Parameters V2QueryGetResponseParameters `json:"parameters,required,nullable"`
-	QueryID    int64                        `json:"query_id,required"`
-	QueryTag   string                       `json:"query_tag,required"`
-	Scan       bool                         `json:"scan,required"`
-	Updated    string                       `json:"updated,required"`
+	Created    string                       `json:"created" api:"required"`
+	Parameters V2QueryGetResponseParameters `json:"parameters" api:"required,nullable"`
+	QueryID    int64                        `json:"query_id" api:"required"`
+	QueryTag   string                       `json:"query_tag" api:"required"`
+	Scan       bool                         `json:"scan" api:"required"`
+	Updated    string                       `json:"updated" api:"required"`
 	JSON       v2QueryGetResponseJSON       `json:"-"`
 }
 
@@ -80,7 +80,7 @@ func (r v2QueryGetResponseJSON) RawJSON() string {
 }
 
 type V2QueryGetResponseParameters struct {
-	StringMatches []V2QueryGetResponseParametersStringMatch `json:"string_matches,required"`
+	StringMatches []V2QueryGetResponseParametersStringMatch `json:"string_matches" api:"required"`
 	MaxTime       string                                    `json:"max_time"`
 	MinTime       string                                    `json:"min_time"`
 	JSON          v2QueryGetResponseParametersJSON          `json:"-"`
@@ -105,8 +105,8 @@ func (r v2QueryGetResponseParametersJSON) RawJSON() string {
 }
 
 type V2QueryGetResponseParametersStringMatch struct {
-	MaxEditDistance float64                                     `json:"max_edit_distance,required"`
-	Pattern         string                                      `json:"pattern,required"`
+	MaxEditDistance float64                                     `json:"max_edit_distance" api:"required"`
+	Pattern         string                                      `json:"pattern" api:"required"`
 	JSON            v2QueryGetResponseParametersStringMatchJSON `json:"-"`
 }
 
@@ -128,7 +128,7 @@ func (r v2QueryGetResponseParametersStringMatchJSON) RawJSON() string {
 }
 
 type V2QueryGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	ID        param.Field[string] `query:"id"`
 }
 

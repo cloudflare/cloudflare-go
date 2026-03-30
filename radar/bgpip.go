@@ -43,16 +43,16 @@ func (r *BGPIPService) Timeseries(ctx context.Context, query BGPIPTimeseriesPara
 	path := "radar/bgp/ips/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BgpipTimeseriesResponse struct {
 	// Metadata for the results.
-	Meta   BgpipTimeseriesResponseMeta   `json:"meta,required"`
-	Serie0 BgpipTimeseriesResponseSerie0 `json:"serie_0,required"`
+	Meta   BgpipTimeseriesResponseMeta   `json:"meta" api:"required"`
+	Serie0 BgpipTimeseriesResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   bgpipTimeseriesResponseJSON   `json:"-"`
 }
 
@@ -78,16 +78,16 @@ type BgpipTimeseriesResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    BgpipTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo BgpipTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []BgpipTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    BgpipTimeseriesResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo BgpipTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []BgpipTimeseriesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization BgpipTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization BgpipTimeseriesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []BgpipTimeseriesResponseMetaUnit `json:"units,required"`
+	Units []BgpipTimeseriesResponseMetaUnit `json:"units" api:"required"`
 	Delay BgpipTimeseriesResponseMetaDelay  `json:"delay"`
 	JSON  bgpipTimeseriesResponseMetaJSON   `json:"-"`
 }
@@ -136,9 +136,9 @@ func (r BgpipTimeseriesResponseMetaAggInterval) IsKnown() bool {
 }
 
 type BgpipTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []BgpipTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []BgpipTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                         `json:"level,required"`
+	Level int64                                         `json:"level" api:"required"`
 	JSON  bgpipTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -162,15 +162,15 @@ func (r bgpipTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type BgpipTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  BgpipTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                         `json:"description,required"`
-	EndDate     time.Time                                                      `json:"endDate,required" format:"date-time"`
+	DataSource  BgpipTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                         `json:"description" api:"required"`
+	EndDate     time.Time                                                      `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType BgpipTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType BgpipTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
-	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                               `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                  `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                               `json:"startDate" api:"required" format:"date-time"`
 	JSON            bgpipTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -257,9 +257,9 @@ func (r BgpipTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown()
 
 type BgpipTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                `json:"startTime" api:"required" format:"date-time"`
 	JSON      bgpipTimeseriesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -304,8 +304,8 @@ func (r BgpipTimeseriesResponseMetaNormalization) IsKnown() bool {
 }
 
 type BgpipTimeseriesResponseMetaUnit struct {
-	Name  string                              `json:"name,required"`
-	Value string                              `json:"value,required"`
+	Name  string                              `json:"name" api:"required"`
+	Value string                              `json:"value" api:"required"`
 	JSON  bgpipTimeseriesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -327,10 +327,10 @@ func (r bgpipTimeseriesResponseMetaUnitJSON) RawJSON() string {
 }
 
 type BgpipTimeseriesResponseMetaDelay struct {
-	ASNData     BgpipTimeseriesResponseMetaDelayASNData     `json:"asn_data,required"`
-	CountryData BgpipTimeseriesResponseMetaDelayCountryData `json:"country_data,required"`
-	Healthy     bool                                        `json:"healthy,required"`
-	NowTs       float64                                     `json:"nowTs,required"`
+	ASNData     BgpipTimeseriesResponseMetaDelayASNData     `json:"asn_data" api:"required"`
+	CountryData BgpipTimeseriesResponseMetaDelayCountryData `json:"country_data" api:"required"`
+	Healthy     bool                                        `json:"healthy" api:"required"`
+	NowTs       float64                                     `json:"nowTs" api:"required"`
 	JSON        bgpipTimeseriesResponseMetaDelayJSON        `json:"-"`
 }
 
@@ -354,10 +354,10 @@ func (r bgpipTimeseriesResponseMetaDelayJSON) RawJSON() string {
 }
 
 type BgpipTimeseriesResponseMetaDelayASNData struct {
-	DelaySecs float64                                       `json:"delaySecs,required"`
-	DelayStr  string                                        `json:"delayStr,required"`
-	Healthy   bool                                          `json:"healthy,required"`
-	Latest    BgpipTimeseriesResponseMetaDelayASNDataLatest `json:"latest,required"`
+	DelaySecs float64                                       `json:"delaySecs" api:"required"`
+	DelayStr  string                                        `json:"delayStr" api:"required"`
+	Healthy   bool                                          `json:"healthy" api:"required"`
+	Latest    BgpipTimeseriesResponseMetaDelayASNDataLatest `json:"latest" api:"required"`
 	JSON      bgpipTimeseriesResponseMetaDelayASNDataJSON   `json:"-"`
 }
 
@@ -381,9 +381,9 @@ func (r bgpipTimeseriesResponseMetaDelayASNDataJSON) RawJSON() string {
 }
 
 type BgpipTimeseriesResponseMetaDelayASNDataLatest struct {
-	EntriesCount float64                                           `json:"entries_count,required"`
-	Path         string                                            `json:"path,required"`
-	Timestamp    float64                                           `json:"timestamp,required"`
+	EntriesCount float64                                           `json:"entries_count" api:"required"`
+	Path         string                                            `json:"path" api:"required"`
+	Timestamp    float64                                           `json:"timestamp" api:"required"`
 	JSON         bgpipTimeseriesResponseMetaDelayASNDataLatestJSON `json:"-"`
 }
 
@@ -406,10 +406,10 @@ func (r bgpipTimeseriesResponseMetaDelayASNDataLatestJSON) RawJSON() string {
 }
 
 type BgpipTimeseriesResponseMetaDelayCountryData struct {
-	DelaySecs float64                                           `json:"delaySecs,required"`
-	DelayStr  string                                            `json:"delayStr,required"`
-	Healthy   bool                                              `json:"healthy,required"`
-	Latest    BgpipTimeseriesResponseMetaDelayCountryDataLatest `json:"latest,required"`
+	DelaySecs float64                                           `json:"delaySecs" api:"required"`
+	DelayStr  string                                            `json:"delayStr" api:"required"`
+	Healthy   bool                                              `json:"healthy" api:"required"`
+	Latest    BgpipTimeseriesResponseMetaDelayCountryDataLatest `json:"latest" api:"required"`
 	JSON      bgpipTimeseriesResponseMetaDelayCountryDataJSON   `json:"-"`
 }
 
@@ -433,8 +433,8 @@ func (r bgpipTimeseriesResponseMetaDelayCountryDataJSON) RawJSON() string {
 }
 
 type BgpipTimeseriesResponseMetaDelayCountryDataLatest struct {
-	Count     float64                                               `json:"count,required"`
-	Timestamp float64                                               `json:"timestamp,required"`
+	Count     float64                                               `json:"count" api:"required"`
+	Timestamp float64                                               `json:"timestamp" api:"required"`
 	JSON      bgpipTimeseriesResponseMetaDelayCountryDataLatestJSON `json:"-"`
 }
 
@@ -456,9 +456,9 @@ func (r bgpipTimeseriesResponseMetaDelayCountryDataLatestJSON) RawJSON() string 
 }
 
 type BgpipTimeseriesResponseSerie0 struct {
-	IPV4       []string                          `json:"ipv4,required"`
-	IPV6       []string                          `json:"ipv6,required"`
-	Timestamps []time.Time                       `json:"timestamps,required" format:"date-time"`
+	IPV4       []string                          `json:"ipv4" api:"required"`
+	IPV6       []string                          `json:"ipv6" api:"required"`
+	Timestamps []time.Time                       `json:"timestamps" api:"required" format:"date-time"`
 	JSON       bgpipTimeseriesResponseSerie0JSON `json:"-"`
 }
 
@@ -547,8 +547,8 @@ func (r BgpipTimeseriesParamsIPVersion) IsKnown() bool {
 }
 
 type BgpipTimeseriesResponseEnvelope struct {
-	Result  BgpipTimeseriesResponse             `json:"result,required"`
-	Success bool                                `json:"success,required"`
+	Result  BgpipTimeseriesResponse             `json:"result" api:"required"`
+	Success bool                                `json:"success" api:"required"`
 	JSON    bgpipTimeseriesResponseEnvelopeJSON `json:"-"`
 }
 

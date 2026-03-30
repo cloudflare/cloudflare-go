@@ -42,15 +42,15 @@ func (r *MeetingService) New(ctx context.Context, appID string, params MeetingNe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Adds a participant to the given meeting ID.
@@ -58,19 +58,19 @@ func (r *MeetingService) AddParticipant(ctx context.Context, appID string, meeti
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/participants", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Deletes a participant for the given meeting and participant ID.
@@ -78,23 +78,23 @@ func (r *MeetingService) DeleteMeetingParticipant(ctx context.Context, appID str
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	if participantID == "" {
 		err = errors.New("missing required participant_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/participants/%s", body.AccountID, appID, meetingID, participantID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates a participant's details for the given meeting and participant ID.
@@ -102,23 +102,23 @@ func (r *MeetingService) EditParticipant(ctx context.Context, appID string, meet
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	if participantID == "" {
 		err = errors.New("missing required participant_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/participants/%s", params.AccountID, appID, meetingID, participantID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns all meetings for the given App ID.
@@ -126,15 +126,15 @@ func (r *MeetingService) Get(ctx context.Context, appID string, params MeetingGe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns a meeting details in an App for the given meeting ID.
@@ -142,19 +142,19 @@ func (r *MeetingService) GetMeetingByID(ctx context.Context, appID string, meeti
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns a participant details for the given meeting and participant ID.
@@ -162,23 +162,23 @@ func (r *MeetingService) GetMeetingParticipant(ctx context.Context, appID string
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	if participantID == "" {
 		err = errors.New("missing required participant_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/participants/%s", query.AccountID, appID, meetingID, participantID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns all participants detail for the given meeting ID.
@@ -186,19 +186,19 @@ func (r *MeetingService) GetMeetingParticipants(ctx context.Context, appID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/participants", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Regenerates participant's authentication token for the given meeting and
@@ -207,23 +207,23 @@ func (r *MeetingService) RefreshParticipantToken(ctx context.Context, appID stri
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	if participantID == "" {
 		err = errors.New("missing required participant_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/participants/%s/token", body.AccountID, appID, meetingID, participantID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Replaces all the details for the given meeting ID.
@@ -231,19 +231,19 @@ func (r *MeetingService) ReplaceMeetingByID(ctx context.Context, appID string, m
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates a meeting in an App for the given meeting ID.
@@ -251,24 +251,24 @@ func (r *MeetingService) UpdateMeetingByID(ctx context.Context, appID string, me
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type MeetingNewResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data MeetingNewResponseData `json:"data"`
 	JSON meetingNewResponseJSON `json:"-"`
@@ -294,11 +294,11 @@ func (r meetingNewResponseJSON) RawJSON() string {
 // Data returned by the operation
 type MeetingNewResponseData struct {
 	// ID of the meeting.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp the object was created at. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Timestamp the object was updated at. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
 	AIConfig MeetingNewResponseDataAIConfig `json:"ai_config"`
@@ -515,7 +515,7 @@ type MeetingNewResponseDataRecordingConfig struct {
 	// of 60 seconds to a maximum of 24 hours.
 	MaxSeconds              float64                                                      `json:"max_seconds"`
 	RealtimekitBucketConfig MeetingNewResponseDataRecordingConfigRealtimekitBucketConfig `json:"realtimekit_bucket_config"`
-	StorageConfig           MeetingNewResponseDataRecordingConfigStorageConfig           `json:"storage_config,nullable"`
+	StorageConfig           MeetingNewResponseDataRecordingConfigStorageConfig           `json:"storage_config" api:"nullable"`
 	VideoConfig             MeetingNewResponseDataRecordingConfigVideoConfig             `json:"video_config"`
 	JSON                    meetingNewResponseDataRecordingConfigJSON                    `json:"-"`
 }
@@ -634,7 +634,7 @@ type MeetingNewResponseDataRecordingConfigRealtimekitBucketConfig struct {
 	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
 	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
 	// generated for a recording.
-	Enabled bool                                                             `json:"enabled,required"`
+	Enabled bool                                                             `json:"enabled" api:"required"`
 	JSON    meetingNewResponseDataRecordingConfigRealtimekitBucketConfigJSON `json:"-"`
 }
 
@@ -657,7 +657,7 @@ func (r meetingNewResponseDataRecordingConfigRealtimekitBucketConfigJSON) RawJSO
 
 type MeetingNewResponseDataRecordingConfigStorageConfig struct {
 	// Type of storage media.
-	Type MeetingNewResponseDataRecordingConfigStorageConfigType `json:"type,required"`
+	Type MeetingNewResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingNewResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -890,7 +890,7 @@ func (r MeetingNewResponseDataStatus) IsKnown() bool {
 
 type MeetingAddParticipantResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Represents a participant.
 	Data MeetingAddParticipantResponseData `json:"data"`
 	JSON meetingAddParticipantResponseJSON `json:"-"`
@@ -916,22 +916,22 @@ func (r meetingAddParticipantResponseJSON) RawJSON() string {
 // Represents a participant.
 type MeetingAddParticipantResponseData struct {
 	// ID of the participant.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The participant's auth token that can be used for joining a meeting from the
 	// client side.
-	Token string `json:"token,required"`
+	Token string `json:"token" api:"required"`
 	// When this object was created. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A unique participant ID generated by the client.
-	CustomParticipantID string `json:"custom_participant_id,required"`
+	CustomParticipantID string `json:"custom_participant_id" api:"required"`
 	// Preset applied to the participant.
-	PresetName string `json:"preset_name,required"`
+	PresetName string `json:"preset_name" api:"required"`
 	// When this object was updated. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Name of the participant.
-	Name string `json:"name,nullable"`
+	Name string `json:"name" api:"nullable"`
 	// URL to a picture of the participant.
-	Picture string                                `json:"picture,nullable" format:"uri"`
+	Picture string                                `json:"picture" api:"nullable" format:"uri"`
 	JSON    meetingAddParticipantResponseDataJSON `json:"-"`
 }
 
@@ -960,7 +960,7 @@ func (r meetingAddParticipantResponseDataJSON) RawJSON() string {
 
 type MeetingDeleteMeetingParticipantResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data MeetingDeleteMeetingParticipantResponseData `json:"data"`
 	JSON meetingDeleteMeetingParticipantResponseJSON `json:"-"`
@@ -986,13 +986,13 @@ func (r meetingDeleteMeetingParticipantResponseJSON) RawJSON() string {
 // Data returned by the operation
 type MeetingDeleteMeetingParticipantResponseData struct {
 	// Timestamp this object was created at. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A unique participant ID generated by the client.
-	CustomParticipantID string `json:"custom_participant_id,required"`
+	CustomParticipantID string `json:"custom_participant_id" api:"required"`
 	// ID of the preset applied to this participant.
-	PresetID string `json:"preset_id,required" format:"uuid"`
+	PresetID string `json:"preset_id" api:"required" format:"uuid"`
 	// Timestamp this object was updated at. The time is returned in ISO format.
-	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time                                       `json:"updated_at" api:"required" format:"date-time"`
 	JSON      meetingDeleteMeetingParticipantResponseDataJSON `json:"-"`
 }
 
@@ -1017,7 +1017,7 @@ func (r meetingDeleteMeetingParticipantResponseDataJSON) RawJSON() string {
 
 type MeetingEditParticipantResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Represents a participant.
 	Data MeetingEditParticipantResponseData `json:"data"`
 	JSON meetingEditParticipantResponseJSON `json:"-"`
@@ -1043,22 +1043,22 @@ func (r meetingEditParticipantResponseJSON) RawJSON() string {
 // Represents a participant.
 type MeetingEditParticipantResponseData struct {
 	// ID of the participant.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The participant's auth token that can be used for joining a meeting from the
 	// client side.
-	Token string `json:"token,required"`
+	Token string `json:"token" api:"required"`
 	// When this object was created. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A unique participant ID generated by the client.
-	CustomParticipantID string `json:"custom_participant_id,required"`
+	CustomParticipantID string `json:"custom_participant_id" api:"required"`
 	// Preset applied to the participant.
-	PresetName string `json:"preset_name,required"`
+	PresetName string `json:"preset_name" api:"required"`
 	// When this object was updated. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Name of the participant.
-	Name string `json:"name,nullable"`
+	Name string `json:"name" api:"nullable"`
 	// URL to a picture of the participant.
-	Picture string                                 `json:"picture,nullable" format:"uri"`
+	Picture string                                 `json:"picture" api:"nullable" format:"uri"`
 	JSON    meetingEditParticipantResponseDataJSON `json:"-"`
 }
 
@@ -1086,9 +1086,9 @@ func (r meetingEditParticipantResponseDataJSON) RawJSON() string {
 }
 
 type MeetingGetResponse struct {
-	Data    []MeetingGetResponseData `json:"data,required"`
-	Paging  MeetingGetResponsePaging `json:"paging,required"`
-	Success bool                     `json:"success,required"`
+	Data    []MeetingGetResponseData `json:"data" api:"required"`
+	Paging  MeetingGetResponsePaging `json:"paging" api:"required"`
+	Success bool                     `json:"success" api:"required"`
 	JSON    meetingGetResponseJSON   `json:"-"`
 }
 
@@ -1112,11 +1112,11 @@ func (r meetingGetResponseJSON) RawJSON() string {
 
 type MeetingGetResponseData struct {
 	// ID of the meeting.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp the object was created at. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Timestamp the object was updated at. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Specifies if the meeting should start getting livestreamed on start.
 	LiveStreamOnStart bool `json:"live_stream_on_start"`
 	// Specifies if Chat within a meeting should persist for a week.
@@ -1181,9 +1181,9 @@ func (r MeetingGetResponseDataStatus) IsKnown() bool {
 }
 
 type MeetingGetResponsePaging struct {
-	EndOffset   float64                      `json:"end_offset,required"`
-	StartOffset float64                      `json:"start_offset,required"`
-	TotalCount  float64                      `json:"total_count,required"`
+	EndOffset   float64                      `json:"end_offset" api:"required"`
+	StartOffset float64                      `json:"start_offset" api:"required"`
+	TotalCount  float64                      `json:"total_count" api:"required"`
 	JSON        meetingGetResponsePagingJSON `json:"-"`
 }
 
@@ -1207,7 +1207,7 @@ func (r meetingGetResponsePagingJSON) RawJSON() string {
 
 type MeetingGetMeetingByIDResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data MeetingGetMeetingByIDResponseData `json:"data"`
 	JSON meetingGetMeetingByIDResponseJSON `json:"-"`
@@ -1233,11 +1233,11 @@ func (r meetingGetMeetingByIDResponseJSON) RawJSON() string {
 // Data returned by the operation
 type MeetingGetMeetingByIDResponseData struct {
 	// ID of the meeting.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp the object was created at. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Timestamp the object was updated at. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
 	AIConfig MeetingGetMeetingByIDResponseDataAIConfig `json:"ai_config"`
@@ -1454,7 +1454,7 @@ type MeetingGetMeetingByIDResponseDataRecordingConfig struct {
 	// of 60 seconds to a maximum of 24 hours.
 	MaxSeconds              float64                                                                 `json:"max_seconds"`
 	RealtimekitBucketConfig MeetingGetMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfig `json:"realtimekit_bucket_config"`
-	StorageConfig           MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig           `json:"storage_config,nullable"`
+	StorageConfig           MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig           `json:"storage_config" api:"nullable"`
 	VideoConfig             MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfig             `json:"video_config"`
 	JSON                    meetingGetMeetingByIDResponseDataRecordingConfigJSON                    `json:"-"`
 }
@@ -1574,7 +1574,7 @@ type MeetingGetMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfig str
 	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
 	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
 	// generated for a recording.
-	Enabled bool                                                                        `json:"enabled,required"`
+	Enabled bool                                                                        `json:"enabled" api:"required"`
 	JSON    meetingGetMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfigJSON `json:"-"`
 }
 
@@ -1597,7 +1597,7 @@ func (r meetingGetMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfigJ
 
 type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig struct {
 	// Type of storage media.
-	Type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type,required"`
+	Type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -1832,9 +1832,9 @@ func (r MeetingGetMeetingByIDResponseDataStatus) IsKnown() bool {
 
 type MeetingGetMeetingParticipantResponse struct {
 	// Data returned by the operation
-	Data MeetingGetMeetingParticipantResponseData `json:"data,required"`
+	Data MeetingGetMeetingParticipantResponseData `json:"data" api:"required"`
 	// Success status of the operation
-	Success bool                                     `json:"success,required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    meetingGetMeetingParticipantResponseJSON `json:"-"`
 }
 
@@ -1858,19 +1858,19 @@ func (r meetingGetMeetingParticipantResponseJSON) RawJSON() string {
 // Data returned by the operation
 type MeetingGetMeetingParticipantResponseData struct {
 	// ID of the participant.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// When this object was created. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A unique participant ID generated by the client.
-	CustomParticipantID string `json:"custom_participant_id,required"`
+	CustomParticipantID string `json:"custom_participant_id" api:"required"`
 	// Preset applied to the participant.
-	PresetName string `json:"preset_name,required"`
+	PresetName string `json:"preset_name" api:"required"`
 	// When this object was updated. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Name of the participant.
-	Name string `json:"name,nullable"`
+	Name string `json:"name" api:"nullable"`
 	// URL to a picture of the participant.
-	Picture string                                       `json:"picture,nullable" format:"uri"`
+	Picture string                                       `json:"picture" api:"nullable" format:"uri"`
 	JSON    meetingGetMeetingParticipantResponseDataJSON `json:"-"`
 }
 
@@ -1897,9 +1897,9 @@ func (r meetingGetMeetingParticipantResponseDataJSON) RawJSON() string {
 }
 
 type MeetingGetMeetingParticipantsResponse struct {
-	Data    []MeetingGetMeetingParticipantsResponseData `json:"data,required"`
-	Paging  MeetingGetMeetingParticipantsResponsePaging `json:"paging,required"`
-	Success bool                                        `json:"success,required"`
+	Data    []MeetingGetMeetingParticipantsResponseData `json:"data" api:"required"`
+	Paging  MeetingGetMeetingParticipantsResponsePaging `json:"paging" api:"required"`
+	Success bool                                        `json:"success" api:"required"`
 	JSON    meetingGetMeetingParticipantsResponseJSON   `json:"-"`
 }
 
@@ -1924,19 +1924,19 @@ func (r meetingGetMeetingParticipantsResponseJSON) RawJSON() string {
 // Represents a participant.
 type MeetingGetMeetingParticipantsResponseData struct {
 	// ID of the participant.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// When this object was created. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// A unique participant ID generated by the client.
-	CustomParticipantID string `json:"custom_participant_id,required"`
+	CustomParticipantID string `json:"custom_participant_id" api:"required"`
 	// Preset applied to the participant.
-	PresetName string `json:"preset_name,required"`
+	PresetName string `json:"preset_name" api:"required"`
 	// When this object was updated. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Name of the participant.
-	Name string `json:"name,nullable"`
+	Name string `json:"name" api:"nullable"`
 	// URL to a picture of the participant.
-	Picture string                                        `json:"picture,nullable" format:"uri"`
+	Picture string                                        `json:"picture" api:"nullable" format:"uri"`
 	JSON    meetingGetMeetingParticipantsResponseDataJSON `json:"-"`
 }
 
@@ -1963,9 +1963,9 @@ func (r meetingGetMeetingParticipantsResponseDataJSON) RawJSON() string {
 }
 
 type MeetingGetMeetingParticipantsResponsePaging struct {
-	EndOffset   float64                                         `json:"end_offset,required"`
-	StartOffset float64                                         `json:"start_offset,required"`
-	TotalCount  float64                                         `json:"total_count,required"`
+	EndOffset   float64                                         `json:"end_offset" api:"required"`
+	StartOffset float64                                         `json:"start_offset" api:"required"`
+	TotalCount  float64                                         `json:"total_count" api:"required"`
 	JSON        meetingGetMeetingParticipantsResponsePagingJSON `json:"-"`
 }
 
@@ -1989,9 +1989,9 @@ func (r meetingGetMeetingParticipantsResponsePagingJSON) RawJSON() string {
 
 type MeetingRefreshParticipantTokenResponse struct {
 	// Data returned by the operation
-	Data MeetingRefreshParticipantTokenResponseData `json:"data,required"`
+	Data MeetingRefreshParticipantTokenResponseData `json:"data" api:"required"`
 	// Success status of the operation
-	Success bool                                       `json:"success,required"`
+	Success bool                                       `json:"success" api:"required"`
 	JSON    meetingRefreshParticipantTokenResponseJSON `json:"-"`
 }
 
@@ -2015,7 +2015,7 @@ func (r meetingRefreshParticipantTokenResponseJSON) RawJSON() string {
 // Data returned by the operation
 type MeetingRefreshParticipantTokenResponseData struct {
 	// Regenerated participant's authentication token.
-	Token string                                         `json:"token,required"`
+	Token string                                         `json:"token" api:"required"`
 	JSON  meetingRefreshParticipantTokenResponseDataJSON `json:"-"`
 }
 
@@ -2037,7 +2037,7 @@ func (r meetingRefreshParticipantTokenResponseDataJSON) RawJSON() string {
 
 type MeetingReplaceMeetingByIDResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data MeetingReplaceMeetingByIDResponseData `json:"data"`
 	JSON meetingReplaceMeetingByIDResponseJSON `json:"-"`
@@ -2063,11 +2063,11 @@ func (r meetingReplaceMeetingByIDResponseJSON) RawJSON() string {
 // Data returned by the operation
 type MeetingReplaceMeetingByIDResponseData struct {
 	// ID of the meeting.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp the object was created at. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Timestamp the object was updated at. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
 	AIConfig MeetingReplaceMeetingByIDResponseDataAIConfig `json:"ai_config"`
@@ -2286,7 +2286,7 @@ type MeetingReplaceMeetingByIDResponseDataRecordingConfig struct {
 	// of 60 seconds to a maximum of 24 hours.
 	MaxSeconds              float64                                                                     `json:"max_seconds"`
 	RealtimekitBucketConfig MeetingReplaceMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfig `json:"realtimekit_bucket_config"`
-	StorageConfig           MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig           `json:"storage_config,nullable"`
+	StorageConfig           MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig           `json:"storage_config" api:"nullable"`
 	VideoConfig             MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfig             `json:"video_config"`
 	JSON                    meetingReplaceMeetingByIDResponseDataRecordingConfigJSON                    `json:"-"`
 }
@@ -2406,7 +2406,7 @@ type MeetingReplaceMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfig
 	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
 	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
 	// generated for a recording.
-	Enabled bool                                                                            `json:"enabled,required"`
+	Enabled bool                                                                            `json:"enabled" api:"required"`
 	JSON    meetingReplaceMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfigJSON `json:"-"`
 }
 
@@ -2429,7 +2429,7 @@ func (r meetingReplaceMeetingByIDResponseDataRecordingConfigRealtimekitBucketCon
 
 type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig struct {
 	// Type of storage media.
-	Type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type,required"`
+	Type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -2664,7 +2664,7 @@ func (r MeetingReplaceMeetingByIDResponseDataStatus) IsKnown() bool {
 
 type MeetingUpdateMeetingByIDResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data MeetingUpdateMeetingByIDResponseData `json:"data"`
 	JSON meetingUpdateMeetingByIDResponseJSON `json:"-"`
@@ -2690,11 +2690,11 @@ func (r meetingUpdateMeetingByIDResponseJSON) RawJSON() string {
 // Data returned by the operation
 type MeetingUpdateMeetingByIDResponseData struct {
 	// ID of the meeting.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp the object was created at. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Timestamp the object was updated at. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
 	AIConfig MeetingUpdateMeetingByIDResponseDataAIConfig `json:"ai_config"`
@@ -2913,7 +2913,7 @@ type MeetingUpdateMeetingByIDResponseDataRecordingConfig struct {
 	// of 60 seconds to a maximum of 24 hours.
 	MaxSeconds              float64                                                                    `json:"max_seconds"`
 	RealtimekitBucketConfig MeetingUpdateMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfig `json:"realtimekit_bucket_config"`
-	StorageConfig           MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig           `json:"storage_config,nullable"`
+	StorageConfig           MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig           `json:"storage_config" api:"nullable"`
 	VideoConfig             MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfig             `json:"video_config"`
 	JSON                    meetingUpdateMeetingByIDResponseDataRecordingConfigJSON                    `json:"-"`
 }
@@ -3033,7 +3033,7 @@ type MeetingUpdateMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfig 
 	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
 	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
 	// generated for a recording.
-	Enabled bool                                                                           `json:"enabled,required"`
+	Enabled bool                                                                           `json:"enabled" api:"required"`
 	JSON    meetingUpdateMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfigJSON `json:"-"`
 }
 
@@ -3056,7 +3056,7 @@ func (r meetingUpdateMeetingByIDResponseDataRecordingConfigRealtimekitBucketConf
 
 type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig struct {
 	// Type of storage media.
-	Type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type,required"`
+	Type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -3291,7 +3291,7 @@ func (r MeetingUpdateMeetingByIDResponseDataStatus) IsKnown() bool {
 
 type MeetingNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
 	AIConfig param.Field[MeetingNewParamsAIConfig] `json:"ai_config"`
@@ -3509,7 +3509,7 @@ type MeetingNewParamsRecordingConfigRealtimekitBucketConfig struct {
 	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
 	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
 	// generated for a recording.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r MeetingNewParamsRecordingConfigRealtimekitBucketConfig) MarshalJSON() (data []byte, err error) {
@@ -3518,7 +3518,7 @@ func (r MeetingNewParamsRecordingConfigRealtimekitBucketConfig) MarshalJSON() (d
 
 type MeetingNewParamsRecordingConfigStorageConfig struct {
 	// Type of storage media.
-	Type param.Field[MeetingNewParamsRecordingConfigStorageConfigType] `json:"type,required"`
+	Type param.Field[MeetingNewParamsRecordingConfigStorageConfigType] `json:"type" api:"required"`
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//
@@ -3668,12 +3668,12 @@ func (r MeetingNewParamsRecordingConfigVideoConfigWatermarkSize) MarshalJSON() (
 
 type MeetingAddParticipantParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A unique participant ID. You must specify a unique ID for the participant, for
 	// example, UUID, email address, and so on.
-	CustomParticipantID param.Field[string] `json:"custom_participant_id,required"`
+	CustomParticipantID param.Field[string] `json:"custom_participant_id" api:"required"`
 	// Name of the preset to apply to this participant.
-	PresetName param.Field[string] `json:"preset_name,required"`
+	PresetName param.Field[string] `json:"preset_name" api:"required"`
 	// (Optional) Name of the participant.
 	Name param.Field[string] `json:"name"`
 	// (Optional) A URL to a picture to be used for the participant.
@@ -3686,12 +3686,12 @@ func (r MeetingAddParticipantParams) MarshalJSON() (data []byte, err error) {
 
 type MeetingDeleteMeetingParticipantParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MeetingEditParticipantParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// (Optional) Name of the participant.
 	Name param.Field[string] `json:"name"`
 	// (Optional) A URL to a picture to be used for the participant.
@@ -3706,7 +3706,7 @@ func (r MeetingEditParticipantParams) MarshalJSON() (data []byte, err error) {
 
 type MeetingGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The end time range for which you want to retrieve the meetings. The time must be
 	// specified in ISO format.
 	EndTime param.Field[time.Time] `query:"end_time" format:"date-time"`
@@ -3731,7 +3731,7 @@ func (r MeetingGetParams) URLQuery() (v url.Values) {
 
 type MeetingGetMeetingByIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `query:"name"`
 }
 
@@ -3746,12 +3746,12 @@ func (r MeetingGetMeetingByIDParams) URLQuery() (v url.Values) {
 
 type MeetingGetMeetingParticipantParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MeetingGetMeetingParticipantsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The page number from which you want your page search results to be displayed.
 	PageNo param.Field[float64] `query:"page_no"`
 	// Number of results per page
@@ -3769,12 +3769,12 @@ func (r MeetingGetMeetingParticipantsParams) URLQuery() (v url.Values) {
 
 type MeetingRefreshParticipantTokenParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MeetingReplaceMeetingByIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
 	AIConfig param.Field[MeetingReplaceMeetingByIDParamsAIConfig] `json:"ai_config"`
@@ -3992,7 +3992,7 @@ type MeetingReplaceMeetingByIDParamsRecordingConfigRealtimekitBucketConfig struc
 	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
 	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
 	// generated for a recording.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r MeetingReplaceMeetingByIDParamsRecordingConfigRealtimekitBucketConfig) MarshalJSON() (data []byte, err error) {
@@ -4001,7 +4001,7 @@ func (r MeetingReplaceMeetingByIDParamsRecordingConfigRealtimekitBucketConfig) M
 
 type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig struct {
 	// Type of storage media.
-	Type param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType] `json:"type,required"`
+	Type param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType] `json:"type" api:"required"`
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//
@@ -4151,7 +4151,7 @@ func (r MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigWatermarkSize) 
 
 type MeetingUpdateMeetingByIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
 	AIConfig param.Field[MeetingUpdateMeetingByIDParamsAIConfig] `json:"ai_config"`

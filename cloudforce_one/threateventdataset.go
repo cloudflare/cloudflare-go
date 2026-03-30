@@ -41,11 +41,11 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/create", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Lists all datasets in an account
@@ -53,11 +53,11 @@ func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventD
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates an existing dataset
@@ -65,15 +65,15 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/%s", params.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Reads a dataset
@@ -81,15 +81,15 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/%s", query.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieves the raw data associated with an event. Searches across all shards in
@@ -98,25 +98,25 @@ func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, e
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/raw/%s/%s", query.AccountID, datasetID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventDatasetNewResponse struct {
-	IsPublic bool                              `json:"isPublic,required"`
-	Name     string                            `json:"name,required"`
-	UUID     string                            `json:"uuid,required"`
+	IsPublic bool                              `json:"isPublic" api:"required"`
+	Name     string                            `json:"name" api:"required"`
+	UUID     string                            `json:"uuid" api:"required"`
 	JSON     threatEventDatasetNewResponseJSON `json:"-"`
 }
 
@@ -139,9 +139,9 @@ func (r threatEventDatasetNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetListResponse struct {
-	IsPublic bool                               `json:"isPublic,required"`
-	Name     string                             `json:"name,required"`
-	UUID     string                             `json:"uuid,required"`
+	IsPublic bool                               `json:"isPublic" api:"required"`
+	Name     string                             `json:"name" api:"required"`
+	UUID     string                             `json:"uuid" api:"required"`
 	JSON     threatEventDatasetListResponseJSON `json:"-"`
 }
 
@@ -164,9 +164,9 @@ func (r threatEventDatasetListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetEditResponse struct {
-	IsPublic bool                               `json:"isPublic,required"`
-	Name     string                             `json:"name,required"`
-	UUID     string                             `json:"uuid,required"`
+	IsPublic bool                               `json:"isPublic" api:"required"`
+	Name     string                             `json:"name" api:"required"`
+	UUID     string                             `json:"uuid" api:"required"`
 	JSON     threatEventDatasetEditResponseJSON `json:"-"`
 }
 
@@ -189,9 +189,9 @@ func (r threatEventDatasetEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetGetResponse struct {
-	IsPublic bool                              `json:"isPublic,required"`
-	Name     string                            `json:"name,required"`
-	UUID     string                            `json:"uuid,required"`
+	IsPublic bool                              `json:"isPublic" api:"required"`
+	Name     string                            `json:"name" api:"required"`
+	UUID     string                            `json:"uuid" api:"required"`
 	JSON     threatEventDatasetGetResponseJSON `json:"-"`
 }
 
@@ -214,12 +214,12 @@ func (r threatEventDatasetGetResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetRawResponse struct {
-	ID        float64                           `json:"id,required"`
-	AccountID float64                           `json:"accountId,required"`
-	Created   string                            `json:"created,required"`
-	Data      string                            `json:"data,required"`
-	Source    string                            `json:"source,required"`
-	TLP       string                            `json:"tlp,required"`
+	ID        float64                           `json:"id" api:"required"`
+	AccountID float64                           `json:"accountId" api:"required"`
+	Created   string                            `json:"created" api:"required"`
+	Data      string                            `json:"data" api:"required"`
+	Source    string                            `json:"source" api:"required"`
+	TLP       string                            `json:"tlp" api:"required"`
 	JSON      threatEventDatasetRawResponseJSON `json:"-"`
 }
 
@@ -246,12 +246,12 @@ func (r threatEventDatasetRawResponseJSON) RawJSON() string {
 
 type ThreatEventDatasetNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
-	IsPublic param.Field[bool] `json:"isPublic,required"`
+	IsPublic param.Field[bool] `json:"isPublic" api:"required"`
 	// Used to describe the dataset within the account context.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ThreatEventDatasetNewParams) MarshalJSON() (data []byte, err error) {
@@ -260,17 +260,17 @@ func (r ThreatEventDatasetNewParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventDatasetListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventDatasetEditParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
-	IsPublic param.Field[bool] `json:"isPublic,required"`
+	IsPublic param.Field[bool] `json:"isPublic" api:"required"`
 	// Used to describe the dataset within the account context.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ThreatEventDatasetEditParams) MarshalJSON() (data []byte, err error) {
@@ -279,10 +279,10 @@ func (r ThreatEventDatasetEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventDatasetGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventDatasetRawParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

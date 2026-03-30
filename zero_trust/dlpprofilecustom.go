@@ -40,15 +40,15 @@ func (r *DLPProfileCustomService) New(ctx context.Context, params DLPProfileCust
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a DLP custom profile.
@@ -57,19 +57,19 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes a DLP custom profile.
@@ -78,19 +78,19 @@ func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", body.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a custom DLP profile by id.
@@ -99,23 +99,23 @@ func (r *DLPProfileCustomService) Get(ctx context.Context, profileID string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Pattern struct {
-	Regex string `json:"regex,required"`
+	Regex string `json:"regex" api:"required"`
 	// Deprecated: deprecated
 	Validation PatternValidation `json:"validation"`
 	JSON       patternJSON       `json:"-"`
@@ -152,7 +152,7 @@ func (r PatternValidation) IsKnown() bool {
 }
 
 type PatternParam struct {
-	Regex param.Field[string] `json:"regex,required"`
+	Regex param.Field[string] `json:"regex" api:"required"`
 	// Deprecated: deprecated
 	Validation param.Field[PatternValidation] `json:"validation"`
 }
@@ -164,8 +164,8 @@ func (r PatternParam) MarshalJSON() (data []byte, err error) {
 type DLPProfileCustomDeleteResponse = interface{}
 
 type DLPProfileCustomNewParams struct {
-	AccountID        param.Field[string] `path:"account_id,required"`
-	Name             param.Field[string] `json:"name,required"`
+	AccountID        param.Field[string] `path:"account_id" api:"required"`
+	Name             param.Field[string] `json:"name" api:"required"`
 	AIContextEnabled param.Field[bool]   `json:"ai_context_enabled"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
@@ -193,8 +193,8 @@ func (r DLPProfileCustomNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomNewParamsEntry struct {
-	Enabled     param.Field[bool]         `json:"enabled,required"`
-	Name        param.Field[string]       `json:"name,required"`
+	Enabled     param.Field[bool]         `json:"enabled" api:"required"`
+	Name        param.Field[string]       `json:"name" api:"required"`
 	Description param.Field[string]       `json:"description"`
 	Pattern     param.Field[PatternParam] `json:"pattern"`
 	Words       param.Field[interface{}]  `json:"words"`
@@ -214,9 +214,9 @@ type DLPProfileCustomNewParamsEntryUnion interface {
 }
 
 type DLPProfileCustomNewParamsEntriesDLPNewCustomEntry struct {
-	Enabled     param.Field[bool]         `json:"enabled,required"`
-	Name        param.Field[string]       `json:"name,required"`
-	Pattern     param.Field[PatternParam] `json:"pattern,required"`
+	Enabled     param.Field[bool]         `json:"enabled" api:"required"`
+	Name        param.Field[string]       `json:"name" api:"required"`
+	Pattern     param.Field[PatternParam] `json:"pattern" api:"required"`
 	Description param.Field[string]       `json:"description"`
 }
 
@@ -228,9 +228,9 @@ func (r DLPProfileCustomNewParamsEntriesDLPNewCustomEntry) implementsDLPProfileC
 }
 
 type DLPProfileCustomNewParamsEntriesDLPNewWordListEntry struct {
-	Enabled param.Field[bool]     `json:"enabled,required"`
-	Name    param.Field[string]   `json:"name,required"`
-	Words   param.Field[[]string] `json:"words,required"`
+	Enabled param.Field[bool]     `json:"enabled" api:"required"`
+	Name    param.Field[string]   `json:"name" api:"required"`
+	Words   param.Field[[]string] `json:"words" api:"required"`
 }
 
 func (r DLPProfileCustomNewParamsEntriesDLPNewWordListEntry) MarshalJSON() (data []byte, err error) {
@@ -241,8 +241,8 @@ func (r DLPProfileCustomNewParamsEntriesDLPNewWordListEntry) implementsDLPProfil
 }
 
 type DLPProfileCustomNewParamsSharedEntry struct {
-	Enabled param.Field[bool]   `json:"enabled,required"`
-	EntryID param.Field[string] `json:"entry_id,required" format:"uuid"`
+	Enabled param.Field[bool]   `json:"enabled" api:"required"`
+	EntryID param.Field[string] `json:"entry_id" api:"required" format:"uuid"`
 }
 
 func (r DLPProfileCustomNewParamsSharedEntry) MarshalJSON() (data []byte, err error) {
@@ -250,10 +250,10 @@ func (r DLPProfileCustomNewParamsSharedEntry) MarshalJSON() (data []byte, err er
 }
 
 type DLPProfileCustomNewResponseEnvelope struct {
-	Errors   []DLPProfileCustomNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfileCustomNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfileCustomNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfileCustomNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPProfileCustomNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Profile                                    `json:"result"`
 	JSON    dlpProfileCustomNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -278,8 +278,8 @@ func (r dlpProfileCustomNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfileCustomNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DLPProfileCustomNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfileCustomNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -326,8 +326,8 @@ func (r dlpProfileCustomNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPProfileCustomNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           DLPProfileCustomNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfileCustomNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -389,8 +389,8 @@ func (r DLPProfileCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfileCustomUpdateParams struct {
-	AccountID           param.Field[string] `path:"account_id,required"`
-	Name                param.Field[string] `json:"name,required"`
+	AccountID           param.Field[string] `path:"account_id" api:"required"`
+	Name                param.Field[string] `json:"name" api:"required"`
 	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
@@ -421,9 +421,9 @@ func (r DLPProfileCustomUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomUpdateParamsEntry struct {
-	Enabled     param.Field[bool]         `json:"enabled,required"`
-	Name        param.Field[string]       `json:"name,required"`
-	Pattern     param.Field[PatternParam] `json:"pattern,required"`
+	Enabled     param.Field[bool]         `json:"enabled" api:"required"`
+	Name        param.Field[string]       `json:"name" api:"required"`
+	Pattern     param.Field[PatternParam] `json:"pattern" api:"required"`
 	Description param.Field[string]       `json:"description"`
 	EntryID     param.Field[string]       `json:"entry_id" format:"uuid"`
 }
@@ -443,10 +443,10 @@ type DLPProfileCustomUpdateParamsEntryUnion interface {
 }
 
 type DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID struct {
-	Enabled     param.Field[bool]         `json:"enabled,required"`
-	EntryID     param.Field[string]       `json:"entry_id,required" format:"uuid"`
-	Name        param.Field[string]       `json:"name,required"`
-	Pattern     param.Field[PatternParam] `json:"pattern,required"`
+	Enabled     param.Field[bool]         `json:"enabled" api:"required"`
+	EntryID     param.Field[string]       `json:"entry_id" api:"required" format:"uuid"`
+	Name        param.Field[string]       `json:"name" api:"required"`
+	Pattern     param.Field[PatternParam] `json:"pattern" api:"required"`
 	Description param.Field[string]       `json:"description"`
 }
 
@@ -458,9 +458,9 @@ func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID) implementsDL
 }
 
 type DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry struct {
-	Enabled     param.Field[bool]         `json:"enabled,required"`
-	Name        param.Field[string]       `json:"name,required"`
-	Pattern     param.Field[PatternParam] `json:"pattern,required"`
+	Enabled     param.Field[bool]         `json:"enabled" api:"required"`
+	Name        param.Field[string]       `json:"name" api:"required"`
+	Pattern     param.Field[PatternParam] `json:"pattern" api:"required"`
 	Description param.Field[string]       `json:"description"`
 }
 
@@ -472,8 +472,8 @@ func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) implementsDLPProfi
 }
 
 type DLPProfileCustomUpdateParamsSharedEntry struct {
-	Enabled param.Field[bool]   `json:"enabled,required"`
-	EntryID param.Field[string] `json:"entry_id,required" format:"uuid"`
+	Enabled param.Field[bool]   `json:"enabled" api:"required"`
+	EntryID param.Field[string] `json:"entry_id" api:"required" format:"uuid"`
 }
 
 func (r DLPProfileCustomUpdateParamsSharedEntry) MarshalJSON() (data []byte, err error) {
@@ -481,10 +481,10 @@ func (r DLPProfileCustomUpdateParamsSharedEntry) MarshalJSON() (data []byte, err
 }
 
 type DLPProfileCustomUpdateResponseEnvelope struct {
-	Errors   []DLPProfileCustomUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfileCustomUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfileCustomUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfileCustomUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPProfileCustomUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Profile                                       `json:"result"`
 	JSON    dlpProfileCustomUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -509,8 +509,8 @@ func (r dlpProfileCustomUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfileCustomUpdateResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DLPProfileCustomUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfileCustomUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -557,8 +557,8 @@ func (r dlpProfileCustomUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type DLPProfileCustomUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           DLPProfileCustomUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfileCustomUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -620,15 +620,15 @@ func (r DLPProfileCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfileCustomDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
-	Errors   []DLPProfileCustomDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfileCustomDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfileCustomDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DLPProfileCustomDeleteResponse                `json:"result,nullable"`
+	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  DLPProfileCustomDeleteResponse                `json:"result" api:"nullable"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -652,8 +652,8 @@ func (r dlpProfileCustomDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfileCustomDeleteResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DLPProfileCustomDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfileCustomDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -700,8 +700,8 @@ func (r dlpProfileCustomDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type DLPProfileCustomDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           DLPProfileCustomDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfileCustomDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -763,14 +763,14 @@ func (r DLPProfileCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfileCustomGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPProfileCustomGetResponseEnvelope struct {
-	Errors   []DLPProfileCustomGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfileCustomGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfileCustomGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfileCustomGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPProfileCustomGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Profile                                    `json:"result"`
 	JSON    dlpProfileCustomGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -795,8 +795,8 @@ func (r dlpProfileCustomGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfileCustomGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DLPProfileCustomGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfileCustomGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -843,8 +843,8 @@ func (r dlpProfileCustomGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPProfileCustomGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           DLPProfileCustomGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfileCustomGetResponseEnvelopeMessagesJSON   `json:"-"`

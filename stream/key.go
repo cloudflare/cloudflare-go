@@ -44,15 +44,15 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
@@ -61,19 +61,19 @@ func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDele
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists the video ID and creation date and time when a signing key was created.
@@ -83,7 +83,7 @@ func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/keys", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -159,8 +159,8 @@ func (r keyGetResponseJSON) RawJSON() string {
 
 type KeyNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
@@ -168,10 +168,10 @@ func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyNewResponseEnvelope struct {
-	Errors   []KeyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeyNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []KeyNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []KeyNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success KeyNewResponseEnvelopeSuccess `json:"success,required"`
+	Success KeyNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Keys                          `json:"result"`
 	JSON    keyNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -196,8 +196,8 @@ func (r keyNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type KeyNewResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           KeyNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             keyNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -244,8 +244,8 @@ func (r keyNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type KeyNewResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           KeyNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             keyNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -308,14 +308,14 @@ func (r KeyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type KeyDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type KeyDeleteResponseEnvelope struct {
-	Errors   []KeyDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeyDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []KeyDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []KeyDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success KeyDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  string                           `json:"result"`
 	JSON    keyDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -340,8 +340,8 @@ func (r keyDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type KeyDeleteResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           KeyDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             keyDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -388,8 +388,8 @@ func (r keyDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type KeyDeleteResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           KeyDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             keyDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -452,5 +452,5 @@ func (r KeyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type KeyGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

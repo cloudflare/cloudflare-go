@@ -52,15 +52,15 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a Queue. Note that this endpoint does not support partial updates. If
@@ -71,19 +71,19 @@ func (r *QueueService) Update(ctx context.Context, queueID string, params QueueU
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the queues owned by an account.
@@ -93,7 +93,7 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -118,15 +118,15 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", body.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates a Queue.
@@ -135,19 +135,19 @@ func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEdi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get details about a specific queue.
@@ -156,19 +156,19 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s", query.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Queue struct {
@@ -492,8 +492,8 @@ func (r QueueDeleteResponseSuccess) IsKnown() bool {
 
 type QueueNewParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	QueueName param.Field[string] `json:"queue_name,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	QueueName param.Field[string] `json:"queue_name" api:"required"`
 }
 
 func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
@@ -545,7 +545,7 @@ func (r QueueNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueUpdateParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Queue     QueueParam          `json:"queue"`
 }
 
@@ -598,17 +598,17 @@ func (r QueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueListParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QueueDeleteParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QueueEditParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Queue     QueueParam          `json:"queue"`
 }
 
@@ -661,7 +661,7 @@ func (r QueueEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueGetParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QueueGetResponseEnvelope struct {

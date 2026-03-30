@@ -41,15 +41,15 @@ func (r *SubscriptionService) Update(ctx context.Context, identifier string, bod
 	opts = slices.Concat(r.Options, opts)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes a user's subscription.
@@ -57,11 +57,11 @@ func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opt
 	opts = slices.Concat(r.Options, opts)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Lists all of a user's subscriptions.
@@ -110,7 +110,7 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 }
 
 type SubscriptionUpdateParams struct {
-	Subscription shared.SubscriptionParam `json:"subscription,required"`
+	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
 }
 
 func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -118,11 +118,11 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

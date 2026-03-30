@@ -43,7 +43,7 @@ func (r *DevicePolicyDefaultFallbackDomainService) Update(ctx context.Context, p
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/fallback_domains", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -72,7 +72,7 @@ func (r *DevicePolicyDefaultFallbackDomainService) Get(ctx context.Context, quer
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/fallback_domains", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -94,8 +94,8 @@ func (r *DevicePolicyDefaultFallbackDomainService) GetAutoPaging(ctx context.Con
 }
 
 type DevicePolicyDefaultFallbackDomainUpdateParams struct {
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Domains   []FallbackDomainParam `json:"domains,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
+	Domains   []FallbackDomainParam `json:"domains" api:"required"`
 }
 
 func (r DevicePolicyDefaultFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -103,5 +103,5 @@ func (r DevicePolicyDefaultFallbackDomainUpdateParams) MarshalJSON() (data []byt
 }
 
 type DevicePolicyDefaultFallbackDomainGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -43,19 +43,19 @@ func (r *SessionService) GenerateSummaryOfTranscripts(ctx context.Context, appID
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/summary", body.AccountID, appID, sessionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Returns details of the given peer ID along with call statistics for the given
@@ -64,19 +64,19 @@ func (r *SessionService) GetParticipantDataFromPeerID(ctx context.Context, appID
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if peerID == "" {
 		err = errors.New("missing required peer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/peer-report/%s", params.AccountID, appID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns a URL to download all chat messages of the session ID in CSV format.
@@ -84,19 +84,19 @@ func (r *SessionService) GetSessionChat(ctx context.Context, appID string, sessi
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/chat", query.AccountID, appID, sessionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns data of the given session ID including recording details.
@@ -104,19 +104,19 @@ func (r *SessionService) GetSessionDetails(ctx context.Context, appID string, se
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s", params.AccountID, appID, sessionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of the given participant ID along with call statistics for the
@@ -125,23 +125,23 @@ func (r *SessionService) GetSessionParticipantDetails(ctx context.Context, appID
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return nil, err
 	}
 	if participantID == "" {
 		err = errors.New("missing required participant_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/participants/%s", params.AccountID, appID, sessionID, participantID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns a list of participants for the given session ID.
@@ -149,19 +149,19 @@ func (r *SessionService) GetSessionParticipants(ctx context.Context, appID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/participants", params.AccountID, appID, sessionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns a Summary URL to download the Summary of Transcripts for the session ID
@@ -170,19 +170,19 @@ func (r *SessionService) GetSessionSummary(ctx context.Context, appID string, se
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/summary", query.AccountID, appID, sessionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns a URL to download the transcript for the session ID in CSV format.
@@ -190,19 +190,19 @@ func (r *SessionService) GetSessionTranscripts(ctx context.Context, appID string
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/transcript", query.AccountID, appID, sessionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of all sessions of an App.
@@ -210,15 +210,15 @@ func (r *SessionService) GetSessions(ctx context.Context, appID string, params S
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type SessionGetParticipantDataFromPeerIDResponse struct {
@@ -1233,13 +1233,13 @@ type SessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStats stru
 	AudioBandwidth           int64                                                                      `json:"audio_bandwidth"`
 	AudioStats               []interface{}                                                              `json:"audio_stats"`
 	AverageQuality           int64                                                                      `json:"average_quality"`
-	End                      string                                                                     `json:"end,nullable"`
+	End                      string                                                                     `json:"end" api:"nullable"`
 	FirstAudioPacketReceived string                                                                     `json:"first_audio_packet_received"`
 	FirstVideoPacketReceived string                                                                     `json:"first_video_packet_received"`
 	LastAudioPacketReceived  string                                                                     `json:"last_audio_packet_received"`
 	LastVideoPacketReceived  string                                                                     `json:"last_video_packet_received"`
 	PeerIDs                  []string                                                                   `json:"peer_ids"`
-	Start                    string                                                                     `json:"start,nullable"`
+	Start                    string                                                                     `json:"start" api:"nullable"`
 	TotalAudioPackets        int64                                                                      `json:"total_audio_packets"`
 	TotalAudioPacketsLost    int64                                                                      `json:"total_audio_packets_lost"`
 	TotalVideoPackets        int64                                                                      `json:"total_video_packets"`
@@ -1306,9 +1306,9 @@ func (r sessionGetSessionChatResponseJSON) RawJSON() string {
 
 type SessionGetSessionChatResponseData struct {
 	// URL where the chat logs can be downloaded
-	ChatDownloadURL string `json:"chat_download_url,required"`
+	ChatDownloadURL string `json:"chat_download_url" api:"required"`
 	// Time when the download URL will expire
-	ChatDownloadURLExpiry string                                `json:"chat_download_url_expiry,required"`
+	ChatDownloadURLExpiry string                                `json:"chat_download_url_expiry" api:"required"`
 	JSON                  sessionGetSessionChatResponseDataJSON `json:"-"`
 }
 
@@ -1375,31 +1375,31 @@ func (r sessionGetSessionDetailsResponseDataJSON) RawJSON() string {
 
 type SessionGetSessionDetailsResponseDataSession struct {
 	// ID of the session
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ID of the meeting this session is associated with. In the case of V2 meetings,
 	// it is always a UUID. In V1 meetings, it is a room name of the form
 	// `abcdef-ghijkl`
-	AssociatedID string `json:"associated_id,required"`
+	AssociatedID string `json:"associated_id" api:"required"`
 	// timestamp when session created
-	CreatedAt string `json:"created_at,required"`
+	CreatedAt string `json:"created_at" api:"required"`
 	// number of participants currently in the session
-	LiveParticipants float64 `json:"live_participants,required"`
+	LiveParticipants float64 `json:"live_participants" api:"required"`
 	// number of maximum participants that were in the session
-	MaxConcurrentParticipants float64 `json:"max_concurrent_participants,required"`
+	MaxConcurrentParticipants float64 `json:"max_concurrent_participants" api:"required"`
 	// Title of the meeting this session belongs to
-	MeetingDisplayName string `json:"meeting_display_name,required"`
+	MeetingDisplayName string `json:"meeting_display_name" api:"required"`
 	// number of minutes consumed since the session started
-	MinutesConsumed float64 `json:"minutes_consumed,required"`
+	MinutesConsumed float64 `json:"minutes_consumed" api:"required"`
 	// App id that hosted this session
-	OrganizationID string `json:"organization_id,required"`
+	OrganizationID string `json:"organization_id" api:"required"`
 	// timestamp when session started
-	StartedAt string `json:"started_at,required"`
+	StartedAt string `json:"started_at" api:"required"`
 	// current status of session
-	Status SessionGetSessionDetailsResponseDataSessionStatus `json:"status,required"`
+	Status SessionGetSessionDetailsResponseDataSessionStatus `json:"status" api:"required"`
 	// type of session
-	Type SessionGetSessionDetailsResponseDataSessionType `json:"type,required"`
+	Type SessionGetSessionDetailsResponseDataSessionType `json:"type" api:"required"`
 	// timestamp when session was last updated
-	UpdatedAt     string        `json:"updated_at,required"`
+	UpdatedAt     string        `json:"updated_at" api:"required"`
 	BreakoutRooms []interface{} `json:"breakout_rooms"`
 	// timestamp when session ended
 	EndedAt string `json:"ended_at"`
@@ -1966,11 +1966,11 @@ func (r sessionGetSessionSummaryResponseJSON) RawJSON() string {
 }
 
 type SessionGetSessionSummaryResponseData struct {
-	SessionID string `json:"sessionId,required"`
+	SessionID string `json:"sessionId" api:"required"`
 	// URL where the summary of transcripts can be downloaded
-	SummaryDownloadURL string `json:"summaryDownloadUrl,required"`
+	SummaryDownloadURL string `json:"summaryDownloadUrl" api:"required"`
 	// Time of Expiry before when you need to download the csv file.
-	SummaryDownloadURLExpiry string                                   `json:"summaryDownloadUrlExpiry,required"`
+	SummaryDownloadURLExpiry string                                   `json:"summaryDownloadUrlExpiry" api:"required"`
 	JSON                     sessionGetSessionSummaryResponseDataJSON `json:"-"`
 }
 
@@ -2016,11 +2016,11 @@ func (r sessionGetSessionTranscriptsResponseJSON) RawJSON() string {
 }
 
 type SessionGetSessionTranscriptsResponseData struct {
-	SessionID string `json:"sessionId,required"`
+	SessionID string `json:"sessionId" api:"required"`
 	// URL where the transcript can be downloaded
-	TranscriptDownloadURL string `json:"transcript_download_url,required"`
+	TranscriptDownloadURL string `json:"transcript_download_url" api:"required"`
 	// Time when the download URL will expire
-	TranscriptDownloadURLExpiry string                                       `json:"transcript_download_url_expiry,required"`
+	TranscriptDownloadURLExpiry string                                       `json:"transcript_download_url_expiry" api:"required"`
 	JSON                        sessionGetSessionTranscriptsResponseDataJSON `json:"-"`
 }
 
@@ -2088,31 +2088,31 @@ func (r sessionGetSessionsResponseDataJSON) RawJSON() string {
 
 type SessionGetSessionsResponseDataSession struct {
 	// ID of the session
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ID of the meeting this session is associated with. In the case of V2 meetings,
 	// it is always a UUID. In V1 meetings, it is a room name of the form
 	// `abcdef-ghijkl`
-	AssociatedID string `json:"associated_id,required"`
+	AssociatedID string `json:"associated_id" api:"required"`
 	// timestamp when session created
-	CreatedAt string `json:"created_at,required"`
+	CreatedAt string `json:"created_at" api:"required"`
 	// number of participants currently in the session
-	LiveParticipants float64 `json:"live_participants,required"`
+	LiveParticipants float64 `json:"live_participants" api:"required"`
 	// number of maximum participants that were in the session
-	MaxConcurrentParticipants float64 `json:"max_concurrent_participants,required"`
+	MaxConcurrentParticipants float64 `json:"max_concurrent_participants" api:"required"`
 	// Title of the meeting this session belongs to
-	MeetingDisplayName string `json:"meeting_display_name,required"`
+	MeetingDisplayName string `json:"meeting_display_name" api:"required"`
 	// number of minutes consumed since the session started
-	MinutesConsumed float64 `json:"minutes_consumed,required"`
+	MinutesConsumed float64 `json:"minutes_consumed" api:"required"`
 	// App id that hosted this session
-	OrganizationID string `json:"organization_id,required"`
+	OrganizationID string `json:"organization_id" api:"required"`
 	// timestamp when session started
-	StartedAt string `json:"started_at,required"`
+	StartedAt string `json:"started_at" api:"required"`
 	// current status of session
-	Status SessionGetSessionsResponseDataSessionsStatus `json:"status,required"`
+	Status SessionGetSessionsResponseDataSessionsStatus `json:"status" api:"required"`
 	// type of session
-	Type SessionGetSessionsResponseDataSessionsType `json:"type,required"`
+	Type SessionGetSessionsResponseDataSessionsType `json:"type" api:"required"`
 	// timestamp when session was last updated
-	UpdatedAt     string        `json:"updated_at,required"`
+	UpdatedAt     string        `json:"updated_at" api:"required"`
 	BreakoutRooms []interface{} `json:"breakout_rooms"`
 	// timestamp when session ended
 	EndedAt string `json:"ended_at"`
@@ -2186,12 +2186,12 @@ func (r SessionGetSessionsResponseDataSessionsType) IsKnown() bool {
 
 type SessionGenerateSummaryOfTranscriptsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetParticipantDataFromPeerIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Comma separated list of filters to apply. Note that there must be no spaces
 	// between the filters.
 	Filters param.Field[SessionGetParticipantDataFromPeerIDParamsFilters] `query:"filters"`
@@ -2228,12 +2228,12 @@ func (r SessionGetParticipantDataFromPeerIDParamsFilters) IsKnown() bool {
 
 type SessionGetSessionChatParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetSessionDetailsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List all breakout rooms
 	IncludeBreakoutRooms param.Field[bool] `query:"include_breakout_rooms"`
 }
@@ -2249,7 +2249,7 @@ func (r SessionGetSessionDetailsParams) URLQuery() (v url.Values) {
 
 type SessionGetSessionParticipantDetailsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Comma separated list of filters to apply. Note that there must be no spaces
 	// between the filters.
 	Filters param.Field[SessionGetSessionParticipantDetailsParamsFilters] `query:"filters"`
@@ -2288,7 +2288,7 @@ func (r SessionGetSessionParticipantDetailsParamsFilters) IsKnown() bool {
 
 type SessionGetSessionParticipantsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// if true, response includes all the peer events of participants.
 	IncludePeerEvents param.Field[bool] `query:"include_peer_events"`
 	// The page number from which you want your page search results to be displayed.
@@ -2364,17 +2364,17 @@ func (r SessionGetSessionParticipantsParamsView) IsKnown() bool {
 
 type SessionGetSessionSummaryParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetSessionTranscriptsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetSessionsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the meeting that sessions should be associated with
 	AssociatedID param.Field[string] `query:"associated_id"`
 	// The end time range for which you want to retrieve the meetings. The time must be

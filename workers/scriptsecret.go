@@ -45,19 +45,19 @@ func (r *ScriptSecretService) Update(ctx context.Context, scriptName string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/secrets", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List secrets bound to a script.
@@ -67,11 +67,11 @@ func (r *ScriptSecretService) List(ctx context.Context, scriptName string, query
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/secrets", query.AccountID, scriptName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -97,23 +97,23 @@ func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, sec
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	if secretName == "" {
 		err = errors.New("missing required secret_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/secrets/%s", params.AccountID, scriptName, secretName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a given secret binding (value omitted) on a script.
@@ -122,31 +122,31 @@ func (r *ScriptSecretService) Get(ctx context.Context, scriptName string, secret
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	if secretName == "" {
 		err = errors.New("missing required secret_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/secrets/%s", params.AccountID, scriptName, secretName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A secret value accessible through a binding.
 type ScriptSecretUpdateResponse struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretUpdateResponseType `json:"type,required"`
+	Type ScriptSecretUpdateResponseType `json:"type" api:"required"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
 	// Data format of the key.
@@ -224,9 +224,9 @@ func init() {
 
 type ScriptSecretUpdateResponseWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretUpdateResponseWorkersBindingKindSecretTextType `json:"type,required"`
+	Type ScriptSecretUpdateResponseWorkersBindingKindSecretTextType `json:"type" api:"required"`
 	JSON scriptSecretUpdateResponseWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
@@ -268,17 +268,17 @@ func (r ScriptSecretUpdateResponseWorkersBindingKindSecretTextType) IsKnown() bo
 type ScriptSecretUpdateResponseWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm interface{} `json:"algorithm,required"`
+	Algorithm interface{} `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format ScriptSecretUpdateResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format ScriptSecretUpdateResponseWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretUpdateResponseWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type ScriptSecretUpdateResponseWorkersBindingKindSecretKeyType `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []ScriptSecretUpdateResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	Usages []ScriptSecretUpdateResponseWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
 	JSON   scriptSecretUpdateResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
@@ -398,9 +398,9 @@ func (r ScriptSecretUpdateResponseFormat) IsKnown() bool {
 // A secret value accessible through a binding.
 type ScriptSecretListResponse struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretListResponseType `json:"type,required"`
+	Type ScriptSecretListResponseType `json:"type" api:"required"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
 	// Data format of the key.
@@ -478,9 +478,9 @@ func init() {
 
 type ScriptSecretListResponseWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretListResponseWorkersBindingKindSecretTextType `json:"type,required"`
+	Type ScriptSecretListResponseWorkersBindingKindSecretTextType `json:"type" api:"required"`
 	JSON scriptSecretListResponseWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
@@ -521,17 +521,17 @@ func (r ScriptSecretListResponseWorkersBindingKindSecretTextType) IsKnown() bool
 type ScriptSecretListResponseWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm interface{} `json:"algorithm,required"`
+	Algorithm interface{} `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format ScriptSecretListResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format ScriptSecretListResponseWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretListResponseWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type ScriptSecretListResponseWorkersBindingKindSecretKeyType `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []ScriptSecretListResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	Usages []ScriptSecretListResponseWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
 	JSON   scriptSecretListResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
@@ -652,9 +652,9 @@ type ScriptSecretDeleteResponse = interface{}
 // A secret value accessible through a binding.
 type ScriptSecretGetResponse struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretGetResponseType `json:"type,required"`
+	Type ScriptSecretGetResponseType `json:"type" api:"required"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
 	// Data format of the key.
@@ -732,9 +732,9 @@ func init() {
 
 type ScriptSecretGetResponseWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretGetResponseWorkersBindingKindSecretTextType `json:"type,required"`
+	Type ScriptSecretGetResponseWorkersBindingKindSecretTextType `json:"type" api:"required"`
 	JSON scriptSecretGetResponseWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
@@ -775,17 +775,17 @@ func (r ScriptSecretGetResponseWorkersBindingKindSecretTextType) IsKnown() bool 
 type ScriptSecretGetResponseWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm interface{} `json:"algorithm,required"`
+	Algorithm interface{} `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format ScriptSecretGetResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format ScriptSecretGetResponseWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type ScriptSecretGetResponseWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type ScriptSecretGetResponseWorkersBindingKindSecretKeyType `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []ScriptSecretGetResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	Usages []ScriptSecretGetResponseWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
 	JSON   scriptSecretGetResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
@@ -903,9 +903,9 @@ func (r ScriptSecretGetResponseFormat) IsKnown() bool {
 
 type ScriptSecretUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A secret value accessible through a binding.
-	Body ScriptSecretUpdateParamsBodyUnion `json:"body,required"`
+	Body ScriptSecretUpdateParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r ScriptSecretUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -915,9 +915,9 @@ func (r ScriptSecretUpdateParams) MarshalJSON() (data []byte, err error) {
 // A secret value accessible through a binding.
 type ScriptSecretUpdateParamsBody struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type      param.Field[ScriptSecretUpdateParamsBodyType] `json:"type,required"`
+	Type      param.Field[ScriptSecretUpdateParamsBodyType] `json:"type" api:"required"`
 	Algorithm param.Field[interface{}]                      `json:"algorithm"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
@@ -947,11 +947,11 @@ type ScriptSecretUpdateParamsBodyUnion interface {
 
 type ScriptSecretUpdateParamsBodyWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The secret value to use.
-	Text param.Field[string] `json:"text,required"`
+	Text param.Field[string] `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptSecretUpdateParamsBodyWorkersBindingKindSecretTextType] `json:"type,required"`
+	Type param.Field[ScriptSecretUpdateParamsBodyWorkersBindingKindSecretTextType] `json:"type" api:"required"`
 }
 
 func (r ScriptSecretUpdateParamsBodyWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
@@ -979,17 +979,17 @@ func (r ScriptSecretUpdateParamsBodyWorkersBindingKindSecretTextType) IsKnown() 
 type ScriptSecretUpdateParamsBodyWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm param.Field[interface{}] `json:"algorithm,required"`
+	Algorithm param.Field[interface{}] `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format param.Field[ScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyFormat] `json:"format,required"`
+	Format param.Field[ScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyFormat] `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyType] `json:"type,required"`
+	Type param.Field[ScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyType] `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages param.Field[[]ScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
+	Usages param.Field[[]ScriptSecretUpdateParamsBodyWorkersBindingKindSecretKeyUsage] `json:"usages" api:"required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
 	// Key data in
@@ -1096,10 +1096,10 @@ func (r ScriptSecretUpdateParamsBodyFormat) IsKnown() bool {
 }
 
 type ScriptSecretUpdateResponseEnvelope struct {
-	Errors   []ScriptSecretUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSecretUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ScriptSecretUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSecretUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSecretUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptSecretUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A secret value accessible through a binding.
 	Result ScriptSecretUpdateResponse             `json:"result"`
 	JSON   scriptSecretUpdateResponseEnvelopeJSON `json:"-"`
@@ -1125,8 +1125,8 @@ func (r scriptSecretUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSecretUpdateResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ScriptSecretUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSecretUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1173,8 +1173,8 @@ func (r scriptSecretUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSecretUpdateResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ScriptSecretUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSecretUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1237,12 +1237,12 @@ func (r ScriptSecretUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSecretListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptSecretDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Flag that indicates whether the secret name is URL encoded.
 	URLEncoded param.Field[bool] `query:"url_encoded"`
 }
@@ -1257,11 +1257,11 @@ func (r ScriptSecretDeleteParams) URLQuery() (v url.Values) {
 }
 
 type ScriptSecretDeleteResponseEnvelope struct {
-	Errors   []ScriptSecretDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSecretDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ScriptSecretDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSecretDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSecretDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  ScriptSecretDeleteResponse                `json:"result,nullable"`
+	Success ScriptSecretDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ScriptSecretDeleteResponse                `json:"result" api:"nullable"`
 	JSON    scriptSecretDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1285,8 +1285,8 @@ func (r scriptSecretDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSecretDeleteResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ScriptSecretDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSecretDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1333,8 +1333,8 @@ func (r scriptSecretDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSecretDeleteResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ScriptSecretDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSecretDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1397,7 +1397,7 @@ func (r ScriptSecretDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSecretGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Flag that indicates whether the secret name is URL encoded.
 	URLEncoded param.Field[bool] `query:"url_encoded"`
 }
@@ -1411,10 +1411,10 @@ func (r ScriptSecretGetParams) URLQuery() (v url.Values) {
 }
 
 type ScriptSecretGetResponseEnvelope struct {
-	Errors   []ScriptSecretGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSecretGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ScriptSecretGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSecretGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSecretGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptSecretGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A secret value accessible through a binding.
 	Result ScriptSecretGetResponse             `json:"result"`
 	JSON   scriptSecretGetResponseEnvelopeJSON `json:"-"`
@@ -1440,8 +1440,8 @@ func (r scriptSecretGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSecretGetResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           ScriptSecretGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSecretGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1488,8 +1488,8 @@ func (r scriptSecretGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSecretGetResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           ScriptSecretGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSecretGetResponseEnvelopeMessagesJSON   `json:"-"`

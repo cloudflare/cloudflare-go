@@ -43,15 +43,15 @@ func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/stats", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Stat struct {
@@ -100,15 +100,15 @@ func (r statCountJSON) RawJSON() string {
 
 type V1StatGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V1StatGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Stat                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Stat                  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V1StatGetResponseEnvelopeSuccess `json:"success,required"`
+	Success V1StatGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v1StatGetResponseEnvelopeJSON    `json:"-"`
 }
 

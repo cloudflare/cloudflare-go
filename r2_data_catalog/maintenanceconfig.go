@@ -41,19 +41,19 @@ func (r *MaintenanceConfigService) Update(ctx context.Context, bucketName string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/maintenance-configs", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve the maintenance configuration for a specific catalog, including
@@ -63,19 +63,19 @@ func (r *MaintenanceConfigService) Get(ctx context.Context, bucketName string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/maintenance-configs", query.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Configures maintenance for the catalog.
@@ -107,9 +107,9 @@ func (r maintenanceConfigUpdateResponseJSON) RawJSON() string {
 // Configures compaction for catalog maintenance.
 type MaintenanceConfigUpdateResponseCompaction struct {
 	// Specifies the state of maintenance operations.
-	State MaintenanceConfigUpdateResponseCompactionState `json:"state,required"`
+	State MaintenanceConfigUpdateResponseCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
-	TargetSizeMB MaintenanceConfigUpdateResponseCompactionTargetSizeMB `json:"target_size_mb,required"`
+	TargetSizeMB MaintenanceConfigUpdateResponseCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
 	JSON         maintenanceConfigUpdateResponseCompactionJSON         `json:"-"`
 }
 
@@ -170,11 +170,11 @@ type MaintenanceConfigUpdateResponseSnapshotExpiration struct {
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
 	// minutes). Defaults to "7d".
-	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
-	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
-	State MaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state,required"`
+	State MaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state" api:"required"`
 	JSON  maintenanceConfigUpdateResponseSnapshotExpirationJSON  `json:"-"`
 }
 
@@ -215,9 +215,9 @@ func (r MaintenanceConfigUpdateResponseSnapshotExpirationState) IsKnown() bool {
 // Contains maintenance configuration and credential status.
 type MaintenanceConfigGetResponse struct {
 	// Shows the credential configuration status.
-	CredentialStatus MaintenanceConfigGetResponseCredentialStatus `json:"credential_status,required"`
+	CredentialStatus MaintenanceConfigGetResponseCredentialStatus `json:"credential_status" api:"required"`
 	// Configures maintenance for the catalog.
-	MaintenanceConfig MaintenanceConfigGetResponseMaintenanceConfig `json:"maintenance_config,required"`
+	MaintenanceConfig MaintenanceConfigGetResponseMaintenanceConfig `json:"maintenance_config" api:"required"`
 	JSON              maintenanceConfigGetResponseJSON              `json:"-"`
 }
 
@@ -283,9 +283,9 @@ func (r maintenanceConfigGetResponseMaintenanceConfigJSON) RawJSON() string {
 // Configures compaction for catalog maintenance.
 type MaintenanceConfigGetResponseMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
-	State MaintenanceConfigGetResponseMaintenanceConfigCompactionState `json:"state,required"`
+	State MaintenanceConfigGetResponseMaintenanceConfigCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
-	TargetSizeMB MaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
+	TargetSizeMB MaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
 	JSON         maintenanceConfigGetResponseMaintenanceConfigCompactionJSON         `json:"-"`
 }
 
@@ -347,11 +347,11 @@ type MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration struct {
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
 	// minutes). Defaults to "7d".
-	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
-	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
-	State MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	State MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state" api:"required"`
 	JSON  maintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
 }
 
@@ -392,7 +392,7 @@ func (r MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState) Is
 
 type MaintenanceConfigUpdateParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Updates compaction configuration (all fields optional).
 	Compaction param.Field[MaintenanceConfigUpdateParamsCompaction] `json:"compaction"`
 	// Updates snapshot expiration configuration (all fields optional).
@@ -481,11 +481,11 @@ func (r MaintenanceConfigUpdateParamsSnapshotExpirationState) IsKnown() bool {
 
 type MaintenanceConfigUpdateResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []MaintenanceConfigUpdateResponseEnvelopeErrors `json:"errors,required"`
+	Errors []MaintenanceConfigUpdateResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []MaintenanceConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Messages []MaintenanceConfigUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Configures maintenance for the catalog.
 	Result MaintenanceConfigUpdateResponse             `json:"result"`
 	JSON   maintenanceConfigUpdateResponseEnvelopeJSON `json:"-"`
@@ -512,9 +512,9 @@ func (r maintenanceConfigUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type MaintenanceConfigUpdateResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                            `json:"message,required"`
+	Message string                                            `json:"message" api:"required"`
 	JSON    maintenanceConfigUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -537,9 +537,9 @@ func (r maintenanceConfigUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type MaintenanceConfigUpdateResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                              `json:"message,required"`
+	Message string                                              `json:"message" api:"required"`
 	JSON    maintenanceConfigUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -562,16 +562,16 @@ func (r maintenanceConfigUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type MaintenanceConfigGetParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MaintenanceConfigGetResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []MaintenanceConfigGetResponseEnvelopeErrors `json:"errors,required"`
+	Errors []MaintenanceConfigGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []MaintenanceConfigGetResponseEnvelopeMessages `json:"messages,required"`
+	Messages []MaintenanceConfigGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Contains maintenance configuration and credential status.
 	Result MaintenanceConfigGetResponse             `json:"result"`
 	JSON   maintenanceConfigGetResponseEnvelopeJSON `json:"-"`
@@ -598,9 +598,9 @@ func (r maintenanceConfigGetResponseEnvelopeJSON) RawJSON() string {
 
 type MaintenanceConfigGetResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                         `json:"message,required"`
+	Message string                                         `json:"message" api:"required"`
 	JSON    maintenanceConfigGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -623,9 +623,9 @@ func (r maintenanceConfigGetResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type MaintenanceConfigGetResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                           `json:"message,required"`
+	Message string                                           `json:"message" api:"required"`
 	JSON    maintenanceConfigGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 

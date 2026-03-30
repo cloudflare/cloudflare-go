@@ -45,32 +45,32 @@ func (r *AnalyticsEventBytimeService) Get(ctx context.Context, params AnalyticsE
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AnalyticsEventBytimeGetResponse struct {
 	// List of columns returned by the analytics query.
-	Data []AnalyticsEventBytimeGetResponseData `json:"data,required"`
+	Data []AnalyticsEventBytimeGetResponseData `json:"data" api:"required"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
-	DataLag float64 `json:"data_lag,required"`
+	DataLag float64 `json:"data_lag" api:"required"`
 	// Maximum result for each selected metrics across all data.
-	Max map[string]float64 `json:"max,required"`
+	Max map[string]float64 `json:"max" api:"required"`
 	// Minimum result for each selected metrics across all data.
-	Min   map[string]float64                   `json:"min,required"`
-	Query AnalyticsEventBytimeGetResponseQuery `json:"query,required"`
+	Min   map[string]float64                   `json:"min" api:"required"`
+	Query AnalyticsEventBytimeGetResponseQuery `json:"query" api:"required"`
 	// Total number of rows in the result.
-	Rows float64 `json:"rows,required"`
+	Rows float64 `json:"rows" api:"required"`
 	// Total result for each selected metrics across all data.
-	Totals map[string]float64 `json:"totals,required"`
+	Totals map[string]float64 `json:"totals" api:"required"`
 	// List of time interval buckets: [start, end]
 	TimeIntervals [][]time.Time                       `json:"time_intervals" format:"date-time"`
 	JSON          analyticsEventBytimeGetResponseJSON `json:"-"`
@@ -244,9 +244,9 @@ func (r AnalyticsEventBytimeGetResponseQueryMetric) IsKnown() bool {
 
 type AnalyticsEventBytimeGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Used to select time series resolution.
-	TimeDelta param.Field[AnalyticsEventBytimeGetParamsTimeDelta] `query:"time_delta,required"`
+	TimeDelta param.Field[AnalyticsEventBytimeGetParamsTimeDelta] `query:"time_delta" api:"required"`
 	// Can be used to break down the data by given attributes. Options are:
 	//
 	// | Dimension | Name                          | Example                                                    |
@@ -347,10 +347,10 @@ func (r AnalyticsEventBytimeGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventBytimeGetResponseEnvelope struct {
-	Errors   []AnalyticsEventBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsEventBytimeGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AnalyticsEventBytimeGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AnalyticsEventBytimeGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AnalyticsEventBytimeGetResponse                `json:"result"`
 	JSON    analyticsEventBytimeGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -375,8 +375,8 @@ func (r analyticsEventBytimeGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AnalyticsEventBytimeGetResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AnalyticsEventBytimeGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             analyticsEventBytimeGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -423,8 +423,8 @@ func (r analyticsEventBytimeGetResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type AnalyticsEventBytimeGetResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           AnalyticsEventBytimeGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             analyticsEventBytimeGetResponseEnvelopeMessagesJSON   `json:"-"`

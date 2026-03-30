@@ -43,24 +43,24 @@ func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetPar
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if RayID == "" {
 		err = errors.New("missing required ray_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/logs/rayids/%s", params.ZoneID, RayID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Value
-	return
+	return res, nil
 }
 
 type RayIDGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The `/received` route by default returns a limited set of fields, and allows
 	// customers to override the default field set by specifying individual fields. The
 	// reasons for this are: 1. Most customers require only a small subset of fields,

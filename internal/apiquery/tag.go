@@ -17,7 +17,7 @@ type parsedStructTag struct {
 func parseQueryStructTag(field reflect.StructField) (tag parsedStructTag, ok bool) {
 	raw, ok := field.Tag.Lookup(queryStructTag)
 	if !ok {
-		return
+		return tag, ok
 	}
 	parts := strings.Split(raw, ",")
 	if len(parts) == 0 {
@@ -32,10 +32,10 @@ func parseQueryStructTag(field reflect.StructField) (tag parsedStructTag, ok boo
 			tag.inline = true
 		}
 	}
-	return
+	return tag, ok
 }
 
 func parseFormatStructTag(field reflect.StructField) (format string, ok bool) {
 	format, ok = field.Tag.Lookup(formatStructTag)
-	return
+	return format, ok
 }

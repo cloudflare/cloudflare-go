@@ -44,15 +44,15 @@ func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/tokens", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update tokens.
@@ -61,19 +61,19 @@ func (r *TokenService) Update(ctx context.Context, id string, params TokenUpdate
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/tokens/%s", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List tokens.
@@ -83,7 +83,7 @@ func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ..
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/tokens", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -109,19 +109,19 @@ func (r *TokenService) Delete(ctx context.Context, id string, body TokenDeletePa
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/tokens/%s", body.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Read tokens.
@@ -130,31 +130,31 @@ func (r *TokenService) Read(ctx context.Context, id string, query TokenReadParam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/tokens/%s", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TokenNewResponse struct {
-	ID         string               `json:"id,required" format:"uuid"`
-	CfAPIID    string               `json:"cf_api_id,required"`
-	CreatedAt  time.Time            `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time            `json:"modified_at,required" format:"date-time"`
-	Name       string               `json:"name,required"`
-	CreatedBy  string               `json:"created_by,nullable"`
+	ID         string               `json:"id" api:"required" format:"uuid"`
+	CfAPIID    string               `json:"cf_api_id" api:"required"`
+	CreatedAt  time.Time            `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time            `json:"modified_at" api:"required" format:"date-time"`
+	Name       string               `json:"name" api:"required"`
+	CreatedBy  string               `json:"created_by" api:"nullable"`
 	Enabled    bool                 `json:"enabled"`
 	Legacy     bool                 `json:"legacy"`
-	ModifiedBy string               `json:"modified_by,nullable"`
+	ModifiedBy string               `json:"modified_by" api:"nullable"`
 	JSON       tokenNewResponseJSON `json:"-"`
 }
 
@@ -183,15 +183,15 @@ func (r tokenNewResponseJSON) RawJSON() string {
 }
 
 type TokenUpdateResponse struct {
-	ID         string                  `json:"id,required" format:"uuid"`
-	CfAPIID    string                  `json:"cf_api_id,required"`
-	CreatedAt  time.Time               `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time               `json:"modified_at,required" format:"date-time"`
-	Name       string                  `json:"name,required"`
-	CreatedBy  string                  `json:"created_by,nullable"`
+	ID         string                  `json:"id" api:"required" format:"uuid"`
+	CfAPIID    string                  `json:"cf_api_id" api:"required"`
+	CreatedAt  time.Time               `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time               `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                  `json:"name" api:"required"`
+	CreatedBy  string                  `json:"created_by" api:"nullable"`
 	Enabled    bool                    `json:"enabled"`
 	Legacy     bool                    `json:"legacy"`
-	ModifiedBy string                  `json:"modified_by,nullable"`
+	ModifiedBy string                  `json:"modified_by" api:"nullable"`
 	JSON       tokenUpdateResponseJSON `json:"-"`
 }
 
@@ -220,15 +220,15 @@ func (r tokenUpdateResponseJSON) RawJSON() string {
 }
 
 type TokenListResponse struct {
-	ID         string                `json:"id,required" format:"uuid"`
-	CfAPIID    string                `json:"cf_api_id,required"`
-	CreatedAt  time.Time             `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time             `json:"modified_at,required" format:"date-time"`
-	Name       string                `json:"name,required"`
-	CreatedBy  string                `json:"created_by,nullable"`
+	ID         string                `json:"id" api:"required" format:"uuid"`
+	CfAPIID    string                `json:"cf_api_id" api:"required"`
+	CreatedAt  time.Time             `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time             `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                `json:"name" api:"required"`
+	CreatedBy  string                `json:"created_by" api:"nullable"`
 	Enabled    bool                  `json:"enabled"`
 	Legacy     bool                  `json:"legacy"`
-	ModifiedBy string                `json:"modified_by,nullable"`
+	ModifiedBy string                `json:"modified_by" api:"nullable"`
 	JSON       tokenListResponseJSON `json:"-"`
 }
 
@@ -257,15 +257,15 @@ func (r tokenListResponseJSON) RawJSON() string {
 }
 
 type TokenDeleteResponse struct {
-	ID         string                  `json:"id,required" format:"uuid"`
-	CfAPIID    string                  `json:"cf_api_id,required"`
-	CreatedAt  time.Time               `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time               `json:"modified_at,required" format:"date-time"`
-	Name       string                  `json:"name,required"`
-	CreatedBy  string                  `json:"created_by,nullable"`
+	ID         string                  `json:"id" api:"required" format:"uuid"`
+	CfAPIID    string                  `json:"cf_api_id" api:"required"`
+	CreatedAt  time.Time               `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time               `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                  `json:"name" api:"required"`
+	CreatedBy  string                  `json:"created_by" api:"nullable"`
 	Enabled    bool                    `json:"enabled"`
 	Legacy     bool                    `json:"legacy"`
-	ModifiedBy string                  `json:"modified_by,nullable"`
+	ModifiedBy string                  `json:"modified_by" api:"nullable"`
 	JSON       tokenDeleteResponseJSON `json:"-"`
 }
 
@@ -294,15 +294,15 @@ func (r tokenDeleteResponseJSON) RawJSON() string {
 }
 
 type TokenReadResponse struct {
-	ID         string                `json:"id,required" format:"uuid"`
-	CfAPIID    string                `json:"cf_api_id,required"`
-	CreatedAt  time.Time             `json:"created_at,required" format:"date-time"`
-	ModifiedAt time.Time             `json:"modified_at,required" format:"date-time"`
-	Name       string                `json:"name,required"`
-	CreatedBy  string                `json:"created_by,nullable"`
+	ID         string                `json:"id" api:"required" format:"uuid"`
+	CfAPIID    string                `json:"cf_api_id" api:"required"`
+	CreatedAt  time.Time             `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt time.Time             `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                `json:"name" api:"required"`
+	CreatedBy  string                `json:"created_by" api:"nullable"`
 	Enabled    bool                  `json:"enabled"`
 	Legacy     bool                  `json:"legacy"`
-	ModifiedBy string                `json:"modified_by,nullable"`
+	ModifiedBy string                `json:"modified_by" api:"nullable"`
 	JSON       tokenReadResponseJSON `json:"-"`
 }
 
@@ -331,10 +331,10 @@ func (r tokenReadResponseJSON) RawJSON() string {
 }
 
 type TokenNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	CfAPIID   param.Field[string] `json:"cf_api_id,required"`
-	CfAPIKey  param.Field[string] `json:"cf_api_key,required"`
-	Name      param.Field[string] `json:"name,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	CfAPIID   param.Field[string] `json:"cf_api_id" api:"required"`
+	CfAPIKey  param.Field[string] `json:"cf_api_key" api:"required"`
+	Name      param.Field[string] `json:"name" api:"required"`
 }
 
 func (r TokenNewParams) MarshalJSON() (data []byte, err error) {
@@ -342,8 +342,8 @@ func (r TokenNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenNewResponseEnvelope struct {
-	Result  TokenNewResponse             `json:"result,required"`
-	Success bool                         `json:"success,required"`
+	Result  TokenNewResponse             `json:"result" api:"required"`
+	Success bool                         `json:"success" api:"required"`
 	JSON    tokenNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -365,10 +365,10 @@ func (r tokenNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TokenUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	CfAPIID   param.Field[string] `json:"cf_api_id,required"`
-	CfAPIKey  param.Field[string] `json:"cf_api_key,required"`
-	Name      param.Field[string] `json:"name,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	CfAPIID   param.Field[string] `json:"cf_api_id" api:"required"`
+	CfAPIKey  param.Field[string] `json:"cf_api_key" api:"required"`
+	Name      param.Field[string] `json:"name" api:"required"`
 }
 
 func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -376,8 +376,8 @@ func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Result  TokenUpdateResponse             `json:"result,required"`
-	Success bool                            `json:"success,required"`
+	Result  TokenUpdateResponse             `json:"result" api:"required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    tokenUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -399,7 +399,7 @@ func (r tokenUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TokenListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Order By Column Name
 	OrderBy param.Field[TokenListParamsOrderBy] `query:"order_by"`
 	// Order By Direction
@@ -448,12 +448,12 @@ func (r TokenListParamsOrderByDirection) IsKnown() bool {
 }
 
 type TokenDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TokenDeleteResponseEnvelope struct {
-	Result  TokenDeleteResponse             `json:"result,required"`
-	Success bool                            `json:"success,required"`
+	Result  TokenDeleteResponse             `json:"result" api:"required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    tokenDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -475,12 +475,12 @@ func (r tokenDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TokenReadParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TokenReadResponseEnvelope struct {
-	Result  TokenReadResponse             `json:"result,required"`
-	Success bool                          `json:"success,required"`
+	Result  TokenReadResponse             `json:"result" api:"required"`
+	Success bool                          `json:"success" api:"required"`
 	JSON    tokenReadResponseEnvelopeJSON `json:"-"`
 }
 

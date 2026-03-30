@@ -27,6 +27,7 @@ func TestProjectDeploymentNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -35,16 +36,16 @@ func TestProjectDeploymentNewWithOptionalParams(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectDeploymentNewParams{
 			AccountID:                          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Headers:                            cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
-			Redirects:                          cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
-			RoutesJson:                         cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
-			WorkerBundle:                       cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
-			WorkerJS:                           cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			Headers:                            cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
+			Redirects:                          cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
+			RoutesJson:                         cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
+			WorkerBundle:                       cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
+			WorkerJS:                           cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
 			Branch:                             cloudflare.F("staging"),
 			CommitDirty:                        cloudflare.F(pages.ProjectDeploymentNewParamsCommitDirtyFalse),
 			CommitHash:                         cloudflare.F("a1b2c3d4e5f6"),
 			CommitMessage:                      cloudflare.F("Update homepage"),
-			FunctionsFilepathRoutingConfigJson: cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			FunctionsFilepathRoutingConfigJson: cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
 			Manifest:                           cloudflare.F(`{"index.html": "abc123", "style.css": "def456"}`),
 			PagesBuildOutputDir:                cloudflare.F("dist"),
 			WranglerConfigHash:                 cloudflare.F("wrangler_config_hash"),
@@ -69,6 +70,7 @@ func TestProjectDeploymentListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -101,6 +103,7 @@ func TestProjectDeploymentDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -131,6 +134,7 @@ func TestProjectDeploymentGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -161,6 +165,7 @@ func TestProjectDeploymentRetry(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -191,6 +196,7 @@ func TestProjectDeploymentRollback(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

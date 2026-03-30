@@ -58,15 +58,15 @@ func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appI
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/user_policy_checks", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type UserPolicyCheckGeo struct {
@@ -196,10 +196,10 @@ type AccessApplicationUserPolicyCheckListParams struct {
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelope struct {
-	Errors   []AccessApplicationUserPolicyCheckListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationUserPolicyCheckListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationUserPolicyCheckListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationUserPolicyCheckListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationUserPolicyCheckListResponse                `json:"result"`
 	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeJSON    `json:"-"`
 }
@@ -224,8 +224,8 @@ func (r accessApplicationUserPolicyCheckListResponseEnvelopeJSON) RawJSON() stri
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelopeErrors struct {
-	Code             int64                                                            `json:"code,required"`
-	Message          string                                                           `json:"message,required"`
+	Code             int64                                                            `json:"code" api:"required"`
+	Message          string                                                           `json:"message" api:"required"`
 	DocumentationURL string                                                           `json:"documentation_url"`
 	Source           AccessApplicationUserPolicyCheckListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -274,8 +274,8 @@ func (r accessApplicationUserPolicyCheckListResponseEnvelopeErrorsSourceJSON) Ra
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelopeMessages struct {
-	Code             int64                                                              `json:"code,required"`
-	Message          string                                                             `json:"message,required"`
+	Code             int64                                                              `json:"code" api:"required"`
+	Message          string                                                             `json:"message" api:"required"`
 	DocumentationURL string                                                             `json:"documentation_url"`
 	Source           AccessApplicationUserPolicyCheckListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON   `json:"-"`

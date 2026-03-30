@@ -51,15 +51,15 @@ func (r *V2DirectUploadService) New(ctx context.Context, params V2DirectUploadNe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v2/direct_upload", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type V2DirectUploadNewResponse struct {
@@ -90,7 +90,7 @@ func (r v2DirectUploadNewResponseJSON) RawJSON() string {
 
 type V2DirectUploadNewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional Image Custom ID. Up to 1024 chars. Can include any number of subpaths,
 	// and utf8 characters. Cannot start nor end with a / (forward slash). Cannot be a
 	// UUID.
@@ -123,11 +123,11 @@ func (r V2DirectUploadNewParams) MarshalMultipart() (data []byte, contentType st
 }
 
 type V2DirectUploadNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   V2DirectUploadNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   V2DirectUploadNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V2DirectUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Success V2DirectUploadNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v2DirectUploadNewResponseEnvelopeJSON    `json:"-"`
 }
 

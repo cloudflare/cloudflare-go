@@ -41,26 +41,26 @@ func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s/advertisement", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Advertisement struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement bool              `json:"automatic_advertisement,required,nullable"`
+	AutomaticAdvertisement bool              `json:"automatic_advertisement" api:"required,nullable"`
 	JSON                   advertisementJSON `json:"-"`
 }
 
@@ -80,8 +80,8 @@ func (r advertisementJSON) RawJSON() string {
 }
 
 type RuleAdvertisementEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r RuleAdvertisementEditParams) MarshalJSON() (data []byte, err error) {
@@ -89,11 +89,11 @@ func (r RuleAdvertisementEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Advertisement         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Advertisement         `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success RuleAdvertisementEditResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleAdvertisementEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleAdvertisementEditResponseEnvelopeJSON    `json:"-"`
 }
 

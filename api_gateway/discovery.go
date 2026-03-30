@@ -44,38 +44,38 @@ func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, op
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/discovery", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DiscoveryOperation struct {
 	// UUID.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method DiscoveryOperationMethod `json:"method,required"`
+	Method DiscoveryOperationMethod `json:"method" api:"required"`
 	// API discovery engine(s) that discovered this operation
-	Origin []DiscoveryOperationOrigin `json:"origin,required"`
+	Origin []DiscoveryOperationOrigin `json:"origin" api:"required"`
 	// State of operation in API Discovery
 	//
 	// - `review` - Operation is not saved into API Shield Endpoint Management
 	// - `saved` - Operation is saved into API Shield Endpoint Management
 	// - `ignored` - Operation is marked as ignored
-	State    DiscoveryOperationState    `json:"state,required"`
+	State    DiscoveryOperationState    `json:"state" api:"required"`
 	Features DiscoveryOperationFeatures `json:"features"`
 	JSON     discoveryOperationJSON     `json:"-"`
 }
@@ -189,11 +189,11 @@ func (r discoveryOperationFeaturesJSON) RawJSON() string {
 }
 
 type DiscoveryOperationFeaturesTrafficStats struct {
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The period in seconds these statistics were computed over
-	PeriodSeconds int64 `json:"period_seconds,required"`
+	PeriodSeconds int64 `json:"period_seconds" api:"required"`
 	// The average number of requests seen during this period
-	Requests float64                                    `json:"requests,required"`
+	Requests float64                                    `json:"requests" api:"required"`
 	JSON     discoveryOperationFeaturesTrafficStatsJSON `json:"-"`
 }
 
@@ -216,8 +216,8 @@ func (r discoveryOperationFeaturesTrafficStatsJSON) RawJSON() string {
 }
 
 type DiscoveryGetResponse struct {
-	Schemas   []interface{}            `json:"schemas,required"`
-	Timestamp time.Time                `json:"timestamp,required" format:"date-time"`
+	Schemas   []interface{}            `json:"schemas" api:"required"`
+	Timestamp time.Time                `json:"timestamp" api:"required" format:"date-time"`
 	JSON      discoveryGetResponseJSON `json:"-"`
 }
 
@@ -240,15 +240,15 @@ func (r discoveryGetResponseJSON) RawJSON() string {
 
 type DiscoveryGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DiscoveryGetResponseEnvelope struct {
-	Errors   Message              `json:"errors,required"`
-	Messages Message              `json:"messages,required"`
-	Result   DiscoveryGetResponse `json:"result,required"`
+	Errors   Message              `json:"errors" api:"required"`
+	Messages Message              `json:"messages" api:"required"`
+	Result   DiscoveryGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success DiscoveryGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DiscoveryGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    discoveryGetResponseEnvelopeJSON    `json:"-"`
 }
 

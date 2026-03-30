@@ -44,16 +44,16 @@ func (r *HTTPLocationTLSVersionService) Get(ctx context.Context, tlsVersion HTTP
 	path := fmt.Sprintf("radar/http/top/locations/tls_version/%v", tlsVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPLocationTLSVersionGetResponse struct {
 	// Metadata for the results.
-	Meta HTTPLocationTLSVersionGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPLocationTLSVersionGetResponseTop0 `json:"top_0,required"`
+	Meta HTTPLocationTLSVersionGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []HTTPLocationTLSVersionGetResponseTop0 `json:"top_0" api:"required"`
 	JSON httpLocationTLSVersionGetResponseJSON   `json:"-"`
 }
 
@@ -76,15 +76,15 @@ func (r httpLocationTLSVersionGetResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPLocationTLSVersionGetResponseMeta struct {
-	ConfidenceInfo HTTPLocationTLSVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []HTTPLocationTLSVersionGetResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo HTTPLocationTLSVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []HTTPLocationTLSVersionGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPLocationTLSVersionGetResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPLocationTLSVersionGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPLocationTLSVersionGetResponseMetaUnit `json:"units,required"`
+	Units []HTTPLocationTLSVersionGetResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpLocationTLSVersionGetResponseMetaJSON   `json:"-"`
 }
 
@@ -109,9 +109,9 @@ func (r httpLocationTLSVersionGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPLocationTLSVersionGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                   `json:"level,required"`
+	Level int64                                                   `json:"level" api:"required"`
 	JSON  httpLocationTLSVersionGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -135,15 +135,15 @@ func (r httpLocationTLSVersionGetResponseMetaConfidenceInfoJSON) RawJSON() strin
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                   `json:"description,required"`
-	EndDate     time.Time                                                                `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                   `json:"description" api:"required"`
+	EndDate     time.Time                                                                `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
-	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                         `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                            `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                         `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -231,9 +231,9 @@ func (r HTTPLocationTLSVersionGetResponseMetaConfidenceInfoAnnotationsEventType)
 
 type HTTPLocationTLSVersionGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                          `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                          `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpLocationTLSVersionGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -278,8 +278,8 @@ func (r HTTPLocationTLSVersionGetResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPLocationTLSVersionGetResponseMetaUnit struct {
-	Name  string                                        `json:"name,required"`
-	Value string                                        `json:"value,required"`
+	Name  string                                        `json:"name" api:"required"`
+	Value string                                        `json:"value" api:"required"`
 	JSON  httpLocationTLSVersionGetResponseMetaUnitJSON `json:"-"`
 }
 
@@ -301,10 +301,10 @@ func (r httpLocationTLSVersionGetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPLocationTLSVersionGetResponseTop0 struct {
-	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string `json:"clientCountryName,required"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2" api:"required"`
+	ClientCountryName   string `json:"clientCountryName" api:"required"`
 	// A numeric string.
-	Value string                                    `json:"value,required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  httpLocationTLSVersionGetResponseTop0JSON `json:"-"`
 }
 
@@ -535,8 +535,8 @@ func (r HTTPLocationTLSVersionGetParamsOS) IsKnown() bool {
 }
 
 type HTTPLocationTLSVersionGetResponseEnvelope struct {
-	Result  HTTPLocationTLSVersionGetResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
+	Result  HTTPLocationTLSVersionGetResponse             `json:"result" api:"required"`
+	Success bool                                          `json:"success" api:"required"`
 	JSON    httpLocationTLSVersionGetResponseEnvelopeJSON `json:"-"`
 }
 

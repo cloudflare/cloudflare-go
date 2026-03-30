@@ -47,15 +47,15 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update actions and matches, or enable/disable specific routing rules.
@@ -64,19 +64,19 @@ func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleIdentifier == "" {
 		err = errors.New("missing required rule_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", params.ZoneID, ruleIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists existing routing rules.
@@ -86,7 +86,7 @@ func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -112,19 +112,19 @@ func (r *RuleService) Delete(ctx context.Context, ruleIdentifier string, body Ru
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleIdentifier == "" {
 		err = errors.New("missing required rule_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", body.ZoneID, ruleIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information for a specific routing rule already created.
@@ -133,25 +133,25 @@ func (r *RuleService) Get(ctx context.Context, ruleIdentifier string, query Rule
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleIdentifier == "" {
 		err = errors.New("missing required rule_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", query.ZoneID, ruleIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Actions pattern.
 type Action struct {
 	// Type of supported action.
-	Type  ActionType `json:"type,required"`
+	Type  ActionType `json:"type" api:"required"`
 	Value []string   `json:"value"`
 	JSON  actionJSON `json:"-"`
 }
@@ -192,7 +192,7 @@ func (r ActionType) IsKnown() bool {
 // Actions pattern.
 type ActionParam struct {
 	// Type of supported action.
-	Type  param.Field[ActionType] `json:"type,required"`
+	Type  param.Field[ActionType] `json:"type" api:"required"`
 	Value param.Field[[]string]   `json:"value"`
 }
 
@@ -261,7 +261,7 @@ func (r EmailRoutingRuleEnabled) IsKnown() bool {
 // Matching pattern to forward your actions.
 type Matcher struct {
 	// Type of matcher.
-	Type MatcherType `json:"type,required"`
+	Type MatcherType `json:"type" api:"required"`
 	// Field for type matcher.
 	Field MatcherField `json:"field"`
 	// Value for matcher.
@@ -320,7 +320,7 @@ func (r MatcherField) IsKnown() bool {
 // Matching pattern to forward your actions.
 type MatcherParam struct {
 	// Type of matcher.
-	Type param.Field[MatcherType] `json:"type,required"`
+	Type param.Field[MatcherType] `json:"type" api:"required"`
 	// Field for type matcher.
 	Field param.Field[MatcherField] `json:"field"`
 	// Value for matcher.
@@ -333,11 +333,11 @@ func (r MatcherParam) MarshalJSON() (data []byte, err error) {
 
 type RuleNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List actions patterns.
-	Actions param.Field[[]ActionParam] `json:"actions,required"`
+	Actions param.Field[[]ActionParam] `json:"actions" api:"required"`
 	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]MatcherParam] `json:"matchers,required"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers" api:"required"`
 	// Routing rule status.
 	Enabled param.Field[RuleNewParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -367,10 +367,10 @@ func (r RuleNewParamsEnabled) IsKnown() bool {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []RuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RuleNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RuleNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EmailRoutingRule               `json:"result"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -395,8 +395,8 @@ func (r ruleNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleNewResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           RuleNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ruleNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -443,8 +443,8 @@ func (r ruleNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RuleNewResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           RuleNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ruleNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -507,11 +507,11 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List actions patterns.
-	Actions param.Field[[]ActionParam] `json:"actions,required"`
+	Actions param.Field[[]ActionParam] `json:"actions" api:"required"`
 	// Matching patterns to forward to your actions.
-	Matchers param.Field[[]MatcherParam] `json:"matchers,required"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers" api:"required"`
 	// Routing rule status.
 	Enabled param.Field[RuleUpdateParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -541,10 +541,10 @@ func (r RuleUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EmailRoutingRule                  `json:"result"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -569,8 +569,8 @@ func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleUpdateResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RuleUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ruleUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -617,8 +617,8 @@ func (r ruleUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RuleUpdateResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RuleUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ruleUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -681,7 +681,7 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Filter by enabled routing rules.
 	Enabled param.Field[RuleListParamsEnabled] `query:"enabled"`
 	// Page number of paginated results.
@@ -716,14 +716,14 @@ func (r RuleListParamsEnabled) IsKnown() bool {
 
 type RuleDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []RuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RuleDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EmailRoutingRule                  `json:"result"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -748,8 +748,8 @@ func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleDeleteResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RuleDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ruleDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -796,8 +796,8 @@ func (r ruleDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RuleDeleteResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RuleDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ruleDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -860,14 +860,14 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []RuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RuleGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RuleGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EmailRoutingRule               `json:"result"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -892,8 +892,8 @@ func (r ruleGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleGetResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           RuleGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ruleGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -940,8 +940,8 @@ func (r ruleGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RuleGetResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           RuleGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ruleGetResponseEnvelopeMessagesJSON   `json:"-"`

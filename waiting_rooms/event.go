@@ -51,19 +51,19 @@ func (r *EventService) New(ctx context.Context, waitingRoomID string, params Eve
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured event for a waiting room.
@@ -72,23 +72,23 @@ func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists events for a waiting room.
@@ -98,11 +98,11 @@ func (r *EventService) List(ctx context.Context, waitingRoomID string, params Ev
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", params.ZoneID, waitingRoomID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -128,23 +128,23 @@ func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", body.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patches a configured event for a waiting room.
@@ -153,23 +153,23 @@ func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID s
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single configured event for a waiting room.
@@ -178,23 +178,23 @@ func (r *EventService) Get(ctx context.Context, waitingRoomID string, eventID st
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", query.ZoneID, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Event struct {
@@ -202,12 +202,12 @@ type Event struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// If set, the event will override the waiting room's `custom_page_html` property
 	// while it is active. If null, the event will inherit it.
-	CustomPageHTML string `json:"custom_page_html,nullable"`
+	CustomPageHTML string `json:"custom_page_html" api:"nullable"`
 	// A note that you can use to add more details about the event.
 	Description string `json:"description"`
 	// If set, the event will override the waiting room's `disable_session_renewal`
 	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal bool `json:"disable_session_renewal,nullable"`
+	DisableSessionRenewal bool `json:"disable_session_renewal" api:"nullable"`
 	// An ISO 8601 timestamp that marks the end of the event.
 	EventEndTime string `json:"event_end_time"`
 	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
@@ -221,17 +221,17 @@ type Event struct {
 	// If set, the event will override the waiting room's `new_users_per_minute`
 	// property while it is active. If null, the event will inherit it. This can only
 	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute int64 `json:"new_users_per_minute,nullable"`
+	NewUsersPerMinute int64 `json:"new_users_per_minute" api:"nullable"`
 	// An ISO 8601 timestamp that marks when to begin queueing all users before the
 	// event starts. The prequeue must start at least five minutes before
 	// `event_start_time`.
-	PrequeueStartTime string `json:"prequeue_start_time,nullable"`
+	PrequeueStartTime string `json:"prequeue_start_time" api:"nullable"`
 	// If set, the event will override the waiting room's `queueing_method` property
 	// while it is active. If null, the event will inherit it.
-	QueueingMethod string `json:"queueing_method,nullable"`
+	QueueingMethod string `json:"queueing_method" api:"nullable"`
 	// If set, the event will override the waiting room's `session_duration` property
 	// while it is active. If null, the event will inherit it.
-	SessionDuration int64 `json:"session_duration,nullable"`
+	SessionDuration int64 `json:"session_duration" api:"nullable"`
 	// If enabled, users in the prequeue will be shuffled randomly at the
 	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
 	// useful for situations when many users will join the event prequeue at the same
@@ -245,13 +245,13 @@ type Event struct {
 	// If set, the event will override the waiting room's `total_active_users` property
 	// while it is active. If null, the event will inherit it. This can only be set if
 	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64 `json:"total_active_users,nullable"`
+	TotalActiveUsers int64 `json:"total_active_users" api:"nullable"`
 	// If set, the event will override the waiting room's `turnstile_action` property
 	// while it is active. If null, the event will inherit it.
-	TurnstileAction EventTurnstileAction `json:"turnstile_action,nullable"`
+	TurnstileAction EventTurnstileAction `json:"turnstile_action" api:"nullable"`
 	// If set, the event will override the waiting room's `turnstile_mode` property
 	// while it is active. If null, the event will inherit it.
-	TurnstileMode EventTurnstileMode `json:"turnstile_mode,nullable"`
+	TurnstileMode EventTurnstileMode `json:"turnstile_mode" api:"nullable"`
 	JSON          eventJSON          `json:"-"`
 }
 
@@ -346,8 +346,8 @@ func (r eventDeleteResponseJSON) RawJSON() string {
 
 type EventNewParams struct {
 	// Identifier.
-	ZoneID     param.Field[string] `path:"zone_id,required"`
-	EventQuery EventQueryParam     `json:"event_query,required"`
+	ZoneID     param.Field[string] `path:"zone_id" api:"required"`
+	EventQuery EventQueryParam     `json:"event_query" api:"required"`
 }
 
 func (r EventNewParams) MarshalJSON() (data []byte, err error) {
@@ -355,7 +355,7 @@ func (r EventNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EventNewResponseEnvelope struct {
-	Result Event                        `json:"result,required"`
+	Result Event                        `json:"result" api:"required"`
 	JSON   eventNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -377,8 +377,8 @@ func (r eventNewResponseEnvelopeJSON) RawJSON() string {
 
 type EventUpdateParams struct {
 	// Identifier.
-	ZoneID     param.Field[string] `path:"zone_id,required"`
-	EventQuery EventQueryParam     `json:"event_query,required"`
+	ZoneID     param.Field[string] `path:"zone_id" api:"required"`
+	EventQuery EventQueryParam     `json:"event_query" api:"required"`
 }
 
 func (r EventUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -386,7 +386,7 @@ func (r EventUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EventUpdateResponseEnvelope struct {
-	Result Event                           `json:"result,required"`
+	Result Event                           `json:"result" api:"required"`
 	JSON   eventUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -408,7 +408,7 @@ func (r eventUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type EventListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page. Must be a multiple of 5.
@@ -425,11 +425,11 @@ func (r EventListParams) URLQuery() (v url.Values) {
 
 type EventDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type EventDeleteResponseEnvelope struct {
-	Result EventDeleteResponse             `json:"result,required"`
+	Result EventDeleteResponse             `json:"result" api:"required"`
 	JSON   eventDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -451,8 +451,8 @@ func (r eventDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type EventEditParams struct {
 	// Identifier.
-	ZoneID     param.Field[string] `path:"zone_id,required"`
-	EventQuery EventQueryParam     `json:"event_query,required"`
+	ZoneID     param.Field[string] `path:"zone_id" api:"required"`
+	EventQuery EventQueryParam     `json:"event_query" api:"required"`
 }
 
 func (r EventEditParams) MarshalJSON() (data []byte, err error) {
@@ -460,7 +460,7 @@ func (r EventEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EventEditResponseEnvelope struct {
-	Result Event                         `json:"result,required"`
+	Result Event                         `json:"result" api:"required"`
 	JSON   eventEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -482,11 +482,11 @@ func (r eventEditResponseEnvelopeJSON) RawJSON() string {
 
 type EventGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type EventGetResponseEnvelope struct {
-	Result Event                        `json:"result,required"`
+	Result Event                        `json:"result" api:"required"`
 	JSON   eventGetResponseEnvelopeJSON `json:"-"`
 }
 

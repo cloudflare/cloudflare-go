@@ -46,19 +46,19 @@ func (r *PrefixServiceBindingService) New(ctx context.Context, prefixID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", params.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List the Cloudflare services this prefix is currently bound to. Traffic sent to
@@ -73,11 +73,11 @@ func (r *PrefixServiceBindingService) List(ctx context.Context, prefixID string,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", query.AccountID, prefixID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -107,19 +107,19 @@ func (r *PrefixServiceBindingService) Delete(ctx context.Context, prefixID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	if bindingID == "" {
 		err = errors.New("missing required binding_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", body.AccountID, prefixID, bindingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Fetch a single Service Binding
@@ -128,23 +128,23 @@ func (r *PrefixServiceBindingService) Get(ctx context.Context, prefixID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	if bindingID == "" {
 		err = errors.New("missing required binding_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", query.AccountID, prefixID, bindingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ServiceBinding struct {
@@ -223,10 +223,10 @@ func (r ServiceBindingProvisioningState) IsKnown() bool {
 }
 
 type PrefixServiceBindingDeleteResponse struct {
-	Errors   []PrefixServiceBindingDeleteResponseError   `json:"errors,required"`
-	Messages []PrefixServiceBindingDeleteResponseMessage `json:"messages,required"`
+	Errors   []PrefixServiceBindingDeleteResponseError   `json:"errors" api:"required"`
+	Messages []PrefixServiceBindingDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixServiceBindingDeleteResponseSuccess `json:"success,required"`
+	Success PrefixServiceBindingDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    prefixServiceBindingDeleteResponseJSON    `json:"-"`
 }
 
@@ -249,8 +249,8 @@ func (r prefixServiceBindingDeleteResponseJSON) RawJSON() string {
 }
 
 type PrefixServiceBindingDeleteResponseError struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           PrefixServiceBindingDeleteResponseErrorsSource `json:"source"`
 	JSON             prefixServiceBindingDeleteResponseErrorJSON    `json:"-"`
@@ -297,8 +297,8 @@ func (r prefixServiceBindingDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixServiceBindingDeleteResponseMessage struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           PrefixServiceBindingDeleteResponseMessagesSource `json:"source"`
 	JSON             prefixServiceBindingDeleteResponseMessageJSON    `json:"-"`
@@ -361,12 +361,12 @@ func (r PrefixServiceBindingDeleteResponseSuccess) IsKnown() bool {
 
 type PrefixServiceBindingNewParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR param.Field[string] `json:"cidr,required"`
+	CIDR param.Field[string] `json:"cidr" api:"required"`
 	// Identifier of a Service on the Cloudflare network. Available services and their
 	// IDs may be found in the **List Services** endpoint.
-	ServiceID param.Field[string] `json:"service_id,required"`
+	ServiceID param.Field[string] `json:"service_id" api:"required"`
 }
 
 func (r PrefixServiceBindingNewParams) MarshalJSON() (data []byte, err error) {
@@ -374,10 +374,10 @@ func (r PrefixServiceBindingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixServiceBindingNewResponseEnvelope struct {
-	Errors   []PrefixServiceBindingNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixServiceBindingNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixServiceBindingNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixServiceBindingNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixServiceBindingNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixServiceBindingNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ServiceBinding                                 `json:"result"`
 	JSON    prefixServiceBindingNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -402,8 +402,8 @@ func (r prefixServiceBindingNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixServiceBindingNewResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           PrefixServiceBindingNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixServiceBindingNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -450,8 +450,8 @@ func (r prefixServiceBindingNewResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type PrefixServiceBindingNewResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           PrefixServiceBindingNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixServiceBindingNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -514,24 +514,24 @@ func (r PrefixServiceBindingNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixServiceBindingListParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixServiceBindingDeleteParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixServiceBindingGetParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixServiceBindingGetResponseEnvelope struct {
-	Errors   []PrefixServiceBindingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixServiceBindingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixServiceBindingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixServiceBindingGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixServiceBindingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixServiceBindingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ServiceBinding                                 `json:"result"`
 	JSON    prefixServiceBindingGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -556,8 +556,8 @@ func (r prefixServiceBindingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixServiceBindingGetResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           PrefixServiceBindingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixServiceBindingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -604,8 +604,8 @@ func (r prefixServiceBindingGetResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type PrefixServiceBindingGetResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           PrefixServiceBindingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixServiceBindingGetResponseEnvelopeMessagesJSON   `json:"-"`

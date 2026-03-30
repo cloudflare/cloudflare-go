@@ -47,15 +47,15 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Instructs Cloudflare to use Post-Quantum (PQ) key agreement algorithms when
@@ -69,26 +69,26 @@ func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query Orig
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OriginPostQuantumEncryptionUpdateResponse struct {
 	// The identifier of the caching setting.
-	ID OriginPostQuantumEncryptionUpdateResponseID `json:"id,required"`
+	ID OriginPostQuantumEncryptionUpdateResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Origin Post Quantum Encryption Setting.
-	Value OriginPostQuantumEncryptionUpdateResponseValue `json:"value,required"`
+	Value OriginPostQuantumEncryptionUpdateResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                                     `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       originPostQuantumEncryptionUpdateResponseJSON `json:"-"`
 }
 
@@ -145,13 +145,13 @@ func (r OriginPostQuantumEncryptionUpdateResponseValue) IsKnown() bool {
 
 type OriginPostQuantumEncryptionGetResponse struct {
 	// The identifier of the caching setting.
-	ID OriginPostQuantumEncryptionGetResponseID `json:"id,required"`
+	ID OriginPostQuantumEncryptionGetResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Origin Post Quantum Encryption Setting.
-	Value OriginPostQuantumEncryptionGetResponseValue `json:"value,required"`
+	Value OriginPostQuantumEncryptionGetResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                                  `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       originPostQuantumEncryptionGetResponseJSON `json:"-"`
 }
 
@@ -208,9 +208,9 @@ func (r OriginPostQuantumEncryptionGetResponseValue) IsKnown() bool {
 
 type OriginPostQuantumEncryptionUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Value of the Origin Post Quantum Encryption Setting.
-	Value param.Field[OriginPostQuantumEncryptionUpdateParamsValue] `json:"value,required"`
+	Value param.Field[OriginPostQuantumEncryptionUpdateParamsValue] `json:"value" api:"required"`
 }
 
 func (r OriginPostQuantumEncryptionUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -235,10 +235,10 @@ func (r OriginPostQuantumEncryptionUpdateParamsValue) IsKnown() bool {
 }
 
 type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OriginPostQuantumEncryptionUpdateResponse                `json:"result"`
 	JSON    originPostQuantumEncryptionUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -279,14 +279,14 @@ func (r OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess) IsKnown() bool
 
 type OriginPostQuantumEncryptionGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OriginPostQuantumEncryptionGetResponse                `json:"result"`
 	JSON    originPostQuantumEncryptionGetResponseEnvelopeJSON    `json:"-"`
 }

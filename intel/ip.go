@@ -45,15 +45,15 @@ func (r *IPService) Get(ctx context.Context, params IPGetParams, opts ...option.
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/ip", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type IP struct {
@@ -156,7 +156,7 @@ func (r ipRiskTypeJSON) RawJSON() string {
 
 type IPGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	IPV4      param.Field[string] `query:"ipv4"`
 	IPV6      param.Field[string] `query:"ipv6"`
 }
@@ -170,11 +170,11 @@ func (r IPGetParams) URLQuery() (v url.Values) {
 }
 
 type IPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []IP                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   []IP                  `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success    IPGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    IPGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo IPGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ipGetResponseEnvelopeJSON       `json:"-"`
 }

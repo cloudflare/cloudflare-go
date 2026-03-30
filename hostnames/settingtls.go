@@ -44,19 +44,19 @@ func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpda
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if hostname == "" {
 		err = errors.New("missing required hostname parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", params.ZoneID, settingID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete the tls setting value for the hostname.
@@ -65,19 +65,19 @@ func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDele
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if hostname == "" {
 		err = errors.New("missing required hostname parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", body.ZoneID, settingID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List the requested TLS setting for the hostnames under this zone.
@@ -87,7 +87,7 @@ func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetPara
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", query.ZoneID, settingID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -310,7 +310,7 @@ func (r settingTLSGetResponseJSON) RawJSON() string {
 
 type SettingTLSUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The TLS setting value. The type depends on the `setting_id` used in the request
 	// path:
 	//
@@ -320,7 +320,7 @@ type SettingTLSUpdateParams struct {
 	//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`)
 	//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
 	//     (e.g., `"on"`)
-	Value param.Field[SettingValueUnionParam] `json:"value,required"`
+	Value param.Field[SettingValueUnionParam] `json:"value" api:"required"`
 }
 
 func (r SettingTLSUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -351,10 +351,10 @@ func (r SettingTLSUpdateParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSUpdateResponseEnvelope struct {
-	Errors   []SettingTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingTLSUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingTLSUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Setting                                 `json:"result"`
 	JSON    settingTLSUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -379,8 +379,8 @@ func (r settingTLSUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingTLSUpdateResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           SettingTLSUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingTLSUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -427,8 +427,8 @@ func (r settingTLSUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingTLSUpdateResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           SettingTLSUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingTLSUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -491,7 +491,7 @@ func (r SettingTLSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingTLSDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 // The TLS Setting name. The value type depends on the setting:
@@ -518,10 +518,10 @@ func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSDeleteResponseEnvelope struct {
-	Errors   []SettingTLSDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTLSDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingTLSDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingTLSDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingTLSDeleteResponse                `json:"result"`
 	JSON    settingTLSDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -546,8 +546,8 @@ func (r settingTLSDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingTLSDeleteResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           SettingTLSDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingTLSDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -594,8 +594,8 @@ func (r settingTLSDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingTLSDeleteResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           SettingTLSDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingTLSDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -658,7 +658,7 @@ func (r SettingTLSDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingTLSGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 // The TLS Setting name. The value type depends on the setting:

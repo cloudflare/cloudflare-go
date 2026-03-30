@@ -45,19 +45,19 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s/config", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // This is a no-op as predefined profiles can't be deleted but is needed for our
@@ -67,19 +67,19 @@ func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID stri
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", body.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // This is similar to `get_predefined` but only returns entries that are enabled.
@@ -89,35 +89,35 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s/config", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PredefinedProfile struct {
 	// The id of the predefined profile (uuid).
-	ID                  string `json:"id,required" format:"uuid"`
-	AllowedMatchCount   int64  `json:"allowed_match_count,required"`
-	ConfidenceThreshold string `json:"confidence_threshold,required,nullable"`
+	ID                  string `json:"id" api:"required" format:"uuid"`
+	AllowedMatchCount   int64  `json:"allowed_match_count" api:"required"`
+	ConfidenceThreshold string `json:"confidence_threshold" api:"required,nullable"`
 	// Entries to enable for this predefined profile. Any entries not provided will be
 	// disabled.
-	EnabledEntries []string `json:"enabled_entries,required" format:"uuid"`
+	EnabledEntries []string `json:"enabled_entries" api:"required" format:"uuid"`
 	// This field has been deprecated for `enabled_entries`.
 	//
 	// Deprecated: deprecated
-	Entries []PredefinedProfileEntry `json:"entries,required"`
+	Entries []PredefinedProfileEntry `json:"entries" api:"required"`
 	// The name of the predefined profile.
-	Name             string `json:"name,required"`
+	Name             string `json:"name" api:"required"`
 	AIContextEnabled bool   `json:"ai_context_enabled"`
 	OCREnabled       bool   `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.
@@ -150,11 +150,11 @@ func (r predefinedProfileJSON) RawJSON() string {
 }
 
 type PredefinedProfileEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                         `json:"enabled,required"`
-	Name    string                       `json:"name,required"`
-	Type    PredefinedProfileEntriesType `json:"type,required"`
+	Enabled bool                         `json:"enabled" api:"required"`
+	Name    string                       `json:"name" api:"required"`
+	Type    PredefinedProfileEntriesType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
@@ -162,10 +162,10 @@ type PredefinedProfileEntry struct {
 	// [PredefinedProfileEntriesPredefinedEntryConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of
@@ -266,17 +266,17 @@ func init() {
 }
 
 type PredefinedProfileEntriesCustomEntry struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                                    `json:"enabled,required"`
-	Name        string                                  `json:"name,required"`
-	Pattern     Pattern                                 `json:"pattern,required"`
-	Type        PredefinedProfileEntriesCustomEntryType `json:"type,required"`
-	UpdatedAt   time.Time                               `json:"updated_at,required" format:"date-time"`
-	Description string                                  `json:"description,nullable"`
+	Enabled     bool                                    `json:"enabled" api:"required"`
+	Name        string                                  `json:"name" api:"required"`
+	Pattern     Pattern                                 `json:"pattern" api:"required"`
+	Type        PredefinedProfileEntriesCustomEntryType `json:"type" api:"required"`
+	UpdatedAt   time.Time                               `json:"updated_at" api:"required" format:"date-time"`
+	Description string                                  `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                  `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      predefinedProfileEntriesCustomEntryJSON `json:"-"`
 }
 
@@ -321,13 +321,13 @@ func (r PredefinedProfileEntriesCustomEntryType) IsKnown() bool {
 }
 
 type PredefinedProfileEntriesPredefinedEntry struct {
-	ID         string                                            `json:"id,required" format:"uuid"`
-	Confidence PredefinedProfileEntriesPredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                              `json:"enabled,required"`
-	Name       string                                            `json:"name,required"`
-	Type       PredefinedProfileEntriesPredefinedEntryType       `json:"type,required"`
+	ID         string                                            `json:"id" api:"required" format:"uuid"`
+	Confidence PredefinedProfileEntriesPredefinedEntryConfidence `json:"confidence" api:"required"`
+	Enabled    bool                                              `json:"enabled" api:"required"`
+	Name       string                                            `json:"name" api:"required"`
+	Type       PredefinedProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                         `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                         `json:"profile_id" api:"nullable" format:"uuid"`
 	Variant   PredefinedProfileEntriesPredefinedEntryVariant `json:"variant"`
 	JSON      predefinedProfileEntriesPredefinedEntryJSON    `json:"-"`
 }
@@ -358,10 +358,10 @@ func (r PredefinedProfileEntriesPredefinedEntry) implementsPredefinedProfileEntr
 
 type PredefinedProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
+	AIContextAvailable bool `json:"ai_context_available" api:"required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                                  `json:"available,required"`
+	Available bool                                                  `json:"available" api:"required"`
 	JSON      predefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
@@ -397,9 +397,9 @@ func (r PredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type PredefinedProfileEntriesPredefinedEntryVariant struct {
-	TopicType   PredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        PredefinedProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
-	Description string                                                  `json:"description,nullable"`
+	TopicType   PredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
+	Type        PredefinedProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Description string                                                  `json:"description" api:"nullable"`
 	JSON        predefinedProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
@@ -451,13 +451,13 @@ func (r PredefinedProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
 }
 
 type PredefinedProfileEntriesIntegrationEntry struct {
-	ID        string                                       `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                    `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                         `json:"enabled,required"`
-	Name      string                                       `json:"name,required"`
-	Type      PredefinedProfileEntriesIntegrationEntryType `json:"type,required"`
-	UpdatedAt time.Time                                    `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                       `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                       `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                    `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                         `json:"enabled" api:"required"`
+	Name      string                                       `json:"name" api:"required"`
+	Type      PredefinedProfileEntriesIntegrationEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                    `json:"updated_at" api:"required" format:"date-time"`
+	ProfileID string                                       `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      predefinedProfileEntriesIntegrationEntryJSON `json:"-"`
 }
 
@@ -500,16 +500,16 @@ func (r PredefinedProfileEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type PredefinedProfileEntriesExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                       `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                  `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                       `json:"enabled,required"`
-	Name          string                                     `json:"name,required"`
-	Secret        bool                                       `json:"secret,required"`
-	Type          PredefinedProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt     time.Time                                  `json:"updated_at,required" format:"date-time"`
+	CaseSensitive bool                                       `json:"case_sensitive" api:"required"`
+	CreatedAt     time.Time                                  `json:"created_at" api:"required" format:"date-time"`
+	Enabled       bool                                       `json:"enabled" api:"required"`
+	Name          string                                     `json:"name" api:"required"`
+	Secret        bool                                       `json:"secret" api:"required"`
+	Type          PredefinedProfileEntriesExactDataEntryType `json:"type" api:"required"`
+	UpdatedAt     time.Time                                  `json:"updated_at" api:"required" format:"date-time"`
 	JSON          predefinedProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
@@ -553,12 +553,12 @@ func (r PredefinedProfileEntriesExactDataEntryType) IsKnown() bool {
 }
 
 type PredefinedProfileEntriesDocumentFingerprintEntry struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Type      PredefinedProfileEntriesDocumentFingerprintEntryType `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
+	ID        string                                               `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                            `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                 `json:"enabled" api:"required"`
+	Name      string                                               `json:"name" api:"required"`
+	Type      PredefinedProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                            `json:"updated_at" api:"required" format:"date-time"`
 	JSON      predefinedProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
@@ -600,14 +600,14 @@ func (r PredefinedProfileEntriesDocumentFingerprintEntryType) IsKnown() bool {
 }
 
 type PredefinedProfileEntriesWordListEntry struct {
-	ID        string                                    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                 `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                      `json:"enabled,required"`
-	Name      string                                    `json:"name,required"`
-	Type      PredefinedProfileEntriesWordListEntryType `json:"type,required"`
-	UpdatedAt time.Time                                 `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                               `json:"word_list,required"`
-	ProfileID string                                    `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                 `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                      `json:"enabled" api:"required"`
+	Name      string                                    `json:"name" api:"required"`
+	Type      PredefinedProfileEntriesWordListEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                 `json:"updated_at" api:"required" format:"date-time"`
+	WordList  interface{}                               `json:"word_list" api:"required"`
+	ProfileID string                                    `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      predefinedProfileEntriesWordListEntryJSON `json:"-"`
 }
 
@@ -672,7 +672,7 @@ func (r PredefinedProfileEntriesType) IsKnown() bool {
 type DLPProfilePredefinedDeleteResponse = interface{}
 
 type DLPProfilePredefinedUpdateParams struct {
-	AccountID           param.Field[string]                                  `path:"account_id,required"`
+	AccountID           param.Field[string]                                  `path:"account_id" api:"required"`
 	AIContextEnabled    param.Field[bool]                                    `json:"ai_context_enabled"`
 	AllowedMatchCount   param.Field[int64]                                   `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string]                                  `json:"confidence_threshold"`
@@ -686,8 +686,8 @@ func (r DLPProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err error)
 }
 
 type DLPProfilePredefinedUpdateParamsEntry struct {
-	ID      param.Field[string] `json:"id,required" format:"uuid"`
-	Enabled param.Field[bool]   `json:"enabled,required"`
+	ID      param.Field[string] `json:"id" api:"required" format:"uuid"`
+	Enabled param.Field[bool]   `json:"enabled" api:"required"`
 }
 
 func (r DLPProfilePredefinedUpdateParamsEntry) MarshalJSON() (data []byte, err error) {
@@ -695,10 +695,10 @@ func (r DLPProfilePredefinedUpdateParamsEntry) MarshalJSON() (data []byte, err e
 }
 
 type DLPProfilePredefinedUpdateResponseEnvelope struct {
-	Errors   []DLPProfilePredefinedUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfilePredefinedUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfilePredefinedUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfilePredefinedUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfilePredefinedUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPProfilePredefinedUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PredefinedProfile                                 `json:"result"`
 	JSON    dlpProfilePredefinedUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -723,8 +723,8 @@ func (r dlpProfilePredefinedUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfilePredefinedUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           DLPProfilePredefinedUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfilePredefinedUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -771,8 +771,8 @@ func (r dlpProfilePredefinedUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type DLPProfilePredefinedUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           DLPProfilePredefinedUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfilePredefinedUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -835,15 +835,15 @@ func (r DLPProfilePredefinedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfilePredefinedDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPProfilePredefinedDeleteResponseEnvelope struct {
-	Errors   []DLPProfilePredefinedDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfilePredefinedDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfilePredefinedDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfilePredefinedDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfilePredefinedDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DLPProfilePredefinedDeleteResponse                `json:"result,nullable"`
+	Success DLPProfilePredefinedDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  DLPProfilePredefinedDeleteResponse                `json:"result" api:"nullable"`
 	JSON    dlpProfilePredefinedDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -867,8 +867,8 @@ func (r dlpProfilePredefinedDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfilePredefinedDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           DLPProfilePredefinedDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfilePredefinedDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -915,8 +915,8 @@ func (r dlpProfilePredefinedDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type DLPProfilePredefinedDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           DLPProfilePredefinedDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfilePredefinedDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -979,14 +979,14 @@ func (r DLPProfilePredefinedDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfilePredefinedGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPProfilePredefinedGetResponseEnvelope struct {
-	Errors   []DLPProfilePredefinedGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfilePredefinedGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfilePredefinedGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfilePredefinedGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PredefinedProfile                              `json:"result"`
 	JSON    dlpProfilePredefinedGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1011,8 +1011,8 @@ func (r dlpProfilePredefinedGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfilePredefinedGetResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           DLPProfilePredefinedGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfilePredefinedGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1059,8 +1059,8 @@ func (r dlpProfilePredefinedGetResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type DLPProfilePredefinedGetResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           DLPProfilePredefinedGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfilePredefinedGetResponseEnvelopeMessagesJSON   `json:"-"`

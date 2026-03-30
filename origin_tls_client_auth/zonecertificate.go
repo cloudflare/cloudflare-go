@@ -46,15 +46,15 @@ func (r *ZoneCertificateService) New(ctx context.Context, params ZoneCertificate
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all client certificates configured for zone-level authenticated origin
@@ -65,7 +65,7 @@ func (r *ZoneCertificateService) List(ctx context.Context, query ZoneCertificate
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -92,19 +92,19 @@ func (r *ZoneCertificateService) Delete(ctx context.Context, certificateID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details for a specific client certificate used in zone-level
@@ -114,19 +114,19 @@ func (r *ZoneCertificateService) Get(ctx context.Context, certificateID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", query.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ZoneAuthenticatedOriginPull struct {
@@ -320,11 +320,11 @@ func (r zoneCertificateGetResponseJSON) RawJSON() string {
 
 type ZoneCertificateNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The zone's leaf certificate.
-	Certificate param.Field[string] `json:"certificate,required"`
+	Certificate param.Field[string] `json:"certificate" api:"required"`
 	// The zone's private key.
-	PrivateKey param.Field[string] `json:"private_key,required"`
+	PrivateKey param.Field[string] `json:"private_key" api:"required"`
 }
 
 func (r ZoneCertificateNewParams) MarshalJSON() (data []byte, err error) {
@@ -332,10 +332,10 @@ func (r ZoneCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneCertificateNewResponseEnvelope struct {
-	Errors   []ZoneCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneCertificateNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneCertificateNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneCertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ZoneCertificateNewResponse                `json:"result"`
 	JSON    zoneCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -360,8 +360,8 @@ func (r zoneCertificateNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneCertificateNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ZoneCertificateNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneCertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -408,8 +408,8 @@ func (r zoneCertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneCertificateNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ZoneCertificateNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneCertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -472,19 +472,19 @@ func (r ZoneCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ZoneCertificateListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ZoneCertificateDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ZoneCertificateDeleteResponseEnvelope struct {
-	Errors   []ZoneCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneCertificateDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneCertificateDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ZoneCertificateDeleteResponse                `json:"result"`
 	JSON    zoneCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -509,8 +509,8 @@ func (r zoneCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneCertificateDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ZoneCertificateDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneCertificateDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -557,8 +557,8 @@ func (r zoneCertificateDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type ZoneCertificateDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           ZoneCertificateDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneCertificateDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -621,14 +621,14 @@ func (r ZoneCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ZoneCertificateGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ZoneCertificateGetResponseEnvelope struct {
-	Errors   []ZoneCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneCertificateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneCertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ZoneCertificateGetResponse                `json:"result"`
 	JSON    zoneCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -653,8 +653,8 @@ func (r zoneCertificateGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneCertificateGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ZoneCertificateGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneCertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -701,8 +701,8 @@ func (r zoneCertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneCertificateGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ZoneCertificateGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneCertificateGetResponseEnvelopeMessagesJSON   `json:"-"`

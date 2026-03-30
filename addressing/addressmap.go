@@ -49,15 +49,15 @@ func (r *AddressMapService) New(ctx context.Context, params AddressMapNewParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all address maps owned by the account.
@@ -67,7 +67,7 @@ func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -93,15 +93,15 @@ func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, bod
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if addressMapID == "" {
 		err = errors.New("missing required address_map_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Modify properties of an address map owned by the account.
@@ -110,19 +110,19 @@ func (r *AddressMapService) Edit(ctx context.Context, addressMapID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if addressMapID == "" {
 		err = errors.New("missing required address_map_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Show a particular address map owned by the account.
@@ -131,19 +131,19 @@ func (r *AddressMapService) Get(ctx context.Context, addressMapID string, query 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if addressMapID == "" {
 		err = errors.New("missing required address_map_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", query.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AddressMap struct {
@@ -161,13 +161,13 @@ type AddressMap struct {
 	// handshake from a client without an SNI, it will respond with the default SNI on
 	// those IPs. The default SNI can be any valid zone or subdomain owned by the
 	// account.
-	DefaultSNI string `json:"default_sni,nullable"`
+	DefaultSNI string `json:"default_sni" api:"nullable"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
-	Description string `json:"description,nullable"`
+	Description string `json:"description" api:"nullable"`
 	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
 	// with IP addresses on an Address Map until the map is enabled.
-	Enabled    bool           `json:"enabled,nullable"`
+	Enabled    bool           `json:"enabled" api:"nullable"`
 	ModifiedAt time.Time      `json:"modified_at" format:"date-time"`
 	JSON       addressMapJSON `json:"-"`
 }
@@ -225,13 +225,13 @@ type AddressMapNewResponse struct {
 	// handshake from a client without an SNI, it will respond with the default SNI on
 	// those IPs. The default SNI can be any valid zone or subdomain owned by the
 	// account.
-	DefaultSNI string `json:"default_sni,nullable"`
+	DefaultSNI string `json:"default_sni" api:"nullable"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
-	Description string `json:"description,nullable"`
+	Description string `json:"description" api:"nullable"`
 	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
 	// with IP addresses on an Address Map until the map is enabled.
-	Enabled bool `json:"enabled,nullable"`
+	Enabled bool `json:"enabled" api:"nullable"`
 	// The set of IPs on the Address Map.
 	IPs ips.IPs `json:"ips"`
 	// Zones and Accounts which will be assigned IPs on this Address Map. A zone
@@ -297,10 +297,10 @@ func (r addressMapNewResponseMembershipJSON) RawJSON() string {
 }
 
 type AddressMapDeleteResponse struct {
-	Errors   []AddressMapDeleteResponseError   `json:"errors,required"`
-	Messages []AddressMapDeleteResponseMessage `json:"messages,required"`
+	Errors   []AddressMapDeleteResponseError   `json:"errors" api:"required"`
+	Messages []AddressMapDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    AddressMapDeleteResponseSuccess    `json:"success,required"`
+	Success    AddressMapDeleteResponseSuccess    `json:"success" api:"required"`
 	ResultInfo AddressMapDeleteResponseResultInfo `json:"result_info"`
 	JSON       addressMapDeleteResponseJSON       `json:"-"`
 }
@@ -325,8 +325,8 @@ func (r addressMapDeleteResponseJSON) RawJSON() string {
 }
 
 type AddressMapDeleteResponseError struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           AddressMapDeleteResponseErrorsSource `json:"source"`
 	JSON             addressMapDeleteResponseErrorJSON    `json:"-"`
@@ -373,8 +373,8 @@ func (r addressMapDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapDeleteResponseMessage struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AddressMapDeleteResponseMessagesSource `json:"source"`
 	JSON             addressMapDeleteResponseMessageJSON    `json:"-"`
@@ -481,13 +481,13 @@ type AddressMapGetResponse struct {
 	// handshake from a client without an SNI, it will respond with the default SNI on
 	// those IPs. The default SNI can be any valid zone or subdomain owned by the
 	// account.
-	DefaultSNI string `json:"default_sni,nullable"`
+	DefaultSNI string `json:"default_sni" api:"nullable"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
-	Description string `json:"description,nullable"`
+	Description string `json:"description" api:"nullable"`
 	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
 	// with IP addresses on an Address Map until the map is enabled.
-	Enabled bool `json:"enabled,nullable"`
+	Enabled bool `json:"enabled" api:"nullable"`
 	// The set of IPs on the Address Map.
 	IPs ips.IPs `json:"ips"`
 	// Zones and Accounts which will be assigned IPs on this Address Map. A zone
@@ -554,7 +554,7 @@ func (r addressMapGetResponseMembershipJSON) RawJSON() string {
 
 type AddressMapNewParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
 	Description param.Field[string] `json:"description"`
@@ -583,10 +583,10 @@ func (r AddressMapNewParamsMembership) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapNewResponseEnvelope struct {
-	Errors   []AddressMapNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AddressMapNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AddressMapNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AddressMapNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AddressMapNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AddressMapNewResponse                `json:"result"`
 	JSON    addressMapNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -611,8 +611,8 @@ func (r addressMapNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AddressMapNewResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AddressMapNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             addressMapNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -659,8 +659,8 @@ func (r addressMapNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapNewResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AddressMapNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             addressMapNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -723,17 +723,17 @@ func (r AddressMapNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AddressMapListParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AddressMapDeleteParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AddressMapEditParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If you have legacy TLS clients which do not send the TLS server name indicator,
 	// then you can specify one default SNI on the map. If Cloudflare receives a TLS
 	// handshake from a client without an SNI, it will respond with the default SNI on
@@ -753,10 +753,10 @@ func (r AddressMapEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapEditResponseEnvelope struct {
-	Errors   []AddressMapEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AddressMapEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AddressMapEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AddressMapEditResponseEnvelopeSuccess `json:"success,required"`
+	Success AddressMapEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AddressMap                            `json:"result"`
 	JSON    addressMapEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -781,8 +781,8 @@ func (r addressMapEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AddressMapEditResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AddressMapEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             addressMapEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -829,8 +829,8 @@ func (r addressMapEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapEditResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AddressMapEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             addressMapEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -893,14 +893,14 @@ func (r AddressMapEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type AddressMapGetParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AddressMapGetResponseEnvelope struct {
-	Errors   []AddressMapGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AddressMapGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AddressMapGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AddressMapGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AddressMapGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AddressMapGetResponse                `json:"result"`
 	JSON    addressMapGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -925,8 +925,8 @@ func (r addressMapGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AddressMapGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AddressMapGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             addressMapGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -973,8 +973,8 @@ func (r addressMapGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AddressMapGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             addressMapGetResponseEnvelopeMessagesJSON   `json:"-"`

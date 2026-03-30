@@ -46,15 +46,15 @@ func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/schemas", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all OpenAPI schemas uploaded to API Shield with pagination support.
@@ -64,7 +64,7 @@ func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/schemas", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -91,19 +91,19 @@ func (r *SchemaService) Delete(ctx context.Context, schemaID string, body Schema
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if schemaID == "" {
 		err = errors.New("missing required schema_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/schemas/%s", body.ZoneID, schemaID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modifies an existing OpenAPI schema in API Shield, updating the validation rules
@@ -113,19 +113,19 @@ func (r *SchemaService) Edit(ctx context.Context, schemaID string, params Schema
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if schemaID == "" {
 		err = errors.New("missing required schema_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/schemas/%s", params.ZoneID, schemaID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets the contents and metadata of a specific OpenAPI schema uploaded to API
@@ -135,32 +135,32 @@ func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaG
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if schemaID == "" {
 		err = errors.New("missing required schema_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/schemas/%s", params.ZoneID, schemaID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A schema used in schema validation
 type PublicSchema struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The kind of the schema
-	Kind PublicSchemaKind `json:"kind,required"`
+	Kind PublicSchemaKind `json:"kind" api:"required"`
 	// A human-readable name for the schema
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// A unique identifier of this schema
-	SchemaID string `json:"schema_id,required" format:"uuid"`
+	SchemaID string `json:"schema_id" api:"required" format:"uuid"`
 	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
-	Source string `json:"source,required"`
+	Source string `json:"source" api:"required"`
 	// An indicator if this schema is enabled
 	ValidationEnabled bool             `json:"validation_enabled"`
 	JSON              publicSchemaJSON `json:"-"`
@@ -203,7 +203,7 @@ func (r PublicSchemaKind) IsKnown() bool {
 
 type SchemaDeleteResponse struct {
 	// The ID of the schema that was just deleted
-	ID   string                   `json:"id,required" format:"uuid"`
+	ID   string                   `json:"id" api:"required" format:"uuid"`
 	JSON schemaDeleteResponseJSON `json:"-"`
 }
 
@@ -225,15 +225,15 @@ func (r schemaDeleteResponseJSON) RawJSON() string {
 
 type SchemaNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The kind of the schema
-	Kind param.Field[SchemaNewParamsKind] `json:"kind,required"`
+	Kind param.Field[SchemaNewParamsKind] `json:"kind" api:"required"`
 	// A human-readable name for the schema
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
-	Source param.Field[string] `json:"source,required"`
+	Source param.Field[string] `json:"source" api:"required"`
 	// An indicator if this schema is enabled
-	ValidationEnabled param.Field[bool] `json:"validation_enabled,required"`
+	ValidationEnabled param.Field[bool] `json:"validation_enabled" api:"required"`
 }
 
 func (r SchemaNewParams) MarshalJSON() (data []byte, err error) {
@@ -256,12 +256,12 @@ func (r SchemaNewParamsKind) IsKnown() bool {
 }
 
 type SchemaNewResponseEnvelope struct {
-	Errors   []SchemaNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SchemaNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SchemaNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SchemaNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A schema used in schema validation
-	Result PublicSchema `json:"result,required"`
+	Result PublicSchema `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SchemaNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SchemaNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    schemaNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -286,9 +286,9 @@ func (r schemaNewResponseEnvelopeJSON) RawJSON() string {
 
 type SchemaNewResponseEnvelopeErrors struct {
 	// A unique error code that describes the kind of issue with the schema
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// A short text explaining the issue with the schema
-	Message          string                                `json:"message,required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           SchemaNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             schemaNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -342,9 +342,9 @@ func (r schemaNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 
 type SchemaNewResponseEnvelopeMessages struct {
 	// A unique error code that describes the kind of issue with the schema
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// A short text explaining the issue with the schema
-	Message          string                                  `json:"message,required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           SchemaNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             schemaNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -413,7 +413,7 @@ func (r SchemaNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SchemaListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
 	// Page number of paginated results.
@@ -434,15 +434,15 @@ func (r SchemaListParams) URLQuery() (v url.Values) {
 
 type SchemaDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SchemaDeleteResponseEnvelope struct {
-	Errors   api_gateway.Message  `json:"errors,required"`
-	Messages api_gateway.Message  `json:"messages,required"`
-	Result   SchemaDeleteResponse `json:"result,required"`
+	Errors   api_gateway.Message  `json:"errors" api:"required"`
+	Messages api_gateway.Message  `json:"messages" api:"required"`
+	Result   SchemaDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SchemaDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SchemaDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    schemaDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -482,7 +482,7 @@ func (r SchemaDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SchemaEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Flag whether schema is enabled for validation.
 	ValidationEnabled param.Field[bool] `json:"validation_enabled"`
 }
@@ -492,12 +492,12 @@ func (r SchemaEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SchemaEditResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
 	// A schema used in schema validation
-	Result PublicSchema `json:"result,required"`
+	Result PublicSchema `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SchemaEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SchemaEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    schemaEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -537,7 +537,7 @@ func (r SchemaEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SchemaGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
 }
@@ -551,12 +551,12 @@ func (r SchemaGetParams) URLQuery() (v url.Values) {
 }
 
 type SchemaGetResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
 	// A schema used in schema validation
-	Result PublicSchema `json:"result,required"`
+	Result PublicSchema `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SchemaGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SchemaGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    schemaGetResponseEnvelopeJSON    `json:"-"`
 }
 

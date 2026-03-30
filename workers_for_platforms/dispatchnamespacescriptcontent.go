@@ -43,31 +43,31 @@ func NewDispatchNamespaceScriptContentService(opts ...option.RequestOption) (r *
 func (r *DispatchNamespaceScriptContentService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
 	var env DispatchNamespaceScriptContentUpdateResponseEnvelope
 	if params.CfWorkerBodyPart.Present {
-		opts = append(opts, option.WithHeader("CF-WORKER-BODY-PART", fmt.Sprintf("%s", params.CfWorkerBodyPart)))
+		opts = append(opts, option.WithHeader("CF-WORKER-BODY-PART", fmt.Sprintf("%v", params.CfWorkerBodyPart)))
 	}
 	if params.CfWorkerMainModulePart.Present {
-		opts = append(opts, option.WithHeader("CF-WORKER-MAIN-MODULE-PART", fmt.Sprintf("%s", params.CfWorkerMainModulePart)))
+		opts = append(opts, option.WithHeader("CF-WORKER-MAIN-MODULE-PART", fmt.Sprintf("%v", params.CfWorkerMainModulePart)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch script content from a script uploaded to a Workers for Platforms
@@ -77,26 +77,26 @@ func (r *DispatchNamespaceScriptContentService) Get(ctx context.Context, dispatc
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", query.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type DispatchNamespaceScriptContentUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[workers.WorkerMetadataParam] `json:"metadata,required"`
+	Metadata param.Field[workers.WorkerMetadataParam] `json:"metadata" api:"required"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
 	// or `body_part` by filename.<br/>Possible Content-Type(s) are:
@@ -125,11 +125,11 @@ func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []b
 }
 
 type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {
-	Errors   []DispatchNamespaceScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   workers.Script                                                 `json:"result,required"`
+	Errors   []DispatchNamespaceScriptContentUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceScriptContentUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   workers.Script                                                 `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    dispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -153,8 +153,8 @@ func (r dispatchNamespaceScriptContentUpdateResponseEnvelopeJSON) RawJSON() stri
 }
 
 type DispatchNamespaceScriptContentUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                            `json:"code,required"`
-	Message          string                                                           `json:"message,required"`
+	Code             int64                                                            `json:"code" api:"required"`
+	Message          string                                                           `json:"message" api:"required"`
 	DocumentationURL string                                                           `json:"documentation_url"`
 	Source           DispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -203,8 +203,8 @@ func (r dispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsSourceJSON) Ra
 }
 
 type DispatchNamespaceScriptContentUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                              `json:"code,required"`
-	Message          string                                                             `json:"message,required"`
+	Code             int64                                                              `json:"code" api:"required"`
+	Message          string                                                             `json:"message" api:"required"`
 	DocumentationURL string                                                             `json:"documentation_url"`
 	Source           DispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -269,5 +269,5 @@ func (r DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess) IsKnown() b
 
 type DispatchNamespaceScriptContentGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

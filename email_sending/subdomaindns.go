@@ -42,11 +42,11 @@ func (r *SubdomainDNSService) Get(ctx context.Context, subdomainID string, query
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if subdomainID == "" {
 		err = errors.New("missing required subdomain_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/sending/subdomains/%s/dns", query.ZoneID, subdomainID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -68,5 +68,5 @@ func (r *SubdomainDNSService) GetAutoPaging(ctx context.Context, subdomainID str
 
 type SubdomainDNSGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

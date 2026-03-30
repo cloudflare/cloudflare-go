@@ -45,15 +45,15 @@ func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClea
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Increase cache lifetimes by automatically storing all cacheable files into
@@ -67,15 +67,15 @@ func (r *CacheReserveService) Edit(ctx context.Context, params CacheReserveEditP
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Increase cache lifetimes by automatically storing all cacheable files into
@@ -89,15 +89,15 @@ func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetPara
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
@@ -109,15 +109,15 @@ func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStat
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // The identifier of the caching setting.
@@ -172,15 +172,15 @@ func (r State) IsKnown() bool {
 // that you cannot undo or cancel this operation.
 type CacheReserveClearResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveClear `json:"id,required"`
+	ID CacheReserveClear `json:"id" api:"required"`
 	// The time that the latest Cache Reserve Clear operation started.
-	StartTs time.Time `json:"start_ts,required" format:"date-time"`
+	StartTs time.Time `json:"start_ts" api:"required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State State `json:"state,required"`
+	State State `json:"state" api:"required"`
 	// The time that the latest Cache Reserve Clear operation completed.
 	EndTs time.Time `json:"end_ts" format:"date-time"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                     `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       cacheReserveClearResponseJSON `json:"-"`
 }
 
@@ -206,13 +206,13 @@ func (r cacheReserveClearResponseJSON) RawJSON() string {
 
 type CacheReserveEditResponse struct {
 	// The identifier of the caching setting.
-	ID CacheReserve `json:"id,required"`
+	ID CacheReserve `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Cache Reserve zone setting.
-	Value CacheReserveEditResponseValue `json:"value,required"`
+	Value CacheReserveEditResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                    `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       cacheReserveEditResponseJSON `json:"-"`
 }
 
@@ -253,13 +253,13 @@ func (r CacheReserveEditResponseValue) IsKnown() bool {
 
 type CacheReserveGetResponse struct {
 	// The identifier of the caching setting.
-	ID CacheReserve `json:"id,required"`
+	ID CacheReserve `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Cache Reserve zone setting.
-	Value CacheReserveGetResponseValue `json:"value,required"`
+	Value CacheReserveGetResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                   `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       cacheReserveGetResponseJSON `json:"-"`
 }
 
@@ -304,15 +304,15 @@ func (r CacheReserveGetResponseValue) IsKnown() bool {
 // that you cannot undo or cancel this operation.
 type CacheReserveStatusResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveClear `json:"id,required"`
+	ID CacheReserveClear `json:"id" api:"required"`
 	// The time that the latest Cache Reserve Clear operation started.
-	StartTs time.Time `json:"start_ts,required" format:"date-time"`
+	StartTs time.Time `json:"start_ts" api:"required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State State `json:"state,required"`
+	State State `json:"state" api:"required"`
 	// The time that the latest Cache Reserve Clear operation completed.
 	EndTs time.Time `json:"end_ts" format:"date-time"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                      `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                      `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       cacheReserveStatusResponseJSON `json:"-"`
 }
 
@@ -338,8 +338,8 @@ func (r cacheReserveStatusResponseJSON) RawJSON() string {
 
 type CacheReserveClearParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Body   interface{}         `json:"body" api:"required"`
 }
 
 func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
@@ -347,10 +347,10 @@ func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CacheReserveClearResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CacheReserveClearResponseEnvelopeSuccess `json:"success,required"`
+	Success CacheReserveClearResponseEnvelopeSuccess `json:"success" api:"required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -395,9 +395,9 @@ func (r CacheReserveClearResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Value of the Cache Reserve zone setting.
-	Value param.Field[CacheReserveEditParamsValue] `json:"value,required"`
+	Value param.Field[CacheReserveEditParamsValue] `json:"value" api:"required"`
 }
 
 func (r CacheReserveEditParams) MarshalJSON() (data []byte, err error) {
@@ -421,10 +421,10 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 }
 
 type CacheReserveEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CacheReserveEditResponseEnvelopeSuccess `json:"success,required"`
+	Success CacheReserveEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CacheReserveEditResponse                `json:"result"`
 	JSON    cacheReserveEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -465,14 +465,14 @@ func (r CacheReserveEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CacheReserveGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CacheReserveGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CacheReserveGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CacheReserveGetResponse                `json:"result"`
 	JSON    cacheReserveGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -513,14 +513,14 @@ func (r CacheReserveGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveStatusParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CacheReserveStatusResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CacheReserveStatusResponseEnvelopeSuccess `json:"success,required"`
+	Success CacheReserveStatusResponseEnvelopeSuccess `json:"success" api:"required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind

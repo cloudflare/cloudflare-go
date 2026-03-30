@@ -41,16 +41,16 @@ func (r *V2LogoMatchService) Get(ctx context.Context, params V2LogoMatchGetParam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/v2/brand-protection/logo/matches", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type V2LogoMatchGetResponse struct {
-	Matches []V2LogoMatchGetResponseMatch `json:"matches,required"`
-	Total   int64                         `json:"total,required"`
+	Matches []V2LogoMatchGetResponseMatch `json:"matches" api:"required"`
+	Total   int64                         `json:"total" api:"required"`
 	JSON    v2LogoMatchGetResponseJSON    `json:"-"`
 }
 
@@ -72,13 +72,13 @@ func (r v2LogoMatchGetResponseJSON) RawJSON() string {
 }
 
 type V2LogoMatchGetResponseMatch struct {
-	ID              int64                           `json:"id,required"`
-	MatchedAt       string                          `json:"matched_at,required,nullable"`
-	QueryID         int64                           `json:"query_id,required"`
-	SimilarityScore float64                         `json:"similarity_score,required"`
-	URLScanID       string                          `json:"url_scan_id,required,nullable"`
+	ID              int64                           `json:"id" api:"required"`
+	MatchedAt       string                          `json:"matched_at" api:"required,nullable"`
+	QueryID         int64                           `json:"query_id" api:"required"`
+	SimilarityScore float64                         `json:"similarity_score" api:"required"`
+	URLScanID       string                          `json:"url_scan_id" api:"required,nullable"`
 	ContentType     string                          `json:"content_type"`
-	Domain          string                          `json:"domain,nullable"`
+	Domain          string                          `json:"domain" api:"nullable"`
 	ImageData       string                          `json:"image_data"`
 	JSON            v2LogoMatchGetResponseMatchJSON `json:"-"`
 }
@@ -107,8 +107,8 @@ func (r v2LogoMatchGetResponseMatchJSON) RawJSON() string {
 }
 
 type V2LogoMatchGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	QueryID   param.Field[string] `query:"query_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	QueryID   param.Field[string] `query:"query_id" api:"required"`
 	Download  param.Field[string] `query:"download"`
 	Limit     param.Field[string] `query:"limit"`
 	Offset    param.Field[string] `query:"offset"`

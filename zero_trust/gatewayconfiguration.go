@@ -44,15 +44,15 @@ func (r *GatewayConfigurationService) Update(ctx context.Context, params Gateway
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/configuration", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update (PATCH) a single subcollection of settings such as `antivirus`,
@@ -65,15 +65,15 @@ func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayCo
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/configuration", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve the current Zero Trust account configuration.
@@ -82,21 +82,21 @@ func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConf
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/configuration", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Specify activity log settings.
 type ActivityLogSettings struct {
 	// Specify whether to log activity.
-	Enabled bool                    `json:"enabled,nullable"`
+	Enabled bool                    `json:"enabled" api:"nullable"`
 	JSON    activityLogSettingsJSON `json:"-"`
 }
 
@@ -129,13 +129,13 @@ func (r ActivityLogSettingsParam) MarshalJSON() (data []byte, err error) {
 // Specify anti-virus settings.
 type AntiVirusSettings struct {
 	// Specify whether to enable anti-virus scanning on downloads.
-	EnabledDownloadPhase bool `json:"enabled_download_phase,nullable"`
+	EnabledDownloadPhase bool `json:"enabled_download_phase" api:"nullable"`
 	// Specify whether to enable anti-virus scanning on uploads.
-	EnabledUploadPhase bool `json:"enabled_upload_phase,nullable"`
+	EnabledUploadPhase bool `json:"enabled_upload_phase" api:"nullable"`
 	// Specify whether to block requests for unscannable files.
-	FailClosed bool `json:"fail_closed,nullable"`
+	FailClosed bool `json:"fail_closed" api:"nullable"`
 	// Configure the message the user's device shows during an antivirus scan.
-	NotificationSettings NotificationSettings  `json:"notification_settings,nullable"`
+	NotificationSettings NotificationSettings  `json:"notification_settings" api:"nullable"`
 	JSON                 antiVirusSettingsJSON `json:"-"`
 }
 
@@ -180,7 +180,7 @@ type BlockPageSettings struct {
 	// customized_block_page.
 	BackgroundColor string `json:"background_color"`
 	// Specify whether to enable the custom block page.
-	Enabled bool `json:"enabled,nullable"`
+	Enabled bool `json:"enabled" api:"nullable"`
 	// Specify the block page footer text when the mode is customized_block_page.
 	FooterText string `json:"footer_text"`
 	// Specify the block page header text when the mode is customized_block_page.
@@ -203,16 +203,16 @@ type BlockPageSettings struct {
 	Name string `json:"name"`
 	// Indicate that this setting was shared via the Orgs API and read only for the
 	// current account.
-	ReadOnly bool `json:"read_only,nullable"`
+	ReadOnly bool `json:"read_only" api:"nullable"`
 	// Indicate the account tag of the account that shared this setting.
-	SourceAccount string `json:"source_account,nullable"`
+	SourceAccount string `json:"source_account" api:"nullable"`
 	// Specify whether to suppress detailed information at the bottom of the block page
 	// when the mode is customized_block_page.
 	SuppressFooter bool `json:"suppress_footer"`
 	// Specify the URI to redirect users to when the mode is redirect_uri.
 	TargetURI string `json:"target_uri" format:"uri"`
 	// Indicate the version number of the setting.
-	Version int64                 `json:"version,nullable"`
+	Version int64                 `json:"version" api:"nullable"`
 	JSON    blockPageSettingsJSON `json:"-"`
 }
 
@@ -396,7 +396,7 @@ func (r BrowserIsolationSettingsParam) MarshalJSON() (data []byte, err error) {
 type CustomCertificateSettings struct {
 	// Specify whether to enable a custom certificate authority for signing Gateway
 	// traffic.
-	Enabled bool `json:"enabled,required,nullable"`
+	Enabled bool `json:"enabled" api:"required,nullable"`
 	// Specify the UUID of the certificate (ID from MTLS certificate store).
 	ID string `json:"id"`
 	// Indicate the internal certificate status.
@@ -431,7 +431,7 @@ func (r customCertificateSettingsJSON) RawJSON() string {
 type CustomCertificateSettingsParam struct {
 	// Specify whether to enable a custom certificate authority for signing Gateway
 	// traffic.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Specify the UUID of the certificate (ID from MTLS certificate store).
 	ID param.Field[string] `json:"id"`
 }
@@ -448,7 +448,7 @@ func (r CustomCertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 type ExtendedEmailMatching struct {
 	// Specify whether to match all variants of user emails (with + or . modifiers)
 	// used as criteria in Firewall policies.
-	Enabled bool `json:"enabled,nullable"`
+	Enabled bool `json:"enabled" api:"nullable"`
 	// Indicate that this setting was shared via the Orgs API and read only for the
 	// current account.
 	ReadOnly bool `json:"read_only"`
@@ -528,41 +528,41 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 // Specify account settings.
 type GatewayConfigurationSettings struct {
 	// Specify activity log settings.
-	ActivityLog ActivityLogSettings `json:"activity_log,nullable"`
+	ActivityLog ActivityLogSettings `json:"activity_log" api:"nullable"`
 	// Specify anti-virus settings.
-	Antivirus AntiVirusSettings `json:"antivirus,nullable"`
+	Antivirus AntiVirusSettings `json:"antivirus" api:"nullable"`
 	// Specify block page layout settings.
-	BlockPage BlockPageSettings `json:"block_page,nullable"`
+	BlockPage BlockPageSettings `json:"block_page" api:"nullable"`
 	// Specify the DLP inspection mode.
-	BodyScanning BodyScanningSettings `json:"body_scanning,nullable"`
+	BodyScanning BodyScanningSettings `json:"body_scanning" api:"nullable"`
 	// Specify Clientless Browser Isolation settings.
-	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation,nullable"`
+	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation" api:"nullable"`
 	// Specify certificate settings for Gateway TLS interception. If unset, the
 	// Cloudflare Root CA handles interception.
-	Certificate GatewayConfigurationSettingsCertificate `json:"certificate,nullable"`
+	Certificate GatewayConfigurationSettingsCertificate `json:"certificate" api:"nullable"`
 	// Specify custom certificate settings for BYO-PKI. This field is deprecated; use
 	// `certificate` instead.
 	//
 	// Deprecated: deprecated
-	CustomCertificate CustomCertificateSettings `json:"custom_certificate,nullable"`
+	CustomCertificate CustomCertificateSettings `json:"custom_certificate" api:"nullable"`
 	// Configures user email settings for firewall policies. When you enable this, the
 	// system standardizes email addresses in the identity portion of the rule to match
 	// extended email variants in firewall policies. When you disable this setting, the
 	// system matches email addresses exactly as you provide them. Enable this setting
 	// if your email uses `.` or `+` modifiers.
-	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching,nullable"`
+	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching" api:"nullable"`
 	// Specify FIPS settings.
-	Fips FipsSettings `json:"fips,nullable"`
+	Fips FipsSettings `json:"fips" api:"nullable"`
 	// Enable host selection in egress policies.
-	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector,nullable"`
+	HostSelector GatewayConfigurationSettingsHostSelector `json:"host_selector" api:"nullable"`
 	// Define the proxy inspection mode.
-	Inspection GatewayConfigurationSettingsInspection `json:"inspection,nullable"`
+	Inspection GatewayConfigurationSettingsInspection `json:"inspection" api:"nullable"`
 	// Specify whether to detect protocols from the initial bytes of client traffic.
-	ProtocolDetection ProtocolDetection `json:"protocol_detection,nullable"`
+	ProtocolDetection ProtocolDetection `json:"protocol_detection" api:"nullable"`
 	// Specify whether to enable the sandbox.
-	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox,nullable"`
+	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox" api:"nullable"`
 	// Specify whether to inspect encrypted HTTP traffic.
-	TLSDecrypt TLSSettings                      `json:"tls_decrypt,nullable"`
+	TLSDecrypt TLSSettings                      `json:"tls_decrypt" api:"nullable"`
 	JSON       gatewayConfigurationSettingsJSON `json:"-"`
 }
 
@@ -601,7 +601,7 @@ type GatewayConfigurationSettingsCertificate struct {
 	// Specify the UUID of the certificate used for interception. Ensure the
 	// certificate is available at the edge(previously called 'active'). A nil UUID
 	// directs Cloudflare to use the Root CA.
-	ID   string                                      `json:"id,required"`
+	ID   string                                      `json:"id" api:"required"`
 	JSON gatewayConfigurationSettingsCertificateJSON `json:"-"`
 }
 
@@ -624,7 +624,7 @@ func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
 // Enable host selection in egress policies.
 type GatewayConfigurationSettingsHostSelector struct {
 	// Specify whether to enable filtering via hosts for egress policies.
-	Enabled bool                                         `json:"enabled,nullable"`
+	Enabled bool                                         `json:"enabled" api:"nullable"`
 	JSON    gatewayConfigurationSettingsHostSelectorJSON `json:"-"`
 }
 
@@ -694,7 +694,7 @@ func (r GatewayConfigurationSettingsInspectionMode) IsKnown() bool {
 // Specify whether to enable the sandbox.
 type GatewayConfigurationSettingsSandbox struct {
 	// Specify whether to enable the sandbox.
-	Enabled bool `json:"enabled,nullable"`
+	Enabled bool `json:"enabled" api:"nullable"`
 	// Specify the action to take when the system cannot scan the file.
 	FallbackAction GatewayConfigurationSettingsSandboxFallbackAction `json:"fallback_action"`
 	JSON           gatewayConfigurationSettingsSandboxJSON           `json:"-"`
@@ -783,7 +783,7 @@ type GatewayConfigurationSettingsCertificateParam struct {
 	// Specify the UUID of the certificate used for interception. Ensure the
 	// certificate is available at the edge(previously called 'active'). A nil UUID
 	// directs Cloudflare to use the Root CA.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r GatewayConfigurationSettingsCertificateParam) MarshalJSON() (data []byte, err error) {
@@ -879,7 +879,7 @@ func (r NotificationSettingsParam) MarshalJSON() (data []byte, err error) {
 // Specify whether to detect protocols from the initial bytes of client traffic.
 type ProtocolDetection struct {
 	// Specify whether to detect protocols from the initial bytes of client traffic.
-	Enabled bool                  `json:"enabled,nullable"`
+	Enabled bool                  `json:"enabled" api:"nullable"`
 	JSON    protocolDetectionJSON `json:"-"`
 }
 
@@ -1023,7 +1023,7 @@ func (r gatewayConfigurationGetResponseJSON) RawJSON() string {
 }
 
 type GatewayConfigurationUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
@@ -1033,10 +1033,10 @@ func (r GatewayConfigurationUpdateParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayConfigurationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Specify account settings.
 	Result GatewayConfigurationUpdateResponse             `json:"result"`
 	JSON   gatewayConfigurationUpdateResponseEnvelopeJSON `json:"-"`
@@ -1077,7 +1077,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayConfigurationEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
@@ -1087,10 +1087,10 @@ func (r GatewayConfigurationEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayConfigurationEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayConfigurationEditResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayConfigurationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Specify account settings.
 	Result GatewayConfigurationEditResponse             `json:"result"`
 	JSON   gatewayConfigurationEditResponseEnvelopeJSON `json:"-"`
@@ -1131,14 +1131,14 @@ func (r GatewayConfigurationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayConfigurationGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayConfigurationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Specify account settings.
 	Result GatewayConfigurationGetResponse             `json:"result"`
 	JSON   gatewayConfigurationGetResponseEnvelopeJSON `json:"-"`

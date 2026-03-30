@@ -41,19 +41,19 @@ func (r *IndexMetadataIndexService) New(ctx context.Context, indexName string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/metadata_index/create", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Metadata Indexes for the specified Vectorize Index.
@@ -62,19 +62,19 @@ func (r *IndexMetadataIndexService) List(ctx context.Context, indexName string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/metadata_index/list", query.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Allow Vectorize to delete the specified metadata index.
@@ -83,19 +83,19 @@ func (r *IndexMetadataIndexService) Delete(ctx context.Context, indexName string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/metadata_index/delete", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type IndexMetadataIndexNewResponse struct {
@@ -208,11 +208,11 @@ func (r indexMetadataIndexDeleteResponseJSON) RawJSON() string {
 
 type IndexMetadataIndexNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the type of metadata property to index.
-	IndexType param.Field[IndexMetadataIndexNewParamsIndexType] `json:"indexType,required"`
+	IndexType param.Field[IndexMetadataIndexNewParamsIndexType] `json:"indexType" api:"required"`
 	// Specifies the metadata property to index.
-	PropertyName param.Field[string] `json:"propertyName,required"`
+	PropertyName param.Field[string] `json:"propertyName" api:"required"`
 }
 
 func (r IndexMetadataIndexNewParams) MarshalJSON() (data []byte, err error) {
@@ -237,11 +237,11 @@ func (r IndexMetadataIndexNewParamsIndexType) IsKnown() bool {
 }
 
 type IndexMetadataIndexNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   IndexMetadataIndexNewResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo         `json:"messages" api:"required"`
+	Result   IndexMetadataIndexNewResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexMetadataIndexNewResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexMetadataIndexNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexMetadataIndexNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -281,15 +281,15 @@ func (r IndexMetadataIndexNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexMetadataIndexListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndexMetadataIndexListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   IndexMetadataIndexListResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo          `json:"messages" api:"required"`
+	Result   IndexMetadataIndexListResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexMetadataIndexListResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexMetadataIndexListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexMetadataIndexListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -329,9 +329,9 @@ func (r IndexMetadataIndexListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexMetadataIndexDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the metadata property for which the index must be deleted.
-	PropertyName param.Field[string] `json:"propertyName,required"`
+	PropertyName param.Field[string] `json:"propertyName" api:"required"`
 }
 
 func (r IndexMetadataIndexDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -339,11 +339,11 @@ func (r IndexMetadataIndexDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexMetadataIndexDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   IndexMetadataIndexDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo            `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo            `json:"messages" api:"required"`
+	Result   IndexMetadataIndexDeleteResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexMetadataIndexDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexMetadataIndexDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexMetadataIndexDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

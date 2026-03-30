@@ -44,16 +44,16 @@ func (r *RobotsTXTTopService) DomainCategories(ctx context.Context, query Robots
 	path := "radar/robots_txt/top/domain_categories"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RobotsTXTTopDomainCategoriesResponse struct {
 	// Metadata for the results.
-	Meta RobotsTXTTopDomainCategoriesResponseMeta   `json:"meta,required"`
-	Top0 []RobotsTXTTopDomainCategoriesResponseTop0 `json:"top_0,required"`
+	Meta RobotsTXTTopDomainCategoriesResponseMeta   `json:"meta" api:"required"`
+	Top0 []RobotsTXTTopDomainCategoriesResponseTop0 `json:"top_0" api:"required"`
 	JSON robotsTXTTopDomainCategoriesResponseJSON   `json:"-"`
 }
 
@@ -76,15 +76,15 @@ func (r robotsTXTTopDomainCategoriesResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type RobotsTXTTopDomainCategoriesResponseMeta struct {
-	ConfidenceInfo RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []RobotsTXTTopDomainCategoriesResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []RobotsTXTTopDomainCategoriesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization RobotsTXTTopDomainCategoriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization RobotsTXTTopDomainCategoriesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []RobotsTXTTopDomainCategoriesResponseMetaUnit `json:"units,required"`
+	Units []RobotsTXTTopDomainCategoriesResponseMetaUnit `json:"units" api:"required"`
 	JSON  robotsTXTTopDomainCategoriesResponseMetaJSON   `json:"-"`
 }
 
@@ -109,9 +109,9 @@ func (r robotsTXTTopDomainCategoriesResponseMetaJSON) RawJSON() string {
 }
 
 type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfo struct {
-	Annotations []RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                      `json:"level,required"`
+	Level int64                                                      `json:"level" api:"required"`
 	JSON  robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -135,15 +135,15 @@ func (r robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoJSON) RawJSON() st
 // Annotation associated with the result (e.g. outage or other type of event).
 type RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                      `json:"description,required"`
-	EndDate     time.Time                                                                   `json:"endDate,required" format:"date-time"`
+	DataSource  RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                      `json:"description" api:"required"`
+	EndDate     time.Time                                                                   `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                            `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                               `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                            `json:"startDate" api:"required" format:"date-time"`
 	JSON            robotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -231,9 +231,9 @@ func (r RobotsTXTTopDomainCategoriesResponseMetaConfidenceInfoAnnotationsEventTy
 
 type RobotsTXTTopDomainCategoriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                             `json:"startTime" api:"required" format:"date-time"`
 	JSON      robotsTXTTopDomainCategoriesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -278,8 +278,8 @@ func (r RobotsTXTTopDomainCategoriesResponseMetaNormalization) IsKnown() bool {
 }
 
 type RobotsTXTTopDomainCategoriesResponseMetaUnit struct {
-	Name  string                                           `json:"name,required"`
-	Value string                                           `json:"value,required"`
+	Name  string                                           `json:"name" api:"required"`
+	Value string                                           `json:"value" api:"required"`
 	JSON  robotsTXTTopDomainCategoriesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -301,8 +301,8 @@ func (r robotsTXTTopDomainCategoriesResponseMetaUnitJSON) RawJSON() string {
 }
 
 type RobotsTXTTopDomainCategoriesResponseTop0 struct {
-	Name  string                                       `json:"name,required"`
-	Value int64                                        `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value int64                                        `json:"value" api:"required"`
 	JSON  robotsTXTTopDomainCategoriesResponseTop0JSON `json:"-"`
 }
 
@@ -377,8 +377,8 @@ func (r RobotsTXTTopDomainCategoriesParamsUserAgentCategory) IsKnown() bool {
 }
 
 type RobotsTXTTopDomainCategoriesResponseEnvelope struct {
-	Result  RobotsTXTTopDomainCategoriesResponse             `json:"result,required"`
-	Success bool                                             `json:"success,required"`
+	Result  RobotsTXTTopDomainCategoriesResponse             `json:"result" api:"required"`
+	Success bool                                             `json:"success" api:"required"`
 	JSON    robotsTXTTopDomainCategoriesResponseEnvelopeJSON `json:"-"`
 }
 

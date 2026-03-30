@@ -41,15 +41,15 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Resets the current device settings for a Zero Trust account.
@@ -58,15 +58,15 @@ func (r *DeviceSettingService) Delete(ctx context.Context, body DeviceSettingDel
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/settings", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patches the current device settings for a Zero Trust account.
@@ -75,15 +75,15 @@ func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEdi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Describes the current device settings for a Zero Trust account.
@@ -92,15 +92,15 @@ func (r *DeviceSettingService) Get(ctx context.Context, query DeviceSettingGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DeviceSettings struct {
@@ -188,8 +188,8 @@ func (r DeviceSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingUpdateParams struct {
-	AccountID      param.Field[string] `path:"account_id,required"`
-	DeviceSettings DeviceSettingsParam `json:"device_settings,required"`
+	AccountID      param.Field[string] `path:"account_id" api:"required"`
+	DeviceSettings DeviceSettingsParam `json:"device_settings" api:"required"`
 }
 
 func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -197,11 +197,11 @@ func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceSettings        `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -240,15 +240,15 @@ func (r DeviceSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceSettingDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceSettingDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceSettings        `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceSettingDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceSettingDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceSettingDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -287,8 +287,8 @@ func (r DeviceSettingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceSettingEditParams struct {
-	AccountID      param.Field[string] `path:"account_id,required"`
-	DeviceSettings DeviceSettingsParam `json:"device_settings,required"`
+	AccountID      param.Field[string] `path:"account_id" api:"required"`
+	DeviceSettings DeviceSettingsParam `json:"device_settings" api:"required"`
 }
 
 func (r DeviceSettingEditParams) MarshalJSON() (data []byte, err error) {
@@ -296,11 +296,11 @@ func (r DeviceSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceSettings        `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceSettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -339,15 +339,15 @@ func (r DeviceSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceSettingGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceSettings        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceSettings        `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceSettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 

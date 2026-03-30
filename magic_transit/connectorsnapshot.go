@@ -44,19 +44,19 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/snapshots", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Snapshot
@@ -65,24 +65,24 @@ func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/snapshots/%v", query.AccountID, connectorID, snapshotT)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConnectorSnapshotListResponse struct {
-	Count  float64                             `json:"count,required"`
-	Items  []ConnectorSnapshotListResponseItem `json:"items,required"`
+	Count  float64                             `json:"count" api:"required"`
+	Items  []ConnectorSnapshotListResponseItem `json:"items" api:"required"`
 	Cursor string                              `json:"cursor"`
 	JSON   connectorSnapshotListResponseJSON   `json:"-"`
 }
@@ -107,9 +107,9 @@ func (r connectorSnapshotListResponseJSON) RawJSON() string {
 
 type ConnectorSnapshotListResponseItem struct {
 	// Time the Snapshot was collected (seconds since the Unix epoch)
-	A float64 `json:"a,required"`
+	A float64 `json:"a" api:"required"`
 	// Time the Snapshot was recorded (seconds since the Unix epoch)
-	T    float64                               `json:"t,required"`
+	T    float64                               `json:"t" api:"required"`
 	JSON connectorSnapshotListResponseItemJSON `json:"-"`
 }
 
@@ -133,17 +133,17 @@ func (r connectorSnapshotListResponseItemJSON) RawJSON() string {
 // Snapshot
 type ConnectorSnapshotGetResponse struct {
 	// Count of failures to reclaim space
-	CountReclaimFailures float64 `json:"count_reclaim_failures,required"`
+	CountReclaimFailures float64 `json:"count_reclaim_failures" api:"required"`
 	// Count of reclaimed paths
-	CountReclaimedPaths float64 `json:"count_reclaimed_paths,required"`
+	CountReclaimedPaths float64 `json:"count_reclaimed_paths" api:"required"`
 	// Count of failed snapshot recordings
-	CountRecordFailed float64 `json:"count_record_failed,required"`
+	CountRecordFailed float64 `json:"count_record_failed" api:"required"`
 	// Count of failed snapshot transmissions
-	CountTransmitFailures float64 `json:"count_transmit_failures,required"`
+	CountTransmitFailures float64 `json:"count_transmit_failures" api:"required"`
 	// Time the Snapshot was recorded (seconds since the Unix epoch)
-	T float64 `json:"t,required"`
+	T float64 `json:"t" api:"required"`
 	// Version
-	V     string                             `json:"v,required"`
+	V     string                             `json:"v" api:"required"`
 	Bonds []ConnectorSnapshotGetResponseBond `json:"bonds"`
 	// Count of processors/cores
 	CPUCount float64 `json:"cpu_count"`
@@ -669,9 +669,9 @@ func (r connectorSnapshotGetResponseJSON) RawJSON() string {
 // Snapshot Bond
 type ConnectorSnapshotGetResponseBond struct {
 	// Name of the network interface
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Current status of the network interface
-	Status string                               `json:"status,required"`
+	Status string                               `json:"status" api:"required"`
 	JSON   connectorSnapshotGetResponseBondJSON `json:"-"`
 }
 
@@ -695,17 +695,17 @@ func (r connectorSnapshotGetResponseBondJSON) RawJSON() string {
 // Snapshot DHCP lease
 type ConnectorSnapshotGetResponseDHCPLease struct {
 	// Client ID of the device the IP Address was leased to
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Expiry time of the DHCP lease (seconds since the Unix epoch)
-	ExpiryTime float64 `json:"expiry_time,required"`
+	ExpiryTime float64 `json:"expiry_time" api:"required"`
 	// Hostname of the device the IP Address was leased to
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Name of the network interface
-	InterfaceName string `json:"interface_name,required"`
+	InterfaceName string `json:"interface_name" api:"required"`
 	// IP Address that was leased
-	IPAddress string `json:"ip_address,required"`
+	IPAddress string `json:"ip_address" api:"required"`
 	// MAC Address of the device the IP Address was leased to
-	MacAddress string                                    `json:"mac_address,required"`
+	MacAddress string                                    `json:"mac_address" api:"required"`
 	JSON       connectorSnapshotGetResponseDHCPLeaseJSON `json:"-"`
 }
 
@@ -733,33 +733,33 @@ func (r connectorSnapshotGetResponseDHCPLeaseJSON) RawJSON() string {
 // Snapshot Disk
 type ConnectorSnapshotGetResponseDisk struct {
 	// I/Os currently in progress
-	InProgress float64 `json:"in_progress,required"`
+	InProgress float64 `json:"in_progress" api:"required"`
 	// Device major number
-	Major float64 `json:"major,required"`
+	Major float64 `json:"major" api:"required"`
 	// Reads merged
-	Merged float64 `json:"merged,required"`
+	Merged float64 `json:"merged" api:"required"`
 	// Device minor number
-	Minor float64 `json:"minor,required"`
+	Minor float64 `json:"minor" api:"required"`
 	// Device name
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Reads completed successfully
-	Reads float64 `json:"reads,required"`
+	Reads float64 `json:"reads" api:"required"`
 	// Sectors read successfully
-	SectorsRead float64 `json:"sectors_read,required"`
+	SectorsRead float64 `json:"sectors_read" api:"required"`
 	// Sectors written successfully
-	SectorsWritten float64 `json:"sectors_written,required"`
+	SectorsWritten float64 `json:"sectors_written" api:"required"`
 	// Time spent doing I/Os (milliseconds)
-	TimeInProgressMs float64 `json:"time_in_progress_ms,required"`
+	TimeInProgressMs float64 `json:"time_in_progress_ms" api:"required"`
 	// Time spent reading (milliseconds)
-	TimeReadingMs float64 `json:"time_reading_ms,required"`
+	TimeReadingMs float64 `json:"time_reading_ms" api:"required"`
 	// Time spent writing (milliseconds)
-	TimeWritingMs float64 `json:"time_writing_ms,required"`
+	TimeWritingMs float64 `json:"time_writing_ms" api:"required"`
 	// Weighted time spent doing I/Os (milliseconds)
-	WeightedTimeInProgressMs float64 `json:"weighted_time_in_progress_ms,required"`
+	WeightedTimeInProgressMs float64 `json:"weighted_time_in_progress_ms" api:"required"`
 	// Writes completed
-	Writes float64 `json:"writes,required"`
+	Writes float64 `json:"writes" api:"required"`
 	// Writes merged
-	WritesMerged float64 `json:"writes_merged,required"`
+	WritesMerged float64 `json:"writes_merged" api:"required"`
 	// Discards completed successfully
 	Discards float64 `json:"discards"`
 	// Discards merged
@@ -813,9 +813,9 @@ func (r connectorSnapshotGetResponseDiskJSON) RawJSON() string {
 // Snapshot Interface
 type ConnectorSnapshotGetResponseInterface struct {
 	// Name of the network interface
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// UP/DOWN state of the network interface
-	Operstate   string                                            `json:"operstate,required"`
+	Operstate   string                                            `json:"operstate" api:"required"`
 	IPAddresses []ConnectorSnapshotGetResponseInterfacesIPAddress `json:"ip_addresses"`
 	// Speed of the network interface (bits per second)
 	Speed float64                                   `json:"speed"`
@@ -844,9 +844,9 @@ func (r connectorSnapshotGetResponseInterfaceJSON) RawJSON() string {
 // Snapshot Interface Address
 type ConnectorSnapshotGetResponseInterfacesIPAddress struct {
 	// Name of the network interface
-	InterfaceName string `json:"interface_name,required"`
+	InterfaceName string `json:"interface_name" api:"required"`
 	// IP address of the network interface
-	IPAddress string                                              `json:"ip_address,required"`
+	IPAddress string                                              `json:"ip_address" api:"required"`
 	JSON      connectorSnapshotGetResponseInterfacesIPAddressJSON `json:"-"`
 }
 
@@ -870,13 +870,13 @@ func (r connectorSnapshotGetResponseInterfacesIPAddressJSON) RawJSON() string {
 // Snapshot Mount
 type ConnectorSnapshotGetResponseMount struct {
 	// File system on disk (EXT4, NTFS, etc.)
-	FileSystem string `json:"file_system,required"`
+	FileSystem string `json:"file_system" api:"required"`
 	// Kind of disk (HDD, SSD, etc.)
-	Kind string `json:"kind,required"`
+	Kind string `json:"kind" api:"required"`
 	// Path where disk is mounted
-	MountPoint string `json:"mount_point,required"`
+	MountPoint string `json:"mount_point" api:"required"`
 	// Name of the disk mount
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Available disk size (bytes)
 	AvailableBytes float64 `json:"available_bytes"`
 	// Determines whether the disk is read-only
@@ -914,39 +914,39 @@ func (r connectorSnapshotGetResponseMountJSON) RawJSON() string {
 // Snapshot Netdev
 type ConnectorSnapshotGetResponseNetdev struct {
 	// Name of the network device
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Total bytes received
-	RecvBytes float64 `json:"recv_bytes,required"`
+	RecvBytes float64 `json:"recv_bytes" api:"required"`
 	// Compressed packets received
-	RecvCompressed float64 `json:"recv_compressed,required"`
+	RecvCompressed float64 `json:"recv_compressed" api:"required"`
 	// Packets dropped
-	RecvDrop float64 `json:"recv_drop,required"`
+	RecvDrop float64 `json:"recv_drop" api:"required"`
 	// Bad packets received
-	RecvErrs float64 `json:"recv_errs,required"`
+	RecvErrs float64 `json:"recv_errs" api:"required"`
 	// FIFO overruns
-	RecvFifo float64 `json:"recv_fifo,required"`
+	RecvFifo float64 `json:"recv_fifo" api:"required"`
 	// Frame alignment errors
-	RecvFrame float64 `json:"recv_frame,required"`
+	RecvFrame float64 `json:"recv_frame" api:"required"`
 	// Multicast packets received
-	RecvMulticast float64 `json:"recv_multicast,required"`
+	RecvMulticast float64 `json:"recv_multicast" api:"required"`
 	// Total packets received
-	RecvPackets float64 `json:"recv_packets,required"`
+	RecvPackets float64 `json:"recv_packets" api:"required"`
 	// Total bytes transmitted
-	SentBytes float64 `json:"sent_bytes,required"`
+	SentBytes float64 `json:"sent_bytes" api:"required"`
 	// Number of packets not sent due to carrier errors
-	SentCarrier float64 `json:"sent_carrier,required"`
+	SentCarrier float64 `json:"sent_carrier" api:"required"`
 	// Number of collisions
-	SentColls float64 `json:"sent_colls,required"`
+	SentColls float64 `json:"sent_colls" api:"required"`
 	// Number of compressed packets transmitted
-	SentCompressed float64 `json:"sent_compressed,required"`
+	SentCompressed float64 `json:"sent_compressed" api:"required"`
 	// Number of packets dropped during transmission
-	SentDrop float64 `json:"sent_drop,required"`
+	SentDrop float64 `json:"sent_drop" api:"required"`
 	// Number of transmission errors
-	SentErrs float64 `json:"sent_errs,required"`
+	SentErrs float64 `json:"sent_errs" api:"required"`
 	// FIFO overruns
-	SentFifo float64 `json:"sent_fifo,required"`
+	SentFifo float64 `json:"sent_fifo" api:"required"`
 	// Total packets transmitted
-	SentPackets float64                                `json:"sent_packets,required"`
+	SentPackets float64                                `json:"sent_packets" api:"required"`
 	JSON        connectorSnapshotGetResponseNetdevJSON `json:"-"`
 }
 
@@ -985,7 +985,7 @@ func (r connectorSnapshotGetResponseNetdevJSON) RawJSON() string {
 // Snapshot Thermal
 type ConnectorSnapshotGetResponseThermal struct {
 	// Sensor identifier for the component
-	Label string `json:"label,required"`
+	Label string `json:"label" api:"required"`
 	// Critical failure temperature of the component (degrees Celsius)
 	CriticalCelcius float64 `json:"critical_celcius"`
 	// Current temperature of the component (degrees Celsius)
@@ -1017,14 +1017,14 @@ func (r connectorSnapshotGetResponseThermalJSON) RawJSON() string {
 // Snapshot Tunnels
 type ConnectorSnapshotGetResponseTunnel struct {
 	// Name of tunnel health state (unknown, healthy, degraded, down)
-	HealthState string `json:"health_state,required"`
+	HealthState string `json:"health_state" api:"required"`
 	// Numeric value associated with tunnel state (0 = unknown, 1 = healthy, 2 =
 	// degraded, 3 = down)
-	HealthValue float64 `json:"health_value,required"`
+	HealthValue float64 `json:"health_value" api:"required"`
 	// The tunnel interface name (i.e. xfrm1, xfrm3.99, etc.)
-	InterfaceName string `json:"interface_name,required"`
+	InterfaceName string `json:"interface_name" api:"required"`
 	// Tunnel identifier
-	TunnelID string `json:"tunnel_id,required"`
+	TunnelID string `json:"tunnel_id" api:"required"`
 	// MTU as measured between the two ends of the tunnel
 	ProbedMtu float64 `json:"probed_mtu"`
 	// Number of recent healthy pings for this tunnel
@@ -1058,9 +1058,9 @@ func (r connectorSnapshotGetResponseTunnelJSON) RawJSON() string {
 
 type ConnectorSnapshotListParams struct {
 	// Account identifier
-	AccountID param.Field[string]  `path:"account_id,required"`
-	From      param.Field[float64] `query:"from,required"`
-	To        param.Field[float64] `query:"to,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
+	From      param.Field[float64] `query:"from" api:"required"`
+	To        param.Field[float64] `query:"to" api:"required"`
 	Cursor    param.Field[string]  `query:"cursor"`
 	Limit     param.Field[float64] `query:"limit"`
 }
@@ -1075,8 +1075,8 @@ func (r ConnectorSnapshotListParams) URLQuery() (v url.Values) {
 }
 
 type ConnectorSnapshotListResponseEnvelope struct {
-	Result   ConnectorSnapshotListResponse                   `json:"result,required"`
-	Success  bool                                            `json:"success,required"`
+	Result   ConnectorSnapshotListResponse                   `json:"result" api:"required"`
+	Success  bool                                            `json:"success" api:"required"`
 	Errors   []ConnectorSnapshotListResponseEnvelopeErrors   `json:"errors"`
 	Messages []ConnectorSnapshotListResponseEnvelopeMessages `json:"messages"`
 	JSON     connectorSnapshotListResponseEnvelopeJSON       `json:"-"`
@@ -1102,8 +1102,8 @@ func (r connectorSnapshotListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotListResponseEnvelopeErrors struct {
-	Code    float64                                         `json:"code,required"`
-	Message string                                          `json:"message,required"`
+	Code    float64                                         `json:"code" api:"required"`
+	Message string                                          `json:"message" api:"required"`
 	JSON    connectorSnapshotListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -1125,8 +1125,8 @@ func (r connectorSnapshotListResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotListResponseEnvelopeMessages struct {
-	Code    float64                                           `json:"code,required"`
-	Message string                                            `json:"message,required"`
+	Code    float64                                           `json:"code" api:"required"`
+	Message string                                            `json:"message" api:"required"`
 	JSON    connectorSnapshotListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -1149,13 +1149,13 @@ func (r connectorSnapshotListResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type ConnectorSnapshotGetParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConnectorSnapshotGetResponseEnvelope struct {
 	// Snapshot
-	Result   ConnectorSnapshotGetResponse                   `json:"result,required"`
-	Success  bool                                           `json:"success,required"`
+	Result   ConnectorSnapshotGetResponse                   `json:"result" api:"required"`
+	Success  bool                                           `json:"success" api:"required"`
 	Errors   []ConnectorSnapshotGetResponseEnvelopeErrors   `json:"errors"`
 	Messages []ConnectorSnapshotGetResponseEnvelopeMessages `json:"messages"`
 	JSON     connectorSnapshotGetResponseEnvelopeJSON       `json:"-"`
@@ -1181,8 +1181,8 @@ func (r connectorSnapshotGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotGetResponseEnvelopeErrors struct {
-	Code    float64                                        `json:"code,required"`
-	Message string                                         `json:"message,required"`
+	Code    float64                                        `json:"code" api:"required"`
+	Message string                                         `json:"message" api:"required"`
 	JSON    connectorSnapshotGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -1204,8 +1204,8 @@ func (r connectorSnapshotGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotGetResponseEnvelopeMessages struct {
-	Code    float64                                          `json:"code,required"`
-	Message string                                           `json:"message,required"`
+	Code    float64                                          `json:"code" api:"required"`
+	Message string                                           `json:"message" api:"required"`
 	JSON    connectorSnapshotGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 

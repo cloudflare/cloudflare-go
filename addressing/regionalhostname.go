@@ -47,15 +47,15 @@ func (r *RegionalHostnameService) New(ctx context.Context, params RegionalHostna
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/addressing/regional_hostnames", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all Regional Hostnames within a zone.
@@ -65,7 +65,7 @@ func (r *RegionalHostnameService) List(ctx context.Context, query RegionalHostna
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/addressing/regional_hostnames", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -90,15 +90,15 @@ func (r *RegionalHostnameService) Delete(ctx context.Context, hostname string, b
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if hostname == "" {
 		err = errors.New("missing required hostname parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/addressing/regional_hostnames/%s", body.ZoneID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Update the configuration for a specific Regional Hostname. Only the region_key
@@ -108,19 +108,19 @@ func (r *RegionalHostnameService) Edit(ctx context.Context, hostname string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if hostname == "" {
 		err = errors.New("missing required hostname parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/addressing/regional_hostnames/%s", params.ZoneID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch the configuration for a specific Regional Hostname, within a zone.
@@ -129,29 +129,29 @@ func (r *RegionalHostnameService) Get(ctx context.Context, hostname string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if hostname == "" {
 		err = errors.New("missing required hostname parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/addressing/regional_hostnames/%s", query.ZoneID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RegionalHostnameNewResponse struct {
 	// When the regional hostname was created
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// DNS hostname to be regionalized, must be a subdomain of the zone. Wildcards are
 	// supported for one level, e.g `*.example.com`
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Identifying key for the region
-	RegionKey string `json:"region_key,required"`
+	RegionKey string `json:"region_key" api:"required"`
 	// Configure which routing method to use for the regional hostname
 	Routing string                          `json:"routing"`
 	JSON    regionalHostnameNewResponseJSON `json:"-"`
@@ -178,12 +178,12 @@ func (r regionalHostnameNewResponseJSON) RawJSON() string {
 
 type RegionalHostnameListResponse struct {
 	// When the regional hostname was created
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// DNS hostname to be regionalized, must be a subdomain of the zone. Wildcards are
 	// supported for one level, e.g `*.example.com`
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Identifying key for the region
-	RegionKey string `json:"region_key,required"`
+	RegionKey string `json:"region_key" api:"required"`
 	// Configure which routing method to use for the regional hostname
 	Routing string                           `json:"routing"`
 	JSON    regionalHostnameListResponseJSON `json:"-"`
@@ -209,10 +209,10 @@ func (r regionalHostnameListResponseJSON) RawJSON() string {
 }
 
 type RegionalHostnameDeleteResponse struct {
-	Errors   []RegionalHostnameDeleteResponseError   `json:"errors,required"`
-	Messages []RegionalHostnameDeleteResponseMessage `json:"messages,required"`
+	Errors   []RegionalHostnameDeleteResponseError   `json:"errors" api:"required"`
+	Messages []RegionalHostnameDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RegionalHostnameDeleteResponseSuccess `json:"success,required"`
+	Success RegionalHostnameDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    regionalHostnameDeleteResponseJSON    `json:"-"`
 }
 
@@ -235,8 +235,8 @@ func (r regionalHostnameDeleteResponseJSON) RawJSON() string {
 }
 
 type RegionalHostnameDeleteResponseError struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           RegionalHostnameDeleteResponseErrorsSource `json:"source"`
 	JSON             regionalHostnameDeleteResponseErrorJSON    `json:"-"`
@@ -283,8 +283,8 @@ func (r regionalHostnameDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type RegionalHostnameDeleteResponseMessage struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           RegionalHostnameDeleteResponseMessagesSource `json:"source"`
 	JSON             regionalHostnameDeleteResponseMessageJSON    `json:"-"`
@@ -347,12 +347,12 @@ func (r RegionalHostnameDeleteResponseSuccess) IsKnown() bool {
 
 type RegionalHostnameEditResponse struct {
 	// When the regional hostname was created
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// DNS hostname to be regionalized, must be a subdomain of the zone. Wildcards are
 	// supported for one level, e.g `*.example.com`
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Identifying key for the region
-	RegionKey string `json:"region_key,required"`
+	RegionKey string `json:"region_key" api:"required"`
 	// Configure which routing method to use for the regional hostname
 	Routing string                           `json:"routing"`
 	JSON    regionalHostnameEditResponseJSON `json:"-"`
@@ -379,12 +379,12 @@ func (r regionalHostnameEditResponseJSON) RawJSON() string {
 
 type RegionalHostnameGetResponse struct {
 	// When the regional hostname was created
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// DNS hostname to be regionalized, must be a subdomain of the zone. Wildcards are
 	// supported for one level, e.g `*.example.com`
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Identifying key for the region
-	RegionKey string `json:"region_key,required"`
+	RegionKey string `json:"region_key" api:"required"`
 	// Configure which routing method to use for the regional hostname
 	Routing string                          `json:"routing"`
 	JSON    regionalHostnameGetResponseJSON `json:"-"`
@@ -411,12 +411,12 @@ func (r regionalHostnameGetResponseJSON) RawJSON() string {
 
 type RegionalHostnameNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// DNS hostname to be regionalized, must be a subdomain of the zone. Wildcards are
 	// supported for one level, e.g `*.example.com`
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// Identifying key for the region
-	RegionKey param.Field[string] `json:"region_key,required"`
+	RegionKey param.Field[string] `json:"region_key" api:"required"`
 	// Configure which routing method to use for the regional hostname
 	Routing param.Field[string] `json:"routing"`
 }
@@ -426,10 +426,10 @@ func (r RegionalHostnameNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RegionalHostnameNewResponseEnvelope struct {
-	Errors   []RegionalHostnameNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionalHostnameNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RegionalHostnameNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegionalHostnameNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RegionalHostnameNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RegionalHostnameNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RegionalHostnameNewResponse                `json:"result"`
 	JSON    regionalHostnameNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -454,8 +454,8 @@ func (r regionalHostnameNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RegionalHostnameNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           RegionalHostnameNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             regionalHostnameNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -502,8 +502,8 @@ func (r regionalHostnameNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RegionalHostnameNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           RegionalHostnameNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             regionalHostnameNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -566,19 +566,19 @@ func (r RegionalHostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionalHostnameListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RegionalHostnameDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RegionalHostnameEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifying key for the region
-	RegionKey param.Field[string] `json:"region_key,required"`
+	RegionKey param.Field[string] `json:"region_key" api:"required"`
 }
 
 func (r RegionalHostnameEditParams) MarshalJSON() (data []byte, err error) {
@@ -586,10 +586,10 @@ func (r RegionalHostnameEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RegionalHostnameEditResponseEnvelope struct {
-	Errors   []RegionalHostnameEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionalHostnameEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RegionalHostnameEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegionalHostnameEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RegionalHostnameEditResponseEnvelopeSuccess `json:"success,required"`
+	Success RegionalHostnameEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RegionalHostnameEditResponse                `json:"result"`
 	JSON    regionalHostnameEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -614,8 +614,8 @@ func (r regionalHostnameEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RegionalHostnameEditResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           RegionalHostnameEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             regionalHostnameEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -662,8 +662,8 @@ func (r regionalHostnameEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RegionalHostnameEditResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           RegionalHostnameEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             regionalHostnameEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -726,14 +726,14 @@ func (r RegionalHostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionalHostnameGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RegionalHostnameGetResponseEnvelope struct {
-	Errors   []RegionalHostnameGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionalHostnameGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RegionalHostnameGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegionalHostnameGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RegionalHostnameGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RegionalHostnameGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RegionalHostnameGetResponse                `json:"result"`
 	JSON    regionalHostnameGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -758,8 +758,8 @@ func (r regionalHostnameGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RegionalHostnameGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           RegionalHostnameGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             regionalHostnameGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -806,8 +806,8 @@ func (r regionalHostnameGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RegionalHostnameGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           RegionalHostnameGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             regionalHostnameGetResponseEnvelopeMessagesJSON   `json:"-"`

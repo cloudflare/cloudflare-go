@@ -43,19 +43,19 @@ func (r *FinetuneAssetService) New(ctx context.Context, finetuneID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if finetuneID == "" {
 		err = errors.New("missing required finetune_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/finetunes/%s/finetune-assets", params.AccountID, finetuneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type FinetuneAssetNewResponse struct {
-	Success bool                         `json:"success,required"`
+	Success bool                         `json:"success" api:"required"`
 	JSON    finetuneAssetNewResponseJSON `json:"-"`
 }
 
@@ -76,7 +76,7 @@ func (r finetuneAssetNewResponseJSON) RawJSON() string {
 }
 
 type FinetuneAssetNewParams struct {
-	AccountID param.Field[string]    `path:"account_id,required"`
+	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	File      param.Field[io.Reader] `json:"file" format:"binary"`
 	FileName  param.Field[string]    `json:"file_name"`
 }

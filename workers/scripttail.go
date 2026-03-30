@@ -40,19 +40,19 @@ func (r *ScriptTailService) New(ctx context.Context, scriptName string, params S
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes a tail from a Worker.
@@ -60,19 +60,19 @@ func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id st
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", body.AccountID, scriptName, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get list of tails currently deployed on a Worker.
@@ -81,25 +81,25 @@ func (r *ScriptTailService) Get(ctx context.Context, scriptName string, query Sc
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A reference to a script that will consume logs from the attached Worker.
 type ConsumerScript struct {
 	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
@@ -127,7 +127,7 @@ func (r consumerScriptJSON) RawJSON() string {
 // A reference to a script that will consume logs from the attached Worker.
 type ConsumerScriptParam struct {
 	// Name of Worker that is to be the consumer.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
@@ -140,9 +140,9 @@ func (r ConsumerScriptParam) MarshalJSON() (data []byte, err error) {
 
 type ScriptTailNewResponse struct {
 	// Identifier.
-	ID        string                    `json:"id,required"`
-	ExpiresAt string                    `json:"expires_at,required"`
-	URL       string                    `json:"url,required"`
+	ID        string                    `json:"id" api:"required"`
+	ExpiresAt string                    `json:"expires_at" api:"required"`
+	URL       string                    `json:"url" api:"required"`
 	JSON      scriptTailNewResponseJSON `json:"-"`
 }
 
@@ -165,10 +165,10 @@ func (r scriptTailNewResponseJSON) RawJSON() string {
 }
 
 type ScriptTailDeleteResponse struct {
-	Errors   []ScriptTailDeleteResponseError   `json:"errors,required"`
-	Messages []ScriptTailDeleteResponseMessage `json:"messages,required"`
+	Errors   []ScriptTailDeleteResponseError   `json:"errors" api:"required"`
+	Messages []ScriptTailDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptTailDeleteResponseSuccess `json:"success,required"`
+	Success ScriptTailDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    scriptTailDeleteResponseJSON    `json:"-"`
 }
 
@@ -191,8 +191,8 @@ func (r scriptTailDeleteResponseJSON) RawJSON() string {
 }
 
 type ScriptTailDeleteResponseError struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           ScriptTailDeleteResponseErrorsSource `json:"source"`
 	JSON             scriptTailDeleteResponseErrorJSON    `json:"-"`
@@ -239,8 +239,8 @@ func (r scriptTailDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptTailDeleteResponseMessage struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           ScriptTailDeleteResponseMessagesSource `json:"source"`
 	JSON             scriptTailDeleteResponseMessageJSON    `json:"-"`
@@ -303,9 +303,9 @@ func (r ScriptTailDeleteResponseSuccess) IsKnown() bool {
 
 type ScriptTailGetResponse struct {
 	// Identifier.
-	ID        string                    `json:"id,required"`
-	ExpiresAt string                    `json:"expires_at,required"`
-	URL       string                    `json:"url,required"`
+	ID        string                    `json:"id" api:"required"`
+	ExpiresAt string                    `json:"expires_at" api:"required"`
+	URL       string                    `json:"url" api:"required"`
 	JSON      scriptTailGetResponseJSON `json:"-"`
 }
 
@@ -329,8 +329,8 @@ func (r scriptTailGetResponseJSON) RawJSON() string {
 
 type ScriptTailNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
@@ -338,11 +338,11 @@ func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponseEnvelope struct {
-	Errors   []ScriptTailNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptTailNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptTailNewResponse                   `json:"result,required"`
+	Errors   []ScriptTailNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptTailNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptTailNewResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptTailNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptTailNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptTailNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -366,8 +366,8 @@ func (r scriptTailNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptTailNewResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           ScriptTailNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptTailNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -414,8 +414,8 @@ func (r scriptTailNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptTailNewResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           ScriptTailNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptTailNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -478,20 +478,20 @@ func (r ScriptTailNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptTailDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptTailGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptTailGetResponseEnvelope struct {
-	Errors   []ScriptTailGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptTailGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptTailGetResponse                   `json:"result,required"`
+	Errors   []ScriptTailGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptTailGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptTailGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptTailGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptTailGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -515,8 +515,8 @@ func (r scriptTailGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptTailGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           ScriptTailGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptTailGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -563,8 +563,8 @@ func (r scriptTailGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptTailGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           ScriptTailGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptTailGetResponseEnvelopeMessagesJSON   `json:"-"`

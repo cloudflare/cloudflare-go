@@ -42,25 +42,25 @@ func (r *TunnelCloudflaredManagementService) New(ctx context.Context, tunnelID s
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/management", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TunnelCloudflaredManagementNewParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string]                                         `path:"account_id,required"`
-	Resources param.Field[[]TunnelCloudflaredManagementNewParamsResource] `json:"resources,required"`
+	AccountID param.Field[string]                                         `path:"account_id" api:"required"`
+	Resources param.Field[[]TunnelCloudflaredManagementNewParamsResource] `json:"resources" api:"required"`
 }
 
 func (r TunnelCloudflaredManagementNewParams) MarshalJSON() (data []byte, err error) {
@@ -83,13 +83,13 @@ func (r TunnelCloudflaredManagementNewParamsResource) IsKnown() bool {
 }
 
 type TunnelCloudflaredManagementNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// The Tunnel Token is used as a mechanism to authenticate the operation of a
 	// tunnel.
-	Result string `json:"result,required"`
+	Result string `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredManagementNewResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredManagementNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredManagementNewResponseEnvelopeJSON    `json:"-"`
 }
 

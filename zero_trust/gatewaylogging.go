@@ -41,15 +41,15 @@ func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/logging", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve the current logging settings for the Zero Trust account.
@@ -58,15 +58,15 @@ func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGet
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/logging", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type LoggingSetting struct {
@@ -266,8 +266,8 @@ func (r LoggingSettingSettingsByRuleTypeL4Param) MarshalJSON() (data []byte, err
 }
 
 type GatewayLoggingUpdateParams struct {
-	AccountID      param.Field[string] `path:"account_id,required"`
-	LoggingSetting LoggingSettingParam `json:"logging_setting,required"`
+	AccountID      param.Field[string] `path:"account_id" api:"required"`
+	LoggingSetting LoggingSettingParam `json:"logging_setting" api:"required"`
 }
 
 func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -275,10 +275,10 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLoggingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  LoggingSetting                              `json:"result"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -318,14 +318,14 @@ func (r GatewayLoggingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLoggingGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  LoggingSetting                           `json:"result"`
 	JSON    gatewayLoggingGetResponseEnvelopeJSON    `json:"-"`
 }

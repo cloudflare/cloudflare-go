@@ -43,15 +43,15 @@ func (r *IndicatorFeedSnapshotService) Update(ctx context.Context, feedID int64,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/snapshot", params.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type IndicatorFeedSnapshotUpdateResponse struct {
@@ -84,7 +84,7 @@ func (r indicatorFeedSnapshotUpdateResponseJSON) RawJSON() string {
 
 type IndicatorFeedSnapshotUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The file to upload
 	Source param.Field[string] `json:"source"`
 }
@@ -105,10 +105,10 @@ func (r IndicatorFeedSnapshotUpdateParams) MarshalMultipart() (data []byte, cont
 }
 
 type IndicatorFeedSnapshotUpdateResponseEnvelope struct {
-	Errors   []IndicatorFeedSnapshotUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedSnapshotUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IndicatorFeedSnapshotUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IndicatorFeedSnapshotUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IndicatorFeedSnapshotUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success IndicatorFeedSnapshotUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  IndicatorFeedSnapshotUpdateResponse                `json:"result"`
 	JSON    indicatorFeedSnapshotUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -133,8 +133,8 @@ func (r indicatorFeedSnapshotUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IndicatorFeedSnapshotUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           IndicatorFeedSnapshotUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             indicatorFeedSnapshotUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -182,8 +182,8 @@ func (r indicatorFeedSnapshotUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() s
 }
 
 type IndicatorFeedSnapshotUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           IndicatorFeedSnapshotUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             indicatorFeedSnapshotUpdateResponseEnvelopeMessagesJSON   `json:"-"`

@@ -55,7 +55,7 @@ func (r *CustomNameserverService) Update(ctx context.Context, params CustomNames
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_ns", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -98,18 +98,18 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_ns", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type CustomNameserverGetResponse struct {
-	Errors   []CustomNameserverGetResponseError   `json:"errors,required"`
-	Messages []CustomNameserverGetResponseMessage `json:"messages,required"`
+	Errors   []CustomNameserverGetResponseError   `json:"errors" api:"required"`
+	Messages []CustomNameserverGetResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomNameserverGetResponseSuccess `json:"success,required"`
+	Success CustomNameserverGetResponseSuccess `json:"success" api:"required"`
 	// Whether zone uses account-level custom nameservers.
 	Enabled bool `json:"enabled"`
 	// The number of the name server set to assign to the zone.
@@ -140,8 +140,8 @@ func (r customNameserverGetResponseJSON) RawJSON() string {
 }
 
 type CustomNameserverGetResponseError struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           CustomNameserverGetResponseErrorsSource `json:"source"`
 	JSON             customNameserverGetResponseErrorJSON    `json:"-"`
@@ -188,8 +188,8 @@ func (r customNameserverGetResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomNameserverGetResponseMessage struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           CustomNameserverGetResponseMessagesSource `json:"source"`
 	JSON             customNameserverGetResponseMessageJSON    `json:"-"`
@@ -283,7 +283,7 @@ func (r customNameserverGetResponseResultInfoJSON) RawJSON() string {
 
 type CustomNameserverUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether zone uses account-level custom nameservers.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The number of the name server set to assign to the zone.
@@ -296,5 +296,5 @@ func (r CustomNameserverUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type CustomNameserverGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

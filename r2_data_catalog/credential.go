@@ -41,28 +41,28 @@ func (r *CredentialService) New(ctx context.Context, bucketName string, params C
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/credential", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CredentialNewResponse = interface{}
 
 type CredentialNewParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Provides the Cloudflare API token for accessing R2.
-	Token param.Field[string] `json:"token,required"`
+	Token param.Field[string] `json:"token" api:"required"`
 }
 
 func (r CredentialNewParams) MarshalJSON() (data []byte, err error) {
@@ -71,12 +71,12 @@ func (r CredentialNewParams) MarshalJSON() (data []byte, err error) {
 
 type CredentialNewResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []CredentialNewResponseEnvelopeErrors `json:"errors,required"`
+	Errors []CredentialNewResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []CredentialNewResponseEnvelopeMessages `json:"messages,required"`
+	Messages []CredentialNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                              `json:"success,required"`
-	Result  CredentialNewResponse             `json:"result,nullable"`
+	Success bool                              `json:"success" api:"required"`
+	Result  CredentialNewResponse             `json:"result" api:"nullable"`
 	JSON    credentialNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -101,9 +101,9 @@ func (r credentialNewResponseEnvelopeJSON) RawJSON() string {
 
 type CredentialNewResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                  `json:"message,required"`
+	Message string                                  `json:"message" api:"required"`
 	JSON    credentialNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -126,9 +126,9 @@ func (r credentialNewResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type CredentialNewResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                    `json:"message,required"`
+	Message string                                    `json:"message" api:"required"`
 	JSON    credentialNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 

@@ -44,15 +44,15 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Partially updates global schema validation settings for a zone using PATCH
@@ -62,15 +62,15 @@ func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the current global schema validation settings for a zone.
@@ -79,15 +79,15 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/schema_validation/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingUpdateResponse struct {
@@ -98,7 +98,7 @@ type SettingUpdateResponse struct {
 	// - `log` - log request when request does not conform to schema
 	// - `block` - deny access to the site when request does not conform to schema
 	// - `none` - skip running schema validation
-	ValidationDefaultMitigationAction SettingUpdateResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action,required"`
+	ValidationDefaultMitigationAction SettingUpdateResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action" api:"required"`
 	// When not null, this overrides global both zone level and operation level
 	// mitigation actions. This can serve as a quick way to disable schema validation
 	// for the whole zone.
@@ -175,7 +175,7 @@ type SettingEditResponse struct {
 	// - `log` - log request when request does not conform to schema
 	// - `block` - deny access to the site when request does not conform to schema
 	// - `none` - skip running schema validation
-	ValidationDefaultMitigationAction SettingEditResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action,required"`
+	ValidationDefaultMitigationAction SettingEditResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action" api:"required"`
 	// When not null, this overrides global both zone level and operation level
 	// mitigation actions. This can serve as a quick way to disable schema validation
 	// for the whole zone.
@@ -252,7 +252,7 @@ type SettingGetResponse struct {
 	// - `log` - log request when request does not conform to schema
 	// - `block` - deny access to the site when request does not conform to schema
 	// - `none` - skip running schema validation
-	ValidationDefaultMitigationAction SettingGetResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action,required"`
+	ValidationDefaultMitigationAction SettingGetResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action" api:"required"`
 	// When not null, this overrides global both zone level and operation level
 	// mitigation actions. This can serve as a quick way to disable schema validation
 	// for the whole zone.
@@ -323,13 +323,13 @@ func (r SettingGetResponseValidationOverrideMitigationAction) IsKnown() bool {
 
 type SettingUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used Mitigation actions are as follows:
 	//
 	// - `"log"` - log request when request does not conform to schema
 	// - `"block"` - deny access to the site when request does not conform to schema
 	// - `"none"` - skip running schema validation
-	ValidationDefaultMitigationAction param.Field[SettingUpdateParamsValidationDefaultMitigationAction] `json:"validation_default_mitigation_action,required"`
+	ValidationDefaultMitigationAction param.Field[SettingUpdateParamsValidationDefaultMitigationAction] `json:"validation_default_mitigation_action" api:"required"`
 	// When set, this overrides both zone level and operation level mitigation actions.
 	//
 	// - `"none"` - skip running schema validation entirely for the request
@@ -381,11 +381,11 @@ func (r SettingUpdateParamsValidationOverrideMitigationAction) IsKnown() bool {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Errors   api_gateway.Message   `json:"errors,required"`
-	Messages api_gateway.Message   `json:"messages,required"`
-	Result   SettingUpdateResponse `json:"result,required"`
+	Errors   api_gateway.Message   `json:"errors" api:"required"`
+	Messages api_gateway.Message   `json:"messages" api:"required"`
+	Result   SettingUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -425,7 +425,7 @@ func (r SettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used Mitigation actions are as follows:
 	//
 	// - `"log"` - log request when request does not conform to schema
@@ -483,11 +483,11 @@ func (r SettingEditParamsValidationOverrideMitigationAction) IsKnown() bool {
 }
 
 type SettingEditResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
-	Result   SettingEditResponse `json:"result,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
+	Result   SettingEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -527,15 +527,15 @@ func (r SettingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SettingGetResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
-	Result   SettingGetResponse  `json:"result,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
+	Result   SettingGetResponse  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingGetResponseEnvelopeJSON    `json:"-"`
 }
 

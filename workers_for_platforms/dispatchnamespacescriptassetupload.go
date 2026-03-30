@@ -43,23 +43,23 @@ func (r *DispatchNamespaceScriptAssetUploadService) New(ctx context.Context, dis
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/assets-upload-session", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DispatchNamespaceScriptAssetUploadNewResponse struct {
@@ -89,10 +89,10 @@ func (r dispatchNamespaceScriptAssetUploadNewResponseJSON) RawJSON() string {
 
 type DispatchNamespaceScriptAssetUploadNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A manifest ([path]: {hash, size}) map of files to upload. As an example,
 	// `/blog/hello-world.html` would be a valid path key.
-	Manifest param.Field[map[string]DispatchNamespaceScriptAssetUploadNewParamsManifest] `json:"manifest,required"`
+	Manifest param.Field[map[string]DispatchNamespaceScriptAssetUploadNewParamsManifest] `json:"manifest" api:"required"`
 }
 
 func (r DispatchNamespaceScriptAssetUploadNewParams) MarshalJSON() (data []byte, err error) {
@@ -101,9 +101,9 @@ func (r DispatchNamespaceScriptAssetUploadNewParams) MarshalJSON() (data []byte,
 
 type DispatchNamespaceScriptAssetUploadNewParamsManifest struct {
 	// The hash of the file.
-	Hash param.Field[string] `json:"hash,required"`
+	Hash param.Field[string] `json:"hash" api:"required"`
 	// The size of the file in bytes.
-	Size param.Field[int64] `json:"size,required"`
+	Size param.Field[int64] `json:"size" api:"required"`
 }
 
 func (r DispatchNamespaceScriptAssetUploadNewParamsManifest) MarshalJSON() (data []byte, err error) {
@@ -111,10 +111,10 @@ func (r DispatchNamespaceScriptAssetUploadNewParamsManifest) MarshalJSON() (data
 }
 
 type DispatchNamespaceScriptAssetUploadNewResponseEnvelope struct {
-	Errors   []DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceScriptAssetUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DispatchNamespaceScriptAssetUploadNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DispatchNamespaceScriptAssetUploadNewResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptAssetUploadNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -139,8 +139,8 @@ func (r dispatchNamespaceScriptAssetUploadNewResponseEnvelopeJSON) RawJSON() str
 }
 
 type DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrors struct {
-	Code             int64                                                             `json:"code,required"`
-	Message          string                                                            `json:"message,required"`
+	Code             int64                                                             `json:"code" api:"required"`
+	Message          string                                                            `json:"message" api:"required"`
 	DocumentationURL string                                                            `json:"documentation_url"`
 	Source           DispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -189,8 +189,8 @@ func (r dispatchNamespaceScriptAssetUploadNewResponseEnvelopeErrorsSourceJSON) R
 }
 
 type DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessages struct {
-	Code             int64                                                               `json:"code,required"`
-	Message          string                                                              `json:"message,required"`
+	Code             int64                                                               `json:"code" api:"required"`
+	Message          string                                                              `json:"message" api:"required"`
 	DocumentationURL string                                                              `json:"documentation_url"`
 	Source           DispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceScriptAssetUploadNewResponseEnvelopeMessagesJSON   `json:"-"`

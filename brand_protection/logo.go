@@ -45,11 +45,11 @@ func (r *LogoService) New(ctx context.Context, params LogoNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/logos", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Return a success message after deleting saved logo queries by ID
@@ -58,15 +58,15 @@ func (r *LogoService) Delete(ctx context.Context, logoID string, body LogoDelete
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if logoID == "" {
 		err = errors.New("missing required logo_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/logos/%s", body.AccountID, logoID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type LogoNewResponse struct {
@@ -94,7 +94,7 @@ func (r logoNewResponseJSON) RawJSON() string {
 }
 
 type LogoNewParams struct {
-	AccountID param.Field[string]    `path:"account_id,required"`
+	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	MatchType param.Field[string]    `query:"match_type"`
 	Tag       param.Field[string]    `query:"tag"`
 	Threshold param.Field[float64]   `query:"threshold"`
@@ -125,5 +125,5 @@ func (r LogoNewParams) URLQuery() (v url.Values) {
 }
 
 type LogoDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

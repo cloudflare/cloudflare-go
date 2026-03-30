@@ -51,19 +51,19 @@ func (r *InstanceService) New(ctx context.Context, workflowName string, params I
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/instances", params.AccountID, workflowName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all instances of a workflow with their execution status.
@@ -73,11 +73,11 @@ func (r *InstanceService) List(ctx context.Context, workflowName string, params 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/instances", params.AccountID, workflowName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -104,11 +104,11 @@ func (r *InstanceService) Bulk(ctx context.Context, workflowName string, params 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/batch", params.AccountID, workflowName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -134,30 +134,30 @@ func (r *InstanceService) Get(ctx context.Context, workflowName string, instance
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	if instanceID == "" {
 		err = errors.New("missing required instance_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/%s", params.AccountID, workflowName, instanceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InstanceNewResponse struct {
-	ID         string                    `json:"id,required"`
-	Status     InstanceNewResponseStatus `json:"status,required"`
-	VersionID  string                    `json:"version_id,required" format:"uuid"`
-	WorkflowID string                    `json:"workflow_id,required" format:"uuid"`
+	ID         string                    `json:"id" api:"required"`
+	Status     InstanceNewResponseStatus `json:"status" api:"required"`
+	VersionID  string                    `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID string                    `json:"workflow_id" api:"required" format:"uuid"`
 	JSON       instanceNewResponseJSON   `json:"-"`
 }
 
@@ -202,14 +202,14 @@ func (r InstanceNewResponseStatus) IsKnown() bool {
 }
 
 type InstanceListResponse struct {
-	ID         string                     `json:"id,required"`
-	CreatedOn  time.Time                  `json:"created_on,required" format:"date-time"`
-	EndedOn    time.Time                  `json:"ended_on,required,nullable" format:"date-time"`
-	ModifiedOn time.Time                  `json:"modified_on,required" format:"date-time"`
-	StartedOn  time.Time                  `json:"started_on,required,nullable" format:"date-time"`
-	Status     InstanceListResponseStatus `json:"status,required"`
-	VersionID  string                     `json:"version_id,required" format:"uuid"`
-	WorkflowID string                     `json:"workflow_id,required" format:"uuid"`
+	ID         string                     `json:"id" api:"required"`
+	CreatedOn  time.Time                  `json:"created_on" api:"required" format:"date-time"`
+	EndedOn    time.Time                  `json:"ended_on" api:"required,nullable" format:"date-time"`
+	ModifiedOn time.Time                  `json:"modified_on" api:"required" format:"date-time"`
+	StartedOn  time.Time                  `json:"started_on" api:"required,nullable" format:"date-time"`
+	Status     InstanceListResponseStatus `json:"status" api:"required"`
+	VersionID  string                     `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
 	JSON       instanceListResponseJSON   `json:"-"`
 }
 
@@ -258,10 +258,10 @@ func (r InstanceListResponseStatus) IsKnown() bool {
 }
 
 type InstanceBulkResponse struct {
-	ID         string                     `json:"id,required"`
-	Status     InstanceBulkResponseStatus `json:"status,required"`
-	VersionID  string                     `json:"version_id,required" format:"uuid"`
-	WorkflowID string                     `json:"workflow_id,required" format:"uuid"`
+	ID         string                     `json:"id" api:"required"`
+	Status     InstanceBulkResponseStatus `json:"status" api:"required"`
+	VersionID  string                     `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
 	JSON       instanceBulkResponseJSON   `json:"-"`
 }
 
@@ -306,18 +306,18 @@ func (r InstanceBulkResponseStatus) IsKnown() bool {
 }
 
 type InstanceGetResponse struct {
-	End       time.Time                      `json:"end,required,nullable" format:"date-time"`
-	Error     InstanceGetResponseError       `json:"error,required,nullable"`
-	Output    InstanceGetResponseOutputUnion `json:"output,required"`
-	Params    interface{}                    `json:"params,required"`
-	Queued    time.Time                      `json:"queued,required" format:"date-time"`
-	Start     time.Time                      `json:"start,required,nullable" format:"date-time"`
-	Status    InstanceGetResponseStatus      `json:"status,required"`
-	StepCount int64                          `json:"step_count,required"`
-	Steps     []InstanceGetResponseStep      `json:"steps,required"`
-	Success   bool                           `json:"success,required,nullable"`
-	Trigger   InstanceGetResponseTrigger     `json:"trigger,required"`
-	VersionID string                         `json:"versionId,required" format:"uuid"`
+	End       time.Time                      `json:"end" api:"required,nullable" format:"date-time"`
+	Error     InstanceGetResponseError       `json:"error" api:"required,nullable"`
+	Output    InstanceGetResponseOutputUnion `json:"output" api:"required"`
+	Params    interface{}                    `json:"params" api:"required"`
+	Queued    time.Time                      `json:"queued" api:"required" format:"date-time"`
+	Start     time.Time                      `json:"start" api:"required,nullable" format:"date-time"`
+	Status    InstanceGetResponseStatus      `json:"status" api:"required"`
+	StepCount int64                          `json:"step_count" api:"required"`
+	Steps     []InstanceGetResponseStep      `json:"steps" api:"required"`
+	Success   bool                           `json:"success" api:"required,nullable"`
+	Trigger   InstanceGetResponseTrigger     `json:"trigger" api:"required"`
+	VersionID string                         `json:"versionId" api:"required" format:"uuid"`
 	JSON      instanceGetResponseJSON        `json:"-"`
 }
 
@@ -349,8 +349,8 @@ func (r instanceGetResponseJSON) RawJSON() string {
 }
 
 type InstanceGetResponseError struct {
-	Message string                       `json:"message,required"`
-	Name    string                       `json:"name,required"`
+	Message string                       `json:"message" api:"required"`
+	Name    string                       `json:"name" api:"required"`
 	JSON    instanceGetResponseErrorJSON `json:"-"`
 }
 
@@ -413,20 +413,20 @@ func (r InstanceGetResponseStatus) IsKnown() bool {
 }
 
 type InstanceGetResponseStep struct {
-	Type InstanceGetResponseStepsType `json:"type,required"`
+	Type InstanceGetResponseStepsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [[]InstanceGetResponseStepsObjectAttempt].
 	Attempts interface{} `json:"attempts"`
 	// This field can have the runtime type of [InstanceGetResponseStepsObjectConfig].
 	Config interface{} `json:"config"`
-	End    time.Time   `json:"end,nullable" format:"date-time"`
+	End    time.Time   `json:"end" api:"nullable" format:"date-time"`
 	// This field can have the runtime type of [InstanceGetResponseStepsObjectError].
 	Error    interface{} `json:"error"`
 	Finished bool        `json:"finished"`
 	Name     string      `json:"name"`
-	Output   string      `json:"output,nullable"`
+	Output   string      `json:"output" api:"nullable"`
 	Start    time.Time   `json:"start" format:"date-time"`
-	Success  bool        `json:"success,nullable"`
+	Success  bool        `json:"success" api:"nullable"`
 	// This field can have the runtime type of [InstanceGetResponseStepsObjectTrigger].
 	Trigger interface{}                 `json:"trigger"`
 	JSON    instanceGetResponseStepJSON `json:"-"`
@@ -505,14 +505,14 @@ func init() {
 }
 
 type InstanceGetResponseStepsObject struct {
-	Attempts []InstanceGetResponseStepsObjectAttempt `json:"attempts,required"`
-	Config   InstanceGetResponseStepsObjectConfig    `json:"config,required"`
-	End      time.Time                               `json:"end,required,nullable" format:"date-time"`
-	Name     string                                  `json:"name,required"`
-	Output   string                                  `json:"output,required,nullable"`
-	Start    time.Time                               `json:"start,required" format:"date-time"`
-	Success  bool                                    `json:"success,required,nullable"`
-	Type     InstanceGetResponseStepsObjectType      `json:"type,required"`
+	Attempts []InstanceGetResponseStepsObjectAttempt `json:"attempts" api:"required"`
+	Config   InstanceGetResponseStepsObjectConfig    `json:"config" api:"required"`
+	End      time.Time                               `json:"end" api:"required,nullable" format:"date-time"`
+	Name     string                                  `json:"name" api:"required"`
+	Output   string                                  `json:"output" api:"required,nullable"`
+	Start    time.Time                               `json:"start" api:"required" format:"date-time"`
+	Success  bool                                    `json:"success" api:"required,nullable"`
+	Type     InstanceGetResponseStepsObjectType      `json:"type" api:"required"`
 	JSON     instanceGetResponseStepsObjectJSON      `json:"-"`
 }
 
@@ -542,10 +542,10 @@ func (r instanceGetResponseStepsObjectJSON) RawJSON() string {
 func (r InstanceGetResponseStepsObject) implementsInstanceGetResponseStep() {}
 
 type InstanceGetResponseStepsObjectAttempt struct {
-	End     time.Time                                   `json:"end,required,nullable" format:"date-time"`
-	Error   InstanceGetResponseStepsObjectAttemptsError `json:"error,required,nullable"`
-	Start   time.Time                                   `json:"start,required" format:"date-time"`
-	Success bool                                        `json:"success,required,nullable"`
+	End     time.Time                                   `json:"end" api:"required,nullable" format:"date-time"`
+	Error   InstanceGetResponseStepsObjectAttemptsError `json:"error" api:"required,nullable"`
+	Start   time.Time                                   `json:"start" api:"required" format:"date-time"`
+	Success bool                                        `json:"success" api:"required,nullable"`
 	JSON    instanceGetResponseStepsObjectAttemptJSON   `json:"-"`
 }
 
@@ -569,8 +569,8 @@ func (r instanceGetResponseStepsObjectAttemptJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectAttemptsError struct {
-	Message string                                          `json:"message,required"`
-	Name    string                                          `json:"name,required"`
+	Message string                                          `json:"message" api:"required"`
+	Name    string                                          `json:"name" api:"required"`
 	JSON    instanceGetResponseStepsObjectAttemptsErrorJSON `json:"-"`
 }
 
@@ -592,9 +592,9 @@ func (r instanceGetResponseStepsObjectAttemptsErrorJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectConfig struct {
-	Retries InstanceGetResponseStepsObjectConfigRetries `json:"retries,required"`
+	Retries InstanceGetResponseStepsObjectConfigRetries `json:"retries" api:"required"`
 	// Specifies the timeout duration.
-	Timeout InstanceGetResponseStepsObjectConfigTimeoutUnion `json:"timeout,required"`
+	Timeout InstanceGetResponseStepsObjectConfigTimeoutUnion `json:"timeout" api:"required"`
 	JSON    instanceGetResponseStepsObjectConfigJSON         `json:"-"`
 }
 
@@ -617,8 +617,8 @@ func (r instanceGetResponseStepsObjectConfigJSON) RawJSON() string {
 
 type InstanceGetResponseStepsObjectConfigRetries struct {
 	// Specifies the delay duration.
-	Delay   InstanceGetResponseStepsObjectConfigRetriesDelayUnion `json:"delay,required"`
-	Limit   float64                                               `json:"limit,required"`
+	Delay   InstanceGetResponseStepsObjectConfigRetriesDelayUnion `json:"delay" api:"required"`
+	Limit   float64                                               `json:"limit" api:"required"`
 	Backoff InstanceGetResponseStepsObjectConfigRetriesBackoff    `json:"backoff"`
 	JSON    instanceGetResponseStepsObjectConfigRetriesJSON       `json:"-"`
 }
@@ -733,7 +733,7 @@ func (r InstanceGetResponseStepsType) IsKnown() bool {
 }
 
 type InstanceGetResponseTrigger struct {
-	Source InstanceGetResponseTriggerSource `json:"source,required"`
+	Source InstanceGetResponseTriggerSource `json:"source" api:"required"`
 	JSON   instanceGetResponseTriggerJSON   `json:"-"`
 }
 
@@ -772,7 +772,7 @@ func (r InstanceGetResponseTriggerSource) IsKnown() bool {
 }
 
 type InstanceNewParams struct {
-	AccountID         param.Field[string]                             `path:"account_id,required"`
+	AccountID         param.Field[string]                             `path:"account_id" api:"required"`
 	InstanceID        param.Field[string]                             `json:"instance_id"`
 	InstanceRetention param.Field[InstanceNewParamsInstanceRetention] `json:"instance_retention"`
 	Params            param.Field[interface{}]                        `json:"params"`
@@ -808,10 +808,10 @@ type InstanceNewParamsInstanceRetentionSuccessRetentionUnion interface {
 }
 
 type InstanceNewResponseEnvelope struct {
-	Errors     []InstanceNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []InstanceNewResponseEnvelopeMessages `json:"messages,required"`
-	Result     InstanceNewResponse                   `json:"result,required"`
-	Success    InstanceNewResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []InstanceNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []InstanceNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     InstanceNewResponse                   `json:"result" api:"required"`
+	Success    InstanceNewResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo InstanceNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       instanceNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -837,8 +837,8 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceNewResponseEnvelopeErrors struct {
-	Code    float64                               `json:"code,required"`
-	Message string                                `json:"message,required"`
+	Code    float64                               `json:"code" api:"required"`
+	Message string                                `json:"message" api:"required"`
 	JSON    instanceNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -860,8 +860,8 @@ func (r instanceNewResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type InstanceNewResponseEnvelopeMessages struct {
-	Code    float64                                 `json:"code,required"`
-	Message string                                  `json:"message,required"`
+	Code    float64                                 `json:"code" api:"required"`
+	Message string                                  `json:"message" api:"required"`
 	JSON    instanceNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -897,9 +897,9 @@ func (r InstanceNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InstanceNewResponseEnvelopeResultInfo struct {
-	Count      float64                                   `json:"count,required"`
-	PerPage    float64                                   `json:"per_page,required"`
-	TotalCount float64                                   `json:"total_count,required"`
+	Count      float64                                   `json:"count" api:"required"`
+	PerPage    float64                                   `json:"per_page" api:"required"`
+	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       instanceNewResponseEnvelopeResultInfoJSON `json:"-"`
@@ -926,7 +926,7 @@ func (r instanceNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type InstanceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// `page` and `cursor` are mutually exclusive, use one or the other.
 	Cursor param.Field[string] `query:"cursor"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
@@ -989,7 +989,7 @@ func (r InstanceListParamsStatus) IsKnown() bool {
 }
 
 type InstanceBulkParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id" api:"required"`
 	Body      []InstanceBulkParamsBody `json:"body"`
 }
 
@@ -1033,7 +1033,7 @@ type InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion interface {
 }
 
 type InstanceGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Step ordering: "asc" (default, oldest first) or "desc" (newest first).
 	Order param.Field[InstanceGetParamsOrder] `query:"order"`
 	// When true, omits step details and returns only metadata with step_count.
@@ -1081,10 +1081,10 @@ func (r InstanceGetParamsSimple) IsKnown() bool {
 }
 
 type InstanceGetResponseEnvelope struct {
-	Errors     []InstanceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []InstanceGetResponseEnvelopeMessages `json:"messages,required"`
-	Result     InstanceGetResponse                   `json:"result,required"`
-	Success    InstanceGetResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []InstanceGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []InstanceGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     InstanceGetResponse                   `json:"result" api:"required"`
+	Success    InstanceGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo InstanceGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       instanceGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -1110,8 +1110,8 @@ func (r instanceGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceGetResponseEnvelopeErrors struct {
-	Code    float64                               `json:"code,required"`
-	Message string                                `json:"message,required"`
+	Code    float64                               `json:"code" api:"required"`
+	Message string                                `json:"message" api:"required"`
 	JSON    instanceGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -1133,8 +1133,8 @@ func (r instanceGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type InstanceGetResponseEnvelopeMessages struct {
-	Code    float64                                 `json:"code,required"`
-	Message string                                  `json:"message,required"`
+	Code    float64                                 `json:"code" api:"required"`
+	Message string                                  `json:"message" api:"required"`
 	JSON    instanceGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -1170,9 +1170,9 @@ func (r InstanceGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InstanceGetResponseEnvelopeResultInfo struct {
-	Count      float64                                   `json:"count,required"`
-	PerPage    float64                                   `json:"per_page,required"`
-	TotalCount float64                                   `json:"total_count,required"`
+	Count      float64                                   `json:"count" api:"required"`
+	PerPage    float64                                   `json:"per_page" api:"required"`
+	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       instanceGetResponseEnvelopeResultInfoJSON `json:"-"`

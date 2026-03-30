@@ -42,15 +42,15 @@ func (r *DestinationWebhookService) New(ctx context.Context, params DestinationW
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a webhook destination.
@@ -59,19 +59,19 @@ func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", params.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets a list of all configured webhook destinations.
@@ -81,7 +81,7 @@ func (r *DestinationWebhookService) List(ctx context.Context, query DestinationW
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,15 +106,15 @@ func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get details for a single webhooks destination.
@@ -123,19 +123,19 @@ func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", query.AccountID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Webhooks struct {
@@ -247,10 +247,10 @@ func (r destinationWebhookUpdateResponseJSON) RawJSON() string {
 }
 
 type DestinationWebhookDeleteResponse struct {
-	Errors   []DestinationWebhookDeleteResponseError   `json:"errors,required"`
-	Messages []DestinationWebhookDeleteResponseMessage `json:"messages,required"`
+	Errors   []DestinationWebhookDeleteResponseError   `json:"errors" api:"required"`
+	Messages []DestinationWebhookDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success DestinationWebhookDeleteResponseSuccess `json:"success,required"`
+	Success DestinationWebhookDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    destinationWebhookDeleteResponseJSON    `json:"-"`
 }
 
@@ -273,7 +273,7 @@ func (r destinationWebhookDeleteResponseJSON) RawJSON() string {
 }
 
 type DestinationWebhookDeleteResponseError struct {
-	Message string                                    `json:"message,required"`
+	Message string                                    `json:"message" api:"required"`
 	Code    int64                                     `json:"code"`
 	JSON    destinationWebhookDeleteResponseErrorJSON `json:"-"`
 }
@@ -296,7 +296,7 @@ func (r destinationWebhookDeleteResponseErrorJSON) RawJSON() string {
 }
 
 type DestinationWebhookDeleteResponseMessage struct {
-	Message string                                      `json:"message,required"`
+	Message string                                      `json:"message" api:"required"`
 	Code    int64                                       `json:"code"`
 	JSON    destinationWebhookDeleteResponseMessageJSON `json:"-"`
 }
@@ -335,12 +335,12 @@ func (r DestinationWebhookDeleteResponseSuccess) IsKnown() bool {
 
 type DestinationWebhookNewParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the webhook destination. This will be included in the request body
 	// when you receive a webhook notification.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The POST endpoint to call when dispatching a notification.
-	URL param.Field[string] `json:"url,required"`
+	URL param.Field[string] `json:"url" api:"required"`
 	// Optional secret that will be passed in the `cf-webhook-auth` header when
 	// dispatching generic webhook notifications or formatted for supported
 	// destinations. Secrets are not returned in any API response body.
@@ -352,10 +352,10 @@ func (r DestinationWebhookNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookNewResponseEnvelope struct {
-	Errors   []DestinationWebhookNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationWebhookNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DestinationWebhookNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DestinationWebhookNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success DestinationWebhookNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DestinationWebhookNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DestinationWebhookNewResponse                `json:"result"`
 	JSON    destinationWebhookNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -380,7 +380,7 @@ func (r destinationWebhookNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DestinationWebhookNewResponseEnvelopeErrors struct {
-	Message string                                          `json:"message,required"`
+	Message string                                          `json:"message" api:"required"`
 	Code    int64                                           `json:"code"`
 	JSON    destinationWebhookNewResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -403,7 +403,7 @@ func (r destinationWebhookNewResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type DestinationWebhookNewResponseEnvelopeMessages struct {
-	Message string                                            `json:"message,required"`
+	Message string                                            `json:"message" api:"required"`
 	Code    int64                                             `json:"code"`
 	JSON    destinationWebhookNewResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -442,12 +442,12 @@ func (r DestinationWebhookNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DestinationWebhookUpdateParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the webhook destination. This will be included in the request body
 	// when you receive a webhook notification.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The POST endpoint to call when dispatching a notification.
-	URL param.Field[string] `json:"url,required"`
+	URL param.Field[string] `json:"url" api:"required"`
 	// Optional secret that will be passed in the `cf-webhook-auth` header when
 	// dispatching generic webhook notifications or formatted for supported
 	// destinations. Secrets are not returned in any API response body.
@@ -459,10 +459,10 @@ func (r DestinationWebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookUpdateResponseEnvelope struct {
-	Errors   []DestinationWebhookUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationWebhookUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DestinationWebhookUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DestinationWebhookUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success DestinationWebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DestinationWebhookUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DestinationWebhookUpdateResponse                `json:"result"`
 	JSON    destinationWebhookUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -487,7 +487,7 @@ func (r destinationWebhookUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DestinationWebhookUpdateResponseEnvelopeErrors struct {
-	Message string                                             `json:"message,required"`
+	Message string                                             `json:"message" api:"required"`
 	Code    int64                                              `json:"code"`
 	JSON    destinationWebhookUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -510,7 +510,7 @@ func (r destinationWebhookUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type DestinationWebhookUpdateResponseEnvelopeMessages struct {
-	Message string                                               `json:"message,required"`
+	Message string                                               `json:"message" api:"required"`
 	Code    int64                                                `json:"code"`
 	JSON    destinationWebhookUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -549,24 +549,24 @@ func (r DestinationWebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DestinationWebhookListParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationWebhookDeleteParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationWebhookGetParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationWebhookGetResponseEnvelope struct {
-	Errors   []DestinationWebhookGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationWebhookGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DestinationWebhookGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DestinationWebhookGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Webhooks                                     `json:"result"`
 	JSON    destinationWebhookGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -591,7 +591,7 @@ func (r destinationWebhookGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DestinationWebhookGetResponseEnvelopeErrors struct {
-	Message string                                          `json:"message,required"`
+	Message string                                          `json:"message" api:"required"`
 	Code    int64                                           `json:"code"`
 	JSON    destinationWebhookGetResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -614,7 +614,7 @@ func (r destinationWebhookGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type DestinationWebhookGetResponseEnvelopeMessages struct {
-	Message string                                            `json:"message,required"`
+	Message string                                            `json:"message" api:"required"`
 	Code    int64                                             `json:"code"`
 	JSON    destinationWebhookGetResponseEnvelopeMessagesJSON `json:"-"`
 }

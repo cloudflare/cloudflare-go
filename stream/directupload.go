@@ -39,20 +39,20 @@ func NewDirectUploadService(opts ...option.RequestOption) (r *DirectUploadServic
 func (r *DirectUploadService) New(ctx context.Context, params DirectUploadNewParams, opts ...option.RequestOption) (res *DirectUploadNewResponse, err error) {
 	var env DirectUploadNewResponseEnvelope
 	if params.UploadCreator.Present {
-		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
+		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%v", params.UploadCreator)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/direct_upload", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DirectUploadNewResponse struct {
@@ -90,12 +90,12 @@ func (r directUploadNewResponseJSON) RawJSON() string {
 
 type DirectUploadNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
 	// is not yet uploaded to limit its duration. Uploads that exceed the specified
 	// duration will fail during processing. A value of `-1` means the value is
 	// unknown.
-	MaxDurationSeconds param.Field[int64] `json:"maxDurationSeconds,required"`
+	MaxDurationSeconds param.Field[int64] `json:"maxDurationSeconds" api:"required"`
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -138,10 +138,10 @@ func (r DirectUploadNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type DirectUploadNewResponseEnvelope struct {
-	Errors   []DirectUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DirectUploadNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DirectUploadNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DirectUploadNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DirectUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DirectUploadNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DirectUploadNewResponse                `json:"result"`
 	JSON    directUploadNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -166,8 +166,8 @@ func (r directUploadNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DirectUploadNewResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           DirectUploadNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             directUploadNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -214,8 +214,8 @@ func (r directUploadNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DirectUploadNewResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           DirectUploadNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             directUploadNewResponseEnvelopeMessagesJSON   `json:"-"`

@@ -41,20 +41,20 @@ func (r *NetworkSubnetCloudflareSourceService) Update(ctx context.Context, addre
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/subnets/cloudflare_source/%v", params.AccountID, addressFamily)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type NetworkSubnetCloudflareSourceUpdateParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the subnet.
 	Comment param.Field[string] `json:"comment"`
 	// A user-friendly name for the subnet.
@@ -84,11 +84,11 @@ func (r NetworkSubnetCloudflareSourceUpdateParamsAddressFamily) IsKnown() bool {
 }
 
 type NetworkSubnetCloudflareSourceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Subnet                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Subnet                `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkSubnetCloudflareSourceUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkSubnetCloudflareSourceUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetCloudflareSourceUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

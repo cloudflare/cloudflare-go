@@ -47,15 +47,15 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Smart Tiered Cache dynamically selects the single closest upper tier for each of
@@ -69,15 +69,15 @@ func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCa
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Smart Tiered Cache dynamically selects the single closest upper tier for each of
@@ -91,24 +91,24 @@ func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCach
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SmartTieredCacheDeleteResponse struct {
 	// The identifier of the caching setting.
-	ID SmartTieredCacheDeleteResponseID `json:"id,required"`
+	ID SmartTieredCacheDeleteResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                          `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       smartTieredCacheDeleteResponseJSON `json:"-"`
 }
 
@@ -147,13 +147,13 @@ func (r SmartTieredCacheDeleteResponseID) IsKnown() bool {
 
 type SmartTieredCacheEditResponse struct {
 	// The identifier of the caching setting.
-	ID SmartTieredCacheEditResponseID `json:"id,required"`
+	ID SmartTieredCacheEditResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Smart Tiered Cache zone setting.
-	Value SmartTieredCacheEditResponseValue `json:"value,required"`
+	Value SmartTieredCacheEditResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                        `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       smartTieredCacheEditResponseJSON `json:"-"`
 }
 
@@ -209,13 +209,13 @@ func (r SmartTieredCacheEditResponseValue) IsKnown() bool {
 
 type SmartTieredCacheGetResponse struct {
 	// The identifier of the caching setting.
-	ID SmartTieredCacheGetResponseID `json:"id,required"`
+	ID SmartTieredCacheGetResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Smart Tiered Cache zone setting.
-	Value SmartTieredCacheGetResponseValue `json:"value,required"`
+	Value SmartTieredCacheGetResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                       `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       smartTieredCacheGetResponseJSON `json:"-"`
 }
 
@@ -271,14 +271,14 @@ func (r SmartTieredCacheGetResponseValue) IsKnown() bool {
 
 type SmartTieredCacheDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SmartTieredCacheDeleteResponse                `json:"result"`
 	JSON    smartTieredCacheDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -319,9 +319,9 @@ func (r SmartTieredCacheDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartTieredCacheEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Enable or disable the Smart Tiered Cache.
-	Value param.Field[SmartTieredCacheEditParamsValue] `json:"value,required"`
+	Value param.Field[SmartTieredCacheEditParamsValue] `json:"value" api:"required"`
 }
 
 func (r SmartTieredCacheEditParams) MarshalJSON() (data []byte, err error) {
@@ -345,10 +345,10 @@ func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type SmartTieredCacheEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SmartTieredCacheEditResponse                `json:"result"`
 	JSON    smartTieredCacheEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -389,14 +389,14 @@ func (r SmartTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartTieredCacheGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SmartTieredCacheGetResponse                `json:"result"`
 	JSON    smartTieredCacheGetResponseEnvelopeJSON    `json:"-"`
 }

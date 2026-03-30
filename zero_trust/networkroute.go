@@ -49,15 +49,15 @@ func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists and filters private network routes in an account.
@@ -67,7 +67,7 @@ func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -93,19 +93,19 @@ func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body N
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", body.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing private network route in an account. The fields that are
@@ -115,19 +115,19 @@ func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params N
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", params.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a private network route in an account.
@@ -136,19 +136,19 @@ func (r *NetworkRouteService) Get(ctx context.Context, routeID string, query Net
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", query.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Route struct {
@@ -263,11 +263,11 @@ func (r TeamnetTunType) IsKnown() bool {
 
 type NetworkRouteNewParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network param.Field[string] `json:"network,required"`
+	Network param.Field[string] `json:"network" api:"required"`
 	// UUID of the tunnel.
-	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
+	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
 	// UUID of the virtual network.
@@ -279,11 +279,11 @@ func (r NetworkRouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkRouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Route                 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkRouteNewResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkRouteNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkRouteNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -323,7 +323,7 @@ func (r NetworkRouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteListParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `query:"comment"`
 	// If provided, include only resources that were created (and not deleted) before
@@ -381,15 +381,15 @@ func (r NetworkRouteListParamsTunType) IsKnown() bool {
 
 type NetworkRouteDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkRouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Route                 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkRouteDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkRouteDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkRouteDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -429,7 +429,7 @@ func (r NetworkRouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteEditParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
@@ -445,11 +445,11 @@ func (r NetworkRouteEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkRouteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Route                 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkRouteEditResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkRouteEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkRouteEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -489,15 +489,15 @@ func (r NetworkRouteEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkRouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Route                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Route                 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkRouteGetResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkRouteGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkRouteGetResponseEnvelopeJSON    `json:"-"`
 }
 

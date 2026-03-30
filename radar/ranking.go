@@ -49,10 +49,10 @@ func (r *RankingService) TimeseriesGroups(ctx context.Context, query RankingTime
 	path := "radar/ranking/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the top or trending domains based on their rank. Popular domains are
@@ -65,16 +65,16 @@ func (r *RankingService) Top(ctx context.Context, query RankingTopParams, opts .
 	path := "radar/ranking/top"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RankingTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   RankingTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 RankingTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   RankingTimeseriesGroupsResponseMeta   `json:"meta" api:"required"`
+	Serie0 RankingTimeseriesGroupsResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   rankingTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
@@ -100,16 +100,16 @@ type RankingTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    RankingTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo RankingTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []RankingTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    RankingTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo RankingTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []RankingTimeseriesGroupsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization RankingTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization RankingTimeseriesGroupsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []RankingTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []RankingTimeseriesGroupsResponseMetaUnit `json:"units" api:"required"`
 	JSON  rankingTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
@@ -156,9 +156,9 @@ func (r RankingTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
 }
 
 type RankingTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                 `json:"level,required"`
+	Level int64                                                 `json:"level" api:"required"`
 	JSON  rankingTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -182,15 +182,15 @@ func (r rankingTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string 
 // Annotation associated with the result (e.g. outage or other type of event).
 type RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                 `json:"description,required"`
-	EndDate     time.Time                                                              `json:"endDate,required" format:"date-time"`
+	DataSource  RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                 `json:"description" api:"required"`
+	EndDate     time.Time                                                              `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
-	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                       `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                          `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                       `json:"startDate" api:"required" format:"date-time"`
 	JSON            rankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -278,9 +278,9 @@ func (r RankingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) I
 
 type RankingTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                        `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                        `json:"startTime" api:"required" format:"date-time"`
 	JSON      rankingTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -325,8 +325,8 @@ func (r RankingTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 }
 
 type RankingTimeseriesGroupsResponseMetaUnit struct {
-	Name  string                                      `json:"name,required"`
-	Value string                                      `json:"value,required"`
+	Name  string                                      `json:"name" api:"required"`
+	Value string                                      `json:"value" api:"required"`
 	JSON  rankingTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -348,8 +348,8 @@ func (r rankingTimeseriesGroupsResponseMetaUnitJSON) RawJSON() string {
 }
 
 type RankingTimeseriesGroupsResponseSerie0 struct {
-	Timestamps  []time.Time                                             `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]RankingTimeseriesGroupsResponseSerie0Union `json:"-,extras"`
+	Timestamps  []time.Time                                             `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]RankingTimeseriesGroupsResponseSerie0Union `json:"-" api:"extrafields"`
 	JSON        rankingTimeseriesGroupsResponseSerie0JSON               `json:"-"`
 }
 
@@ -392,8 +392,8 @@ func init() {
 }
 
 type RankingTopResponse struct {
-	Meta RankingTopResponseMeta   `json:"meta,required"`
-	Top0 []RankingTopResponseTop0 `json:"top_0,required"`
+	Meta RankingTopResponseMeta   `json:"meta" api:"required"`
+	Top0 []RankingTopResponseTop0 `json:"top_0" api:"required"`
 	JSON rankingTopResponseJSON   `json:"-"`
 }
 
@@ -415,15 +415,15 @@ func (r rankingTopResponseJSON) RawJSON() string {
 }
 
 type RankingTopResponseMeta struct {
-	ConfidenceInfo RankingTopResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []RankingTopResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo RankingTopResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []RankingTopResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization RankingTopResponseMetaNormalization `json:"normalization,required"`
+	Normalization RankingTopResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []RankingTopResponseMetaUnit `json:"units,required"`
+	Units []RankingTopResponseMetaUnit `json:"units" api:"required"`
 	JSON  rankingTopResponseMetaJSON   `json:"-"`
 }
 
@@ -448,9 +448,9 @@ func (r rankingTopResponseMetaJSON) RawJSON() string {
 }
 
 type RankingTopResponseMetaConfidenceInfo struct {
-	Annotations []RankingTopResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []RankingTopResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                    `json:"level,required"`
+	Level int64                                    `json:"level" api:"required"`
 	JSON  rankingTopResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -474,15 +474,15 @@ func (r rankingTopResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type RankingTopResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  RankingTopResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                    `json:"description,required"`
-	EndDate     time.Time                                                 `json:"endDate,required" format:"date-time"`
+	DataSource  RankingTopResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                    `json:"description" api:"required"`
+	EndDate     time.Time                                                 `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType RankingTopResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType RankingTopResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                               `json:"isInstantaneous,required"`
-	LinkedURL       string                                             `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                          `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                               `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                             `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                          `json:"startDate" api:"required" format:"date-time"`
 	JSON            rankingTopResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -569,9 +569,9 @@ func (r RankingTopResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool
 
 type RankingTopResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                           `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                           `json:"startTime" api:"required" format:"date-time"`
 	JSON      rankingTopResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -616,8 +616,8 @@ func (r RankingTopResponseMetaNormalization) IsKnown() bool {
 }
 
 type RankingTopResponseMetaUnit struct {
-	Name  string                         `json:"name,required"`
-	Value string                         `json:"value,required"`
+	Name  string                         `json:"name" api:"required"`
+	Value string                         `json:"value" api:"required"`
 	JSON  rankingTopResponseMetaUnitJSON `json:"-"`
 }
 
@@ -639,9 +639,9 @@ func (r rankingTopResponseMetaUnitJSON) RawJSON() string {
 }
 
 type RankingTopResponseTop0 struct {
-	Categories []RankingTopResponseTop0Category `json:"categories,required"`
-	Domain     string                           `json:"domain,required"`
-	Rank       int64                            `json:"rank,required"`
+	Categories []RankingTopResponseTop0Category `json:"categories" api:"required"`
+	Domain     string                           `json:"domain" api:"required"`
+	Rank       int64                            `json:"rank" api:"required"`
 	// Only available in TRENDING rankings.
 	PctRankChange float64                    `json:"pctRankChange"`
 	JSON          rankingTopResponseTop0JSON `json:"-"`
@@ -667,9 +667,9 @@ func (r rankingTopResponseTop0JSON) RawJSON() string {
 }
 
 type RankingTopResponseTop0Category struct {
-	ID              float64                            `json:"id,required"`
-	Name            string                             `json:"name,required"`
-	SuperCategoryID float64                            `json:"superCategoryId,required"`
+	ID              float64                            `json:"id" api:"required"`
+	Name            string                             `json:"name" api:"required"`
+	SuperCategoryID float64                            `json:"superCategoryId" api:"required"`
 	JSON            rankingTopResponseTop0CategoryJSON `json:"-"`
 }
 
@@ -760,8 +760,8 @@ func (r RankingTimeseriesGroupsParamsRankingType) IsKnown() bool {
 }
 
 type RankingTimeseriesGroupsResponseEnvelope struct {
-	Result  RankingTimeseriesGroupsResponse             `json:"result,required"`
-	Success bool                                        `json:"success,required"`
+	Result  RankingTimeseriesGroupsResponse             `json:"result" api:"required"`
+	Success bool                                        `json:"success" api:"required"`
 	JSON    rankingTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 
@@ -842,8 +842,8 @@ func (r RankingTopParamsRankingType) IsKnown() bool {
 }
 
 type RankingTopResponseEnvelope struct {
-	Result  RankingTopResponse             `json:"result,required"`
-	Success bool                           `json:"success,required"`
+	Result  RankingTopResponse             `json:"result" api:"required"`
+	Success bool                           `json:"success" api:"required"`
 	JSON    rankingTopResponseEnvelopeJSON `json:"-"`
 }
 

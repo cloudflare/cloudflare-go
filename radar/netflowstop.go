@@ -42,10 +42,10 @@ func (r *NetFlowsTopService) Ases(ctx context.Context, query NetFlowsTopAsesPara
 	path := "radar/netflows/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the top locations by network traffic (NetFlows).
@@ -55,16 +55,16 @@ func (r *NetFlowsTopService) Locations(ctx context.Context, query NetFlowsTopLoc
 	path := "radar/netflows/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type NetFlowsTopAsesResponse struct {
 	// Metadata for the results.
-	Meta NetFlowsTopAsesResponseMeta   `json:"meta,required"`
-	Top0 []NetFlowsTopAsesResponseTop0 `json:"top_0,required"`
+	Meta NetFlowsTopAsesResponseMeta   `json:"meta" api:"required"`
+	Top0 []NetFlowsTopAsesResponseTop0 `json:"top_0" api:"required"`
 	JSON netFlowsTopAsesResponseJSON   `json:"-"`
 }
 
@@ -87,15 +87,15 @@ func (r netFlowsTopAsesResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type NetFlowsTopAsesResponseMeta struct {
-	ConfidenceInfo NetFlowsTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []NetFlowsTopAsesResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo NetFlowsTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []NetFlowsTopAsesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization NetFlowsTopAsesResponseMetaNormalization `json:"normalization,required"`
+	Normalization NetFlowsTopAsesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []NetFlowsTopAsesResponseMetaUnit `json:"units,required"`
+	Units []NetFlowsTopAsesResponseMetaUnit `json:"units" api:"required"`
 	JSON  netFlowsTopAsesResponseMetaJSON   `json:"-"`
 }
 
@@ -120,9 +120,9 @@ func (r netFlowsTopAsesResponseMetaJSON) RawJSON() string {
 }
 
 type NetFlowsTopAsesResponseMetaConfidenceInfo struct {
-	Annotations []NetFlowsTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []NetFlowsTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                         `json:"level,required"`
+	Level int64                                         `json:"level" api:"required"`
 	JSON  netFlowsTopAsesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -146,15 +146,15 @@ func (r netFlowsTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetFlowsTopAsesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  NetFlowsTopAsesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                         `json:"description,required"`
-	EndDate     time.Time                                                      `json:"endDate,required" format:"date-time"`
+	DataSource  NetFlowsTopAsesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                         `json:"description" api:"required"`
+	EndDate     time.Time                                                      `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType NetFlowsTopAsesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType NetFlowsTopAsesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
-	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                               `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                  `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                               `json:"startDate" api:"required" format:"date-time"`
 	JSON            netFlowsTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -241,9 +241,9 @@ func (r NetFlowsTopAsesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown()
 
 type NetFlowsTopAsesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                `json:"startTime" api:"required" format:"date-time"`
 	JSON      netFlowsTopAsesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -288,8 +288,8 @@ func (r NetFlowsTopAsesResponseMetaNormalization) IsKnown() bool {
 }
 
 type NetFlowsTopAsesResponseMetaUnit struct {
-	Name  string                              `json:"name,required"`
-	Value string                              `json:"value,required"`
+	Name  string                              `json:"name" api:"required"`
+	Value string                              `json:"value" api:"required"`
 	JSON  netFlowsTopAsesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -311,10 +311,10 @@ func (r netFlowsTopAsesResponseMetaUnitJSON) RawJSON() string {
 }
 
 type NetFlowsTopAsesResponseTop0 struct {
-	ClientASN    float64 `json:"clientASN,required"`
-	ClientAsName string  `json:"clientASName,required"`
+	ClientASN    float64 `json:"clientASN" api:"required"`
+	ClientAsName string  `json:"clientASName" api:"required"`
 	// A numeric string.
-	Value string                          `json:"value,required"`
+	Value string                          `json:"value" api:"required"`
 	JSON  netFlowsTopAsesResponseTop0JSON `json:"-"`
 }
 
@@ -338,8 +338,8 @@ func (r netFlowsTopAsesResponseTop0JSON) RawJSON() string {
 
 type NetFlowsTopLocationsResponse struct {
 	// Metadata for the results.
-	Meta NetFlowsTopLocationsResponseMeta   `json:"meta,required"`
-	Top0 []NetFlowsTopLocationsResponseTop0 `json:"top_0,required"`
+	Meta NetFlowsTopLocationsResponseMeta   `json:"meta" api:"required"`
+	Top0 []NetFlowsTopLocationsResponseTop0 `json:"top_0" api:"required"`
 	JSON netFlowsTopLocationsResponseJSON   `json:"-"`
 }
 
@@ -362,15 +362,15 @@ func (r netFlowsTopLocationsResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type NetFlowsTopLocationsResponseMeta struct {
-	ConfidenceInfo NetFlowsTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []NetFlowsTopLocationsResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo NetFlowsTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []NetFlowsTopLocationsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization NetFlowsTopLocationsResponseMetaNormalization `json:"normalization,required"`
+	Normalization NetFlowsTopLocationsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []NetFlowsTopLocationsResponseMetaUnit `json:"units,required"`
+	Units []NetFlowsTopLocationsResponseMetaUnit `json:"units" api:"required"`
 	JSON  netFlowsTopLocationsResponseMetaJSON   `json:"-"`
 }
 
@@ -395,9 +395,9 @@ func (r netFlowsTopLocationsResponseMetaJSON) RawJSON() string {
 }
 
 type NetFlowsTopLocationsResponseMetaConfidenceInfo struct {
-	Annotations []NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                              `json:"level,required"`
+	Level int64                                              `json:"level" api:"required"`
 	JSON  netFlowsTopLocationsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -421,15 +421,15 @@ func (r netFlowsTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                              `json:"description,required"`
-	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	DataSource  NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                              `json:"description" api:"required"`
+	EndDate     time.Time                                                           `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
-	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
 	JSON            netFlowsTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -517,9 +517,9 @@ func (r NetFlowsTopLocationsResponseMetaConfidenceInfoAnnotationsEventType) IsKn
 
 type NetFlowsTopLocationsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                     `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                     `json:"startTime" api:"required" format:"date-time"`
 	JSON      netFlowsTopLocationsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -564,8 +564,8 @@ func (r NetFlowsTopLocationsResponseMetaNormalization) IsKnown() bool {
 }
 
 type NetFlowsTopLocationsResponseMetaUnit struct {
-	Name  string                                   `json:"name,required"`
-	Value string                                   `json:"value,required"`
+	Name  string                                   `json:"name" api:"required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  netFlowsTopLocationsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -587,10 +587,10 @@ func (r netFlowsTopLocationsResponseMetaUnitJSON) RawJSON() string {
 }
 
 type NetFlowsTopLocationsResponseTop0 struct {
-	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string `json:"clientCountryName,required"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2" api:"required"`
+	ClientCountryName   string `json:"clientCountryName" api:"required"`
 	// A numeric string.
-	Value string                               `json:"value,required"`
+	Value string                               `json:"value" api:"required"`
 	JSON  netFlowsTopLocationsResponseTop0JSON `json:"-"`
 }
 
@@ -672,8 +672,8 @@ func (r NetFlowsTopAsesParamsFormat) IsKnown() bool {
 }
 
 type NetFlowsTopAsesResponseEnvelope struct {
-	Result  NetFlowsTopAsesResponse             `json:"result,required"`
-	Success bool                                `json:"success,required"`
+	Result  NetFlowsTopAsesResponse             `json:"result" api:"required"`
+	Success bool                                `json:"success" api:"required"`
 	JSON    netFlowsTopAsesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -755,8 +755,8 @@ func (r NetFlowsTopLocationsParamsFormat) IsKnown() bool {
 }
 
 type NetFlowsTopLocationsResponseEnvelope struct {
-	Result  NetFlowsTopLocationsResponse             `json:"result,required"`
-	Success bool                                     `json:"success,required"`
+	Result  NetFlowsTopLocationsResponse             `json:"result" api:"required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    netFlowsTopLocationsResponseEnvelopeJSON `json:"-"`
 }
 

@@ -49,35 +49,35 @@ func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReport
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_analytics/report", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Report struct {
 	// Array with one row per combination of dimension values.
-	Data []ReportData `json:"data,required"`
+	Data []ReportData `json:"data" api:"required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
-	DataLag float64 `json:"data_lag,required"`
+	DataLag float64 `json:"data_lag" api:"required"`
 	// Maximum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Max interface{} `json:"max,required"`
+	Max interface{} `json:"max" api:"required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{} `json:"min,required"`
-	Query ReportQuery `json:"query,required"`
+	Min   interface{} `json:"min" api:"required"`
+	Query ReportQuery `json:"query" api:"required"`
 	// Total number of rows in the result.
-	Rows float64 `json:"rows,required"`
+	Rows float64 `json:"rows" api:"required"`
 	// Total results for metrics across all data (object mapping metric names to
 	// values).
-	Totals interface{} `json:"totals,required"`
+	Totals interface{} `json:"totals" api:"required"`
 	JSON   reportJSON  `json:"-"`
 }
 
@@ -105,9 +105,9 @@ func (r reportJSON) RawJSON() string {
 type ReportData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
-	Dimensions []string `json:"dimensions,required"`
+	Dimensions []string `json:"dimensions" api:"required"`
 	// Array with one item per requested metric. Each item is a single value.
-	Metrics []float64      `json:"metrics,required"`
+	Metrics []float64      `json:"metrics" api:"required"`
 	JSON    reportDataJSON `json:"-"`
 }
 
@@ -129,15 +129,15 @@ func (r reportDataJSON) RawJSON() string {
 
 type ReportQuery struct {
 	// Array of dimension names.
-	Dimensions []string `json:"dimensions,required"`
+	Dimensions []string `json:"dimensions" api:"required"`
 	// Limit number of returned metrics.
-	Limit int64 `json:"limit,required"`
+	Limit int64 `json:"limit" api:"required"`
 	// Array of metric names.
-	Metrics []string `json:"metrics,required"`
+	Metrics []string `json:"metrics" api:"required"`
 	// Start date and time of requesting data period in ISO 8601 format.
-	Since time.Time `json:"since,required" format:"date-time"`
+	Since time.Time `json:"since" api:"required" format:"date-time"`
 	// End date and time of requesting data period in ISO 8601 format.
-	Until time.Time `json:"until,required" format:"date-time"`
+	Until time.Time `json:"until" api:"required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
@@ -169,7 +169,7 @@ func (r reportQueryJSON) RawJSON() string {
 
 type AnalyticsReportGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -197,10 +197,10 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsReportGetResponseEnvelope struct {
-	Errors   []AnalyticsReportGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsReportGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AnalyticsReportGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AnalyticsReportGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Report                                    `json:"result"`
 	JSON    analyticsReportGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -225,8 +225,8 @@ func (r analyticsReportGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AnalyticsReportGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AnalyticsReportGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             analyticsReportGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -273,8 +273,8 @@ func (r analyticsReportGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AnalyticsReportGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AnalyticsReportGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             analyticsReportGetResponseEnvelopeMessagesJSON   `json:"-"`

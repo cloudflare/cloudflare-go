@@ -50,15 +50,15 @@ func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a list of all user projects.
@@ -68,7 +68,7 @@ func (r *ProjectService) List(ctx context.Context, params ProjectListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -94,19 +94,19 @@ func (r *ProjectService) Delete(ctx context.Context, projectName string, body Pr
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", body.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Set new attributes for an existing project. Modify environment variables. To
@@ -116,19 +116,19 @@ func (r *ProjectService) Edit(ctx context.Context, projectName string, params Pr
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", params.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a project by name.
@@ -137,19 +137,19 @@ func (r *ProjectService) Get(ctx context.Context, projectName string, query Proj
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", query.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Purge all cached build artifacts for a Pages project
@@ -158,56 +158,56 @@ func (r *ProjectService) PurgeBuildCache(ctx context.Context, projectName string
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/purge_build_cache", body.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Deployment struct {
 	// Id of the deployment.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A list of alias URLs pointing to this deployment.
-	Aliases []string `json:"aliases,required,nullable"`
+	Aliases []string `json:"aliases" api:"required,nullable"`
 	// Configs for the project build process.
-	BuildConfig DeploymentBuildConfig `json:"build_config,required"`
+	BuildConfig DeploymentBuildConfig `json:"build_config" api:"required"`
 	// When the deployment was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Info about what caused the deployment.
-	DeploymentTrigger DeploymentDeploymentTrigger `json:"deployment_trigger,required"`
+	DeploymentTrigger DeploymentDeploymentTrigger `json:"deployment_trigger" api:"required"`
 	// Environment variables used for builds and Pages Functions.
-	EnvVars map[string]DeploymentEnvVar `json:"env_vars,required,nullable"`
+	EnvVars map[string]DeploymentEnvVar `json:"env_vars" api:"required,nullable"`
 	// Type of deploy.
-	Environment DeploymentEnvironment `json:"environment,required"`
+	Environment DeploymentEnvironment `json:"environment" api:"required"`
 	// If the deployment has been skipped.
-	IsSkipped bool `json:"is_skipped,required"`
+	IsSkipped bool `json:"is_skipped" api:"required"`
 	// The status of the deployment.
-	LatestStage Stage `json:"latest_stage,required"`
+	LatestStage Stage `json:"latest_stage" api:"required"`
 	// When the deployment was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Id of the project.
-	ProjectID string `json:"project_id,required"`
+	ProjectID string `json:"project_id" api:"required"`
 	// Name of the project.
-	ProjectName string `json:"project_name,required"`
+	ProjectName string `json:"project_name" api:"required"`
 	// Short Id (8 character) of the deployment.
-	ShortID string `json:"short_id,required"`
+	ShortID string `json:"short_id" api:"required"`
 	// Configs for the project source control.
-	Source DeploymentSource `json:"source,required"`
+	Source DeploymentSource `json:"source" api:"required"`
 	// List of past stages.
-	Stages []Stage `json:"stages,required"`
+	Stages []Stage `json:"stages" api:"required"`
 	// The live URL to view this deployment.
-	URL string `json:"url,required"`
+	URL string `json:"url" api:"required"`
 	// Whether the deployment uses functions.
-	UsesFunctions bool           `json:"uses_functions,nullable"`
+	UsesFunctions bool           `json:"uses_functions" api:"nullable"`
 	JSON          deploymentJSON `json:"-"`
 }
 
@@ -245,17 +245,17 @@ func (r deploymentJSON) RawJSON() string {
 // Configs for the project build process.
 type DeploymentBuildConfig struct {
 	// The classifying tag for analytics.
-	WebAnalyticsTag string `json:"web_analytics_tag,required,nullable"`
+	WebAnalyticsTag string `json:"web_analytics_tag" api:"required,nullable"`
 	// The auth token for analytics.
-	WebAnalyticsToken string `json:"web_analytics_token,required,nullable"`
+	WebAnalyticsToken string `json:"web_analytics_token" api:"required,nullable"`
 	// Enable build caching for the project.
-	BuildCaching bool `json:"build_caching,nullable"`
+	BuildCaching bool `json:"build_caching" api:"nullable"`
 	// Command used to build project.
-	BuildCommand string `json:"build_command,nullable"`
+	BuildCommand string `json:"build_command" api:"nullable"`
 	// Assets output directory of the build.
-	DestinationDir string `json:"destination_dir,nullable"`
+	DestinationDir string `json:"destination_dir" api:"nullable"`
 	// Directory to run the command.
-	RootDir string                    `json:"root_dir,nullable"`
+	RootDir string                    `json:"root_dir" api:"nullable"`
 	JSON    deploymentBuildConfigJSON `json:"-"`
 }
 
@@ -283,9 +283,9 @@ func (r deploymentBuildConfigJSON) RawJSON() string {
 // Info about what caused the deployment.
 type DeploymentDeploymentTrigger struct {
 	// Additional info about the trigger.
-	Metadata DeploymentDeploymentTriggerMetadata `json:"metadata,required"`
+	Metadata DeploymentDeploymentTriggerMetadata `json:"metadata" api:"required"`
 	// What caused the deployment.
-	Type DeploymentDeploymentTriggerType `json:"type,required"`
+	Type DeploymentDeploymentTriggerType `json:"type" api:"required"`
 	JSON deploymentDeploymentTriggerJSON `json:"-"`
 }
 
@@ -309,13 +309,13 @@ func (r deploymentDeploymentTriggerJSON) RawJSON() string {
 // Additional info about the trigger.
 type DeploymentDeploymentTriggerMetadata struct {
 	// Where the trigger happened.
-	Branch string `json:"branch,required"`
+	Branch string `json:"branch" api:"required"`
 	// Whether the deployment trigger commit was dirty.
-	CommitDirty bool `json:"commit_dirty,required"`
+	CommitDirty bool `json:"commit_dirty" api:"required"`
 	// Hash of the deployment trigger commit.
-	CommitHash string `json:"commit_hash,required"`
+	CommitHash string `json:"commit_hash" api:"required"`
 	// Message of the deployment trigger commit.
-	CommitMessage string                                  `json:"commit_message,required"`
+	CommitMessage string                                  `json:"commit_message" api:"required"`
 	JSON          deploymentDeploymentTriggerMetadataJSON `json:"-"`
 }
 
@@ -357,9 +357,9 @@ func (r DeploymentDeploymentTriggerType) IsKnown() bool {
 
 // A plaintext environment variable.
 type DeploymentEnvVar struct {
-	Type DeploymentEnvVarsType `json:"type,required"`
+	Type DeploymentEnvVarsType `json:"type" api:"required"`
 	// Environment variable value.
-	Value string               `json:"value,required"`
+	Value string               `json:"value" api:"required"`
 	JSON  deploymentEnvVarJSON `json:"-"`
 	union DeploymentEnvVarsUnion
 }
@@ -422,9 +422,9 @@ func init() {
 
 // A plaintext environment variable.
 type DeploymentEnvVarsPagesPlainTextEnvVar struct {
-	Type DeploymentEnvVarsPagesPlainTextEnvVarType `json:"type,required"`
+	Type DeploymentEnvVarsPagesPlainTextEnvVarType `json:"type" api:"required"`
 	// Environment variable value.
-	Value string                                    `json:"value,required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  deploymentEnvVarsPagesPlainTextEnvVarJSON `json:"-"`
 }
 
@@ -463,9 +463,9 @@ func (r DeploymentEnvVarsPagesPlainTextEnvVarType) IsKnown() bool {
 
 // An encrypted environment variable.
 type DeploymentEnvVarsPagesSecretTextEnvVar struct {
-	Type DeploymentEnvVarsPagesSecretTextEnvVarType `json:"type,required"`
+	Type DeploymentEnvVarsPagesSecretTextEnvVarType `json:"type" api:"required"`
 	// Secret value.
-	Value string                                     `json:"value,required"`
+	Value string                                     `json:"value" api:"required"`
 	JSON  deploymentEnvVarsPagesSecretTextEnvVarJSON `json:"-"`
 }
 
@@ -535,9 +535,9 @@ func (r DeploymentEnvironment) IsKnown() bool {
 
 // Configs for the project source control.
 type DeploymentSource struct {
-	Config DeploymentSourceConfig `json:"config,required"`
+	Config DeploymentSourceConfig `json:"config" api:"required"`
 	// The source control management provider.
-	Type DeploymentSourceType `json:"type,required"`
+	Type DeploymentSourceType `json:"type" api:"required"`
 	JSON deploymentSourceJSON `json:"-"`
 }
 
@@ -565,37 +565,37 @@ type DeploymentSourceConfig struct {
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	DeploymentsEnabled bool `json:"deployments_enabled" api:"required"`
 	// The owner of the repository.
-	Owner string `json:"owner,required"`
+	Owner string `json:"owner" api:"required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id,required"`
+	OwnerID string `json:"owner_id" api:"required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes,required"`
+	PathExcludes []string `json:"path_excludes" api:"required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes,required"`
+	PathIncludes []string `json:"path_includes" api:"required"`
 	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
+	PrCommentsEnabled bool `json:"pr_comments_enabled" api:"required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes" api:"required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes" api:"required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting DeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	PreviewDeploymentSetting DeploymentSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting" api:"required"`
 	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
+	ProductionBranch string `json:"production_branch" api:"required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled" api:"required"`
 	// The ID of the repository.
-	RepoID string `json:"repo_id,required"`
+	RepoID string `json:"repo_id" api:"required"`
 	// The name of the repository.
-	RepoName string                     `json:"repo_name,required"`
+	RepoName string                     `json:"repo_name" api:"required"`
 	JSON     deploymentSourceConfigJSON `json:"-"`
 }
 
@@ -662,29 +662,29 @@ func (r DeploymentSourceType) IsKnown() bool {
 
 type Project struct {
 	// ID of the project.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Most recent production deployment of the project.
-	CanonicalDeployment Deployment `json:"canonical_deployment,required,nullable"`
+	CanonicalDeployment Deployment `json:"canonical_deployment" api:"required,nullable"`
 	// When the project was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Configs for deployments in a project.
-	DeploymentConfigs ProjectDeploymentConfigs `json:"deployment_configs,required"`
+	DeploymentConfigs ProjectDeploymentConfigs `json:"deployment_configs" api:"required"`
 	// Framework the project is using.
-	Framework string `json:"framework,required"`
+	Framework string `json:"framework" api:"required"`
 	// Version of the framework the project is using.
-	FrameworkVersion string `json:"framework_version,required"`
+	FrameworkVersion string `json:"framework_version" api:"required"`
 	// Most recent deployment of the project.
-	LatestDeployment Deployment `json:"latest_deployment,required,nullable"`
+	LatestDeployment Deployment `json:"latest_deployment" api:"required,nullable"`
 	// Name of the project.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the preview script.
-	PreviewScriptName string `json:"preview_script_name,required"`
+	PreviewScriptName string `json:"preview_script_name" api:"required"`
 	// Production branch of the project. Used to identify production deployments.
-	ProductionBranch string `json:"production_branch,required"`
+	ProductionBranch string `json:"production_branch" api:"required"`
 	// Name of the production script.
-	ProductionScriptName string `json:"production_script_name,required"`
+	ProductionScriptName string `json:"production_script_name" api:"required"`
 	// Whether the project uses functions.
-	UsesFunctions bool `json:"uses_functions,required,nullable"`
+	UsesFunctions bool `json:"uses_functions" api:"required,nullable"`
 	// Configs for the project build process.
 	BuildConfig ProjectBuildConfig `json:"build_config"`
 	// A list of associated custom domains for the project.
@@ -729,9 +729,9 @@ func (r projectJSON) RawJSON() string {
 // Configs for deployments in a project.
 type ProjectDeploymentConfigs struct {
 	// Configs for preview deploys.
-	Preview ProjectDeploymentConfigsPreview `json:"preview,required"`
+	Preview ProjectDeploymentConfigsPreview `json:"preview" api:"required"`
 	// Configs for production deploys.
-	Production ProjectDeploymentConfigsProduction `json:"production,required"`
+	Production ProjectDeploymentConfigsProduction `json:"production" api:"required"`
 	JSON       projectDeploymentConfigsJSON       `json:"-"`
 }
 
@@ -755,21 +755,21 @@ func (r projectDeploymentConfigsJSON) RawJSON() string {
 // Configs for preview deploys.
 type ProjectDeploymentConfigsPreview struct {
 	// Whether to always use the latest compatibility date for Pages Functions.
-	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date,required"`
+	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date" api:"required"`
 	// The major version of the build image to use for Pages Functions.
-	BuildImageMajorVersion int64 `json:"build_image_major_version,required"`
+	BuildImageMajorVersion int64 `json:"build_image_major_version" api:"required"`
 	// Compatibility date used for Pages Functions.
-	CompatibilityDate string `json:"compatibility_date,required"`
+	CompatibilityDate string `json:"compatibility_date" api:"required"`
 	// Compatibility flags used for Pages Functions.
-	CompatibilityFlags []string `json:"compatibility_flags,required"`
+	CompatibilityFlags []string `json:"compatibility_flags" api:"required"`
 	// Environment variables used for builds and Pages Functions.
-	EnvVars map[string]ProjectDeploymentConfigsPreviewEnvVar `json:"env_vars,required,nullable"`
+	EnvVars map[string]ProjectDeploymentConfigsPreviewEnvVar `json:"env_vars" api:"required,nullable"`
 	// Whether to fail open when the deployment config cannot be applied.
-	FailOpen bool `json:"fail_open,required"`
+	FailOpen bool `json:"fail_open" api:"required"`
 	// The usage model for Pages Functions.
 	//
 	// Deprecated: All new projects now use the Standard usage model.
-	UsageModel ProjectDeploymentConfigsPreviewUsageModel `json:"usage_model,required"`
+	UsageModel ProjectDeploymentConfigsPreviewUsageModel `json:"usage_model" api:"required"`
 	// Constellation bindings used for Pages Functions.
 	AIBindings map[string]ProjectDeploymentConfigsPreviewAIBinding `json:"ai_bindings"`
 	// Analytics Engine bindings used for Pages Functions.
@@ -842,9 +842,9 @@ func (r projectDeploymentConfigsPreviewJSON) RawJSON() string {
 
 // A plaintext environment variable.
 type ProjectDeploymentConfigsPreviewEnvVar struct {
-	Type ProjectDeploymentConfigsPreviewEnvVarsType `json:"type,required"`
+	Type ProjectDeploymentConfigsPreviewEnvVarsType `json:"type" api:"required"`
 	// Environment variable value.
-	Value string                                    `json:"value,required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  projectDeploymentConfigsPreviewEnvVarJSON `json:"-"`
 	union ProjectDeploymentConfigsPreviewEnvVarsUnion
 }
@@ -908,9 +908,9 @@ func init() {
 
 // A plaintext environment variable.
 type ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar struct {
-	Type ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType `json:"type,required"`
+	Type ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType `json:"type" api:"required"`
 	// Environment variable value.
-	Value string                                                         `json:"value,required"`
+	Value string                                                         `json:"value" api:"required"`
 	JSON  projectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarJSON `json:"-"`
 }
 
@@ -951,9 +951,9 @@ func (r ProjectDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType) IsKnown(
 
 // An encrypted environment variable.
 type ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar struct {
-	Type ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType `json:"type,required"`
+	Type ProjectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType `json:"type" api:"required"`
 	// Secret value.
-	Value string                                                          `json:"value,required"`
+	Value string                                                          `json:"value" api:"required"`
 	JSON  projectDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarJSON `json:"-"`
 }
 
@@ -1026,7 +1026,7 @@ func (r ProjectDeploymentConfigsPreviewUsageModel) IsKnown() bool {
 
 // AI binding.
 type ProjectDeploymentConfigsPreviewAIBinding struct {
-	ProjectID string                                       `json:"project_id,required"`
+	ProjectID string                                       `json:"project_id" api:"required"`
 	JSON      projectDeploymentConfigsPreviewAIBindingJSON `json:"-"`
 }
 
@@ -1049,7 +1049,7 @@ func (r projectDeploymentConfigsPreviewAIBindingJSON) RawJSON() string {
 // Analytics Engine binding.
 type ProjectDeploymentConfigsPreviewAnalyticsEngineDataset struct {
 	// Name of the dataset.
-	Dataset string                                                    `json:"dataset,required"`
+	Dataset string                                                    `json:"dataset" api:"required"`
 	JSON    projectDeploymentConfigsPreviewAnalyticsEngineDatasetJSON `json:"-"`
 }
 
@@ -1092,7 +1092,7 @@ func (r projectDeploymentConfigsPreviewBrowserJSON) RawJSON() string {
 // D1 binding.
 type ProjectDeploymentConfigsPreviewD1Database struct {
 	// UUID of the D1 database.
-	ID   string                                        `json:"id,required"`
+	ID   string                                        `json:"id" api:"required"`
 	JSON projectDeploymentConfigsPreviewD1DatabaseJSON `json:"-"`
 }
 
@@ -1115,7 +1115,7 @@ func (r projectDeploymentConfigsPreviewD1DatabaseJSON) RawJSON() string {
 // Durable Object binding.
 type ProjectDeploymentConfigsPreviewDurableObjectNamespace struct {
 	// ID of the Durable Object namespace.
-	NamespaceID string                                                    `json:"namespace_id,required"`
+	NamespaceID string                                                    `json:"namespace_id" api:"required"`
 	JSON        projectDeploymentConfigsPreviewDurableObjectNamespaceJSON `json:"-"`
 }
 
@@ -1137,7 +1137,7 @@ func (r projectDeploymentConfigsPreviewDurableObjectNamespaceJSON) RawJSON() str
 
 // Hyperdrive binding.
 type ProjectDeploymentConfigsPreviewHyperdriveBinding struct {
-	ID   string                                               `json:"id,required"`
+	ID   string                                               `json:"id" api:"required"`
 	JSON projectDeploymentConfigsPreviewHyperdriveBindingJSON `json:"-"`
 }
 
@@ -1160,7 +1160,7 @@ func (r projectDeploymentConfigsPreviewHyperdriveBindingJSON) RawJSON() string {
 // KV namespace binding.
 type ProjectDeploymentConfigsPreviewKVNamespace struct {
 	// ID of the KV namespace.
-	NamespaceID string                                         `json:"namespace_id,required"`
+	NamespaceID string                                         `json:"namespace_id" api:"required"`
 	JSON        projectDeploymentConfigsPreviewKVNamespaceJSON `json:"-"`
 }
 
@@ -1183,7 +1183,7 @@ func (r projectDeploymentConfigsPreviewKVNamespaceJSON) RawJSON() string {
 // Limits for Pages Functions.
 type ProjectDeploymentConfigsPreviewLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs int64                                     `json:"cpu_ms,required"`
+	CPUMs int64                                     `json:"cpu_ms" api:"required"`
 	JSON  projectDeploymentConfigsPreviewLimitsJSON `json:"-"`
 }
 
@@ -1205,7 +1205,7 @@ func (r projectDeploymentConfigsPreviewLimitsJSON) RawJSON() string {
 
 // mTLS binding.
 type ProjectDeploymentConfigsPreviewMTLSCertificate struct {
-	CertificateID string                                             `json:"certificate_id,required"`
+	CertificateID string                                             `json:"certificate_id" api:"required"`
 	JSON          projectDeploymentConfigsPreviewMTLSCertificateJSON `json:"-"`
 }
 
@@ -1228,7 +1228,7 @@ func (r projectDeploymentConfigsPreviewMTLSCertificateJSON) RawJSON() string {
 // Placement setting used for Pages Functions.
 type ProjectDeploymentConfigsPreviewPlacement struct {
 	// Placement mode.
-	Mode string                                       `json:"mode,required"`
+	Mode string                                       `json:"mode" api:"required"`
 	JSON projectDeploymentConfigsPreviewPlacementJSON `json:"-"`
 }
 
@@ -1251,7 +1251,7 @@ func (r projectDeploymentConfigsPreviewPlacementJSON) RawJSON() string {
 // Queue Producer binding.
 type ProjectDeploymentConfigsPreviewQueueProducer struct {
 	// Name of the Queue.
-	Name string                                           `json:"name,required"`
+	Name string                                           `json:"name" api:"required"`
 	JSON projectDeploymentConfigsPreviewQueueProducerJSON `json:"-"`
 }
 
@@ -1274,9 +1274,9 @@ func (r projectDeploymentConfigsPreviewQueueProducerJSON) RawJSON() string {
 // R2 binding.
 type ProjectDeploymentConfigsPreviewR2Bucket struct {
 	// Name of the R2 bucket.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Jurisdiction of the R2 bucket.
-	Jurisdiction string                                      `json:"jurisdiction,nullable"`
+	Jurisdiction string                                      `json:"jurisdiction" api:"nullable"`
 	JSON         projectDeploymentConfigsPreviewR2BucketJSON `json:"-"`
 }
 
@@ -1300,11 +1300,11 @@ func (r projectDeploymentConfigsPreviewR2BucketJSON) RawJSON() string {
 // Service binding.
 type ProjectDeploymentConfigsPreviewService struct {
 	// The Service environment.
-	Environment string `json:"environment,required"`
+	Environment string `json:"environment" api:"required"`
 	// The Service name.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// The entrypoint to bind to.
-	Entrypoint string                                     `json:"entrypoint,nullable"`
+	Entrypoint string                                     `json:"entrypoint" api:"nullable"`
 	JSON       projectDeploymentConfigsPreviewServiceJSON `json:"-"`
 }
 
@@ -1328,7 +1328,7 @@ func (r projectDeploymentConfigsPreviewServiceJSON) RawJSON() string {
 
 // Vectorize binding.
 type ProjectDeploymentConfigsPreviewVectorizeBinding struct {
-	IndexName string                                              `json:"index_name,required"`
+	IndexName string                                              `json:"index_name" api:"required"`
 	JSON      projectDeploymentConfigsPreviewVectorizeBindingJSON `json:"-"`
 }
 
@@ -1351,21 +1351,21 @@ func (r projectDeploymentConfigsPreviewVectorizeBindingJSON) RawJSON() string {
 // Configs for production deploys.
 type ProjectDeploymentConfigsProduction struct {
 	// Whether to always use the latest compatibility date for Pages Functions.
-	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date,required"`
+	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date" api:"required"`
 	// The major version of the build image to use for Pages Functions.
-	BuildImageMajorVersion int64 `json:"build_image_major_version,required"`
+	BuildImageMajorVersion int64 `json:"build_image_major_version" api:"required"`
 	// Compatibility date used for Pages Functions.
-	CompatibilityDate string `json:"compatibility_date,required"`
+	CompatibilityDate string `json:"compatibility_date" api:"required"`
 	// Compatibility flags used for Pages Functions.
-	CompatibilityFlags []string `json:"compatibility_flags,required"`
+	CompatibilityFlags []string `json:"compatibility_flags" api:"required"`
 	// Environment variables used for builds and Pages Functions.
-	EnvVars map[string]ProjectDeploymentConfigsProductionEnvVar `json:"env_vars,required,nullable"`
+	EnvVars map[string]ProjectDeploymentConfigsProductionEnvVar `json:"env_vars" api:"required,nullable"`
 	// Whether to fail open when the deployment config cannot be applied.
-	FailOpen bool `json:"fail_open,required"`
+	FailOpen bool `json:"fail_open" api:"required"`
 	// The usage model for Pages Functions.
 	//
 	// Deprecated: All new projects now use the Standard usage model.
-	UsageModel ProjectDeploymentConfigsProductionUsageModel `json:"usage_model,required"`
+	UsageModel ProjectDeploymentConfigsProductionUsageModel `json:"usage_model" api:"required"`
 	// Constellation bindings used for Pages Functions.
 	AIBindings map[string]ProjectDeploymentConfigsProductionAIBinding `json:"ai_bindings"`
 	// Analytics Engine bindings used for Pages Functions.
@@ -1438,9 +1438,9 @@ func (r projectDeploymentConfigsProductionJSON) RawJSON() string {
 
 // A plaintext environment variable.
 type ProjectDeploymentConfigsProductionEnvVar struct {
-	Type ProjectDeploymentConfigsProductionEnvVarsType `json:"type,required"`
+	Type ProjectDeploymentConfigsProductionEnvVarsType `json:"type" api:"required"`
 	// Environment variable value.
-	Value string                                       `json:"value,required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  projectDeploymentConfigsProductionEnvVarJSON `json:"-"`
 	union ProjectDeploymentConfigsProductionEnvVarsUnion
 }
@@ -1505,9 +1505,9 @@ func init() {
 
 // A plaintext environment variable.
 type ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar struct {
-	Type ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType `json:"type,required"`
+	Type ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType `json:"type" api:"required"`
 	// Environment variable value.
-	Value string                                                            `json:"value,required"`
+	Value string                                                            `json:"value" api:"required"`
 	JSON  projectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarJSON `json:"-"`
 }
 
@@ -1548,9 +1548,9 @@ func (r ProjectDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType) IsKno
 
 // An encrypted environment variable.
 type ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar struct {
-	Type ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType `json:"type,required"`
+	Type ProjectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType `json:"type" api:"required"`
 	// Secret value.
-	Value string                                                             `json:"value,required"`
+	Value string                                                             `json:"value" api:"required"`
 	JSON  projectDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarJSON `json:"-"`
 }
 
@@ -1623,7 +1623,7 @@ func (r ProjectDeploymentConfigsProductionUsageModel) IsKnown() bool {
 
 // AI binding.
 type ProjectDeploymentConfigsProductionAIBinding struct {
-	ProjectID string                                          `json:"project_id,required"`
+	ProjectID string                                          `json:"project_id" api:"required"`
 	JSON      projectDeploymentConfigsProductionAIBindingJSON `json:"-"`
 }
 
@@ -1646,7 +1646,7 @@ func (r projectDeploymentConfigsProductionAIBindingJSON) RawJSON() string {
 // Analytics Engine binding.
 type ProjectDeploymentConfigsProductionAnalyticsEngineDataset struct {
 	// Name of the dataset.
-	Dataset string                                                       `json:"dataset,required"`
+	Dataset string                                                       `json:"dataset" api:"required"`
 	JSON    projectDeploymentConfigsProductionAnalyticsEngineDatasetJSON `json:"-"`
 }
 
@@ -1690,7 +1690,7 @@ func (r projectDeploymentConfigsProductionBrowserJSON) RawJSON() string {
 // D1 binding.
 type ProjectDeploymentConfigsProductionD1Database struct {
 	// UUID of the D1 database.
-	ID   string                                           `json:"id,required"`
+	ID   string                                           `json:"id" api:"required"`
 	JSON projectDeploymentConfigsProductionD1DatabaseJSON `json:"-"`
 }
 
@@ -1713,7 +1713,7 @@ func (r projectDeploymentConfigsProductionD1DatabaseJSON) RawJSON() string {
 // Durable Object binding.
 type ProjectDeploymentConfigsProductionDurableObjectNamespace struct {
 	// ID of the Durable Object namespace.
-	NamespaceID string                                                       `json:"namespace_id,required"`
+	NamespaceID string                                                       `json:"namespace_id" api:"required"`
 	JSON        projectDeploymentConfigsProductionDurableObjectNamespaceJSON `json:"-"`
 }
 
@@ -1736,7 +1736,7 @@ func (r projectDeploymentConfigsProductionDurableObjectNamespaceJSON) RawJSON() 
 
 // Hyperdrive binding.
 type ProjectDeploymentConfigsProductionHyperdriveBinding struct {
-	ID   string                                                  `json:"id,required"`
+	ID   string                                                  `json:"id" api:"required"`
 	JSON projectDeploymentConfigsProductionHyperdriveBindingJSON `json:"-"`
 }
 
@@ -1759,7 +1759,7 @@ func (r projectDeploymentConfigsProductionHyperdriveBindingJSON) RawJSON() strin
 // KV namespace binding.
 type ProjectDeploymentConfigsProductionKVNamespace struct {
 	// ID of the KV namespace.
-	NamespaceID string                                            `json:"namespace_id,required"`
+	NamespaceID string                                            `json:"namespace_id" api:"required"`
 	JSON        projectDeploymentConfigsProductionKVNamespaceJSON `json:"-"`
 }
 
@@ -1782,7 +1782,7 @@ func (r projectDeploymentConfigsProductionKVNamespaceJSON) RawJSON() string {
 // Limits for Pages Functions.
 type ProjectDeploymentConfigsProductionLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs int64                                        `json:"cpu_ms,required"`
+	CPUMs int64                                        `json:"cpu_ms" api:"required"`
 	JSON  projectDeploymentConfigsProductionLimitsJSON `json:"-"`
 }
 
@@ -1804,7 +1804,7 @@ func (r projectDeploymentConfigsProductionLimitsJSON) RawJSON() string {
 
 // mTLS binding.
 type ProjectDeploymentConfigsProductionMTLSCertificate struct {
-	CertificateID string                                                `json:"certificate_id,required"`
+	CertificateID string                                                `json:"certificate_id" api:"required"`
 	JSON          projectDeploymentConfigsProductionMTLSCertificateJSON `json:"-"`
 }
 
@@ -1827,7 +1827,7 @@ func (r projectDeploymentConfigsProductionMTLSCertificateJSON) RawJSON() string 
 // Placement setting used for Pages Functions.
 type ProjectDeploymentConfigsProductionPlacement struct {
 	// Placement mode.
-	Mode string                                          `json:"mode,required"`
+	Mode string                                          `json:"mode" api:"required"`
 	JSON projectDeploymentConfigsProductionPlacementJSON `json:"-"`
 }
 
@@ -1850,7 +1850,7 @@ func (r projectDeploymentConfigsProductionPlacementJSON) RawJSON() string {
 // Queue Producer binding.
 type ProjectDeploymentConfigsProductionQueueProducer struct {
 	// Name of the Queue.
-	Name string                                              `json:"name,required"`
+	Name string                                              `json:"name" api:"required"`
 	JSON projectDeploymentConfigsProductionQueueProducerJSON `json:"-"`
 }
 
@@ -1873,9 +1873,9 @@ func (r projectDeploymentConfigsProductionQueueProducerJSON) RawJSON() string {
 // R2 binding.
 type ProjectDeploymentConfigsProductionR2Bucket struct {
 	// Name of the R2 bucket.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Jurisdiction of the R2 bucket.
-	Jurisdiction string                                         `json:"jurisdiction,nullable"`
+	Jurisdiction string                                         `json:"jurisdiction" api:"nullable"`
 	JSON         projectDeploymentConfigsProductionR2BucketJSON `json:"-"`
 }
 
@@ -1899,11 +1899,11 @@ func (r projectDeploymentConfigsProductionR2BucketJSON) RawJSON() string {
 // Service binding.
 type ProjectDeploymentConfigsProductionService struct {
 	// The Service environment.
-	Environment string `json:"environment,required"`
+	Environment string `json:"environment" api:"required"`
 	// The Service name.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// The entrypoint to bind to.
-	Entrypoint string                                        `json:"entrypoint,nullable"`
+	Entrypoint string                                        `json:"entrypoint" api:"nullable"`
 	JSON       projectDeploymentConfigsProductionServiceJSON `json:"-"`
 }
 
@@ -1927,7 +1927,7 @@ func (r projectDeploymentConfigsProductionServiceJSON) RawJSON() string {
 
 // Vectorize binding.
 type ProjectDeploymentConfigsProductionVectorizeBinding struct {
-	IndexName string                                                 `json:"index_name,required"`
+	IndexName string                                                 `json:"index_name" api:"required"`
 	JSON      projectDeploymentConfigsProductionVectorizeBindingJSON `json:"-"`
 }
 
@@ -1950,17 +1950,17 @@ func (r projectDeploymentConfigsProductionVectorizeBindingJSON) RawJSON() string
 // Configs for the project build process.
 type ProjectBuildConfig struct {
 	// The classifying tag for analytics.
-	WebAnalyticsTag string `json:"web_analytics_tag,required,nullable"`
+	WebAnalyticsTag string `json:"web_analytics_tag" api:"required,nullable"`
 	// The auth token for analytics.
-	WebAnalyticsToken string `json:"web_analytics_token,required,nullable"`
+	WebAnalyticsToken string `json:"web_analytics_token" api:"required,nullable"`
 	// Enable build caching for the project.
-	BuildCaching bool `json:"build_caching,nullable"`
+	BuildCaching bool `json:"build_caching" api:"nullable"`
 	// Command used to build project.
-	BuildCommand string `json:"build_command,nullable"`
+	BuildCommand string `json:"build_command" api:"nullable"`
 	// Assets output directory of the build.
-	DestinationDir string `json:"destination_dir,nullable"`
+	DestinationDir string `json:"destination_dir" api:"nullable"`
 	// Directory to run the command.
-	RootDir string                 `json:"root_dir,nullable"`
+	RootDir string                 `json:"root_dir" api:"nullable"`
 	JSON    projectBuildConfigJSON `json:"-"`
 }
 
@@ -1987,9 +1987,9 @@ func (r projectBuildConfigJSON) RawJSON() string {
 
 // Configs for the project source control.
 type ProjectSource struct {
-	Config ProjectSourceConfig `json:"config,required"`
+	Config ProjectSourceConfig `json:"config" api:"required"`
 	// The source control management provider.
-	Type ProjectSourceType `json:"type,required"`
+	Type ProjectSourceType `json:"type" api:"required"`
 	JSON projectSourceJSON `json:"-"`
 }
 
@@ -2016,37 +2016,37 @@ type ProjectSourceConfig struct {
 	//
 	// Deprecated: Use `production_deployments_enabled` and
 	// `preview_deployment_setting` for more granular control.
-	DeploymentsEnabled bool `json:"deployments_enabled,required"`
+	DeploymentsEnabled bool `json:"deployments_enabled" api:"required"`
 	// The owner of the repository.
-	Owner string `json:"owner,required"`
+	Owner string `json:"owner" api:"required"`
 	// The owner ID of the repository.
-	OwnerID string `json:"owner_id,required"`
+	OwnerID string `json:"owner_id" api:"required"`
 	// A list of paths that should be excluded from triggering a preview deployment.
 	// Wildcard syntax (`*`) is supported.
-	PathExcludes []string `json:"path_excludes,required"`
+	PathExcludes []string `json:"path_excludes" api:"required"`
 	// A list of paths that should be watched to trigger a preview deployment. Wildcard
 	// syntax (`*`) is supported.
-	PathIncludes []string `json:"path_includes,required"`
+	PathIncludes []string `json:"path_includes" api:"required"`
 	// Whether to enable PR comments.
-	PrCommentsEnabled bool `json:"pr_comments_enabled,required"`
+	PrCommentsEnabled bool `json:"pr_comments_enabled" api:"required"`
 	// A list of branches that should not trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchExcludes []string `json:"preview_branch_excludes,required"`
+	PreviewBranchExcludes []string `json:"preview_branch_excludes" api:"required"`
 	// A list of branches that should trigger a preview deployment. Wildcard syntax
 	// (`*`) is supported. Must be used with `preview_deployment_setting` set to
 	// `custom`.
-	PreviewBranchIncludes []string `json:"preview_branch_includes,required"`
+	PreviewBranchIncludes []string `json:"preview_branch_includes" api:"required"`
 	// Controls whether commits to preview branches trigger a preview deployment.
-	PreviewDeploymentSetting ProjectSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting,required"`
+	PreviewDeploymentSetting ProjectSourceConfigPreviewDeploymentSetting `json:"preview_deployment_setting" api:"required"`
 	// The production branch of the repository.
-	ProductionBranch string `json:"production_branch,required"`
+	ProductionBranch string `json:"production_branch" api:"required"`
 	// Whether to trigger a production deployment on commits to the production branch.
-	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled,required"`
+	ProductionDeploymentsEnabled bool `json:"production_deployments_enabled" api:"required"`
 	// The ID of the repository.
-	RepoID string `json:"repo_id,required"`
+	RepoID string `json:"repo_id" api:"required"`
 	// The name of the repository.
-	RepoName string                  `json:"repo_name,required"`
+	RepoName string                  `json:"repo_name" api:"required"`
 	JSON     projectSourceConfigJSON `json:"-"`
 }
 
@@ -2114,13 +2114,13 @@ func (r ProjectSourceType) IsKnown() bool {
 // The status of the deployment.
 type Stage struct {
 	// When the stage ended.
-	EndedOn time.Time `json:"ended_on,required,nullable" format:"date-time"`
+	EndedOn time.Time `json:"ended_on" api:"required,nullable" format:"date-time"`
 	// The current build stage.
-	Name StageName `json:"name,required"`
+	Name StageName `json:"name" api:"required"`
 	// When the stage started.
-	StartedOn time.Time `json:"started_on,required,nullable" format:"date-time"`
+	StartedOn time.Time `json:"started_on" api:"required,nullable" format:"date-time"`
 	// State of the current stage.
-	Status StageStatus `json:"status,required"`
+	Status StageStatus `json:"status" api:"required"`
 	JSON   stageJSON   `json:"-"`
 }
 
@@ -2186,11 +2186,11 @@ type ProjectPurgeBuildCacheResponse = interface{}
 
 type ProjectNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the project.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Production branch of the project. Used to identify production deployments.
-	ProductionBranch param.Field[string] `json:"production_branch,required"`
+	ProductionBranch param.Field[string] `json:"production_branch" api:"required"`
 	// Configs for the project build process.
 	BuildConfig param.Field[ProjectNewParamsBuildConfig] `json:"build_config"`
 	// Configs for deployments in a project.
@@ -2291,7 +2291,7 @@ func (r ProjectNewParamsDeploymentConfigsPreview) MarshalJSON() (data []byte, er
 
 // AI binding.
 type ProjectNewParamsDeploymentConfigsPreviewAIBindings struct {
-	ProjectID param.Field[string] `json:"project_id,required"`
+	ProjectID param.Field[string] `json:"project_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewAIBindings) MarshalJSON() (data []byte, err error) {
@@ -2301,7 +2301,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewAIBindings) MarshalJSON() (data 
 // Analytics Engine binding.
 type ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasets struct {
 	// Name of the dataset.
-	Dataset param.Field[string] `json:"dataset,required"`
+	Dataset param.Field[string] `json:"dataset" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
@@ -2319,7 +2319,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewBrowsers) MarshalJSON() (data []
 // D1 binding.
 type ProjectNewParamsDeploymentConfigsPreviewD1Databases struct {
 	// UUID of the D1 database.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewD1Databases) MarshalJSON() (data []byte, err error) {
@@ -2329,7 +2329,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewD1Databases) MarshalJSON() (data
 // Durable Object binding.
 type ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespaces struct {
 	// ID of the Durable Object namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespaces) MarshalJSON() (data []byte, err error) {
@@ -2338,9 +2338,9 @@ func (r ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespaces) Marshal
 
 // A plaintext environment variable.
 type ProjectNewParamsDeploymentConfigsPreviewEnvVars struct {
-	Type param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsType] `json:"type,required"`
+	Type param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewEnvVars) MarshalJSON() (data []byte, err error) {
@@ -2362,9 +2362,9 @@ type ProjectNewParamsDeploymentConfigsPreviewEnvVarsUnion interface {
 
 // A plaintext environment variable.
 type ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar struct {
-	Type param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -2390,9 +2390,9 @@ func (r ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType)
 
 // An encrypted environment variable.
 type ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar struct {
-	Type param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType] `json:"type" api:"required"`
 	// Secret value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -2433,7 +2433,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewEnvVarsType) IsKnown() bool {
 
 // Hyperdrive binding.
 type ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings struct {
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings) MarshalJSON() (data []byte, err error) {
@@ -2443,7 +2443,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings) MarshalJSON(
 // KV namespace binding.
 type ProjectNewParamsDeploymentConfigsPreviewKVNamespaces struct {
 	// ID of the KV namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewKVNamespaces) MarshalJSON() (data []byte, err error) {
@@ -2453,7 +2453,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewKVNamespaces) MarshalJSON() (dat
 // Limits for Pages Functions.
 type ProjectNewParamsDeploymentConfigsPreviewLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs param.Field[int64] `json:"cpu_ms,required"`
+	CPUMs param.Field[int64] `json:"cpu_ms" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewLimits) MarshalJSON() (data []byte, err error) {
@@ -2462,7 +2462,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewLimits) MarshalJSON() (data []by
 
 // mTLS binding.
 type ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates struct {
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates) MarshalJSON() (data []byte, err error) {
@@ -2472,7 +2472,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates) MarshalJSON() 
 // Placement setting used for Pages Functions.
 type ProjectNewParamsDeploymentConfigsPreviewPlacement struct {
 	// Placement mode.
-	Mode param.Field[string] `json:"mode,required"`
+	Mode param.Field[string] `json:"mode" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewPlacement) MarshalJSON() (data []byte, err error) {
@@ -2482,7 +2482,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewPlacement) MarshalJSON() (data [
 // Queue Producer binding.
 type ProjectNewParamsDeploymentConfigsPreviewQueueProducers struct {
 	// Name of the Queue.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewQueueProducers) MarshalJSON() (data []byte, err error) {
@@ -2492,7 +2492,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewQueueProducers) MarshalJSON() (d
 // R2 binding.
 type ProjectNewParamsDeploymentConfigsPreviewR2Buckets struct {
 	// Name of the R2 bucket.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction param.Field[string] `json:"jurisdiction"`
 }
@@ -2504,7 +2504,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewR2Buckets) MarshalJSON() (data [
 // Service binding.
 type ProjectNewParamsDeploymentConfigsPreviewServices struct {
 	// The Service name.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// The entrypoint to bind to.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
@@ -2534,7 +2534,7 @@ func (r ProjectNewParamsDeploymentConfigsPreviewUsageModel) IsKnown() bool {
 
 // Vectorize binding.
 type ProjectNewParamsDeploymentConfigsPreviewVectorizeBindings struct {
-	IndexName param.Field[string] `json:"index_name,required"`
+	IndexName param.Field[string] `json:"index_name" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsPreviewVectorizeBindings) MarshalJSON() (data []byte, err error) {
@@ -2597,7 +2597,7 @@ func (r ProjectNewParamsDeploymentConfigsProduction) MarshalJSON() (data []byte,
 
 // AI binding.
 type ProjectNewParamsDeploymentConfigsProductionAIBindings struct {
-	ProjectID param.Field[string] `json:"project_id,required"`
+	ProjectID param.Field[string] `json:"project_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionAIBindings) MarshalJSON() (data []byte, err error) {
@@ -2607,7 +2607,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionAIBindings) MarshalJSON() (da
 // Analytics Engine binding.
 type ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasets struct {
 	// Name of the dataset.
-	Dataset param.Field[string] `json:"dataset,required"`
+	Dataset param.Field[string] `json:"dataset" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
@@ -2625,7 +2625,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionBrowsers) MarshalJSON() (data
 // D1 binding.
 type ProjectNewParamsDeploymentConfigsProductionD1Databases struct {
 	// UUID of the D1 database.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionD1Databases) MarshalJSON() (data []byte, err error) {
@@ -2635,7 +2635,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionD1Databases) MarshalJSON() (d
 // Durable Object binding.
 type ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespaces struct {
 	// ID of the Durable Object namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespaces) MarshalJSON() (data []byte, err error) {
@@ -2644,9 +2644,9 @@ func (r ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespaces) Mars
 
 // A plaintext environment variable.
 type ProjectNewParamsDeploymentConfigsProductionEnvVars struct {
-	Type param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsType] `json:"type,required"`
+	Type param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionEnvVars) MarshalJSON() (data []byte, err error) {
@@ -2668,9 +2668,9 @@ type ProjectNewParamsDeploymentConfigsProductionEnvVarsUnion interface {
 
 // A plaintext environment variable.
 type ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar struct {
-	Type param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -2696,9 +2696,9 @@ func (r ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarTy
 
 // An encrypted environment variable.
 type ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar struct {
-	Type param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType] `json:"type" api:"required"`
 	// Secret value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -2739,7 +2739,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionEnvVarsType) IsKnown() bool {
 
 // Hyperdrive binding.
 type ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings struct {
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings) MarshalJSON() (data []byte, err error) {
@@ -2749,7 +2749,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings) MarshalJS
 // KV namespace binding.
 type ProjectNewParamsDeploymentConfigsProductionKVNamespaces struct {
 	// ID of the KV namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionKVNamespaces) MarshalJSON() (data []byte, err error) {
@@ -2759,7 +2759,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionKVNamespaces) MarshalJSON() (
 // Limits for Pages Functions.
 type ProjectNewParamsDeploymentConfigsProductionLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs param.Field[int64] `json:"cpu_ms,required"`
+	CPUMs param.Field[int64] `json:"cpu_ms" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionLimits) MarshalJSON() (data []byte, err error) {
@@ -2768,7 +2768,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionLimits) MarshalJSON() (data [
 
 // mTLS binding.
 type ProjectNewParamsDeploymentConfigsProductionMTLSCertificates struct {
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionMTLSCertificates) MarshalJSON() (data []byte, err error) {
@@ -2778,7 +2778,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionMTLSCertificates) MarshalJSON
 // Placement setting used for Pages Functions.
 type ProjectNewParamsDeploymentConfigsProductionPlacement struct {
 	// Placement mode.
-	Mode param.Field[string] `json:"mode,required"`
+	Mode param.Field[string] `json:"mode" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionPlacement) MarshalJSON() (data []byte, err error) {
@@ -2788,7 +2788,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionPlacement) MarshalJSON() (dat
 // Queue Producer binding.
 type ProjectNewParamsDeploymentConfigsProductionQueueProducers struct {
 	// Name of the Queue.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionQueueProducers) MarshalJSON() (data []byte, err error) {
@@ -2798,7 +2798,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionQueueProducers) MarshalJSON()
 // R2 binding.
 type ProjectNewParamsDeploymentConfigsProductionR2Buckets struct {
 	// Name of the R2 bucket.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction param.Field[string] `json:"jurisdiction"`
 }
@@ -2810,7 +2810,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionR2Buckets) MarshalJSON() (dat
 // Service binding.
 type ProjectNewParamsDeploymentConfigsProductionServices struct {
 	// The Service name.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// The entrypoint to bind to.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
@@ -2840,7 +2840,7 @@ func (r ProjectNewParamsDeploymentConfigsProductionUsageModel) IsKnown() bool {
 
 // Vectorize binding.
 type ProjectNewParamsDeploymentConfigsProductionVectorizeBindings struct {
-	IndexName param.Field[string] `json:"index_name,required"`
+	IndexName param.Field[string] `json:"index_name" api:"required"`
 }
 
 func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindings) MarshalJSON() (data []byte, err error) {
@@ -2849,9 +2849,9 @@ func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindings) MarshalJSO
 
 // Configs for the project source control.
 type ProjectNewParamsSource struct {
-	Config param.Field[ProjectNewParamsSourceConfig] `json:"config,required"`
+	Config param.Field[ProjectNewParamsSourceConfig] `json:"config" api:"required"`
 	// The source control management provider.
-	Type param.Field[ProjectNewParamsSourceType] `json:"type,required"`
+	Type param.Field[ProjectNewParamsSourceType] `json:"type" api:"required"`
 }
 
 func (r ProjectNewParamsSource) MarshalJSON() (data []byte, err error) {
@@ -2936,11 +2936,11 @@ func (r ProjectNewParamsSourceType) IsKnown() bool {
 }
 
 type ProjectNewResponseEnvelope struct {
-	Errors   []ProjectNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Project                              `json:"result,required"`
+	Errors   []ProjectNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Project                              `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2964,8 +2964,8 @@ func (r projectNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectNewResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           ProjectNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3012,8 +3012,8 @@ func (r projectNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectNewResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ProjectNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3076,7 +3076,7 @@ func (r ProjectNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Which page of projects to fetch.
 	Page param.Field[int64] `query:"page"`
 	// How many projects to return per page.
@@ -3093,15 +3093,15 @@ func (r ProjectListParams) URLQuery() (v url.Values) {
 
 type ProjectDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDeleteResponseEnvelope struct {
-	Errors   []ProjectDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []ProjectDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectDeleteResponse                   `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success ProjectDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3125,8 +3125,8 @@ func (r projectDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDeleteResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           ProjectDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3173,8 +3173,8 @@ func (r projectDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectDeleteResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           ProjectDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3237,7 +3237,7 @@ func (r ProjectDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Configs for the project build process.
 	BuildConfig param.Field[ProjectEditParamsBuildConfig] `json:"build_config"`
 	// Configs for deployments in a project.
@@ -3342,7 +3342,7 @@ func (r ProjectEditParamsDeploymentConfigsPreview) MarshalJSON() (data []byte, e
 
 // AI binding.
 type ProjectEditParamsDeploymentConfigsPreviewAIBindings struct {
-	ProjectID param.Field[string] `json:"project_id,required"`
+	ProjectID param.Field[string] `json:"project_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewAIBindings) MarshalJSON() (data []byte, err error) {
@@ -3352,7 +3352,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewAIBindings) MarshalJSON() (data
 // Analytics Engine binding.
 type ProjectEditParamsDeploymentConfigsPreviewAnalyticsEngineDatasets struct {
 	// Name of the dataset.
-	Dataset param.Field[string] `json:"dataset,required"`
+	Dataset param.Field[string] `json:"dataset" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
@@ -3370,7 +3370,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewBrowsers) MarshalJSON() (data [
 // D1 binding.
 type ProjectEditParamsDeploymentConfigsPreviewD1Databases struct {
 	// UUID of the D1 database.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewD1Databases) MarshalJSON() (data []byte, err error) {
@@ -3380,7 +3380,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewD1Databases) MarshalJSON() (dat
 // Durable Object binding.
 type ProjectEditParamsDeploymentConfigsPreviewDurableObjectNamespaces struct {
 	// ID of the Durable Object namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewDurableObjectNamespaces) MarshalJSON() (data []byte, err error) {
@@ -3389,9 +3389,9 @@ func (r ProjectEditParamsDeploymentConfigsPreviewDurableObjectNamespaces) Marsha
 
 // A plaintext environment variable.
 type ProjectEditParamsDeploymentConfigsPreviewEnvVars struct {
-	Type param.Field[ProjectEditParamsDeploymentConfigsPreviewEnvVarsType] `json:"type,required"`
+	Type param.Field[ProjectEditParamsDeploymentConfigsPreviewEnvVarsType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewEnvVars) MarshalJSON() (data []byte, err error) {
@@ -3413,9 +3413,9 @@ type ProjectEditParamsDeploymentConfigsPreviewEnvVarsUnion interface {
 
 // A plaintext environment variable.
 type ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar struct {
-	Type param.Field[ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -3441,9 +3441,9 @@ func (r ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesPlainTextEnvVarType
 
 // An encrypted environment variable.
 type ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar struct {
-	Type param.Field[ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVarType] `json:"type" api:"required"`
 	// Secret value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewEnvVarsPagesSecretTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -3484,7 +3484,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewEnvVarsType) IsKnown() bool {
 
 // Hyperdrive binding.
 type ProjectEditParamsDeploymentConfigsPreviewHyperdriveBindings struct {
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewHyperdriveBindings) MarshalJSON() (data []byte, err error) {
@@ -3494,7 +3494,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewHyperdriveBindings) MarshalJSON
 // KV namespace binding.
 type ProjectEditParamsDeploymentConfigsPreviewKVNamespaces struct {
 	// ID of the KV namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewKVNamespaces) MarshalJSON() (data []byte, err error) {
@@ -3504,7 +3504,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewKVNamespaces) MarshalJSON() (da
 // Limits for Pages Functions.
 type ProjectEditParamsDeploymentConfigsPreviewLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs param.Field[int64] `json:"cpu_ms,required"`
+	CPUMs param.Field[int64] `json:"cpu_ms" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewLimits) MarshalJSON() (data []byte, err error) {
@@ -3513,7 +3513,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewLimits) MarshalJSON() (data []b
 
 // mTLS binding.
 type ProjectEditParamsDeploymentConfigsPreviewMTLSCertificates struct {
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewMTLSCertificates) MarshalJSON() (data []byte, err error) {
@@ -3523,7 +3523,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewMTLSCertificates) MarshalJSON()
 // Placement setting used for Pages Functions.
 type ProjectEditParamsDeploymentConfigsPreviewPlacement struct {
 	// Placement mode.
-	Mode param.Field[string] `json:"mode,required"`
+	Mode param.Field[string] `json:"mode" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewPlacement) MarshalJSON() (data []byte, err error) {
@@ -3533,7 +3533,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewPlacement) MarshalJSON() (data 
 // Queue Producer binding.
 type ProjectEditParamsDeploymentConfigsPreviewQueueProducers struct {
 	// Name of the Queue.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewQueueProducers) MarshalJSON() (data []byte, err error) {
@@ -3543,7 +3543,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewQueueProducers) MarshalJSON() (
 // R2 binding.
 type ProjectEditParamsDeploymentConfigsPreviewR2Buckets struct {
 	// Name of the R2 bucket.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction param.Field[string] `json:"jurisdiction"`
 }
@@ -3555,7 +3555,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewR2Buckets) MarshalJSON() (data 
 // Service binding.
 type ProjectEditParamsDeploymentConfigsPreviewServices struct {
 	// The Service name.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// The entrypoint to bind to.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
@@ -3585,7 +3585,7 @@ func (r ProjectEditParamsDeploymentConfigsPreviewUsageModel) IsKnown() bool {
 
 // Vectorize binding.
 type ProjectEditParamsDeploymentConfigsPreviewVectorizeBindings struct {
-	IndexName param.Field[string] `json:"index_name,required"`
+	IndexName param.Field[string] `json:"index_name" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsPreviewVectorizeBindings) MarshalJSON() (data []byte, err error) {
@@ -3648,7 +3648,7 @@ func (r ProjectEditParamsDeploymentConfigsProduction) MarshalJSON() (data []byte
 
 // AI binding.
 type ProjectEditParamsDeploymentConfigsProductionAIBindings struct {
-	ProjectID param.Field[string] `json:"project_id,required"`
+	ProjectID param.Field[string] `json:"project_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionAIBindings) MarshalJSON() (data []byte, err error) {
@@ -3658,7 +3658,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionAIBindings) MarshalJSON() (d
 // Analytics Engine binding.
 type ProjectEditParamsDeploymentConfigsProductionAnalyticsEngineDatasets struct {
 	// Name of the dataset.
-	Dataset param.Field[string] `json:"dataset,required"`
+	Dataset param.Field[string] `json:"dataset" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionAnalyticsEngineDatasets) MarshalJSON() (data []byte, err error) {
@@ -3676,7 +3676,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionBrowsers) MarshalJSON() (dat
 // D1 binding.
 type ProjectEditParamsDeploymentConfigsProductionD1Databases struct {
 	// UUID of the D1 database.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionD1Databases) MarshalJSON() (data []byte, err error) {
@@ -3686,7 +3686,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionD1Databases) MarshalJSON() (
 // Durable Object binding.
 type ProjectEditParamsDeploymentConfigsProductionDurableObjectNamespaces struct {
 	// ID of the Durable Object namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionDurableObjectNamespaces) MarshalJSON() (data []byte, err error) {
@@ -3695,9 +3695,9 @@ func (r ProjectEditParamsDeploymentConfigsProductionDurableObjectNamespaces) Mar
 
 // A plaintext environment variable.
 type ProjectEditParamsDeploymentConfigsProductionEnvVars struct {
-	Type param.Field[ProjectEditParamsDeploymentConfigsProductionEnvVarsType] `json:"type,required"`
+	Type param.Field[ProjectEditParamsDeploymentConfigsProductionEnvVarsType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionEnvVars) MarshalJSON() (data []byte, err error) {
@@ -3719,9 +3719,9 @@ type ProjectEditParamsDeploymentConfigsProductionEnvVarsUnion interface {
 
 // A plaintext environment variable.
 type ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar struct {
-	Type param.Field[ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarType] `json:"type" api:"required"`
 	// Environment variable value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -3747,9 +3747,9 @@ func (r ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesPlainTextEnvVarT
 
 // An encrypted environment variable.
 type ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar struct {
-	Type param.Field[ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType] `json:"type,required"`
+	Type param.Field[ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVarType] `json:"type" api:"required"`
 	// Secret value.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionEnvVarsPagesSecretTextEnvVar) MarshalJSON() (data []byte, err error) {
@@ -3790,7 +3790,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionEnvVarsType) IsKnown() bool 
 
 // Hyperdrive binding.
 type ProjectEditParamsDeploymentConfigsProductionHyperdriveBindings struct {
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionHyperdriveBindings) MarshalJSON() (data []byte, err error) {
@@ -3800,7 +3800,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionHyperdriveBindings) MarshalJ
 // KV namespace binding.
 type ProjectEditParamsDeploymentConfigsProductionKVNamespaces struct {
 	// ID of the KV namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionKVNamespaces) MarshalJSON() (data []byte, err error) {
@@ -3810,7 +3810,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionKVNamespaces) MarshalJSON() 
 // Limits for Pages Functions.
 type ProjectEditParamsDeploymentConfigsProductionLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs param.Field[int64] `json:"cpu_ms,required"`
+	CPUMs param.Field[int64] `json:"cpu_ms" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionLimits) MarshalJSON() (data []byte, err error) {
@@ -3819,7 +3819,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionLimits) MarshalJSON() (data 
 
 // mTLS binding.
 type ProjectEditParamsDeploymentConfigsProductionMTLSCertificates struct {
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionMTLSCertificates) MarshalJSON() (data []byte, err error) {
@@ -3829,7 +3829,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionMTLSCertificates) MarshalJSO
 // Placement setting used for Pages Functions.
 type ProjectEditParamsDeploymentConfigsProductionPlacement struct {
 	// Placement mode.
-	Mode param.Field[string] `json:"mode,required"`
+	Mode param.Field[string] `json:"mode" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionPlacement) MarshalJSON() (data []byte, err error) {
@@ -3839,7 +3839,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionPlacement) MarshalJSON() (da
 // Queue Producer binding.
 type ProjectEditParamsDeploymentConfigsProductionQueueProducers struct {
 	// Name of the Queue.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionQueueProducers) MarshalJSON() (data []byte, err error) {
@@ -3849,7 +3849,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionQueueProducers) MarshalJSON(
 // R2 binding.
 type ProjectEditParamsDeploymentConfigsProductionR2Buckets struct {
 	// Name of the R2 bucket.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction param.Field[string] `json:"jurisdiction"`
 }
@@ -3861,7 +3861,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionR2Buckets) MarshalJSON() (da
 // Service binding.
 type ProjectEditParamsDeploymentConfigsProductionServices struct {
 	// The Service name.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// The entrypoint to bind to.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
@@ -3891,7 +3891,7 @@ func (r ProjectEditParamsDeploymentConfigsProductionUsageModel) IsKnown() bool {
 
 // Vectorize binding.
 type ProjectEditParamsDeploymentConfigsProductionVectorizeBindings struct {
-	IndexName param.Field[string] `json:"index_name,required"`
+	IndexName param.Field[string] `json:"index_name" api:"required"`
 }
 
 func (r ProjectEditParamsDeploymentConfigsProductionVectorizeBindings) MarshalJSON() (data []byte, err error) {
@@ -3900,9 +3900,9 @@ func (r ProjectEditParamsDeploymentConfigsProductionVectorizeBindings) MarshalJS
 
 // Configs for the project source control.
 type ProjectEditParamsSource struct {
-	Config param.Field[ProjectEditParamsSourceConfig] `json:"config,required"`
+	Config param.Field[ProjectEditParamsSourceConfig] `json:"config" api:"required"`
 	// The source control management provider.
-	Type param.Field[ProjectEditParamsSourceType] `json:"type,required"`
+	Type param.Field[ProjectEditParamsSourceType] `json:"type" api:"required"`
 }
 
 func (r ProjectEditParamsSource) MarshalJSON() (data []byte, err error) {
@@ -3987,11 +3987,11 @@ func (r ProjectEditParamsSourceType) IsKnown() bool {
 }
 
 type ProjectEditResponseEnvelope struct {
-	Errors   []ProjectEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   Project                               `json:"result,required"`
+	Errors   []ProjectEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Project                               `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4015,8 +4015,8 @@ func (r projectEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectEditResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           ProjectEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4063,8 +4063,8 @@ func (r projectEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectEditResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           ProjectEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -4127,15 +4127,15 @@ func (r ProjectEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectGetResponseEnvelope struct {
-	Errors   []ProjectGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Project                              `json:"result,required"`
+	Errors   []ProjectGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Project                              `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4159,8 +4159,8 @@ func (r projectGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           ProjectGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4207,8 +4207,8 @@ func (r projectGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ProjectGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -4271,15 +4271,15 @@ func (r ProjectGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectPurgeBuildCacheParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectPurgeBuildCacheResponseEnvelope struct {
-	Errors   []ProjectPurgeBuildCacheResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectPurgeBuildCacheResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectPurgeBuildCacheResponse                   `json:"result,required,nullable"`
+	Errors   []ProjectPurgeBuildCacheResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectPurgeBuildCacheResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectPurgeBuildCacheResponse                   `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success ProjectPurgeBuildCacheResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectPurgeBuildCacheResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectPurgeBuildCacheResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4303,8 +4303,8 @@ func (r projectPurgeBuildCacheResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectPurgeBuildCacheResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ProjectPurgeBuildCacheResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectPurgeBuildCacheResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4351,8 +4351,8 @@ func (r projectPurgeBuildCacheResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ProjectPurgeBuildCacheResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ProjectPurgeBuildCacheResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectPurgeBuildCacheResponseEnvelopeMessagesJSON   `json:"-"`

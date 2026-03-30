@@ -40,11 +40,11 @@ func (r *ASNSubnetService) Get(ctx context.Context, asn shared.ASNParam, query A
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", query.AccountID, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ASNSubnetGetResponse struct {
@@ -83,5 +83,5 @@ func (r asnSubnetGetResponseJSON) RawJSON() string {
 
 type ASNSubnetGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -48,19 +48,19 @@ func (r *WorkflowService) Update(ctx context.Context, workflowName string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s", params.AccountID, workflowName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all workflows configured for the account.
@@ -70,7 +70,7 @@ func (r *WorkflowService) List(ctx context.Context, params WorkflowListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -97,19 +97,19 @@ func (r *WorkflowService) Delete(ctx context.Context, workflowName string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s", body.AccountID, workflowName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves configuration and metadata for a specific workflow.
@@ -118,32 +118,32 @@ func (r *WorkflowService) Get(ctx context.Context, workflowName string, query Wo
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s", query.AccountID, workflowName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type WorkflowUpdateResponse struct {
-	ID                string                     `json:"id,required" format:"uuid"`
-	ClassName         string                     `json:"class_name,required"`
-	CreatedOn         time.Time                  `json:"created_on,required" format:"date-time"`
-	IsDeleted         float64                    `json:"is_deleted,required"`
-	ModifiedOn        time.Time                  `json:"modified_on,required" format:"date-time"`
-	Name              string                     `json:"name,required"`
-	ScriptName        string                     `json:"script_name,required"`
-	TerminatorRunning float64                    `json:"terminator_running,required"`
-	TriggeredOn       time.Time                  `json:"triggered_on,required,nullable" format:"date-time"`
-	VersionID         string                     `json:"version_id,required" format:"uuid"`
+	ID                string                     `json:"id" api:"required" format:"uuid"`
+	ClassName         string                     `json:"class_name" api:"required"`
+	CreatedOn         time.Time                  `json:"created_on" api:"required" format:"date-time"`
+	IsDeleted         float64                    `json:"is_deleted" api:"required"`
+	ModifiedOn        time.Time                  `json:"modified_on" api:"required" format:"date-time"`
+	Name              string                     `json:"name" api:"required"`
+	ScriptName        string                     `json:"script_name" api:"required"`
+	TerminatorRunning float64                    `json:"terminator_running" api:"required"`
+	TriggeredOn       time.Time                  `json:"triggered_on" api:"required,nullable" format:"date-time"`
+	VersionID         string                     `json:"version_id" api:"required" format:"uuid"`
 	JSON              workflowUpdateResponseJSON `json:"-"`
 }
 
@@ -173,14 +173,14 @@ func (r workflowUpdateResponseJSON) RawJSON() string {
 }
 
 type WorkflowListResponse struct {
-	ID          string                        `json:"id,required" format:"uuid"`
-	ClassName   string                        `json:"class_name,required"`
-	CreatedOn   time.Time                     `json:"created_on,required" format:"date-time"`
-	Instances   WorkflowListResponseInstances `json:"instances,required"`
-	ModifiedOn  time.Time                     `json:"modified_on,required" format:"date-time"`
-	Name        string                        `json:"name,required"`
-	ScriptName  string                        `json:"script_name,required"`
-	TriggeredOn time.Time                     `json:"triggered_on,required,nullable" format:"date-time"`
+	ID          string                        `json:"id" api:"required" format:"uuid"`
+	ClassName   string                        `json:"class_name" api:"required"`
+	CreatedOn   time.Time                     `json:"created_on" api:"required" format:"date-time"`
+	Instances   WorkflowListResponseInstances `json:"instances" api:"required"`
+	ModifiedOn  time.Time                     `json:"modified_on" api:"required" format:"date-time"`
+	Name        string                        `json:"name" api:"required"`
+	ScriptName  string                        `json:"script_name" api:"required"`
+	TriggeredOn time.Time                     `json:"triggered_on" api:"required,nullable" format:"date-time"`
 	JSON        workflowListResponseJSON      `json:"-"`
 }
 
@@ -243,8 +243,8 @@ func (r workflowListResponseInstancesJSON) RawJSON() string {
 }
 
 type WorkflowDeleteResponse struct {
-	Status  WorkflowDeleteResponseStatus `json:"status,required"`
-	Success bool                         `json:"success,required,nullable"`
+	Status  WorkflowDeleteResponseStatus `json:"status" api:"required"`
+	Success bool                         `json:"success" api:"required,nullable"`
 	JSON    workflowDeleteResponseJSON   `json:"-"`
 }
 
@@ -280,14 +280,14 @@ func (r WorkflowDeleteResponseStatus) IsKnown() bool {
 }
 
 type WorkflowGetResponse struct {
-	ID          string                       `json:"id,required" format:"uuid"`
-	ClassName   string                       `json:"class_name,required"`
-	CreatedOn   time.Time                    `json:"created_on,required" format:"date-time"`
-	Instances   WorkflowGetResponseInstances `json:"instances,required"`
-	ModifiedOn  time.Time                    `json:"modified_on,required" format:"date-time"`
-	Name        string                       `json:"name,required"`
-	ScriptName  string                       `json:"script_name,required"`
-	TriggeredOn time.Time                    `json:"triggered_on,required,nullable" format:"date-time"`
+	ID          string                       `json:"id" api:"required" format:"uuid"`
+	ClassName   string                       `json:"class_name" api:"required"`
+	CreatedOn   time.Time                    `json:"created_on" api:"required" format:"date-time"`
+	Instances   WorkflowGetResponseInstances `json:"instances" api:"required"`
+	ModifiedOn  time.Time                    `json:"modified_on" api:"required" format:"date-time"`
+	Name        string                       `json:"name" api:"required"`
+	ScriptName  string                       `json:"script_name" api:"required"`
+	TriggeredOn time.Time                    `json:"triggered_on" api:"required,nullable" format:"date-time"`
 	JSON        workflowGetResponseJSON      `json:"-"`
 }
 
@@ -350,9 +350,9 @@ func (r workflowGetResponseInstancesJSON) RawJSON() string {
 }
 
 type WorkflowUpdateParams struct {
-	AccountID  param.Field[string]                     `path:"account_id,required"`
-	ClassName  param.Field[string]                     `json:"class_name,required"`
-	ScriptName param.Field[string]                     `json:"script_name,required"`
+	AccountID  param.Field[string]                     `path:"account_id" api:"required"`
+	ClassName  param.Field[string]                     `json:"class_name" api:"required"`
+	ScriptName param.Field[string]                     `json:"script_name" api:"required"`
 	Limits     param.Field[WorkflowUpdateParamsLimits] `json:"limits"`
 }
 
@@ -369,10 +369,10 @@ func (r WorkflowUpdateParamsLimits) MarshalJSON() (data []byte, err error) {
 }
 
 type WorkflowUpdateResponseEnvelope struct {
-	Errors     []WorkflowUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []WorkflowUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result     WorkflowUpdateResponse                   `json:"result,required"`
-	Success    WorkflowUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []WorkflowUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []WorkflowUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     WorkflowUpdateResponse                   `json:"result" api:"required"`
+	Success    WorkflowUpdateResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo WorkflowUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       workflowUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -398,8 +398,8 @@ func (r workflowUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WorkflowUpdateResponseEnvelopeErrors struct {
-	Code    float64                                  `json:"code,required"`
-	Message string                                   `json:"message,required"`
+	Code    float64                                  `json:"code" api:"required"`
+	Message string                                   `json:"message" api:"required"`
 	JSON    workflowUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -421,8 +421,8 @@ func (r workflowUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type WorkflowUpdateResponseEnvelopeMessages struct {
-	Code    float64                                    `json:"code,required"`
-	Message string                                     `json:"message,required"`
+	Code    float64                                    `json:"code" api:"required"`
+	Message string                                     `json:"message" api:"required"`
 	JSON    workflowUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -458,9 +458,9 @@ func (r WorkflowUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WorkflowUpdateResponseEnvelopeResultInfo struct {
-	Count      float64                                      `json:"count,required"`
-	PerPage    float64                                      `json:"per_page,required"`
-	TotalCount float64                                      `json:"total_count,required"`
+	Count      float64                                      `json:"count" api:"required"`
+	PerPage    float64                                      `json:"per_page" api:"required"`
+	TotalCount float64                                      `json:"total_count" api:"required"`
 	Cursor     string                                       `json:"cursor"`
 	Page       float64                                      `json:"page"`
 	JSON       workflowUpdateResponseEnvelopeResultInfoJSON `json:"-"`
@@ -487,7 +487,7 @@ func (r workflowUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type WorkflowListParams struct {
-	AccountID param.Field[string]  `path:"account_id,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
 	// Allows filtering workflows` name.
@@ -503,14 +503,14 @@ func (r WorkflowListParams) URLQuery() (v url.Values) {
 }
 
 type WorkflowDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WorkflowDeleteResponseEnvelope struct {
-	Errors     []WorkflowDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []WorkflowDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result     WorkflowDeleteResponse                   `json:"result,required"`
-	Success    WorkflowDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []WorkflowDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []WorkflowDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     WorkflowDeleteResponse                   `json:"result" api:"required"`
+	Success    WorkflowDeleteResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo WorkflowDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       workflowDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -536,8 +536,8 @@ func (r workflowDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WorkflowDeleteResponseEnvelopeErrors struct {
-	Code    float64                                  `json:"code,required"`
-	Message string                                   `json:"message,required"`
+	Code    float64                                  `json:"code" api:"required"`
+	Message string                                   `json:"message" api:"required"`
 	JSON    workflowDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -559,8 +559,8 @@ func (r workflowDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type WorkflowDeleteResponseEnvelopeMessages struct {
-	Code    float64                                    `json:"code,required"`
-	Message string                                     `json:"message,required"`
+	Code    float64                                    `json:"code" api:"required"`
+	Message string                                     `json:"message" api:"required"`
 	JSON    workflowDeleteResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -596,9 +596,9 @@ func (r WorkflowDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WorkflowDeleteResponseEnvelopeResultInfo struct {
-	Count      float64                                      `json:"count,required"`
-	PerPage    float64                                      `json:"per_page,required"`
-	TotalCount float64                                      `json:"total_count,required"`
+	Count      float64                                      `json:"count" api:"required"`
+	PerPage    float64                                      `json:"per_page" api:"required"`
+	TotalCount float64                                      `json:"total_count" api:"required"`
 	Cursor     string                                       `json:"cursor"`
 	Page       float64                                      `json:"page"`
 	JSON       workflowDeleteResponseEnvelopeResultInfoJSON `json:"-"`
@@ -625,14 +625,14 @@ func (r workflowDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type WorkflowGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WorkflowGetResponseEnvelope struct {
-	Errors     []WorkflowGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []WorkflowGetResponseEnvelopeMessages `json:"messages,required"`
-	Result     WorkflowGetResponse                   `json:"result,required"`
-	Success    WorkflowGetResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []WorkflowGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []WorkflowGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     WorkflowGetResponse                   `json:"result" api:"required"`
+	Success    WorkflowGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo WorkflowGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       workflowGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -658,8 +658,8 @@ func (r workflowGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WorkflowGetResponseEnvelopeErrors struct {
-	Code    float64                               `json:"code,required"`
-	Message string                                `json:"message,required"`
+	Code    float64                               `json:"code" api:"required"`
+	Message string                                `json:"message" api:"required"`
 	JSON    workflowGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -681,8 +681,8 @@ func (r workflowGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type WorkflowGetResponseEnvelopeMessages struct {
-	Code    float64                                 `json:"code,required"`
-	Message string                                  `json:"message,required"`
+	Code    float64                                 `json:"code" api:"required"`
+	Message string                                  `json:"message" api:"required"`
 	JSON    workflowGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -718,9 +718,9 @@ func (r WorkflowGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WorkflowGetResponseEnvelopeResultInfo struct {
-	Count      float64                                   `json:"count,required"`
-	PerPage    float64                                   `json:"per_page,required"`
-	TotalCount float64                                   `json:"total_count,required"`
+	Count      float64                                   `json:"count" api:"required"`
+	PerPage    float64                                   `json:"per_page" api:"required"`
+	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
 	JSON       workflowGetResponseEnvelopeResultInfoJSON `json:"-"`

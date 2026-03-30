@@ -41,15 +41,15 @@ func (r *ZoneTransferPeerService) New(ctx context.Context, params ZoneTransferPe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify Peer.
@@ -58,19 +58,19 @@ func (r *ZoneTransferPeerService) Update(ctx context.Context, peerID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if peerID == "" {
 		err = errors.New("missing required peer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Peers.
@@ -80,7 +80,7 @@ func (r *ZoneTransferPeerService) List(ctx context.Context, query ZoneTransferPe
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,19 +106,19 @@ func (r *ZoneTransferPeerService) Delete(ctx context.Context, peerID string, bod
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if peerID == "" {
 		err = errors.New("missing required peer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", body.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Peer.
@@ -127,25 +127,25 @@ func (r *ZoneTransferPeerService) Get(ctx context.Context, peerID string, query 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if peerID == "" {
 		err = errors.New("missing required peer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", query.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Peer struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The name of the peer.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
 	// this peer is linked to. For primary zones this IP defines the IP of the
 	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
@@ -185,7 +185,7 @@ func (r peerJSON) RawJSON() string {
 
 type PeerParam struct {
 	// The name of the peer.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
 	// this peer is linked to. For primary zones this IP defines the IP of the
 	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
@@ -228,9 +228,9 @@ func (r zoneTransferPeerDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the peer.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ZoneTransferPeerNewParams) MarshalJSON() (data []byte, err error) {
@@ -238,10 +238,10 @@ func (r ZoneTransferPeerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferPeerNewResponseEnvelope struct {
-	Errors   []ZoneTransferPeerNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferPeerNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferPeerNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferPeerNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferPeerNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferPeerNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Peer                                       `json:"result"`
 	JSON    zoneTransferPeerNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -266,8 +266,8 @@ func (r zoneTransferPeerNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ZoneTransferPeerNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferPeerNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -314,8 +314,8 @@ func (r zoneTransferPeerNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ZoneTransferPeerNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferPeerNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -377,8 +377,8 @@ func (r ZoneTransferPeerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferPeerUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Peer      PeerParam           `json:"peer,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Peer      PeerParam           `json:"peer" api:"required"`
 }
 
 func (r ZoneTransferPeerUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -386,10 +386,10 @@ func (r ZoneTransferPeerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferPeerUpdateResponseEnvelope struct {
-	Errors   []ZoneTransferPeerUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferPeerUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferPeerUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferPeerUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferPeerUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferPeerUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Peer                                          `json:"result"`
 	JSON    zoneTransferPeerUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -414,8 +414,8 @@ func (r zoneTransferPeerUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerUpdateResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ZoneTransferPeerUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferPeerUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -462,8 +462,8 @@ func (r zoneTransferPeerUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ZoneTransferPeerUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ZoneTransferPeerUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferPeerUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -525,18 +525,18 @@ func (r ZoneTransferPeerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferPeerListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferPeerDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferPeerDeleteResponseEnvelope struct {
-	Errors   []ZoneTransferPeerDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferPeerDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferPeerDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferPeerDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferPeerDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferPeerDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ZoneTransferPeerDeleteResponse                `json:"result"`
 	JSON    zoneTransferPeerDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -561,8 +561,8 @@ func (r zoneTransferPeerDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerDeleteResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ZoneTransferPeerDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferPeerDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -609,8 +609,8 @@ func (r zoneTransferPeerDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ZoneTransferPeerDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ZoneTransferPeerDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferPeerDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -672,14 +672,14 @@ func (r ZoneTransferPeerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferPeerGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferPeerGetResponseEnvelope struct {
-	Errors   []ZoneTransferPeerGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferPeerGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferPeerGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferPeerGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferPeerGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferPeerGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Peer                                       `json:"result"`
 	JSON    zoneTransferPeerGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -704,8 +704,8 @@ func (r zoneTransferPeerGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ZoneTransferPeerGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferPeerGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -752,8 +752,8 @@ func (r zoneTransferPeerGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ZoneTransferPeerGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferPeerGetResponseEnvelopeMessagesJSON   `json:"-"`

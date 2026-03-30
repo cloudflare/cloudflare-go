@@ -50,15 +50,15 @@ func (r *DLPEntryService) New(ctx context.Context, params DLPEntryNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/entries", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a DLP entry.
@@ -67,19 +67,19 @@ func (r *DLPEntryService) Update(ctx context.Context, entryID string, params DLP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if entryID == "" {
 		err = errors.New("missing required entry_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/entries/%s", params.AccountID, entryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all DLP entries in an account.
@@ -89,7 +89,7 @@ func (r *DLPEntryService) List(ctx context.Context, query DLPEntryListParams, op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/entries", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -115,19 +115,19 @@ func (r *DLPEntryService) Delete(ctx context.Context, entryID string, body DLPEn
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if entryID == "" {
 		err = errors.New("missing required entry_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/entries/%s", body.AccountID, entryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a DLP entry by ID.
@@ -136,32 +136,32 @@ func (r *DLPEntryService) Get(ctx context.Context, entryID string, query DLPEntr
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if entryID == "" {
 		err = errors.New("missing required entry_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/entries/%s", query.AccountID, entryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DLPEntryNewResponse struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool      `json:"enabled,required"`
-	Name        string    `json:"name,required"`
-	Pattern     Pattern   `json:"pattern,required"`
-	UpdatedAt   time.Time `json:"updated_at,required" format:"date-time"`
-	Description string    `json:"description,nullable"`
+	Enabled     bool      `json:"enabled" api:"required"`
+	Name        string    `json:"name" api:"required"`
+	Pattern     Pattern   `json:"pattern" api:"required"`
+	UpdatedAt   time.Time `json:"updated_at" api:"required" format:"date-time"`
+	Description string    `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                  `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                  `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      dlpEntryNewResponseJSON `json:"-"`
 }
 
@@ -189,11 +189,11 @@ func (r dlpEntryNewResponseJSON) RawJSON() string {
 }
 
 type DLPEntryUpdateResponse struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                       `json:"enabled,required"`
-	Name    string                     `json:"name,required"`
-	Type    DLPEntryUpdateResponseType `json:"type,required"`
+	Enabled bool                       `json:"enabled" api:"required"`
+	Name    string                     `json:"name" api:"required"`
+	Type    DLPEntryUpdateResponseType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
@@ -201,10 +201,10 @@ type DLPEntryUpdateResponse struct {
 	// [DLPEntryUpdateResponsePredefinedEntryConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of
@@ -305,17 +305,17 @@ func init() {
 }
 
 type DLPEntryUpdateResponseCustomEntry struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                                  `json:"enabled,required"`
-	Name        string                                `json:"name,required"`
-	Pattern     Pattern                               `json:"pattern,required"`
-	Type        DLPEntryUpdateResponseCustomEntryType `json:"type,required"`
-	UpdatedAt   time.Time                             `json:"updated_at,required" format:"date-time"`
-	Description string                                `json:"description,nullable"`
+	Enabled     bool                                  `json:"enabled" api:"required"`
+	Name        string                                `json:"name" api:"required"`
+	Pattern     Pattern                               `json:"pattern" api:"required"`
+	Type        DLPEntryUpdateResponseCustomEntryType `json:"type" api:"required"`
+	UpdatedAt   time.Time                             `json:"updated_at" api:"required" format:"date-time"`
+	Description string                                `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      dlpEntryUpdateResponseCustomEntryJSON `json:"-"`
 }
 
@@ -360,13 +360,13 @@ func (r DLPEntryUpdateResponseCustomEntryType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponsePredefinedEntry struct {
-	ID         string                                          `json:"id,required" format:"uuid"`
-	Confidence DLPEntryUpdateResponsePredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                            `json:"enabled,required"`
-	Name       string                                          `json:"name,required"`
-	Type       DLPEntryUpdateResponsePredefinedEntryType       `json:"type,required"`
+	ID         string                                          `json:"id" api:"required" format:"uuid"`
+	Confidence DLPEntryUpdateResponsePredefinedEntryConfidence `json:"confidence" api:"required"`
+	Enabled    bool                                            `json:"enabled" api:"required"`
+	Name       string                                          `json:"name" api:"required"`
+	Type       DLPEntryUpdateResponsePredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                       `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                       `json:"profile_id" api:"nullable" format:"uuid"`
 	Variant   DLPEntryUpdateResponsePredefinedEntryVariant `json:"variant"`
 	JSON      dlpEntryUpdateResponsePredefinedEntryJSON    `json:"-"`
 }
@@ -397,10 +397,10 @@ func (r DLPEntryUpdateResponsePredefinedEntry) implementsDLPEntryUpdateResponse(
 
 type DLPEntryUpdateResponsePredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
+	AIContextAvailable bool `json:"ai_context_available" api:"required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                                `json:"available,required"`
+	Available bool                                                `json:"available" api:"required"`
 	JSON      dlpEntryUpdateResponsePredefinedEntryConfidenceJSON `json:"-"`
 }
 
@@ -436,9 +436,9 @@ func (r DLPEntryUpdateResponsePredefinedEntryType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponsePredefinedEntryVariant struct {
-	TopicType   DLPEntryUpdateResponsePredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        DLPEntryUpdateResponsePredefinedEntryVariantType      `json:"type,required"`
-	Description string                                                `json:"description,nullable"`
+	TopicType   DLPEntryUpdateResponsePredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
+	Type        DLPEntryUpdateResponsePredefinedEntryVariantType      `json:"type" api:"required"`
+	Description string                                                `json:"description" api:"nullable"`
 	JSON        dlpEntryUpdateResponsePredefinedEntryVariantJSON      `json:"-"`
 }
 
@@ -490,13 +490,13 @@ func (r DLPEntryUpdateResponsePredefinedEntryVariantType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponseIntegrationEntry struct {
-	ID        string                                     `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                  `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                       `json:"enabled,required"`
-	Name      string                                     `json:"name,required"`
-	Type      DLPEntryUpdateResponseIntegrationEntryType `json:"type,required"`
-	UpdatedAt time.Time                                  `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                     `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                     `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                  `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                       `json:"enabled" api:"required"`
+	Name      string                                     `json:"name" api:"required"`
+	Type      DLPEntryUpdateResponseIntegrationEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                  `json:"updated_at" api:"required" format:"date-time"`
+	ProfileID string                                     `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      dlpEntryUpdateResponseIntegrationEntryJSON `json:"-"`
 }
 
@@ -539,16 +539,16 @@ func (r DLPEntryUpdateResponseIntegrationEntryType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponseExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                     `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                     `json:"enabled,required"`
-	Name          string                                   `json:"name,required"`
-	Secret        bool                                     `json:"secret,required"`
-	Type          DLPEntryUpdateResponseExactDataEntryType `json:"type,required"`
-	UpdatedAt     time.Time                                `json:"updated_at,required" format:"date-time"`
+	CaseSensitive bool                                     `json:"case_sensitive" api:"required"`
+	CreatedAt     time.Time                                `json:"created_at" api:"required" format:"date-time"`
+	Enabled       bool                                     `json:"enabled" api:"required"`
+	Name          string                                   `json:"name" api:"required"`
+	Secret        bool                                     `json:"secret" api:"required"`
+	Type          DLPEntryUpdateResponseExactDataEntryType `json:"type" api:"required"`
+	UpdatedAt     time.Time                                `json:"updated_at" api:"required" format:"date-time"`
 	JSON          dlpEntryUpdateResponseExactDataEntryJSON `json:"-"`
 }
 
@@ -592,12 +592,12 @@ func (r DLPEntryUpdateResponseExactDataEntryType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponseDocumentFingerprintEntry struct {
-	ID        string                                             `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                          `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                               `json:"enabled,required"`
-	Name      string                                             `json:"name,required"`
-	Type      DLPEntryUpdateResponseDocumentFingerprintEntryType `json:"type,required"`
-	UpdatedAt time.Time                                          `json:"updated_at,required" format:"date-time"`
+	ID        string                                             `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                          `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                               `json:"enabled" api:"required"`
+	Name      string                                             `json:"name" api:"required"`
+	Type      DLPEntryUpdateResponseDocumentFingerprintEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                          `json:"updated_at" api:"required" format:"date-time"`
 	JSON      dlpEntryUpdateResponseDocumentFingerprintEntryJSON `json:"-"`
 }
 
@@ -639,14 +639,14 @@ func (r DLPEntryUpdateResponseDocumentFingerprintEntryType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponseWordListEntry struct {
-	ID        string                                  `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                               `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                    `json:"enabled,required"`
-	Name      string                                  `json:"name,required"`
-	Type      DLPEntryUpdateResponseWordListEntryType `json:"type,required"`
-	UpdatedAt time.Time                               `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                             `json:"word_list,required"`
-	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                  `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                               `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                    `json:"enabled" api:"required"`
+	Name      string                                  `json:"name" api:"required"`
+	Type      DLPEntryUpdateResponseWordListEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                               `json:"updated_at" api:"required" format:"date-time"`
+	WordList  interface{}                             `json:"word_list" api:"required"`
+	ProfileID string                                  `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      dlpEntryUpdateResponseWordListEntryJSON `json:"-"`
 }
 
@@ -709,21 +709,21 @@ func (r DLPEntryUpdateResponseType) IsKnown() bool {
 }
 
 type DLPEntryListResponse struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                     `json:"enabled,required"`
-	Name    string                   `json:"name,required"`
-	Type    DLPEntryListResponseType `json:"type,required"`
+	Enabled bool                     `json:"enabled" api:"required"`
+	Name    string                   `json:"name" api:"required"`
+	Type    DLPEntryListResponseType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of [DLPEntryListResponseObjectConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID    string                           `json:"profile_id,nullable" format:"uuid"`
+	ProfileID    string                           `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret       bool                             `json:"secret"`
 	UpdatedAt    time.Time                        `json:"updated_at" format:"date-time"`
 	UploadStatus DLPEntryListResponseUploadStatus `json:"upload_status"`
@@ -820,17 +820,17 @@ func init() {
 }
 
 type DLPEntryListResponseObject struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                           `json:"enabled,required"`
-	Name        string                         `json:"name,required"`
-	Pattern     Pattern                        `json:"pattern,required"`
-	Type        DLPEntryListResponseObjectType `json:"type,required"`
-	UpdatedAt   time.Time                      `json:"updated_at,required" format:"date-time"`
-	Description string                         `json:"description,nullable"`
+	Enabled     bool                           `json:"enabled" api:"required"`
+	Name        string                         `json:"name" api:"required"`
+	Pattern     Pattern                        `json:"pattern" api:"required"`
+	Type        DLPEntryListResponseObjectType `json:"type" api:"required"`
+	UpdatedAt   time.Time                      `json:"updated_at" api:"required" format:"date-time"`
+	Description string                         `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID    string                                 `json:"profile_id,nullable" format:"uuid"`
+	ProfileID    string                                 `json:"profile_id" api:"nullable" format:"uuid"`
 	UploadStatus DLPEntryListResponseObjectUploadStatus `json:"upload_status"`
 	JSON         dlpEntryListResponseObjectJSON         `json:"-"`
 }
@@ -936,21 +936,21 @@ func (r DLPEntryListResponseUploadStatus) IsKnown() bool {
 type DLPEntryDeleteResponse = interface{}
 
 type DLPEntryGetResponse struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                    `json:"enabled,required"`
-	Name    string                  `json:"name,required"`
-	Type    DLPEntryGetResponseType `json:"type,required"`
+	Enabled bool                    `json:"enabled" api:"required"`
+	Name    string                  `json:"name" api:"required"`
+	Type    DLPEntryGetResponseType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of [DLPEntryGetResponseObjectConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// This field can have the runtime type of [[]DLPEntryGetResponseObjectProfile].
 	Profiles     interface{}                     `json:"profiles"`
 	Secret       bool                            `json:"secret"`
@@ -1050,17 +1050,17 @@ func init() {
 }
 
 type DLPEntryGetResponseObject struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                          `json:"enabled,required"`
-	Name        string                        `json:"name,required"`
-	Pattern     Pattern                       `json:"pattern,required"`
-	Type        DLPEntryGetResponseObjectType `json:"type,required"`
-	UpdatedAt   time.Time                     `json:"updated_at,required" format:"date-time"`
-	Description string                        `json:"description,nullable"`
+	Enabled     bool                          `json:"enabled" api:"required"`
+	Name        string                        `json:"name" api:"required"`
+	Pattern     Pattern                       `json:"pattern" api:"required"`
+	Type        DLPEntryGetResponseObjectType `json:"type" api:"required"`
+	UpdatedAt   time.Time                     `json:"updated_at" api:"required" format:"date-time"`
+	Description string                        `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID    string                                `json:"profile_id,nullable" format:"uuid"`
+	ProfileID    string                                `json:"profile_id" api:"nullable" format:"uuid"`
 	Profiles     []DLPEntryGetResponseObjectProfile    `json:"profiles"`
 	UploadStatus DLPEntryGetResponseObjectUploadStatus `json:"upload_status"`
 	JSON         dlpEntryGetResponseObjectJSON         `json:"-"`
@@ -1110,8 +1110,8 @@ func (r DLPEntryGetResponseObjectType) IsKnown() bool {
 
 // Computed entry field for a profile that an entry is shared into.
 type DLPEntryGetResponseObjectProfile struct {
-	ID   string                               `json:"id,required" format:"uuid"`
-	Name string                               `json:"name,required"`
+	ID   string                               `json:"id" api:"required" format:"uuid"`
+	Name string                               `json:"name" api:"required"`
 	JSON dlpEntryGetResponseObjectProfileJSON `json:"-"`
 }
 
@@ -1190,10 +1190,10 @@ func (r DLPEntryGetResponseUploadStatus) IsKnown() bool {
 }
 
 type DLPEntryNewParams struct {
-	AccountID   param.Field[string]       `path:"account_id,required"`
-	Enabled     param.Field[bool]         `json:"enabled,required"`
-	Name        param.Field[string]       `json:"name,required"`
-	Pattern     param.Field[PatternParam] `json:"pattern,required"`
+	AccountID   param.Field[string]       `path:"account_id" api:"required"`
+	Enabled     param.Field[bool]         `json:"enabled" api:"required"`
+	Name        param.Field[string]       `json:"name" api:"required"`
+	Pattern     param.Field[PatternParam] `json:"pattern" api:"required"`
 	Description param.Field[string]       `json:"description"`
 	ProfileID   param.Field[string]       `json:"profile_id" format:"uuid"`
 }
@@ -1203,10 +1203,10 @@ func (r DLPEntryNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPEntryNewResponseEnvelope struct {
-	Errors   []DLPEntryNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPEntryNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPEntryNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPEntryNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPEntryNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPEntryNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DLPEntryNewResponse                `json:"result"`
 	JSON    dlpEntryNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1231,8 +1231,8 @@ func (r dlpEntryNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPEntryNewResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           DLPEntryNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpEntryNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1279,8 +1279,8 @@ func (r dlpEntryNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPEntryNewResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           DLPEntryNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpEntryNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1342,8 +1342,8 @@ func (r DLPEntryNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEntryUpdateParams struct {
-	AccountID param.Field[string]           `path:"account_id,required"`
-	Body      DLPEntryUpdateParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]           `path:"account_id" api:"required"`
+	Body      DLPEntryUpdateParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r DLPEntryUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1351,7 +1351,7 @@ func (r DLPEntryUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPEntryUpdateParamsBody struct {
-	Type        param.Field[DLPEntryUpdateParamsBodyType] `json:"type,required"`
+	Type        param.Field[DLPEntryUpdateParamsBodyType] `json:"type" api:"required"`
 	Description param.Field[string]                       `json:"description"`
 	Enabled     param.Field[bool]                         `json:"enabled"`
 	Name        param.Field[string]                       `json:"name"`
@@ -1372,9 +1372,9 @@ type DLPEntryUpdateParamsBodyUnion interface {
 }
 
 type DLPEntryUpdateParamsBodyCustom struct {
-	Name        param.Field[string]                             `json:"name,required"`
-	Pattern     param.Field[PatternParam]                       `json:"pattern,required"`
-	Type        param.Field[DLPEntryUpdateParamsBodyCustomType] `json:"type,required"`
+	Name        param.Field[string]                             `json:"name" api:"required"`
+	Pattern     param.Field[PatternParam]                       `json:"pattern" api:"required"`
+	Type        param.Field[DLPEntryUpdateParamsBodyCustomType] `json:"type" api:"required"`
 	Description param.Field[string]                             `json:"description"`
 	Enabled     param.Field[bool]                               `json:"enabled"`
 }
@@ -1400,7 +1400,7 @@ func (r DLPEntryUpdateParamsBodyCustomType) IsKnown() bool {
 }
 
 type DLPEntryUpdateParamsBodyPredefined struct {
-	Type    param.Field[DLPEntryUpdateParamsBodyPredefinedType] `json:"type,required"`
+	Type    param.Field[DLPEntryUpdateParamsBodyPredefinedType] `json:"type" api:"required"`
 	Enabled param.Field[bool]                                   `json:"enabled"`
 }
 
@@ -1425,7 +1425,7 @@ func (r DLPEntryUpdateParamsBodyPredefinedType) IsKnown() bool {
 }
 
 type DLPEntryUpdateParamsBodyIntegration struct {
-	Type    param.Field[DLPEntryUpdateParamsBodyIntegrationType] `json:"type,required"`
+	Type    param.Field[DLPEntryUpdateParamsBodyIntegrationType] `json:"type" api:"required"`
 	Enabled param.Field[bool]                                    `json:"enabled"`
 }
 
@@ -1466,10 +1466,10 @@ func (r DLPEntryUpdateParamsBodyType) IsKnown() bool {
 }
 
 type DLPEntryUpdateResponseEnvelope struct {
-	Errors   []DLPEntryUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPEntryUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPEntryUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPEntryUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPEntryUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPEntryUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DLPEntryUpdateResponse                `json:"result"`
 	JSON    dlpEntryUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1494,8 +1494,8 @@ func (r dlpEntryUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPEntryUpdateResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DLPEntryUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpEntryUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1542,8 +1542,8 @@ func (r dlpEntryUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPEntryUpdateResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DLPEntryUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpEntryUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1605,19 +1605,19 @@ func (r DLPEntryUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEntryListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPEntryDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPEntryDeleteResponseEnvelope struct {
-	Errors   []DLPEntryDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPEntryDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPEntryDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPEntryDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPEntryDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DLPEntryDeleteResponse                `json:"result,nullable"`
+	Success DLPEntryDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  DLPEntryDeleteResponse                `json:"result" api:"nullable"`
 	JSON    dlpEntryDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1641,8 +1641,8 @@ func (r dlpEntryDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPEntryDeleteResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DLPEntryDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpEntryDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1689,8 +1689,8 @@ func (r dlpEntryDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPEntryDeleteResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DLPEntryDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpEntryDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1752,14 +1752,14 @@ func (r DLPEntryDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEntryGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPEntryGetResponseEnvelope struct {
-	Errors   []DLPEntryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPEntryGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPEntryGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPEntryGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPEntryGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPEntryGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DLPEntryGetResponse                `json:"result"`
 	JSON    dlpEntryGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1784,8 +1784,8 @@ func (r dlpEntryGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPEntryGetResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           DLPEntryGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpEntryGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1832,8 +1832,8 @@ func (r dlpEntryGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPEntryGetResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           DLPEntryGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpEntryGetResponseEnvelopeMessagesJSON   `json:"-"`

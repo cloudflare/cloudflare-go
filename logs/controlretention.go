@@ -40,15 +40,15 @@ func (r *ControlRetentionService) New(ctx context.Context, params ControlRetenti
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets log retention flag for Logpull API.
@@ -57,15 +57,15 @@ func (r *ControlRetentionService) Get(ctx context.Context, query ControlRetentio
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ControlRetentionNewResponse struct {
@@ -114,7 +114,7 @@ func (r controlRetentionGetResponseJSON) RawJSON() string {
 
 type ControlRetentionNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The log retention flag for Logpull API.
 	Flag param.Field[bool] `json:"flag"`
 }
@@ -124,11 +124,11 @@ func (r ControlRetentionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlRetentionNewResponseEnvelope struct {
-	Errors   []ControlRetentionNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlRetentionNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ControlRetentionNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ControlRetentionNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ControlRetentionNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ControlRetentionNewResponse                `json:"result,nullable"`
+	Success ControlRetentionNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ControlRetentionNewResponse                `json:"result" api:"nullable"`
 	JSON    controlRetentionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -152,8 +152,8 @@ func (r controlRetentionNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ControlRetentionNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ControlRetentionNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             controlRetentionNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -200,8 +200,8 @@ func (r controlRetentionNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ControlRetentionNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ControlRetentionNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             controlRetentionNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -264,15 +264,15 @@ func (r ControlRetentionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ControlRetentionGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ControlRetentionGetResponseEnvelope struct {
-	Errors   []ControlRetentionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlRetentionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ControlRetentionGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ControlRetentionGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ControlRetentionGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ControlRetentionGetResponse                `json:"result,nullable"`
+	Success ControlRetentionGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ControlRetentionGetResponse                `json:"result" api:"nullable"`
 	JSON    controlRetentionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -296,8 +296,8 @@ func (r controlRetentionGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ControlRetentionGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ControlRetentionGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             controlRetentionGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -344,8 +344,8 @@ func (r controlRetentionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ControlRetentionGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ControlRetentionGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             controlRetentionGetResponseEnvelopeMessagesJSON   `json:"-"`

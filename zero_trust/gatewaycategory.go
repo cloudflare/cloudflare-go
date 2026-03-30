@@ -42,7 +42,7 @@ func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategory
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/categories", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -180,5 +180,5 @@ func (r CategorySubcategoriesClass) IsKnown() bool {
 
 type GatewayCategoryListParams struct {
 	// Provide the identifier string.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -42,23 +42,23 @@ func (r *ConfigurationCredentialService) Update(ctx context.Context, configID st
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if configID == "" {
 		err = errors.New("missing required config_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/config/%s/credentials", params.ZoneID, configID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type ConfigurationCredentialUpdateResponse struct {
-	Errors   api_gateway.Message                        `json:"errors,required"`
-	Keys     []ConfigurationCredentialUpdateResponseKey `json:"keys,required"`
-	Messages api_gateway.Message                        `json:"messages,required"`
+	Errors   api_gateway.Message                        `json:"errors" api:"required"`
+	Keys     []ConfigurationCredentialUpdateResponseKey `json:"keys" api:"required"`
+	Messages api_gateway.Message                        `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigurationCredentialUpdateResponseSuccess `json:"success,required"`
+	Success ConfigurationCredentialUpdateResponseSuccess `json:"success" api:"required"`
 	JSON    configurationCredentialUpdateResponseJSON    `json:"-"`
 }
 
@@ -84,11 +84,11 @@ func (r configurationCredentialUpdateResponseJSON) RawJSON() string {
 // JSON representation of a JWKS key.
 type ConfigurationCredentialUpdateResponseKey struct {
 	// Algorithm
-	Alg ConfigurationCredentialUpdateResponseKeysAlg `json:"alg,required"`
+	Alg ConfigurationCredentialUpdateResponseKeysAlg `json:"alg" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty ConfigurationCredentialUpdateResponseKeysKty `json:"kty,required"`
+	Kty ConfigurationCredentialUpdateResponseKeysKty `json:"kty" api:"required"`
 	// Curve
 	Crv ConfigurationCredentialUpdateResponseKeysCrv `json:"crv"`
 	// RSA exponent
@@ -174,15 +174,15 @@ func init() {
 // JSON representation of an RSA key.
 type ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSA struct {
 	// Algorithm
-	Alg ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSAAlg `json:"alg,required"`
+	Alg ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSAAlg `json:"alg" api:"required"`
 	// RSA exponent
-	E string `json:"e,required"`
+	E string `json:"e" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSAKty `json:"kty,required"`
+	Kty ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSAKty `json:"kty" api:"required"`
 	// RSA modulus
-	N    string                                                                     `json:"n,required"`
+	N    string                                                                     `json:"n" api:"required"`
 	JSON configurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSAJSON `json:"-"`
 }
 
@@ -248,17 +248,17 @@ func (r ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSAKt
 // JSON representation of an ES256 key
 type ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256 struct {
 	// Algorithm
-	Alg ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256Alg `json:"alg,required"`
+	Alg ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256Alg `json:"alg" api:"required"`
 	// Curve
-	Crv ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256Crv `json:"crv,required"`
+	Crv ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256Crv `json:"crv" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256Kty `json:"kty,required"`
+	Kty ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256Kty `json:"kty" api:"required"`
 	// X EC coordinate
-	X string `json:"x,required"`
+	X string `json:"x" api:"required"`
 	// Y EC coordinate
-	Y    string                                                                         `json:"y,required"`
+	Y    string                                                                         `json:"y" api:"required"`
 	JSON configurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256JSON `json:"-"`
 }
 
@@ -335,17 +335,17 @@ func (r ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs2
 // JSON representation of an ES384 key
 type ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384 struct {
 	// Algorithm
-	Alg ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384Alg `json:"alg,required"`
+	Alg ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384Alg `json:"alg" api:"required"`
 	// Curve
-	Crv ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384Crv `json:"crv,required"`
+	Crv ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384Crv `json:"crv" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384Kty `json:"kty,required"`
+	Kty ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384Kty `json:"kty" api:"required"`
 	// X EC coordinate
-	X string `json:"x,required"`
+	X string `json:"x" api:"required"`
 	// Y EC coordinate
-	Y    string                                                                         `json:"y,required"`
+	Y    string                                                                         `json:"y" api:"required"`
 	JSON configurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384JSON `json:"-"`
 }
 
@@ -490,8 +490,8 @@ func (r ConfigurationCredentialUpdateResponseSuccess) IsKnown() bool {
 
 type ConfigurationCredentialUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string]                                        `path:"zone_id,required"`
-	Keys   param.Field[[]ConfigurationCredentialUpdateParamsKeyUnion] `json:"keys,required"`
+	ZoneID param.Field[string]                                        `path:"zone_id" api:"required"`
+	Keys   param.Field[[]ConfigurationCredentialUpdateParamsKeyUnion] `json:"keys" api:"required"`
 }
 
 func (r ConfigurationCredentialUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -501,11 +501,11 @@ func (r ConfigurationCredentialUpdateParams) MarshalJSON() (data []byte, err err
 // JSON representation of a JWKS key.
 type ConfigurationCredentialUpdateParamsKey struct {
 	// Algorithm
-	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAlg] `json:"alg,required"`
+	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAlg] `json:"alg" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationCredentialUpdateParamsKeysKty] `json:"kty,required"`
+	Kty param.Field[ConfigurationCredentialUpdateParamsKeysKty] `json:"kty" api:"required"`
 	// Curve
 	Crv param.Field[ConfigurationCredentialUpdateParamsKeysCrv] `json:"crv"`
 	// RSA exponent
@@ -539,15 +539,15 @@ type ConfigurationCredentialUpdateParamsKeyUnion interface {
 // JSON representation of an RSA key.
 type ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSA struct {
 	// Algorithm
-	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSAAlg] `json:"alg,required"`
+	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSAAlg] `json:"alg" api:"required"`
 	// RSA exponent
-	E param.Field[string] `json:"e,required"`
+	E param.Field[string] `json:"e" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSAKty] `json:"kty,required"`
+	Kty param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSAKty] `json:"kty" api:"required"`
 	// RSA modulus
-	N param.Field[string] `json:"n,required"`
+	N param.Field[string] `json:"n" api:"required"`
 }
 
 func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSA) MarshalJSON() (data []byte, err error) {
@@ -595,17 +595,17 @@ func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSAKty)
 // JSON representation of an ES256 key
 type ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256 struct {
 	// Algorithm
-	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256Alg] `json:"alg,required"`
+	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256Alg] `json:"alg" api:"required"`
 	// Curve
-	Crv param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256Crv] `json:"crv,required"`
+	Crv param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256Crv] `json:"crv" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256Kty] `json:"kty,required"`
+	Kty param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256Kty] `json:"kty" api:"required"`
 	// X EC coordinate
-	X param.Field[string] `json:"x,required"`
+	X param.Field[string] `json:"x" api:"required"`
 	// Y EC coordinate
-	Y param.Field[string] `json:"y,required"`
+	Y param.Field[string] `json:"y" api:"required"`
 }
 
 func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256) MarshalJSON() (data []byte, err error) {
@@ -663,17 +663,17 @@ func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256
 // JSON representation of an ES384 key
 type ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384 struct {
 	// Algorithm
-	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384Alg] `json:"alg,required"`
+	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384Alg] `json:"alg" api:"required"`
 	// Curve
-	Crv param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384Crv] `json:"crv,required"`
+	Crv param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384Crv] `json:"crv" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384Kty] `json:"kty,required"`
+	Kty param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384Kty] `json:"kty" api:"required"`
 	// X EC coordinate
-	X param.Field[string] `json:"x,required"`
+	X param.Field[string] `json:"x" api:"required"`
 	// Y EC coordinate
-	Y param.Field[string] `json:"y,required"`
+	Y param.Field[string] `json:"y" api:"required"`
 }
 
 func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384) MarshalJSON() (data []byte, err error) {

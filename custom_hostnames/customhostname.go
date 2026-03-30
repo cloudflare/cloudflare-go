@@ -58,15 +58,15 @@ func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNe
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List, search, sort, and filter all of your custom hostnames.
@@ -76,7 +76,7 @@ func (r *CustomHostnameService) List(ctx context.Context, params CustomHostnameL
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -102,15 +102,15 @@ func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID str
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customHostnameID == "" {
 		err = errors.New("missing required custom_hostname_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", body.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Modify SSL configuration for a custom hostname. When sent with SSL config that
@@ -125,19 +125,19 @@ func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customHostnameID == "" {
 		err = errors.New("missing required custom_hostname_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves detailed information about a specific custom hostname, including SSL
@@ -147,19 +147,19 @@ func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customHostnameID == "" {
 		err = errors.New("missing required custom_hostname_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", query.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A ubiquitous bundle has the highest probability of being verified everywhere,
@@ -217,9 +217,9 @@ func (r DomainValidationType) IsKnown() bool {
 
 type CustomHostnameNewResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -711,9 +711,9 @@ func (r CustomHostnameNewResponseStatus) IsKnown() bool {
 
 type CustomHostnameListResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -1227,9 +1227,9 @@ func (r customHostnameDeleteResponseJSON) RawJSON() string {
 
 type CustomHostnameEditResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -1721,9 +1721,9 @@ func (r CustomHostnameEditResponseStatus) IsKnown() bool {
 
 type CustomHostnameGetResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -2215,9 +2215,9 @@ func (r CustomHostnameGetResponseStatus) IsKnown() bool {
 
 type CustomHostnameNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
 	// settings.
 	CustomMetadata param.Field[map[string]string] `json:"custom_metadata"`
@@ -2266,9 +2266,9 @@ func (r CustomHostnameNewParamsSSL) MarshalJSON() (data []byte, err error) {
 
 type CustomHostnameNewParamsSSLCustomCERTBundle struct {
 	// If a custom uploaded certificate is used.
-	CustomCertificate param.Field[string] `json:"custom_certificate,required"`
+	CustomCertificate param.Field[string] `json:"custom_certificate" api:"required"`
 	// The key for a custom uploaded certificate.
-	CustomKey param.Field[string] `json:"custom_key,required"`
+	CustomKey param.Field[string] `json:"custom_key" api:"required"`
 }
 
 func (r CustomHostnameNewParamsSSLCustomCERTBundle) MarshalJSON() (data []byte, err error) {
@@ -2361,10 +2361,10 @@ func (r CustomHostnameNewParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameNewResponseEnvelope struct {
-	Errors   []CustomHostnameNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomHostnameNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomHostnameNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomHostnameNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomHostnameNewResponse                `json:"result"`
 	JSON    customHostnameNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -2389,8 +2389,8 @@ func (r customHostnameNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomHostnameNewResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           CustomHostnameNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customHostnameNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -2437,8 +2437,8 @@ func (r customHostnameNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomHostnameNewResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           CustomHostnameNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customHostnameNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -2501,7 +2501,7 @@ func (r CustomHostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomHostnameListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Hostname ID to match against. This ID was generated and returned during the
 	// initial custom_hostname creation. This parameter cannot be used with the
 	// 'hostname' parameter.
@@ -2685,12 +2685,12 @@ func (r CustomHostnameListParamsSSLStatus) IsKnown() bool {
 
 type CustomHostnameDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CustomHostnameEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
 	// settings.
 	CustomMetadata param.Field[map[string]string] `json:"custom_metadata"`
@@ -2748,9 +2748,9 @@ func (r CustomHostnameEditParamsSSL) MarshalJSON() (data []byte, err error) {
 
 type CustomHostnameEditParamsSSLCustomCERTBundle struct {
 	// If a custom uploaded certificate is used.
-	CustomCertificate param.Field[string] `json:"custom_certificate,required"`
+	CustomCertificate param.Field[string] `json:"custom_certificate" api:"required"`
 	// The key for a custom uploaded certificate.
-	CustomKey param.Field[string] `json:"custom_key,required"`
+	CustomKey param.Field[string] `json:"custom_key" api:"required"`
 }
 
 func (r CustomHostnameEditParamsSSLCustomCERTBundle) MarshalJSON() (data []byte, err error) {
@@ -2843,10 +2843,10 @@ func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameEditResponseEnvelope struct {
-	Errors   []CustomHostnameEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomHostnameEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomHostnameEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomHostnameEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomHostnameEditResponse                `json:"result"`
 	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -2871,8 +2871,8 @@ func (r customHostnameEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomHostnameEditResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           CustomHostnameEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customHostnameEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -2919,8 +2919,8 @@ func (r customHostnameEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomHostnameEditResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           CustomHostnameEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customHostnameEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -2983,14 +2983,14 @@ func (r CustomHostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomHostnameGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CustomHostnameGetResponseEnvelope struct {
-	Errors   []CustomHostnameGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomHostnameGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomHostnameGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomHostnameGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomHostnameGetResponse                `json:"result"`
 	JSON    customHostnameGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -3015,8 +3015,8 @@ func (r customHostnameGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomHostnameGetResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           CustomHostnameGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customHostnameGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3063,8 +3063,8 @@ func (r customHostnameGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomHostnameGetResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           CustomHostnameGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customHostnameGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -40,19 +40,19 @@ func (r *ReverseDNSService) Edit(ctx context.Context, dnsFirewallID string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dnsFirewallID == "" {
 		err = errors.New("missing required dns_firewall_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/reverse_dns", params.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Show reverse DNS configuration (PTR records) for a DNS Firewall cluster
@@ -61,24 +61,24 @@ func (r *ReverseDNSService) Get(ctx context.Context, dnsFirewallID string, query
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dnsFirewallID == "" {
 		err = errors.New("missing required dns_firewall_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/reverse_dns", query.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ReverseDNSEditResponse struct {
 	// Map of cluster IP addresses to PTR record contents
-	PTR  map[string]string          `json:"ptr,required"`
+	PTR  map[string]string          `json:"ptr" api:"required"`
 	JSON reverseDNSEditResponseJSON `json:"-"`
 }
 
@@ -100,7 +100,7 @@ func (r reverseDNSEditResponseJSON) RawJSON() string {
 
 type ReverseDNSGetResponse struct {
 	// Map of cluster IP addresses to PTR record contents
-	PTR  map[string]string         `json:"ptr,required"`
+	PTR  map[string]string         `json:"ptr" api:"required"`
 	JSON reverseDNSGetResponseJSON `json:"-"`
 }
 
@@ -122,7 +122,7 @@ func (r reverseDNSGetResponseJSON) RawJSON() string {
 
 type ReverseDNSEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Map of cluster IP addresses to PTR record contents
 	PTR param.Field[map[string]string] `json:"ptr"`
 }
@@ -132,10 +132,10 @@ func (r ReverseDNSEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ReverseDNSEditResponseEnvelope struct {
-	Errors   []ReverseDNSEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ReverseDNSEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ReverseDNSEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ReverseDNSEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ReverseDNSEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ReverseDNSEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ReverseDNSEditResponse                `json:"result"`
 	JSON    reverseDNSEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -160,8 +160,8 @@ func (r reverseDNSEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ReverseDNSEditResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ReverseDNSEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             reverseDNSEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -208,8 +208,8 @@ func (r reverseDNSEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ReverseDNSEditResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ReverseDNSEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             reverseDNSEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -272,14 +272,14 @@ func (r ReverseDNSEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ReverseDNSGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ReverseDNSGetResponseEnvelope struct {
-	Errors   []ReverseDNSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ReverseDNSGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ReverseDNSGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ReverseDNSGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ReverseDNSGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ReverseDNSGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ReverseDNSGetResponse                `json:"result"`
 	JSON    reverseDNSGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -304,8 +304,8 @@ func (r reverseDNSGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ReverseDNSGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           ReverseDNSGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             reverseDNSGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -352,8 +352,8 @@ func (r reverseDNSGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ReverseDNSGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           ReverseDNSGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             reverseDNSGetResponseEnvelopeMessagesJSON   `json:"-"`

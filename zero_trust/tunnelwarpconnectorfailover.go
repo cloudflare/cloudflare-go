@@ -43,28 +43,28 @@ func (r *TunnelWARPConnectorFailoverService) Update(ctx context.Context, tunnelI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s/failover", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TunnelWARPConnectorFailoverUpdateResponse = interface{}
 
 type TunnelWARPConnectorFailoverUpdateParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// UUID of the Cloudflare Tunnel connector.
-	ClientID param.Field[string] `json:"client_id,required" format:"uuid"`
+	ClientID param.Field[string] `json:"client_id" api:"required" format:"uuid"`
 }
 
 func (r TunnelWARPConnectorFailoverUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -72,11 +72,11 @@ func (r TunnelWARPConnectorFailoverUpdateParams) MarshalJSON() (data []byte, err
 }
 
 type TunnelWARPConnectorFailoverUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   TunnelWARPConnectorFailoverUpdateResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                     `json:"messages" api:"required"`
+	Result   TunnelWARPConnectorFailoverUpdateResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success TunnelWARPConnectorFailoverUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelWARPConnectorFailoverUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelWARPConnectorFailoverUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

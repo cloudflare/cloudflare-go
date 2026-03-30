@@ -46,19 +46,19 @@ func (r *LabelUserService) Update(ctx context.Context, name string, params Label
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if name == "" {
 		err = errors.New("missing required name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels/user/%s", params.ZoneID, name)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete user label
@@ -67,19 +67,19 @@ func (r *LabelUserService) Delete(ctx context.Context, name string, body LabelUs
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if name == "" {
 		err = errors.New("missing required name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels/user/%s", body.ZoneID, name)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Create user labels
@@ -89,7 +89,7 @@ func (r *LabelUserService) BulkNew(ctx context.Context, params LabelUserBulkNewP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels/user", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -116,7 +116,7 @@ func (r *LabelUserService) BulkDelete(ctx context.Context, body LabelUserBulkDel
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels/user", body.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -142,19 +142,19 @@ func (r *LabelUserService) Edit(ctx context.Context, name string, params LabelUs
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if name == "" {
 		err = errors.New("missing required name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels/user/%s", params.ZoneID, name)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve user label
@@ -163,33 +163,33 @@ func (r *LabelUserService) Get(ctx context.Context, name string, params LabelUse
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if name == "" {
 		err = errors.New("missing required name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels/user/%s", params.ZoneID, name)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type LabelUserUpdateResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelUserUpdateResponseSource `json:"source,required"`
+	Source LabelUserUpdateResponseSource `json:"source" api:"required"`
 	JSON   labelUserUpdateResponseJSON   `json:"-"`
 }
 
@@ -232,17 +232,17 @@ func (r LabelUserUpdateResponseSource) IsKnown() bool {
 }
 
 type LabelUserDeleteResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelUserDeleteResponseSource `json:"source,required"`
+	Source LabelUserDeleteResponseSource `json:"source" api:"required"`
 	JSON   labelUserDeleteResponseJSON   `json:"-"`
 }
 
@@ -285,17 +285,17 @@ func (r LabelUserDeleteResponseSource) IsKnown() bool {
 }
 
 type LabelUserBulkNewResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelUserBulkNewResponseSource `json:"source,required"`
+	Source LabelUserBulkNewResponseSource `json:"source" api:"required"`
 	JSON   labelUserBulkNewResponseJSON   `json:"-"`
 }
 
@@ -338,17 +338,17 @@ func (r LabelUserBulkNewResponseSource) IsKnown() bool {
 }
 
 type LabelUserBulkDeleteResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelUserBulkDeleteResponseSource `json:"source,required"`
+	Source LabelUserBulkDeleteResponseSource `json:"source" api:"required"`
 	JSON   labelUserBulkDeleteResponseJSON   `json:"-"`
 }
 
@@ -391,17 +391,17 @@ func (r LabelUserBulkDeleteResponseSource) IsKnown() bool {
 }
 
 type LabelUserEditResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelUserEditResponseSource `json:"source,required"`
+	Source LabelUserEditResponseSource `json:"source" api:"required"`
 	JSON   labelUserEditResponseJSON   `json:"-"`
 }
 
@@ -444,17 +444,17 @@ func (r LabelUserEditResponseSource) IsKnown() bool {
 }
 
 type LabelUserGetResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelUserGetResponseSource `json:"source,required"`
+	Source LabelUserGetResponseSource `json:"source" api:"required"`
 	// Provides counts of what resources are linked to this label
 	MappedResources interface{}              `json:"mapped_resources"`
 	JSON            labelUserGetResponseJSON `json:"-"`
@@ -501,7 +501,7 @@ func (r LabelUserGetResponseSource) IsKnown() bool {
 
 type LabelUserUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The description of the label
 	Description param.Field[string] `json:"description"`
 	// Metadata for the label
@@ -513,11 +513,11 @@ func (r LabelUserUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LabelUserUpdateResponseEnvelope struct {
-	Errors   Message                 `json:"errors,required"`
-	Messages Message                 `json:"messages,required"`
-	Result   LabelUserUpdateResponse `json:"result,required"`
+	Errors   Message                 `json:"errors" api:"required"`
+	Messages Message                 `json:"messages" api:"required"`
+	Result   LabelUserUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LabelUserUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success LabelUserUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    labelUserUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -557,15 +557,15 @@ func (r LabelUserUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type LabelUserDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LabelUserDeleteResponseEnvelope struct {
-	Errors   Message                 `json:"errors,required"`
-	Messages Message                 `json:"messages,required"`
-	Result   LabelUserDeleteResponse `json:"result,required"`
+	Errors   Message                 `json:"errors" api:"required"`
+	Messages Message                 `json:"messages" api:"required"`
+	Result   LabelUserDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LabelUserDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success LabelUserDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    labelUserDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -605,8 +605,8 @@ func (r LabelUserDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type LabelUserBulkNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string]          `path:"zone_id,required"`
-	Body   []LabelUserBulkNewParamsBody `json:"body,required"`
+	ZoneID param.Field[string]          `path:"zone_id" api:"required"`
+	Body   []LabelUserBulkNewParamsBody `json:"body" api:"required"`
 }
 
 func (r LabelUserBulkNewParams) MarshalJSON() (data []byte, err error) {
@@ -615,7 +615,7 @@ func (r LabelUserBulkNewParams) MarshalJSON() (data []byte, err error) {
 
 type LabelUserBulkNewParamsBody struct {
 	// The name of the label
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The description of the label
 	Description param.Field[string] `json:"description"`
 	// Metadata for the label
@@ -628,12 +628,12 @@ func (r LabelUserBulkNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type LabelUserBulkDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LabelUserEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The description of the label
 	Description param.Field[string] `json:"description"`
 	// Metadata for the label
@@ -645,11 +645,11 @@ func (r LabelUserEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LabelUserEditResponseEnvelope struct {
-	Errors   Message               `json:"errors,required"`
-	Messages Message               `json:"messages,required"`
-	Result   LabelUserEditResponse `json:"result,required"`
+	Errors   Message               `json:"errors" api:"required"`
+	Messages Message               `json:"messages" api:"required"`
+	Result   LabelUserEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LabelUserEditResponseEnvelopeSuccess `json:"success,required"`
+	Success LabelUserEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    labelUserEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -689,7 +689,7 @@ func (r LabelUserEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type LabelUserGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Include `mapped_resources` for each label
 	WithMappedResourceCounts param.Field[bool] `query:"with_mapped_resource_counts"`
 }
@@ -703,11 +703,11 @@ func (r LabelUserGetParams) URLQuery() (v url.Values) {
 }
 
 type LabelUserGetResponseEnvelope struct {
-	Errors   Message              `json:"errors,required"`
-	Messages Message              `json:"messages,required"`
-	Result   LabelUserGetResponse `json:"result,required"`
+	Errors   Message              `json:"errors" api:"required"`
+	Messages Message              `json:"messages" api:"required"`
+	Result   LabelUserGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LabelUserGetResponseEnvelopeSuccess `json:"success,required"`
+	Success LabelUserGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    labelUserGetResponseEnvelopeJSON    `json:"-"`
 }
 

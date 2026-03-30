@@ -45,11 +45,11 @@ func (r *StoreSecretService) New(ctx context.Context, storeID string, params Sto
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if storeID == "" {
 		err = errors.New("missing required store_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets", params.AccountID, storeID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -76,11 +76,11 @@ func (r *StoreSecretService) List(ctx context.Context, storeID string, params St
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if storeID == "" {
 		err = errors.New("missing required store_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets", params.AccountID, storeID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -106,23 +106,23 @@ func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretI
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if storeID == "" {
 		err = errors.New("missing required store_id parameter")
-		return
+		return nil, err
 	}
 	if secretID == "" {
 		err = errors.New("missing required secret_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets/%s", body.AccountID, storeID, secretID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes one or more secrets
@@ -132,11 +132,11 @@ func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, bod
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if storeID == "" {
 		err = errors.New("missing required store_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets", body.AccountID, storeID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -162,23 +162,23 @@ func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secr
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if storeID == "" {
 		err = errors.New("missing required store_id parameter")
-		return
+		return nil, err
 	}
 	if secretID == "" {
 		err = errors.New("missing required secret_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets/%s/duplicate", params.AccountID, storeID, secretID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a single secret
@@ -187,23 +187,23 @@ func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if storeID == "" {
 		err = errors.New("missing required store_id parameter")
-		return
+		return nil, err
 	}
 	if secretID == "" {
 		err = errors.New("missing required secret_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets/%s", params.AccountID, storeID, secretID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns details of a single secret
@@ -212,37 +212,37 @@ func (r *StoreSecretService) Get(ctx context.Context, storeID string, secretID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if storeID == "" {
 		err = errors.New("missing required store_id parameter")
-		return
+		return nil, err
 	}
 	if secretID == "" {
 		err = errors.New("missing required secret_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets/%s", query.AccountID, storeID, secretID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type StoreSecretNewResponse struct {
 	// Secret identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the secret
-	Name   string                       `json:"name,required"`
-	Status StoreSecretNewResponseStatus `json:"status,required"`
+	Name   string                       `json:"name" api:"required"`
+	Status StoreSecretNewResponseStatus `json:"status" api:"required"`
 	// Store Identifier
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
 	Comment string                     `json:"comment"`
 	JSON    storeSecretNewResponseJSON `json:"-"`
@@ -288,16 +288,16 @@ func (r StoreSecretNewResponseStatus) IsKnown() bool {
 
 type StoreSecretListResponse struct {
 	// Secret identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the secret
-	Name   string                        `json:"name,required"`
-	Status StoreSecretListResponseStatus `json:"status,required"`
+	Name   string                        `json:"name" api:"required"`
+	Status StoreSecretListResponseStatus `json:"status" api:"required"`
 	// Store Identifier
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
 	Comment string                      `json:"comment"`
 	JSON    storeSecretListResponseJSON `json:"-"`
@@ -343,16 +343,16 @@ func (r StoreSecretListResponseStatus) IsKnown() bool {
 
 type StoreSecretDeleteResponse struct {
 	// Secret identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the secret
-	Name   string                          `json:"name,required"`
-	Status StoreSecretDeleteResponseStatus `json:"status,required"`
+	Name   string                          `json:"name" api:"required"`
+	Status StoreSecretDeleteResponseStatus `json:"status" api:"required"`
 	// Store Identifier
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
 	Comment string                        `json:"comment"`
 	JSON    storeSecretDeleteResponseJSON `json:"-"`
@@ -398,16 +398,16 @@ func (r StoreSecretDeleteResponseStatus) IsKnown() bool {
 
 type StoreSecretBulkDeleteResponse struct {
 	// Secret identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the secret
-	Name   string                              `json:"name,required"`
-	Status StoreSecretBulkDeleteResponseStatus `json:"status,required"`
+	Name   string                              `json:"name" api:"required"`
+	Status StoreSecretBulkDeleteResponseStatus `json:"status" api:"required"`
 	// Store Identifier
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
 	Comment string                            `json:"comment"`
 	JSON    storeSecretBulkDeleteResponseJSON `json:"-"`
@@ -453,16 +453,16 @@ func (r StoreSecretBulkDeleteResponseStatus) IsKnown() bool {
 
 type StoreSecretDuplicateResponse struct {
 	// Secret identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the secret
-	Name   string                             `json:"name,required"`
-	Status StoreSecretDuplicateResponseStatus `json:"status,required"`
+	Name   string                             `json:"name" api:"required"`
+	Status StoreSecretDuplicateResponseStatus `json:"status" api:"required"`
 	// Store Identifier
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
 	Comment string                           `json:"comment"`
 	JSON    storeSecretDuplicateResponseJSON `json:"-"`
@@ -508,16 +508,16 @@ func (r StoreSecretDuplicateResponseStatus) IsKnown() bool {
 
 type StoreSecretEditResponse struct {
 	// Secret identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the secret
-	Name   string                        `json:"name,required"`
-	Status StoreSecretEditResponseStatus `json:"status,required"`
+	Name   string                        `json:"name" api:"required"`
+	Status StoreSecretEditResponseStatus `json:"status" api:"required"`
 	// Store Identifier
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
 	Comment string                      `json:"comment"`
 	JSON    storeSecretEditResponseJSON `json:"-"`
@@ -563,16 +563,16 @@ func (r StoreSecretEditResponseStatus) IsKnown() bool {
 
 type StoreSecretGetResponse struct {
 	// Secret identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whenthe secret was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the secret
-	Name   string                       `json:"name,required"`
-	Status StoreSecretGetResponseStatus `json:"status,required"`
+	Name   string                       `json:"name" api:"required"`
+	Status StoreSecretGetResponseStatus `json:"status" api:"required"`
 	// Store Identifier
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
 	Comment string                     `json:"comment"`
 	JSON    storeSecretGetResponseJSON `json:"-"`
@@ -618,8 +618,8 @@ func (r StoreSecretGetResponseStatus) IsKnown() bool {
 
 type StoreSecretNewParams struct {
 	// Account Identifier
-	AccountID param.Field[string]        `path:"account_id,required"`
-	Body      []StoreSecretNewParamsBody `json:"body,required"`
+	AccountID param.Field[string]        `path:"account_id" api:"required"`
+	Body      []StoreSecretNewParamsBody `json:"body" api:"required"`
 }
 
 func (r StoreSecretNewParams) MarshalJSON() (data []byte, err error) {
@@ -628,12 +628,12 @@ func (r StoreSecretNewParams) MarshalJSON() (data []byte, err error) {
 
 type StoreSecretNewParamsBody struct {
 	// The name of the secret
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The list of services that can use this secret.
-	Scopes param.Field[[]string] `json:"scopes,required"`
+	Scopes param.Field[[]string] `json:"scopes" api:"required"`
 	// The value of the secret. Note that this is 'write only' - no API reponse will
 	// provide this value, it is only used to create/modify secrets.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 	// Freeform text describing the secret
 	Comment param.Field[string] `json:"comment"`
 }
@@ -644,7 +644,7 @@ func (r StoreSecretNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type StoreSecretListParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to sort objects
 	Direction param.Field[StoreSecretListParamsDirection] `query:"direction"`
 	// Order secrets by values in the given field
@@ -704,14 +704,14 @@ func (r StoreSecretListParamsOrder) IsKnown() bool {
 
 type StoreSecretDeleteParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type StoreSecretDeleteResponseEnvelope struct {
-	Errors   []StoreSecretDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StoreSecretDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []StoreSecretDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StoreSecretDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreSecretDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Success    StoreSecretDeleteResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     StoreSecretDeleteResponse                   `json:"result"`
 	ResultInfo StoreSecretDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       storeSecretDeleteResponseEnvelopeJSON       `json:"-"`
@@ -738,8 +738,8 @@ func (r storeSecretDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type StoreSecretDeleteResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           StoreSecretDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             storeSecretDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -786,8 +786,8 @@ func (r storeSecretDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type StoreSecretDeleteResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           StoreSecretDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             storeSecretDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -881,16 +881,16 @@ func (r storeSecretDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreSecretBulkDeleteParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type StoreSecretDuplicateParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the secret
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The list of services that can use this secret.
-	Scopes param.Field[[]string] `json:"scopes,required"`
+	Scopes param.Field[[]string] `json:"scopes" api:"required"`
 	// Freeform text describing the secret
 	Comment param.Field[string] `json:"comment"`
 }
@@ -900,10 +900,10 @@ func (r StoreSecretDuplicateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StoreSecretDuplicateResponseEnvelope struct {
-	Errors   []StoreSecretDuplicateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StoreSecretDuplicateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []StoreSecretDuplicateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StoreSecretDuplicateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreSecretDuplicateResponseEnvelopeSuccess    `json:"success,required"`
+	Success    StoreSecretDuplicateResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     StoreSecretDuplicateResponse                   `json:"result"`
 	ResultInfo StoreSecretDuplicateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       storeSecretDuplicateResponseEnvelopeJSON       `json:"-"`
@@ -930,8 +930,8 @@ func (r storeSecretDuplicateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type StoreSecretDuplicateResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           StoreSecretDuplicateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             storeSecretDuplicateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -978,8 +978,8 @@ func (r storeSecretDuplicateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type StoreSecretDuplicateResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           StoreSecretDuplicateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             storeSecretDuplicateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1073,7 +1073,7 @@ func (r storeSecretDuplicateResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreSecretEditParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Freeform text describing the secret
 	Comment param.Field[string] `json:"comment"`
 	// The list of services that can use this secret.
@@ -1085,10 +1085,10 @@ func (r StoreSecretEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StoreSecretEditResponseEnvelope struct {
-	Errors   []StoreSecretEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StoreSecretEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []StoreSecretEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StoreSecretEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreSecretEditResponseEnvelopeSuccess    `json:"success,required"`
+	Success    StoreSecretEditResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     StoreSecretEditResponse                   `json:"result"`
 	ResultInfo StoreSecretEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       storeSecretEditResponseEnvelopeJSON       `json:"-"`
@@ -1115,8 +1115,8 @@ func (r storeSecretEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type StoreSecretEditResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           StoreSecretEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             storeSecretEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1163,8 +1163,8 @@ func (r storeSecretEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type StoreSecretEditResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           StoreSecretEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             storeSecretEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1258,14 +1258,14 @@ func (r storeSecretEditResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreSecretGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type StoreSecretGetResponseEnvelope struct {
-	Errors   []StoreSecretGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StoreSecretGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []StoreSecretGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StoreSecretGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreSecretGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    StoreSecretGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     StoreSecretGetResponse                   `json:"result"`
 	ResultInfo StoreSecretGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       storeSecretGetResponseEnvelopeJSON       `json:"-"`
@@ -1292,8 +1292,8 @@ func (r storeSecretGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type StoreSecretGetResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           StoreSecretGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             storeSecretGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1340,8 +1340,8 @@ func (r storeSecretGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type StoreSecretGetResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           StoreSecretGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             storeSecretGetResponseEnvelopeMessagesJSON   `json:"-"`

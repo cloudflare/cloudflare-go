@@ -43,16 +43,16 @@ func (r *HTTPLocationIPVersionService) Get(ctx context.Context, ipVersion HTTPLo
 	path := fmt.Sprintf("radar/http/top/locations/ip_version/%v", ipVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPLocationIPVersionGetResponse struct {
 	// Metadata for the results.
-	Meta HTTPLocationIPVersionGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPLocationIPVersionGetResponseTop0 `json:"top_0,required"`
+	Meta HTTPLocationIPVersionGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []HTTPLocationIPVersionGetResponseTop0 `json:"top_0" api:"required"`
 	JSON httpLocationIPVersionGetResponseJSON   `json:"-"`
 }
 
@@ -75,15 +75,15 @@ func (r httpLocationIPVersionGetResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPLocationIPVersionGetResponseMeta struct {
-	ConfidenceInfo HTTPLocationIPVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []HTTPLocationIPVersionGetResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo HTTPLocationIPVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []HTTPLocationIPVersionGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPLocationIPVersionGetResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPLocationIPVersionGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPLocationIPVersionGetResponseMetaUnit `json:"units,required"`
+	Units []HTTPLocationIPVersionGetResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpLocationIPVersionGetResponseMetaJSON   `json:"-"`
 }
 
@@ -108,9 +108,9 @@ func (r httpLocationIPVersionGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPLocationIPVersionGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                  `json:"level,required"`
+	Level int64                                                  `json:"level" api:"required"`
 	JSON  httpLocationIPVersionGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -134,15 +134,15 @@ func (r httpLocationIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                  `json:"description,required"`
-	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                  `json:"description" api:"required"`
+	EndDate     time.Time                                                               `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpLocationIPVersionGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -230,9 +230,9 @@ func (r HTTPLocationIPVersionGetResponseMetaConfidenceInfoAnnotationsEventType) 
 
 type HTTPLocationIPVersionGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                         `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpLocationIPVersionGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -277,8 +277,8 @@ func (r HTTPLocationIPVersionGetResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPLocationIPVersionGetResponseMetaUnit struct {
-	Name  string                                       `json:"name,required"`
-	Value string                                       `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  httpLocationIPVersionGetResponseMetaUnitJSON `json:"-"`
 }
 
@@ -300,10 +300,10 @@ func (r httpLocationIPVersionGetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPLocationIPVersionGetResponseTop0 struct {
-	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string `json:"clientCountryName,required"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2" api:"required"`
+	ClientCountryName   string `json:"clientCountryName" api:"required"`
 	// A numeric string.
-	Value string                                   `json:"value,required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  httpLocationIPVersionGetResponseTop0JSON `json:"-"`
 }
 
@@ -534,8 +534,8 @@ func (r HTTPLocationIPVersionGetParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPLocationIPVersionGetResponseEnvelope struct {
-	Result  HTTPLocationIPVersionGetResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  HTTPLocationIPVersionGetResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    httpLocationIPVersionGetResponseEnvelopeJSON `json:"-"`
 }
 

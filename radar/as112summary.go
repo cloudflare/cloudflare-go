@@ -47,10 +47,10 @@ func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSS
 	path := "radar/as112/summary/dnssec"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries to AS112 by EDNS (Extension Mechanisms
@@ -65,10 +65,10 @@ func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsPa
 	path := "radar/as112/summary/edns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries to AS112 by IP version.
@@ -82,10 +82,10 @@ func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryI
 	path := "radar/as112/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries to AS112 by protocol.
@@ -99,10 +99,10 @@ func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryPr
 	path := "radar/as112/summary/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries to AS112 by type.
@@ -116,10 +116,10 @@ func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQ
 	path := "radar/as112/summary/query_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of AS112 DNS requests classified by response code.
@@ -133,16 +133,16 @@ func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112Summ
 	path := "radar/as112/summary/response_codes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AS112SummaryDNSSECResponse struct {
 	// Metadata for the results.
-	Meta     AS112SummaryDNSSECResponseMeta     `json:"meta,required"`
-	Summary0 AS112SummaryDNSSECResponseSummary0 `json:"summary_0,required"`
+	Meta     AS112SummaryDNSSECResponseMeta     `json:"meta" api:"required"`
+	Summary0 AS112SummaryDNSSECResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     as112SummaryDNSSECResponseJSON     `json:"-"`
 }
 
@@ -165,15 +165,15 @@ func (r as112SummaryDNSSECResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryDNSSECResponseMeta struct {
-	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AS112SummaryDNSSECResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AS112SummaryDNSSECResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AS112SummaryDNSSECResponseMetaNormalization `json:"normalization,required"`
+	Normalization AS112SummaryDNSSECResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AS112SummaryDNSSECResponseMetaUnit `json:"units,required"`
+	Units []AS112SummaryDNSSECResponseMetaUnit `json:"units" api:"required"`
 	JSON  as112SummaryDNSSECResponseMetaJSON   `json:"-"`
 }
 
@@ -198,9 +198,9 @@ func (r as112SummaryDNSSECResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                            `json:"level,required"`
+	Level int64                                            `json:"level" api:"required"`
 	JSON  as112SummaryDNSSECResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -224,15 +224,15 @@ func (r as112SummaryDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                            `json:"description,required"`
-	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	DataSource  AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                            `json:"description" api:"required"`
+	EndDate     time.Time                                                         `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
 	JSON            as112SummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -319,9 +319,9 @@ func (r AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotationsEventType) IsKnow
 
 type AS112SummaryDNSSECResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                   `json:"startTime" api:"required" format:"date-time"`
 	JSON      as112SummaryDNSSECResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -366,8 +366,8 @@ func (r AS112SummaryDNSSECResponseMetaNormalization) IsKnown() bool {
 }
 
 type AS112SummaryDNSSECResponseMetaUnit struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
+	Name  string                                 `json:"name" api:"required"`
+	Value string                                 `json:"value" api:"required"`
 	JSON  as112SummaryDNSSECResponseMetaUnitJSON `json:"-"`
 }
 
@@ -390,9 +390,9 @@ func (r as112SummaryDNSSECResponseMetaUnitJSON) RawJSON() string {
 
 type AS112SummaryDNSSECResponseSummary0 struct {
 	// A numeric string.
-	NotSupported string `json:"NOT_SUPPORTED,required"`
+	NotSupported string `json:"NOT_SUPPORTED" api:"required"`
 	// A numeric string.
-	Supported string                                 `json:"SUPPORTED,required"`
+	Supported string                                 `json:"SUPPORTED" api:"required"`
 	JSON      as112SummaryDNSSECResponseSummary0JSON `json:"-"`
 }
 
@@ -415,8 +415,8 @@ func (r as112SummaryDNSSECResponseSummary0JSON) RawJSON() string {
 
 type AS112SummaryEdnsResponse struct {
 	// Metadata for the results.
-	Meta     AS112SummaryEdnsResponseMeta     `json:"meta,required"`
-	Summary0 AS112SummaryEdnsResponseSummary0 `json:"summary_0,required"`
+	Meta     AS112SummaryEdnsResponseMeta     `json:"meta" api:"required"`
+	Summary0 AS112SummaryEdnsResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     as112SummaryEdnsResponseJSON     `json:"-"`
 }
 
@@ -439,15 +439,15 @@ func (r as112SummaryEdnsResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryEdnsResponseMeta struct {
-	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AS112SummaryEdnsResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AS112SummaryEdnsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AS112SummaryEdnsResponseMetaNormalization `json:"normalization,required"`
+	Normalization AS112SummaryEdnsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AS112SummaryEdnsResponseMetaUnit `json:"units,required"`
+	Units []AS112SummaryEdnsResponseMetaUnit `json:"units" api:"required"`
 	JSON  as112SummaryEdnsResponseMetaJSON   `json:"-"`
 }
 
@@ -472,9 +472,9 @@ func (r as112SummaryEdnsResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryEdnsResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                          `json:"level,required"`
+	Level int64                                          `json:"level" api:"required"`
 	JSON  as112SummaryEdnsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -498,15 +498,15 @@ func (r as112SummaryEdnsResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AS112SummaryEdnsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                          `json:"description,required"`
-	EndDate     time.Time                                                       `json:"endDate,required" format:"date-time"`
+	DataSource  AS112SummaryEdnsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                          `json:"description" api:"required"`
+	EndDate     time.Time                                                       `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AS112SummaryEdnsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AS112SummaryEdnsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                     `json:"isInstantaneous,required"`
-	LinkedURL       string                                                   `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                     `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                   `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                `json:"startDate" api:"required" format:"date-time"`
 	JSON            as112SummaryEdnsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -593,9 +593,9 @@ func (r AS112SummaryEdnsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown(
 
 type AS112SummaryEdnsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                 `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                 `json:"startTime" api:"required" format:"date-time"`
 	JSON      as112SummaryEdnsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -640,8 +640,8 @@ func (r AS112SummaryEdnsResponseMetaNormalization) IsKnown() bool {
 }
 
 type AS112SummaryEdnsResponseMetaUnit struct {
-	Name  string                               `json:"name,required"`
-	Value string                               `json:"value,required"`
+	Name  string                               `json:"name" api:"required"`
+	Value string                               `json:"value" api:"required"`
 	JSON  as112SummaryEdnsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -664,9 +664,9 @@ func (r as112SummaryEdnsResponseMetaUnitJSON) RawJSON() string {
 
 type AS112SummaryEdnsResponseSummary0 struct {
 	// A numeric string.
-	NotSupported string `json:"NOT_SUPPORTED,required"`
+	NotSupported string `json:"NOT_SUPPORTED" api:"required"`
 	// A numeric string.
-	Supported string                               `json:"SUPPORTED,required"`
+	Supported string                               `json:"SUPPORTED" api:"required"`
 	JSON      as112SummaryEdnsResponseSummary0JSON `json:"-"`
 }
 
@@ -689,8 +689,8 @@ func (r as112SummaryEdnsResponseSummary0JSON) RawJSON() string {
 
 type AS112SummaryIPVersionResponse struct {
 	// Metadata for the results.
-	Meta     AS112SummaryIPVersionResponseMeta     `json:"meta,required"`
-	Summary0 AS112SummaryIPVersionResponseSummary0 `json:"summary_0,required"`
+	Meta     AS112SummaryIPVersionResponseMeta     `json:"meta" api:"required"`
+	Summary0 AS112SummaryIPVersionResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     as112SummaryIPVersionResponseJSON     `json:"-"`
 }
 
@@ -713,15 +713,15 @@ func (r as112SummaryIPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryIPVersionResponseMeta struct {
-	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AS112SummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AS112SummaryIPVersionResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AS112SummaryIPVersionResponseMetaNormalization `json:"normalization,required"`
+	Normalization AS112SummaryIPVersionResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AS112SummaryIPVersionResponseMetaUnit `json:"units,required"`
+	Units []AS112SummaryIPVersionResponseMetaUnit `json:"units" api:"required"`
 	JSON  as112SummaryIPVersionResponseMetaJSON   `json:"-"`
 }
 
@@ -746,9 +746,9 @@ func (r as112SummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                               `json:"level,required"`
+	Level int64                                               `json:"level" api:"required"`
 	JSON  as112SummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -772,15 +772,15 @@ func (r as112SummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                               `json:"description,required"`
-	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	DataSource  AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                               `json:"description" api:"required"`
+	EndDate     time.Time                                                            `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                        `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                     `json:"startDate" api:"required" format:"date-time"`
 	JSON            as112SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -868,9 +868,9 @@ func (r AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType) IsK
 
 type AS112SummaryIPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                      `json:"startTime" api:"required" format:"date-time"`
 	JSON      as112SummaryIPVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -915,8 +915,8 @@ func (r AS112SummaryIPVersionResponseMetaNormalization) IsKnown() bool {
 }
 
 type AS112SummaryIPVersionResponseMetaUnit struct {
-	Name  string                                    `json:"name,required"`
-	Value string                                    `json:"value,required"`
+	Name  string                                    `json:"name" api:"required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  as112SummaryIPVersionResponseMetaUnitJSON `json:"-"`
 }
 
@@ -939,9 +939,9 @@ func (r as112SummaryIPVersionResponseMetaUnitJSON) RawJSON() string {
 
 type AS112SummaryIPVersionResponseSummary0 struct {
 	// A numeric string.
-	IPv4 string `json:"IPv4,required"`
+	IPv4 string `json:"IPv4" api:"required"`
 	// A numeric string.
-	IPv6 string                                    `json:"IPv6,required"`
+	IPv6 string                                    `json:"IPv6" api:"required"`
 	JSON as112SummaryIPVersionResponseSummary0JSON `json:"-"`
 }
 
@@ -964,8 +964,8 @@ func (r as112SummaryIPVersionResponseSummary0JSON) RawJSON() string {
 
 type AS112SummaryProtocolResponse struct {
 	// Metadata for the results.
-	Meta     AS112SummaryProtocolResponseMeta     `json:"meta,required"`
-	Summary0 AS112SummaryProtocolResponseSummary0 `json:"summary_0,required"`
+	Meta     AS112SummaryProtocolResponseMeta     `json:"meta" api:"required"`
+	Summary0 AS112SummaryProtocolResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     as112SummaryProtocolResponseJSON     `json:"-"`
 }
 
@@ -988,15 +988,15 @@ func (r as112SummaryProtocolResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryProtocolResponseMeta struct {
-	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AS112SummaryProtocolResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AS112SummaryProtocolResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AS112SummaryProtocolResponseMetaNormalization `json:"normalization,required"`
+	Normalization AS112SummaryProtocolResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AS112SummaryProtocolResponseMetaUnit `json:"units,required"`
+	Units []AS112SummaryProtocolResponseMetaUnit `json:"units" api:"required"`
 	JSON  as112SummaryProtocolResponseMetaJSON   `json:"-"`
 }
 
@@ -1021,9 +1021,9 @@ func (r as112SummaryProtocolResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryProtocolResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                              `json:"level,required"`
+	Level int64                                              `json:"level" api:"required"`
 	JSON  as112SummaryProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1047,15 +1047,15 @@ func (r as112SummaryProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AS112SummaryProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                              `json:"description,required"`
-	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	DataSource  AS112SummaryProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                              `json:"description" api:"required"`
+	EndDate     time.Time                                                           `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AS112SummaryProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AS112SummaryProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
-	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
 	JSON            as112SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1143,9 +1143,9 @@ func (r AS112SummaryProtocolResponseMetaConfidenceInfoAnnotationsEventType) IsKn
 
 type AS112SummaryProtocolResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                     `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                     `json:"startTime" api:"required" format:"date-time"`
 	JSON      as112SummaryProtocolResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1190,8 +1190,8 @@ func (r AS112SummaryProtocolResponseMetaNormalization) IsKnown() bool {
 }
 
 type AS112SummaryProtocolResponseMetaUnit struct {
-	Name  string                                   `json:"name,required"`
-	Value string                                   `json:"value,required"`
+	Name  string                                   `json:"name" api:"required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  as112SummaryProtocolResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1214,13 +1214,13 @@ func (r as112SummaryProtocolResponseMetaUnitJSON) RawJSON() string {
 
 type AS112SummaryProtocolResponseSummary0 struct {
 	// A numeric string.
-	HTTPS string `json:"HTTPS,required"`
+	HTTPS string `json:"HTTPS" api:"required"`
 	// A numeric string.
-	TCP string `json:"TCP,required"`
+	TCP string `json:"TCP" api:"required"`
 	// A numeric string.
-	TLS string `json:"TLS,required"`
+	TLS string `json:"TLS" api:"required"`
 	// A numeric string.
-	Udp  string                                   `json:"UDP,required"`
+	Udp  string                                   `json:"UDP" api:"required"`
 	JSON as112SummaryProtocolResponseSummary0JSON `json:"-"`
 }
 
@@ -1245,8 +1245,8 @@ func (r as112SummaryProtocolResponseSummary0JSON) RawJSON() string {
 
 type AS112SummaryQueryTypeResponse struct {
 	// Metadata for the results.
-	Meta     AS112SummaryQueryTypeResponseMeta `json:"meta,required"`
-	Summary0 map[string]string                 `json:"summary_0,required"`
+	Meta     AS112SummaryQueryTypeResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string                 `json:"summary_0" api:"required"`
 	JSON     as112SummaryQueryTypeResponseJSON `json:"-"`
 }
 
@@ -1269,15 +1269,15 @@ func (r as112SummaryQueryTypeResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryQueryTypeResponseMeta struct {
-	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AS112SummaryQueryTypeResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AS112SummaryQueryTypeResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AS112SummaryQueryTypeResponseMetaNormalization `json:"normalization,required"`
+	Normalization AS112SummaryQueryTypeResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AS112SummaryQueryTypeResponseMetaUnit `json:"units,required"`
+	Units []AS112SummaryQueryTypeResponseMetaUnit `json:"units" api:"required"`
 	JSON  as112SummaryQueryTypeResponseMetaJSON   `json:"-"`
 }
 
@@ -1302,9 +1302,9 @@ func (r as112SummaryQueryTypeResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryQueryTypeResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                               `json:"level,required"`
+	Level int64                                               `json:"level" api:"required"`
 	JSON  as112SummaryQueryTypeResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1328,15 +1328,15 @@ func (r as112SummaryQueryTypeResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                               `json:"description,required"`
-	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	DataSource  AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                               `json:"description" api:"required"`
+	EndDate     time.Time                                                            `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                        `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                     `json:"startDate" api:"required" format:"date-time"`
 	JSON            as112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1424,9 +1424,9 @@ func (r AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotationsEventType) IsK
 
 type AS112SummaryQueryTypeResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                      `json:"startTime" api:"required" format:"date-time"`
 	JSON      as112SummaryQueryTypeResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1471,8 +1471,8 @@ func (r AS112SummaryQueryTypeResponseMetaNormalization) IsKnown() bool {
 }
 
 type AS112SummaryQueryTypeResponseMetaUnit struct {
-	Name  string                                    `json:"name,required"`
-	Value string                                    `json:"value,required"`
+	Name  string                                    `json:"name" api:"required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  as112SummaryQueryTypeResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1495,8 +1495,8 @@ func (r as112SummaryQueryTypeResponseMetaUnitJSON) RawJSON() string {
 
 type AS112SummaryResponseCodesResponse struct {
 	// Metadata for the results.
-	Meta     AS112SummaryResponseCodesResponseMeta `json:"meta,required"`
-	Summary0 map[string]string                     `json:"summary_0,required"`
+	Meta     AS112SummaryResponseCodesResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string                     `json:"summary_0" api:"required"`
 	JSON     as112SummaryResponseCodesResponseJSON `json:"-"`
 }
 
@@ -1519,15 +1519,15 @@ func (r as112SummaryResponseCodesResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AS112SummaryResponseCodesResponseMeta struct {
-	ConfidenceInfo AS112SummaryResponseCodesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AS112SummaryResponseCodesResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AS112SummaryResponseCodesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AS112SummaryResponseCodesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AS112SummaryResponseCodesResponseMetaNormalization `json:"normalization,required"`
+	Normalization AS112SummaryResponseCodesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AS112SummaryResponseCodesResponseMetaUnit `json:"units,required"`
+	Units []AS112SummaryResponseCodesResponseMetaUnit `json:"units" api:"required"`
 	JSON  as112SummaryResponseCodesResponseMetaJSON   `json:"-"`
 }
 
@@ -1552,9 +1552,9 @@ func (r as112SummaryResponseCodesResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryResponseCodesResponseMetaConfidenceInfo struct {
-	Annotations []AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                   `json:"level,required"`
+	Level int64                                                   `json:"level" api:"required"`
 	JSON  as112SummaryResponseCodesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1578,15 +1578,15 @@ func (r as112SummaryResponseCodesResponseMetaConfidenceInfoJSON) RawJSON() strin
 // Annotation associated with the result (e.g. outage or other type of event).
 type AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                   `json:"description,required"`
-	EndDate     time.Time                                                                `json:"endDate,required" format:"date-time"`
+	DataSource  AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                   `json:"description" api:"required"`
+	EndDate     time.Time                                                                `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
-	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                         `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                            `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                         `json:"startDate" api:"required" format:"date-time"`
 	JSON            as112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1674,9 +1674,9 @@ func (r AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotationsEventType)
 
 type AS112SummaryResponseCodesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                          `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                          `json:"startTime" api:"required" format:"date-time"`
 	JSON      as112SummaryResponseCodesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1721,8 +1721,8 @@ func (r AS112SummaryResponseCodesResponseMetaNormalization) IsKnown() bool {
 }
 
 type AS112SummaryResponseCodesResponseMetaUnit struct {
-	Name  string                                        `json:"name,required"`
-	Value string                                        `json:"value,required"`
+	Name  string                                        `json:"name" api:"required"`
+	Value string                                        `json:"value" api:"required"`
 	JSON  as112SummaryResponseCodesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1948,8 +1948,8 @@ func (r AS112SummaryDNSSECParamsResponseCode) IsKnown() bool {
 }
 
 type AS112SummaryDNSSECResponseEnvelope struct {
-	Result  AS112SummaryDNSSECResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  AS112SummaryDNSSECResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    as112SummaryDNSSECResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2174,8 +2174,8 @@ func (r AS112SummaryEdnsParamsResponseCode) IsKnown() bool {
 }
 
 type AS112SummaryEdnsResponseEnvelope struct {
-	Result  AS112SummaryEdnsResponse             `json:"result,required"`
-	Success bool                                 `json:"success,required"`
+	Result  AS112SummaryEdnsResponse             `json:"result" api:"required"`
+	Success bool                                 `json:"success" api:"required"`
 	JSON    as112SummaryEdnsResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2401,8 +2401,8 @@ func (r AS112SummaryIPVersionParamsResponseCode) IsKnown() bool {
 }
 
 type AS112SummaryIPVersionResponseEnvelope struct {
-	Result  AS112SummaryIPVersionResponse             `json:"result,required"`
-	Success bool                                      `json:"success,required"`
+	Result  AS112SummaryIPVersionResponse             `json:"result" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    as112SummaryIPVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2609,8 +2609,8 @@ func (r AS112SummaryProtocolParamsResponseCode) IsKnown() bool {
 }
 
 type AS112SummaryProtocolResponseEnvelope struct {
-	Result  AS112SummaryProtocolResponse             `json:"result,required"`
-	Success bool                                     `json:"success,required"`
+	Result  AS112SummaryProtocolResponse             `json:"result" api:"required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    as112SummaryProtocolResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2737,8 +2737,8 @@ func (r AS112SummaryQueryTypeParamsResponseCode) IsKnown() bool {
 }
 
 type AS112SummaryQueryTypeResponseEnvelope struct {
-	Result  AS112SummaryQueryTypeResponse             `json:"result,required"`
-	Success bool                                      `json:"success,required"`
+	Result  AS112SummaryQueryTypeResponse             `json:"result" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    as112SummaryQueryTypeResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2934,8 +2934,8 @@ func (r AS112SummaryResponseCodesParamsQueryType) IsKnown() bool {
 }
 
 type AS112SummaryResponseCodesResponseEnvelope struct {
-	Result  AS112SummaryResponseCodesResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
+	Result  AS112SummaryResponseCodesResponse             `json:"result" api:"required"`
+	Success bool                                          `json:"success" api:"required"`
 	JSON    as112SummaryResponseCodesResponseEnvelopeJSON `json:"-"`
 }
 

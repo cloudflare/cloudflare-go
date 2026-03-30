@@ -46,7 +46,7 @@ func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/tests/overview", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -67,8 +67,8 @@ func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListP
 }
 
 type AggregateTimePeriod struct {
-	Units AggregateTimePeriodUnits `json:"units,required"`
-	Value int64                    `json:"value,required"`
+	Units AggregateTimePeriodUnits `json:"units" api:"required"`
+	Value int64                    `json:"value" api:"required"`
 	JSON  aggregateTimePeriodJSON  `json:"-"`
 }
 
@@ -106,9 +106,9 @@ func (r AggregateTimePeriodUnits) IsKnown() bool {
 }
 
 type Tests struct {
-	OverviewMetrics TestsOverviewMetrics `json:"overviewMetrics,required"`
+	OverviewMetrics TestsOverviewMetrics `json:"overviewMetrics" api:"required"`
 	// array of test results objects.
-	Tests []TestsTest `json:"tests,required"`
+	Tests []TestsTest `json:"tests" api:"required"`
 	JSON  testsJSON   `json:"-"`
 }
 
@@ -130,11 +130,11 @@ func (r testsJSON) RawJSON() string {
 
 type TestsOverviewMetrics struct {
 	// number of tests.
-	TestsTotal int64 `json:"testsTotal,required"`
+	TestsTotal int64 `json:"testsTotal" api:"required"`
 	// percentage availability for all HTTP test results in response
-	AvgHTTPAvailabilityPct float64 `json:"avgHttpAvailabilityPct,nullable"`
+	AvgHTTPAvailabilityPct float64 `json:"avgHttpAvailabilityPct" api:"nullable"`
 	// percentage availability for all traceroutes results in response
-	AvgTracerouteAvailabilityPct float64                  `json:"avgTracerouteAvailabilityPct,nullable"`
+	AvgTracerouteAvailabilityPct float64                  `json:"avgTracerouteAvailabilityPct" api:"nullable"`
 	JSON                         testsOverviewMetricsJSON `json:"-"`
 }
 
@@ -158,29 +158,29 @@ func (r testsOverviewMetricsJSON) RawJSON() string {
 
 type TestsTest struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// date the test was created.
-	Created string `json:"created,required"`
+	Created string `json:"created" api:"required"`
 	// the test description defined during configuration
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// if true, then the test will run on targeted devices. Else, the test will not
 	// run.
-	Enabled bool   `json:"enabled,required"`
-	Host    string `json:"host,required"`
+	Enabled bool   `json:"enabled" api:"required"`
+	Host    string `json:"host" api:"required"`
 	// The interval at which the synthetic application test is set to run.
-	Interval string `json:"interval,required"`
+	Interval string `json:"interval" api:"required"`
 	// test type, http or traceroute
-	Kind TestsTestsKind `json:"kind,required"`
+	Kind TestsTestsKind `json:"kind" api:"required"`
 	// name given to this test
-	Name              string                        `json:"name,required"`
-	Updated           string                        `json:"updated,required"`
-	HTTPResults       TestsTestsHTTPResults         `json:"httpResults,nullable"`
+	Name              string                        `json:"name" api:"required"`
+	Updated           string                        `json:"updated" api:"required"`
+	HTTPResults       TestsTestsHTTPResults         `json:"httpResults" api:"nullable"`
 	HTTPResultsByColo []TestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
 	Method                  string                              `json:"method"`
-	TargetPolicies          []DigitalExperienceMonitor          `json:"target_policies,nullable"`
+	TargetPolicies          []DigitalExperienceMonitor          `json:"target_policies" api:"nullable"`
 	Targeted                bool                                `json:"targeted"`
-	TracerouteResults       TestsTestsTracerouteResults         `json:"tracerouteResults,nullable"`
+	TracerouteResults       TestsTestsTracerouteResults         `json:"tracerouteResults" api:"nullable"`
 	TracerouteResultsByColo []TestsTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
 	JSON                    testsTestJSON                       `json:"-"`
 }
@@ -232,7 +232,7 @@ func (r TestsTestsKind) IsKnown() bool {
 }
 
 type TestsTestsHTTPResults struct {
-	ResourceFetchTime TestsTestsHTTPResultsResourceFetchTime `json:"resourceFetchTime,required"`
+	ResourceFetchTime TestsTestsHTTPResultsResourceFetchTime `json:"resourceFetchTime" api:"required"`
 	JSON              testsTestsHTTPResultsJSON              `json:"-"`
 }
 
@@ -253,9 +253,9 @@ func (r testsTestsHTTPResultsJSON) RawJSON() string {
 }
 
 type TestsTestsHTTPResultsResourceFetchTime struct {
-	History  []TestsTestsHTTPResultsResourceFetchTimeHistory `json:"history,required"`
-	AvgMs    int64                                           `json:"avgMs,nullable"`
-	OverTime TestsTestsHTTPResultsResourceFetchTimeOverTime  `json:"overTime,nullable"`
+	History  []TestsTestsHTTPResultsResourceFetchTimeHistory `json:"history" api:"required"`
+	AvgMs    int64                                           `json:"avgMs" api:"nullable"`
+	OverTime TestsTestsHTTPResultsResourceFetchTimeOverTime  `json:"overTime" api:"nullable"`
 	JSON     testsTestsHTTPResultsResourceFetchTimeJSON      `json:"-"`
 }
 
@@ -278,9 +278,9 @@ func (r testsTestsHTTPResultsResourceFetchTimeJSON) RawJSON() string {
 }
 
 type TestsTestsHTTPResultsResourceFetchTimeHistory struct {
-	TimePeriod AggregateTimePeriod                               `json:"timePeriod,required"`
-	AvgMs      int64                                             `json:"avgMs,nullable"`
-	DeltaPct   float64                                           `json:"deltaPct,nullable"`
+	TimePeriod AggregateTimePeriod                               `json:"timePeriod" api:"required"`
+	AvgMs      int64                                             `json:"avgMs" api:"nullable"`
+	DeltaPct   float64                                           `json:"deltaPct" api:"nullable"`
 	JSON       testsTestsHTTPResultsResourceFetchTimeHistoryJSON `json:"-"`
 }
 
@@ -303,8 +303,8 @@ func (r testsTestsHTTPResultsResourceFetchTimeHistoryJSON) RawJSON() string {
 }
 
 type TestsTestsHTTPResultsResourceFetchTimeOverTime struct {
-	TimePeriod AggregateTimePeriod                                   `json:"timePeriod,required"`
-	Values     []TestsTestsHTTPResultsResourceFetchTimeOverTimeValue `json:"values,required"`
+	TimePeriod AggregateTimePeriod                                   `json:"timePeriod" api:"required"`
+	Values     []TestsTestsHTTPResultsResourceFetchTimeOverTimeValue `json:"values" api:"required"`
 	JSON       testsTestsHTTPResultsResourceFetchTimeOverTimeJSON    `json:"-"`
 }
 
@@ -326,8 +326,8 @@ func (r testsTestsHTTPResultsResourceFetchTimeOverTimeJSON) RawJSON() string {
 }
 
 type TestsTestsHTTPResultsResourceFetchTimeOverTimeValue struct {
-	AvgMs     int64                                                   `json:"avgMs,required"`
-	Timestamp string                                                  `json:"timestamp,required"`
+	AvgMs     int64                                                   `json:"avgMs" api:"required"`
+	Timestamp string                                                  `json:"timestamp" api:"required"`
 	JSON      testsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON `json:"-"`
 }
 
@@ -350,8 +350,8 @@ func (r testsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON) RawJSON() strin
 
 type TestsTestsHTTPResultsByColo struct {
 	// Cloudflare colo
-	Colo              string                                       `json:"colo,required"`
-	ResourceFetchTime TestsTestsHTTPResultsByColoResourceFetchTime `json:"resourceFetchTime,required"`
+	Colo              string                                       `json:"colo" api:"required"`
+	ResourceFetchTime TestsTestsHTTPResultsByColoResourceFetchTime `json:"resourceFetchTime" api:"required"`
 	JSON              testsTestsHTTPResultsByColoJSON              `json:"-"`
 }
 
@@ -373,9 +373,9 @@ func (r testsTestsHTTPResultsByColoJSON) RawJSON() string {
 }
 
 type TestsTestsHTTPResultsByColoResourceFetchTime struct {
-	History  []TestsTestsHTTPResultsByColoResourceFetchTimeHistory `json:"history,required"`
-	AvgMs    int64                                                 `json:"avgMs,nullable"`
-	OverTime TestsTestsHTTPResultsByColoResourceFetchTimeOverTime  `json:"overTime,nullable"`
+	History  []TestsTestsHTTPResultsByColoResourceFetchTimeHistory `json:"history" api:"required"`
+	AvgMs    int64                                                 `json:"avgMs" api:"nullable"`
+	OverTime TestsTestsHTTPResultsByColoResourceFetchTimeOverTime  `json:"overTime" api:"nullable"`
 	JSON     testsTestsHTTPResultsByColoResourceFetchTimeJSON      `json:"-"`
 }
 
@@ -398,9 +398,9 @@ func (r testsTestsHTTPResultsByColoResourceFetchTimeJSON) RawJSON() string {
 }
 
 type TestsTestsHTTPResultsByColoResourceFetchTimeHistory struct {
-	TimePeriod AggregateTimePeriod                                     `json:"timePeriod,required"`
-	AvgMs      int64                                                   `json:"avgMs,nullable"`
-	DeltaPct   float64                                                 `json:"deltaPct,nullable"`
+	TimePeriod AggregateTimePeriod                                     `json:"timePeriod" api:"required"`
+	AvgMs      int64                                                   `json:"avgMs" api:"nullable"`
+	DeltaPct   float64                                                 `json:"deltaPct" api:"nullable"`
 	JSON       testsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON `json:"-"`
 }
 
@@ -423,8 +423,8 @@ func (r testsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON) RawJSON() strin
 }
 
 type TestsTestsHTTPResultsByColoResourceFetchTimeOverTime struct {
-	TimePeriod AggregateTimePeriod                                         `json:"timePeriod,required"`
-	Values     []TestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue `json:"values,required"`
+	TimePeriod AggregateTimePeriod                                         `json:"timePeriod" api:"required"`
+	Values     []TestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue `json:"values" api:"required"`
 	JSON       testsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON    `json:"-"`
 }
 
@@ -446,8 +446,8 @@ func (r testsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON) RawJSON() stri
 }
 
 type TestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue struct {
-	AvgMs     int64                                                         `json:"avgMs,required"`
-	Timestamp string                                                        `json:"timestamp,required"`
+	AvgMs     int64                                                         `json:"avgMs" api:"required"`
+	Timestamp string                                                        `json:"timestamp" api:"required"`
 	JSON      testsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON `json:"-"`
 }
 
@@ -470,7 +470,7 @@ func (r testsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON) RawJSON()
 }
 
 type TestsTestsTracerouteResults struct {
-	RoundTripTime TestsTestsTracerouteResultsRoundTripTime `json:"roundTripTime,required"`
+	RoundTripTime TestsTestsTracerouteResultsRoundTripTime `json:"roundTripTime" api:"required"`
 	JSON          testsTestsTracerouteResultsJSON          `json:"-"`
 }
 
@@ -491,9 +491,9 @@ func (r testsTestsTracerouteResultsJSON) RawJSON() string {
 }
 
 type TestsTestsTracerouteResultsRoundTripTime struct {
-	History  []TestsTestsTracerouteResultsRoundTripTimeHistory `json:"history,required"`
-	AvgMs    int64                                             `json:"avgMs,nullable"`
-	OverTime TestsTestsTracerouteResultsRoundTripTimeOverTime  `json:"overTime,nullable"`
+	History  []TestsTestsTracerouteResultsRoundTripTimeHistory `json:"history" api:"required"`
+	AvgMs    int64                                             `json:"avgMs" api:"nullable"`
+	OverTime TestsTestsTracerouteResultsRoundTripTimeOverTime  `json:"overTime" api:"nullable"`
 	JSON     testsTestsTracerouteResultsRoundTripTimeJSON      `json:"-"`
 }
 
@@ -516,9 +516,9 @@ func (r testsTestsTracerouteResultsRoundTripTimeJSON) RawJSON() string {
 }
 
 type TestsTestsTracerouteResultsRoundTripTimeHistory struct {
-	TimePeriod AggregateTimePeriod                                 `json:"timePeriod,required"`
-	AvgMs      int64                                               `json:"avgMs,nullable"`
-	DeltaPct   float64                                             `json:"deltaPct,nullable"`
+	TimePeriod AggregateTimePeriod                                 `json:"timePeriod" api:"required"`
+	AvgMs      int64                                               `json:"avgMs" api:"nullable"`
+	DeltaPct   float64                                             `json:"deltaPct" api:"nullable"`
 	JSON       testsTestsTracerouteResultsRoundTripTimeHistoryJSON `json:"-"`
 }
 
@@ -541,8 +541,8 @@ func (r testsTestsTracerouteResultsRoundTripTimeHistoryJSON) RawJSON() string {
 }
 
 type TestsTestsTracerouteResultsRoundTripTimeOverTime struct {
-	TimePeriod AggregateTimePeriod                                     `json:"timePeriod,required"`
-	Values     []TestsTestsTracerouteResultsRoundTripTimeOverTimeValue `json:"values,required"`
+	TimePeriod AggregateTimePeriod                                     `json:"timePeriod" api:"required"`
+	Values     []TestsTestsTracerouteResultsRoundTripTimeOverTimeValue `json:"values" api:"required"`
 	JSON       testsTestsTracerouteResultsRoundTripTimeOverTimeJSON    `json:"-"`
 }
 
@@ -564,8 +564,8 @@ func (r testsTestsTracerouteResultsRoundTripTimeOverTimeJSON) RawJSON() string {
 }
 
 type TestsTestsTracerouteResultsRoundTripTimeOverTimeValue struct {
-	AvgMs     int64                                                     `json:"avgMs,required"`
-	Timestamp string                                                    `json:"timestamp,required"`
+	AvgMs     int64                                                     `json:"avgMs" api:"required"`
+	Timestamp string                                                    `json:"timestamp" api:"required"`
 	JSON      testsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON `json:"-"`
 }
 
@@ -588,8 +588,8 @@ func (r testsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON) RawJSON() str
 
 type TestsTestsTracerouteResultsByColo struct {
 	// Cloudflare colo
-	Colo          string                                         `json:"colo,required"`
-	RoundTripTime TestsTestsTracerouteResultsByColoRoundTripTime `json:"roundTripTime,required"`
+	Colo          string                                         `json:"colo" api:"required"`
+	RoundTripTime TestsTestsTracerouteResultsByColoRoundTripTime `json:"roundTripTime" api:"required"`
 	JSON          testsTestsTracerouteResultsByColoJSON          `json:"-"`
 }
 
@@ -611,9 +611,9 @@ func (r testsTestsTracerouteResultsByColoJSON) RawJSON() string {
 }
 
 type TestsTestsTracerouteResultsByColoRoundTripTime struct {
-	History  []TestsTestsTracerouteResultsByColoRoundTripTimeHistory `json:"history,required"`
-	AvgMs    int64                                                   `json:"avgMs,nullable"`
-	OverTime TestsTestsTracerouteResultsByColoRoundTripTimeOverTime  `json:"overTime,nullable"`
+	History  []TestsTestsTracerouteResultsByColoRoundTripTimeHistory `json:"history" api:"required"`
+	AvgMs    int64                                                   `json:"avgMs" api:"nullable"`
+	OverTime TestsTestsTracerouteResultsByColoRoundTripTimeOverTime  `json:"overTime" api:"nullable"`
 	JSON     testsTestsTracerouteResultsByColoRoundTripTimeJSON      `json:"-"`
 }
 
@@ -636,9 +636,9 @@ func (r testsTestsTracerouteResultsByColoRoundTripTimeJSON) RawJSON() string {
 }
 
 type TestsTestsTracerouteResultsByColoRoundTripTimeHistory struct {
-	TimePeriod AggregateTimePeriod                                       `json:"timePeriod,required"`
-	AvgMs      int64                                                     `json:"avgMs,nullable"`
-	DeltaPct   float64                                                   `json:"deltaPct,nullable"`
+	TimePeriod AggregateTimePeriod                                       `json:"timePeriod" api:"required"`
+	AvgMs      int64                                                     `json:"avgMs" api:"nullable"`
+	DeltaPct   float64                                                   `json:"deltaPct" api:"nullable"`
 	JSON       testsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON `json:"-"`
 }
 
@@ -661,8 +661,8 @@ func (r testsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON) RawJSON() str
 }
 
 type TestsTestsTracerouteResultsByColoRoundTripTimeOverTime struct {
-	TimePeriod AggregateTimePeriod                                           `json:"timePeriod,required"`
-	Values     []TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue `json:"values,required"`
+	TimePeriod AggregateTimePeriod                                           `json:"timePeriod" api:"required"`
+	Values     []TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue `json:"values" api:"required"`
 	JSON       testsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON    `json:"-"`
 }
 
@@ -684,8 +684,8 @@ func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON) RawJSON() st
 }
 
 type TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue struct {
-	AvgMs     int64                                                           `json:"avgMs,required"`
-	Timestamp string                                                          `json:"timestamp,required"`
+	AvgMs     int64                                                           `json:"avgMs" api:"required"`
+	Timestamp string                                                          `json:"timestamp" api:"required"`
 	JSON      testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON `json:"-"`
 }
 
@@ -708,7 +708,7 @@ func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON
 }
 
 type DEXTestListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`

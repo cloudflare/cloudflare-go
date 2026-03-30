@@ -50,10 +50,10 @@ func (r *CTService) Summary(ctx context.Context, dimension CTSummaryParamsDimens
 	path := fmt.Sprintf("radar/ct/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves certificate volume over time.
@@ -63,10 +63,10 @@ func (r *CTService) Timeseries(ctx context.Context, query CTTimeseriesParams, op
 	path := "radar/ct/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of certificates grouped by the specified dimension
@@ -77,16 +77,16 @@ func (r *CTService) TimeseriesGroups(ctx context.Context, dimension CTTimeseries
 	path := fmt.Sprintf("radar/ct/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CTSummaryResponse struct {
 	// Metadata for the results.
-	Meta     CTSummaryResponseMeta          `json:"meta,required"`
-	Summary0 CTSummaryResponseSummary0Union `json:"summary_0,required"`
+	Meta     CTSummaryResponseMeta          `json:"meta" api:"required"`
+	Summary0 CTSummaryResponseSummary0Union `json:"summary_0" api:"required"`
 	JSON     ctSummaryResponseJSON          `json:"-"`
 }
 
@@ -109,15 +109,15 @@ func (r ctSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type CTSummaryResponseMeta struct {
-	ConfidenceInfo CTSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []CTSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo CTSummaryResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []CTSummaryResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization CTSummaryResponseMetaNormalization `json:"normalization,required"`
+	Normalization CTSummaryResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []CTSummaryResponseMetaUnit `json:"units,required"`
+	Units []CTSummaryResponseMetaUnit `json:"units" api:"required"`
 	JSON  ctSummaryResponseMetaJSON   `json:"-"`
 }
 
@@ -142,9 +142,9 @@ func (r ctSummaryResponseMetaJSON) RawJSON() string {
 }
 
 type CTSummaryResponseMetaConfidenceInfo struct {
-	Annotations []CTSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []CTSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                   `json:"level,required"`
+	Level int64                                   `json:"level" api:"required"`
 	JSON  ctSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -168,15 +168,15 @@ func (r ctSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type CTSummaryResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                   `json:"description,required"`
-	EndDate     time.Time                                                `json:"endDate,required" format:"date-time"`
+	DataSource  CTSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                   `json:"description" api:"required"`
+	EndDate     time.Time                                                `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType CTSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType CTSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                              `json:"isInstantaneous,required"`
-	LinkedURL       string                                            `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                         `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                              `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                            `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                         `json:"startDate" api:"required" format:"date-time"`
 	JSON            ctSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -263,9 +263,9 @@ func (r CTSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool 
 
 type CTSummaryResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                          `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                          `json:"startTime" api:"required" format:"date-time"`
 	JSON      ctSummaryResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -310,8 +310,8 @@ func (r CTSummaryResponseMetaNormalization) IsKnown() bool {
 }
 
 type CTSummaryResponseMetaUnit struct {
-	Name  string                        `json:"name,required"`
-	Value string                        `json:"value,required"`
+	Name  string                        `json:"name" api:"required"`
+	Value string                        `json:"value" api:"required"`
 	JSON  ctSummaryResponseMetaUnitJSON `json:"-"`
 }
 
@@ -385,8 +385,8 @@ type CTSummaryResponseSummary0Map map[string]string
 func (r CTSummaryResponseSummary0Map) implementsCTSummaryResponseSummary0Union() {}
 
 type CTSummaryResponseSummary0Object struct {
-	Rfc6962 string                              `json:"rfc6962,required"`
-	Static  string                              `json:"static,required"`
+	Rfc6962 string                              `json:"rfc6962" api:"required"`
+	Static  string                              `json:"static" api:"required"`
 	JSON    ctSummaryResponseSummary0ObjectJSON `json:"-"`
 }
 
@@ -411,8 +411,8 @@ func (r CTSummaryResponseSummary0Object) implementsCTSummaryResponseSummary0Unio
 
 type CTTimeseriesResponse struct {
 	// Metadata for the results.
-	Meta        CTTimeseriesResponseMeta        `json:"meta,required"`
-	ExtraFields map[string]CTTimeseriesResponse `json:"-,extras"`
+	Meta        CTTimeseriesResponseMeta        `json:"meta" api:"required"`
+	ExtraFields map[string]CTTimeseriesResponse `json:"-" api:"extrafields"`
 	JSON        ctTimeseriesResponseJSON        `json:"-"`
 }
 
@@ -437,16 +437,16 @@ type CTTimeseriesResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    CTTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo CTTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []CTTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    CTTimeseriesResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo CTTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []CTTimeseriesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization CTTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization CTTimeseriesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []CTTimeseriesResponseMetaUnit `json:"units,required"`
+	Units []CTTimeseriesResponseMetaUnit `json:"units" api:"required"`
 	JSON  ctTimeseriesResponseMetaJSON   `json:"-"`
 }
 
@@ -493,9 +493,9 @@ func (r CTTimeseriesResponseMetaAggInterval) IsKnown() bool {
 }
 
 type CTTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []CTTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []CTTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                      `json:"level,required"`
+	Level int64                                      `json:"level" api:"required"`
 	JSON  ctTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -519,15 +519,15 @@ func (r ctTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type CTTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                      `json:"description,required"`
-	EndDate     time.Time                                                   `json:"endDate,required" format:"date-time"`
+	DataSource  CTTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                      `json:"description" api:"required"`
+	EndDate     time.Time                                                   `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
-	LinkedURL       string                                               `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                            `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                 `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                               `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                            `json:"startDate" api:"required" format:"date-time"`
 	JSON            ctTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -614,9 +614,9 @@ func (r CTTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bo
 
 type CTTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                             `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                             `json:"startTime" api:"required" format:"date-time"`
 	JSON      ctTimeseriesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -661,8 +661,8 @@ func (r CTTimeseriesResponseMetaNormalization) IsKnown() bool {
 }
 
 type CTTimeseriesResponseMetaUnit struct {
-	Name  string                           `json:"name,required"`
-	Value string                           `json:"value,required"`
+	Name  string                           `json:"name" api:"required"`
+	Value string                           `json:"value" api:"required"`
 	JSON  ctTimeseriesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -685,8 +685,8 @@ func (r ctTimeseriesResponseMetaUnitJSON) RawJSON() string {
 
 type CTTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   CTTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 CTTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   CTTimeseriesGroupsResponseMeta   `json:"meta" api:"required"`
+	Serie0 CTTimeseriesGroupsResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   ctTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
@@ -712,16 +712,16 @@ type CTTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    CTTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo CTTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []CTTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    CTTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo CTTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []CTTimeseriesGroupsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization CTTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization CTTimeseriesGroupsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []CTTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []CTTimeseriesGroupsResponseMetaUnit `json:"units" api:"required"`
 	JSON  ctTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
@@ -768,9 +768,9 @@ func (r CTTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
 }
 
 type CTTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                            `json:"level,required"`
+	Level int64                                            `json:"level" api:"required"`
 	JSON  ctTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -794,15 +794,15 @@ func (r ctTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                            `json:"description,required"`
-	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	DataSource  CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                            `json:"description" api:"required"`
+	EndDate     time.Time                                                         `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
 	JSON            ctTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -889,9 +889,9 @@ func (r CTTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKnow
 
 type CTTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                   `json:"startTime" api:"required" format:"date-time"`
 	JSON      ctTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -936,8 +936,8 @@ func (r CTTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 }
 
 type CTTimeseriesGroupsResponseMetaUnit struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
+	Name  string                                 `json:"name" api:"required"`
+	Value string                                 `json:"value" api:"required"`
 	JSON  ctTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1118,8 +1118,8 @@ func init() {
 }
 
 type CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55 struct {
-	Timestamps  []time.Time                                                                          `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                                                                  `json:"-,extras"`
+	Timestamps  []time.Time                                                                          `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                                                                  `json:"-" api:"extrafields"`
 	JSON        ctTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON `json:"-"`
 }
 
@@ -1144,8 +1144,8 @@ func (r CTTimeseriesGroupsResponseSerie0UnnamedSchemaRef7826220e105d84352ba1108d
 }
 
 type CTTimeseriesGroupsResponseSerie0Object struct {
-	Rfc6962 []string                                   `json:"rfc6962,required"`
-	Static  []string                                   `json:"static,required"`
+	Rfc6962 []string                                   `json:"rfc6962" api:"required"`
+	Static  []string                                   `json:"static" api:"required"`
 	JSON    ctTimeseriesGroupsResponseSerie0ObjectJSON `json:"-"`
 }
 
@@ -1432,8 +1432,8 @@ func (r CTSummaryParamsValidationLevel) IsKnown() bool {
 }
 
 type CTSummaryResponseEnvelope struct {
-	Result  CTSummaryResponse             `json:"result,required"`
-	Success bool                          `json:"success,required"`
+	Result  CTSummaryResponse             `json:"result" api:"required"`
+	Success bool                          `json:"success" api:"required"`
 	JSON    ctSummaryResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1690,8 +1690,8 @@ func (r CTTimeseriesParamsValidationLevel) IsKnown() bool {
 }
 
 type CTTimeseriesResponseEnvelope struct {
-	Result  CTTimeseriesResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  CTTimeseriesResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    ctTimeseriesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2001,8 +2001,8 @@ func (r CTTimeseriesGroupsParamsValidationLevel) IsKnown() bool {
 }
 
 type CTTimeseriesGroupsResponseEnvelope struct {
-	Result  CTTimeseriesGroupsResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  CTTimeseriesGroupsResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    ctTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 

@@ -42,10 +42,10 @@ func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, op
 	path := "radar/bgp/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the full list of autonomous systems on the global routing table
@@ -57,15 +57,15 @@ func (r *BGPTopAseService) Prefixes(ctx context.Context, query BGPTopAsePrefixes
 	path := "radar/bgp/top/ases/prefixes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BGPTopAseGetResponse struct {
-	Meta BGPTopAseGetResponseMeta   `json:"meta,required"`
-	Top0 []BGPTopAseGetResponseTop0 `json:"top_0,required"`
+	Meta BGPTopAseGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []BGPTopAseGetResponseTop0 `json:"top_0" api:"required"`
 	JSON bgpTopAseGetResponseJSON   `json:"-"`
 }
 
@@ -87,7 +87,7 @@ func (r bgpTopAseGetResponseJSON) RawJSON() string {
 }
 
 type BGPTopAseGetResponseMeta struct {
-	DateRange []BGPTopAseGetResponseMetaDateRange `json:"dateRange,required"`
+	DateRange []BGPTopAseGetResponseMetaDateRange `json:"dateRange" api:"required"`
 	JSON      bgpTopAseGetResponseMetaJSON        `json:"-"`
 }
 
@@ -109,9 +109,9 @@ func (r bgpTopAseGetResponseMetaJSON) RawJSON() string {
 
 type BGPTopAseGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                             `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                             `json:"startTime" api:"required" format:"date-time"`
 	JSON      bgpTopAseGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -133,11 +133,11 @@ func (r bgpTopAseGetResponseMetaDateRangeJSON) RawJSON() string {
 }
 
 type BGPTopAseGetResponseTop0 struct {
-	ASN    int64  `json:"asn,required"`
-	AsName string `json:"ASName,required"`
+	ASN    int64  `json:"asn" api:"required"`
+	AsName string `json:"ASName" api:"required"`
 	// Percentage of updates by this AS out of the total updates by all autonomous
 	// systems.
-	Value string                       `json:"value,required"`
+	Value string                       `json:"value" api:"required"`
 	JSON  bgpTopAseGetResponseTop0JSON `json:"-"`
 }
 
@@ -160,8 +160,8 @@ func (r bgpTopAseGetResponseTop0JSON) RawJSON() string {
 }
 
 type BGPTopAsePrefixesResponse struct {
-	ASNs []BGPTopAsePrefixesResponseASN `json:"asns,required"`
-	Meta BGPTopAsePrefixesResponseMeta  `json:"meta,required"`
+	ASNs []BGPTopAsePrefixesResponseASN `json:"asns" api:"required"`
+	Meta BGPTopAsePrefixesResponseMeta  `json:"meta" api:"required"`
 	JSON bgpTopAsePrefixesResponseJSON  `json:"-"`
 }
 
@@ -183,10 +183,10 @@ func (r bgpTopAsePrefixesResponseJSON) RawJSON() string {
 }
 
 type BGPTopAsePrefixesResponseASN struct {
-	ASN       int64                            `json:"asn,required"`
-	Country   string                           `json:"country,required"`
-	Name      string                           `json:"name,required"`
-	PfxsCount int64                            `json:"pfxs_count,required"`
+	ASN       int64                            `json:"asn" api:"required"`
+	Country   string                           `json:"country" api:"required"`
+	Name      string                           `json:"name" api:"required"`
+	PfxsCount int64                            `json:"pfxs_count" api:"required"`
 	JSON      bgpTopAsePrefixesResponseASNJSON `json:"-"`
 }
 
@@ -210,9 +210,9 @@ func (r bgpTopAsePrefixesResponseASNJSON) RawJSON() string {
 }
 
 type BGPTopAsePrefixesResponseMeta struct {
-	DataTime   string                            `json:"data_time,required"`
-	QueryTime  string                            `json:"query_time,required"`
-	TotalPeers int64                             `json:"total_peers,required"`
+	DataTime   string                            `json:"data_time" api:"required"`
+	QueryTime  string                            `json:"query_time" api:"required"`
+	TotalPeers int64                             `json:"total_peers" api:"required"`
 	JSON       bgpTopAsePrefixesResponseMetaJSON `json:"-"`
 }
 
@@ -300,8 +300,8 @@ func (r BGPTopAseGetParamsUpdateType) IsKnown() bool {
 }
 
 type BGPTopAseGetResponseEnvelope struct {
-	Result  BGPTopAseGetResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  BGPTopAseGetResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    bgpTopAseGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -357,8 +357,8 @@ func (r BGPTopAsePrefixesParamsFormat) IsKnown() bool {
 }
 
 type BGPTopAsePrefixesResponseEnvelope struct {
-	Result  BGPTopAsePrefixesResponse             `json:"result,required"`
-	Success bool                                  `json:"success,required"`
+	Result  BGPTopAsePrefixesResponse             `json:"result" api:"required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    bgpTopAsePrefixesResponseEnvelopeJSON `json:"-"`
 }
 

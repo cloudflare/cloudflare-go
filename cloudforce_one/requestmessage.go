@@ -42,19 +42,19 @@ func (r *RequestMessageService) New(ctx context.Context, requestID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if requestID == "" {
 		err = errors.New("missing required request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/new", params.AccountID, requestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Request Message
@@ -63,19 +63,19 @@ func (r *RequestMessageService) Update(ctx context.Context, requestID string, me
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if requestID == "" {
 		err = errors.New("missing required request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", params.AccountID, requestID, messageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete a Request Message
@@ -83,15 +83,15 @@ func (r *RequestMessageService) Delete(ctx context.Context, requestID string, me
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if requestID == "" {
 		err = errors.New("missing required request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", body.AccountID, requestID, messageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Request Messages
@@ -101,11 +101,11 @@ func (r *RequestMessageService) Get(ctx context.Context, requestID string, param
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if requestID == "" {
 		err = errors.New("missing required request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message", params.AccountID, requestID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -127,15 +127,15 @@ func (r *RequestMessageService) GetAutoPaging(ctx context.Context, requestID str
 
 type Message struct {
 	// Message ID.
-	ID int64 `json:"id,required"`
+	ID int64 `json:"id" api:"required"`
 	// Author of message.
-	Author string `json:"author,required"`
+	Author string `json:"author" api:"required"`
 	// Content of message.
-	Content string `json:"content,required"`
+	Content string `json:"content" api:"required"`
 	// Whether the message is a follow-on request.
-	IsFollowOnRequest bool `json:"is_follow_on_request,required"`
+	IsFollowOnRequest bool `json:"is_follow_on_request" api:"required"`
 	// Defines the message last updated time.
-	Updated time.Time `json:"updated,required" format:"date-time"`
+	Updated time.Time `json:"updated" api:"required" format:"date-time"`
 	// Defines the message creation time.
 	Created time.Time   `json:"created" format:"date-time"`
 	JSON    messageJSON `json:"-"`
@@ -162,10 +162,10 @@ func (r messageJSON) RawJSON() string {
 }
 
 type RequestMessageDeleteResponse struct {
-	Errors   []RequestMessageDeleteResponseError   `json:"errors,required"`
-	Messages []RequestMessageDeleteResponseMessage `json:"messages,required"`
+	Errors   []RequestMessageDeleteResponseError   `json:"errors" api:"required"`
+	Messages []RequestMessageDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestMessageDeleteResponseSuccess `json:"success,required"`
+	Success RequestMessageDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    requestMessageDeleteResponseJSON    `json:"-"`
 }
 
@@ -188,8 +188,8 @@ func (r requestMessageDeleteResponseJSON) RawJSON() string {
 }
 
 type RequestMessageDeleteResponseError struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RequestMessageDeleteResponseErrorsSource `json:"source"`
 	JSON             requestMessageDeleteResponseErrorJSON    `json:"-"`
@@ -236,8 +236,8 @@ func (r requestMessageDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestMessageDeleteResponseMessage struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           RequestMessageDeleteResponseMessagesSource `json:"source"`
 	JSON             requestMessageDeleteResponseMessageJSON    `json:"-"`
@@ -300,7 +300,7 @@ func (r RequestMessageDeleteResponseSuccess) IsKnown() bool {
 
 type RequestMessageNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Content of message.
 	Content param.Field[string] `json:"content"`
 }
@@ -310,10 +310,10 @@ func (r RequestMessageNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestMessageNewResponseEnvelope struct {
-	Errors   []RequestMessageNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestMessageNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestMessageNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestMessageNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestMessageNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Message                                  `json:"result"`
 	JSON    requestMessageNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -338,8 +338,8 @@ func (r requestMessageNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestMessageNewResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           RequestMessageNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestMessageNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -386,8 +386,8 @@ func (r requestMessageNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestMessageNewResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           RequestMessageNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestMessageNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -450,7 +450,7 @@ func (r RequestMessageNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestMessageUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Content of message.
 	Content param.Field[string] `json:"content"`
 }
@@ -460,10 +460,10 @@ func (r RequestMessageUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestMessageUpdateResponseEnvelope struct {
-	Errors   []RequestMessageUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestMessageUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestMessageUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestMessageUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Message                                     `json:"result"`
 	JSON    requestMessageUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -488,8 +488,8 @@ func (r requestMessageUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestMessageUpdateResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           RequestMessageUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestMessageUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -536,8 +536,8 @@ func (r requestMessageUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestMessageUpdateResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           RequestMessageUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestMessageUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -600,16 +600,16 @@ func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestMessageDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestMessageGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
-	Page param.Field[int64] `json:"page,required"`
+	Page param.Field[int64] `json:"page" api:"required"`
 	// Number of results per page.
-	PerPage param.Field[int64] `json:"per_page,required"`
+	PerPage param.Field[int64] `json:"per_page" api:"required"`
 	// Retrieve mes ges created after this time.
 	After param.Field[time.Time] `json:"after" format:"date-time"`
 	// Retrieve messages created before this time.

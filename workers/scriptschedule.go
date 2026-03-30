@@ -40,19 +40,19 @@ func (r *ScriptScheduleService) Update(ctx context.Context, scriptName string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches Cron Triggers for a Worker.
@@ -61,23 +61,23 @@ func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ScriptScheduleUpdateResponse struct {
-	Schedules []ScriptScheduleUpdateResponseSchedule `json:"schedules,required"`
+	Schedules []ScriptScheduleUpdateResponseSchedule `json:"schedules" api:"required"`
 	JSON      scriptScheduleUpdateResponseJSON       `json:"-"`
 }
 
@@ -98,7 +98,7 @@ func (r scriptScheduleUpdateResponseJSON) RawJSON() string {
 }
 
 type ScriptScheduleUpdateResponseSchedule struct {
-	Cron       string                                   `json:"cron,required"`
+	Cron       string                                   `json:"cron" api:"required"`
 	CreatedOn  string                                   `json:"created_on"`
 	ModifiedOn string                                   `json:"modified_on"`
 	JSON       scriptScheduleUpdateResponseScheduleJSON `json:"-"`
@@ -123,7 +123,7 @@ func (r scriptScheduleUpdateResponseScheduleJSON) RawJSON() string {
 }
 
 type ScriptScheduleGetResponse struct {
-	Schedules []ScriptScheduleGetResponseSchedule `json:"schedules,required"`
+	Schedules []ScriptScheduleGetResponseSchedule `json:"schedules" api:"required"`
 	JSON      scriptScheduleGetResponseJSON       `json:"-"`
 }
 
@@ -144,7 +144,7 @@ func (r scriptScheduleGetResponseJSON) RawJSON() string {
 }
 
 type ScriptScheduleGetResponseSchedule struct {
-	Cron       string                                `json:"cron,required"`
+	Cron       string                                `json:"cron" api:"required"`
 	CreatedOn  string                                `json:"created_on"`
 	ModifiedOn string                                `json:"modified_on"`
 	JSON       scriptScheduleGetResponseScheduleJSON `json:"-"`
@@ -170,8 +170,8 @@ func (r scriptScheduleGetResponseScheduleJSON) RawJSON() string {
 
 type ScriptScheduleUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string]              `path:"account_id,required"`
-	Body      []ScriptScheduleUpdateParamsBody `json:"body,required"`
+	AccountID param.Field[string]              `path:"account_id" api:"required"`
+	Body      []ScriptScheduleUpdateParamsBody `json:"body" api:"required"`
 }
 
 func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -179,7 +179,7 @@ func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptScheduleUpdateParamsBody struct {
-	Cron param.Field[string] `json:"cron,required"`
+	Cron param.Field[string] `json:"cron" api:"required"`
 }
 
 func (r ScriptScheduleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -187,11 +187,11 @@ func (r ScriptScheduleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptScheduleUpdateResponseEnvelope struct {
-	Errors   []ScriptScheduleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptScheduleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptScheduleUpdateResponse                   `json:"result,required"`
+	Errors   []ScriptScheduleUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptScheduleUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptScheduleUpdateResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptScheduleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptScheduleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptScheduleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -215,8 +215,8 @@ func (r scriptScheduleUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptScheduleUpdateResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ScriptScheduleUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptScheduleUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -263,8 +263,8 @@ func (r scriptScheduleUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptScheduleUpdateResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ScriptScheduleUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptScheduleUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -327,15 +327,15 @@ func (r ScriptScheduleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptScheduleGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptScheduleGetResponseEnvelope struct {
-	Errors   []ScriptScheduleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptScheduleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptScheduleGetResponse                   `json:"result,required"`
+	Errors   []ScriptScheduleGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptScheduleGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptScheduleGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptScheduleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptScheduleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptScheduleGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -359,8 +359,8 @@ func (r scriptScheduleGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptScheduleGetResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           ScriptScheduleGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptScheduleGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -407,8 +407,8 @@ func (r scriptScheduleGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptScheduleGetResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ScriptScheduleGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptScheduleGetResponseEnvelopeMessagesJSON   `json:"-"`

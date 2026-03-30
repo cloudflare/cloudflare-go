@@ -75,15 +75,15 @@ func (r *PageService) Preview(ctx context.Context, params PagePreviewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/preview", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PagePreviewResponse struct {
@@ -110,7 +110,7 @@ func (r pagePreviewResponseJSON) RawJSON() string {
 
 type PagePreviewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Only available for the Waiting Room Advanced subscription. This is a template
 	// html file that will be rendered at the edge. If no custom_page_html is provided,
 	// the default waiting room will be used. The template is based on mustache (
@@ -132,7 +132,7 @@ type PagePreviewParams struct {
 	//
 	// To view the full list of variables, look at the `cfWaitingRoom` object described
 	// under the `json_response_enabled` property in other Waiting Room API calls.
-	CustomHTML param.Field[string] `json:"custom_html,required"`
+	CustomHTML param.Field[string] `json:"custom_html" api:"required"`
 }
 
 func (r PagePreviewParams) MarshalJSON() (data []byte, err error) {
@@ -140,7 +140,7 @@ func (r PagePreviewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PagePreviewResponseEnvelope struct {
-	Result PagePreviewResponse             `json:"result,required"`
+	Result PagePreviewResponse             `json:"result" api:"required"`
 	JSON   pagePreviewResponseEnvelopeJSON `json:"-"`
 }
 

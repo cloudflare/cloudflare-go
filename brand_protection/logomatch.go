@@ -41,11 +41,11 @@ func (r *LogoMatchService) Download(ctx context.Context, params LogoMatchDownloa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/logo-matches/download", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Return matches for logo queries based on ID
@@ -53,11 +53,11 @@ func (r *LogoMatchService) Get(ctx context.Context, params LogoMatchGetParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/logo-matches", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type LogoMatchDownloadResponse struct {
@@ -107,7 +107,7 @@ func (r logoMatchGetResponseJSON) RawJSON() string {
 }
 
 type LogoMatchDownloadParams struct {
-	AccountID param.Field[string]   `path:"account_id,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Limit     param.Field[string]   `query:"limit"`
 	LogoID    param.Field[[]string] `query:"logo_id"`
 	Offset    param.Field[string]   `query:"offset"`
@@ -123,7 +123,7 @@ func (r LogoMatchDownloadParams) URLQuery() (v url.Values) {
 }
 
 type LogoMatchGetParams struct {
-	AccountID param.Field[string]   `path:"account_id,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Limit     param.Field[string]   `query:"limit"`
 	LogoID    param.Field[[]string] `query:"logo_id"`
 	Offset    param.Field[string]   `query:"offset"`

@@ -43,15 +43,15 @@ func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a DEX test.
@@ -60,19 +60,19 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dexTestID == "" {
 		err = errors.New("missing required dex_test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", params.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch all DEX tests
@@ -82,7 +82,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, params DeviceDEXTestLis
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -109,19 +109,19 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, bod
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dexTestID == "" {
 		err = errors.New("missing required dex_test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", body.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single DEX test.
@@ -130,31 +130,31 @@ func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dexTestID == "" {
 		err = errors.New("missing required dex_test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/devices/dex_tests/%s", query.AccountID, dexTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DeviceDEXTestNewResponse struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data DeviceDEXTestNewResponseData `json:"data,required"`
+	Data DeviceDEXTestNewResponseData `json:"data" api:"required"`
 	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// How often the test will run.
-	Interval string `json:"interval,required"`
+	Interval string `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Additional details about the test.
 	Description string `json:"description"`
 	// DEX rules targeted by this test
@@ -192,9 +192,9 @@ func (r deviceDEXTestNewResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestNewResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DeviceDEXTestNewResponseDataKind `json:"kind,required"`
+	Kind DeviceDEXTestNewResponseDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DeviceDEXTestNewResponseDataMethod `json:"method"`
 	JSON   deviceDEXTestNewResponseDataJSON   `json:"-"`
@@ -251,7 +251,7 @@ func (r DeviceDEXTestNewResponseDataMethod) IsKnown() bool {
 
 type DeviceDEXTestNewResponseTargetPolicy struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -280,13 +280,13 @@ func (r deviceDEXTestNewResponseTargetPolicyJSON) RawJSON() string {
 type DeviceDEXTestUpdateResponse struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data DeviceDEXTestUpdateResponseData `json:"data,required"`
+	Data DeviceDEXTestUpdateResponseData `json:"data" api:"required"`
 	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// How often the test will run.
-	Interval string `json:"interval,required"`
+	Interval string `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Additional details about the test.
 	Description string `json:"description"`
 	// DEX rules targeted by this test
@@ -324,9 +324,9 @@ func (r deviceDEXTestUpdateResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestUpdateResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DeviceDEXTestUpdateResponseDataKind `json:"kind,required"`
+	Kind DeviceDEXTestUpdateResponseDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DeviceDEXTestUpdateResponseDataMethod `json:"method"`
 	JSON   deviceDEXTestUpdateResponseDataJSON   `json:"-"`
@@ -383,7 +383,7 @@ func (r DeviceDEXTestUpdateResponseDataMethod) IsKnown() bool {
 
 type DeviceDEXTestUpdateResponseTargetPolicy struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -412,13 +412,13 @@ func (r deviceDEXTestUpdateResponseTargetPolicyJSON) RawJSON() string {
 type DeviceDEXTestListResponse struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data DeviceDEXTestListResponseData `json:"data,required"`
+	Data DeviceDEXTestListResponseData `json:"data" api:"required"`
 	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// How often the test will run.
-	Interval string `json:"interval,required"`
+	Interval string `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Additional details about the test.
 	Description string `json:"description"`
 	// DEX rules targeted by this test
@@ -456,9 +456,9 @@ func (r deviceDEXTestListResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestListResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DeviceDEXTestListResponseDataKind `json:"kind,required"`
+	Kind DeviceDEXTestListResponseDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DeviceDEXTestListResponseDataMethod `json:"method"`
 	JSON   deviceDEXTestListResponseDataJSON   `json:"-"`
@@ -515,7 +515,7 @@ func (r DeviceDEXTestListResponseDataMethod) IsKnown() bool {
 
 type DeviceDEXTestListResponseTargetPolicy struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -565,13 +565,13 @@ func (r deviceDEXTestDeleteResponseJSON) RawJSON() string {
 type DeviceDEXTestDeleteResponseDEXTest struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data DeviceDEXTestDeleteResponseDEXTestsData `json:"data,required"`
+	Data DeviceDEXTestDeleteResponseDEXTestsData `json:"data" api:"required"`
 	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// How often the test will run.
-	Interval string `json:"interval,required"`
+	Interval string `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Additional details about the test.
 	Description string `json:"description"`
 	// DEX rules targeted by this test
@@ -609,9 +609,9 @@ func (r deviceDEXTestDeleteResponseDEXTestJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestDeleteResponseDEXTestsData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DeviceDEXTestDeleteResponseDEXTestsDataKind `json:"kind,required"`
+	Kind DeviceDEXTestDeleteResponseDEXTestsDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DeviceDEXTestDeleteResponseDEXTestsDataMethod `json:"method"`
 	JSON   deviceDEXTestDeleteResponseDEXTestsDataJSON   `json:"-"`
@@ -668,7 +668,7 @@ func (r DeviceDEXTestDeleteResponseDEXTestsDataMethod) IsKnown() bool {
 
 type DeviceDEXTestDeleteResponseDEXTestsTargetPolicy struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -697,13 +697,13 @@ func (r deviceDEXTestDeleteResponseDEXTestsTargetPolicyJSON) RawJSON() string {
 type DeviceDEXTestGetResponse struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data DeviceDEXTestGetResponseData `json:"data,required"`
+	Data DeviceDEXTestGetResponseData `json:"data" api:"required"`
 	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// How often the test will run.
-	Interval string `json:"interval,required"`
+	Interval string `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Additional details about the test.
 	Description string `json:"description"`
 	// DEX rules targeted by this test
@@ -741,9 +741,9 @@ func (r deviceDEXTestGetResponseJSON) RawJSON() string {
 // conduct the test.
 type DeviceDEXTestGetResponseData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DeviceDEXTestGetResponseDataKind `json:"kind,required"`
+	Kind DeviceDEXTestGetResponseDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DeviceDEXTestGetResponseDataMethod `json:"method"`
 	JSON   deviceDEXTestGetResponseDataJSON   `json:"-"`
@@ -800,7 +800,7 @@ func (r DeviceDEXTestGetResponseDataMethod) IsKnown() bool {
 
 type DeviceDEXTestGetResponseTargetPolicy struct {
 	// API Resource UUID tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether the DEX rule is the account default
 	Default bool `json:"default"`
 	// The name of the DEX rule
@@ -827,16 +827,16 @@ func (r deviceDEXTestGetResponseTargetPolicyJSON) RawJSON() string {
 }
 
 type DeviceDEXTestNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data param.Field[DeviceDEXTestNewParamsData] `json:"data,required"`
+	Data param.Field[DeviceDEXTestNewParamsData] `json:"data" api:"required"`
 	// Determines whether or not the test is active.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// How often the test will run.
-	Interval param.Field[string] `json:"interval,required"`
+	Interval param.Field[string] `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Additional details about the test.
 	Description param.Field[string] `json:"description"`
 	// DEX rules targeted by this test
@@ -852,9 +852,9 @@ func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
 // conduct the test.
 type DeviceDEXTestNewParamsData struct {
 	// The desired endpoint to test.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// The type of test.
-	Kind param.Field[DeviceDEXTestNewParamsDataKind] `json:"kind,required"`
+	Kind param.Field[DeviceDEXTestNewParamsDataKind] `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method param.Field[DeviceDEXTestNewParamsDataMethod] `json:"method"`
 }
@@ -896,7 +896,7 @@ func (r DeviceDEXTestNewParamsDataMethod) IsKnown() bool {
 
 type DeviceDEXTestNewParamsTargetPolicy struct {
 	// API Resource UUID tag.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Whether the DEX rule is the account default
 	Default param.Field[bool] `json:"default"`
 	// The name of the DEX rule
@@ -908,10 +908,10 @@ func (r DeviceDEXTestNewParamsTargetPolicy) MarshalJSON() (data []byte, err erro
 }
 
 type DeviceDEXTestNewResponseEnvelope struct {
-	Errors   []DeviceDEXTestNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DeviceDEXTestNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceDEXTestNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DeviceDEXTestNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceDEXTestNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DeviceDEXTestNewResponse                `json:"result"`
 	JSON    deviceDEXTestNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -936,8 +936,8 @@ func (r deviceDEXTestNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DeviceDEXTestNewResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DeviceDEXTestNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             deviceDEXTestNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -984,8 +984,8 @@ func (r deviceDEXTestNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DeviceDEXTestNewResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           DeviceDEXTestNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             deviceDEXTestNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1047,16 +1047,16 @@ func (r DeviceDEXTestNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data param.Field[DeviceDEXTestUpdateParamsData] `json:"data,required"`
+	Data param.Field[DeviceDEXTestUpdateParamsData] `json:"data" api:"required"`
 	// Determines whether or not the test is active.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// How often the test will run.
-	Interval param.Field[string] `json:"interval,required"`
+	Interval param.Field[string] `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Additional details about the test.
 	Description param.Field[string] `json:"description"`
 	// DEX rules targeted by this test
@@ -1072,9 +1072,9 @@ func (r DeviceDEXTestUpdateParams) MarshalJSON() (data []byte, err error) {
 // conduct the test.
 type DeviceDEXTestUpdateParamsData struct {
 	// The desired endpoint to test.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// The type of test.
-	Kind param.Field[DeviceDEXTestUpdateParamsDataKind] `json:"kind,required"`
+	Kind param.Field[DeviceDEXTestUpdateParamsDataKind] `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method param.Field[DeviceDEXTestUpdateParamsDataMethod] `json:"method"`
 }
@@ -1116,7 +1116,7 @@ func (r DeviceDEXTestUpdateParamsDataMethod) IsKnown() bool {
 
 type DeviceDEXTestUpdateParamsTargetPolicy struct {
 	// API Resource UUID tag.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Whether the DEX rule is the account default
 	Default param.Field[bool] `json:"default"`
 	// The name of the DEX rule
@@ -1128,10 +1128,10 @@ func (r DeviceDEXTestUpdateParamsTargetPolicy) MarshalJSON() (data []byte, err e
 }
 
 type DeviceDEXTestUpdateResponseEnvelope struct {
-	Errors   []DeviceDEXTestUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DeviceDEXTestUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceDEXTestUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DeviceDEXTestUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceDEXTestUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DeviceDEXTestUpdateResponse                `json:"result"`
 	JSON    deviceDEXTestUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1156,8 +1156,8 @@ func (r deviceDEXTestUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DeviceDEXTestUpdateResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DeviceDEXTestUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             deviceDEXTestUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1204,8 +1204,8 @@ func (r deviceDEXTestUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DeviceDEXTestUpdateResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           DeviceDEXTestUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             deviceDEXTestUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1267,7 +1267,7 @@ func (r DeviceDEXTestUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter by test type
 	Kind param.Field[DeviceDEXTestListParamsKind] `query:"kind"`
 	// Page number of paginated results
@@ -1304,14 +1304,14 @@ func (r DeviceDEXTestListParamsKind) IsKnown() bool {
 }
 
 type DeviceDEXTestDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceDEXTestDeleteResponseEnvelope struct {
-	Errors   []DeviceDEXTestDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DeviceDEXTestDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceDEXTestDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DeviceDEXTestDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceDEXTestDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DeviceDEXTestDeleteResponse                `json:"result"`
 	JSON    deviceDEXTestDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -1336,8 +1336,8 @@ func (r deviceDEXTestDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DeviceDEXTestDeleteResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DeviceDEXTestDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             deviceDEXTestDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1384,8 +1384,8 @@ func (r deviceDEXTestDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DeviceDEXTestDeleteResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           DeviceDEXTestDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             deviceDEXTestDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1447,14 +1447,14 @@ func (r DeviceDEXTestDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceDEXTestGetResponseEnvelope struct {
-	Errors   []DeviceDEXTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DeviceDEXTestGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceDEXTestGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DeviceDEXTestGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceDEXTestGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DeviceDEXTestGetResponse                `json:"result"`
 	JSON    deviceDEXTestGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1479,8 +1479,8 @@ func (r deviceDEXTestGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DeviceDEXTestGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DeviceDEXTestGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             deviceDEXTestGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1527,8 +1527,8 @@ func (r deviceDEXTestGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DeviceDEXTestGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           DeviceDEXTestGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             deviceDEXTestGetResponseEnvelopeMessagesJSON   `json:"-"`

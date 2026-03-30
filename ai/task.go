@@ -41,7 +41,7 @@ func (r *TaskService) List(ctx context.Context, query TaskListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/tasks/search", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -64,5 +64,5 @@ func (r *TaskService) ListAutoPaging(ctx context.Context, query TaskListParams, 
 type TaskListResponse = interface{}
 
 type TaskListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
