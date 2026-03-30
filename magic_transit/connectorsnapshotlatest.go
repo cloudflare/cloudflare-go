@@ -282,6 +282,8 @@ type ConnectorSnapshotLatestListResponseItem struct {
 	MemoryZSwappedBytes float64                                          `json:"memory_z_swapped_bytes"`
 	Mounts              []ConnectorSnapshotLatestListResponseItemsMount  `json:"mounts"`
 	Netdevs             []ConnectorSnapshotLatestListResponseItemsNetdev `json:"netdevs"`
+	// Platform identifier
+	Platform string `json:"platform"`
 	// Number of ICMP Address Mask Reply messages received
 	SnmpIcmpInAddrMaskReps float64 `json:"snmp_icmp_in_addr_mask_reps"`
 	// Number of ICMP Address Mask Request messages received
@@ -533,6 +535,7 @@ type connectorSnapshotLatestListResponseItemJSON struct {
 	MemoryZSwappedBytes            apijson.Field
 	Mounts                         apijson.Field
 	Netdevs                        apijson.Field
+	Platform                       apijson.Field
 	SnmpIcmpInAddrMaskReps         apijson.Field
 	SnmpIcmpInAddrMasks            apijson.Field
 	SnmpIcmpInCsumErrors           apijson.Field
