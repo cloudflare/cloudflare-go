@@ -25,6 +25,7 @@ import (
 // the [NewCustomPageService] method instead.
 type CustomPageService struct {
 	Options []option.RequestOption
+	Assets  *AssetService
 }
 
 // NewCustomPageService generates a new service that applies the given options to
@@ -33,6 +34,7 @@ type CustomPageService struct {
 func NewCustomPageService(opts ...option.RequestOption) (r *CustomPageService) {
 	r = &CustomPageService{}
 	r.Options = opts
+	r.Assets = NewAssetService(opts...)
 	return
 }
 

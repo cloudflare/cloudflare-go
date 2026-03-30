@@ -713,6 +713,7 @@ TEST_PATHS=(
 	browser_rendering/markdown_test.go
 	browser_rendering/crawl_test.go
 	custom_pages/custompage_test.go
+	custom_pages/asset_test.go
 	secrets_store/store_test.go
 	secrets_store/storesecret_test.go
 	secrets_store/quota_test.go
