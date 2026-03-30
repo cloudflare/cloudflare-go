@@ -43,21 +43,21 @@ func (r *AccountOrganizationService) New(ctx context.Context, params AccountOrga
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/move", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccountOrganizationNewResponse struct {
-	AccountID                 string                             `json:"account_id,required"`
-	DestinationOrganizationID string                             `json:"destination_organization_id,required"`
-	SourceOrganizationID      string                             `json:"source_organization_id,required"`
+	AccountID                 string                             `json:"account_id" api:"required"`
+	DestinationOrganizationID string                             `json:"destination_organization_id" api:"required"`
+	SourceOrganizationID      string                             `json:"source_organization_id" api:"required"`
 	JSON                      accountOrganizationNewResponseJSON `json:"-"`
 }
 
@@ -80,8 +80,8 @@ func (r accountOrganizationNewResponseJSON) RawJSON() string {
 }
 
 type AccountOrganizationNewParams struct {
-	AccountID                 param.Field[string] `path:"account_id,required"`
-	DestinationOrganizationID param.Field[string] `json:"destination_organization_id,required"`
+	AccountID                 param.Field[string] `path:"account_id" api:"required"`
+	DestinationOrganizationID param.Field[string] `json:"destination_organization_id" api:"required"`
 }
 
 func (r AccountOrganizationNewParams) MarshalJSON() (data []byte, err error) {
@@ -89,10 +89,10 @@ func (r AccountOrganizationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountOrganizationNewResponseEnvelope struct {
-	Errors   []interface{}                                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   AccountOrganizationNewResponse                `json:"result,required"`
-	Success  AccountOrganizationNewResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []interface{}                                 `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                         `json:"messages" api:"required"`
+	Result   AccountOrganizationNewResponse                `json:"result" api:"required"`
+	Success  AccountOrganizationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON     accountOrganizationNewResponseEnvelopeJSON    `json:"-"`
 }
 

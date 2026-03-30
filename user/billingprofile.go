@@ -42,10 +42,10 @@ func (r *BillingProfileService) Get(ctx context.Context, opts ...option.RequestO
 	path := "user/billing/profile"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BillingProfileGetResponse struct {
@@ -147,11 +147,11 @@ func (r billingProfileGetResponseJSON) RawJSON() string {
 }
 
 type BillingProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   BillingProfileGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   BillingProfileGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success BillingProfileGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BillingProfileGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    billingProfileGetResponseEnvelopeJSON    `json:"-"`
 }
 

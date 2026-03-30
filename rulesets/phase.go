@@ -64,10 +64,10 @@ func (r *PhaseService) Update(ctx context.Context, rulesetPhase Phase, params Ph
 	path := fmt.Sprintf("%s/%s/rulesets/phases/%v/entrypoint", accountOrZone, accountOrZoneID, rulesetPhase)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the latest version of the account or zone entry point ruleset for a
@@ -96,28 +96,28 @@ func (r *PhaseService) Get(ctx context.Context, rulesetPhase Phase, query PhaseG
 	path := fmt.Sprintf("%s/%s/rulesets/phases/%v/entrypoint", accountOrZone, accountOrZoneID, rulesetPhase)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A ruleset object.
 type PhaseUpdateResponse struct {
 	// The unique ID of the ruleset.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The kind of the ruleset.
-	Kind Kind `json:"kind,required"`
+	Kind Kind `json:"kind" api:"required"`
 	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The human-readable name of the ruleset.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The phase of the ruleset.
-	Phase Phase `json:"phase,required"`
+	Phase Phase `json:"phase" api:"required"`
 	// The list of rules in the ruleset.
-	Rules []PhaseUpdateResponseRule `json:"rules,required"`
+	Rules []PhaseUpdateResponseRule `json:"rules" api:"required"`
 	// The version of the ruleset.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// An informative description of the ruleset.
 	Description string                  `json:"description"`
 	JSON        phaseUpdateResponseJSON `json:"-"`
@@ -148,9 +148,9 @@ func (r phaseUpdateResponseJSON) RawJSON() string {
 
 type PhaseUpdateResponseRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -380,9 +380,9 @@ func init() {
 
 type PhaseUpdateResponseRulesRulesetsChallengeRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -456,9 +456,9 @@ func (r PhaseUpdateResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type PhaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                  `json:"username_expression,required"`
+	UsernameExpression string                                                                  `json:"username_expression" api:"required"`
 	JSON               phaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -484,9 +484,9 @@ func (r phaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON)
 type PhaseUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -532,9 +532,9 @@ func (r phaseUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() st
 
 type PhaseUpdateResponseRulesRulesetsJSChallengeRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -608,9 +608,9 @@ func (r PhaseUpdateResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type PhaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                    `json:"username_expression,required"`
+	UsernameExpression string                                                                    `json:"username_expression" api:"required"`
 	JSON               phaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -636,9 +636,9 @@ func (r phaseUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSO
 type PhaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -685,9 +685,9 @@ func (r phaseUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() 
 
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -827,7 +827,7 @@ func (r phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersJSON)
 // A cache-control directive configuration.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                             `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
@@ -896,7 +896,7 @@ func init() {
 // Set the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
@@ -942,7 +942,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmut
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
@@ -1005,7 +1005,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersImmut
 // seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -1078,9 +1078,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
@@ -1127,7 +1127,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAg
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
@@ -1189,7 +1189,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAg
 // A cache-control directive configuration.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                  `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
@@ -1258,7 +1258,7 @@ func init() {
 // Set the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
@@ -1304,7 +1304,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustR
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                 `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
@@ -1366,7 +1366,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustR
 // A cache-control directive configuration.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                  `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
@@ -1435,7 +1435,7 @@ func init() {
 // Set the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
@@ -1481,7 +1481,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustU
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                 `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
@@ -1544,7 +1544,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersMustU
 // names).
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// This field can have the runtime type of [[]string].
@@ -1617,7 +1617,7 @@ func init() {
 // Set the directive with optional qualifiers.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -1667,7 +1667,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCac
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
@@ -1729,7 +1729,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoCac
 // A cache-control directive configuration.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                           `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
@@ -1798,7 +1798,7 @@ func init() {
 // Set the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
@@ -1844,7 +1844,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoSto
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
@@ -1906,7 +1906,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoSto
 // A cache-control directive configuration.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
@@ -1975,7 +1975,7 @@ func init() {
 // Set the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
@@ -2021,7 +2021,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTra
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
@@ -2084,7 +2084,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersNoTra
 // names).
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// This field can have the runtime type of [[]string].
@@ -2157,7 +2157,7 @@ func init() {
 // Set the directive with optional qualifiers.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -2207,7 +2207,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPriva
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
@@ -2269,7 +2269,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPriva
 // A cache-control directive configuration.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
@@ -2338,7 +2338,7 @@ func init() {
 // Set the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
@@ -2384,7 +2384,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxy
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                  `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
@@ -2446,7 +2446,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersProxy
 // A cache-control directive configuration.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublic struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                          `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
@@ -2515,7 +2515,7 @@ func init() {
 // Set the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
@@ -2561,7 +2561,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPubli
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
@@ -2624,7 +2624,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersPubli
 // seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -2697,9 +2697,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
@@ -2746,7 +2746,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxa
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
@@ -2809,7 +2809,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxa
 // seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -2882,9 +2882,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
@@ -2931,7 +2931,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStale
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
@@ -2994,7 +2994,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStale
 // seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -3067,9 +3067,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                    `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
@@ -3116,7 +3116,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStale
 // Remove the directive.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                       `json:"cloudflare_only"`
 	JSON           phaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
@@ -3178,9 +3178,9 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheControlRuleActionParametersStale
 // Configuration for exposed credential checking.
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                        `json:"username_expression,required"`
+	UsernameExpression string                                                                        `json:"username_expression" api:"required"`
 	JSON               phaseUpdateResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -3206,9 +3206,9 @@ func (r phaseUpdateResponseRulesRulesetsSetCacheControlRuleExposedCredentialChec
 type PhaseUpdateResponseRulesRulesetsSetCacheControlRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -3255,9 +3255,9 @@ func (r phaseUpdateResponseRulesRulesetsSetCacheControlRuleRatelimitJSON) RawJSO
 
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -3331,7 +3331,7 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleAction) IsKnown() bool {
 // The parameters configuring the rule's action.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParameters struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation" api:"required"`
 	// An expression that evaluates to an array of cache tag values.
 	Expression string `json:"expression"`
 	// This field can have the runtime type of [[]string].
@@ -3427,9 +3427,9 @@ func init() {
 // Add cache tags using a list of values.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                               `json:"values,required"`
+	Values []string                                                                               `json:"values" api:"required"`
 	JSON   phaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
 }
 
@@ -3474,9 +3474,9 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCache
 // Add cache tags using an expression.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      phaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -3521,9 +3521,9 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCache
 // Remove cache tags using a list of values.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                                  `json:"values,required"`
+	Values []string                                                                                  `json:"values" api:"required"`
 	JSON   phaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
 }
 
@@ -3568,9 +3568,9 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCa
 // Remove cache tags using an expression.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      phaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -3615,9 +3615,9 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCa
 // Set cache tags using a list of values.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                               `json:"values,required"`
+	Values []string                                                                               `json:"values" api:"required"`
 	JSON   phaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
 }
 
@@ -3662,9 +3662,9 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCache
 // Set cache tags using an expression.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation,required"`
+	Operation PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      phaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -3726,9 +3726,9 @@ func (r PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleActionParametersOperatio
 // Configuration for exposed credential checking.
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                     `json:"username_expression,required"`
+	UsernameExpression string                                                                     `json:"username_expression" api:"required"`
 	JSON               phaseUpdateResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -3754,9 +3754,9 @@ func (r phaseUpdateResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJS
 type PhaseUpdateResponseRulesRulesetsSetCacheTagsRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -3838,19 +3838,19 @@ func (r PhaseUpdateResponseRulesAction) IsKnown() bool {
 // A ruleset object.
 type PhaseGetResponse struct {
 	// The unique ID of the ruleset.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The kind of the ruleset.
-	Kind Kind `json:"kind,required"`
+	Kind Kind `json:"kind" api:"required"`
 	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The human-readable name of the ruleset.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The phase of the ruleset.
-	Phase Phase `json:"phase,required"`
+	Phase Phase `json:"phase" api:"required"`
 	// The list of rules in the ruleset.
-	Rules []PhaseGetResponseRule `json:"rules,required"`
+	Rules []PhaseGetResponseRule `json:"rules" api:"required"`
 	// The version of the ruleset.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// An informative description of the ruleset.
 	Description string               `json:"description"`
 	JSON        phaseGetResponseJSON `json:"-"`
@@ -3881,9 +3881,9 @@ func (r phaseGetResponseJSON) RawJSON() string {
 
 type PhaseGetResponseRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -4112,9 +4112,9 @@ func init() {
 
 type PhaseGetResponseRulesRulesetsChallengeRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -4188,9 +4188,9 @@ func (r PhaseGetResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type PhaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                               `json:"username_expression,required"`
+	UsernameExpression string                                                               `json:"username_expression" api:"required"`
 	JSON               phaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -4216,9 +4216,9 @@ func (r phaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) Ra
 type PhaseGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -4264,9 +4264,9 @@ func (r phaseGetResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() strin
 
 type PhaseGetResponseRulesRulesetsJSChallengeRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -4340,9 +4340,9 @@ func (r PhaseGetResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type PhaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                 `json:"username_expression,required"`
+	UsernameExpression string                                                                 `json:"username_expression" api:"required"`
 	JSON               phaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -4368,9 +4368,9 @@ func (r phaseGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON) 
 type PhaseGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -4416,9 +4416,9 @@ func (r phaseGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() str
 
 type PhaseGetResponseRulesRulesetsSetCacheControlRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -4558,7 +4558,7 @@ func (r phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersJSON) Ra
 // A cache-control directive configuration.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                          `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
@@ -4627,7 +4627,7 @@ func init() {
 // Set the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
@@ -4673,7 +4673,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutabl
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
@@ -4736,7 +4736,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutabl
 // seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -4809,9 +4809,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
@@ -4858,7 +4858,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSe
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
@@ -4920,7 +4920,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOp
 // A cache-control directive configuration.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
@@ -4989,7 +4989,7 @@ func init() {
 // Set the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
@@ -5035,7 +5035,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustReva
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
@@ -5097,7 +5097,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustReva
 // A cache-control directive configuration.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
@@ -5166,7 +5166,7 @@ func init() {
 // Set the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
@@ -5212,7 +5212,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnde
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
@@ -5275,7 +5275,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnde
 // names).
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// This field can have the runtime type of [[]string].
@@ -5348,7 +5348,7 @@ func init() {
 // Set the directive with optional qualifiers.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -5398,7 +5398,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheS
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
@@ -5460,7 +5460,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheO
 // A cache-control directive configuration.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                        `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
@@ -5529,7 +5529,7 @@ func init() {
 // Set the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                    `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
@@ -5575,7 +5575,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreS
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
@@ -5637,7 +5637,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreO
 // A cache-control directive configuration.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                            `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
@@ -5706,7 +5706,7 @@ func init() {
 // Set the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
@@ -5752,7 +5752,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransf
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
@@ -5815,7 +5815,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransf
 // names).
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// This field can have the runtime type of [[]string].
@@ -5888,7 +5888,7 @@ func init() {
 // Set the directive with optional qualifiers.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -5938,7 +5938,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateS
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
@@ -6000,7 +6000,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateO
 // A cache-control directive configuration.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
@@ -6069,7 +6069,7 @@ func init() {
 // Set the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
@@ -6115,7 +6115,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRev
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
@@ -6177,7 +6177,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRev
 // A cache-control directive configuration.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublic struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                       `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
@@ -6246,7 +6246,7 @@ func init() {
 // Set the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
@@ -6292,7 +6292,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSe
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
@@ -6355,7 +6355,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOp
 // seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -6428,9 +6428,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                    `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
@@ -6477,7 +6477,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageS
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
@@ -6540,7 +6540,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageO
 // seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -6613,9 +6613,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
@@ -6662,7 +6662,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfE
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
@@ -6725,7 +6725,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfE
 // seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -6798,9 +6798,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                 `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
@@ -6847,7 +6847,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhi
 // Remove the directive.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                    `json:"cloudflare_only"`
 	JSON           phaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
@@ -6909,9 +6909,9 @@ func (r PhaseGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhi
 // Configuration for exposed credential checking.
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                     `json:"username_expression,required"`
+	UsernameExpression string                                                                     `json:"username_expression" api:"required"`
 	JSON               phaseGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -6937,9 +6937,9 @@ func (r phaseGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJS
 type PhaseGetResponseRulesRulesetsSetCacheControlRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -6986,9 +6986,9 @@ func (r phaseGetResponseRulesRulesetsSetCacheControlRuleRatelimitJSON) RawJSON()
 
 type PhaseGetResponseRulesRulesetsSetCacheTagsRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -7062,7 +7062,7 @@ func (r PhaseGetResponseRulesRulesetsSetCacheTagsRuleAction) IsKnown() bool {
 // The parameters configuring the rule's action.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParameters struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation" api:"required"`
 	// An expression that evaluates to an array of cache tag values.
 	Expression string `json:"expression"`
 	// This field can have the runtime type of [[]string].
@@ -7158,9 +7158,9 @@ func init() {
 // Add cache tags using a list of values.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                            `json:"values,required"`
+	Values []string                                                                            `json:"values" api:"required"`
 	JSON   phaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
 }
 
@@ -7205,9 +7205,9 @@ func (r PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTag
 // Add cache tags using an expression.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      phaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -7252,9 +7252,9 @@ func (r PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTag
 // Remove cache tags using a list of values.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                               `json:"values,required"`
+	Values []string                                                                               `json:"values" api:"required"`
 	JSON   phaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
 }
 
@@ -7299,9 +7299,9 @@ func (r PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCache
 // Remove cache tags using an expression.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      phaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -7346,9 +7346,9 @@ func (r PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCache
 // Set cache tags using a list of values.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                            `json:"values,required"`
+	Values []string                                                                            `json:"values" api:"required"`
 	JSON   phaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
 }
 
@@ -7393,9 +7393,9 @@ func (r PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTag
 // Set cache tags using an expression.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation,required"`
+	Operation PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      phaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -7457,9 +7457,9 @@ func (r PhaseGetResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation) 
 // Configuration for exposed credential checking.
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                  `json:"username_expression,required"`
+	UsernameExpression string                                                                  `json:"username_expression" api:"required"`
 	JSON               phaseGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -7485,9 +7485,9 @@ func (r phaseGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON)
 type PhaseGetResponseRulesRulesetsSetCacheTagsRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -7674,9 +7674,9 @@ func (r PhaseUpdateParamsRulesRulesetsChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type PhaseUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	PasswordExpression param.Field[string] `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression param.Field[string] `json:"username_expression,required"`
+	UsernameExpression param.Field[string] `json:"username_expression" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
@@ -7687,9 +7687,9 @@ func (r PhaseUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck) Marsh
 type PhaseUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	Characteristics param.Field[[]string] `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[int64] `json:"period,required"`
+	Period param.Field[int64] `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -7760,9 +7760,9 @@ func (r PhaseUpdateParamsRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type PhaseUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	PasswordExpression param.Field[string] `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression param.Field[string] `json:"username_expression,required"`
+	UsernameExpression param.Field[string] `json:"username_expression" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
@@ -7773,9 +7773,9 @@ func (r PhaseUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck) Mar
 type PhaseUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	Characteristics param.Field[[]string] `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[int64] `json:"period,required"`
+	Period param.Field[int64] `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -7886,7 +7886,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParameters) Marsh
 // A cache-control directive configuration.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutable struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -7911,7 +7911,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableU
 // Set the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -7942,7 +7942,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutab
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -7990,7 +7990,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersImmutab
 // seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAge struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -8018,9 +8018,9 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnio
 // Set the directive with a duration value in seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation] `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value param.Field[int64] `json:"value,required"`
+	Value param.Field[int64] `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8051,7 +8051,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeS
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8098,7 +8098,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMaxAgeO
 // A cache-control directive configuration.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8123,7 +8123,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevali
 // Set the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8154,7 +8154,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRev
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8201,7 +8201,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustRev
 // A cache-control directive configuration.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8226,7 +8226,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnders
 // Set the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8257,7 +8257,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnd
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8305,7 +8305,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersMustUnd
 // names).
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCache struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool]        `json:"cloudflare_only"`
 	Qualifiers     param.Field[interface{}] `json:"qualifiers"`
@@ -8332,7 +8332,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheUni
 // Set the directive with optional qualifiers.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -8366,7 +8366,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCache
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8413,7 +8413,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoCache
 // A cache-control directive configuration.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStore struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8438,7 +8438,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreUni
 // Set the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8469,7 +8469,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStore
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8516,7 +8516,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoStore
 // A cache-control directive configuration.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransform struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8541,7 +8541,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransfor
 // Set the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8572,7 +8572,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTrans
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8620,7 +8620,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersNoTrans
 // names).
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivate struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool]        `json:"cloudflare_only"`
 	Qualifiers     param.Field[interface{}] `json:"qualifiers"`
@@ -8647,7 +8647,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateUni
 // Set the directive with optional qualifiers.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -8681,7 +8681,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivate
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8728,7 +8728,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPrivate
 // A cache-control directive configuration.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8753,7 +8753,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyReval
 // Set the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8784,7 +8784,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRe
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8831,7 +8831,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersProxyRe
 // A cache-control directive configuration.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublic struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8856,7 +8856,7 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicUnio
 // Set the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8887,7 +8887,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicS
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8935,7 +8935,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersPublicO
 // seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxage struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -8963,9 +8963,9 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageUni
 // Set the directive with a duration value in seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation] `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value param.Field[int64] `json:"value,required"`
+	Value param.Field[int64] `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -8996,7 +8996,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxage
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -9044,7 +9044,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersSMaxage
 // seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfError struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -9072,9 +9072,9 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErr
 // Set the directive with a duration value in seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation] `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value param.Field[int64] `json:"value,required"`
+	Value param.Field[int64] `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -9105,7 +9105,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIf
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -9153,7 +9153,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleIf
 // seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -9181,9 +9181,9 @@ type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhile
 // Set the directive with a duration value in seconds.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation] `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value param.Field[int64] `json:"value,required"`
+	Value param.Field[int64] `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -9214,7 +9214,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWh
 // Remove the directive.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation] `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly param.Field[bool] `json:"cloudflare_only"`
 }
@@ -9261,9 +9261,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleActionParametersStaleWh
 // Configuration for exposed credential checking.
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	PasswordExpression param.Field[string] `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression param.Field[string] `json:"username_expression,required"`
+	UsernameExpression param.Field[string] `json:"username_expression" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
@@ -9274,9 +9274,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheControlRuleExposedCredentialCheck)
 type PhaseUpdateParamsRulesRulesetsSetCacheControlRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	Characteristics param.Field[[]string] `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[int64] `json:"period,required"`
+	Period param.Field[int64] `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -9347,7 +9347,7 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleAction) IsKnown() bool {
 // The parameters configuring the rule's action.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParameters struct {
 	// The operation to perform on the cache tags.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersOperation] `json:"operation" api:"required"`
 	// An expression that evaluates to an array of cache tag values.
 	Expression param.Field[string]      `json:"expression"`
 	Values     param.Field[interface{}] `json:"values"`
@@ -9377,9 +9377,9 @@ type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersUnion interfa
 // Add cache tags using a list of values.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation] `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values param.Field[[]string] `json:"values,required"`
+	Values param.Field[[]string] `json:"values" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues) MarshalJSON() (data []byte, err error) {
@@ -9409,9 +9409,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTa
 // Add cache tags using an expression.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation] `json:"operation" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression) MarshalJSON() (data []byte, err error) {
@@ -9441,9 +9441,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTa
 // Remove cache tags using a list of values.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation] `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values param.Field[[]string] `json:"values,required"`
+	Values param.Field[[]string] `json:"values" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues) MarshalJSON() (data []byte, err error) {
@@ -9473,9 +9473,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCach
 // Remove cache tags using an expression.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation] `json:"operation" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) MarshalJSON() (data []byte, err error) {
@@ -9505,9 +9505,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersRemoveCach
 // Set cache tags using a list of values.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation] `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values param.Field[[]string] `json:"values,required"`
+	Values param.Field[[]string] `json:"values" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues) MarshalJSON() (data []byte, err error) {
@@ -9537,9 +9537,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTa
 // Set cache tags using an expression.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation] `json:"operation,required"`
+	Operation param.Field[PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation] `json:"operation" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression) MarshalJSON() (data []byte, err error) {
@@ -9586,9 +9586,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleActionParametersOperation)
 // Configuration for exposed credential checking.
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	PasswordExpression param.Field[string] `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression param.Field[string] `json:"username_expression,required"`
+	UsernameExpression param.Field[string] `json:"username_expression" api:"required"`
 }
 
 func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
@@ -9599,9 +9599,9 @@ func (r PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleExposedCredentialCheck) Ma
 type PhaseUpdateParamsRulesRulesetsSetCacheTagsRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	Characteristics param.Field[[]string] `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[int64] `json:"period,required"`
+	Period param.Field[int64] `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -9662,13 +9662,13 @@ func (r PhaseUpdateParamsRulesAction) IsKnown() bool {
 // A response object.
 type PhaseUpdateResponseEnvelope struct {
 	// A list of error messages.
-	Errors []PhaseUpdateResponseEnvelopeErrors `json:"errors,required"`
+	Errors []PhaseUpdateResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
-	Messages []PhaseUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Messages []PhaseUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A ruleset object.
-	Result PhaseUpdateResponse `json:"result,required"`
+	Result PhaseUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PhaseUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success PhaseUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    phaseUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -9694,7 +9694,7 @@ func (r phaseUpdateResponseEnvelopeJSON) RawJSON() string {
 // A message.
 type PhaseUpdateResponseEnvelopeErrors struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -9723,7 +9723,7 @@ func (r phaseUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 // The source of this message.
 type PhaseUpdateResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                      `json:"pointer,required"`
+	Pointer string                                      `json:"pointer" api:"required"`
 	JSON    phaseUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
@@ -9746,7 +9746,7 @@ func (r phaseUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 // A message.
 type PhaseUpdateResponseEnvelopeMessages struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -9775,7 +9775,7 @@ func (r phaseUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 // The source of this message.
 type PhaseUpdateResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                        `json:"pointer,required"`
+	Pointer string                                        `json:"pointer" api:"required"`
 	JSON    phaseUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 
@@ -9820,13 +9820,13 @@ type PhaseGetParams struct {
 // A response object.
 type PhaseGetResponseEnvelope struct {
 	// A list of error messages.
-	Errors []PhaseGetResponseEnvelopeErrors `json:"errors,required"`
+	Errors []PhaseGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
-	Messages []PhaseGetResponseEnvelopeMessages `json:"messages,required"`
+	Messages []PhaseGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A ruleset object.
-	Result PhaseGetResponse `json:"result,required"`
+	Result PhaseGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PhaseGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PhaseGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    phaseGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -9852,7 +9852,7 @@ func (r phaseGetResponseEnvelopeJSON) RawJSON() string {
 // A message.
 type PhaseGetResponseEnvelopeErrors struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -9881,7 +9881,7 @@ func (r phaseGetResponseEnvelopeErrorsJSON) RawJSON() string {
 // The source of this message.
 type PhaseGetResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                   `json:"pointer,required"`
+	Pointer string                                   `json:"pointer" api:"required"`
 	JSON    phaseGetResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
@@ -9904,7 +9904,7 @@ func (r phaseGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 // A message.
 type PhaseGetResponseEnvelopeMessages struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -9933,7 +9933,7 @@ func (r phaseGetResponseEnvelopeMessagesJSON) RawJSON() string {
 // The source of this message.
 type PhaseGetResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                     `json:"pointer,required"`
+	Pointer string                                     `json:"pointer" api:"required"`
 	JSON    phaseGetResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 

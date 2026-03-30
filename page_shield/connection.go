@@ -46,7 +46,7 @@ func (r *ConnectionService) List(ctx context.Context, params ConnectionListParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/connections", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -72,30 +72,30 @@ func (r *ConnectionService) Get(ctx context.Context, connectionID string, query 
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if connectionID == "" {
 		err = errors.New("missing required connection_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/connections/%s", query.ZoneID, connectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Connection struct {
 	// Identifier
-	ID                        string         `json:"id,required"`
-	AddedAt                   time.Time      `json:"added_at,required" format:"date-time"`
-	FirstSeenAt               time.Time      `json:"first_seen_at,required" format:"date-time"`
-	Host                      string         `json:"host,required"`
-	LastSeenAt                time.Time      `json:"last_seen_at,required" format:"date-time"`
-	URL                       string         `json:"url,required"`
-	URLContainsCDNCGIPath     bool           `json:"url_contains_cdn_cgi_path,required"`
+	ID                        string         `json:"id" api:"required"`
+	AddedAt                   time.Time      `json:"added_at" api:"required" format:"date-time"`
+	FirstSeenAt               time.Time      `json:"first_seen_at" api:"required" format:"date-time"`
+	Host                      string         `json:"host" api:"required"`
+	LastSeenAt                time.Time      `json:"last_seen_at" api:"required" format:"date-time"`
+	URL                       string         `json:"url" api:"required"`
+	URLContainsCDNCGIPath     bool           `json:"url_contains_cdn_cgi_path" api:"required"`
 	DomainReportedMalicious   bool           `json:"domain_reported_malicious"`
 	FirstPageURL              string         `json:"first_page_url"`
 	MaliciousDomainCategories []string       `json:"malicious_domain_categories"`
@@ -134,7 +134,7 @@ func (r connectionJSON) RawJSON() string {
 
 type ConnectionListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned connections.
 	Direction param.Field[ConnectionListParamsDirection] `query:"direction"`
 	// When true, excludes connections seen in a `/cdn-cgi` path from the returned
@@ -238,13 +238,13 @@ func (r ConnectionListParamsOrderBy) IsKnown() bool {
 
 type ConnectionGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ConnectionGetResponseEnvelope struct {
-	Result Connection `json:"result,required,nullable"`
+	Result Connection `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success  ConnectionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success  ConnectionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo                `json:"errors"`
 	Messages []shared.ResponseInfo                `json:"messages"`
 	JSON     connectionGetResponseEnvelopeJSON    `json:"-"`

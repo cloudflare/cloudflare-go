@@ -42,19 +42,19 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", params.AccountID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a rule in a Web Analytics ruleset.
@@ -63,23 +63,23 @@ func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", params.AccountID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all the rules in a Web Analytics ruleset.
@@ -88,19 +88,19 @@ func (r *RuleService) List(ctx context.Context, rulesetID string, query RuleList
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", query.AccountID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes an existing rule from a Web Analytics ruleset.
@@ -109,23 +109,23 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", body.AccountID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modifies one or more rules in a Web Analytics ruleset with a single request.
@@ -134,19 +134,19 @@ func (r *RuleService) BulkNew(ctx context.Context, rulesetID string, params Rule
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", params.AccountID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RUMRule struct {
@@ -318,7 +318,7 @@ func (r ruleBulkNewResponseRulesetJSON) RawJSON() string {
 
 type RuleNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
 	Inclusive param.Field[bool] `json:"inclusive"`
@@ -332,10 +332,10 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                        `json:"success,required"`
+	Success bool                        `json:"success" api:"required"`
 	Result  RUMRule                     `json:"result"`
 	JSON    ruleNewResponseEnvelopeJSON `json:"-"`
 }
@@ -361,7 +361,7 @@ func (r ruleNewResponseEnvelopeJSON) RawJSON() string {
 
 type RuleUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
 	Inclusive param.Field[bool] `json:"inclusive"`
@@ -375,10 +375,10 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                           `json:"success,required"`
+	Success bool                           `json:"success" api:"required"`
 	Result  RUMRule                        `json:"result"`
 	JSON    ruleUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -404,14 +404,14 @@ func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type RuleListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RuleListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                         `json:"success,required"`
+	Success bool                         `json:"success" api:"required"`
 	Result  RuleListResponse             `json:"result"`
 	JSON    ruleListResponseEnvelopeJSON `json:"-"`
 }
@@ -437,14 +437,14 @@ func (r ruleListResponseEnvelopeJSON) RawJSON() string {
 
 type RuleDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                           `json:"success,required"`
+	Success bool                           `json:"success" api:"required"`
 	Result  RuleDeleteResponse             `json:"result"`
 	JSON    ruleDeleteResponseEnvelopeJSON `json:"-"`
 }
@@ -470,7 +470,7 @@ func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RuleBulkNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of rule identifiers to delete.
 	DeleteRules param.Field[[]string] `json:"delete_rules"`
 	// A list of rules to create or update.
@@ -495,10 +495,10 @@ func (r RuleBulkNewParamsRule) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleBulkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	Result  RuleBulkNewResponse             `json:"result"`
 	JSON    ruleBulkNewResponseEnvelopeJSON `json:"-"`
 }

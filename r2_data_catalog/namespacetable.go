@@ -46,38 +46,38 @@ func (r *NamespaceTableService) List(ctx context.Context, bucketName string, nam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if namespace == "" {
 		err = errors.New("missing required namespace parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/namespaces/%s/tables", params.AccountID, bucketName, namespace)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Contains the list of tables with optional pagination.
 type NamespaceTableListResponse struct {
 	// Lists tables in the namespace.
-	Identifiers []NamespaceTableListResponseIdentifier `json:"identifiers,required"`
+	Identifiers []NamespaceTableListResponseIdentifier `json:"identifiers" api:"required"`
 	// Contains detailed metadata for each table when return_details is true. Each
 	// object includes identifier, UUID, timestamps, and locations.
-	Details []NamespaceTableListResponseDetail `json:"details,nullable"`
+	Details []NamespaceTableListResponseDetail `json:"details" api:"nullable"`
 	// Use this opaque token to fetch the next page of results. A null or absent value
 	// indicates the last page.
-	NextPageToken string `json:"next_page_token,nullable"`
+	NextPageToken string `json:"next_page_token" api:"nullable"`
 	// Contains UUIDs for each table when return_uuids is true. The order corresponds
 	// to the identifiers array.
-	TableUUIDs []string                       `json:"table_uuids,nullable" format:"uuid"`
+	TableUUIDs []string                       `json:"table_uuids" api:"nullable" format:"uuid"`
 	JSON       namespaceTableListResponseJSON `json:"-"`
 }
 
@@ -103,10 +103,10 @@ func (r namespaceTableListResponseJSON) RawJSON() string {
 // Specifies a unique table identifier within a catalog.
 type NamespaceTableListResponseIdentifier struct {
 	// Specifies the table name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies the hierarchical namespace parts as an array of strings. For example,
 	// ["bronze", "analytics"] represents the namespace "bronze.analytics".
-	Namespace []string                                 `json:"namespace,required"`
+	Namespace []string                                 `json:"namespace" api:"required"`
 	JSON      namespaceTableListResponseIdentifierJSON `json:"-"`
 }
 
@@ -130,17 +130,17 @@ func (r namespaceTableListResponseIdentifierJSON) RawJSON() string {
 // Contains table with metadata.
 type NamespaceTableListResponseDetail struct {
 	// Specifies a unique table identifier within a catalog.
-	Identifier NamespaceTableListResponseDetailsIdentifier `json:"identifier,required"`
+	Identifier NamespaceTableListResponseDetailsIdentifier `json:"identifier" api:"required"`
 	// Contains the UUID that persists across renames.
-	TableUUID string `json:"table_uuid,required" format:"uuid"`
+	TableUUID string `json:"table_uuid" api:"required" format:"uuid"`
 	// Indicates the creation timestamp in ISO 8601 format.
-	CreatedAt time.Time `json:"created_at,nullable" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date-time"`
 	// Specifies the base S3 URI for table storage location.
-	Location string `json:"location,nullable"`
+	Location string `json:"location" api:"nullable"`
 	// Contains the S3 URI to table metadata file. Null for staged tables.
-	MetadataLocation string `json:"metadata_location,nullable"`
+	MetadataLocation string `json:"metadata_location" api:"nullable"`
 	// Shows the last update timestamp in ISO 8601 format. Null if never updated.
-	UpdatedAt time.Time                            `json:"updated_at,nullable" format:"date-time"`
+	UpdatedAt time.Time                            `json:"updated_at" api:"nullable" format:"date-time"`
 	JSON      namespaceTableListResponseDetailJSON `json:"-"`
 }
 
@@ -168,10 +168,10 @@ func (r namespaceTableListResponseDetailJSON) RawJSON() string {
 // Specifies a unique table identifier within a catalog.
 type NamespaceTableListResponseDetailsIdentifier struct {
 	// Specifies the table name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies the hierarchical namespace parts as an array of strings. For example,
 	// ["bronze", "analytics"] represents the namespace "bronze.analytics".
-	Namespace []string                                        `json:"namespace,required"`
+	Namespace []string                                        `json:"namespace" api:"required"`
 	JSON      namespaceTableListResponseDetailsIdentifierJSON `json:"-"`
 }
 
@@ -194,7 +194,7 @@ func (r namespaceTableListResponseDetailsIdentifierJSON) RawJSON() string {
 
 type NamespaceTableListParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Maximum number of tables to return per page. Defaults to 100, maximum 1000.
 	PageSize param.Field[int64] `query:"page_size"`
 	// Opaque pagination token from a previous response. Use this to fetch the next
@@ -220,11 +220,11 @@ func (r NamespaceTableListParams) URLQuery() (v url.Values) {
 
 type NamespaceTableListResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []NamespaceTableListResponseEnvelopeErrors `json:"errors,required"`
+	Errors []NamespaceTableListResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []NamespaceTableListResponseEnvelopeMessages `json:"messages,required"`
+	Messages []NamespaceTableListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Contains the list of tables with optional pagination.
 	Result NamespaceTableListResponse             `json:"result"`
 	JSON   namespaceTableListResponseEnvelopeJSON `json:"-"`
@@ -251,9 +251,9 @@ func (r namespaceTableListResponseEnvelopeJSON) RawJSON() string {
 
 type NamespaceTableListResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                       `json:"message,required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    namespaceTableListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -276,9 +276,9 @@ func (r namespaceTableListResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type NamespaceTableListResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                         `json:"message,required"`
+	Message string                                         `json:"message" api:"required"`
 	JSON    namespaceTableListResponseEnvelopeMessagesJSON `json:"-"`
 }
 

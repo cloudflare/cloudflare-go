@@ -44,15 +44,15 @@ func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing User Agent Blocking rule.
@@ -61,19 +61,19 @@ func (r *UARuleService) Update(ctx context.Context, uaRuleID string, params UARu
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if uaRuleID == "" {
 		err = errors.New("missing required ua_rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", params.ZoneID, uaRuleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches User Agent Blocking rules in a zone. You can filter the results using
@@ -84,7 +84,7 @@ func (r *UARuleService) List(ctx context.Context, params UARuleListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -111,19 +111,19 @@ func (r *UARuleService) Delete(ctx context.Context, uaRuleID string, body UARule
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if uaRuleID == "" {
 		err = errors.New("missing required ua_rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", body.ZoneID, uaRuleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the details of a User Agent Blocking rule.
@@ -132,19 +132,19 @@ func (r *UARuleService) Get(ctx context.Context, uaRuleID string, query UARuleGe
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if uaRuleID == "" {
 		err = errors.New("missing required ua_rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", query.ZoneID, uaRuleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type UARuleNewResponse struct {
@@ -549,10 +549,10 @@ func (r UARuleGetResponseMode) IsKnown() bool {
 
 type UARuleNewParams struct {
 	// Defines an identifier.
-	ZoneID        param.Field[string]                       `path:"zone_id,required"`
-	Configuration param.Field[UARuleNewParamsConfiguration] `json:"configuration,required"`
+	ZoneID        param.Field[string]                       `path:"zone_id" api:"required"`
+	Configuration param.Field[UARuleNewParamsConfiguration] `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode param.Field[UARuleNewParamsMode] `json:"mode,required"`
+	Mode param.Field[UARuleNewParamsMode] `json:"mode" api:"required"`
 	// An informative summary of the rule. This value is sanitized and any tags will be
 	// removed.
 	Description param.Field[string] `json:"description"`
@@ -612,11 +612,11 @@ func (r UARuleNewParamsMode) IsKnown() bool {
 }
 
 type UARuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UARuleNewResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   UARuleNewResponse     `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success UARuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -656,11 +656,11 @@ func (r UARuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type UARuleUpdateParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The rule configuration.
-	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration,required"`
+	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode param.Field[UARuleUpdateParamsMode] `json:"mode,required"`
+	Mode param.Field[UARuleUpdateParamsMode] `json:"mode" api:"required"`
 	// An informative summary of the rule. This value is sanitized and any tags will be
 	// removed.
 	Description param.Field[string] `json:"description"`
@@ -738,11 +738,11 @@ func (r UARuleUpdateParamsMode) IsKnown() bool {
 }
 
 type UARuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UARuleUpdateResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   UARuleUpdateResponse  `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success UARuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -782,7 +782,7 @@ func (r UARuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type UARuleListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A string to search for in the description of existing rules.
 	Description param.Field[string] `query:"description"`
 	// Page number of paginated results.
@@ -806,15 +806,15 @@ func (r UARuleListParams) URLQuery() (v url.Values) {
 
 type UARuleDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type UARuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UARuleDeleteResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   UARuleDeleteResponse  `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success UARuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success UARuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    uaRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -854,15 +854,15 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type UARuleGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type UARuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UARuleGetResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   UARuleGetResponse     `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success UARuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`
 }
 

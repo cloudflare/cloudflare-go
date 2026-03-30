@@ -50,11 +50,11 @@ func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, par
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if packageID == "" {
 		err = errors.New("missing required package_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups", params.ZoneID, packageID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -91,23 +91,23 @@ func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, gro
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if packageID == "" {
 		err = errors.New("missing required package_id parameter")
-		return
+		return nil, err
 	}
 	if groupID == "" {
 		err = errors.New("missing required group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", params.ZoneID, packageID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the details of a WAF rule group.
@@ -121,37 +121,37 @@ func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, grou
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if packageID == "" {
 		err = errors.New("missing required package_id parameter")
-		return
+		return nil, err
 	}
 	if groupID == "" {
 		err = errors.New("missing required group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", query.ZoneID, packageID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Group struct {
 	// Defines the unique identifier of the rule group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Defines an informative summary of what the rule group does.
-	Description string `json:"description,required,nullable"`
+	Description string `json:"description" api:"required,nullable"`
 	// Defines the state of the rules contained in the rule group. When `on`, the rules
 	// in the group are configurable/usable.
-	Mode GroupMode `json:"mode,required"`
+	Mode GroupMode `json:"mode" api:"required"`
 	// Defines the name of the rule group.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Defines the number of rules in the current rule group.
-	RulesCount float64 `json:"rules_count,required"`
+	RulesCount float64 `json:"rules_count" api:"required"`
 	// Defines the available states for the rule group.
 	AllowedModes []GroupAllowedMode `json:"allowed_modes"`
 	// Defines the number of rules within the group that have been modified from their
@@ -220,7 +220,7 @@ func (r GroupAllowedMode) IsKnown() bool {
 
 type WAFPackageGroupListParams struct {
 	// Defines an identifier of a schema.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the direction used to sort returned rule groups.
 	Direction param.Field[WAFPackageGroupListParamsDirection] `query:"direction"`
 	// Defines the condition for search requirements. When set to `all`, all the search
@@ -320,7 +320,7 @@ func (r WAFPackageGroupListParamsOrder) IsKnown() bool {
 
 type WAFPackageGroupEditParams struct {
 	// Defines an identifier of a schema.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the state of the rules contained in the rule group. When `on`, the rules
 	// in the group are configurable/usable.
 	Mode param.Field[WAFPackageGroupEditParamsMode] `json:"mode"`
@@ -348,11 +348,11 @@ func (r WAFPackageGroupEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageGroupEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
+	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    wafPackageGroupEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -392,15 +392,15 @@ func (r WAFPackageGroupEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type WAFPackageGroupGetParams struct {
 	// Defines an identifier of a schema.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type WAFPackageGroupGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    wafPackageGroupGetResponseEnvelopeJSON    `json:"-"`
 }
 

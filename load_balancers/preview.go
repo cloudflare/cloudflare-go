@@ -41,19 +41,19 @@ func (r *PreviewService) Get(ctx context.Context, previewID string, query Previe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if previewID == "" {
 		err = errors.New("missing required preview_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%s", query.AccountID, previewID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PreviewGetResponse map[string]PreviewGetResponseItem
@@ -111,16 +111,16 @@ func (r previewGetResponseItemOriginJSON) RawJSON() string {
 
 type PreviewGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PreviewGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Resulting health data from a preview operation.
-	Result PreviewGetResponse `json:"result,required"`
+	Result PreviewGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PreviewGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`
 }
 

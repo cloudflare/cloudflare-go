@@ -44,15 +44,15 @@ func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Stop enforcement of a zone hold on the zone, permanently or temporarily,
@@ -62,15 +62,15 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update the `hold_after` and/or `include_subdomains` values on an existing zone
@@ -80,15 +80,15 @@ func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve whether the zone is subject to a zone hold, and metadata about the
@@ -98,15 +98,15 @@ func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...opti
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/hold", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ZoneHold struct {
@@ -135,7 +135,7 @@ func (r zoneHoldJSON) RawJSON() string {
 
 type HoldNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If provided, the zone hold will extend to block any subdomain of the given zone,
 	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
 	// the hostname 'example.com' and include_subdomains=true will block 'example.com',
@@ -152,11 +152,11 @@ func (r HoldNewParams) URLQuery() (v url.Values) {
 }
 
 type HoldNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ZoneHold              `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success HoldNewResponseEnvelopeSuccess `json:"success,required"`
+	Success HoldNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    holdNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -196,7 +196,7 @@ func (r HoldNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type HoldDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If `hold_after` is provided, the hold will be temporarily disabled, then
 	// automatically re-enabled by the system at the time specified in this
 	// RFC3339-formatted timestamp. Otherwise, the hold will be disabled indefinitely.
@@ -212,11 +212,11 @@ func (r HoldDeleteParams) URLQuery() (v url.Values) {
 }
 
 type HoldDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ZoneHold              `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success HoldDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success HoldDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    holdDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -256,7 +256,7 @@ func (r HoldDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type HoldEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If `hold_after` is provided and future-dated, the hold will be temporarily
 	// disabled, then automatically re-enabled by the system at the time specified in
 	// this RFC3339-formatted timestamp. A past-dated `hold_after` value will have no
@@ -275,11 +275,11 @@ func (r HoldEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HoldEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ZoneHold              `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success HoldEditResponseEnvelopeSuccess `json:"success,required"`
+	Success HoldEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    holdEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -319,15 +319,15 @@ func (r HoldEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type HoldGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HoldGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZoneHold              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ZoneHold              `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success HoldGetResponseEnvelopeSuccess `json:"success,required"`
+	Success HoldGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    holdGetResponseEnvelopeJSON    `json:"-"`
 }
 

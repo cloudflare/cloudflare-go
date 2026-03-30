@@ -40,19 +40,19 @@ func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, userID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s/last_seen_identity", query.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Identity struct {
@@ -243,14 +243,14 @@ func (r identityMTLSAuthJSON) RawJSON() string {
 
 type AccessUserLastSeenIdentityGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelope struct {
-	Errors   []AccessUserLastSeenIdentityGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserLastSeenIdentityGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessUserLastSeenIdentityGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessUserLastSeenIdentityGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Identity                                             `json:"result"`
 	JSON    accessUserLastSeenIdentityGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -275,8 +275,8 @@ func (r accessUserLastSeenIdentityGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           AccessUserLastSeenIdentityGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -324,8 +324,8 @@ func (r accessUserLastSeenIdentityGetResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           AccessUserLastSeenIdentityGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON   `json:"-"`

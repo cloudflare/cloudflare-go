@@ -41,11 +41,11 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s/items", query.AccountID, listID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -66,5 +66,5 @@ func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID stri
 }
 
 type GatewayListItemListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -40,15 +40,15 @@ func (r *OnRampAddressSpaceService) Update(ctx context.Context, params OnRampAdd
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/onramps/magic_wan_address_space", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Read the Magic WAN Address Space (Closed Beta).
@@ -57,15 +57,15 @@ func (r *OnRampAddressSpaceService) List(ctx context.Context, query OnRampAddres
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/onramps/magic_wan_address_space", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update the Magic WAN Address Space (Closed Beta).
@@ -74,19 +74,19 @@ func (r *OnRampAddressSpaceService) Edit(ctx context.Context, params OnRampAddre
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/onramps/magic_wan_address_space", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OnRampAddressSpaceUpdateResponse struct {
-	Prefixes []string                             `json:"prefixes,required"`
+	Prefixes []string                             `json:"prefixes" api:"required"`
 	JSON     onRampAddressSpaceUpdateResponseJSON `json:"-"`
 }
 
@@ -107,7 +107,7 @@ func (r onRampAddressSpaceUpdateResponseJSON) RawJSON() string {
 }
 
 type OnRampAddressSpaceListResponse struct {
-	Prefixes []string                           `json:"prefixes,required"`
+	Prefixes []string                           `json:"prefixes" api:"required"`
 	JSON     onRampAddressSpaceListResponseJSON `json:"-"`
 }
 
@@ -128,7 +128,7 @@ func (r onRampAddressSpaceListResponseJSON) RawJSON() string {
 }
 
 type OnRampAddressSpaceEditResponse struct {
-	Prefixes []string                           `json:"prefixes,required"`
+	Prefixes []string                           `json:"prefixes" api:"required"`
 	JSON     onRampAddressSpaceEditResponseJSON `json:"-"`
 }
 
@@ -149,8 +149,8 @@ func (r onRampAddressSpaceEditResponseJSON) RawJSON() string {
 }
 
 type OnRampAddressSpaceUpdateParams struct {
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Prefixes  param.Field[[]string] `json:"prefixes,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
+	Prefixes  param.Field[[]string] `json:"prefixes" api:"required"`
 }
 
 func (r OnRampAddressSpaceUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -158,10 +158,10 @@ func (r OnRampAddressSpaceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OnRampAddressSpaceUpdateResponseEnvelope struct {
-	Errors   []OnRampAddressSpaceUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OnRampAddressSpaceUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   OnRampAddressSpaceUpdateResponse                   `json:"result,required"`
-	Success  bool                                               `json:"success,required"`
+	Errors   []OnRampAddressSpaceUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OnRampAddressSpaceUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   OnRampAddressSpaceUpdateResponse                   `json:"result" api:"required"`
+	Success  bool                                               `json:"success" api:"required"`
 	JSON     onRampAddressSpaceUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -185,8 +185,8 @@ func (r onRampAddressSpaceUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OnRampAddressSpaceUpdateResponseEnvelopeErrors struct {
-	Code             OnRampAddressSpaceUpdateResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             OnRampAddressSpaceUpdateResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Meta             OnRampAddressSpaceUpdateResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           OnRampAddressSpaceUpdateResponseEnvelopeErrorsSource `json:"source"`
@@ -434,8 +434,8 @@ func (r onRampAddressSpaceUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type OnRampAddressSpaceUpdateResponseEnvelopeMessages struct {
-	Code             OnRampAddressSpaceUpdateResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             OnRampAddressSpaceUpdateResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Meta             OnRampAddressSpaceUpdateResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           OnRampAddressSpaceUpdateResponseEnvelopeMessagesSource `json:"source"`
@@ -683,14 +683,14 @@ func (r onRampAddressSpaceUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 }
 
 type OnRampAddressSpaceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type OnRampAddressSpaceListResponseEnvelope struct {
-	Errors   []OnRampAddressSpaceListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OnRampAddressSpaceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   OnRampAddressSpaceListResponse                   `json:"result,required"`
-	Success  bool                                             `json:"success,required"`
+	Errors   []OnRampAddressSpaceListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OnRampAddressSpaceListResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   OnRampAddressSpaceListResponse                   `json:"result" api:"required"`
+	Success  bool                                             `json:"success" api:"required"`
 	JSON     onRampAddressSpaceListResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -714,8 +714,8 @@ func (r onRampAddressSpaceListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OnRampAddressSpaceListResponseEnvelopeErrors struct {
-	Code             OnRampAddressSpaceListResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             OnRampAddressSpaceListResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Meta             OnRampAddressSpaceListResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           OnRampAddressSpaceListResponseEnvelopeErrorsSource `json:"source"`
@@ -963,8 +963,8 @@ func (r onRampAddressSpaceListResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type OnRampAddressSpaceListResponseEnvelopeMessages struct {
-	Code             OnRampAddressSpaceListResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             OnRampAddressSpaceListResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Meta             OnRampAddressSpaceListResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           OnRampAddressSpaceListResponseEnvelopeMessagesSource `json:"source"`
@@ -1212,8 +1212,8 @@ func (r onRampAddressSpaceListResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 }
 
 type OnRampAddressSpaceEditParams struct {
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Prefixes  param.Field[[]string] `json:"prefixes,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
+	Prefixes  param.Field[[]string] `json:"prefixes" api:"required"`
 }
 
 func (r OnRampAddressSpaceEditParams) MarshalJSON() (data []byte, err error) {
@@ -1221,10 +1221,10 @@ func (r OnRampAddressSpaceEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OnRampAddressSpaceEditResponseEnvelope struct {
-	Errors   []OnRampAddressSpaceEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OnRampAddressSpaceEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   OnRampAddressSpaceEditResponse                   `json:"result,required"`
-	Success  bool                                             `json:"success,required"`
+	Errors   []OnRampAddressSpaceEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OnRampAddressSpaceEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   OnRampAddressSpaceEditResponse                   `json:"result" api:"required"`
+	Success  bool                                             `json:"success" api:"required"`
 	JSON     onRampAddressSpaceEditResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -1248,8 +1248,8 @@ func (r onRampAddressSpaceEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OnRampAddressSpaceEditResponseEnvelopeErrors struct {
-	Code             OnRampAddressSpaceEditResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             OnRampAddressSpaceEditResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Meta             OnRampAddressSpaceEditResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           OnRampAddressSpaceEditResponseEnvelopeErrorsSource `json:"source"`
@@ -1497,8 +1497,8 @@ func (r onRampAddressSpaceEditResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type OnRampAddressSpaceEditResponseEnvelopeMessages struct {
-	Code             OnRampAddressSpaceEditResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             OnRampAddressSpaceEditResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Meta             OnRampAddressSpaceEditResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           OnRampAddressSpaceEditResponseEnvelopeMessagesSource `json:"source"`

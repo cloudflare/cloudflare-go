@@ -40,15 +40,15 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes CMB config.
@@ -57,15 +57,15 @@ func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbCon
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets CMB config.
@@ -74,15 +74,15 @@ func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfi
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CmbConfig struct {
@@ -124,8 +124,8 @@ type ControlCmbConfigDeleteResponse = interface{}
 
 type ControlCmbConfigNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	CmbConfig CmbConfigParam      `json:"cmb_config,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	CmbConfig CmbConfigParam      `json:"cmb_config" api:"required"`
 }
 
 func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
@@ -133,11 +133,11 @@ func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigNewResponseEnvelope struct {
-	Errors   []ControlCmbConfigNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlCmbConfigNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ControlCmbConfigNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ControlCmbConfigNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ControlCmbConfigNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  CmbConfig                                  `json:"result,nullable"`
+	Success ControlCmbConfigNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  CmbConfig                                  `json:"result" api:"nullable"`
 	JSON    controlCmbConfigNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -161,8 +161,8 @@ func (r controlCmbConfigNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ControlCmbConfigNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ControlCmbConfigNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             controlCmbConfigNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -209,8 +209,8 @@ func (r controlCmbConfigNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ControlCmbConfigNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ControlCmbConfigNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             controlCmbConfigNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -273,15 +273,15 @@ func (r ControlCmbConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ControlCmbConfigDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {
-	Errors   []ControlCmbConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlCmbConfigDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ControlCmbConfigDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ControlCmbConfigDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  ControlCmbConfigDeleteResponse                `json:"result,nullable"`
+	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ControlCmbConfigDeleteResponse                `json:"result" api:"nullable"`
 	JSON    controlCmbConfigDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -305,8 +305,8 @@ func (r controlCmbConfigDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ControlCmbConfigDeleteResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ControlCmbConfigDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             controlCmbConfigDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -353,8 +353,8 @@ func (r controlCmbConfigDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ControlCmbConfigDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ControlCmbConfigDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             controlCmbConfigDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -417,15 +417,15 @@ func (r ControlCmbConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ControlCmbConfigGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ControlCmbConfigGetResponseEnvelope struct {
-	Errors   []ControlCmbConfigGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ControlCmbConfigGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ControlCmbConfigGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ControlCmbConfigGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ControlCmbConfigGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  CmbConfig                                  `json:"result,nullable"`
+	Success ControlCmbConfigGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  CmbConfig                                  `json:"result" api:"nullable"`
 	JSON    controlCmbConfigGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -449,8 +449,8 @@ func (r controlCmbConfigGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ControlCmbConfigGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ControlCmbConfigGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             controlCmbConfigGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -497,8 +497,8 @@ func (r controlCmbConfigGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ControlCmbConfigGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ControlCmbConfigGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             controlCmbConfigGetResponseEnvelopeMessagesJSON   `json:"-"`

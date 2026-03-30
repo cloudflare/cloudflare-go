@@ -42,10 +42,10 @@ func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutag
 	path := "radar/annotations/outages"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the number of outages by location.
@@ -55,14 +55,14 @@ func (r *AnnotationOutageService) Locations(ctx context.Context, query Annotatio
 	path := "radar/annotations/outages/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AnnotationOutageGetResponse struct {
-	Annotations []AnnotationOutageGetResponseAnnotation `json:"annotations,required"`
+	Annotations []AnnotationOutageGetResponseAnnotation `json:"annotations" api:"required"`
 	JSON        annotationOutageGetResponseJSON         `json:"-"`
 }
 
@@ -83,17 +83,17 @@ func (r annotationOutageGetResponseJSON) RawJSON() string {
 }
 
 type AnnotationOutageGetResponseAnnotation struct {
-	ID               string                                                  `json:"id,required"`
-	ASNs             []int64                                                 `json:"asns,required"`
-	ASNsDetails      []AnnotationOutageGetResponseAnnotationsASNsDetail      `json:"asnsDetails,required"`
-	DataSource       string                                                  `json:"dataSource,required"`
-	EventType        string                                                  `json:"eventType,required"`
-	Locations        []string                                                `json:"locations,required"`
-	LocationsDetails []AnnotationOutageGetResponseAnnotationsLocationsDetail `json:"locationsDetails,required"`
-	Origins          []string                                                `json:"origins,required"`
-	OriginsDetails   []AnnotationOutageGetResponseAnnotationsOriginsDetail   `json:"originsDetails,required"`
-	Outage           AnnotationOutageGetResponseAnnotationsOutage            `json:"outage,required"`
-	StartDate        time.Time                                               `json:"startDate,required" format:"date-time"`
+	ID               string                                                  `json:"id" api:"required"`
+	ASNs             []int64                                                 `json:"asns" api:"required"`
+	ASNsDetails      []AnnotationOutageGetResponseAnnotationsASNsDetail      `json:"asnsDetails" api:"required"`
+	DataSource       string                                                  `json:"dataSource" api:"required"`
+	EventType        string                                                  `json:"eventType" api:"required"`
+	Locations        []string                                                `json:"locations" api:"required"`
+	LocationsDetails []AnnotationOutageGetResponseAnnotationsLocationsDetail `json:"locationsDetails" api:"required"`
+	Origins          []string                                                `json:"origins" api:"required"`
+	OriginsDetails   []AnnotationOutageGetResponseAnnotationsOriginsDetail   `json:"originsDetails" api:"required"`
+	Outage           AnnotationOutageGetResponseAnnotationsOutage            `json:"outage" api:"required"`
+	StartDate        time.Time                                               `json:"startDate" api:"required" format:"date-time"`
 	Description      string                                                  `json:"description"`
 	EndDate          time.Time                                               `json:"endDate" format:"date-time"`
 	LinkedURL        string                                                  `json:"linkedUrl"`
@@ -132,8 +132,8 @@ func (r annotationOutageGetResponseAnnotationJSON) RawJSON() string {
 }
 
 type AnnotationOutageGetResponseAnnotationsASNsDetail struct {
-	ASN       string                                                     `json:"asn,required"`
-	Name      string                                                     `json:"name,required"`
+	ASN       string                                                     `json:"asn" api:"required"`
+	Name      string                                                     `json:"name" api:"required"`
 	Locations AnnotationOutageGetResponseAnnotationsASNsDetailsLocations `json:"locations"`
 	JSON      annotationOutageGetResponseAnnotationsASNsDetailJSON       `json:"-"`
 }
@@ -157,8 +157,8 @@ func (r annotationOutageGetResponseAnnotationsASNsDetailJSON) RawJSON() string {
 }
 
 type AnnotationOutageGetResponseAnnotationsASNsDetailsLocations struct {
-	Code string                                                         `json:"code,required"`
-	Name string                                                         `json:"name,required"`
+	Code string                                                         `json:"code" api:"required"`
+	Name string                                                         `json:"name" api:"required"`
 	JSON annotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON `json:"-"`
 }
 
@@ -181,8 +181,8 @@ func (r annotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON) RawJSON(
 }
 
 type AnnotationOutageGetResponseAnnotationsLocationsDetail struct {
-	Code string                                                    `json:"code,required"`
-	Name string                                                    `json:"name,required"`
+	Code string                                                    `json:"code" api:"required"`
+	Name string                                                    `json:"name" api:"required"`
 	JSON annotationOutageGetResponseAnnotationsLocationsDetailJSON `json:"-"`
 }
 
@@ -204,8 +204,8 @@ func (r annotationOutageGetResponseAnnotationsLocationsDetailJSON) RawJSON() str
 }
 
 type AnnotationOutageGetResponseAnnotationsOriginsDetail struct {
-	Name   string                                                  `json:"name,required"`
-	Origin string                                                  `json:"origin,required"`
+	Name   string                                                  `json:"name" api:"required"`
+	Origin string                                                  `json:"origin" api:"required"`
 	JSON   annotationOutageGetResponseAnnotationsOriginsDetailJSON `json:"-"`
 }
 
@@ -227,8 +227,8 @@ func (r annotationOutageGetResponseAnnotationsOriginsDetailJSON) RawJSON() strin
 }
 
 type AnnotationOutageGetResponseAnnotationsOutage struct {
-	OutageCause string                                           `json:"outageCause,required"`
-	OutageType  string                                           `json:"outageType,required"`
+	OutageCause string                                           `json:"outageCause" api:"required"`
+	OutageType  string                                           `json:"outageType" api:"required"`
 	JSON        annotationOutageGetResponseAnnotationsOutageJSON `json:"-"`
 }
 
@@ -250,7 +250,7 @@ func (r annotationOutageGetResponseAnnotationsOutageJSON) RawJSON() string {
 }
 
 type AnnotationOutageLocationsResponse struct {
-	Annotations []AnnotationOutageLocationsResponseAnnotation `json:"annotations,required"`
+	Annotations []AnnotationOutageLocationsResponseAnnotation `json:"annotations" api:"required"`
 	JSON        annotationOutageLocationsResponseJSON         `json:"-"`
 }
 
@@ -271,10 +271,10 @@ func (r annotationOutageLocationsResponseJSON) RawJSON() string {
 }
 
 type AnnotationOutageLocationsResponseAnnotation struct {
-	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string `json:"clientCountryName,required"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2" api:"required"`
+	ClientCountryName   string `json:"clientCountryName" api:"required"`
 	// A numeric string.
-	Value string                                          `json:"value,required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  annotationOutageLocationsResponseAnnotationJSON `json:"-"`
 }
 
@@ -344,8 +344,8 @@ func (r AnnotationOutageGetParamsFormat) IsKnown() bool {
 }
 
 type AnnotationOutageGetResponseEnvelope struct {
-	Result  AnnotationOutageGetResponse             `json:"result,required"`
-	Success bool                                    `json:"success,required"`
+	Result  AnnotationOutageGetResponse             `json:"result" api:"required"`
+	Success bool                                    `json:"success" api:"required"`
 	JSON    annotationOutageGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -405,8 +405,8 @@ func (r AnnotationOutageLocationsParamsFormat) IsKnown() bool {
 }
 
 type AnnotationOutageLocationsResponseEnvelope struct {
-	Result  AnnotationOutageLocationsResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
+	Result  AnnotationOutageLocationsResponse             `json:"result" api:"required"`
+	Success bool                                          `json:"success" api:"required"`
 	JSON    annotationOutageLocationsResponseEnvelopeJSON `json:"-"`
 }
 

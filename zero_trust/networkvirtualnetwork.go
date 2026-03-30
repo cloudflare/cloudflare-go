@@ -45,15 +45,15 @@ func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists and filters virtual networks in an account.
@@ -63,7 +63,7 @@ func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkV
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -89,19 +89,19 @@ func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetwor
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if virtualNetworkID == "" {
 		err = errors.New("missing required virtual_network_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", body.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing virtual network.
@@ -110,19 +110,19 @@ func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if virtualNetworkID == "" {
 		err = errors.New("missing required virtual_network_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", params.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a virtual network.
@@ -131,32 +131,32 @@ func (r *NetworkVirtualNetworkService) Get(ctx context.Context, virtualNetworkID
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if virtualNetworkID == "" {
 		err = errors.New("missing required virtual_network_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", query.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type VirtualNetwork struct {
 	// UUID of the virtual network.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Optional remark describing the virtual network.
-	Comment string `json:"comment,required"`
+	Comment string `json:"comment" api:"required"`
 	// Timestamp of when the resource was created.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// If `true`, this virtual network is the default for the account.
-	IsDefaultNetwork bool `json:"is_default_network,required"`
+	IsDefaultNetwork bool `json:"is_default_network" api:"required"`
 	// A user-friendly name for the virtual network.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time          `json:"deleted_at" format:"date-time"`
@@ -185,9 +185,9 @@ func (r virtualNetworkJSON) RawJSON() string {
 
 type NetworkVirtualNetworkNewParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for the virtual network.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Optional remark describing the virtual network.
 	Comment param.Field[string] `json:"comment"`
 	// If `true`, this virtual network is the default for the account.
@@ -201,11 +201,11 @@ func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkVirtualNetworkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   VirtualNetwork        `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkVirtualNetworkNewResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkVirtualNetworkNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkVirtualNetworkNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -245,7 +245,7 @@ func (r NetworkVirtualNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkVirtualNetworkListParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// UUID of the virtual network.
 	ID param.Field[string] `query:"id" format:"uuid"`
 	// If `true`, only include the default virtual network. If `false`, exclude the
@@ -272,15 +272,15 @@ func (r NetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 
 type NetworkVirtualNetworkDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   VirtualNetwork        `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkVirtualNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkVirtualNetworkDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkVirtualNetworkDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -320,7 +320,7 @@ func (r NetworkVirtualNetworkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkVirtualNetworkEditParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional remark describing the virtual network.
 	Comment param.Field[string] `json:"comment"`
 	// If `true`, this virtual network is the default for the account.
@@ -334,11 +334,11 @@ func (r NetworkVirtualNetworkEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type NetworkVirtualNetworkEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   VirtualNetwork        `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkVirtualNetworkEditResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkVirtualNetworkEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkVirtualNetworkEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -378,15 +378,15 @@ func (r NetworkVirtualNetworkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkVirtualNetworkGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkVirtualNetworkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   VirtualNetwork        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   VirtualNetwork        `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkVirtualNetworkGetResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkVirtualNetworkGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkVirtualNetworkGetResponseEnvelopeJSON    `json:"-"`
 }
 

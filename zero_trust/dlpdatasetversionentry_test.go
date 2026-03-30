@@ -27,6 +27,7 @@ func TestDLPDatasetVersionEntryNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -35,7 +36,7 @@ func TestDLPDatasetVersionEntryNew(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		int64(0),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+		io.Reader(bytes.NewBuffer([]byte("Example data"))),
 		zero_trust.DLPDatasetVersionEntryNewParams{
 			AccountID: cloudflare.F("account_id"),
 		},

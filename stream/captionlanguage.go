@@ -45,23 +45,23 @@ func (r *CaptionLanguageService) New(ctx context.Context, identifier string, lan
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	if language == "" {
 		err = errors.New("missing required language parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s/generate", body.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
@@ -71,23 +71,23 @@ func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	if language == "" {
 		err = errors.New("missing required language parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Removes the captions or subtitles from a video.
@@ -96,23 +96,23 @@ func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	if language == "" {
 		err = errors.New("missing required language parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", body.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists the captions or subtitles for provided language.
@@ -121,35 +121,35 @@ func (r *CaptionLanguageService) Get(ctx context.Context, identifier string, lan
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	if language == "" {
 		err = errors.New("missing required language parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", query.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CaptionLanguageNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CaptionLanguageNewResponseEnvelope struct {
-	Errors   []CaptionLanguageNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CaptionLanguageNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CaptionLanguageNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CaptionLanguageNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CaptionLanguageNewResponseEnvelopeSuccess `json:"success,required"`
+	Success CaptionLanguageNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Caption                                   `json:"result"`
 	JSON    captionLanguageNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -174,8 +174,8 @@ func (r captionLanguageNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CaptionLanguageNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           CaptionLanguageNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             captionLanguageNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -222,8 +222,8 @@ func (r captionLanguageNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CaptionLanguageNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           CaptionLanguageNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             captionLanguageNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -286,9 +286,9 @@ func (r CaptionLanguageNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionLanguageUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The WebVTT file containing the caption or subtitle content.
-	File param.Field[string] `json:"file,required"`
+	File param.Field[string] `json:"file" api:"required"`
 }
 
 func (r CaptionLanguageUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -307,10 +307,10 @@ func (r CaptionLanguageUpdateParams) MarshalMultipart() (data []byte, contentTyp
 }
 
 type CaptionLanguageUpdateResponseEnvelope struct {
-	Errors   []CaptionLanguageUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CaptionLanguageUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CaptionLanguageUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CaptionLanguageUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CaptionLanguageUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success CaptionLanguageUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Caption                                      `json:"result"`
 	JSON    captionLanguageUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -335,8 +335,8 @@ func (r captionLanguageUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CaptionLanguageUpdateResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CaptionLanguageUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             captionLanguageUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -383,8 +383,8 @@ func (r captionLanguageUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type CaptionLanguageUpdateResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           CaptionLanguageUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             captionLanguageUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -447,14 +447,14 @@ func (r CaptionLanguageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionLanguageDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CaptionLanguageDeleteResponseEnvelope struct {
-	Errors   []CaptionLanguageDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CaptionLanguageDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CaptionLanguageDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CaptionLanguageDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CaptionLanguageDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success CaptionLanguageDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  string                                       `json:"result"`
 	JSON    captionLanguageDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -479,8 +479,8 @@ func (r captionLanguageDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CaptionLanguageDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CaptionLanguageDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             captionLanguageDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -527,8 +527,8 @@ func (r captionLanguageDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type CaptionLanguageDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           CaptionLanguageDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             captionLanguageDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -591,14 +591,14 @@ func (r CaptionLanguageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionLanguageGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CaptionLanguageGetResponseEnvelope struct {
-	Errors   []CaptionLanguageGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CaptionLanguageGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CaptionLanguageGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CaptionLanguageGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CaptionLanguageGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CaptionLanguageGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Caption                                   `json:"result"`
 	JSON    captionLanguageGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -623,8 +623,8 @@ func (r captionLanguageGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CaptionLanguageGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           CaptionLanguageGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             captionLanguageGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -671,8 +671,8 @@ func (r captionLanguageGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CaptionLanguageGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           CaptionLanguageGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             captionLanguageGetResponseEnvelopeMessagesJSON   `json:"-"`

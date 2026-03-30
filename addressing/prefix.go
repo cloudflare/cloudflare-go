@@ -50,15 +50,15 @@ func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all prefixes owned by the account.
@@ -68,7 +68,7 @@ func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts .
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -93,15 +93,15 @@ func (r *PrefixService) Delete(ctx context.Context, prefixID string, body Prefix
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", body.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Modify the description for a prefix owned by the account.
@@ -110,19 +110,19 @@ func (r *PrefixService) Edit(ctx context.Context, prefixID string, params Prefix
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List a particular prefix owned by the account.
@@ -131,19 +131,19 @@ func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", query.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Prefix struct {
@@ -158,7 +158,7 @@ type Prefix struct {
 	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
 	// instead, which allows for advertising multiple BGP routes within a single IP
 	// Prefix.
-	Advertised bool `json:"advertised,nullable"`
+	Advertised bool `json:"advertised" api:"nullable"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
 	//
@@ -166,7 +166,7 @@ type Prefix struct {
 	// [BGP Prefixes API](https://developers.cloudflare.com/api/resources/addressing/subresources/prefixes/subresources/bgp_prefixes/)
 	// instead, which allows for advertising multiple BGP routes within a single IP
 	// Prefix.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
+	AdvertisedModifiedAt time.Time `json:"advertised_modified_at" api:"nullable" format:"date-time"`
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
@@ -182,7 +182,7 @@ type Prefix struct {
 	// State of one kind of validation for an IP prefix.
 	IrrValidationState string `json:"irr_validation_state"`
 	// Identifier for the uploaded LOA document.
-	LOADocumentID string    `json:"loa_document_id,nullable"`
+	LOADocumentID string    `json:"loa_document_id" api:"nullable"`
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
@@ -242,10 +242,10 @@ func (r prefixJSON) RawJSON() string {
 }
 
 type PrefixDeleteResponse struct {
-	Errors   []PrefixDeleteResponseError   `json:"errors,required"`
-	Messages []PrefixDeleteResponseMessage `json:"messages,required"`
+	Errors   []PrefixDeleteResponseError   `json:"errors" api:"required"`
+	Messages []PrefixDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixDeleteResponseSuccess `json:"success,required"`
+	Success PrefixDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    prefixDeleteResponseJSON    `json:"-"`
 }
 
@@ -268,8 +268,8 @@ func (r prefixDeleteResponseJSON) RawJSON() string {
 }
 
 type PrefixDeleteResponseError struct {
-	Code             int64                            `json:"code,required"`
-	Message          string                           `json:"message,required"`
+	Code             int64                            `json:"code" api:"required"`
+	Message          string                           `json:"message" api:"required"`
 	DocumentationURL string                           `json:"documentation_url"`
 	Source           PrefixDeleteResponseErrorsSource `json:"source"`
 	JSON             prefixDeleteResponseErrorJSON    `json:"-"`
@@ -316,8 +316,8 @@ func (r prefixDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixDeleteResponseMessage struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           PrefixDeleteResponseMessagesSource `json:"source"`
 	JSON             prefixDeleteResponseMessageJSON    `json:"-"`
@@ -380,11 +380,11 @@ func (r PrefixDeleteResponseSuccess) IsKnown() bool {
 
 type PrefixNewParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN param.Field[int64] `json:"asn,required"`
+	ASN param.Field[int64] `json:"asn" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR param.Field[string] `json:"cidr,required"`
+	CIDR param.Field[string] `json:"cidr" api:"required"`
 	// Whether Cloudflare is allowed to generate the LOA document on behalf of the
 	// prefix owner.
 	DelegateLOACreation param.Field[bool] `json:"delegate_loa_creation"`
@@ -400,10 +400,10 @@ func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixNewResponseEnvelope struct {
-	Errors   []PrefixNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Prefix                           `json:"result"`
 	JSON    prefixNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -428,8 +428,8 @@ func (r prefixNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixNewResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           PrefixNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -476,8 +476,8 @@ func (r prefixNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixNewResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           PrefixNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -540,19 +540,19 @@ func (r PrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixListParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixDeleteParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixEditParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Description of the prefix.
-	Description param.Field[string] `json:"description,required"`
+	Description param.Field[string] `json:"description" api:"required"`
 }
 
 func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
@@ -560,10 +560,10 @@ func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixEditResponseEnvelope struct {
-	Errors   []PrefixEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixEditResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Prefix                            `json:"result"`
 	JSON    prefixEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -588,8 +588,8 @@ func (r prefixEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixEditResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           PrefixEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -636,8 +636,8 @@ func (r prefixEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixEditResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           PrefixEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -700,14 +700,14 @@ func (r PrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixGetParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixGetResponseEnvelope struct {
-	Errors   []PrefixGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Prefix                           `json:"result"`
 	JSON    prefixGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -732,8 +732,8 @@ func (r prefixGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           PrefixGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -780,8 +780,8 @@ func (r prefixGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           PrefixGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixGetResponseEnvelopeMessagesJSON   `json:"-"`

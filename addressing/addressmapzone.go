@@ -39,19 +39,19 @@ func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string,
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if addressMapID == "" {
 		err = errors.New("missing required address_map_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", params.AccountID, addressMapID, params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Remove a zone as a member of a particular address map.
@@ -59,26 +59,26 @@ func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if addressMapID == "" {
 		err = errors.New("missing required address_map_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", body.AccountID, addressMapID, body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type AddressMapZoneUpdateResponse struct {
-	Errors   []AddressMapZoneUpdateResponseError   `json:"errors,required"`
-	Messages []AddressMapZoneUpdateResponseMessage `json:"messages,required"`
+	Errors   []AddressMapZoneUpdateResponseError   `json:"errors" api:"required"`
+	Messages []AddressMapZoneUpdateResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    AddressMapZoneUpdateResponseSuccess    `json:"success,required"`
+	Success    AddressMapZoneUpdateResponseSuccess    `json:"success" api:"required"`
 	ResultInfo AddressMapZoneUpdateResponseResultInfo `json:"result_info"`
 	JSON       addressMapZoneUpdateResponseJSON       `json:"-"`
 }
@@ -103,8 +103,8 @@ func (r addressMapZoneUpdateResponseJSON) RawJSON() string {
 }
 
 type AddressMapZoneUpdateResponseError struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AddressMapZoneUpdateResponseErrorsSource `json:"source"`
 	JSON             addressMapZoneUpdateResponseErrorJSON    `json:"-"`
@@ -151,8 +151,8 @@ func (r addressMapZoneUpdateResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapZoneUpdateResponseMessage struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AddressMapZoneUpdateResponseMessagesSource `json:"source"`
 	JSON             addressMapZoneUpdateResponseMessageJSON    `json:"-"`
@@ -245,10 +245,10 @@ func (r addressMapZoneUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapZoneDeleteResponse struct {
-	Errors   []AddressMapZoneDeleteResponseError   `json:"errors,required"`
-	Messages []AddressMapZoneDeleteResponseMessage `json:"messages,required"`
+	Errors   []AddressMapZoneDeleteResponseError   `json:"errors" api:"required"`
+	Messages []AddressMapZoneDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    AddressMapZoneDeleteResponseSuccess    `json:"success,required"`
+	Success    AddressMapZoneDeleteResponseSuccess    `json:"success" api:"required"`
 	ResultInfo AddressMapZoneDeleteResponseResultInfo `json:"result_info"`
 	JSON       addressMapZoneDeleteResponseJSON       `json:"-"`
 }
@@ -273,8 +273,8 @@ func (r addressMapZoneDeleteResponseJSON) RawJSON() string {
 }
 
 type AddressMapZoneDeleteResponseError struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AddressMapZoneDeleteResponseErrorsSource `json:"source"`
 	JSON             addressMapZoneDeleteResponseErrorJSON    `json:"-"`
@@ -321,8 +321,8 @@ func (r addressMapZoneDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapZoneDeleteResponseMessage struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AddressMapZoneDeleteResponseMessagesSource `json:"source"`
 	JSON             addressMapZoneDeleteResponseMessageJSON    `json:"-"`
@@ -416,10 +416,10 @@ func (r addressMapZoneDeleteResponseResultInfoJSON) RawJSON() string {
 
 type AddressMapZoneUpdateParams struct {
 	// Identifier of a zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r AddressMapZoneUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -428,7 +428,7 @@ func (r AddressMapZoneUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type AddressMapZoneDeleteParams struct {
 	// Identifier of a zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

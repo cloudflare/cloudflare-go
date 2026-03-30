@@ -44,15 +44,15 @@ func (r *CustomTrustStoreService) New(ctx context.Context, params CustomTrustSto
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/acm/custom_trust_store", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Custom Origin Trust Store for a Zone.
@@ -62,7 +62,7 @@ func (r *CustomTrustStoreService) List(ctx context.Context, params CustomTrustSt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/acm/custom_trust_store", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -89,19 +89,19 @@ func (r *CustomTrustStoreService) Delete(ctx context.Context, customOriginTrustS
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customOriginTrustStoreID == "" {
 		err = errors.New("missing required custom_origin_trust_store_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/acm/custom_trust_store/%s", body.ZoneID, customOriginTrustStoreID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details about a specific certificate in the custom origin trust store,
@@ -111,38 +111,38 @@ func (r *CustomTrustStoreService) Get(ctx context.Context, customOriginTrustStor
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customOriginTrustStoreID == "" {
 		err = errors.New("missing required custom_origin_trust_store_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/acm/custom_trust_store/%s", query.ZoneID, customOriginTrustStoreID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CustomTrustStore struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
-	Certificate string `json:"certificate,required"`
+	Certificate string `json:"certificate" api:"required"`
 	// When the certificate expires.
-	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
+	ExpiresOn time.Time `json:"expires_on" api:"required" format:"date-time"`
 	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer,required"`
+	Issuer string `json:"issuer" api:"required"`
 	// The type of hash used for the certificate.
-	Signature string `json:"signature,required"`
+	Signature string `json:"signature" api:"required"`
 	// Status of the zone's custom SSL.
-	Status CustomTrustStoreStatus `json:"status,required"`
+	Status CustomTrustStoreStatus `json:"status" api:"required"`
 	// When the certificate was last modified.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// When the certificate was uploaded to Cloudflare.
-	UploadedOn time.Time            `json:"uploaded_on,required" format:"date-time"`
+	UploadedOn time.Time            `json:"uploaded_on" api:"required" format:"date-time"`
 	JSON       customTrustStoreJSON `json:"-"`
 }
 
@@ -213,9 +213,9 @@ func (r customTrustStoreDeleteResponseJSON) RawJSON() string {
 
 type CustomTrustStoreNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
-	Certificate param.Field[string] `json:"certificate,required"`
+	Certificate param.Field[string] `json:"certificate" api:"required"`
 }
 
 func (r CustomTrustStoreNewParams) MarshalJSON() (data []byte, err error) {
@@ -223,10 +223,10 @@ func (r CustomTrustStoreNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomTrustStoreNewResponseEnvelope struct {
-	Errors   []CustomTrustStoreNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomTrustStoreNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomTrustStoreNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomTrustStoreNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomTrustStoreNewResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomTrustStoreNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomTrustStore                           `json:"result"`
 	JSON    customTrustStoreNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -251,8 +251,8 @@ func (r customTrustStoreNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomTrustStoreNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           CustomTrustStoreNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customTrustStoreNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -299,8 +299,8 @@ func (r customTrustStoreNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomTrustStoreNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CustomTrustStoreNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customTrustStoreNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -363,7 +363,7 @@ func (r CustomTrustStoreNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomTrustStoreListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`
 	// Offset the results
@@ -385,14 +385,14 @@ func (r CustomTrustStoreListParams) URLQuery() (v url.Values) {
 
 type CustomTrustStoreDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CustomTrustStoreDeleteResponseEnvelope struct {
-	Errors   []CustomTrustStoreDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomTrustStoreDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomTrustStoreDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomTrustStoreDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomTrustStoreDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomTrustStoreDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomTrustStoreDeleteResponse                `json:"result"`
 	JSON    customTrustStoreDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -417,8 +417,8 @@ func (r customTrustStoreDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomTrustStoreDeleteResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           CustomTrustStoreDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customTrustStoreDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -465,8 +465,8 @@ func (r customTrustStoreDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type CustomTrustStoreDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           CustomTrustStoreDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customTrustStoreDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -529,14 +529,14 @@ func (r CustomTrustStoreDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomTrustStoreGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CustomTrustStoreGetResponseEnvelope struct {
-	Errors   []CustomTrustStoreGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomTrustStoreGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomTrustStoreGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomTrustStoreGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomTrustStoreGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomTrustStoreGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomTrustStore                           `json:"result"`
 	JSON    customTrustStoreGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -561,8 +561,8 @@ func (r customTrustStoreGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomTrustStoreGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           CustomTrustStoreGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customTrustStoreGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -609,8 +609,8 @@ func (r customTrustStoreGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomTrustStoreGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CustomTrustStoreGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customTrustStoreGetResponseEnvelopeMessagesJSON   `json:"-"`

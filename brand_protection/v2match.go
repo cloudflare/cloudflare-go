@@ -43,16 +43,16 @@ func (r *V2MatchService) Get(ctx context.Context, params V2MatchGetParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/v2/brand-protection/domain/matches", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type V2MatchGetResponse struct {
-	Matches []V2MatchGetResponseMatch `json:"matches,required"`
-	Total   int64                     `json:"total,required"`
+	Matches []V2MatchGetResponseMatch `json:"matches" api:"required"`
+	Total   int64                     `json:"total" api:"required"`
 	JSON    v2MatchGetResponseJSON    `json:"-"`
 }
 
@@ -74,13 +74,13 @@ func (r v2MatchGetResponseJSON) RawJSON() string {
 }
 
 type V2MatchGetResponseMatch struct {
-	Dismissed        bool                                 `json:"dismissed,required"`
-	Domain           string                               `json:"domain,required"`
-	FirstSeen        string                               `json:"first_seen,required"`
-	PublicScans      V2MatchGetResponseMatchesPublicScans `json:"public_scans,required,nullable"`
-	ScanStatus       string                               `json:"scan_status,required"`
-	ScanSubmissionID int64                                `json:"scan_submission_id,required,nullable"`
-	Source           string                               `json:"source,required,nullable"`
+	Dismissed        bool                                 `json:"dismissed" api:"required"`
+	Domain           string                               `json:"domain" api:"required"`
+	FirstSeen        string                               `json:"first_seen" api:"required"`
+	PublicScans      V2MatchGetResponseMatchesPublicScans `json:"public_scans" api:"required,nullable"`
+	ScanStatus       string                               `json:"scan_status" api:"required"`
+	ScanSubmissionID int64                                `json:"scan_submission_id" api:"required,nullable"`
+	Source           string                               `json:"source" api:"required,nullable"`
 	// All underlying match row IDs for this domain. Only present when multiple
 	// query_ids are requested.
 	MatchIDs []int64 `json:"match_ids"`
@@ -115,7 +115,7 @@ func (r v2MatchGetResponseMatchJSON) RawJSON() string {
 }
 
 type V2MatchGetResponseMatchesPublicScans struct {
-	SubmissionID string                                   `json:"submission_id,required"`
+	SubmissionID string                                   `json:"submission_id" api:"required"`
 	JSON         v2MatchGetResponseMatchesPublicScansJSON `json:"-"`
 }
 
@@ -136,11 +136,11 @@ func (r v2MatchGetResponseMatchesPublicScansJSON) RawJSON() string {
 }
 
 type V2MatchGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Query ID or comma-separated list of Query IDs. When multiple IDs are provided,
 	// matches are deduplicated across queries and each match includes matched_queries
 	// and match_ids arrays.
-	QueryID param.Field[[]string] `query:"query_id,required"`
+	QueryID param.Field[[]string] `query:"query_id" api:"required"`
 	// Filter matches by domain name (substring match)
 	DomainSearch     param.Field[string] `query:"domain_search"`
 	IncludeDismissed param.Field[string] `query:"include_dismissed"`

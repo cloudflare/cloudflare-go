@@ -40,32 +40,32 @@ func (r *URLService) Get(ctx context.Context, gatewayID string, provider string,
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if provider == "" {
 		err = errors.New("missing required provider parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/url/%s", query.AccountID, gatewayID, provider)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type URLGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type URLGetResponseEnvelope struct {
-	Result  string                     `json:"result,required"`
-	Success bool                       `json:"success,required"`
+	Result  string                     `json:"result" api:"required"`
+	Success bool                       `json:"success" api:"required"`
 	JSON    urlGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -47,7 +47,7 @@ func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -78,19 +78,19 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if hostname == "" {
 		err = errors.New("missing required hostname parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", query.ZoneID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AuthenticatedOriginPull struct {
@@ -108,7 +108,7 @@ type AuthenticatedOriginPull struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
 	// value voids the association.
-	Enabled bool `json:"enabled,nullable"`
+	Enabled bool `json:"enabled" api:"nullable"`
 	// The date when the certificate expires.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// The hostname on the origin for which the client certificate uploaded will be
@@ -207,7 +207,7 @@ type HostnameUpdateResponse struct {
 	Certificate string `json:"certificate"`
 	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
 	// value voids the association.
-	Enabled bool `json:"enabled,nullable"`
+	Enabled bool `json:"enabled" api:"nullable"`
 	// The hostname on the origin for which the client certificate uploaded will be
 	// used.
 	Hostname string `json:"hostname"`
@@ -240,8 +240,8 @@ func (r hostnameUpdateResponseJSON) RawJSON() string {
 
 type HostnameUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string]                       `path:"zone_id,required"`
-	Config param.Field[[]HostnameUpdateParamsConfig] `json:"config,required"`
+	ZoneID param.Field[string]                       `path:"zone_id" api:"required"`
+	Config param.Field[[]HostnameUpdateParamsConfig] `json:"config" api:"required"`
 }
 
 func (r HostnameUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -265,14 +265,14 @@ func (r HostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 
 type HostnameGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []HostnameGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []HostnameGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []HostnameGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AuthenticatedOriginPull            `json:"result"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -297,8 +297,8 @@ func (r hostnameGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type HostnameGetResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           HostnameGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             hostnameGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -345,8 +345,8 @@ func (r hostnameGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type HostnameGetResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           HostnameGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             hostnameGetResponseEnvelopeMessagesJSON   `json:"-"`

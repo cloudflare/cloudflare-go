@@ -41,15 +41,15 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/custom_ns", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete Account Custom Nameserver
@@ -59,11 +59,11 @@ func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if customNSID == "" {
 		err = errors.New("missing required custom_ns_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNSID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -90,7 +90,7 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/custom_ns", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -113,15 +113,15 @@ func (r *CustomNameserverService) GetAutoPaging(ctx context.Context, query Custo
 // A single account custom nameserver.
 type CustomNameserver struct {
 	// A and AAAA records associated with the nameserver.
-	DNSRecords []CustomNameserverDNSRecord `json:"dns_records,required"`
+	DNSRecords []CustomNameserverDNSRecord `json:"dns_records" api:"required"`
 	// The FQDN of the name server.
-	NSName string `json:"ns_name,required" format:"hostname"`
+	NSName string `json:"ns_name" api:"required" format:"hostname"`
 	// Verification status of the nameserver.
 	//
 	// Deprecated: deprecated
-	Status CustomNameserverStatus `json:"status,required"`
+	Status CustomNameserverStatus `json:"status" api:"required"`
 	// Identifier.
-	ZoneTag string `json:"zone_tag,required"`
+	ZoneTag string `json:"zone_tag" api:"required"`
 	// The number of the set that this name server belongs to.
 	NSSet float64              `json:"ns_set"`
 	JSON  customNameserverJSON `json:"-"`
@@ -207,9 +207,9 @@ func (r CustomNameserverStatus) IsKnown() bool {
 
 type CustomNameserverNewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The FQDN of the name server.
-	NSName param.Field[string] `json:"ns_name,required" format:"hostname"`
+	NSName param.Field[string] `json:"ns_name" api:"required" format:"hostname"`
 	// The number of the set that this name server belongs to.
 	NSSet param.Field[float64] `json:"ns_set"`
 }
@@ -219,10 +219,10 @@ func (r CustomNameserverNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverNewResponseEnvelope struct {
-	Errors   []CustomNameserverNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomNameserverNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomNameserverNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomNameserverNewResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomNameserverNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A single account custom nameserver.
 	Result CustomNameserver                        `json:"result"`
 	JSON   customNameserverNewResponseEnvelopeJSON `json:"-"`
@@ -248,8 +248,8 @@ func (r customNameserverNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomNameserverNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           CustomNameserverNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customNameserverNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -296,8 +296,8 @@ func (r customNameserverNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomNameserverNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CustomNameserverNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customNameserverNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -360,10 +360,10 @@ func (r CustomNameserverNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomNameserverDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CustomNameserverGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

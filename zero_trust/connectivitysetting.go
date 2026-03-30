@@ -41,15 +41,15 @@ func (r *ConnectivitySettingService) Edit(ctx context.Context, params Connectivi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets the Zero Trust Connectivity Settings for the given account.
@@ -58,15 +58,15 @@ func (r *ConnectivitySettingService) Get(ctx context.Context, query Connectivity
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConnectivitySettingEditResponse struct {
@@ -121,7 +121,7 @@ func (r connectivitySettingGetResponseJSON) RawJSON() string {
 
 type ConnectivitySettingEditParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled param.Field[bool] `json:"icmp_proxy_enabled"`
 	// A flag to enable WARP to WARP traffic.
@@ -133,11 +133,11 @@ func (r ConnectivitySettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConnectivitySettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   ConnectivitySettingEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo           `json:"messages" api:"required"`
+	Result   ConnectivitySettingEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConnectivitySettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ConnectivitySettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    connectivitySettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -177,15 +177,15 @@ func (r ConnectivitySettingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConnectivitySettingGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConnectivitySettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ConnectivitySettingGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo          `json:"messages" api:"required"`
+	Result   ConnectivitySettingGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConnectivitySettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConnectivitySettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    connectivitySettingGetResponseEnvelopeJSON    `json:"-"`
 }
 

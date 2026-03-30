@@ -48,10 +48,10 @@ func (r *AITimeseriesGroupService) Summary(ctx context.Context, dimension AITime
 	path := fmt.Sprintf("radar/ai/bots/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves AI bots HTTP request volume over time.
@@ -65,10 +65,10 @@ func (r *AITimeseriesGroupService) Timeseries(ctx context.Context, query AITimes
 	path := "radar/ai/bots/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests from AI bots, grouped by the
@@ -83,10 +83,10 @@ func (r *AITimeseriesGroupService) TimeseriesGroups(ctx context.Context, dimensi
 	path := fmt.Sprintf("radar/ai/bots/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of traffic by AI user agent over time.
@@ -100,16 +100,16 @@ func (r *AITimeseriesGroupService) UserAgent(ctx context.Context, query AITimese
 	path := "radar/ai/bots/timeseries_groups/user_agent"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AITimeseriesGroupSummaryResponse struct {
 	// Metadata for the results.
-	Meta     AITimeseriesGroupSummaryResponseMeta `json:"meta,required"`
-	Summary0 map[string]string                    `json:"summary_0,required"`
+	Meta     AITimeseriesGroupSummaryResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string                    `json:"summary_0" api:"required"`
 	JSON     aiTimeseriesGroupSummaryResponseJSON `json:"-"`
 }
 
@@ -132,15 +132,15 @@ func (r aiTimeseriesGroupSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AITimeseriesGroupSummaryResponseMeta struct {
-	ConfidenceInfo AITimeseriesGroupSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AITimeseriesGroupSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AITimeseriesGroupSummaryResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AITimeseriesGroupSummaryResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AITimeseriesGroupSummaryResponseMetaNormalization `json:"normalization,required"`
+	Normalization AITimeseriesGroupSummaryResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AITimeseriesGroupSummaryResponseMetaUnit `json:"units,required"`
+	Units []AITimeseriesGroupSummaryResponseMetaUnit `json:"units" api:"required"`
 	JSON  aiTimeseriesGroupSummaryResponseMetaJSON   `json:"-"`
 }
 
@@ -165,9 +165,9 @@ func (r aiTimeseriesGroupSummaryResponseMetaJSON) RawJSON() string {
 }
 
 type AITimeseriesGroupSummaryResponseMetaConfidenceInfo struct {
-	Annotations []AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                  `json:"level,required"`
+	Level int64                                                  `json:"level" api:"required"`
 	JSON  aiTimeseriesGroupSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -191,15 +191,15 @@ func (r aiTimeseriesGroupSummaryResponseMetaConfidenceInfoJSON) RawJSON() string
 // Annotation associated with the result (e.g. outage or other type of event).
 type AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                  `json:"description,required"`
-	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	DataSource  AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                  `json:"description" api:"required"`
+	EndDate     time.Time                                                               `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
 	JSON            aiTimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -287,9 +287,9 @@ func (r AITimeseriesGroupSummaryResponseMetaConfidenceInfoAnnotationsEventType) 
 
 type AITimeseriesGroupSummaryResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                         `json:"startTime" api:"required" format:"date-time"`
 	JSON      aiTimeseriesGroupSummaryResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -334,8 +334,8 @@ func (r AITimeseriesGroupSummaryResponseMetaNormalization) IsKnown() bool {
 }
 
 type AITimeseriesGroupSummaryResponseMetaUnit struct {
-	Name  string                                       `json:"name,required"`
-	Value string                                       `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  aiTimeseriesGroupSummaryResponseMetaUnitJSON `json:"-"`
 }
 
@@ -358,8 +358,8 @@ func (r aiTimeseriesGroupSummaryResponseMetaUnitJSON) RawJSON() string {
 
 type AITimeseriesGroupTimeseriesResponse struct {
 	// Metadata for the results.
-	Meta        AITimeseriesGroupTimeseriesResponseMeta        `json:"meta,required"`
-	ExtraFields map[string]AITimeseriesGroupTimeseriesResponse `json:"-,extras"`
+	Meta        AITimeseriesGroupTimeseriesResponseMeta        `json:"meta" api:"required"`
+	ExtraFields map[string]AITimeseriesGroupTimeseriesResponse `json:"-" api:"extrafields"`
 	JSON        aiTimeseriesGroupTimeseriesResponseJSON        `json:"-"`
 }
 
@@ -384,16 +384,16 @@ type AITimeseriesGroupTimeseriesResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    AITimeseriesGroupTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo AITimeseriesGroupTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AITimeseriesGroupTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    AITimeseriesGroupTimeseriesResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo AITimeseriesGroupTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AITimeseriesGroupTimeseriesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AITimeseriesGroupTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization AITimeseriesGroupTimeseriesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AITimeseriesGroupTimeseriesResponseMetaUnit `json:"units,required"`
+	Units []AITimeseriesGroupTimeseriesResponseMetaUnit `json:"units" api:"required"`
 	JSON  aiTimeseriesGroupTimeseriesResponseMetaJSON   `json:"-"`
 }
 
@@ -440,9 +440,9 @@ func (r AITimeseriesGroupTimeseriesResponseMetaAggInterval) IsKnown() bool {
 }
 
 type AITimeseriesGroupTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                     `json:"level,required"`
+	Level int64                                                     `json:"level" api:"required"`
 	JSON  aiTimeseriesGroupTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -466,15 +466,15 @@ func (r aiTimeseriesGroupTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() str
 // Annotation associated with the result (e.g. outage or other type of event).
 type AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                     `json:"description,required"`
-	EndDate     time.Time                                                                  `json:"endDate,required" format:"date-time"`
+	DataSource  AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                     `json:"description" api:"required"`
+	EndDate     time.Time                                                                  `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
-	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
 	JSON            aiTimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -562,9 +562,9 @@ func (r AITimeseriesGroupTimeseriesResponseMetaConfidenceInfoAnnotationsEventTyp
 
 type AITimeseriesGroupTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                            `json:"startTime" api:"required" format:"date-time"`
 	JSON      aiTimeseriesGroupTimeseriesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -609,8 +609,8 @@ func (r AITimeseriesGroupTimeseriesResponseMetaNormalization) IsKnown() bool {
 }
 
 type AITimeseriesGroupTimeseriesResponseMetaUnit struct {
-	Name  string                                          `json:"name,required"`
-	Value string                                          `json:"value,required"`
+	Name  string                                          `json:"name" api:"required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  aiTimeseriesGroupTimeseriesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -633,8 +633,8 @@ func (r aiTimeseriesGroupTimeseriesResponseMetaUnitJSON) RawJSON() string {
 
 type AITimeseriesGroupTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   AITimeseriesGroupTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 AITimeseriesGroupTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   AITimeseriesGroupTimeseriesGroupsResponseMeta   `json:"meta" api:"required"`
+	Serie0 AITimeseriesGroupTimeseriesGroupsResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   aiTimeseriesGroupTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
@@ -660,16 +660,16 @@ type AITimeseriesGroupTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    AITimeseriesGroupTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AITimeseriesGroupTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    AITimeseriesGroupTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AITimeseriesGroupTimeseriesGroupsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AITimeseriesGroupTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization AITimeseriesGroupTimeseriesGroupsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AITimeseriesGroupTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []AITimeseriesGroupTimeseriesGroupsResponseMetaUnit `json:"units" api:"required"`
 	JSON  aiTimeseriesGroupTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
@@ -716,9 +716,9 @@ func (r AITimeseriesGroupTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool
 }
 
 type AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                           `json:"level,required"`
+	Level int64                                                           `json:"level" api:"required"`
 	JSON  aiTimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -743,15 +743,15 @@ func (r aiTimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON
 // Annotation associated with the result (e.g. outage or other type of event).
 type AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                           `json:"description,required"`
-	EndDate     time.Time                                                                        `json:"endDate,required" format:"date-time"`
+	DataSource  AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                           `json:"description" api:"required"`
+	EndDate     time.Time                                                                        `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                      `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                    `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                                 `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                      `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                    `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                                 `json:"startDate" api:"required" format:"date-time"`
 	JSON            aiTimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -839,9 +839,9 @@ func (r AITimeseriesGroupTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEv
 
 type AITimeseriesGroupTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                  `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                                  `json:"startTime" api:"required" format:"date-time"`
 	JSON      aiTimeseriesGroupTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -886,8 +886,8 @@ func (r AITimeseriesGroupTimeseriesGroupsResponseMetaNormalization) IsKnown() bo
 }
 
 type AITimeseriesGroupTimeseriesGroupsResponseMetaUnit struct {
-	Name  string                                                `json:"name,required"`
-	Value string                                                `json:"value,required"`
+	Name  string                                                `json:"name" api:"required"`
+	Value string                                                `json:"value" api:"required"`
 	JSON  aiTimeseriesGroupTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -909,8 +909,8 @@ func (r aiTimeseriesGroupTimeseriesGroupsResponseMetaUnitJSON) RawJSON() string 
 }
 
 type AITimeseriesGroupTimeseriesGroupsResponseSerie0 struct {
-	Timestamps  []time.Time                                         `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                                 `json:"-,extras"`
+	Timestamps  []time.Time                                         `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                                 `json:"-" api:"extrafields"`
 	JSON        aiTimeseriesGroupTimeseriesGroupsResponseSerie0JSON `json:"-"`
 }
 
@@ -932,8 +932,8 @@ func (r aiTimeseriesGroupTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 
 type AITimeseriesGroupUserAgentResponse struct {
 	// Metadata for the results.
-	Meta   AITimeseriesGroupUserAgentResponseMeta   `json:"meta,required"`
-	Serie0 AITimeseriesGroupUserAgentResponseSerie0 `json:"serie_0,required"`
+	Meta   AITimeseriesGroupUserAgentResponseMeta   `json:"meta" api:"required"`
+	Serie0 AITimeseriesGroupUserAgentResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   aiTimeseriesGroupUserAgentResponseJSON   `json:"-"`
 }
 
@@ -959,16 +959,16 @@ type AITimeseriesGroupUserAgentResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    AITimeseriesGroupUserAgentResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo AITimeseriesGroupUserAgentResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AITimeseriesGroupUserAgentResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    AITimeseriesGroupUserAgentResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo AITimeseriesGroupUserAgentResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AITimeseriesGroupUserAgentResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AITimeseriesGroupUserAgentResponseMetaNormalization `json:"normalization,required"`
+	Normalization AITimeseriesGroupUserAgentResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AITimeseriesGroupUserAgentResponseMetaUnit `json:"units,required"`
+	Units []AITimeseriesGroupUserAgentResponseMetaUnit `json:"units" api:"required"`
 	JSON  aiTimeseriesGroupUserAgentResponseMetaJSON   `json:"-"`
 }
 
@@ -1015,9 +1015,9 @@ func (r AITimeseriesGroupUserAgentResponseMetaAggInterval) IsKnown() bool {
 }
 
 type AITimeseriesGroupUserAgentResponseMetaConfidenceInfo struct {
-	Annotations []AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                    `json:"level,required"`
+	Level int64                                                    `json:"level" api:"required"`
 	JSON  aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1041,15 +1041,15 @@ func (r aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoJSON) RawJSON() stri
 // Annotation associated with the result (e.g. outage or other type of event).
 type AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                    `json:"description,required"`
-	EndDate     time.Time                                                                 `json:"endDate,required" format:"date-time"`
+	DataSource  AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                    `json:"description" api:"required"`
+	EndDate     time.Time                                                                 `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
-	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                          `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                               `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                             `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                          `json:"startDate" api:"required" format:"date-time"`
 	JSON            aiTimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1137,9 +1137,9 @@ func (r AITimeseriesGroupUserAgentResponseMetaConfidenceInfoAnnotationsEventType
 
 type AITimeseriesGroupUserAgentResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                           `json:"startTime" api:"required" format:"date-time"`
 	JSON      aiTimeseriesGroupUserAgentResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1184,8 +1184,8 @@ func (r AITimeseriesGroupUserAgentResponseMetaNormalization) IsKnown() bool {
 }
 
 type AITimeseriesGroupUserAgentResponseMetaUnit struct {
-	Name  string                                         `json:"name,required"`
-	Value string                                         `json:"value,required"`
+	Name  string                                         `json:"name" api:"required"`
+	Value string                                         `json:"value" api:"required"`
 	JSON  aiTimeseriesGroupUserAgentResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1207,8 +1207,8 @@ func (r aiTimeseriesGroupUserAgentResponseMetaUnitJSON) RawJSON() string {
 }
 
 type AITimeseriesGroupUserAgentResponseSerie0 struct {
-	Timestamps  []time.Time                                  `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                          `json:"-,extras"`
+	Timestamps  []time.Time                                  `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                          `json:"-" api:"extrafields"`
 	JSON        aiTimeseriesGroupUserAgentResponseSerie0JSON `json:"-"`
 }
 
@@ -1344,8 +1344,8 @@ func (r AITimeseriesGroupSummaryParamsFormat) IsKnown() bool {
 }
 
 type AITimeseriesGroupSummaryResponseEnvelope struct {
-	Result  AITimeseriesGroupSummaryResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  AITimeseriesGroupSummaryResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    aiTimeseriesGroupSummaryResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1487,8 +1487,8 @@ func (r AITimeseriesGroupTimeseriesParamsFormat) IsKnown() bool {
 }
 
 type AITimeseriesGroupTimeseriesResponseEnvelope struct {
-	Result  AITimeseriesGroupTimeseriesResponse             `json:"result,required"`
-	Success bool                                            `json:"success,required"`
+	Result  AITimeseriesGroupTimeseriesResponse             `json:"result" api:"required"`
+	Success bool                                            `json:"success" api:"required"`
 	JSON    aiTimeseriesGroupTimeseriesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1669,8 +1669,8 @@ func (r AITimeseriesGroupTimeseriesGroupsParamsNormalization) IsKnown() bool {
 }
 
 type AITimeseriesGroupTimeseriesGroupsResponseEnvelope struct {
-	Result  AITimeseriesGroupTimeseriesGroupsResponse             `json:"result,required"`
-	Success bool                                                  `json:"success,required"`
+	Result  AITimeseriesGroupTimeseriesGroupsResponse             `json:"result" api:"required"`
+	Success bool                                                  `json:"success" api:"required"`
 	JSON    aiTimeseriesGroupTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1773,8 +1773,8 @@ func (r AITimeseriesGroupUserAgentParamsFormat) IsKnown() bool {
 }
 
 type AITimeseriesGroupUserAgentResponseEnvelope struct {
-	Result  AITimeseriesGroupUserAgentResponse             `json:"result,required"`
-	Success bool                                           `json:"success,required"`
+	Result  AITimeseriesGroupUserAgentResponse             `json:"result" api:"required"`
+	Success bool                                           `json:"success" api:"required"`
 	JSON    aiTimeseriesGroupUserAgentResponseEnvelopeJSON `json:"-"`
 }
 

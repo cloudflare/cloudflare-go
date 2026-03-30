@@ -56,15 +56,15 @@ func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSCl
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all client certificates configured for zone-level authenticated origin
@@ -78,7 +78,7 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSCl
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -111,19 +111,19 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID s
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details for a specific client certificate used in zone-level
@@ -136,19 +136,19 @@ func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", query.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OriginTLSClientAuthNewResponse struct {
@@ -281,11 +281,11 @@ func (r originTLSClientAuthGetResponseJSON) RawJSON() string {
 
 type OriginTLSClientAuthNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The zone's leaf certificate.
-	Certificate param.Field[string] `json:"certificate,required"`
+	Certificate param.Field[string] `json:"certificate" api:"required"`
 	// The zone's private key.
-	PrivateKey param.Field[string] `json:"private_key,required"`
+	PrivateKey param.Field[string] `json:"private_key" api:"required"`
 }
 
 func (r OriginTLSClientAuthNewParams) MarshalJSON() (data []byte, err error) {
@@ -293,10 +293,10 @@ func (r OriginTLSClientAuthNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginTLSClientAuthNewResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OriginTLSClientAuthNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OriginTLSClientAuthNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginTLSClientAuthNewResponseEnvelopeSuccess `json:"success,required"`
+	Success OriginTLSClientAuthNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OriginTLSClientAuthNewResponse                `json:"result"`
 	JSON    originTLSClientAuthNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -321,8 +321,8 @@ func (r originTLSClientAuthNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OriginTLSClientAuthNewResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           OriginTLSClientAuthNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             originTLSClientAuthNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -369,8 +369,8 @@ func (r originTLSClientAuthNewResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type OriginTLSClientAuthNewResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           OriginTLSClientAuthNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             originTLSClientAuthNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -433,19 +433,19 @@ func (r OriginTLSClientAuthNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginTLSClientAuthListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OriginTLSClientAuthDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OriginTLSClientAuthDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OriginTLSClientAuthDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginTLSClientAuthDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success OriginTLSClientAuthDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OriginTLSClientAuthDeleteResponse                `json:"result"`
 	JSON    originTLSClientAuthDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -470,8 +470,8 @@ func (r originTLSClientAuthDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           OriginTLSClientAuthDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             originTLSClientAuthDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -518,8 +518,8 @@ func (r originTLSClientAuthDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           OriginTLSClientAuthDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             originTLSClientAuthDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -583,14 +583,14 @@ func (r OriginTLSClientAuthDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginTLSClientAuthGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OriginTLSClientAuthGetResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OriginTLSClientAuthGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OriginTLSClientAuthGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginTLSClientAuthGetResponseEnvelopeSuccess `json:"success,required"`
+	Success OriginTLSClientAuthGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OriginTLSClientAuthGetResponse                `json:"result"`
 	JSON    originTLSClientAuthGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -615,8 +615,8 @@ func (r originTLSClientAuthGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OriginTLSClientAuthGetResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           OriginTLSClientAuthGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             originTLSClientAuthGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -663,8 +663,8 @@ func (r originTLSClientAuthGetResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type OriginTLSClientAuthGetResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           OriginTLSClientAuthGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             originTLSClientAuthGetResponseEnvelopeMessagesJSON   `json:"-"`

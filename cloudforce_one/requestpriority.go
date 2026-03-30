@@ -41,15 +41,15 @@ func (r *RequestPriorityService) New(ctx context.Context, params RequestPriority
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/new", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Priority Intelligence Requirement
@@ -58,19 +58,19 @@ func (r *RequestPriorityService) Update(ctx context.Context, priorityID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if priorityID == "" {
 		err = errors.New("missing required priority_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", params.AccountID, priorityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete a Priority Intelligence Requirement
@@ -78,15 +78,15 @@ func (r *RequestPriorityService) Delete(ctx context.Context, priorityID string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if priorityID == "" {
 		err = errors.New("missing required priority_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", body.AccountID, priorityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a Priority Intelligence Requirement
@@ -95,19 +95,19 @@ func (r *RequestPriorityService) Get(ctx context.Context, priorityID string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if priorityID == "" {
 		err = errors.New("missing required priority_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", query.AccountID, priorityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Priority Intelligence Requirement Quota
@@ -116,15 +116,15 @@ func (r *RequestPriorityService) Quota(ctx context.Context, query RequestPriorit
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/quota", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Label = string
@@ -133,19 +133,19 @@ type LabelParam = string
 
 type Priority struct {
 	// UUID.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Priority creation time.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// List of labels.
-	Labels []Label `json:"labels,required"`
+	Labels []Label `json:"labels" api:"required"`
 	// Priority.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// Requirement.
-	Requirement string `json:"requirement,required"`
+	Requirement string `json:"requirement" api:"required"`
 	// The CISA defined Traffic Light Protocol (TLP).
-	TLP PriorityTLP `json:"tlp,required"`
+	TLP PriorityTLP `json:"tlp" api:"required"`
 	// Priority last updated time.
-	Updated time.Time    `json:"updated,required" format:"date-time"`
+	Updated time.Time    `json:"updated" api:"required" format:"date-time"`
 	JSON    priorityJSON `json:"-"`
 }
 
@@ -191,13 +191,13 @@ func (r PriorityTLP) IsKnown() bool {
 
 type PriorityEditParam struct {
 	// List of labels.
-	Labels param.Field[[]LabelParam] `json:"labels,required"`
+	Labels param.Field[[]LabelParam] `json:"labels" api:"required"`
 	// Priority.
-	Priority param.Field[int64] `json:"priority,required"`
+	Priority param.Field[int64] `json:"priority" api:"required"`
 	// Requirement.
-	Requirement param.Field[string] `json:"requirement,required"`
+	Requirement param.Field[string] `json:"requirement" api:"required"`
 	// The CISA defined Traffic Light Protocol (TLP).
-	TLP param.Field[PriorityEditTLP] `json:"tlp,required"`
+	TLP param.Field[PriorityEditTLP] `json:"tlp" api:"required"`
 }
 
 func (r PriorityEditParam) MarshalJSON() (data []byte, err error) {
@@ -224,10 +224,10 @@ func (r PriorityEditTLP) IsKnown() bool {
 }
 
 type RequestPriorityDeleteResponse struct {
-	Errors   []RequestPriorityDeleteResponseError   `json:"errors,required"`
-	Messages []RequestPriorityDeleteResponseMessage `json:"messages,required"`
+	Errors   []RequestPriorityDeleteResponseError   `json:"errors" api:"required"`
+	Messages []RequestPriorityDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestPriorityDeleteResponseSuccess `json:"success,required"`
+	Success RequestPriorityDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    requestPriorityDeleteResponseJSON    `json:"-"`
 }
 
@@ -250,8 +250,8 @@ func (r requestPriorityDeleteResponseJSON) RawJSON() string {
 }
 
 type RequestPriorityDeleteResponseError struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           RequestPriorityDeleteResponseErrorsSource `json:"source"`
 	JSON             requestPriorityDeleteResponseErrorJSON    `json:"-"`
@@ -298,8 +298,8 @@ func (r requestPriorityDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestPriorityDeleteResponseMessage struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           RequestPriorityDeleteResponseMessagesSource `json:"source"`
 	JSON             requestPriorityDeleteResponseMessageJSON    `json:"-"`
@@ -362,8 +362,8 @@ func (r RequestPriorityDeleteResponseSuccess) IsKnown() bool {
 
 type RequestPriorityNewParams struct {
 	// Identifier.
-	AccountID    param.Field[string] `path:"account_id,required"`
-	PriorityEdit PriorityEditParam   `json:"priority_edit,required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
+	PriorityEdit PriorityEditParam   `json:"priority_edit" api:"required"`
 }
 
 func (r RequestPriorityNewParams) MarshalJSON() (data []byte, err error) {
@@ -371,10 +371,10 @@ func (r RequestPriorityNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestPriorityNewResponseEnvelope struct {
-	Errors   []RequestPriorityNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestPriorityNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestPriorityNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestPriorityNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestPriorityNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Priority                                  `json:"result"`
 	JSON    requestPriorityNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -399,8 +399,8 @@ func (r requestPriorityNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestPriorityNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           RequestPriorityNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestPriorityNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -447,8 +447,8 @@ func (r requestPriorityNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestPriorityNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           RequestPriorityNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestPriorityNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -511,8 +511,8 @@ func (r RequestPriorityNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityUpdateParams struct {
 	// Identifier.
-	AccountID    param.Field[string] `path:"account_id,required"`
-	PriorityEdit PriorityEditParam   `json:"priority_edit,required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
+	PriorityEdit PriorityEditParam   `json:"priority_edit" api:"required"`
 }
 
 func (r RequestPriorityUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -520,10 +520,10 @@ func (r RequestPriorityUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestPriorityUpdateResponseEnvelope struct {
-	Errors   []RequestPriorityUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestPriorityUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestPriorityUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestPriorityUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestPriorityUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Item                                         `json:"result"`
 	JSON    requestPriorityUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -548,8 +548,8 @@ func (r requestPriorityUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestPriorityUpdateResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           RequestPriorityUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestPriorityUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -596,8 +596,8 @@ func (r requestPriorityUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type RequestPriorityUpdateResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           RequestPriorityUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestPriorityUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -660,19 +660,19 @@ func (r RequestPriorityUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestPriorityGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestPriorityGetResponseEnvelope struct {
-	Errors   []RequestPriorityGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestPriorityGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestPriorityGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestPriorityGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestPriorityGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Item                                      `json:"result"`
 	JSON    requestPriorityGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -697,8 +697,8 @@ func (r requestPriorityGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestPriorityGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           RequestPriorityGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestPriorityGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -745,8 +745,8 @@ func (r requestPriorityGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestPriorityGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           RequestPriorityGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestPriorityGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -809,14 +809,14 @@ func (r RequestPriorityGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityQuotaParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestPriorityQuotaResponseEnvelope struct {
-	Errors   []RequestPriorityQuotaResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityQuotaResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestPriorityQuotaResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestPriorityQuotaResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestPriorityQuotaResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestPriorityQuotaResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Quota                                       `json:"result"`
 	JSON    requestPriorityQuotaResponseEnvelopeJSON    `json:"-"`
 }
@@ -841,8 +841,8 @@ func (r requestPriorityQuotaResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestPriorityQuotaResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           RequestPriorityQuotaResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestPriorityQuotaResponseEnvelopeErrorsJSON   `json:"-"`
@@ -889,8 +889,8 @@ func (r requestPriorityQuotaResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestPriorityQuotaResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           RequestPriorityQuotaResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestPriorityQuotaResponseEnvelopeMessagesJSON   `json:"-"`

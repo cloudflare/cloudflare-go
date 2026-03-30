@@ -41,15 +41,15 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Defines the status for Content Scanning.
@@ -80,16 +80,16 @@ func (r settingGetResponseJSON) RawJSON() string {
 
 type SettingGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines the status for Content Scanning.
-	Result SettingGetResponse `json:"result,required"`
+	Result SettingGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    settingGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -44,7 +44,7 @@ func (r *CatalogSyncPrebuiltPolicyService) List(ctx context.Context, params Cata
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs/prebuilt-policies", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -65,10 +65,10 @@ func (r *CatalogSyncPrebuiltPolicyService) ListAutoPaging(ctx context.Context, p
 }
 
 type CatalogSyncPrebuiltPolicyListResponse struct {
-	ApplicableDestinations []CatalogSyncPrebuiltPolicyListResponseApplicableDestination `json:"applicable_destinations,required"`
-	PolicyDescription      string                                                       `json:"policy_description,required"`
-	PolicyName             string                                                       `json:"policy_name,required"`
-	PolicyString           string                                                       `json:"policy_string,required"`
+	ApplicableDestinations []CatalogSyncPrebuiltPolicyListResponseApplicableDestination `json:"applicable_destinations" api:"required"`
+	PolicyDescription      string                                                       `json:"policy_description" api:"required"`
+	PolicyName             string                                                       `json:"policy_name" api:"required"`
+	PolicyString           string                                                       `json:"policy_string" api:"required"`
 	JSON                   catalogSyncPrebuiltPolicyListResponseJSON                    `json:"-"`
 }
 
@@ -107,7 +107,7 @@ func (r CatalogSyncPrebuiltPolicyListResponseApplicableDestination) IsKnown() bo
 }
 
 type CatalogSyncPrebuiltPolicyListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify type of destination, omit to return all.
 	DestinationType param.Field[CatalogSyncPrebuiltPolicyListParamsDestinationType] `query:"destination_type"`
 }

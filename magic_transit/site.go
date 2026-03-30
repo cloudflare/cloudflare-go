@@ -50,15 +50,15 @@ func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a specific Site.
@@ -67,19 +67,19 @@ func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpda
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists Sites associated with an account. Use connectorid query param to return
@@ -91,7 +91,7 @@ func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -119,19 +119,19 @@ func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDelete
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", body.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patch a specific Site.
@@ -140,43 +140,43 @@ func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditPa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a specific Site.
 func (r *SiteService) Get(ctx context.Context, siteID string, params SiteGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteGetResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Site struct {
@@ -257,9 +257,9 @@ func (r SiteLocationParam) MarshalJSON() (data []byte, err error) {
 
 type SiteNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the site.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
@@ -277,11 +277,11 @@ func (r SiteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Site                  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -321,7 +321,7 @@ func (r SiteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
@@ -338,11 +338,11 @@ func (r SiteUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Site                  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -382,7 +382,7 @@ func (r SiteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Identifier
 	Connectorid param.Field[string] `query:"connectorid"`
 }
@@ -397,15 +397,15 @@ func (r SiteListParams) URLQuery() (v url.Values) {
 
 type SiteDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Site                  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -445,7 +445,7 @@ func (r SiteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteEditParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
@@ -462,11 +462,11 @@ func (r SiteEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Site                  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -506,16 +506,16 @@ func (r SiteEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteGetParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type SiteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Site                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Site                  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteGetResponseEnvelopeJSON    `json:"-"`
 }
 

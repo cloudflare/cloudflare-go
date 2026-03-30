@@ -44,11 +44,11 @@ func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, para
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if postfixID == "" {
 		err = errors.New("missing required postfix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/move", params.AccountID, postfixID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -76,7 +76,7 @@ func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMov
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/move", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -100,16 +100,16 @@ type InvestigateMoveNewResponse struct {
 	// Deprecated, use `completed_at` instead
 	//
 	// Deprecated: deprecated
-	CompletedTimestamp time.Time `json:"completed_timestamp,required" format:"date-time"`
+	CompletedTimestamp time.Time `json:"completed_timestamp" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	ItemCount   int64                          `json:"item_count,required"`
-	Success     bool                           `json:"success,required"`
+	ItemCount   int64                          `json:"item_count" api:"required"`
+	Success     bool                           `json:"success" api:"required"`
 	CompletedAt time.Time                      `json:"completed_at" format:"date-time"`
-	Destination string                         `json:"destination,nullable"`
-	MessageID   string                         `json:"message_id,nullable"`
-	Operation   string                         `json:"operation,nullable"`
-	Recipient   string                         `json:"recipient,nullable"`
-	Status      string                         `json:"status,nullable"`
+	Destination string                         `json:"destination" api:"nullable"`
+	MessageID   string                         `json:"message_id" api:"nullable"`
+	Operation   string                         `json:"operation" api:"nullable"`
+	Recipient   string                         `json:"recipient" api:"nullable"`
+	Status      string                         `json:"status" api:"nullable"`
 	JSON        investigateMoveNewResponseJSON `json:"-"`
 }
 
@@ -141,16 +141,16 @@ type InvestigateMoveBulkResponse struct {
 	// Deprecated, use `completed_at` instead
 	//
 	// Deprecated: deprecated
-	CompletedTimestamp time.Time `json:"completed_timestamp,required" format:"date-time"`
+	CompletedTimestamp time.Time `json:"completed_timestamp" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	ItemCount   int64                           `json:"item_count,required"`
-	Success     bool                            `json:"success,required"`
+	ItemCount   int64                           `json:"item_count" api:"required"`
+	Success     bool                            `json:"success" api:"required"`
 	CompletedAt time.Time                       `json:"completed_at" format:"date-time"`
-	Destination string                          `json:"destination,nullable"`
-	MessageID   string                          `json:"message_id,nullable"`
-	Operation   string                          `json:"operation,nullable"`
-	Recipient   string                          `json:"recipient,nullable"`
-	Status      string                          `json:"status,nullable"`
+	Destination string                          `json:"destination" api:"nullable"`
+	MessageID   string                          `json:"message_id" api:"nullable"`
+	Operation   string                          `json:"operation" api:"nullable"`
+	Recipient   string                          `json:"recipient" api:"nullable"`
+	Status      string                          `json:"status" api:"nullable"`
 	JSON        investigateMoveBulkResponseJSON `json:"-"`
 }
 
@@ -180,8 +180,8 @@ func (r investigateMoveBulkResponseJSON) RawJSON() string {
 
 type InvestigateMoveNewParams struct {
 	// Account Identifier
-	AccountID   param.Field[string]                              `path:"account_id,required"`
-	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination,required"`
+	AccountID   param.Field[string]                              `path:"account_id" api:"required"`
+	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination" api:"required"`
 }
 
 func (r InvestigateMoveNewParams) MarshalJSON() (data []byte, err error) {
@@ -208,8 +208,8 @@ func (r InvestigateMoveNewParamsDestination) IsKnown() bool {
 
 type InvestigateMoveBulkParams struct {
 	// Account Identifier
-	AccountID   param.Field[string]                               `path:"account_id,required"`
-	Destination param.Field[InvestigateMoveBulkParamsDestination] `json:"destination,required"`
+	AccountID   param.Field[string]                               `path:"account_id" api:"required"`
+	Destination param.Field[InvestigateMoveBulkParamsDestination] `json:"destination" api:"required"`
 	// List of message IDs to move.
 	IDs param.Field[[]string] `json:"ids"`
 	// Deprecated: Use `ids` instead. List of message IDs to move.

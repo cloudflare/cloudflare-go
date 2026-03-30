@@ -47,15 +47,15 @@ func (r *AssetUploadService) New(ctx context.Context, params AssetUploadNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/assets/upload", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AssetUploadNewResponse struct {
@@ -82,10 +82,10 @@ func (r assetUploadNewResponseJSON) RawJSON() string {
 
 type AssetUploadNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether the file contents are base64-encoded. Must be `true`.
-	Base64 param.Field[AssetUploadNewParamsBase64] `query:"base64,required"`
-	Body   map[string]string                       `json:"body,required"`
+	Base64 param.Field[AssetUploadNewParamsBase64] `query:"base64" api:"required"`
+	Body   map[string]string                       `json:"body" api:"required"`
 }
 
 func (r AssetUploadNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -127,10 +127,10 @@ func (r AssetUploadNewParamsBase64) IsKnown() bool {
 }
 
 type AssetUploadNewResponseEnvelope struct {
-	Errors   []AssetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AssetUploadNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AssetUploadNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AssetUploadNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AssetUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AssetUploadNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AssetUploadNewResponse                `json:"result"`
 	JSON    assetUploadNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -155,8 +155,8 @@ func (r assetUploadNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AssetUploadNewResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AssetUploadNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             assetUploadNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -203,8 +203,8 @@ func (r assetUploadNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AssetUploadNewResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AssetUploadNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             assetUploadNewResponseEnvelopeMessagesJSON   `json:"-"`

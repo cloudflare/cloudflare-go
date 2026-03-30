@@ -60,8 +60,8 @@ func (r *BGPLeakEventService) ListAutoPaging(ctx context.Context, query BGPLeakE
 }
 
 type BGPLeakEventListResponse struct {
-	ASNInfo []BGPLeakEventListResponseASNInfo `json:"asn_info,required"`
-	Events  []BGPLeakEventListResponseEvent   `json:"events,required"`
+	ASNInfo []BGPLeakEventListResponseASNInfo `json:"asn_info" api:"required"`
+	Events  []BGPLeakEventListResponseEvent   `json:"events" api:"required"`
 	JSON    bgpLeakEventListResponseJSON      `json:"-"`
 }
 
@@ -83,9 +83,9 @@ func (r bgpLeakEventListResponseJSON) RawJSON() string {
 }
 
 type BGPLeakEventListResponseASNInfo struct {
-	ASN         int64                               `json:"asn,required"`
-	CountryCode string                              `json:"country_code,required"`
-	OrgName     string                              `json:"org_name,required"`
+	ASN         int64                               `json:"asn" api:"required"`
+	CountryCode string                              `json:"country_code" api:"required"`
+	OrgName     string                              `json:"org_name" api:"required"`
 	JSON        bgpLeakEventListResponseASNInfoJSON `json:"-"`
 }
 
@@ -108,19 +108,19 @@ func (r bgpLeakEventListResponseASNInfoJSON) RawJSON() string {
 }
 
 type BGPLeakEventListResponseEvent struct {
-	ID          int64                             `json:"id,required"`
-	Countries   []string                          `json:"countries,required"`
-	DetectedTs  string                            `json:"detected_ts,required"`
-	Finished    bool                              `json:"finished,required"`
-	LeakASN     int64                             `json:"leak_asn,required"`
-	LeakCount   int64                             `json:"leak_count,required"`
-	LeakSeg     []int64                           `json:"leak_seg,required"`
-	LeakType    int64                             `json:"leak_type,required"`
-	MaxTs       string                            `json:"max_ts,required"`
-	MinTs       string                            `json:"min_ts,required"`
-	OriginCount int64                             `json:"origin_count,required"`
-	PeerCount   int64                             `json:"peer_count,required"`
-	PrefixCount int64                             `json:"prefix_count,required"`
+	ID          int64                             `json:"id" api:"required"`
+	Countries   []string                          `json:"countries" api:"required"`
+	DetectedTs  string                            `json:"detected_ts" api:"required"`
+	Finished    bool                              `json:"finished" api:"required"`
+	LeakASN     int64                             `json:"leak_asn" api:"required"`
+	LeakCount   int64                             `json:"leak_count" api:"required"`
+	LeakSeg     []int64                           `json:"leak_seg" api:"required"`
+	LeakType    int64                             `json:"leak_type" api:"required"`
+	MaxTs       string                            `json:"max_ts" api:"required"`
+	MinTs       string                            `json:"min_ts" api:"required"`
+	OriginCount int64                             `json:"origin_count" api:"required"`
+	PeerCount   int64                             `json:"peer_count" api:"required"`
+	PrefixCount int64                             `json:"prefix_count" api:"required"`
 	JSON        bgpLeakEventListResponseEventJSON `json:"-"`
 }
 

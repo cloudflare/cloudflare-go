@@ -46,11 +46,11 @@ func (r *DLPDatasetVersionService) New(ctx context.Context, datasetID string, ve
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/versions/%v", params.AccountID, datasetID, version)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -73,10 +73,10 @@ func (r *DLPDatasetVersionService) NewAutoPaging(ctx context.Context, datasetID 
 }
 
 type DLPDatasetVersionNewResponse struct {
-	EntryID      string                                   `json:"entry_id,required" format:"uuid"`
-	HeaderName   string                                   `json:"header_name,required"`
-	NumCells     int64                                    `json:"num_cells,required"`
-	UploadStatus DLPDatasetVersionNewResponseUploadStatus `json:"upload_status,required"`
+	EntryID      string                                   `json:"entry_id" api:"required" format:"uuid"`
+	HeaderName   string                                   `json:"header_name" api:"required"`
+	NumCells     int64                                    `json:"num_cells" api:"required"`
+	UploadStatus DLPDatasetVersionNewResponseUploadStatus `json:"upload_status" api:"required"`
 	JSON         dlpDatasetVersionNewResponseJSON         `json:"-"`
 }
 
@@ -119,8 +119,8 @@ func (r DLPDatasetVersionNewResponseUploadStatus) IsKnown() bool {
 }
 
 type DLPDatasetVersionNewParams struct {
-	AccountID param.Field[string]                   `path:"account_id,required"`
-	Body      []DLPDatasetVersionNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]                   `path:"account_id" api:"required"`
+	Body      []DLPDatasetVersionNewParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r DLPDatasetVersionNewParams) MarshalJSON() (data []byte, err error) {
@@ -148,7 +148,7 @@ type DLPDatasetVersionNewParamsBodyUnion interface {
 }
 
 type DLPDatasetVersionNewParamsBodyExistingColumn struct {
-	EntryID    param.Field[string] `json:"entry_id,required" format:"uuid"`
+	EntryID    param.Field[string] `json:"entry_id" api:"required" format:"uuid"`
 	HeaderName param.Field[string] `json:"header_name"`
 	NumCells   param.Field[int64]  `json:"num_cells"`
 }
@@ -161,7 +161,7 @@ func (r DLPDatasetVersionNewParamsBodyExistingColumn) implementsDLPDatasetVersio
 }
 
 type DLPDatasetVersionNewParamsBodyNewColumn struct {
-	EntryName  param.Field[string] `json:"entry_name,required"`
+	EntryName  param.Field[string] `json:"entry_name" api:"required"`
 	HeaderName param.Field[string] `json:"header_name"`
 	NumCells   param.Field[int64]  `json:"num_cells"`
 }

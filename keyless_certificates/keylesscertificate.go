@@ -44,15 +44,15 @@ func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCerti
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all Keyless SSL configurations for a given zone.
@@ -62,7 +62,7 @@ func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCerti
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -89,19 +89,19 @@ func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertifica
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if keylessCertificateID == "" {
 		err = errors.New("missing required keyless_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", body.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // This will update attributes of a Keyless SSL. Consists of one or more of the
@@ -111,19 +111,19 @@ func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificate
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if keylessCertificateID == "" {
 		err = errors.New("missing required keyless_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", params.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get details for one Keyless SSL configuration.
@@ -132,42 +132,42 @@ func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateI
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if keylessCertificateID == "" {
 		err = errors.New("missing required keyless_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", query.ZoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type KeylessCertificate struct {
 	// Keyless certificate identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the Keyless SSL was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Whether or not the Keyless SSL is on or off.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The keyless SSL name.
-	Host string `json:"host,required" format:"hostname"`
+	Host string `json:"host" api:"required" format:"hostname"`
 	// When the Keyless SSL was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// The keyless SSL name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Available permissions for the Keyless SSL for the current user requesting the
 	// item.
-	Permissions []string `json:"permissions,required"`
+	Permissions []string `json:"permissions" api:"required"`
 	// The keyless SSL port used to communicate between Cloudflare and the client's
 	// Keyless SSL server.
-	Port float64 `json:"port,required"`
+	Port float64 `json:"port" api:"required"`
 	// Status of the Keyless SSL.
-	Status KeylessCertificateStatus `json:"status,required"`
+	Status KeylessCertificateStatus `json:"status" api:"required"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
 	Tunnel Tunnel                 `json:"tunnel"`
 	JSON   keylessCertificateJSON `json:"-"`
@@ -217,9 +217,9 @@ func (r KeylessCertificateStatus) IsKnown() bool {
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
 type Tunnel struct {
 	// Private IP of the Key Server Host
-	PrivateIP string `json:"private_ip,required"`
+	PrivateIP string `json:"private_ip" api:"required"`
 	// Cloudflare Tunnel Virtual Network ID
-	VnetID string     `json:"vnet_id,required"`
+	VnetID string     `json:"vnet_id" api:"required"`
 	JSON   tunnelJSON `json:"-"`
 }
 
@@ -242,9 +242,9 @@ func (r tunnelJSON) RawJSON() string {
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
 type TunnelParam struct {
 	// Private IP of the Key Server Host
-	PrivateIP param.Field[string] `json:"private_ip,required"`
+	PrivateIP param.Field[string] `json:"private_ip" api:"required"`
 	// Cloudflare Tunnel Virtual Network ID
-	VnetID param.Field[string] `json:"vnet_id,required"`
+	VnetID param.Field[string] `json:"vnet_id" api:"required"`
 }
 
 func (r TunnelParam) MarshalJSON() (data []byte, err error) {
@@ -275,14 +275,14 @@ func (r keylessCertificateDeleteResponseJSON) RawJSON() string {
 
 type KeylessCertificateNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The zone's SSL certificate or SSL certificate and intermediate(s).
-	Certificate param.Field[string] `json:"certificate,required"`
+	Certificate param.Field[string] `json:"certificate" api:"required"`
 	// The keyless SSL name.
-	Host param.Field[string] `json:"host,required" format:"hostname"`
+	Host param.Field[string] `json:"host" api:"required" format:"hostname"`
 	// The keyless SSL port used to communicate between Cloudflare and the client's
 	// Keyless SSL server.
-	Port param.Field[float64] `json:"port,required"`
+	Port param.Field[float64] `json:"port" api:"required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -299,10 +299,10 @@ func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateNewResponseEnvelope struct {
-	Errors   []KeylessCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeylessCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []KeylessCertificateNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []KeylessCertificateNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -327,8 +327,8 @@ func (r keylessCertificateNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type KeylessCertificateNewResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           KeylessCertificateNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             keylessCertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -375,8 +375,8 @@ func (r keylessCertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type KeylessCertificateNewResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           KeylessCertificateNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             keylessCertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -439,19 +439,19 @@ func (r KeylessCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type KeylessCertificateListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type KeylessCertificateDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type KeylessCertificateDeleteResponseEnvelope struct {
-	Errors   []KeylessCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeylessCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []KeylessCertificateDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []KeylessCertificateDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success KeylessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success KeylessCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  KeylessCertificateDeleteResponse                `json:"result"`
 	JSON    keylessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -476,8 +476,8 @@ func (r keylessCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type KeylessCertificateDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           KeylessCertificateDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             keylessCertificateDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -524,8 +524,8 @@ func (r keylessCertificateDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type KeylessCertificateDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           KeylessCertificateDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             keylessCertificateDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -588,7 +588,7 @@ func (r KeylessCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type KeylessCertificateEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether or not the Keyless SSL is on or off.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The keyless SSL name.
@@ -607,10 +607,10 @@ func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateEditResponseEnvelope struct {
-	Errors   []KeylessCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeylessCertificateEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []KeylessCertificateEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []KeylessCertificateEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  KeylessCertificate                            `json:"result"`
 	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -635,8 +635,8 @@ func (r keylessCertificateEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type KeylessCertificateEditResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           KeylessCertificateEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             keylessCertificateEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -683,8 +683,8 @@ func (r keylessCertificateEditResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type KeylessCertificateEditResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           KeylessCertificateEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             keylessCertificateEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -747,14 +747,14 @@ func (r KeylessCertificateEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type KeylessCertificateGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type KeylessCertificateGetResponseEnvelope struct {
-	Errors   []KeylessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeylessCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []KeylessCertificateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []KeylessCertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  KeylessCertificate                           `json:"result"`
 	JSON    keylessCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -779,8 +779,8 @@ func (r keylessCertificateGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type KeylessCertificateGetResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           KeylessCertificateGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             keylessCertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -827,8 +827,8 @@ func (r keylessCertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type KeylessCertificateGetResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           KeylessCertificateGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             keylessCertificateGetResponseEnvelopeMessagesJSON   `json:"-"`

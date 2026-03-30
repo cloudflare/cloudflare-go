@@ -43,15 +43,15 @@ func (r *AccessCustomPageService) New(ctx context.Context, params AccessCustomPa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a custom page
@@ -60,19 +60,19 @@ func (r *AccessCustomPageService) Update(ctx context.Context, customPageID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if customPageID == "" {
 		err = errors.New("missing required custom_page_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", params.AccountID, customPageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List custom pages
@@ -82,7 +82,7 @@ func (r *AccessCustomPageService) List(ctx context.Context, params AccessCustomP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -108,19 +108,19 @@ func (r *AccessCustomPageService) Delete(ctx context.Context, customPageID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if customPageID == "" {
 		err = errors.New("missing required custom_page_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", body.AccountID, customPageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a custom page and also returns its HTML.
@@ -129,28 +129,28 @@ func (r *AccessCustomPageService) Get(ctx context.Context, customPageID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if customPageID == "" {
 		err = errors.New("missing required custom_page_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", query.AccountID, customPageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CustomPage struct {
 	// Custom page HTML.
-	CustomHTML string `json:"custom_html,required"`
+	CustomHTML string `json:"custom_html" api:"required"`
 	// Custom page name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Custom page type.
-	Type CustomPageType `json:"type,required"`
+	Type CustomPageType `json:"type" api:"required"`
 	// UUID.
 	UID  string         `json:"uid"`
 	JSON customPageJSON `json:"-"`
@@ -192,11 +192,11 @@ func (r CustomPageType) IsKnown() bool {
 
 type CustomPageParam struct {
 	// Custom page HTML.
-	CustomHTML param.Field[string] `json:"custom_html,required"`
+	CustomHTML param.Field[string] `json:"custom_html" api:"required"`
 	// Custom page name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Custom page type.
-	Type param.Field[CustomPageType] `json:"type,required"`
+	Type param.Field[CustomPageType] `json:"type" api:"required"`
 }
 
 func (r CustomPageParam) MarshalJSON() (data []byte, err error) {
@@ -205,9 +205,9 @@ func (r CustomPageParam) MarshalJSON() (data []byte, err error) {
 
 type CustomPageWithoutHTML struct {
 	// Custom page name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Custom page type.
-	Type CustomPageWithoutHTMLType `json:"type,required"`
+	Type CustomPageWithoutHTMLType `json:"type" api:"required"`
 	// UUID.
 	UID  string                    `json:"uid"`
 	JSON customPageWithoutHTMLJSON `json:"-"`
@@ -271,8 +271,8 @@ func (r accessCustomPageDeleteResponseJSON) RawJSON() string {
 
 type AccessCustomPageNewParams struct {
 	// Identifier.
-	AccountID  param.Field[string] `path:"account_id,required"`
-	CustomPage CustomPageParam     `json:"custom_page,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
+	CustomPage CustomPageParam     `json:"custom_page" api:"required"`
 }
 
 func (r AccessCustomPageNewParams) MarshalJSON() (data []byte, err error) {
@@ -280,10 +280,10 @@ func (r AccessCustomPageNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCustomPageNewResponseEnvelope struct {
-	Errors   []AccessCustomPageNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCustomPageNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCustomPageNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomPageWithoutHTML                      `json:"result"`
 	JSON    accessCustomPageNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -308,8 +308,8 @@ func (r accessCustomPageNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCustomPageNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           AccessCustomPageNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCustomPageNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -356,8 +356,8 @@ func (r accessCustomPageNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessCustomPageNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           AccessCustomPageNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCustomPageNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -420,8 +420,8 @@ func (r AccessCustomPageNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCustomPageUpdateParams struct {
 	// Identifier.
-	AccountID  param.Field[string] `path:"account_id,required"`
-	CustomPage CustomPageParam     `json:"custom_page,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
+	CustomPage CustomPageParam     `json:"custom_page" api:"required"`
 }
 
 func (r AccessCustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -429,10 +429,10 @@ func (r AccessCustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCustomPageUpdateResponseEnvelope struct {
-	Errors   []AccessCustomPageUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCustomPageUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCustomPageUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomPageWithoutHTML                         `json:"result"`
 	JSON    accessCustomPageUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -457,8 +457,8 @@ func (r accessCustomPageUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCustomPageUpdateResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessCustomPageUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCustomPageUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -505,8 +505,8 @@ func (r accessCustomPageUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type AccessCustomPageUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AccessCustomPageUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCustomPageUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -569,7 +569,7 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCustomPageListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page param.Field[int64] `query:"page"`
 	// Number of results per page.
@@ -587,14 +587,14 @@ func (r AccessCustomPageListParams) URLQuery() (v url.Values) {
 
 type AccessCustomPageDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessCustomPageDeleteResponseEnvelope struct {
-	Errors   []AccessCustomPageDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCustomPageDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCustomPageDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessCustomPageDeleteResponse                `json:"result"`
 	JSON    accessCustomPageDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -619,8 +619,8 @@ func (r accessCustomPageDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCustomPageDeleteResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessCustomPageDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCustomPageDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -667,8 +667,8 @@ func (r accessCustomPageDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type AccessCustomPageDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AccessCustomPageDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCustomPageDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -731,14 +731,14 @@ func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCustomPageGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessCustomPageGetResponseEnvelope struct {
-	Errors   []AccessCustomPageGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCustomPageGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCustomPageGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomPage                                 `json:"result"`
 	JSON    accessCustomPageGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -763,8 +763,8 @@ func (r accessCustomPageGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCustomPageGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           AccessCustomPageGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCustomPageGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -811,8 +811,8 @@ func (r accessCustomPageGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessCustomPageGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           AccessCustomPageGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCustomPageGetResponseEnvelopeMessagesJSON   `json:"-"`

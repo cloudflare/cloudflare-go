@@ -42,15 +42,15 @@ func (r *DevicePostureIntegrationService) New(ctx context.Context, params Device
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the list of device posture integrations for an account.
@@ -60,7 +60,7 @@ func (r *DevicePostureIntegrationService) List(ctx context.Context, query Device
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -86,19 +86,19 @@ func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integratio
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if integrationID == "" {
 		err = errors.New("missing required integration_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", body.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured device posture integration.
@@ -107,19 +107,19 @@ func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if integrationID == "" {
 		err = errors.New("missing required integration_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", params.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches details for a single device posture integration.
@@ -128,19 +128,19 @@ func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if integrationID == "" {
 		err = errors.New("missing required integration_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", query.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Integration struct {
@@ -180,11 +180,11 @@ func (r integrationJSON) RawJSON() string {
 // The configuration object containing third-party integration information.
 type IntegrationConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL string `json:"api_url,required"`
+	APIURL string `json:"api_url" api:"required"`
 	// The Workspace One Authorization URL depending on your region.
-	AuthURL string `json:"auth_url,required"`
+	AuthURL string `json:"auth_url" api:"required"`
 	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID string                `json:"client_id,required"`
+	ClientID string                `json:"client_id" api:"required"`
 	JSON     integrationConfigJSON `json:"-"`
 }
 
@@ -229,16 +229,16 @@ func (r IntegrationType) IsKnown() bool {
 }
 
 type DevicePostureIntegrationNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object containing third-party integration information.
-	Config param.Field[DevicePostureIntegrationNewParamsConfigUnion] `json:"config,required"`
+	Config param.Field[DevicePostureIntegrationNewParamsConfigUnion] `json:"config" api:"required"`
 	// The interval between each posture check with the third-party API. Use `m` for
 	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
-	Interval param.Field[string] `json:"interval,required"`
+	Interval param.Field[string] `json:"interval" api:"required"`
 	// The name of the device posture integration.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The type of device posture integration.
-	Type param.Field[DevicePostureIntegrationNewParamsType] `json:"type,required"`
+	Type param.Field[DevicePostureIntegrationNewParamsType] `json:"type" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParams) MarshalJSON() (data []byte, err error) {
@@ -292,13 +292,13 @@ type DevicePostureIntegrationNewParamsConfigUnion interface {
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Workspace One Authorization URL depending on your region.
-	AuthURL param.Field[string] `json:"auth_url,required"`
+	AuthURL param.Field[string] `json:"auth_url" api:"required"`
 	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -310,13 +310,13 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigReq
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesCrowdstrikeConfigRequest struct {
 	// The Crowdstrike API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Crowdstrike client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Crowdstrike client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The Crowdstrike customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
+	CustomerID param.Field[string] `json:"customer_id" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCrowdstrikeConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -328,13 +328,13 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCrowdstrikeConfigRequ
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesUptycsConfigRequest struct {
 	// The Uptycs API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Uptycs client secret.
-	ClientKey param.Field[string] `json:"client_key,required"`
+	ClientKey param.Field[string] `json:"client_key" api:"required"`
 	// The Uptycs client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The Uptycs customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
+	CustomerID param.Field[string] `json:"customer_id" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesUptycsConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -346,11 +346,11 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesUptycsConfigRequest) 
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesIntuneConfigRequest struct {
 	// The Intune client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Intune client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The Intune customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
+	CustomerID param.Field[string] `json:"customer_id" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesIntuneConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -362,9 +362,9 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesIntuneConfigRequest) 
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest struct {
 	// The Kolide client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Kolide client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -376,9 +376,9 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest) 
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest struct {
 	// The Tanium API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Tanium client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
 	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
@@ -396,9 +396,9 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest) 
 
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigRequest struct {
 	// The SentinelOne S2S API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The SentinelOne S2S client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -411,12 +411,12 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigR
 type DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
 	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
 	// `api_url`.
-	AccessClientID param.Field[string] `json:"access_client_id,required"`
+	AccessClientID param.Field[string] `json:"access_client_id" api:"required"`
 	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
 	// the `api_url`.
-	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
+	AccessClientSecret param.Field[string] `json:"access_client_secret" api:"required"`
 	// The Custom Device Posture Integration API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 }
 
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -449,11 +449,11 @@ func (r DevicePostureIntegrationNewParamsType) IsKnown() bool {
 }
 
 type DevicePostureIntegrationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Integration           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Integration           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureIntegrationNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureIntegrationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureIntegrationNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -492,19 +492,19 @@ func (r DevicePostureIntegrationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureIntegrationListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePostureIntegrationDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureIntegrationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureIntegrationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -543,7 +543,7 @@ func (r DevicePostureIntegrationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureIntegrationEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object containing third-party integration information.
 	Config param.Field[DevicePostureIntegrationEditParamsConfigUnion] `json:"config"`
 	// The interval between each posture check with the third-party API. Use `m` for
@@ -606,13 +606,13 @@ type DevicePostureIntegrationEditParamsConfigUnion interface {
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Workspace One Authorization URL depending on your region.
-	AuthURL param.Field[string] `json:"auth_url,required"`
+	AuthURL param.Field[string] `json:"auth_url" api:"required"`
 	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -624,13 +624,13 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRe
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest struct {
 	// The Crowdstrike API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Crowdstrike client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Crowdstrike client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The Crowdstrike customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
+	CustomerID param.Field[string] `json:"customer_id" api:"required"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -642,13 +642,13 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigReq
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest struct {
 	// The Uptycs API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Uptycs client secret.
-	ClientKey param.Field[string] `json:"client_key,required"`
+	ClientKey param.Field[string] `json:"client_key" api:"required"`
 	// The Uptycs client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The Uptycs customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
+	CustomerID param.Field[string] `json:"customer_id" api:"required"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -660,11 +660,11 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest)
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest struct {
 	// The Intune client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Intune client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The Intune customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
+	CustomerID param.Field[string] `json:"customer_id" api:"required"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -676,9 +676,9 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest)
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest struct {
 	// The Kolide client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// The Kolide client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -690,9 +690,9 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest)
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest struct {
 	// The Tanium API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The Tanium client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
 	// hitting the `api_url`.
 	AccessClientID param.Field[string] `json:"access_client_id"`
@@ -710,9 +710,9 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest)
 
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest struct {
 	// The SentinelOne S2S API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 	// The SentinelOne S2S client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -725,12 +725,12 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfig
 type DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
 	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
 	// `api_url`.
-	AccessClientID param.Field[string] `json:"access_client_id,required"`
+	AccessClientID param.Field[string] `json:"access_client_id" api:"required"`
 	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
 	// the `api_url`.
-	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
+	AccessClientSecret param.Field[string] `json:"access_client_secret" api:"required"`
 	// The Custom Device Posture Integration API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
+	APIURL param.Field[string] `json:"api_url" api:"required"`
 }
 
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest) MarshalJSON() (data []byte, err error) {
@@ -763,11 +763,11 @@ func (r DevicePostureIntegrationEditParamsType) IsKnown() bool {
 }
 
 type DevicePostureIntegrationEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Integration           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Integration           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureIntegrationEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureIntegrationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureIntegrationEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -806,15 +806,15 @@ func (r DevicePostureIntegrationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureIntegrationGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePostureIntegrationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Integration           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Integration           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureIntegrationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureIntegrationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureIntegrationGetResponseEnvelopeJSON    `json:"-"`
 }
 

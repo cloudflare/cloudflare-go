@@ -28,6 +28,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -109,7 +110,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard),
 			}),
 			BindingsInherit: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBindingsInheritStrict),
-			Files:           cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			Files:           cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("Example data")))}),
 		},
 	)
 	if err != nil {
@@ -131,6 +132,7 @@ func TestDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -162,6 +164,7 @@ func TestDispatchNamespaceScriptGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

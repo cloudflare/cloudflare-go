@@ -40,19 +40,19 @@ func (r *TokenValueService) Update(ctx context.Context, tokenID string, body Tok
 	opts = slices.Concat(r.Options, opts)
 	if tokenID == "" {
 		err = errors.New("missing required token_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("user/tokens/%s/value", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TokenValueUpdateParams struct {
-	Body interface{} `json:"body,required"`
+	Body interface{} `json:"body" api:"required"`
 }
 
 func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -60,10 +60,10 @@ func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenValueUpdateResponseEnvelope struct {
-	Errors   []TokenValueUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TokenValueUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TokenValueUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TokenValueUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TokenValueUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success TokenValueUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// The token value.
 	Result shared.TokenValue                    `json:"result"`
 	JSON   tokenValueUpdateResponseEnvelopeJSON `json:"-"`
@@ -89,8 +89,8 @@ func (r tokenValueUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TokenValueUpdateResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           TokenValueUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             tokenValueUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -137,8 +137,8 @@ func (r tokenValueUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TokenValueUpdateResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           TokenValueUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             tokenValueUpdateResponseEnvelopeMessagesJSON   `json:"-"`

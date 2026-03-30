@@ -42,7 +42,7 @@ func (r *RegionalHostnameRegionService) List(ctx context.Context, query Regional
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/regional_hostnames/regions", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -89,5 +89,5 @@ func (r regionalHostnameRegionListResponseJSON) RawJSON() string {
 
 type RegionalHostnameRegionListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

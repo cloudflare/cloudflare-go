@@ -44,11 +44,11 @@ func (r *NamespaceObjectService) List(ctx context.Context, id string, params Nam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces/%s/objects", params.AccountID, id)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -94,7 +94,7 @@ func (r durableObjectJSON) RawJSON() string {
 
 type NamespaceObjectListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records. A valid value for the cursor can be obtained from the
 	// cursors object in the result_info structure.

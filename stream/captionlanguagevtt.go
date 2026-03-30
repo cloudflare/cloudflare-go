@@ -39,22 +39,22 @@ func (r *CaptionLanguageVttService) Get(ctx context.Context, identifier string, 
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/vtt")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	if language == "" {
 		err = errors.New("missing required language parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s/vtt", query.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type CaptionLanguageVttGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

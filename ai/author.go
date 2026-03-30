@@ -41,7 +41,7 @@ func (r *AuthorService) List(ctx context.Context, query AuthorListParams, opts .
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/authors/search", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -64,5 +64,5 @@ func (r *AuthorService) ListAutoPaging(ctx context.Context, query AuthorListPara
 type AuthorListResponse = interface{}
 
 type AuthorListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

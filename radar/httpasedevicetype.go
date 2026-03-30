@@ -44,16 +44,16 @@ func (r *HTTPAseDeviceTypeService) Get(ctx context.Context, deviceType HTTPAseDe
 	path := fmt.Sprintf("radar/http/top/ases/device_type/%v", deviceType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPAseDeviceTypeGetResponse struct {
 	// Metadata for the results.
-	Meta HTTPAseDeviceTypeGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPAseDeviceTypeGetResponseTop0 `json:"top_0,required"`
+	Meta HTTPAseDeviceTypeGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []HTTPAseDeviceTypeGetResponseTop0 `json:"top_0" api:"required"`
 	JSON httpAseDeviceTypeGetResponseJSON   `json:"-"`
 }
 
@@ -76,15 +76,15 @@ func (r httpAseDeviceTypeGetResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPAseDeviceTypeGetResponseMeta struct {
-	ConfidenceInfo HTTPAseDeviceTypeGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []HTTPAseDeviceTypeGetResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo HTTPAseDeviceTypeGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []HTTPAseDeviceTypeGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPAseDeviceTypeGetResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPAseDeviceTypeGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPAseDeviceTypeGetResponseMetaUnit `json:"units,required"`
+	Units []HTTPAseDeviceTypeGetResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpAseDeviceTypeGetResponseMetaJSON   `json:"-"`
 }
 
@@ -109,9 +109,9 @@ func (r httpAseDeviceTypeGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPAseDeviceTypeGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                              `json:"level,required"`
+	Level int64                                              `json:"level" api:"required"`
 	JSON  httpAseDeviceTypeGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -135,15 +135,15 @@ func (r httpAseDeviceTypeGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                              `json:"description,required"`
-	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                              `json:"description" api:"required"`
+	EndDate     time.Time                                                           `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
-	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -231,9 +231,9 @@ func (r HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationsEventType) IsKn
 
 type HTTPAseDeviceTypeGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                     `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                     `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpAseDeviceTypeGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -278,8 +278,8 @@ func (r HTTPAseDeviceTypeGetResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPAseDeviceTypeGetResponseMetaUnit struct {
-	Name  string                                   `json:"name,required"`
-	Value string                                   `json:"value,required"`
+	Name  string                                   `json:"name" api:"required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  httpAseDeviceTypeGetResponseMetaUnitJSON `json:"-"`
 }
 
@@ -301,10 +301,10 @@ func (r httpAseDeviceTypeGetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPAseDeviceTypeGetResponseTop0 struct {
-	ClientASN    int64  `json:"clientASN,required"`
-	ClientAsName string `json:"clientASName,required"`
+	ClientASN    int64  `json:"clientASN" api:"required"`
+	ClientAsName string `json:"clientASName" api:"required"`
 	// A numeric string.
-	Value string                               `json:"value,required"`
+	Value string                               `json:"value" api:"required"`
 	JSON  httpAseDeviceTypeGetResponseTop0JSON `json:"-"`
 }
 
@@ -535,8 +535,8 @@ func (r HTTPAseDeviceTypeGetParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPAseDeviceTypeGetResponseEnvelope struct {
-	Result  HTTPAseDeviceTypeGetResponse             `json:"result,required"`
-	Success bool                                     `json:"success,required"`
+	Result  HTTPAseDeviceTypeGetResponse             `json:"result" api:"required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    httpAseDeviceTypeGetResponseEnvelopeJSON `json:"-"`
 }
 

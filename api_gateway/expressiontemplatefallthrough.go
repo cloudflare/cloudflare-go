@@ -41,22 +41,22 @@ func (r *ExpressionTemplateFallthroughService) New(ctx context.Context, params E
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/expression-template/fallthrough", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ExpressionTemplateFallthroughNewResponse struct {
 	// WAF Expression for fallthrough
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// Title for the expression
-	Title string                                       `json:"title,required"`
+	Title string                                       `json:"title" api:"required"`
 	JSON  expressionTemplateFallthroughNewResponseJSON `json:"-"`
 }
 
@@ -79,9 +79,9 @@ func (r expressionTemplateFallthroughNewResponseJSON) RawJSON() string {
 
 type ExpressionTemplateFallthroughNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List of hosts to be targeted in the expression
-	Hosts param.Field[[]string] `json:"hosts,required"`
+	Hosts param.Field[[]string] `json:"hosts" api:"required"`
 }
 
 func (r ExpressionTemplateFallthroughNewParams) MarshalJSON() (data []byte, err error) {
@@ -89,11 +89,11 @@ func (r ExpressionTemplateFallthroughNewParams) MarshalJSON() (data []byte, err 
 }
 
 type ExpressionTemplateFallthroughNewResponseEnvelope struct {
-	Errors   Message                                  `json:"errors,required"`
-	Messages Message                                  `json:"messages,required"`
-	Result   ExpressionTemplateFallthroughNewResponse `json:"result,required"`
+	Errors   Message                                  `json:"errors" api:"required"`
+	Messages Message                                  `json:"messages" api:"required"`
+	Result   ExpressionTemplateFallthroughNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ExpressionTemplateFallthroughNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ExpressionTemplateFallthroughNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    expressionTemplateFallthroughNewResponseEnvelopeJSON    `json:"-"`
 }
 

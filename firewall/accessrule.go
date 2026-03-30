@@ -70,10 +70,10 @@ func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams,
 	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches IP Access rules of an account or zone. These rules apply to all the
@@ -147,15 +147,15 @@ func (r *AccessRuleService) Delete(ctx context.Context, ruleID string, body Acce
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an IP Access rule defined.
@@ -184,15 +184,15 @@ func (r *AccessRuleService) Edit(ctx context.Context, ruleID string, params Acce
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the details of an IP Access rule defined.
@@ -219,15 +219,15 @@ func (r *AccessRuleService) Get(ctx context.Context, ruleID string, query Access
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessRuleCIDRConfiguration struct {
@@ -578,13 +578,13 @@ func (r IPV6ConfigurationParam) implementsUARuleUpdateParamsConfigurationUnion()
 
 type AccessRuleNewResponse struct {
 	// The unique identifier of the IP Access rule.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The available actions that a rule can apply to a matched request.
-	AllowedModes []AccessRuleNewResponseAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AccessRuleNewResponseAllowedMode `json:"allowed_modes" api:"required"`
 	// The rule configuration.
-	Configuration AccessRuleNewResponseConfiguration `json:"configuration,required"`
+	Configuration AccessRuleNewResponseConfiguration `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode AccessRuleNewResponseMode `json:"mode,required"`
+	Mode AccessRuleNewResponseMode `json:"mode" api:"required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the rule was last modified.
@@ -803,13 +803,13 @@ func (r AccessRuleNewResponseScopeType) IsKnown() bool {
 
 type AccessRuleListResponse struct {
 	// The unique identifier of the IP Access rule.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The available actions that a rule can apply to a matched request.
-	AllowedModes []AccessRuleListResponseAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AccessRuleListResponseAllowedMode `json:"allowed_modes" api:"required"`
 	// The rule configuration.
-	Configuration AccessRuleListResponseConfiguration `json:"configuration,required"`
+	Configuration AccessRuleListResponseConfiguration `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode AccessRuleListResponseMode `json:"mode,required"`
+	Mode AccessRuleListResponseMode `json:"mode" api:"required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the rule was last modified.
@@ -1028,7 +1028,7 @@ func (r AccessRuleListResponseScopeType) IsKnown() bool {
 
 type AccessRuleDeleteResponse struct {
 	// Defines an identifier.
-	ID   string                       `json:"id,required"`
+	ID   string                       `json:"id" api:"required"`
 	JSON accessRuleDeleteResponseJSON `json:"-"`
 }
 
@@ -1050,13 +1050,13 @@ func (r accessRuleDeleteResponseJSON) RawJSON() string {
 
 type AccessRuleEditResponse struct {
 	// The unique identifier of the IP Access rule.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The available actions that a rule can apply to a matched request.
-	AllowedModes []AccessRuleEditResponseAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AccessRuleEditResponseAllowedMode `json:"allowed_modes" api:"required"`
 	// The rule configuration.
-	Configuration AccessRuleEditResponseConfiguration `json:"configuration,required"`
+	Configuration AccessRuleEditResponseConfiguration `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode AccessRuleEditResponseMode `json:"mode,required"`
+	Mode AccessRuleEditResponseMode `json:"mode" api:"required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the rule was last modified.
@@ -1275,13 +1275,13 @@ func (r AccessRuleEditResponseScopeType) IsKnown() bool {
 
 type AccessRuleGetResponse struct {
 	// The unique identifier of the IP Access rule.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The available actions that a rule can apply to a matched request.
-	AllowedModes []AccessRuleGetResponseAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AccessRuleGetResponseAllowedMode `json:"allowed_modes" api:"required"`
 	// The rule configuration.
-	Configuration AccessRuleGetResponseConfiguration `json:"configuration,required"`
+	Configuration AccessRuleGetResponseConfiguration `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode AccessRuleGetResponseMode `json:"mode,required"`
+	Mode AccessRuleGetResponseMode `json:"mode" api:"required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the rule was last modified.
@@ -1500,9 +1500,9 @@ func (r AccessRuleGetResponseScopeType) IsKnown() bool {
 
 type AccessRuleNewParams struct {
 	// The rule configuration.
-	Configuration param.Field[AccessRuleNewParamsConfigurationUnion] `json:"configuration,required"`
+	Configuration param.Field[AccessRuleNewParamsConfigurationUnion] `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode param.Field[AccessRuleNewParamsMode] `json:"mode,required"`
+	Mode param.Field[AccessRuleNewParamsMode] `json:"mode" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -1581,11 +1581,11 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AccessRuleNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   AccessRuleNewResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessRuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1771,11 +1771,11 @@ type AccessRuleDeleteParams struct {
 }
 
 type AccessRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   AccessRuleDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo    `json:"messages" api:"required"`
+	Result   AccessRuleDeleteResponse `json:"result" api:"required,nullable"`
 	// Defines whether the API call was successful.
-	Success AccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessRuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    accessRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1815,9 +1815,9 @@ func (r AccessRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessRuleEditParams struct {
 	// The rule configuration.
-	Configuration param.Field[AccessRuleEditParamsConfigurationUnion] `json:"configuration,required"`
+	Configuration param.Field[AccessRuleEditParamsConfigurationUnion] `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
-	Mode param.Field[AccessRuleEditParamsMode] `json:"mode,required"`
+	Mode param.Field[AccessRuleEditParamsMode] `json:"mode" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -1896,11 +1896,11 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   AccessRuleEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   AccessRuleEditResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessRuleEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1946,11 +1946,11 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AccessRuleGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   AccessRuleGetResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessRuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`
 }
 

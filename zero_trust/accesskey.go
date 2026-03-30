@@ -41,15 +41,15 @@ func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdatePar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets the Access key rotation settings for an account.
@@ -58,15 +58,15 @@ func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, op
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/keys", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Perfoms a key rotation for an account.
@@ -75,15 +75,15 @@ func (r *AccessKeyService) Rotate(ctx context.Context, body AccessKeyRotateParam
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/keys/rotate", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessKeyUpdateResponse struct {
@@ -172,9 +172,9 @@ func (r accessKeyRotateResponseJSON) RawJSON() string {
 
 type AccessKeyUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The number of days between key rotations.
-	KeyRotationIntervalDays param.Field[float64] `json:"key_rotation_interval_days,required"`
+	KeyRotationIntervalDays param.Field[float64] `json:"key_rotation_interval_days" api:"required"`
 }
 
 func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -182,10 +182,10 @@ func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessKeyUpdateResponseEnvelope struct {
-	Errors   []AccessKeyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessKeyUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessKeyUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessKeyUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessKeyUpdateResponse                `json:"result"`
 	JSON    accessKeyUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -210,8 +210,8 @@ func (r accessKeyUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessKeyUpdateResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessKeyUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessKeyUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -258,8 +258,8 @@ func (r accessKeyUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessKeyUpdateResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessKeyUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessKeyUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -322,14 +322,14 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessKeyGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessKeyGetResponseEnvelope struct {
-	Errors   []AccessKeyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessKeyGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessKeyGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessKeyGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessKeyGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessKeyGetResponse                `json:"result"`
 	JSON    accessKeyGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -354,8 +354,8 @@ func (r accessKeyGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessKeyGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AccessKeyGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessKeyGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -402,8 +402,8 @@ func (r accessKeyGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessKeyGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AccessKeyGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessKeyGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -466,14 +466,14 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessKeyRotateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessKeyRotateResponseEnvelope struct {
-	Errors   []AccessKeyRotateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessKeyRotateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessKeyRotateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessKeyRotateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessKeyRotateResponse                `json:"result"`
 	JSON    accessKeyRotateResponseEnvelopeJSON    `json:"-"`
 }
@@ -498,8 +498,8 @@ func (r accessKeyRotateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessKeyRotateResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessKeyRotateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessKeyRotateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -546,8 +546,8 @@ func (r accessKeyRotateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessKeyRotateResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessKeyRotateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessKeyRotateResponseEnvelopeMessagesJSON   `json:"-"`

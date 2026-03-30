@@ -50,10 +50,10 @@ func (r *NetFlowsService) Summary(ctx context.Context, query NetFlowsSummaryPara
 	path := "radar/netflows/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of network traffic (NetFlows) by the specified
@@ -64,10 +64,10 @@ func (r *NetFlowsService) SummaryV2(ctx context.Context, dimension NetFlowsSumma
 	path := fmt.Sprintf("radar/netflows/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves network traffic (NetFlows) over time.
@@ -77,10 +77,10 @@ func (r *NetFlowsService) Timeseries(ctx context.Context, query NetFlowsTimeseri
 	path := "radar/netflows/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of NetFlows traffic, grouped by the specified
@@ -91,16 +91,16 @@ func (r *NetFlowsService) TimeseriesGroups(ctx context.Context, dimension NetFlo
 	path := fmt.Sprintf("radar/netflows/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type NetFlowsSummaryResponse struct {
 	// Metadata for the results.
-	Meta     NetFlowsSummaryResponseMeta     `json:"meta,required"`
-	Summary0 NetFlowsSummaryResponseSummary0 `json:"summary_0,required"`
+	Meta     NetFlowsSummaryResponseMeta     `json:"meta" api:"required"`
+	Summary0 NetFlowsSummaryResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     netFlowsSummaryResponseJSON     `json:"-"`
 }
 
@@ -123,15 +123,15 @@ func (r netFlowsSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type NetFlowsSummaryResponseMeta struct {
-	ConfidenceInfo NetFlowsSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []NetFlowsSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo NetFlowsSummaryResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []NetFlowsSummaryResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization NetFlowsSummaryResponseMetaNormalization `json:"normalization,required"`
+	Normalization NetFlowsSummaryResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []NetFlowsSummaryResponseMetaUnit `json:"units,required"`
+	Units []NetFlowsSummaryResponseMetaUnit `json:"units" api:"required"`
 	JSON  netFlowsSummaryResponseMetaJSON   `json:"-"`
 }
 
@@ -156,9 +156,9 @@ func (r netFlowsSummaryResponseMetaJSON) RawJSON() string {
 }
 
 type NetFlowsSummaryResponseMetaConfidenceInfo struct {
-	Annotations []NetFlowsSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []NetFlowsSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                         `json:"level,required"`
+	Level int64                                         `json:"level" api:"required"`
 	JSON  netFlowsSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -182,15 +182,15 @@ func (r netFlowsSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetFlowsSummaryResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  NetFlowsSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                         `json:"description,required"`
-	EndDate     time.Time                                                      `json:"endDate,required" format:"date-time"`
+	DataSource  NetFlowsSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                         `json:"description" api:"required"`
+	EndDate     time.Time                                                      `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType NetFlowsSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType NetFlowsSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
-	LinkedURL       string                                                  `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                               `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                  `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                               `json:"startDate" api:"required" format:"date-time"`
 	JSON            netFlowsSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -277,9 +277,9 @@ func (r NetFlowsSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown()
 
 type NetFlowsSummaryResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                `json:"startTime" api:"required" format:"date-time"`
 	JSON      netFlowsSummaryResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -324,8 +324,8 @@ func (r NetFlowsSummaryResponseMetaNormalization) IsKnown() bool {
 }
 
 type NetFlowsSummaryResponseMetaUnit struct {
-	Name  string                              `json:"name,required"`
-	Value string                              `json:"value,required"`
+	Name  string                              `json:"name" api:"required"`
+	Value string                              `json:"value" api:"required"`
 	JSON  netFlowsSummaryResponseMetaUnitJSON `json:"-"`
 }
 
@@ -348,9 +348,9 @@ func (r netFlowsSummaryResponseMetaUnitJSON) RawJSON() string {
 
 type NetFlowsSummaryResponseSummary0 struct {
 	// A numeric string.
-	HTTP string `json:"HTTP,required"`
+	HTTP string `json:"HTTP" api:"required"`
 	// A numeric string.
-	Other string                              `json:"OTHER,required"`
+	Other string                              `json:"OTHER" api:"required"`
 	JSON  netFlowsSummaryResponseSummary0JSON `json:"-"`
 }
 
@@ -373,8 +373,8 @@ func (r netFlowsSummaryResponseSummary0JSON) RawJSON() string {
 
 type NetFlowsSummaryV2Response struct {
 	// Metadata for the results.
-	Meta     NetFlowsSummaryV2ResponseMeta `json:"meta,required"`
-	Summary0 map[string]string             `json:"summary_0,required"`
+	Meta     NetFlowsSummaryV2ResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string             `json:"summary_0" api:"required"`
 	JSON     netFlowsSummaryV2ResponseJSON `json:"-"`
 }
 
@@ -397,15 +397,15 @@ func (r netFlowsSummaryV2ResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type NetFlowsSummaryV2ResponseMeta struct {
-	ConfidenceInfo NetFlowsSummaryV2ResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []NetFlowsSummaryV2ResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo NetFlowsSummaryV2ResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []NetFlowsSummaryV2ResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization NetFlowsSummaryV2ResponseMetaNormalization `json:"normalization,required"`
+	Normalization NetFlowsSummaryV2ResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []NetFlowsSummaryV2ResponseMetaUnit `json:"units,required"`
+	Units []NetFlowsSummaryV2ResponseMetaUnit `json:"units" api:"required"`
 	JSON  netFlowsSummaryV2ResponseMetaJSON   `json:"-"`
 }
 
@@ -430,9 +430,9 @@ func (r netFlowsSummaryV2ResponseMetaJSON) RawJSON() string {
 }
 
 type NetFlowsSummaryV2ResponseMetaConfidenceInfo struct {
-	Annotations []NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                           `json:"level,required"`
+	Level int64                                           `json:"level" api:"required"`
 	JSON  netFlowsSummaryV2ResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -456,15 +456,15 @@ func (r netFlowsSummaryV2ResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                           `json:"description,required"`
-	EndDate     time.Time                                                        `json:"endDate,required" format:"date-time"`
+	DataSource  NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                           `json:"description" api:"required"`
+	EndDate     time.Time                                                        `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
-	LinkedURL       string                                                    `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                 `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                      `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                    `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                 `json:"startDate" api:"required" format:"date-time"`
 	JSON            netFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -551,9 +551,9 @@ func (r NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationsEventType) IsKnown
 
 type NetFlowsSummaryV2ResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                  `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                  `json:"startTime" api:"required" format:"date-time"`
 	JSON      netFlowsSummaryV2ResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -598,8 +598,8 @@ func (r NetFlowsSummaryV2ResponseMetaNormalization) IsKnown() bool {
 }
 
 type NetFlowsSummaryV2ResponseMetaUnit struct {
-	Name  string                                `json:"name,required"`
-	Value string                                `json:"value,required"`
+	Name  string                                `json:"name" api:"required"`
+	Value string                                `json:"value" api:"required"`
 	JSON  netFlowsSummaryV2ResponseMetaUnitJSON `json:"-"`
 }
 
@@ -622,8 +622,8 @@ func (r netFlowsSummaryV2ResponseMetaUnitJSON) RawJSON() string {
 
 type NetFlowsTimeseriesResponse struct {
 	// Metadata for the results.
-	Meta   NetFlowsTimeseriesResponseMeta   `json:"meta,required"`
-	Serie0 NetFlowsTimeseriesResponseSerie0 `json:"serie_0,required"`
+	Meta   NetFlowsTimeseriesResponseMeta   `json:"meta" api:"required"`
+	Serie0 NetFlowsTimeseriesResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   netFlowsTimeseriesResponseJSON   `json:"-"`
 }
 
@@ -649,16 +649,16 @@ type NetFlowsTimeseriesResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    NetFlowsTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo NetFlowsTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []NetFlowsTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    NetFlowsTimeseriesResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo NetFlowsTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []NetFlowsTimeseriesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization NetFlowsTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization NetFlowsTimeseriesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []NetFlowsTimeseriesResponseMetaUnit `json:"units,required"`
+	Units []NetFlowsTimeseriesResponseMetaUnit `json:"units" api:"required"`
 	JSON  netFlowsTimeseriesResponseMetaJSON   `json:"-"`
 }
 
@@ -705,9 +705,9 @@ func (r NetFlowsTimeseriesResponseMetaAggInterval) IsKnown() bool {
 }
 
 type NetFlowsTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                            `json:"level,required"`
+	Level int64                                            `json:"level" api:"required"`
 	JSON  netFlowsTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -731,15 +731,15 @@ func (r netFlowsTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                            `json:"description,required"`
-	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	DataSource  NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                            `json:"description" api:"required"`
+	EndDate     time.Time                                                         `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
 	JSON            netFlowsTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -826,9 +826,9 @@ func (r NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnow
 
 type NetFlowsTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                   `json:"startTime" api:"required" format:"date-time"`
 	JSON      netFlowsTimeseriesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -873,8 +873,8 @@ func (r NetFlowsTimeseriesResponseMetaNormalization) IsKnown() bool {
 }
 
 type NetFlowsTimeseriesResponseMetaUnit struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
+	Name  string                                 `json:"name" api:"required"`
+	Value string                                 `json:"value" api:"required"`
 	JSON  netFlowsTimeseriesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -896,8 +896,8 @@ func (r netFlowsTimeseriesResponseMetaUnitJSON) RawJSON() string {
 }
 
 type NetFlowsTimeseriesResponseSerie0 struct {
-	Timestamps []time.Time                          `json:"timestamps,required" format:"date-time"`
-	Values     []string                             `json:"values,required"`
+	Timestamps []time.Time                          `json:"timestamps" api:"required" format:"date-time"`
+	Values     []string                             `json:"values" api:"required"`
 	JSON       netFlowsTimeseriesResponseSerie0JSON `json:"-"`
 }
 
@@ -920,8 +920,8 @@ func (r netFlowsTimeseriesResponseSerie0JSON) RawJSON() string {
 
 type NetFlowsTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   NetFlowsTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 NetFlowsTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   NetFlowsTimeseriesGroupsResponseMeta   `json:"meta" api:"required"`
+	Serie0 NetFlowsTimeseriesGroupsResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   netFlowsTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
@@ -947,16 +947,16 @@ type NetFlowsTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    NetFlowsTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo NetFlowsTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []NetFlowsTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    NetFlowsTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo NetFlowsTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []NetFlowsTimeseriesGroupsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization NetFlowsTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization NetFlowsTimeseriesGroupsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []NetFlowsTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []NetFlowsTimeseriesGroupsResponseMetaUnit `json:"units" api:"required"`
 	JSON  netFlowsTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
@@ -1003,9 +1003,9 @@ func (r NetFlowsTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
 }
 
 type NetFlowsTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                  `json:"level,required"`
+	Level int64                                                  `json:"level" api:"required"`
 	JSON  netFlowsTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1029,15 +1029,15 @@ func (r netFlowsTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string
 // Annotation associated with the result (e.g. outage or other type of event).
 type NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                  `json:"description,required"`
-	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	DataSource  NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                  `json:"description" api:"required"`
+	EndDate     time.Time                                                               `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
 	JSON            netFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1125,9 +1125,9 @@ func (r NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) 
 
 type NetFlowsTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                         `json:"startTime" api:"required" format:"date-time"`
 	JSON      netFlowsTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1172,8 +1172,8 @@ func (r NetFlowsTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 }
 
 type NetFlowsTimeseriesGroupsResponseMetaUnit struct {
-	Name  string                                       `json:"name,required"`
-	Value string                                       `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  netFlowsTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1195,8 +1195,8 @@ func (r netFlowsTimeseriesGroupsResponseMetaUnitJSON) RawJSON() string {
 }
 
 type NetFlowsTimeseriesGroupsResponseSerie0 struct {
-	Timestamps  []time.Time                                `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                        `json:"-,extras"`
+	Timestamps  []time.Time                                `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                        `json:"-" api:"extrafields"`
 	JSON        netFlowsTimeseriesGroupsResponseSerie0JSON `json:"-"`
 }
 
@@ -1274,8 +1274,8 @@ func (r NetFlowsSummaryParamsFormat) IsKnown() bool {
 }
 
 type NetFlowsSummaryResponseEnvelope struct {
-	Result  NetFlowsSummaryResponse             `json:"result,required"`
-	Success bool                                `json:"success,required"`
+	Result  NetFlowsSummaryResponse             `json:"result" api:"required"`
+	Success bool                                `json:"success" api:"required"`
 	JSON    netFlowsSummaryResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1394,8 +1394,8 @@ func (r NetFlowsSummaryV2ParamsProduct) IsKnown() bool {
 }
 
 type NetFlowsSummaryV2ResponseEnvelope struct {
-	Result  NetFlowsSummaryV2Response             `json:"result,required"`
-	Success bool                                  `json:"success,required"`
+	Result  NetFlowsSummaryV2Response             `json:"result" api:"required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    netFlowsSummaryV2ResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1536,8 +1536,8 @@ func (r NetFlowsTimeseriesParamsProduct) IsKnown() bool {
 }
 
 type NetFlowsTimeseriesResponseEnvelope struct {
-	Result  NetFlowsTimeseriesResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  NetFlowsTimeseriesResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    netFlowsTimeseriesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1700,8 +1700,8 @@ func (r NetFlowsTimeseriesGroupsParamsProduct) IsKnown() bool {
 }
 
 type NetFlowsTimeseriesGroupsResponseEnvelope struct {
-	Result  NetFlowsTimeseriesGroupsResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  NetFlowsTimeseriesGroupsResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    netFlowsTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 

@@ -63,10 +63,10 @@ func (r *InsightSeverityService) Get(ctx context.Context, params InsightSeverity
 	path := fmt.Sprintf("%s/%s/security-center/insights/severity", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InsightSeverityGetResponse struct {
@@ -120,10 +120,10 @@ func (r InsightSeverityGetParams) URLQuery() (v url.Values) {
 }
 
 type InsightSeverityGetResponseEnvelope struct {
-	Errors   []InsightSeverityGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InsightSeverityGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []InsightSeverityGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InsightSeverityGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success InsightSeverityGetResponseEnvelopeSuccess `json:"success,required"`
+	Success InsightSeverityGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  []InsightSeverityGetResponse              `json:"result"`
 	JSON    insightSeverityGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -148,8 +148,8 @@ func (r insightSeverityGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InsightSeverityGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           InsightSeverityGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             insightSeverityGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -196,8 +196,8 @@ func (r insightSeverityGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type InsightSeverityGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           InsightSeverityGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             insightSeverityGetResponseEnvelopeMessagesJSON   `json:"-"`

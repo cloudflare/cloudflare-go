@@ -46,10 +46,10 @@ func (r *BotService) List(ctx context.Context, query BotListParams, opts ...opti
 	path := "radar/bots"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the requested bot information.
@@ -58,15 +58,15 @@ func (r *BotService) Get(ctx context.Context, botSlug string, query BotGetParams
 	opts = slices.Concat(r.Options, opts)
 	if botSlug == "" {
 		err = errors.New("missing required bot_slug parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("radar/bots/%s", botSlug)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves an aggregated summary of bots HTTP requests grouped by the specified
@@ -77,10 +77,10 @@ func (r *BotService) Summary(ctx context.Context, dimension BotSummaryParamsDime
 	path := fmt.Sprintf("radar/bots/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves bots HTTP request volume over time.
@@ -90,10 +90,10 @@ func (r *BotService) Timeseries(ctx context.Context, query BotTimeseriesParams, 
 	path := "radar/bots/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests from bots, grouped by the specified
@@ -104,14 +104,14 @@ func (r *BotService) TimeseriesGroups(ctx context.Context, dimension BotTimeseri
 	path := fmt.Sprintf("radar/bots/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BotListResponse struct {
-	Bots []BotListResponseBot `json:"bots,required"`
+	Bots []BotListResponseBot `json:"bots" api:"required"`
 	JSON botListResponseJSON  `json:"-"`
 }
 
@@ -132,18 +132,18 @@ func (r botListResponseJSON) RawJSON() string {
 
 type BotListResponseBot struct {
 	// The category of the bot.
-	Category string `json:"category,required"`
+	Category string `json:"category" api:"required"`
 	// A summary for the bot (e.g., purpose).
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// The kind of the bot.
-	Kind string `json:"kind,required"`
+	Kind string `json:"kind" api:"required"`
 	// The name of the bot.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The organization that owns and operates the bot.
-	Operator string `json:"operator,required"`
+	Operator string `json:"operator" api:"required"`
 	// A kebab-case identifier derived from the bot name.
-	Slug              string                 `json:"slug,required"`
-	UserAgentPatterns []string               `json:"userAgentPatterns,required"`
+	Slug              string                 `json:"slug" api:"required"`
+	UserAgentPatterns []string               `json:"userAgentPatterns" api:"required"`
 	JSON              botListResponseBotJSON `json:"-"`
 }
 
@@ -170,7 +170,7 @@ func (r botListResponseBotJSON) RawJSON() string {
 }
 
 type BotGetResponse struct {
-	Bot  BotGetResponseBot  `json:"bot,required"`
+	Bot  BotGetResponseBot  `json:"bot" api:"required"`
 	JSON botGetResponseJSON `json:"-"`
 }
 
@@ -191,21 +191,21 @@ func (r botGetResponseJSON) RawJSON() string {
 
 type BotGetResponseBot struct {
 	// The category of the bot.
-	Category string `json:"category,required"`
+	Category string `json:"category" api:"required"`
 	// A summary for the bot (e.g., purpose).
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// The kind of the bot.
-	Kind string `json:"kind,required"`
+	Kind string `json:"kind" api:"required"`
 	// The name of the bot.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The organization that owns and operates the bot.
-	Operator string `json:"operator,required"`
+	Operator string `json:"operator" api:"required"`
 	// The link to the bot documentation.
-	OperatorURL string `json:"operatorUrl,required"`
+	OperatorURL string `json:"operatorUrl" api:"required"`
 	// A kebab-case identifier derived from the bot name.
-	Slug              string                `json:"slug,required"`
-	UserAgentPatterns []string              `json:"userAgentPatterns,required"`
-	UserAgents        []string              `json:"userAgents,required"`
+	Slug              string                `json:"slug" api:"required"`
+	UserAgentPatterns []string              `json:"userAgentPatterns" api:"required"`
+	UserAgents        []string              `json:"userAgents" api:"required"`
 	JSON              botGetResponseBotJSON `json:"-"`
 }
 
@@ -235,8 +235,8 @@ func (r botGetResponseBotJSON) RawJSON() string {
 
 type BotSummaryResponse struct {
 	// Metadata for the results.
-	Meta     BotSummaryResponseMeta `json:"meta,required"`
-	Summary0 map[string]string      `json:"summary_0,required"`
+	Meta     BotSummaryResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string      `json:"summary_0" api:"required"`
 	JSON     botSummaryResponseJSON `json:"-"`
 }
 
@@ -259,15 +259,15 @@ func (r botSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type BotSummaryResponseMeta struct {
-	ConfidenceInfo BotSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []BotSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo BotSummaryResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []BotSummaryResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization BotSummaryResponseMetaNormalization `json:"normalization,required"`
+	Normalization BotSummaryResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []BotSummaryResponseMetaUnit `json:"units,required"`
+	Units []BotSummaryResponseMetaUnit `json:"units" api:"required"`
 	JSON  botSummaryResponseMetaJSON   `json:"-"`
 }
 
@@ -292,9 +292,9 @@ func (r botSummaryResponseMetaJSON) RawJSON() string {
 }
 
 type BotSummaryResponseMetaConfidenceInfo struct {
-	Annotations []BotSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []BotSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                    `json:"level,required"`
+	Level int64                                    `json:"level" api:"required"`
 	JSON  botSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -318,15 +318,15 @@ func (r botSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type BotSummaryResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  BotSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                    `json:"description,required"`
-	EndDate     time.Time                                                 `json:"endDate,required" format:"date-time"`
+	DataSource  BotSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                    `json:"description" api:"required"`
+	EndDate     time.Time                                                 `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType BotSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType BotSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                               `json:"isInstantaneous,required"`
-	LinkedURL       string                                             `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                          `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                               `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                             `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                          `json:"startDate" api:"required" format:"date-time"`
 	JSON            botSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -413,9 +413,9 @@ func (r BotSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool
 
 type BotSummaryResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                           `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                           `json:"startTime" api:"required" format:"date-time"`
 	JSON      botSummaryResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -460,8 +460,8 @@ func (r BotSummaryResponseMetaNormalization) IsKnown() bool {
 }
 
 type BotSummaryResponseMetaUnit struct {
-	Name  string                         `json:"name,required"`
-	Value string                         `json:"value,required"`
+	Name  string                         `json:"name" api:"required"`
+	Value string                         `json:"value" api:"required"`
 	JSON  botSummaryResponseMetaUnitJSON `json:"-"`
 }
 
@@ -484,8 +484,8 @@ func (r botSummaryResponseMetaUnitJSON) RawJSON() string {
 
 type BotTimeseriesResponse struct {
 	// Metadata for the results.
-	Meta        BotTimeseriesResponseMeta        `json:"meta,required"`
-	ExtraFields map[string]BotTimeseriesResponse `json:"-,extras"`
+	Meta        BotTimeseriesResponseMeta        `json:"meta" api:"required"`
+	ExtraFields map[string]BotTimeseriesResponse `json:"-" api:"extrafields"`
 	JSON        botTimeseriesResponseJSON        `json:"-"`
 }
 
@@ -510,16 +510,16 @@ type BotTimeseriesResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    BotTimeseriesResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo BotTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []BotTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    BotTimeseriesResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo BotTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []BotTimeseriesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization BotTimeseriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization BotTimeseriesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []BotTimeseriesResponseMetaUnit `json:"units,required"`
+	Units []BotTimeseriesResponseMetaUnit `json:"units" api:"required"`
 	JSON  botTimeseriesResponseMetaJSON   `json:"-"`
 }
 
@@ -566,9 +566,9 @@ func (r BotTimeseriesResponseMetaAggInterval) IsKnown() bool {
 }
 
 type BotTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []BotTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []BotTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                       `json:"level,required"`
+	Level int64                                       `json:"level" api:"required"`
 	JSON  botTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -592,15 +592,15 @@ func (r botTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type BotTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  BotTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                       `json:"description,required"`
-	EndDate     time.Time                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  BotTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType BotTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType BotTimeseriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            botTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -687,9 +687,9 @@ func (r BotTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() b
 
 type BotTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      botTimeseriesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -734,8 +734,8 @@ func (r BotTimeseriesResponseMetaNormalization) IsKnown() bool {
 }
 
 type BotTimeseriesResponseMetaUnit struct {
-	Name  string                            `json:"name,required"`
-	Value string                            `json:"value,required"`
+	Name  string                            `json:"name" api:"required"`
+	Value string                            `json:"value" api:"required"`
 	JSON  botTimeseriesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -758,8 +758,8 @@ func (r botTimeseriesResponseMetaUnitJSON) RawJSON() string {
 
 type BotTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   BotTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 BotTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   BotTimeseriesGroupsResponseMeta   `json:"meta" api:"required"`
+	Serie0 BotTimeseriesGroupsResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   botTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
@@ -785,16 +785,16 @@ type BotTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    BotTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo BotTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []BotTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    BotTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo BotTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []BotTimeseriesGroupsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization BotTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization BotTimeseriesGroupsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []BotTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []BotTimeseriesGroupsResponseMetaUnit `json:"units" api:"required"`
 	JSON  botTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
@@ -841,9 +841,9 @@ func (r BotTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
 }
 
 type BotTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                             `json:"level,required"`
+	Level int64                                             `json:"level" api:"required"`
 	JSON  botTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -867,15 +867,15 @@ func (r botTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                             `json:"description,required"`
-	EndDate     time.Time                                                          `json:"endDate,required" format:"date-time"`
+	DataSource  BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                             `json:"description" api:"required"`
+	EndDate     time.Time                                                          `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
-	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                      `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                   `json:"startDate" api:"required" format:"date-time"`
 	JSON            botTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -963,9 +963,9 @@ func (r BotTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType) IsKno
 
 type BotTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                    `json:"startTime" api:"required" format:"date-time"`
 	JSON      botTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1010,8 +1010,8 @@ func (r BotTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 }
 
 type BotTimeseriesGroupsResponseMetaUnit struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
+	Name  string                                  `json:"name" api:"required"`
+	Value string                                  `json:"value" api:"required"`
 	JSON  botTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1033,8 +1033,8 @@ func (r botTimeseriesGroupsResponseMetaUnitJSON) RawJSON() string {
 }
 
 type BotTimeseriesGroupsResponseSerie0 struct {
-	Timestamps  []time.Time                           `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                   `json:"-,extras"`
+	Timestamps  []time.Time                           `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                   `json:"-" api:"extrafields"`
 	JSON        botTimeseriesGroupsResponseSerie0JSON `json:"-"`
 }
 
@@ -1157,8 +1157,8 @@ func (r BotListParamsKind) IsKnown() bool {
 }
 
 type BotListResponseEnvelope struct {
-	Result  BotListResponse             `json:"result,required"`
-	Success bool                        `json:"success,required"`
+	Result  BotListResponse             `json:"result" api:"required"`
+	Success bool                        `json:"success" api:"required"`
 	JSON    botListResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1209,8 +1209,8 @@ func (r BotGetParamsFormat) IsKnown() bool {
 }
 
 type BotGetResponseEnvelope struct {
-	Result  BotGetResponse             `json:"result,required"`
-	Success bool                       `json:"success,required"`
+	Result  BotGetResponse             `json:"result" api:"required"`
+	Success bool                       `json:"success" api:"required"`
 	JSON    botGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1376,8 +1376,8 @@ func (r BotSummaryParamsFormat) IsKnown() bool {
 }
 
 type BotSummaryResponseEnvelope struct {
-	Result  BotSummaryResponse             `json:"result,required"`
-	Success bool                           `json:"success,required"`
+	Result  BotSummaryResponse             `json:"result" api:"required"`
+	Success bool                           `json:"success" api:"required"`
 	JSON    botSummaryResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1545,8 +1545,8 @@ func (r BotTimeseriesParamsFormat) IsKnown() bool {
 }
 
 type BotTimeseriesResponseEnvelope struct {
-	Result  BotTimeseriesResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  BotTimeseriesResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    botTimeseriesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1737,8 +1737,8 @@ func (r BotTimeseriesGroupsParamsFormat) IsKnown() bool {
 }
 
 type BotTimeseriesGroupsResponseEnvelope struct {
-	Result  BotTimeseriesGroupsResponse             `json:"result,required"`
-	Success bool                                    `json:"success,required"`
+	Result  BotTimeseriesGroupsResponse             `json:"result" api:"required"`
+	Success bool                                    `json:"success" api:"required"`
 	JSON    botTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 

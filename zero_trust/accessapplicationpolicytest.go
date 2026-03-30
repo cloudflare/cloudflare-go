@@ -42,15 +42,15 @@ func (r *AccessApplicationPolicyTestService) New(ctx context.Context, params Acc
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policy-tests", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the current status of a given Access policy test.
@@ -59,19 +59,19 @@ func (r *AccessApplicationPolicyTestService) Get(ctx context.Context, policyTest
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyTestID == "" {
 		err = errors.New("missing required policy_test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policy-tests/%s", query.AccountID, policyTestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessApplicationPolicyTestNewResponse struct {
@@ -183,7 +183,7 @@ func (r AccessApplicationPolicyTestGetResponseStatus) IsKnown() bool {
 
 type AccessApplicationPolicyTestNewParams struct {
 	// Identifier.
-	AccountID param.Field[string]                                            `path:"account_id,required"`
+	AccountID param.Field[string]                                            `path:"account_id" api:"required"`
 	Policies  param.Field[[]AccessApplicationPolicyTestNewParamsPolicyUnion] `json:"policies"`
 }
 
@@ -202,12 +202,12 @@ type AccessApplicationPolicyTestNewParamsPolicyUnion interface {
 type AccessApplicationPolicyTestNewParamsPoliciesObject struct {
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
-	Decision param.Field[Decision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision" api:"required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
 	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -331,10 +331,10 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthen
 }
 
 type AccessApplicationPolicyTestNewResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyTestNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyTestNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationPolicyTestNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationPolicyTestNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationPolicyTestNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationPolicyTestNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationPolicyTestNewResponse                `json:"result"`
 	JSON    accessApplicationPolicyTestNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -359,8 +359,8 @@ func (r accessApplicationPolicyTestNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyTestNewResponseEnvelopeErrors struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           AccessApplicationPolicyTestNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationPolicyTestNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -408,8 +408,8 @@ func (r accessApplicationPolicyTestNewResponseEnvelopeErrorsSourceJSON) RawJSON(
 }
 
 type AccessApplicationPolicyTestNewResponseEnvelopeMessages struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           AccessApplicationPolicyTestNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationPolicyTestNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -473,14 +473,14 @@ func (r AccessApplicationPolicyTestNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationPolicyTestGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessApplicationPolicyTestGetResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationPolicyTestGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationPolicyTestGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationPolicyTestGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationPolicyTestGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationPolicyTestGetResponse                `json:"result"`
 	JSON    accessApplicationPolicyTestGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -505,8 +505,8 @@ func (r accessApplicationPolicyTestGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyTestGetResponseEnvelopeErrors struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           AccessApplicationPolicyTestGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationPolicyTestGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -554,8 +554,8 @@ func (r accessApplicationPolicyTestGetResponseEnvelopeErrorsSourceJSON) RawJSON(
 }
 
 type AccessApplicationPolicyTestGetResponseEnvelopeMessages struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           AccessApplicationPolicyTestGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationPolicyTestGetResponseEnvelopeMessagesJSON   `json:"-"`

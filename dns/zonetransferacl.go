@@ -41,15 +41,15 @@ func (r *ZoneTransferACLService) New(ctx context.Context, params ZoneTransferACL
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify ACL.
@@ -58,19 +58,19 @@ func (r *ZoneTransferACLService) Update(ctx context.Context, aclID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if aclID == "" {
 		err = errors.New("missing required acl_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", params.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List ACLs.
@@ -80,7 +80,7 @@ func (r *ZoneTransferACLService) List(ctx context.Context, query ZoneTransferACL
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,19 +106,19 @@ func (r *ZoneTransferACLService) Delete(ctx context.Context, aclID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if aclID == "" {
 		err = errors.New("missing required acl_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", body.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get ACL.
@@ -127,31 +127,31 @@ func (r *ZoneTransferACLService) Get(ctx context.Context, aclID string, query Zo
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if aclID == "" {
 		err = errors.New("missing required acl_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", query.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ACL struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
 	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
 	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
 	// IPv6 respectively.
-	IPRange string `json:"ip_range,required"`
+	IPRange string `json:"ip_range" api:"required"`
 	// The name of the acl.
-	Name string  `json:"name,required"`
+	Name string  `json:"name" api:"required"`
 	JSON aclJSON `json:"-"`
 }
 
@@ -178,9 +178,9 @@ type ACLParam struct {
 	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
 	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
 	// IPv6 respectively.
-	IPRange param.Field[string] `json:"ip_range,required"`
+	IPRange param.Field[string] `json:"ip_range" api:"required"`
 	// The name of the acl.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ACLParam) MarshalJSON() (data []byte, err error) {
@@ -209,15 +209,15 @@ func (r zoneTransferACLDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneTransferACLNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
 	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
 	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
 	// IPv6 respectively.
-	IPRange param.Field[string] `json:"ip_range,required"`
+	IPRange param.Field[string] `json:"ip_range" api:"required"`
 	// The name of the acl.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ZoneTransferACLNewParams) MarshalJSON() (data []byte, err error) {
@@ -225,10 +225,10 @@ func (r ZoneTransferACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferACLNewResponseEnvelope struct {
-	Errors   []ZoneTransferACLNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferACLNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferACLNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferACLNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferACLNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ACL                                       `json:"result"`
 	JSON    zoneTransferACLNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -253,8 +253,8 @@ func (r zoneTransferACLNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferACLNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ZoneTransferACLNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferACLNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -301,8 +301,8 @@ func (r zoneTransferACLNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneTransferACLNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ZoneTransferACLNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferACLNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -364,8 +364,8 @@ func (r ZoneTransferACLNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferACLUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	ACL       ACLParam            `json:"acl,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	ACL       ACLParam            `json:"acl" api:"required"`
 }
 
 func (r ZoneTransferACLUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -373,10 +373,10 @@ func (r ZoneTransferACLUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferACLUpdateResponseEnvelope struct {
-	Errors   []ZoneTransferACLUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferACLUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferACLUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferACLUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferACLUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ACL                                          `json:"result"`
 	JSON    zoneTransferACLUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -401,8 +401,8 @@ func (r zoneTransferACLUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferACLUpdateResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ZoneTransferACLUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferACLUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -449,8 +449,8 @@ func (r zoneTransferACLUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type ZoneTransferACLUpdateResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           ZoneTransferACLUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferACLUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -512,18 +512,18 @@ func (r ZoneTransferACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferACLListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferACLDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferACLDeleteResponseEnvelope struct {
-	Errors   []ZoneTransferACLDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferACLDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferACLDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferACLDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferACLDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ZoneTransferACLDeleteResponse                `json:"result"`
 	JSON    zoneTransferACLDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -548,8 +548,8 @@ func (r zoneTransferACLDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferACLDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ZoneTransferACLDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferACLDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -596,8 +596,8 @@ func (r zoneTransferACLDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type ZoneTransferACLDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           ZoneTransferACLDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferACLDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -659,14 +659,14 @@ func (r ZoneTransferACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferACLGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferACLGetResponseEnvelope struct {
-	Errors   []ZoneTransferACLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferACLGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferACLGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferACLGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferACLGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferACLGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ACL                                       `json:"result"`
 	JSON    zoneTransferACLGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -691,8 +691,8 @@ func (r zoneTransferACLGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferACLGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ZoneTransferACLGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferACLGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -739,8 +739,8 @@ func (r zoneTransferACLGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneTransferACLGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ZoneTransferACLGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferACLGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -42,36 +42,36 @@ func NewAccountTagService(opts ...option.RequestOption) (r *AccountTagService) {
 func (r *AccountTagService) Update(ctx context.Context, params AccountTagUpdateParams, opts ...option.RequestOption) (res *AccountTagUpdateResponse, err error) {
 	var env AccountTagUpdateResponseEnvelope
 	if params.IfMatch.Present {
-		opts = append(opts, option.WithHeader("If-Match", fmt.Sprintf("%s", params.IfMatch)))
+		opts = append(opts, option.WithHeader("If-Match", fmt.Sprintf("%v", params.IfMatch)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/tags", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Removes all tags from a specific account-level resource.
 func (r *AccountTagService) Delete(ctx context.Context, params AccountTagDeleteParams, opts ...option.RequestOption) (err error) {
 	if params.IfMatch.Present {
-		opts = append(opts, option.WithHeader("If-Match", fmt.Sprintf("%s", params.IfMatch)))
+		opts = append(opts, option.WithHeader("If-Match", fmt.Sprintf("%v", params.IfMatch)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/tags", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Retrieves tags for a specific account-level resource.
@@ -80,32 +80,32 @@ func (r *AccountTagService) Get(ctx context.Context, params AccountTagGetParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/tags", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Response for access_application resources
 type AccountTagUpdateResponse struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// This field can have the runtime type of [map[string]string].
-	Tags interface{}                  `json:"tags,required"`
-	Type AccountTagUpdateResponseType `json:"type,required"`
+	Tags interface{}                  `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
 	// Worker ID is required only for worker_version resources
@@ -358,18 +358,18 @@ func init() {
 // Response for access_application resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplication struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type,required"`
+	Tags map[string]string                                                                `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
 }
 
@@ -414,22 +414,22 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplica
 // Response for access_application_policy resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Access application ID is required only for access_application_policy resources
-	AccessApplicationID string `json:"access_application_id,required" format:"uuid"`
+	AccessApplicationID string `json:"access_application_id" api:"required" format:"uuid"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                      `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type,required"`
+	Tags map[string]string                                                                      `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                                 `json:"zone_id,required"`
+	ZoneID string                                                                                 `json:"zone_id" api:"required"`
 	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON `json:"-"`
 }
 
@@ -476,18 +476,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplica
 // Response for access_group resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                          `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type,required"`
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
 }
 
@@ -532,18 +532,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupTy
 // Response for account resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                      `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountType `json:"type,required"`
+	Tags map[string]string                                                      `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
 }
 
@@ -588,18 +588,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountType) 
 // Response for ai_gateway resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                        `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type,required"`
+	Tags map[string]string                                                        `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
 }
 
@@ -644,18 +644,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayType
 // Response for alerting_policy resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                             `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type,required"`
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
 }
 
@@ -700,18 +700,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolic
 // Response for alerting_webhook resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                              `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type,required"`
+	Tags map[string]string                                                              `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
 }
 
@@ -756,20 +756,20 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebho
 // Response for api_gateway_operation resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                  `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type,required"`
+	Tags map[string]string                                                                  `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                             `json:"zone_id,required"`
+	ZoneID string                                                                             `json:"zone_id" api:"required"`
 	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON `json:"-"`
 }
 
@@ -815,18 +815,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOpe
 // Response for cloudflared_tunnel resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type,required"`
+	Tags map[string]string                                                                `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
 }
 
@@ -871,20 +871,20 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTu
 // Response for custom_certificate resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type,required"`
+	Tags map[string]string                                                                `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                           `json:"zone_id,required"`
+	ZoneID string                                                                           `json:"zone_id" api:"required"`
 	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON `json:"-"`
 }
 
@@ -930,20 +930,20 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertifi
 // Response for custom_hostname resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                             `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type,required"`
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                        `json:"zone_id,required"`
+	ZoneID string                                                                        `json:"zone_id" api:"required"`
 	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON `json:"-"`
 }
 
@@ -989,18 +989,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnam
 // Response for d1_database resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                         `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type,required"`
+	Tags map[string]string                                                         `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
 }
 
@@ -1045,20 +1045,20 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseTyp
 // Response for dns_record resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                        `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type,required"`
+	Tags map[string]string                                                        `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                   `json:"zone_id,required"`
+	ZoneID string                                                                   `json:"zone_id" api:"required"`
 	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordJSON `json:"-"`
 }
 
@@ -1104,18 +1104,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordType
 // Response for durable_object_namespace resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                     `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type,required"`
+	Tags map[string]string                                                                     `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
 }
 
@@ -1160,18 +1160,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObject
 // Response for gateway_list resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                          `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type,required"`
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
 }
 
@@ -1216,18 +1216,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListTy
 // Response for gateway_rule resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRule struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                          `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type,required"`
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
 }
 
@@ -1272,18 +1272,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleTy
 // Response for image resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImage struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                    `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImageType `json:"type,required"`
+	Tags map[string]string                                                    `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImageType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
 }
 
@@ -1328,18 +1328,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImageType) Is
 // Response for kv_namespace resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                          `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type,required"`
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
 }
 
@@ -1384,20 +1384,20 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceTy
 // Response for managed_client_certificate resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                       `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type,required"`
+	Tags map[string]string                                                                       `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                                  `json:"zone_id,required"`
+	ZoneID string                                                                                  `json:"zone_id" api:"required"`
 	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON `json:"-"`
 }
 
@@ -1443,18 +1443,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClient
 // Response for queue resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueue struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                    `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueueType `json:"type,required"`
+	Tags map[string]string                                                    `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueueType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
 }
 
@@ -1499,18 +1499,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueueType) Is
 // Response for r2_bucket resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                       `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type,required"`
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
 }
 
@@ -1555,18 +1555,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketType)
 // Response for resource_share resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                            `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type,required"`
+	Tags map[string]string                                                            `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
 }
 
@@ -1611,18 +1611,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare
 // Response for stream_live_input resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInput struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                              `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type,required"`
+	Tags map[string]string                                                              `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
 }
 
@@ -1667,18 +1667,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInp
 // Response for stream_video resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideo struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                          `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type,required"`
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
 }
 
@@ -1723,18 +1723,18 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoTy
 // Response for worker resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorker struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                     `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type,required"`
+	Tags map[string]string                                                     `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
 }
 
@@ -1779,20 +1779,20 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerType) I
 // Response for worker_version resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                            `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type,required"`
+	Tags map[string]string                                                            `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type" api:"required"`
 	// Worker ID is required only for worker_version resources
-	WorkerID string                                                                       `json:"worker_id,required"`
+	WorkerID string                                                                       `json:"worker_id" api:"required"`
 	JSON     accountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON `json:"-"`
 }
 
@@ -1838,20 +1838,20 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion
 // Response for zone resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZone struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                   `json:"tags,required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneType `json:"type,required"`
+	Tags map[string]string                                                   `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                              `json:"zone_id,required"`
+	ZoneID string                                                              `json:"zone_id" api:"required"`
 	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneJSON `json:"-"`
 }
 
@@ -1937,18 +1937,18 @@ func (r AccountTagUpdateResponseType) IsKnown() bool {
 // Response for access_application resources
 type AccountTagGetResponse struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// This field can have the runtime type of [map[string]string].
-	Tags interface{}               `json:"tags,required"`
-	Type AccountTagGetResponseType `json:"type,required"`
+	Tags interface{}               `json:"tags" api:"required"`
+	Type AccountTagGetResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
 	// Worker ID is required only for worker_version resources
@@ -2201,18 +2201,18 @@ func init() {
 // Response for access_application resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplication struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                             `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type,required"`
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
 }
 
@@ -2257,22 +2257,22 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicatio
 // Response for access_application_policy resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Access application ID is required only for access_application_policy resources
-	AccessApplicationID string `json:"access_application_id,required" format:"uuid"`
+	AccessApplicationID string `json:"access_application_id" api:"required" format:"uuid"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                   `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type,required"`
+	Tags map[string]string                                                                   `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                              `json:"zone_id,required"`
+	ZoneID string                                                                              `json:"zone_id" api:"required"`
 	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON `json:"-"`
 }
 
@@ -2319,18 +2319,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicatio
 // Response for access_group resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                       `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type,required"`
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
 }
 
@@ -2375,18 +2375,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupType)
 // Response for account resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                   `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountType `json:"type,required"`
+	Tags map[string]string                                                   `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
 }
 
@@ -2431,18 +2431,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountType) IsK
 // Response for ai_gateway resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                     `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type,required"`
+	Tags map[string]string                                                     `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
 }
 
@@ -2487,18 +2487,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayType) I
 // Response for alerting_policy resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                          `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type,required"`
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
 }
 
@@ -2543,18 +2543,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyTy
 // Response for alerting_webhook resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                           `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type,required"`
+	Tags map[string]string                                                           `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
 }
 
@@ -2599,20 +2599,20 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookT
 // Response for api_gateway_operation resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                               `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type,required"`
+	Tags map[string]string                                                               `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                          `json:"zone_id,required"`
+	ZoneID string                                                                          `json:"zone_id" api:"required"`
 	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON `json:"-"`
 }
 
@@ -2658,18 +2658,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperat
 // Response for cloudflared_tunnel resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                             `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type,required"`
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
 }
 
@@ -2714,20 +2714,20 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunne
 // Response for custom_certificate resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                             `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type,required"`
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                        `json:"zone_id,required"`
+	ZoneID string                                                                        `json:"zone_id" api:"required"`
 	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON `json:"-"`
 }
 
@@ -2773,20 +2773,20 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificat
 // Response for custom_hostname resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                          `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type,required"`
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                     `json:"zone_id,required"`
+	ZoneID string                                                                     `json:"zone_id" api:"required"`
 	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON `json:"-"`
 }
 
@@ -2832,18 +2832,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameTy
 // Response for d1_database resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectD1Database struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                      `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type,required"`
+	Tags map[string]string                                                      `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
 }
 
@@ -2888,20 +2888,20 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseType) 
 // Response for dns_record resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                     `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type,required"`
+	Tags map[string]string                                                     `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                `json:"zone_id,required"`
+	ZoneID string                                                                `json:"zone_id" api:"required"`
 	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordJSON `json:"-"`
 }
 
@@ -2947,18 +2947,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordType) I
 // Response for durable_object_namespace resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                  `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type,required"`
+	Tags map[string]string                                                                  `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
 }
 
@@ -3003,18 +3003,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNam
 // Response for gateway_list resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayList struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                       `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type,required"`
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
 }
 
@@ -3059,18 +3059,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayListType)
 // Response for gateway_rule resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRule struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                       `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type,required"`
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
 }
 
@@ -3115,18 +3115,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleType)
 // Response for image resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectImage struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                 `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectImageType `json:"type,required"`
+	Tags map[string]string                                                 `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectImageType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
 }
 
@@ -3171,18 +3171,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectImageType) IsKno
 // Response for kv_namespace resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                       `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type,required"`
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
 }
 
@@ -3227,20 +3227,20 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceType)
 // Response for managed_client_certificate resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                                    `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type,required"`
+	Tags map[string]string                                                                    `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                               `json:"zone_id,required"`
+	ZoneID string                                                                               `json:"zone_id" api:"required"`
 	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON `json:"-"`
 }
 
@@ -3286,18 +3286,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCer
 // Response for queue resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectQueue struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                 `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectQueueType `json:"type,required"`
+	Tags map[string]string                                                 `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectQueueType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
 }
 
@@ -3342,18 +3342,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectQueueType) IsKno
 // Response for r2_bucket resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                    `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type,required"`
+	Tags map[string]string                                                    `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
 }
 
@@ -3398,18 +3398,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectR2BucketType) Is
 // Response for resource_share resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShare struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                         `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type,required"`
+	Tags map[string]string                                                         `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
 }
 
@@ -3454,18 +3454,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShareTyp
 // Response for stream_live_input resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInput struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                           `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type,required"`
+	Tags map[string]string                                                           `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
 }
 
@@ -3510,18 +3510,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputT
 // Response for stream_video resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideo struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                       `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type,required"`
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
 }
 
@@ -3566,18 +3566,18 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoType)
 // Response for worker resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorker struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                  `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type,required"`
+	Tags map[string]string                                                  `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
 }
 
@@ -3622,20 +3622,20 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerType) IsKn
 // Response for worker_version resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                         `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type,required"`
+	Tags map[string]string                                                         `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type" api:"required"`
 	// Worker ID is required only for worker_version resources
-	WorkerID string                                                                    `json:"worker_id,required"`
+	WorkerID string                                                                    `json:"worker_id" api:"required"`
 	JSON     accountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON `json:"-"`
 }
 
@@ -3681,20 +3681,20 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionTyp
 // Response for zone resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectZone struct {
 	// Identifies the unique resource.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
 	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
 	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
 	// should treat ETags as opaque strings and pass them back via the If-Match header
 	// on write operations.
-	Etag string `json:"etag,required"`
+	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Contains key-value pairs of tags.
-	Tags map[string]string                                                `json:"tags,required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneType `json:"type,required"`
+	Tags map[string]string                                                `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                           `json:"zone_id,required"`
+	ZoneID string                                                           `json:"zone_id" api:"required"`
 	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectZoneJSON `json:"-"`
 }
 
@@ -3779,9 +3779,9 @@ func (r AccountTagGetResponseType) IsKnown() bool {
 
 type AccountTagUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request body schema for setting tags on account-level resources.
-	Body    AccountTagUpdateParamsBodyUnion `json:"body,required"`
+	Body    AccountTagUpdateParamsBodyUnion `json:"body" api:"required"`
 	IfMatch param.Field[string]             `header:"If-Match"`
 }
 
@@ -3792,10 +3792,10 @@ func (r AccountTagUpdateParams) MarshalJSON() (data []byte, err error) {
 // Request body schema for setting tags on account-level resources.
 type AccountTagUpdateParamsBody struct {
 	// Identifies the unique resource.
-	ResourceID param.Field[string] `json:"resource_id,required"`
+	ResourceID param.Field[string] `json:"resource_id" api:"required"`
 	// Enum for base account-level resource types (those with no extra required
 	// fields).
-	ResourceType param.Field[AccountTagUpdateParamsBodyResourceType] `json:"resource_type,required"`
+	ResourceType param.Field[AccountTagUpdateParamsBodyResourceType] `json:"resource_type" api:"required"`
 	Tags         param.Field[interface{}]                            `json:"tags"`
 	// Worker ID is required only for worker_version resources
 	WorkerID param.Field[string] `json:"worker_id"`
@@ -3820,12 +3820,12 @@ type AccountTagUpdateParamsBodyUnion interface {
 // Request body schema for deleting tags from account-level resources.
 type AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersion struct {
 	// Identifies the unique resource.
-	ResourceID param.Field[string] `json:"resource_id,required"`
+	ResourceID param.Field[string] `json:"resource_id" api:"required"`
 	// Enum for base account-level resource types (those with no extra required
 	// fields).
-	ResourceType param.Field[AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType] `json:"resource_type,required"`
+	ResourceType param.Field[AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType] `json:"resource_type" api:"required"`
 	// Worker ID is required only for worker_version resources
-	WorkerID param.Field[string] `json:"worker_id,required"`
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
 	// Contains key-value pairs of tags.
 	Tags param.Field[map[string]string] `json:"tags"`
 }
@@ -3875,10 +3875,10 @@ func (r AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorke
 // Request body schema for deleting tags from account-level resources.
 type AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBase struct {
 	// Identifies the unique resource.
-	ResourceID param.Field[string] `json:"resource_id,required"`
+	ResourceID param.Field[string] `json:"resource_id" api:"required"`
 	// Enum for base account-level resource types (those with no extra required
 	// fields).
-	ResourceType param.Field[AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType] `json:"resource_type,required"`
+	ResourceType param.Field[AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType] `json:"resource_type" api:"required"`
 	// Contains key-value pairs of tags.
 	Tags param.Field[map[string]string] `json:"tags"`
 }
@@ -3960,10 +3960,10 @@ func (r AccountTagUpdateParamsBodyResourceType) IsKnown() bool {
 }
 
 type AccountTagUpdateResponseEnvelope struct {
-	Errors   []AccountTagUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountTagUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccountTagUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountTagUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccountTagUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccountTagUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Response for access_application resources
 	Result AccountTagUpdateResponse             `json:"result"`
 	JSON   accountTagUpdateResponseEnvelopeJSON `json:"-"`
@@ -3989,8 +3989,8 @@ func (r accountTagUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountTagUpdateResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AccountTagUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountTagUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4037,8 +4037,8 @@ func (r accountTagUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountTagUpdateResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AccountTagUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountTagUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -4101,17 +4101,17 @@ func (r AccountTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountTagDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	IfMatch   param.Field[string] `header:"If-Match"`
 }
 
 type AccountTagGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The ID of the resource to retrieve tags for.
-	ResourceID param.Field[string] `query:"resource_id,required"`
+	ResourceID param.Field[string] `query:"resource_id" api:"required"`
 	// The type of the resource.
-	ResourceType param.Field[AccountTagGetParamsResourceType] `query:"resource_type,required"`
+	ResourceType param.Field[AccountTagGetParamsResourceType] `query:"resource_type" api:"required"`
 	// Worker identifier. Required for worker_version resources.
 	WorkerID param.Field[string] `query:"worker_id"`
 }
@@ -4159,10 +4159,10 @@ func (r AccountTagGetParamsResourceType) IsKnown() bool {
 }
 
 type AccountTagGetResponseEnvelope struct {
-	Errors   []AccountTagGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountTagGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccountTagGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountTagGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccountTagGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccountTagGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Response for access_application resources
 	Result AccountTagGetResponse             `json:"result"`
 	JSON   accountTagGetResponseEnvelopeJSON `json:"-"`
@@ -4188,8 +4188,8 @@ func (r accountTagGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountTagGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AccountTagGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountTagGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4236,8 +4236,8 @@ func (r accountTagGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountTagGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccountTagGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountTagGetResponseEnvelopeMessagesJSON   `json:"-"`

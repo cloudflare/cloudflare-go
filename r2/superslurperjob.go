@@ -49,15 +49,15 @@ func (r *SuperSlurperJobService) New(ctx context.Context, params SuperSlurperJob
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all R2 Super Slurper migration jobs for the account with their status.
@@ -67,7 +67,7 @@ func (r *SuperSlurperJobService) List(ctx context.Context, params SuperSlurperJo
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -94,19 +94,19 @@ func (r *SuperSlurperJobService) Abort(ctx context.Context, jobID string, body S
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if jobID == "" {
 		err = errors.New("missing required job_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs/%s/abort", body.AccountID, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Cancels all running R2 Super Slurper migration jobs for the account. Any objects
@@ -117,15 +117,15 @@ func (r *SuperSlurperJobService) AbortAll(ctx context.Context, body SuperSlurper
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs/abortAll", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves detailed status and configuration for a specific R2 Super Slurper
@@ -135,19 +135,19 @@ func (r *SuperSlurperJobService) Get(ctx context.Context, jobID string, query Su
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if jobID == "" {
 		err = errors.New("missing required job_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs/%s", query.AccountID, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Pauses a running R2 Super Slurper migration job. The job can be resumed later to
@@ -157,19 +157,19 @@ func (r *SuperSlurperJobService) Pause(ctx context.Context, jobID string, body S
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if jobID == "" {
 		err = errors.New("missing required job_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs/%s/pause", body.AccountID, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves current progress metrics for an R2 Super Slurper migration job
@@ -178,19 +178,19 @@ func (r *SuperSlurperJobService) Progress(ctx context.Context, jobID string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if jobID == "" {
 		err = errors.New("missing required job_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs/%s/progress", query.AccountID, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Resumes a paused R2 Super Slurper migration job, continuing the transfer from
@@ -200,19 +200,19 @@ func (r *SuperSlurperJobService) Resume(ctx context.Context, jobID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if jobID == "" {
 		err = errors.New("missing required job_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/slurper/jobs/%s/resume", body.AccountID, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SuperSlurperJobNewResponse struct {
@@ -239,7 +239,7 @@ func (r superSlurperJobNewResponseJSON) RawJSON() string {
 type SuperSlurperJobListResponse struct {
 	ID         string                            `json:"id"`
 	CreatedAt  string                            `json:"createdAt"`
-	FinishedAt string                            `json:"finishedAt,nullable"`
+	FinishedAt string                            `json:"finishedAt" api:"nullable"`
 	Overwrite  bool                              `json:"overwrite"`
 	Source     SuperSlurperJobListResponseSource `json:"source"`
 	Status     SuperSlurperJobListResponseStatus `json:"status"`
@@ -271,11 +271,11 @@ func (r superSlurperJobListResponseJSON) RawJSON() string {
 
 type SuperSlurperJobListResponseSource struct {
 	Bucket       string                                        `json:"bucket"`
-	Endpoint     string                                        `json:"endpoint,nullable"`
+	Endpoint     string                                        `json:"endpoint" api:"nullable"`
 	Jurisdiction SuperSlurperJobListResponseSourceJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [[]string].
 	Keys       interface{}                             `json:"keys"`
-	PathPrefix string                                  `json:"pathPrefix,nullable"`
+	PathPrefix string                                  `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobListResponseSourceVendor `json:"vendor"`
 	JSON       superSlurperJobListResponseSourceJSON   `json:"-"`
 	union      SuperSlurperJobListResponseSourceUnion
@@ -346,9 +346,9 @@ func init() {
 
 type SuperSlurperJobListResponseSourceS3SourceResponseSchema struct {
 	Bucket     string                                                        `json:"bucket"`
-	Endpoint   string                                                        `json:"endpoint,nullable"`
-	Keys       []string                                                      `json:"keys,nullable"`
-	PathPrefix string                                                        `json:"pathPrefix,nullable"`
+	Endpoint   string                                                        `json:"endpoint" api:"nullable"`
+	Keys       []string                                                      `json:"keys" api:"nullable"`
+	PathPrefix string                                                        `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobListResponseSourceS3SourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobListResponseSourceS3SourceResponseSchemaJSON   `json:"-"`
 }
@@ -393,8 +393,8 @@ func (r SuperSlurperJobListResponseSourceS3SourceResponseSchemaVendor) IsKnown()
 
 type SuperSlurperJobListResponseSourceGcsSourceResponseSchema struct {
 	Bucket     string                                                         `json:"bucket"`
-	Keys       []string                                                       `json:"keys,nullable"`
-	PathPrefix string                                                         `json:"pathPrefix,nullable"`
+	Keys       []string                                                       `json:"keys" api:"nullable"`
+	PathPrefix string                                                         `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobListResponseSourceGcsSourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobListResponseSourceGcsSourceResponseSchemaJSON   `json:"-"`
 }
@@ -439,8 +439,8 @@ func (r SuperSlurperJobListResponseSourceGcsSourceResponseSchemaVendor) IsKnown(
 type SuperSlurperJobListResponseSourceR2SourceResponseSchema struct {
 	Bucket       string                                                              `json:"bucket"`
 	Jurisdiction SuperSlurperJobListResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction"`
-	Keys         []string                                                            `json:"keys,nullable"`
-	PathPrefix   string                                                              `json:"pathPrefix,nullable"`
+	Keys         []string                                                            `json:"keys" api:"nullable"`
+	PathPrefix   string                                                              `json:"pathPrefix" api:"nullable"`
 	Vendor       Provider                                                            `json:"vendor"`
 	JSON         superSlurperJobListResponseSourceR2SourceResponseSchemaJSON         `json:"-"`
 }
@@ -578,7 +578,7 @@ func (r SuperSlurperJobListResponseTargetJurisdiction) IsKnown() bool {
 type SuperSlurperJobGetResponse struct {
 	ID         string                           `json:"id"`
 	CreatedAt  string                           `json:"createdAt"`
-	FinishedAt string                           `json:"finishedAt,nullable"`
+	FinishedAt string                           `json:"finishedAt" api:"nullable"`
 	Overwrite  bool                             `json:"overwrite"`
 	Source     SuperSlurperJobGetResponseSource `json:"source"`
 	Status     SuperSlurperJobGetResponseStatus `json:"status"`
@@ -610,11 +610,11 @@ func (r superSlurperJobGetResponseJSON) RawJSON() string {
 
 type SuperSlurperJobGetResponseSource struct {
 	Bucket       string                                       `json:"bucket"`
-	Endpoint     string                                       `json:"endpoint,nullable"`
+	Endpoint     string                                       `json:"endpoint" api:"nullable"`
 	Jurisdiction SuperSlurperJobGetResponseSourceJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [[]string].
 	Keys       interface{}                            `json:"keys"`
-	PathPrefix string                                 `json:"pathPrefix,nullable"`
+	PathPrefix string                                 `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobGetResponseSourceVendor `json:"vendor"`
 	JSON       superSlurperJobGetResponseSourceJSON   `json:"-"`
 	union      SuperSlurperJobGetResponseSourceUnion
@@ -685,9 +685,9 @@ func init() {
 
 type SuperSlurperJobGetResponseSourceS3SourceResponseSchema struct {
 	Bucket     string                                                       `json:"bucket"`
-	Endpoint   string                                                       `json:"endpoint,nullable"`
-	Keys       []string                                                     `json:"keys,nullable"`
-	PathPrefix string                                                       `json:"pathPrefix,nullable"`
+	Endpoint   string                                                       `json:"endpoint" api:"nullable"`
+	Keys       []string                                                     `json:"keys" api:"nullable"`
+	PathPrefix string                                                       `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobGetResponseSourceS3SourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobGetResponseSourceS3SourceResponseSchemaJSON   `json:"-"`
 }
@@ -731,8 +731,8 @@ func (r SuperSlurperJobGetResponseSourceS3SourceResponseSchemaVendor) IsKnown() 
 
 type SuperSlurperJobGetResponseSourceGcsSourceResponseSchema struct {
 	Bucket     string                                                        `json:"bucket"`
-	Keys       []string                                                      `json:"keys,nullable"`
-	PathPrefix string                                                        `json:"pathPrefix,nullable"`
+	Keys       []string                                                      `json:"keys" api:"nullable"`
+	PathPrefix string                                                        `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobGetResponseSourceGcsSourceResponseSchemaVendor `json:"vendor"`
 	JSON       superSlurperJobGetResponseSourceGcsSourceResponseSchemaJSON   `json:"-"`
 }
@@ -777,8 +777,8 @@ func (r SuperSlurperJobGetResponseSourceGcsSourceResponseSchemaVendor) IsKnown()
 type SuperSlurperJobGetResponseSourceR2SourceResponseSchema struct {
 	Bucket       string                                                             `json:"bucket"`
 	Jurisdiction SuperSlurperJobGetResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction"`
-	Keys         []string                                                           `json:"keys,nullable"`
-	PathPrefix   string                                                             `json:"pathPrefix,nullable"`
+	Keys         []string                                                           `json:"keys" api:"nullable"`
+	PathPrefix   string                                                             `json:"pathPrefix" api:"nullable"`
 	Vendor       Provider                                                           `json:"vendor"`
 	JSON         superSlurperJobGetResponseSourceR2SourceResponseSchemaJSON         `json:"-"`
 }
@@ -963,7 +963,7 @@ func (r SuperSlurperJobProgressResponseStatus) IsKnown() bool {
 }
 
 type SuperSlurperJobNewParams struct {
-	AccountID param.Field[string]                              `path:"account_id,required"`
+	AccountID param.Field[string]                              `path:"account_id" api:"required"`
 	Overwrite param.Field[bool]                                `json:"overwrite"`
 	Source    param.Field[SuperSlurperJobNewParamsSourceUnion] `json:"source"`
 	Target    param.Field[SuperSlurperJobNewParamsTarget]      `json:"target"`
@@ -974,9 +974,9 @@ func (r SuperSlurperJobNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SuperSlurperJobNewParamsSource struct {
-	Bucket       param.Field[string]                                     `json:"bucket,required"`
-	Secret       param.Field[interface{}]                                `json:"secret,required"`
-	Vendor       param.Field[SuperSlurperJobNewParamsSourceVendor]       `json:"vendor,required"`
+	Bucket       param.Field[string]                                     `json:"bucket" api:"required"`
+	Secret       param.Field[interface{}]                                `json:"secret" api:"required"`
+	Vendor       param.Field[SuperSlurperJobNewParamsSourceVendor]       `json:"vendor" api:"required"`
 	Endpoint     param.Field[string]                                     `json:"endpoint"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsSourceJurisdiction] `json:"jurisdiction"`
 	Keys         param.Field[interface{}]                                `json:"keys"`
@@ -999,9 +999,9 @@ type SuperSlurperJobNewParamsSourceUnion interface {
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema struct {
-	Bucket     param.Field[string]                                                      `json:"bucket,required"`
-	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret] `json:"secret,required"`
-	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor] `json:"vendor,required"`
+	Bucket     param.Field[string]                                                      `json:"bucket" api:"required"`
+	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret] `json:"secret" api:"required"`
+	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor] `json:"vendor" api:"required"`
 	Endpoint   param.Field[string]                                                      `json:"endpoint"`
 	Keys       param.Field[[]string]                                                    `json:"keys"`
 	PathPrefix param.Field[string]                                                      `json:"pathPrefix"`
@@ -1016,8 +1016,8 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema) implementsSuperSl
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
+	AccessKeyID     param.Field[string] `json:"accessKeyId" api:"required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey" api:"required"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
@@ -1039,9 +1039,9 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor) IsKnown() b
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchema struct {
-	Bucket     param.Field[string]                                                       `json:"bucket,required"`
-	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret] `json:"secret,required"`
-	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaVendor] `json:"vendor,required"`
+	Bucket     param.Field[string]                                                       `json:"bucket" api:"required"`
+	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret] `json:"secret" api:"required"`
+	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaVendor] `json:"vendor" api:"required"`
 	Keys       param.Field[[]string]                                                     `json:"keys"`
 	PathPrefix param.Field[string]                                                       `json:"pathPrefix"`
 }
@@ -1054,8 +1054,8 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchema) implementsSuperS
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret struct {
-	ClientEmail param.Field[string] `json:"clientEmail,required"`
-	PrivateKey  param.Field[string] `json:"privateKey,required"`
+	ClientEmail param.Field[string] `json:"clientEmail" api:"required"`
+	PrivateKey  param.Field[string] `json:"privateKey" api:"required"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaSecret) MarshalJSON() (data []byte, err error) {
@@ -1077,9 +1077,9 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperGcsSourceSchemaVendor) IsKnown() 
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchema struct {
-	Bucket       param.Field[string]                                                            `json:"bucket,required"`
-	Secret       param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret]       `json:"secret,required"`
-	Vendor       param.Field[Provider]                                                          `json:"vendor,required"`
+	Bucket       param.Field[string]                                                            `json:"bucket" api:"required"`
+	Secret       param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret]       `json:"secret" api:"required"`
+	Vendor       param.Field[Provider]                                                          `json:"vendor" api:"required"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaJurisdiction] `json:"jurisdiction"`
 	Keys         param.Field[[]string]                                                          `json:"keys"`
 	PathPrefix   param.Field[string]                                                            `json:"pathPrefix"`
@@ -1093,8 +1093,8 @@ func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchema) implementsSuperSl
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
+	AccessKeyID     param.Field[string] `json:"accessKeyId" api:"required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey" api:"required"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperR2SourceSchemaSecret) MarshalJSON() (data []byte, err error) {
@@ -1150,9 +1150,9 @@ func (r SuperSlurperJobNewParamsSourceJurisdiction) IsKnown() bool {
 }
 
 type SuperSlurperJobNewParamsTarget struct {
-	Bucket       param.Field[string]                                     `json:"bucket,required"`
-	Secret       param.Field[SuperSlurperJobNewParamsTargetSecret]       `json:"secret,required"`
-	Vendor       param.Field[Provider]                                   `json:"vendor,required"`
+	Bucket       param.Field[string]                                     `json:"bucket" api:"required"`
+	Secret       param.Field[SuperSlurperJobNewParamsTargetSecret]       `json:"secret" api:"required"`
+	Vendor       param.Field[Provider]                                   `json:"vendor" api:"required"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsTargetJurisdiction] `json:"jurisdiction"`
 }
 
@@ -1161,8 +1161,8 @@ func (r SuperSlurperJobNewParamsTarget) MarshalJSON() (data []byte, err error) {
 }
 
 type SuperSlurperJobNewParamsTargetSecret struct {
-	AccessKeyID     param.Field[string] `json:"accessKeyId,required"`
-	SecretAccessKey param.Field[string] `json:"secretAccessKey,required"`
+	AccessKeyID     param.Field[string] `json:"accessKeyId" api:"required"`
+	SecretAccessKey param.Field[string] `json:"secretAccessKey" api:"required"`
 }
 
 func (r SuperSlurperJobNewParamsTargetSecret) MarshalJSON() (data []byte, err error) {
@@ -1229,7 +1229,7 @@ func (r SuperSlurperJobNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Limit     param.Field[int64]  `query:"limit"`
 	Offset    param.Field[int64]  `query:"offset"`
 }
@@ -1244,7 +1244,7 @@ func (r SuperSlurperJobListParams) URLQuery() (v url.Values) {
 }
 
 type SuperSlurperJobAbortParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SuperSlurperJobAbortResponseEnvelope struct {
@@ -1291,7 +1291,7 @@ func (r SuperSlurperJobAbortResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobAbortAllParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SuperSlurperJobAbortAllResponseEnvelope struct {
@@ -1338,7 +1338,7 @@ func (r SuperSlurperJobAbortAllResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SuperSlurperJobGetResponseEnvelope struct {
@@ -1385,7 +1385,7 @@ func (r SuperSlurperJobGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobPauseParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SuperSlurperJobPauseResponseEnvelope struct {
@@ -1432,7 +1432,7 @@ func (r SuperSlurperJobPauseResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobProgressParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SuperSlurperJobProgressResponseEnvelope struct {
@@ -1479,7 +1479,7 @@ func (r SuperSlurperJobProgressResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobResumeParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SuperSlurperJobResumeResponseEnvelope struct {

@@ -50,7 +50,7 @@ func (r *AIToMarkdownService) New(ctx context.Context, params AIToMarkdownNewPar
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/tomarkdown", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -75,11 +75,11 @@ func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, params AIToMark
 }
 
 type AIToMarkdownNewResponse struct {
-	Data     string                      `json:"data,required"`
-	Format   string                      `json:"format,required"`
-	MimeType string                      `json:"mimeType,required"`
-	Name     string                      `json:"name,required"`
-	Tokens   string                      `json:"tokens,required"`
+	Data     string                      `json:"data" api:"required"`
+	Format   string                      `json:"format" api:"required"`
+	MimeType string                      `json:"mimeType" api:"required"`
+	Name     string                      `json:"name" api:"required"`
+	Tokens   string                      `json:"tokens" api:"required"`
 	JSON     aiToMarkdownNewResponseJSON `json:"-"`
 }
 
@@ -104,8 +104,8 @@ func (r aiToMarkdownNewResponseJSON) RawJSON() string {
 }
 
 type AIToMarkdownNewParams struct {
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Files     param.Field[[]io.Reader] `json:"files,required" format:"binary"`
+	AccountID param.Field[string]      `path:"account_id" api:"required"`
+	Files     param.Field[[]io.Reader] `json:"files" api:"required" format:"binary"`
 }
 
 func (r AIToMarkdownNewParams) MarshalMultipart() (data []byte, contentType string, err error) {

@@ -50,15 +50,15 @@ func (r *AccessUserService) New(ctx context.Context, params AccessUserNewParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a specific user's name for an account. Requires the user's current email
@@ -68,19 +68,19 @@ func (r *AccessUserService) Update(ctx context.Context, userID string, params Ac
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s", params.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets a list of users for an account.
@@ -90,7 +90,7 @@ func (r *AccessUserService) List(ctx context.Context, params AccessUserListParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -117,19 +117,19 @@ func (r *AccessUserService) Delete(ctx context.Context, userID string, body Acce
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s", body.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets a specific user for an account.
@@ -138,19 +138,19 @@ func (r *AccessUserService) Get(ctx context.Context, userID string, query Access
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s", query.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessUser struct {
@@ -448,9 +448,9 @@ func (r accessUserGetResponseJSON) RawJSON() string {
 
 type AccessUserNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The email of the user.
-	Email param.Field[string] `json:"email,required" format:"email"`
+	Email param.Field[string] `json:"email" api:"required" format:"email"`
 	// The name of the user.
 	Name param.Field[string] `json:"name"`
 }
@@ -460,10 +460,10 @@ func (r AccessUserNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessUserNewResponseEnvelope struct {
-	Errors   []AccessUserNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessUserNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessUserNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessUserNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessUserNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessUserNewResponse                `json:"result"`
 	JSON    accessUserNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -488,8 +488,8 @@ func (r accessUserNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessUserNewResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AccessUserNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessUserNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -536,8 +536,8 @@ func (r accessUserNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessUserNewResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessUserNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessUserNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -600,11 +600,11 @@ func (r AccessUserNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessUserUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The email of the user.
-	Email param.Field[string] `json:"email,required" format:"email"`
+	Email param.Field[string] `json:"email" api:"required" format:"email"`
 	// The name of the user.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r AccessUserUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -612,10 +612,10 @@ func (r AccessUserUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessUserUpdateResponseEnvelope struct {
-	Errors   []AccessUserUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessUserUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessUserUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessUserUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessUserUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessUserUpdateResponse                `json:"result"`
 	JSON    accessUserUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -640,8 +640,8 @@ func (r accessUserUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessUserUpdateResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AccessUserUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessUserUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -688,8 +688,8 @@ func (r accessUserUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessUserUpdateResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AccessUserUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessUserUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -752,7 +752,7 @@ func (r AccessUserUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessUserListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The email of the user.
 	Email param.Field[string] `query:"email"`
 	// The name of the user.
@@ -775,15 +775,15 @@ func (r AccessUserListParams) URLQuery() (v url.Values) {
 
 type AccessUserDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessUserDeleteResponseEnvelope struct {
-	Errors   []AccessUserDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessUserDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessUserDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessUserDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccessUserDeleteResponse                `json:"result,nullable"`
+	Success AccessUserDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  AccessUserDeleteResponse                `json:"result" api:"nullable"`
 	JSON    accessUserDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -807,8 +807,8 @@ func (r accessUserDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessUserDeleteResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AccessUserDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessUserDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -855,8 +855,8 @@ func (r accessUserDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessUserDeleteResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AccessUserDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessUserDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -919,14 +919,14 @@ func (r AccessUserDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessUserGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessUserGetResponseEnvelope struct {
-	Errors   []AccessUserGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessUserGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessUserGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessUserGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessUserGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessUserGetResponse                `json:"result"`
 	JSON    accessUserGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -951,8 +951,8 @@ func (r accessUserGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessUserGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AccessUserGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessUserGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -999,8 +999,8 @@ func (r accessUserGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessUserGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessUserGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessUserGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -42,7 +42,7 @@ func (r *AttackSurfaceReportIssueTypeService) Get(ctx context.Context, query Att
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/issue-types", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -65,5 +65,5 @@ func (r *AttackSurfaceReportIssueTypeService) GetAutoPaging(ctx context.Context,
 
 type AttackSurfaceReportIssueTypeGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

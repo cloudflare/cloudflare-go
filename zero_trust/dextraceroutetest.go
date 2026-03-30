@@ -43,19 +43,19 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if testID == "" {
 		err = errors.New("missing required test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a breakdown of metrics by hop for individual traceroute test runs
@@ -64,19 +64,19 @@ func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if testID == "" {
 		err = errors.New("missing required test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/network-path", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get percentiles for a traceroute test for a given time period between 1 hour and
@@ -86,32 +86,32 @@ func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if testID == "" {
 		err = errors.New("missing required test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/percentiles", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Traceroute struct {
 	// The host of the Traceroute synthetic application test
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The interval at which the Traceroute synthetic application test is set to run.
-	Interval string         `json:"interval,required"`
-	Kind     TracerouteKind `json:"kind,required"`
+	Interval string         `json:"interval" api:"required"`
+	Kind     TracerouteKind `json:"kind" api:"required"`
 	// The name of the Traceroute synthetic application test
-	Name                  string                            `json:"name,required"`
-	TargetPolicies        []DigitalExperienceMonitor        `json:"target_policies,nullable"`
+	Name                  string                            `json:"name" api:"required"`
+	TargetPolicies        []DigitalExperienceMonitor        `json:"target_policies" api:"nullable"`
 	Targeted              bool                              `json:"targeted"`
-	TracerouteStats       TracerouteTracerouteStats         `json:"tracerouteStats,nullable"`
+	TracerouteStats       TracerouteTracerouteStats         `json:"tracerouteStats" api:"nullable"`
 	TracerouteStatsByColo []TracerouteTracerouteStatsByColo `json:"tracerouteStatsByColo"`
 	JSON                  tracerouteJSON                    `json:"-"`
 }
@@ -153,12 +153,12 @@ func (r TracerouteKind) IsKnown() bool {
 }
 
 type TracerouteTracerouteStats struct {
-	AvailabilityPct TracerouteTracerouteStatsAvailabilityPct `json:"availabilityPct,required"`
-	HopsCount       TestStatOverTime                         `json:"hopsCount,required"`
-	PacketLossPct   TracerouteTracerouteStatsPacketLossPct   `json:"packetLossPct,required"`
-	RoundTripTimeMs TestStatOverTime                         `json:"roundTripTimeMs,required"`
+	AvailabilityPct TracerouteTracerouteStatsAvailabilityPct `json:"availabilityPct" api:"required"`
+	HopsCount       TestStatOverTime                         `json:"hopsCount" api:"required"`
+	PacketLossPct   TracerouteTracerouteStatsPacketLossPct   `json:"packetLossPct" api:"required"`
+	RoundTripTimeMs TestStatOverTime                         `json:"roundTripTimeMs" api:"required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                         `json:"uniqueDevicesTotal,required"`
+	UniqueDevicesTotal int64                         `json:"uniqueDevicesTotal" api:"required"`
 	JSON               tracerouteTracerouteStatsJSON `json:"-"`
 }
 
@@ -183,13 +183,13 @@ func (r tracerouteTracerouteStatsJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsAvailabilityPct struct {
-	Slots []TracerouteTracerouteStatsAvailabilityPctSlot `json:"slots,required"`
+	Slots []TracerouteTracerouteStatsAvailabilityPctSlot `json:"slots" api:"required"`
 	// average observed in the time period
-	Avg float64 `json:"avg,nullable"`
+	Avg float64 `json:"avg" api:"nullable"`
 	// highest observed in the time period
-	Max float64 `json:"max,nullable"`
+	Max float64 `json:"max" api:"nullable"`
 	// lowest observed in the time period
-	Min  float64                                      `json:"min,nullable"`
+	Min  float64                                      `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsAvailabilityPctJSON `json:"-"`
 }
 
@@ -213,8 +213,8 @@ func (r tracerouteTracerouteStatsAvailabilityPctJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsAvailabilityPctSlot struct {
-	Timestamp string                                           `json:"timestamp,required"`
-	Value     float64                                          `json:"value,required"`
+	Timestamp string                                           `json:"timestamp" api:"required"`
+	Value     float64                                          `json:"value" api:"required"`
 	JSON      tracerouteTracerouteStatsAvailabilityPctSlotJSON `json:"-"`
 }
 
@@ -236,13 +236,13 @@ func (r tracerouteTracerouteStatsAvailabilityPctSlotJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsPacketLossPct struct {
-	Slots []TracerouteTracerouteStatsPacketLossPctSlot `json:"slots,required"`
+	Slots []TracerouteTracerouteStatsPacketLossPctSlot `json:"slots" api:"required"`
 	// average observed in the time period
-	Avg float64 `json:"avg,nullable"`
+	Avg float64 `json:"avg" api:"nullable"`
 	// highest observed in the time period
-	Max float64 `json:"max,nullable"`
+	Max float64 `json:"max" api:"nullable"`
 	// lowest observed in the time period
-	Min  float64                                    `json:"min,nullable"`
+	Min  float64                                    `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsPacketLossPctJSON `json:"-"`
 }
 
@@ -266,8 +266,8 @@ func (r tracerouteTracerouteStatsPacketLossPctJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsPacketLossPctSlot struct {
-	Timestamp string                                         `json:"timestamp,required"`
-	Value     float64                                        `json:"value,required"`
+	Timestamp string                                         `json:"timestamp" api:"required"`
+	Value     float64                                        `json:"value" api:"required"`
 	JSON      tracerouteTracerouteStatsPacketLossPctSlotJSON `json:"-"`
 }
 
@@ -289,13 +289,13 @@ func (r tracerouteTracerouteStatsPacketLossPctSlotJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsByColo struct {
-	AvailabilityPct TracerouteTracerouteStatsByColoAvailabilityPct `json:"availabilityPct,required"`
-	Colo            string                                         `json:"colo,required"`
-	HopsCount       TestStatOverTime                               `json:"hopsCount,required"`
-	PacketLossPct   TracerouteTracerouteStatsByColoPacketLossPct   `json:"packetLossPct,required"`
-	RoundTripTimeMs TestStatOverTime                               `json:"roundTripTimeMs,required"`
+	AvailabilityPct TracerouteTracerouteStatsByColoAvailabilityPct `json:"availabilityPct" api:"required"`
+	Colo            string                                         `json:"colo" api:"required"`
+	HopsCount       TestStatOverTime                               `json:"hopsCount" api:"required"`
+	PacketLossPct   TracerouteTracerouteStatsByColoPacketLossPct   `json:"packetLossPct" api:"required"`
+	RoundTripTimeMs TestStatOverTime                               `json:"roundTripTimeMs" api:"required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                               `json:"uniqueDevicesTotal,required"`
+	UniqueDevicesTotal int64                               `json:"uniqueDevicesTotal" api:"required"`
 	JSON               tracerouteTracerouteStatsByColoJSON `json:"-"`
 }
 
@@ -321,13 +321,13 @@ func (r tracerouteTracerouteStatsByColoJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsByColoAvailabilityPct struct {
-	Slots []TracerouteTracerouteStatsByColoAvailabilityPctSlot `json:"slots,required"`
+	Slots []TracerouteTracerouteStatsByColoAvailabilityPctSlot `json:"slots" api:"required"`
 	// average observed in the time period
-	Avg float64 `json:"avg,nullable"`
+	Avg float64 `json:"avg" api:"nullable"`
 	// highest observed in the time period
-	Max float64 `json:"max,nullable"`
+	Max float64 `json:"max" api:"nullable"`
 	// lowest observed in the time period
-	Min  float64                                            `json:"min,nullable"`
+	Min  float64                                            `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsByColoAvailabilityPctJSON `json:"-"`
 }
 
@@ -351,8 +351,8 @@ func (r tracerouteTracerouteStatsByColoAvailabilityPctJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsByColoAvailabilityPctSlot struct {
-	Timestamp string                                                 `json:"timestamp,required"`
-	Value     float64                                                `json:"value,required"`
+	Timestamp string                                                 `json:"timestamp" api:"required"`
+	Value     float64                                                `json:"value" api:"required"`
 	JSON      tracerouteTracerouteStatsByColoAvailabilityPctSlotJSON `json:"-"`
 }
 
@@ -374,13 +374,13 @@ func (r tracerouteTracerouteStatsByColoAvailabilityPctSlotJSON) RawJSON() string
 }
 
 type TracerouteTracerouteStatsByColoPacketLossPct struct {
-	Slots []TracerouteTracerouteStatsByColoPacketLossPctSlot `json:"slots,required"`
+	Slots []TracerouteTracerouteStatsByColoPacketLossPctSlot `json:"slots" api:"required"`
 	// average observed in the time period
-	Avg float64 `json:"avg,nullable"`
+	Avg float64 `json:"avg" api:"nullable"`
 	// highest observed in the time period
-	Max float64 `json:"max,nullable"`
+	Max float64 `json:"max" api:"nullable"`
 	// lowest observed in the time period
-	Min  float64                                          `json:"min,nullable"`
+	Min  float64                                          `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsByColoPacketLossPctJSON `json:"-"`
 }
 
@@ -404,8 +404,8 @@ func (r tracerouteTracerouteStatsByColoPacketLossPctJSON) RawJSON() string {
 }
 
 type TracerouteTracerouteStatsByColoPacketLossPctSlot struct {
-	Timestamp string                                               `json:"timestamp,required"`
-	Value     float64                                              `json:"value,required"`
+	Timestamp string                                               `json:"timestamp" api:"required"`
+	Value     float64                                              `json:"value" api:"required"`
 	JSON      tracerouteTracerouteStatsByColoPacketLossPctSlotJSON `json:"-"`
 }
 
@@ -452,13 +452,13 @@ func (r dexTracerouteTestPercentilesResponseJSON) RawJSON() string {
 }
 
 type DEXTracerouteTestGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for aggregate metrics in ISO ms
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// Time interval for aggregate time slots.
-	Interval param.Field[DEXTracerouteTestGetParamsInterval] `query:"interval,required"`
+	Interval param.Field[DEXTracerouteTestGetParamsInterval] `query:"interval" api:"required"`
 	// End time for aggregate metrics in ISO ms
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
@@ -493,10 +493,10 @@ func (r DEXTracerouteTestGetParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestGetResponseEnvelope struct {
-	Errors   []DEXTracerouteTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXTracerouteTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXTracerouteTestGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXTracerouteTestGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXTracerouteTestGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXTracerouteTestGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Traceroute                                  `json:"result"`
 	JSON    dexTracerouteTestGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -521,8 +521,8 @@ func (r dexTracerouteTestGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXTracerouteTestGetResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           DEXTracerouteTestGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexTracerouteTestGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -569,8 +569,8 @@ func (r dexTracerouteTestGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DEXTracerouteTestGetResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DEXTracerouteTestGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexTracerouteTestGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -632,15 +632,15 @@ func (r DEXTracerouteTestGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXTracerouteTestNetworkPathParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Device to filter tracroute result runs to
-	DeviceID param.Field[string] `query:"deviceId,required"`
+	DeviceID param.Field[string] `query:"deviceId" api:"required"`
 	// Start time for aggregate metrics in ISO ms
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// Time interval for aggregate time slots.
-	Interval param.Field[DEXTracerouteTestNetworkPathParamsInterval] `query:"interval,required"`
+	Interval param.Field[DEXTracerouteTestNetworkPathParamsInterval] `query:"interval" api:"required"`
 	// End time for aggregate metrics in ISO ms
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 }
 
 // URLQuery serializes [DEXTracerouteTestNetworkPathParams]'s query parameters as
@@ -669,10 +669,10 @@ func (r DEXTracerouteTestNetworkPathParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestNetworkPathResponseEnvelope struct {
-	Errors   []DEXTracerouteTestNetworkPathResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXTracerouteTestNetworkPathResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXTracerouteTestNetworkPathResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXTracerouteTestNetworkPathResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  NetworkPathResponse                                 `json:"result"`
 	JSON    dexTracerouteTestNetworkPathResponseEnvelopeJSON    `json:"-"`
 }
@@ -697,8 +697,8 @@ func (r dexTracerouteTestNetworkPathResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXTracerouteTestNetworkPathResponseEnvelopeErrors struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           DEXTracerouteTestNetworkPathResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexTracerouteTestNetworkPathResponseEnvelopeErrorsJSON   `json:"-"`
@@ -746,8 +746,8 @@ func (r dexTracerouteTestNetworkPathResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type DEXTracerouteTestNetworkPathResponseEnvelopeMessages struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           DEXTracerouteTestNetworkPathResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexTracerouteTestNetworkPathResponseEnvelopeMessagesJSON   `json:"-"`
@@ -810,11 +810,11 @@ func (r DEXTracerouteTestNetworkPathResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXTracerouteTestPercentilesParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for the query in ISO (RFC3339 - ISO 8601) format
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// End time for the query in ISO (RFC3339 - ISO 8601) format
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
@@ -833,10 +833,10 @@ func (r DEXTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelope struct {
-	Errors   []DEXTracerouteTestPercentilesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXTracerouteTestPercentilesResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXTracerouteTestPercentilesResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXTracerouteTestPercentilesResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DEXTracerouteTestPercentilesResponse                `json:"result"`
 	JSON    dexTracerouteTestPercentilesResponseEnvelopeJSON    `json:"-"`
 }
@@ -861,8 +861,8 @@ func (r dexTracerouteTestPercentilesResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelopeErrors struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           DEXTracerouteTestPercentilesResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexTracerouteTestPercentilesResponseEnvelopeErrorsJSON   `json:"-"`
@@ -910,8 +910,8 @@ func (r dexTracerouteTestPercentilesResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelopeMessages struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           DEXTracerouteTestPercentilesResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexTracerouteTestPercentilesResponseEnvelopeMessagesJSON   `json:"-"`

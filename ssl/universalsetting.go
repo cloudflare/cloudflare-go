@@ -40,15 +40,15 @@ func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSett
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Universal SSL Settings for a Zone.
@@ -57,15 +57,15 @@ func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettin
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type UniversalSSLSettings struct {
@@ -149,8 +149,8 @@ func (r UniversalSSLSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type UniversalSettingEditParams struct {
 	// Identifier.
-	ZoneID               param.Field[string]       `path:"zone_id,required"`
-	UniversalSSLSettings UniversalSSLSettingsParam `json:"universal_ssl_settings,required"`
+	ZoneID               param.Field[string]       `path:"zone_id" api:"required"`
+	UniversalSSLSettings UniversalSSLSettingsParam `json:"universal_ssl_settings" api:"required"`
 }
 
 func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
@@ -158,10 +158,10 @@ func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UniversalSettingEditResponseEnvelope struct {
-	Errors   []UniversalSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UniversalSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UniversalSettingEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UniversalSettingEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UniversalSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success UniversalSettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  UniversalSSLSettings                        `json:"result"`
 	JSON    universalSettingEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -186,8 +186,8 @@ func (r universalSettingEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UniversalSettingEditResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           UniversalSettingEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             universalSettingEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -234,8 +234,8 @@ func (r universalSettingEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UniversalSettingEditResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           UniversalSettingEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             universalSettingEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -298,14 +298,14 @@ func (r UniversalSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type UniversalSettingGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type UniversalSettingGetResponseEnvelope struct {
-	Errors   []UniversalSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UniversalSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UniversalSettingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UniversalSettingGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UniversalSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success UniversalSettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  UniversalSSLSettings                       `json:"result"`
 	JSON    universalSettingGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -330,8 +330,8 @@ func (r universalSettingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UniversalSettingGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           UniversalSettingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             universalSettingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -378,8 +378,8 @@ func (r universalSettingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UniversalSettingGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           UniversalSettingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             universalSettingGetResponseEnvelopeMessagesJSON   `json:"-"`

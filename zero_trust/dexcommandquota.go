@@ -42,24 +42,24 @@ func (r *DEXCommandQuotaService) Get(ctx context.Context, query DEXCommandQuotaG
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/commands/quota", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DEXCommandQuotaGetResponse struct {
 	// The remaining number of commands that can be initiated for an account
-	Quota float64 `json:"quota,required"`
+	Quota float64 `json:"quota" api:"required"`
 	// The number of commands that have been initiated for an account
-	QuotaUsage float64 `json:"quota_usage,required"`
+	QuotaUsage float64 `json:"quota_usage" api:"required"`
 	// The time when the quota resets
-	ResetTime time.Time                      `json:"reset_time,required" format:"date-time"`
+	ResetTime time.Time                      `json:"reset_time" api:"required" format:"date-time"`
 	JSON      dexCommandQuotaGetResponseJSON `json:"-"`
 }
 
@@ -82,14 +82,14 @@ func (r dexCommandQuotaGetResponseJSON) RawJSON() string {
 }
 
 type DEXCommandQuotaGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DEXCommandQuotaGetResponseEnvelope struct {
-	Errors   []DEXCommandQuotaGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXCommandQuotaGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXCommandQuotaGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXCommandQuotaGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    DEXCommandQuotaGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    DEXCommandQuotaGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     DEXCommandQuotaGetResponse                   `json:"result"`
 	ResultInfo DEXCommandQuotaGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dexCommandQuotaGetResponseEnvelopeJSON       `json:"-"`
@@ -116,8 +116,8 @@ func (r dexCommandQuotaGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXCommandQuotaGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           DEXCommandQuotaGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexCommandQuotaGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -164,8 +164,8 @@ func (r dexCommandQuotaGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DEXCommandQuotaGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           DEXCommandQuotaGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexCommandQuotaGetResponseEnvelopeMessagesJSON   `json:"-"`

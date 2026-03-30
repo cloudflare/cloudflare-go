@@ -45,7 +45,7 @@ func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/audit_logs", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -68,7 +68,7 @@ func (r *AuditLogService) ListAutoPaging(ctx context.Context, params AuditLogLis
 
 type AuditLogListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Finds a specific log by its ID.
 	ID     param.Field[string]                   `query:"id"`
 	Action param.Field[AuditLogListParamsAction] `query:"action"`

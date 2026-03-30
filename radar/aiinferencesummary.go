@@ -46,10 +46,10 @@ func (r *AIInferenceSummaryService) Model(ctx context.Context, query AIInference
 	path := "radar/ai/inference/summary/model"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of unique accounts by task.
@@ -63,16 +63,16 @@ func (r *AIInferenceSummaryService) Task(ctx context.Context, query AIInferenceS
 	path := "radar/ai/inference/summary/task"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AIInferenceSummaryModelResponse struct {
 	// Metadata for the results.
-	Meta     AIInferenceSummaryModelResponseMeta `json:"meta,required"`
-	Summary0 map[string]string                   `json:"summary_0,required"`
+	Meta     AIInferenceSummaryModelResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string                   `json:"summary_0" api:"required"`
 	JSON     aiInferenceSummaryModelResponseJSON `json:"-"`
 }
 
@@ -95,15 +95,15 @@ func (r aiInferenceSummaryModelResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AIInferenceSummaryModelResponseMeta struct {
-	ConfidenceInfo AIInferenceSummaryModelResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AIInferenceSummaryModelResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AIInferenceSummaryModelResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AIInferenceSummaryModelResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AIInferenceSummaryModelResponseMetaNormalization `json:"normalization,required"`
+	Normalization AIInferenceSummaryModelResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AIInferenceSummaryModelResponseMetaUnit `json:"units,required"`
+	Units []AIInferenceSummaryModelResponseMetaUnit `json:"units" api:"required"`
 	JSON  aiInferenceSummaryModelResponseMetaJSON   `json:"-"`
 }
 
@@ -128,9 +128,9 @@ func (r aiInferenceSummaryModelResponseMetaJSON) RawJSON() string {
 }
 
 type AIInferenceSummaryModelResponseMetaConfidenceInfo struct {
-	Annotations []AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                 `json:"level,required"`
+	Level int64                                                 `json:"level" api:"required"`
 	JSON  aiInferenceSummaryModelResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -154,15 +154,15 @@ func (r aiInferenceSummaryModelResponseMetaConfidenceInfoJSON) RawJSON() string 
 // Annotation associated with the result (e.g. outage or other type of event).
 type AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                 `json:"description,required"`
-	EndDate     time.Time                                                              `json:"endDate,required" format:"date-time"`
+	DataSource  AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                 `json:"description" api:"required"`
+	EndDate     time.Time                                                              `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
-	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                       `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                          `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                       `json:"startDate" api:"required" format:"date-time"`
 	JSON            aiInferenceSummaryModelResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -250,9 +250,9 @@ func (r AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotationsEventType) I
 
 type AIInferenceSummaryModelResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                        `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                        `json:"startTime" api:"required" format:"date-time"`
 	JSON      aiInferenceSummaryModelResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -297,8 +297,8 @@ func (r AIInferenceSummaryModelResponseMetaNormalization) IsKnown() bool {
 }
 
 type AIInferenceSummaryModelResponseMetaUnit struct {
-	Name  string                                      `json:"name,required"`
-	Value string                                      `json:"value,required"`
+	Name  string                                      `json:"name" api:"required"`
+	Value string                                      `json:"value" api:"required"`
 	JSON  aiInferenceSummaryModelResponseMetaUnitJSON `json:"-"`
 }
 
@@ -321,8 +321,8 @@ func (r aiInferenceSummaryModelResponseMetaUnitJSON) RawJSON() string {
 
 type AIInferenceSummaryTaskResponse struct {
 	// Metadata for the results.
-	Meta     AIInferenceSummaryTaskResponseMeta `json:"meta,required"`
-	Summary0 map[string]string                  `json:"summary_0,required"`
+	Meta     AIInferenceSummaryTaskResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string                  `json:"summary_0" api:"required"`
 	JSON     aiInferenceSummaryTaskResponseJSON `json:"-"`
 }
 
@@ -345,15 +345,15 @@ func (r aiInferenceSummaryTaskResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AIInferenceSummaryTaskResponseMeta struct {
-	ConfidenceInfo AIInferenceSummaryTaskResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []AIInferenceSummaryTaskResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AIInferenceSummaryTaskResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []AIInferenceSummaryTaskResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AIInferenceSummaryTaskResponseMetaNormalization `json:"normalization,required"`
+	Normalization AIInferenceSummaryTaskResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AIInferenceSummaryTaskResponseMetaUnit `json:"units,required"`
+	Units []AIInferenceSummaryTaskResponseMetaUnit `json:"units" api:"required"`
 	JSON  aiInferenceSummaryTaskResponseMetaJSON   `json:"-"`
 }
 
@@ -378,9 +378,9 @@ func (r aiInferenceSummaryTaskResponseMetaJSON) RawJSON() string {
 }
 
 type AIInferenceSummaryTaskResponseMetaConfidenceInfo struct {
-	Annotations []AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                `json:"level,required"`
+	Level int64                                                `json:"level" api:"required"`
 	JSON  aiInferenceSummaryTaskResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -404,15 +404,15 @@ func (r aiInferenceSummaryTaskResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                `json:"description,required"`
-	EndDate     time.Time                                                             `json:"endDate,required" format:"date-time"`
+	DataSource  AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                `json:"description" api:"required"`
+	EndDate     time.Time                                                             `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
-	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                         `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                      `json:"startDate" api:"required" format:"date-time"`
 	JSON            aiInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -500,9 +500,9 @@ func (r AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationsEventType) Is
 
 type AIInferenceSummaryTaskResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                       `json:"startTime" api:"required" format:"date-time"`
 	JSON      aiInferenceSummaryTaskResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -547,8 +547,8 @@ func (r AIInferenceSummaryTaskResponseMetaNormalization) IsKnown() bool {
 }
 
 type AIInferenceSummaryTaskResponseMetaUnit struct {
-	Name  string                                     `json:"name,required"`
-	Value string                                     `json:"value,required"`
+	Name  string                                     `json:"name" api:"required"`
+	Value string                                     `json:"value" api:"required"`
 	JSON  aiInferenceSummaryTaskResponseMetaUnitJSON `json:"-"`
 }
 
@@ -614,8 +614,8 @@ func (r AIInferenceSummaryModelParamsFormat) IsKnown() bool {
 }
 
 type AIInferenceSummaryModelResponseEnvelope struct {
-	Result  AIInferenceSummaryModelResponse             `json:"result,required"`
-	Success bool                                        `json:"success,required"`
+	Result  AIInferenceSummaryModelResponse             `json:"result" api:"required"`
+	Success bool                                        `json:"success" api:"required"`
 	JSON    aiInferenceSummaryModelResponseEnvelopeJSON `json:"-"`
 }
 
@@ -681,8 +681,8 @@ func (r AIInferenceSummaryTaskParamsFormat) IsKnown() bool {
 }
 
 type AIInferenceSummaryTaskResponseEnvelope struct {
-	Result  AIInferenceSummaryTaskResponse             `json:"result,required"`
-	Success bool                                       `json:"success,required"`
+	Result  AIInferenceSummaryTaskResponse             `json:"result" api:"required"`
+	Success bool                                       `json:"success" api:"required"`
 	JSON    aiInferenceSummaryTaskResponseEnvelopeJSON `json:"-"`
 }
 

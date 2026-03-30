@@ -49,7 +49,7 @@ func (r *LabelService) List(ctx context.Context, params LabelListParams, opts ..
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/labels", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -70,17 +70,17 @@ func (r *LabelService) ListAutoPaging(ctx context.Context, params LabelListParam
 }
 
 type LabelListResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source LabelListResponseSource `json:"source,required"`
+	Source LabelListResponseSource `json:"source" api:"required"`
 	// Provides counts of what resources are linked to this label
 	MappedResources interface{}           `json:"mapped_resources"`
 	JSON            labelListResponseJSON `json:"-"`
@@ -127,7 +127,7 @@ func (r LabelListResponseSource) IsKnown() bool {
 
 type LabelListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Direction to order results.
 	Direction param.Field[LabelListParamsDirection] `query:"direction"`
 	// Filter for labels where the name or description matches using substring match

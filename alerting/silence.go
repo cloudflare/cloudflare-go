@@ -40,11 +40,11 @@ func (r *SilenceService) New(ctx context.Context, params SilenceNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/silences", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates existing silences for an account.
@@ -54,7 +54,7 @@ func (r *SilenceService) Update(ctx context.Context, params SilenceUpdateParams,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/silences", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -81,7 +81,7 @@ func (r *SilenceService) List(ctx context.Context, query SilenceListParams, opts
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/silences", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,15 +106,15 @@ func (r *SilenceService) Delete(ctx context.Context, silenceID string, body Sile
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if silenceID == "" {
 		err = errors.New("missing required silence_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/silences/%s", body.AccountID, silenceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Gets a specific silence for an account.
@@ -123,26 +123,26 @@ func (r *SilenceService) Get(ctx context.Context, silenceID string, query Silenc
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if silenceID == "" {
 		err = errors.New("missing required silence_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/silences/%s", query.AccountID, silenceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SilenceNewResponse struct {
-	Errors   []SilenceNewResponseError   `json:"errors,required"`
-	Messages []SilenceNewResponseMessage `json:"messages,required"`
+	Errors   []SilenceNewResponseError   `json:"errors" api:"required"`
+	Messages []SilenceNewResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success SilenceNewResponseSuccess `json:"success,required"`
+	Success SilenceNewResponseSuccess `json:"success" api:"required"`
 	JSON    silenceNewResponseJSON    `json:"-"`
 }
 
@@ -165,7 +165,7 @@ func (r silenceNewResponseJSON) RawJSON() string {
 }
 
 type SilenceNewResponseError struct {
-	Message string                      `json:"message,required"`
+	Message string                      `json:"message" api:"required"`
 	Code    int64                       `json:"code"`
 	JSON    silenceNewResponseErrorJSON `json:"-"`
 }
@@ -188,7 +188,7 @@ func (r silenceNewResponseErrorJSON) RawJSON() string {
 }
 
 type SilenceNewResponseMessage struct {
-	Message string                        `json:"message,required"`
+	Message string                        `json:"message" api:"required"`
 	Code    int64                         `json:"code"`
 	JSON    silenceNewResponseMessageJSON `json:"-"`
 }
@@ -300,10 +300,10 @@ func (r silenceListResponseJSON) RawJSON() string {
 }
 
 type SilenceDeleteResponse struct {
-	Errors   []SilenceDeleteResponseError   `json:"errors,required"`
-	Messages []SilenceDeleteResponseMessage `json:"messages,required"`
+	Errors   []SilenceDeleteResponseError   `json:"errors" api:"required"`
+	Messages []SilenceDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success SilenceDeleteResponseSuccess `json:"success,required"`
+	Success SilenceDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    silenceDeleteResponseJSON    `json:"-"`
 }
 
@@ -326,7 +326,7 @@ func (r silenceDeleteResponseJSON) RawJSON() string {
 }
 
 type SilenceDeleteResponseError struct {
-	Message string                         `json:"message,required"`
+	Message string                         `json:"message" api:"required"`
 	Code    int64                          `json:"code"`
 	JSON    silenceDeleteResponseErrorJSON `json:"-"`
 }
@@ -349,7 +349,7 @@ func (r silenceDeleteResponseErrorJSON) RawJSON() string {
 }
 
 type SilenceDeleteResponseMessage struct {
-	Message string                           `json:"message,required"`
+	Message string                           `json:"message" api:"required"`
 	Code    int64                            `json:"code"`
 	JSON    silenceDeleteResponseMessageJSON `json:"-"`
 }
@@ -425,8 +425,8 @@ func (r silenceGetResponseJSON) RawJSON() string {
 
 type SilenceNewParams struct {
 	// The account id
-	AccountID param.Field[string]    `path:"account_id,required"`
-	Body      []SilenceNewParamsBody `json:"body,required"`
+	AccountID param.Field[string]    `path:"account_id" api:"required"`
+	Body      []SilenceNewParamsBody `json:"body" api:"required"`
 }
 
 func (r SilenceNewParams) MarshalJSON() (data []byte, err error) {
@@ -448,8 +448,8 @@ func (r SilenceNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type SilenceUpdateParams struct {
 	// The account id
-	AccountID param.Field[string]       `path:"account_id,required"`
-	Body      []SilenceUpdateParamsBody `json:"body,required"`
+	AccountID param.Field[string]       `path:"account_id" api:"required"`
+	Body      []SilenceUpdateParamsBody `json:"body" api:"required"`
 }
 
 func (r SilenceUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -471,24 +471,24 @@ func (r SilenceUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 type SilenceListParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SilenceDeleteParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SilenceGetParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SilenceGetResponseEnvelope struct {
-	Errors   []SilenceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SilenceGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SilenceGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SilenceGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success SilenceGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SilenceGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SilenceGetResponse                `json:"result"`
 	JSON    silenceGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -513,7 +513,7 @@ func (r silenceGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SilenceGetResponseEnvelopeErrors struct {
-	Message string                               `json:"message,required"`
+	Message string                               `json:"message" api:"required"`
 	Code    int64                                `json:"code"`
 	JSON    silenceGetResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -536,7 +536,7 @@ func (r silenceGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type SilenceGetResponseEnvelopeMessages struct {
-	Message string                                 `json:"message,required"`
+	Message string                                 `json:"message" api:"required"`
 	Code    int64                                  `json:"code"`
 	JSON    silenceGetResponseEnvelopeMessagesJSON `json:"-"`
 }

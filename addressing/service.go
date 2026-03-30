@@ -45,7 +45,7 @@ func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/services", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -96,5 +96,5 @@ func (r serviceListResponseJSON) RawJSON() string {
 
 type ServiceListParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -41,34 +41,34 @@ func (r *TunnelCloudflaredTokenService) Get(ctx context.Context, tunnelID string
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TunnelCloudflaredTokenGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelCloudflaredTokenGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// The Tunnel Token is used as a mechanism to authenticate the operation of a
 	// tunnel.
-	Result string `json:"result,required"`
+	Result string `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredTokenGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredTokenGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredTokenGetResponseEnvelopeJSON    `json:"-"`
 }
 

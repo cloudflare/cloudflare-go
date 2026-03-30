@@ -40,15 +40,15 @@ func (r *EndpointHealthcheckService) New(ctx context.Context, params EndpointHea
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/endpoint-healthchecks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Endpoint Health Check.
@@ -57,19 +57,19 @@ func (r *EndpointHealthcheckService) Update(ctx context.Context, id string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/endpoint-healthchecks/%s", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Endpoint Health Checks.
@@ -78,15 +78,15 @@ func (r *EndpointHealthcheckService) List(ctx context.Context, query EndpointHea
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/endpoint-healthchecks", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete Endpoint Health Check.
@@ -94,15 +94,15 @@ func (r *EndpointHealthcheckService) Delete(ctx context.Context, id string, body
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/endpoint-healthchecks/%s", body.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a single Endpoint Health Check.
@@ -111,26 +111,26 @@ func (r *EndpointHealthcheckService) Get(ctx context.Context, id string, query E
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/endpoint-healthchecks/%s", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EndpointHealthcheckParam struct {
 	// type of check to perform
-	CheckType param.Field[EndpointHealthcheckCheckType] `json:"check_type,required"`
+	CheckType param.Field[EndpointHealthcheckCheckType] `json:"check_type" api:"required"`
 	// the IP address of the host to perform checks against
-	Endpoint param.Field[string] `json:"endpoint,required"`
+	Endpoint param.Field[string] `json:"endpoint" api:"required"`
 	// Optional name associated with this check
 	Name param.Field[string] `json:"name"`
 }
@@ -156,9 +156,9 @@ func (r EndpointHealthcheckCheckType) IsKnown() bool {
 
 type EndpointHealthcheckNewResponse struct {
 	// type of check to perform
-	CheckType EndpointHealthcheckNewResponseCheckType `json:"check_type,required"`
+	CheckType EndpointHealthcheckNewResponseCheckType `json:"check_type" api:"required"`
 	// the IP address of the host to perform checks against
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Optional name associated with this check
@@ -202,9 +202,9 @@ func (r EndpointHealthcheckNewResponseCheckType) IsKnown() bool {
 
 type EndpointHealthcheckUpdateResponse struct {
 	// type of check to perform
-	CheckType EndpointHealthcheckUpdateResponseCheckType `json:"check_type,required"`
+	CheckType EndpointHealthcheckUpdateResponseCheckType `json:"check_type" api:"required"`
 	// the IP address of the host to perform checks against
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Optional name associated with this check
@@ -248,9 +248,9 @@ func (r EndpointHealthcheckUpdateResponseCheckType) IsKnown() bool {
 
 type EndpointHealthcheckListResponse struct {
 	// type of check to perform
-	CheckType EndpointHealthcheckListResponseCheckType `json:"check_type,required"`
+	CheckType EndpointHealthcheckListResponseCheckType `json:"check_type" api:"required"`
 	// the IP address of the host to perform checks against
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Optional name associated with this check
@@ -293,10 +293,10 @@ func (r EndpointHealthcheckListResponseCheckType) IsKnown() bool {
 }
 
 type EndpointHealthcheckDeleteResponse struct {
-	Errors   []EndpointHealthcheckDeleteResponseError   `json:"errors,required"`
-	Messages []EndpointHealthcheckDeleteResponseMessage `json:"messages,required"`
+	Errors   []EndpointHealthcheckDeleteResponseError   `json:"errors" api:"required"`
+	Messages []EndpointHealthcheckDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EndpointHealthcheckDeleteResponseSuccess `json:"success,required"`
+	Success EndpointHealthcheckDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    endpointHealthcheckDeleteResponseJSON    `json:"-"`
 }
 
@@ -319,8 +319,8 @@ func (r endpointHealthcheckDeleteResponseJSON) RawJSON() string {
 }
 
 type EndpointHealthcheckDeleteResponseError struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           EndpointHealthcheckDeleteResponseErrorsSource `json:"source"`
 	JSON             endpointHealthcheckDeleteResponseErrorJSON    `json:"-"`
@@ -367,8 +367,8 @@ func (r endpointHealthcheckDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type EndpointHealthcheckDeleteResponseMessage struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           EndpointHealthcheckDeleteResponseMessagesSource `json:"source"`
 	JSON             endpointHealthcheckDeleteResponseMessageJSON    `json:"-"`
@@ -431,9 +431,9 @@ func (r EndpointHealthcheckDeleteResponseSuccess) IsKnown() bool {
 
 type EndpointHealthcheckGetResponse struct {
 	// type of check to perform
-	CheckType EndpointHealthcheckGetResponseCheckType `json:"check_type,required"`
+	CheckType EndpointHealthcheckGetResponseCheckType `json:"check_type" api:"required"`
 	// the IP address of the host to perform checks against
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Optional name associated with this check
@@ -477,8 +477,8 @@ func (r EndpointHealthcheckGetResponseCheckType) IsKnown() bool {
 
 type EndpointHealthcheckNewParams struct {
 	// Identifier
-	AccountID           param.Field[string]      `path:"account_id,required"`
-	EndpointHealthcheck EndpointHealthcheckParam `json:"endpoint_healthcheck,required"`
+	AccountID           param.Field[string]      `path:"account_id" api:"required"`
+	EndpointHealthcheck EndpointHealthcheckParam `json:"endpoint_healthcheck" api:"required"`
 }
 
 func (r EndpointHealthcheckNewParams) MarshalJSON() (data []byte, err error) {
@@ -486,10 +486,10 @@ func (r EndpointHealthcheckNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EndpointHealthcheckNewResponseEnvelope struct {
-	Errors   []EndpointHealthcheckNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EndpointHealthcheckNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EndpointHealthcheckNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EndpointHealthcheckNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EndpointHealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
+	Success EndpointHealthcheckNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EndpointHealthcheckNewResponse                `json:"result"`
 	JSON    endpointHealthcheckNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -514,8 +514,8 @@ func (r endpointHealthcheckNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EndpointHealthcheckNewResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           EndpointHealthcheckNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             endpointHealthcheckNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -562,8 +562,8 @@ func (r endpointHealthcheckNewResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type EndpointHealthcheckNewResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           EndpointHealthcheckNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             endpointHealthcheckNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -626,8 +626,8 @@ func (r EndpointHealthcheckNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type EndpointHealthcheckUpdateParams struct {
 	// Identifier
-	AccountID           param.Field[string]      `path:"account_id,required"`
-	EndpointHealthcheck EndpointHealthcheckParam `json:"endpoint_healthcheck,required"`
+	AccountID           param.Field[string]      `path:"account_id" api:"required"`
+	EndpointHealthcheck EndpointHealthcheckParam `json:"endpoint_healthcheck" api:"required"`
 }
 
 func (r EndpointHealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -635,10 +635,10 @@ func (r EndpointHealthcheckUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type EndpointHealthcheckUpdateResponseEnvelope struct {
-	Errors   []EndpointHealthcheckUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EndpointHealthcheckUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EndpointHealthcheckUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EndpointHealthcheckUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EndpointHealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success EndpointHealthcheckUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EndpointHealthcheckUpdateResponse                `json:"result"`
 	JSON    endpointHealthcheckUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -663,8 +663,8 @@ func (r endpointHealthcheckUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EndpointHealthcheckUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           EndpointHealthcheckUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             endpointHealthcheckUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -711,8 +711,8 @@ func (r endpointHealthcheckUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type EndpointHealthcheckUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           EndpointHealthcheckUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             endpointHealthcheckUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -776,14 +776,14 @@ func (r EndpointHealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type EndpointHealthcheckListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type EndpointHealthcheckListResponseEnvelope struct {
-	Errors   []EndpointHealthcheckListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EndpointHealthcheckListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EndpointHealthcheckListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EndpointHealthcheckListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EndpointHealthcheckListResponseEnvelopeSuccess `json:"success,required"`
+	Success EndpointHealthcheckListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EndpointHealthcheckListResponse                `json:"result"`
 	JSON    endpointHealthcheckListResponseEnvelopeJSON    `json:"-"`
 }
@@ -808,8 +808,8 @@ func (r endpointHealthcheckListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EndpointHealthcheckListResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           EndpointHealthcheckListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             endpointHealthcheckListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -856,8 +856,8 @@ func (r endpointHealthcheckListResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type EndpointHealthcheckListResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           EndpointHealthcheckListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             endpointHealthcheckListResponseEnvelopeMessagesJSON   `json:"-"`
@@ -920,19 +920,19 @@ func (r EndpointHealthcheckListResponseEnvelopeSuccess) IsKnown() bool {
 
 type EndpointHealthcheckDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type EndpointHealthcheckGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type EndpointHealthcheckGetResponseEnvelope struct {
-	Errors   []EndpointHealthcheckGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EndpointHealthcheckGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EndpointHealthcheckGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EndpointHealthcheckGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EndpointHealthcheckGetResponseEnvelopeSuccess `json:"success,required"`
+	Success EndpointHealthcheckGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  EndpointHealthcheckGetResponse                `json:"result"`
 	JSON    endpointHealthcheckGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -957,8 +957,8 @@ func (r endpointHealthcheckGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EndpointHealthcheckGetResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           EndpointHealthcheckGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             endpointHealthcheckGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1005,8 +1005,8 @@ func (r endpointHealthcheckGetResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type EndpointHealthcheckGetResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           EndpointHealthcheckGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             endpointHealthcheckGetResponseEnvelopeMessagesJSON   `json:"-"`

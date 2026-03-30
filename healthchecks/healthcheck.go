@@ -47,15 +47,15 @@ func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a configured health check.
@@ -64,19 +64,19 @@ func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if healthcheckID == "" {
 		err = errors.New("missing required healthcheck_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List configured health checks.
@@ -86,7 +86,7 @@ func (r *HealthcheckService) List(ctx context.Context, params HealthcheckListPar
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -112,19 +112,19 @@ func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, b
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if healthcheckID == "" {
 		err = errors.New("missing required healthcheck_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", body.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patch a configured health check.
@@ -133,19 +133,19 @@ func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if healthcheckID == "" {
 		err = errors.New("missing required healthcheck_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single configured health check.
@@ -154,19 +154,19 @@ func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if healthcheckID == "" {
 		err = errors.New("missing required healthcheck_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", query.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
@@ -208,7 +208,7 @@ type Healthcheck struct {
 	Address string `json:"address"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions []CheckRegion `json:"check_regions,nullable"`
+	CheckRegions []CheckRegion `json:"check_regions" api:"nullable"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails int64 `json:"consecutive_fails"`
@@ -221,7 +221,7 @@ type Healthcheck struct {
 	// The current failure reason if status is unhealthy.
 	FailureReason string `json:"failure_reason"`
 	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig HTTPConfiguration `json:"http_config,nullable"`
+	HTTPConfig HTTPConfiguration `json:"http_config" api:"nullable"`
 	// The interval between each health check. Shorter intervals may give quicker
 	// notifications if the origin status changes, but will increase load on the origin
 	// as we check from multiple locations.
@@ -238,7 +238,7 @@ type Healthcheck struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended bool `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TCPConfig TCPConfiguration `json:"tcp_config,nullable"`
+	TCPConfig TCPConfiguration `json:"tcp_config" api:"nullable"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
@@ -306,12 +306,12 @@ type HTTPConfiguration struct {
 	ExpectedBody string `json:"expected_body"`
 	// The expected HTTP response codes (e.g. "200") or code ranges (e.g. "2xx" for all
 	// codes starting with 2) of the health check.
-	ExpectedCodes []string `json:"expected_codes,nullable"`
+	ExpectedCodes []string `json:"expected_codes" api:"nullable"`
 	// Follow redirects if the origin returns a 3xx status code.
 	FollowRedirects bool `json:"follow_redirects"`
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden.
-	Header map[string][]string `json:"header,nullable"`
+	Header map[string][]string `json:"header" api:"nullable"`
 	// The HTTP method to use for the health check.
 	Method HTTPConfigurationMethod `json:"method"`
 	// The endpoint path to health check against.
@@ -391,10 +391,10 @@ func (r HTTPConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 type QueryHealthcheckParam struct {
 	// The hostname or IP address of the origin server to run health checks on.
-	Address param.Field[string] `json:"address,required"`
+	Address param.Field[string] `json:"address" api:"required"`
 	// A short name to identify the health check. Only alphanumeric characters, hyphens
 	// and underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
 	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
@@ -507,8 +507,8 @@ func (r healthcheckDeleteResponseJSON) RawJSON() string {
 
 type HealthcheckNewParams struct {
 	// Identifier
-	ZoneID           param.Field[string]   `path:"zone_id,required"`
-	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck,required"`
+	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
+	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
 
 func (r HealthcheckNewParams) MarshalJSON() (data []byte, err error) {
@@ -516,11 +516,11 @@ func (r HealthcheckNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Healthcheck           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Healthcheck           `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success HealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
+	Success HealthcheckNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    healthcheckNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -560,8 +560,8 @@ func (r HealthcheckNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckUpdateParams struct {
 	// Identifier
-	ZoneID           param.Field[string]   `path:"zone_id,required"`
-	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck,required"`
+	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
+	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
 
 func (r HealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -569,11 +569,11 @@ func (r HealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Healthcheck           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Healthcheck           `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    healthcheckUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -613,7 +613,7 @@ func (r HealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page. Must be a multiple of 5.
@@ -630,15 +630,15 @@ func (r HealthcheckListParams) URLQuery() (v url.Values) {
 
 type HealthcheckDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HealthcheckDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   HealthcheckDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   HealthcheckDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success HealthcheckDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success HealthcheckDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    healthcheckDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -678,8 +678,8 @@ func (r HealthcheckDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckEditParams struct {
 	// Identifier
-	ZoneID           param.Field[string]   `path:"zone_id,required"`
-	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck,required"`
+	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
+	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
 
 func (r HealthcheckEditParams) MarshalJSON() (data []byte, err error) {
@@ -687,11 +687,11 @@ func (r HealthcheckEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Healthcheck           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Healthcheck           `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success HealthcheckEditResponseEnvelopeSuccess `json:"success,required"`
+	Success HealthcheckEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    healthcheckEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -731,15 +731,15 @@ func (r HealthcheckEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HealthcheckGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Healthcheck           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Healthcheck           `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success HealthcheckGetResponseEnvelopeSuccess `json:"success,required"`
+	Success HealthcheckGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    healthcheckGetResponseEnvelopeJSON    `json:"-"`
 }
 

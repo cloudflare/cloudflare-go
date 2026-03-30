@@ -42,11 +42,11 @@ func (r *AssociationService) Get(ctx context.Context, mtlsCertificateID string, 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if mtlsCertificateID == "" {
 		err = errors.New("missing required mtls_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", query.AccountID, mtlsCertificateID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -93,5 +93,5 @@ func (r certificateAsssociationJSON) RawJSON() string {
 
 type AssociationGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

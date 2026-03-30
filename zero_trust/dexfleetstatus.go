@@ -44,15 +44,15 @@ func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusL
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/live", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List details for devices using WARP, up to 7 days
@@ -61,15 +61,15 @@ func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetSta
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/over-time", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type LiveStat struct {
@@ -117,11 +117,11 @@ func (r dexFleetStatusLiveResponseJSON) RawJSON() string {
 }
 
 type DEXFleetStatusLiveResponseDeviceStats struct {
-	ByColo     []LiveStat `json:"byColo,nullable"`
-	ByMode     []LiveStat `json:"byMode,nullable"`
-	ByPlatform []LiveStat `json:"byPlatform,nullable"`
-	ByStatus   []LiveStat `json:"byStatus,nullable"`
-	ByVersion  []LiveStat `json:"byVersion,nullable"`
+	ByColo     []LiveStat `json:"byColo" api:"nullable"`
+	ByMode     []LiveStat `json:"byMode" api:"nullable"`
+	ByPlatform []LiveStat `json:"byPlatform" api:"nullable"`
+	ByStatus   []LiveStat `json:"byStatus" api:"nullable"`
+	ByVersion  []LiveStat `json:"byVersion" api:"nullable"`
 	// Number of unique devices
 	UniqueDevicesTotal float64                                   `json:"uniqueDevicesTotal"`
 	JSON               dexFleetStatusLiveResponseDeviceStatsJSON `json:"-"`
@@ -250,9 +250,9 @@ func (r dexFleetStatusOverTimeResponseDeviceStatsByStatusJSON) RawJSON() string 
 }
 
 type DEXFleetStatusLiveParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Number of minutes before current time
-	SinceMinutes param.Field[float64] `query:"since_minutes,required"`
+	SinceMinutes param.Field[float64] `query:"since_minutes" api:"required"`
 }
 
 // URLQuery serializes [DEXFleetStatusLiveParams]'s query parameters as
@@ -265,10 +265,10 @@ func (r DEXFleetStatusLiveParams) URLQuery() (v url.Values) {
 }
 
 type DEXFleetStatusLiveResponseEnvelope struct {
-	Errors   []DEXFleetStatusLiveResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXFleetStatusLiveResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXFleetStatusLiveResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXFleetStatusLiveResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXFleetStatusLiveResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXFleetStatusLiveResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DEXFleetStatusLiveResponse                `json:"result"`
 	JSON    dexFleetStatusLiveResponseEnvelopeJSON    `json:"-"`
 }
@@ -293,8 +293,8 @@ func (r dexFleetStatusLiveResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXFleetStatusLiveResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           DEXFleetStatusLiveResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexFleetStatusLiveResponseEnvelopeErrorsJSON   `json:"-"`
@@ -341,8 +341,8 @@ func (r dexFleetStatusLiveResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DEXFleetStatusLiveResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           DEXFleetStatusLiveResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexFleetStatusLiveResponseEnvelopeMessagesJSON   `json:"-"`
@@ -404,11 +404,11 @@ func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXFleetStatusOverTimeParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Time range beginning in ISO format
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// Time range end in ISO format
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 	// Cloudflare colo
 	Colo param.Field[string] `query:"colo"`
 	// Device-specific ID, given as UUID v4
@@ -425,10 +425,10 @@ func (r DEXFleetStatusOverTimeParams) URLQuery() (v url.Values) {
 }
 
 type DEXFleetStatusOverTimeResponseEnvelope struct {
-	Errors   []DEXFleetStatusOverTimeResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXFleetStatusOverTimeResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXFleetStatusOverTimeResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXFleetStatusOverTimeResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    DEXFleetStatusOverTimeResponseEnvelopeSuccess    `json:"success,required"`
+	Success    DEXFleetStatusOverTimeResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     DEXFleetStatusOverTimeResponse                   `json:"result"`
 	ResultInfo DEXFleetStatusOverTimeResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dexFleetStatusOverTimeResponseEnvelopeJSON       `json:"-"`
@@ -455,8 +455,8 @@ func (r dexFleetStatusOverTimeResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXFleetStatusOverTimeResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DEXFleetStatusOverTimeResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexFleetStatusOverTimeResponseEnvelopeErrorsJSON   `json:"-"`
@@ -503,8 +503,8 @@ func (r dexFleetStatusOverTimeResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type DEXFleetStatusOverTimeResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           DEXFleetStatusOverTimeResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexFleetStatusOverTimeResponseEnvelopeMessagesJSON   `json:"-"`

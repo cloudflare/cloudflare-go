@@ -42,19 +42,19 @@ func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/script-settings", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get script-level settings when using
@@ -65,25 +65,25 @@ func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/script-settings", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ScriptSettingEditParams struct {
 	// Identifier.
-	AccountID     param.Field[string] `path:"account_id,required"`
-	ScriptSetting ScriptSettingParam  `json:"script_setting,required"`
+	AccountID     param.Field[string] `path:"account_id" api:"required"`
+	ScriptSetting ScriptSettingParam  `json:"script_setting" api:"required"`
 }
 
 func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
@@ -91,11 +91,11 @@ func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptSettingEditResponseEnvelope struct {
-	Errors   []ScriptSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSettingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptSetting                               `json:"result,required"`
+	Errors   []ScriptSettingEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSettingEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptSetting                               `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptSettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -119,8 +119,8 @@ func (r scriptSettingEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSettingEditResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           ScriptSettingEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSettingEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -167,8 +167,8 @@ func (r scriptSettingEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSettingEditResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ScriptSettingEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSettingEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -231,15 +231,15 @@ func (r ScriptSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSettingGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptSettingGetResponseEnvelope struct {
-	Errors   []ScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptSetting                              `json:"result,required"`
+	Errors   []ScriptSettingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSettingGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptSetting                              `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptSettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -263,8 +263,8 @@ func (r scriptSettingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSettingGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ScriptSettingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSettingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -311,8 +311,8 @@ func (r scriptSettingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSettingGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ScriptSettingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSettingGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -45,15 +45,15 @@ func (r *FinetuneService) New(ctx context.Context, params FinetuneNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/finetunes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all fine-tuning jobs created by the account, including status and metrics.
@@ -62,24 +62,24 @@ func (r *FinetuneService) List(ctx context.Context, query FinetuneListParams, op
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/finetunes", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type FinetuneNewResponse struct {
-	ID          string                  `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time               `json:"created_at,required" format:"date-time"`
-	Model       string                  `json:"model,required"`
-	ModifiedAt  time.Time               `json:"modified_at,required" format:"date-time"`
-	Name        string                  `json:"name,required"`
-	Public      bool                    `json:"public,required"`
+	ID          string                  `json:"id" api:"required" format:"uuid"`
+	CreatedAt   time.Time               `json:"created_at" api:"required" format:"date-time"`
+	Model       string                  `json:"model" api:"required"`
+	ModifiedAt  time.Time               `json:"modified_at" api:"required" format:"date-time"`
+	Name        string                  `json:"name" api:"required"`
+	Public      bool                    `json:"public" api:"required"`
 	Description string                  `json:"description"`
 	JSON        finetuneNewResponseJSON `json:"-"`
 }
@@ -107,11 +107,11 @@ func (r finetuneNewResponseJSON) RawJSON() string {
 }
 
 type FinetuneListResponse struct {
-	ID          string                   `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time                `json:"created_at,required" format:"date-time"`
-	Model       string                   `json:"model,required"`
-	ModifiedAt  time.Time                `json:"modified_at,required" format:"date-time"`
-	Name        string                   `json:"name,required"`
+	ID          string                   `json:"id" api:"required" format:"uuid"`
+	CreatedAt   time.Time                `json:"created_at" api:"required" format:"date-time"`
+	Model       string                   `json:"model" api:"required"`
+	ModifiedAt  time.Time                `json:"modified_at" api:"required" format:"date-time"`
+	Name        string                   `json:"name" api:"required"`
 	Description string                   `json:"description"`
 	JSON        finetuneListResponseJSON `json:"-"`
 }
@@ -138,9 +138,9 @@ func (r finetuneListResponseJSON) RawJSON() string {
 }
 
 type FinetuneNewParams struct {
-	AccountID   param.Field[string] `path:"account_id,required"`
-	Model       param.Field[string] `json:"model,required"`
-	Name        param.Field[string] `json:"name,required"`
+	AccountID   param.Field[string] `path:"account_id" api:"required"`
+	Model       param.Field[string] `json:"model" api:"required"`
+	Name        param.Field[string] `json:"name" api:"required"`
 	Description param.Field[string] `json:"description"`
 	Public      param.Field[bool]   `json:"public"`
 }
@@ -150,8 +150,8 @@ func (r FinetuneNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FinetuneNewResponseEnvelope struct {
-	Result  FinetuneNewResponse             `json:"result,required"`
-	Success bool                            `json:"success,required"`
+	Result  FinetuneNewResponse             `json:"result" api:"required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    finetuneNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -173,12 +173,12 @@ func (r finetuneNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type FinetuneListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type FinetuneListResponseEnvelope struct {
-	Result  FinetuneListResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  FinetuneListResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    finetuneListResponseEnvelopeJSON `json:"-"`
 }
 

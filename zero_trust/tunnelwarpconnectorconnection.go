@@ -43,11 +43,11 @@ func (r *TunnelWARPConnectorConnectionService) Get(ctx context.Context, tunnelID
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s/connections", query.AccountID, tunnelID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -164,5 +164,5 @@ func (r TunnelWARPConnectorConnectionGetResponseHaStatus) IsKnown() bool {
 
 type TunnelWARPConnectorConnectionGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -40,19 +40,19 @@ func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/event_tag/%s/create", params.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Removes a tag from an event
@@ -61,23 +61,23 @@ func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/event_tag/%s", body.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ThreatEventEventTagNewResponse struct {
-	Success bool                               `json:"success,required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    threatEventEventTagNewResponseJSON `json:"-"`
 }
 
@@ -98,7 +98,7 @@ func (r threatEventEventTagNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventEventTagDeleteResponse struct {
-	Success bool                                  `json:"success,required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    threatEventEventTagDeleteResponseJSON `json:"-"`
 }
 
@@ -120,8 +120,8 @@ func (r threatEventEventTagDeleteResponseJSON) RawJSON() string {
 
 type ThreatEventEventTagNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Tags      param.Field[[]string] `json:"tags,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
+	Tags      param.Field[[]string] `json:"tags" api:"required"`
 }
 
 func (r ThreatEventEventTagNewParams) MarshalJSON() (data []byte, err error) {
@@ -129,8 +129,8 @@ func (r ThreatEventEventTagNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventEventTagNewResponseEnvelope struct {
-	Result  ThreatEventEventTagNewResponse             `json:"result,required"`
-	Success bool                                       `json:"success,required"`
+	Result  ThreatEventEventTagNewResponse             `json:"result" api:"required"`
+	Success bool                                       `json:"success" api:"required"`
 	JSON    threatEventEventTagNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -153,12 +153,12 @@ func (r threatEventEventTagNewResponseEnvelopeJSON) RawJSON() string {
 
 type ThreatEventEventTagDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventEventTagDeleteResponseEnvelope struct {
-	Result  ThreatEventEventTagDeleteResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
+	Result  ThreatEventEventTagDeleteResponse             `json:"result" api:"required"`
+	Success bool                                          `json:"success" api:"required"`
 	JSON    threatEventEventTagDeleteResponseEnvelopeJSON `json:"-"`
 }
 

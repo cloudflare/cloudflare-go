@@ -49,15 +49,15 @@ func (r *ConfigurationService) New(ctx context.Context, params ConfigurationNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/config", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all token validation configurations for this zone
@@ -67,7 +67,7 @@ func (r *ConfigurationService) List(ctx context.Context, params ConfigurationLis
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/config", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -93,19 +93,19 @@ func (r *ConfigurationService) Delete(ctx context.Context, configID string, body
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if configID == "" {
 		err = errors.New("missing required config_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/config/%s", body.ZoneID, configID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Edit fields of an existing Token Configuration
@@ -114,19 +114,19 @@ func (r *ConfigurationService) Edit(ctx context.Context, configID string, params
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if configID == "" {
 		err = errors.New("missing required config_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/config/%s", params.ZoneID, configID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a single Token Configuration
@@ -135,31 +135,31 @@ func (r *ConfigurationService) Get(ctx context.Context, configID string, query C
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if configID == "" {
 		err = errors.New("missing required config_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/config/%s", query.ZoneID, configID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TokenConfig struct {
 	// UUID.
-	ID           string                 `json:"id,required"`
-	CreatedAt    time.Time              `json:"created_at,required" format:"date-time"`
-	Credentials  TokenConfigCredentials `json:"credentials,required"`
-	Description  string                 `json:"description,required"`
-	LastUpdated  time.Time              `json:"last_updated,required" format:"date-time"`
-	Title        string                 `json:"title,required"`
-	TokenSources []string               `json:"token_sources,required"`
-	TokenType    TokenConfigTokenType   `json:"token_type,required"`
+	ID           string                 `json:"id" api:"required"`
+	CreatedAt    time.Time              `json:"created_at" api:"required" format:"date-time"`
+	Credentials  TokenConfigCredentials `json:"credentials" api:"required"`
+	Description  string                 `json:"description" api:"required"`
+	LastUpdated  time.Time              `json:"last_updated" api:"required" format:"date-time"`
+	Title        string                 `json:"title" api:"required"`
+	TokenSources []string               `json:"token_sources" api:"required"`
+	TokenType    TokenConfigTokenType   `json:"token_type" api:"required"`
 	JSON         tokenConfigJSON        `json:"-"`
 }
 
@@ -186,7 +186,7 @@ func (r tokenConfigJSON) RawJSON() string {
 }
 
 type TokenConfigCredentials struct {
-	Keys []TokenConfigCredentialsKey `json:"keys,required"`
+	Keys []TokenConfigCredentialsKey `json:"keys" api:"required"`
 	JSON tokenConfigCredentialsJSON  `json:"-"`
 }
 
@@ -209,11 +209,11 @@ func (r tokenConfigCredentialsJSON) RawJSON() string {
 // JSON representation of a JWKS key.
 type TokenConfigCredentialsKey struct {
 	// Algorithm
-	Alg TokenConfigCredentialsKeysAlg `json:"alg,required"`
+	Alg TokenConfigCredentialsKeysAlg `json:"alg" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty TokenConfigCredentialsKeysKty `json:"kty,required"`
+	Kty TokenConfigCredentialsKeysKty `json:"kty" api:"required"`
 	// Curve
 	Crv TokenConfigCredentialsKeysCrv `json:"crv"`
 	// RSA exponent
@@ -298,15 +298,15 @@ func init() {
 // JSON representation of an RSA key.
 type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSA struct {
 	// Algorithm
-	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAAlg `json:"alg,required"`
+	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAAlg `json:"alg" api:"required"`
 	// RSA exponent
-	E string `json:"e,required"`
+	E string `json:"e" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty `json:"kty,required"`
+	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty `json:"kty" api:"required"`
 	// RSA modulus
-	N    string                                                      `json:"n,required"`
+	N    string                                                      `json:"n" api:"required"`
 	JSON tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAJSON `json:"-"`
 }
 
@@ -372,17 +372,17 @@ func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty) IsKnown() bo
 // JSON representation of an ES256 key
 type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256 struct {
 	// Algorithm
-	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg `json:"alg,required"`
+	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg `json:"alg" api:"required"`
 	// Curve
-	Crv TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv `json:"crv,required"`
+	Crv TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv `json:"crv" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty `json:"kty,required"`
+	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty `json:"kty" api:"required"`
 	// X EC coordinate
-	X string `json:"x,required"`
+	X string `json:"x" api:"required"`
 	// Y EC coordinate
-	Y    string                                                          `json:"y,required"`
+	Y    string                                                          `json:"y" api:"required"`
 	JSON tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256JSON `json:"-"`
 }
 
@@ -459,17 +459,17 @@ func (r TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty) IsKnown(
 // JSON representation of an ES384 key
 type TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384 struct {
 	// Algorithm
-	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg `json:"alg,required"`
+	Alg TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg `json:"alg" api:"required"`
 	// Curve
-	Crv TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv `json:"crv,required"`
+	Crv TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv `json:"crv" api:"required"`
 	// Key ID
-	Kid string `json:"kid,required"`
+	Kid string `json:"kid" api:"required"`
 	// Key Type
-	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty `json:"kty,required"`
+	Kty TokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty `json:"kty" api:"required"`
 	// X EC coordinate
-	X string `json:"x,required"`
+	X string `json:"x" api:"required"`
 	// Y EC coordinate
-	Y    string                                                          `json:"y,required"`
+	Y    string                                                          `json:"y" api:"required"`
 	JSON tokenConfigCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384JSON `json:"-"`
 }
 
@@ -663,12 +663,12 @@ func (r configurationEditResponseJSON) RawJSON() string {
 
 type ConfigurationNewParams struct {
 	// Identifier.
-	ZoneID       param.Field[string]                            `path:"zone_id,required"`
-	Credentials  param.Field[ConfigurationNewParamsCredentials] `json:"credentials,required"`
-	Description  param.Field[string]                            `json:"description,required"`
-	Title        param.Field[string]                            `json:"title,required"`
-	TokenSources param.Field[[]string]                          `json:"token_sources,required"`
-	TokenType    param.Field[ConfigurationNewParamsTokenType]   `json:"token_type,required"`
+	ZoneID       param.Field[string]                            `path:"zone_id" api:"required"`
+	Credentials  param.Field[ConfigurationNewParamsCredentials] `json:"credentials" api:"required"`
+	Description  param.Field[string]                            `json:"description" api:"required"`
+	Title        param.Field[string]                            `json:"title" api:"required"`
+	TokenSources param.Field[[]string]                          `json:"token_sources" api:"required"`
+	TokenType    param.Field[ConfigurationNewParamsTokenType]   `json:"token_type" api:"required"`
 }
 
 func (r ConfigurationNewParams) MarshalJSON() (data []byte, err error) {
@@ -676,7 +676,7 @@ func (r ConfigurationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigurationNewParamsCredentials struct {
-	Keys param.Field[[]ConfigurationNewParamsCredentialsKeyUnion] `json:"keys,required"`
+	Keys param.Field[[]ConfigurationNewParamsCredentialsKeyUnion] `json:"keys" api:"required"`
 }
 
 func (r ConfigurationNewParamsCredentials) MarshalJSON() (data []byte, err error) {
@@ -686,11 +686,11 @@ func (r ConfigurationNewParamsCredentials) MarshalJSON() (data []byte, err error
 // JSON representation of a JWKS key.
 type ConfigurationNewParamsCredentialsKey struct {
 	// Algorithm
-	Alg param.Field[ConfigurationNewParamsCredentialsKeysAlg] `json:"alg,required"`
+	Alg param.Field[ConfigurationNewParamsCredentialsKeysAlg] `json:"alg" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationNewParamsCredentialsKeysKty] `json:"kty,required"`
+	Kty param.Field[ConfigurationNewParamsCredentialsKeysKty] `json:"kty" api:"required"`
 	// Curve
 	Crv param.Field[ConfigurationNewParamsCredentialsKeysCrv] `json:"crv"`
 	// RSA exponent
@@ -723,15 +723,15 @@ type ConfigurationNewParamsCredentialsKeyUnion interface {
 // JSON representation of an RSA key.
 type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSA struct {
 	// Algorithm
-	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAAlg] `json:"alg,required"`
+	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAAlg] `json:"alg" api:"required"`
 	// RSA exponent
-	E param.Field[string] `json:"e,required"`
+	E param.Field[string] `json:"e" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty] `json:"kty,required"`
+	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty] `json:"kty" api:"required"`
 	// RSA modulus
-	N param.Field[string] `json:"n,required"`
+	N param.Field[string] `json:"n" api:"required"`
 }
 
 func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSA) MarshalJSON() (data []byte, err error) {
@@ -779,17 +779,17 @@ func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAKty) I
 // JSON representation of an ES256 key
 type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256 struct {
 	// Algorithm
-	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg] `json:"alg,required"`
+	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Alg] `json:"alg" api:"required"`
 	// Curve
-	Crv param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv] `json:"crv,required"`
+	Crv param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Crv] `json:"crv" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty] `json:"kty,required"`
+	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kty] `json:"kty" api:"required"`
 	// X EC coordinate
-	X param.Field[string] `json:"x,required"`
+	X param.Field[string] `json:"x" api:"required"`
 	// Y EC coordinate
-	Y param.Field[string] `json:"y,required"`
+	Y param.Field[string] `json:"y" api:"required"`
 }
 
 func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256) MarshalJSON() (data []byte, err error) {
@@ -847,17 +847,17 @@ func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256Kt
 // JSON representation of an ES384 key
 type ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384 struct {
 	// Algorithm
-	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg] `json:"alg,required"`
+	Alg param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Alg] `json:"alg" api:"required"`
 	// Curve
-	Crv param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv] `json:"crv,required"`
+	Crv param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Crv] `json:"crv" api:"required"`
 	// Key ID
-	Kid param.Field[string] `json:"kid,required"`
+	Kid param.Field[string] `json:"kid" api:"required"`
 	// Key Type
-	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty] `json:"kty,required"`
+	Kty param.Field[ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384Kty] `json:"kty" api:"required"`
 	// X EC coordinate
-	X param.Field[string] `json:"x,required"`
+	X param.Field[string] `json:"x" api:"required"`
 	// Y EC coordinate
-	Y param.Field[string] `json:"y,required"`
+	Y param.Field[string] `json:"y" api:"required"`
 }
 
 func (r ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs384) MarshalJSON() (data []byte, err error) {
@@ -981,11 +981,11 @@ func (r ConfigurationNewParamsTokenType) IsKnown() bool {
 }
 
 type ConfigurationNewResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
-	Result   TokenConfig         `json:"result,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
+	Result   TokenConfig         `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigurationNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigurationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configurationNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1025,7 +1025,7 @@ func (r ConfigurationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`
 	// Maximum number of results per page.
@@ -1043,15 +1043,15 @@ func (r ConfigurationListParams) URLQuery() (v url.Values) {
 
 type ConfigurationDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ConfigurationDeleteResponseEnvelope struct {
-	Errors   api_gateway.Message         `json:"errors,required"`
-	Messages api_gateway.Message         `json:"messages,required"`
-	Result   ConfigurationDeleteResponse `json:"result,required"`
+	Errors   api_gateway.Message         `json:"errors" api:"required"`
+	Messages api_gateway.Message         `json:"messages" api:"required"`
+	Result   ConfigurationDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigurationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigurationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configurationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1091,7 +1091,7 @@ func (r ConfigurationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationEditParams struct {
 	// Identifier.
-	ZoneID       param.Field[string]   `path:"zone_id,required"`
+	ZoneID       param.Field[string]   `path:"zone_id" api:"required"`
 	Description  param.Field[string]   `json:"description"`
 	Title        param.Field[string]   `json:"title"`
 	TokenSources param.Field[[]string] `json:"token_sources"`
@@ -1102,11 +1102,11 @@ func (r ConfigurationEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigurationEditResponseEnvelope struct {
-	Errors   api_gateway.Message       `json:"errors,required"`
-	Messages api_gateway.Message       `json:"messages,required"`
-	Result   ConfigurationEditResponse `json:"result,required"`
+	Errors   api_gateway.Message       `json:"errors" api:"required"`
+	Messages api_gateway.Message       `json:"messages" api:"required"`
+	Result   ConfigurationEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigurationEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigurationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configurationEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1146,15 +1146,15 @@ func (r ConfigurationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ConfigurationGetResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
-	Result   TokenConfig         `json:"result,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
+	Result   TokenConfig         `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigurationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configurationGetResponseEnvelopeJSON    `json:"-"`
 }
 

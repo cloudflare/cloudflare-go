@@ -40,15 +40,15 @@ func (r *TotalTLSService) Update(ctx context.Context, params TotalTLSUpdateParam
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/acm/total_tls", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Set Total TLS Settings or disable the feature for a Zone.
@@ -57,15 +57,15 @@ func (r *TotalTLSService) Edit(ctx context.Context, params TotalTLSEditParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/acm/total_tls", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Total TLS Settings for a Zone.
@@ -74,15 +74,15 @@ func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/acm/total_tls", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // The Certificate Authority that Total TLS certificates will be issued through.
@@ -236,10 +236,10 @@ func (r TotalTLSGetResponseValidityPeriod) IsKnown() bool {
 
 type TotalTLSUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
 	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
 }
@@ -249,10 +249,10 @@ func (r TotalTLSUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TotalTLSUpdateResponseEnvelope struct {
-	Errors   []TotalTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TotalTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TotalTLSUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TotalTLSUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TotalTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success TotalTLSUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TotalTLSUpdateResponse                `json:"result"`
 	JSON    totalTLSUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -277,8 +277,8 @@ func (r totalTLSUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TotalTLSUpdateResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           TotalTLSUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             totalTLSUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -325,8 +325,8 @@ func (r totalTLSUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TotalTLSUpdateResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           TotalTLSUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             totalTLSUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -389,10 +389,10 @@ func (r TotalTLSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type TotalTLSEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
 	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
 }
@@ -402,10 +402,10 @@ func (r TotalTLSEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TotalTLSEditResponseEnvelope struct {
-	Errors   []TotalTLSEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TotalTLSEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TotalTLSEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TotalTLSEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TotalTLSEditResponseEnvelopeSuccess `json:"success,required"`
+	Success TotalTLSEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TotalTLSEditResponse                `json:"result"`
 	JSON    totalTLSEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -430,8 +430,8 @@ func (r totalTLSEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TotalTLSEditResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           TotalTLSEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             totalTLSEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -478,8 +478,8 @@ func (r totalTLSEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TotalTLSEditResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           TotalTLSEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             totalTLSEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -542,14 +542,14 @@ func (r TotalTLSEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TotalTLSGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type TotalTLSGetResponseEnvelope struct {
-	Errors   []TotalTLSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TotalTLSGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TotalTLSGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TotalTLSGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TotalTLSGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TotalTLSGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TotalTLSGetResponse                `json:"result"`
 	JSON    totalTLSGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -574,8 +574,8 @@ func (r totalTLSGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TotalTLSGetResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           TotalTLSGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             totalTLSGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -622,8 +622,8 @@ func (r totalTLSGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TotalTLSGetResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           TotalTLSGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             totalTLSGetResponseEnvelopeMessagesJSON   `json:"-"`

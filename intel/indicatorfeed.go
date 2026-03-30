@@ -48,15 +48,15 @@ func (r *IndicatorFeedService) New(ctx context.Context, params IndicatorFeedNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Revises details for a specific custom threat indicator feed.
@@ -65,15 +65,15 @@ func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", params.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details for all accessible custom threat indicator feeds.
@@ -83,7 +83,7 @@ func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedList
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -109,11 +109,11 @@ func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query Ind
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/data", query.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieves details for a specific custom threat indicator feed.
@@ -122,15 +122,15 @@ func (r *IndicatorFeedService) Get(ctx context.Context, feedID int64, query Indi
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", query.AccountID, feedID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type IndicatorFeedNewResponse struct {
@@ -336,7 +336,7 @@ func (r IndicatorFeedGetResponseLatestUploadStatus) IsKnown() bool {
 
 type IndicatorFeedNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The description of the example test
 	Description param.Field[string] `json:"description"`
 	// The name of the indicator feed
@@ -348,10 +348,10 @@ func (r IndicatorFeedNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedNewResponseEnvelope struct {
-	Errors   []IndicatorFeedNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IndicatorFeedNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IndicatorFeedNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IndicatorFeedNewResponseEnvelopeSuccess `json:"success,required"`
+	Success IndicatorFeedNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  IndicatorFeedNewResponse                `json:"result"`
 	JSON    indicatorFeedNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -376,8 +376,8 @@ func (r indicatorFeedNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IndicatorFeedNewResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           IndicatorFeedNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             indicatorFeedNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -424,8 +424,8 @@ func (r indicatorFeedNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type IndicatorFeedNewResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           IndicatorFeedNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             indicatorFeedNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -488,7 +488,7 @@ func (r IndicatorFeedNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndicatorFeedUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The new description of the feed
 	Description param.Field[string] `json:"description"`
 	// The new is_attributable value of the feed
@@ -506,10 +506,10 @@ func (r IndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedUpdateResponseEnvelope struct {
-	Errors   []IndicatorFeedUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IndicatorFeedUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IndicatorFeedUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IndicatorFeedUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success IndicatorFeedUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  IndicatorFeedUpdateResponse                `json:"result"`
 	JSON    indicatorFeedUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -534,8 +534,8 @@ func (r indicatorFeedUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IndicatorFeedUpdateResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           IndicatorFeedUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             indicatorFeedUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -582,8 +582,8 @@ func (r indicatorFeedUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type IndicatorFeedUpdateResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           IndicatorFeedUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             indicatorFeedUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -646,24 +646,24 @@ func (r IndicatorFeedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndicatorFeedListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndicatorFeedDataParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndicatorFeedGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndicatorFeedGetResponseEnvelope struct {
-	Errors   []IndicatorFeedGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IndicatorFeedGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IndicatorFeedGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IndicatorFeedGetResponseEnvelopeSuccess `json:"success,required"`
+	Success IndicatorFeedGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  IndicatorFeedGetResponse                `json:"result"`
 	JSON    indicatorFeedGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -688,8 +688,8 @@ func (r indicatorFeedGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IndicatorFeedGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           IndicatorFeedGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             indicatorFeedGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -736,8 +736,8 @@ func (r indicatorFeedGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type IndicatorFeedGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           IndicatorFeedGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             indicatorFeedGetResponseEnvelopeMessagesJSON   `json:"-"`

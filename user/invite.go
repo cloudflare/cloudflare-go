@@ -65,15 +65,15 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 	opts = slices.Concat(r.Options, opts)
 	if inviteID == "" {
 		err = errors.New("missing required invite_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("user/invites/%s", inviteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets the details of an invitation.
@@ -82,22 +82,22 @@ func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option
 	opts = slices.Concat(r.Options, opts)
 	if inviteID == "" {
 		err = errors.New("missing required invite_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("user/invites/%s", inviteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Invite struct {
 	// ID of the user to add to the organization.
-	InvitedMemberID string `json:"invited_member_id,required,nullable"`
+	InvitedMemberID string `json:"invited_member_id" api:"required,nullable"`
 	// ID of the organization the user will be added to.
-	OrganizationID string `json:"organization_id,required"`
+	OrganizationID string `json:"organization_id" api:"required"`
 	// Invite identifier tag.
 	ID string `json:"id"`
 	// When the invite is no longer active.
@@ -163,7 +163,7 @@ func (r InviteStatus) IsKnown() bool {
 
 type InviteEditParams struct {
 	// Status of your response to the invitation (rejected or accepted).
-	Status param.Field[InviteEditParamsStatus] `json:"status,required"`
+	Status param.Field[InviteEditParamsStatus] `json:"status" api:"required"`
 }
 
 func (r InviteEditParams) MarshalJSON() (data []byte, err error) {
@@ -187,10 +187,10 @@ func (r InviteEditParamsStatus) IsKnown() bool {
 }
 
 type InviteEditResponseEnvelope struct {
-	Errors   []InviteEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InviteEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []InviteEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InviteEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
+	Success InviteEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Invite                            `json:"result"`
 	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -215,8 +215,8 @@ func (r inviteEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InviteEditResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           InviteEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             inviteEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -263,8 +263,8 @@ func (r inviteEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type InviteEditResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           InviteEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             inviteEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -326,10 +326,10 @@ func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InviteGetResponseEnvelope struct {
-	Errors   []InviteGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InviteGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []InviteGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InviteGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
+	Success InviteGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Invite                           `json:"result"`
 	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -354,8 +354,8 @@ func (r inviteGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InviteGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           InviteGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             inviteGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -402,8 +402,8 @@ func (r inviteGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type InviteGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           InviteGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             inviteGetResponseEnvelopeMessagesJSON   `json:"-"`

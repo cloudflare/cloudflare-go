@@ -42,15 +42,15 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Removes the fallback origin configuration for custom hostnames on a zone. Custom
@@ -60,15 +60,15 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the current fallback origin configuration for custom hostnames on a
@@ -79,15 +79,15 @@ func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGet
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type FallbackOriginUpdateResponse struct {
@@ -257,9 +257,9 @@ func (r FallbackOriginGetResponseStatus) IsKnown() bool {
 
 type FallbackOriginUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Your origin hostname that requests to your custom hostnames will be sent to.
-	Origin param.Field[string] `json:"origin,required"`
+	Origin param.Field[string] `json:"origin" api:"required"`
 }
 
 func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -267,10 +267,10 @@ func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginUpdateResponseEnvelope struct {
-	Errors   []FallbackOriginUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []FallbackOriginUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []FallbackOriginUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  FallbackOriginUpdateResponse                `json:"result"`
 	JSON    fallbackOriginUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -295,8 +295,8 @@ func (r fallbackOriginUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type FallbackOriginUpdateResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           FallbackOriginUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             fallbackOriginUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -343,8 +343,8 @@ func (r fallbackOriginUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type FallbackOriginUpdateResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           FallbackOriginUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             fallbackOriginUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -407,14 +407,14 @@ func (r FallbackOriginUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type FallbackOriginDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {
-	Errors   []FallbackOriginDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []FallbackOriginDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []FallbackOriginDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  FallbackOriginDeleteResponse                `json:"result"`
 	JSON    fallbackOriginDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -439,8 +439,8 @@ func (r fallbackOriginDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type FallbackOriginDeleteResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           FallbackOriginDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             fallbackOriginDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -487,8 +487,8 @@ func (r fallbackOriginDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type FallbackOriginDeleteResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           FallbackOriginDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             fallbackOriginDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -551,14 +551,14 @@ func (r FallbackOriginDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type FallbackOriginGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type FallbackOriginGetResponseEnvelope struct {
-	Errors   []FallbackOriginGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FallbackOriginGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []FallbackOriginGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []FallbackOriginGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
+	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  FallbackOriginGetResponse                `json:"result"`
 	JSON    fallbackOriginGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -583,8 +583,8 @@ func (r fallbackOriginGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type FallbackOriginGetResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           FallbackOriginGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             fallbackOriginGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -631,8 +631,8 @@ func (r fallbackOriginGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type FallbackOriginGetResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           FallbackOriginGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             fallbackOriginGetResponseEnvelopeMessagesJSON   `json:"-"`

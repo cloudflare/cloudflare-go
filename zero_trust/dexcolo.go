@@ -46,7 +46,7 @@ func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/colos", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -70,11 +70,11 @@ func (r *DEXColoService) ListAutoPaging(ctx context.Context, params DEXColoListP
 
 type DEXColoListResponse struct {
 	// Airport code
-	AirportCode string `json:"airportCode,required"`
+	AirportCode string `json:"airportCode" api:"required"`
 	// City
-	City string `json:"city,required"`
+	City string `json:"city" api:"required"`
 	// Country code
-	CountryCode string                  `json:"countryCode,required"`
+	CountryCode string                  `json:"countryCode" api:"required"`
 	JSON        dexColoListResponseJSON `json:"-"`
 }
 
@@ -97,11 +97,11 @@ func (r dexColoListResponseJSON) RawJSON() string {
 }
 
 type DEXColoListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for connection period in ISO (RFC3339 - ISO 8601) format
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// End time for connection period in ISO (RFC3339 - ISO 8601) format
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 	// Type of usage that colos should be sorted by. If unspecified, returns all
 	// Cloudflare colos sorted alphabetically.
 	SortBy param.Field[DEXColoListParamsSortBy] `query:"sortBy"`

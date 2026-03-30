@@ -44,15 +44,15 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/members", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify an account member.
@@ -61,19 +61,19 @@ func (r *MemberService) Update(ctx context.Context, memberID string, params Memb
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if memberID == "" {
 		err = errors.New("missing required member_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/members/%s", params.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all members of an account.
@@ -83,7 +83,7 @@ func (r *MemberService) List(ctx context.Context, params MemberListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/members", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -109,19 +109,19 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, body Member
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if memberID == "" {
 		err = errors.New("missing required member_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/members/%s", body.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information about a specific member of an account.
@@ -130,19 +130,19 @@ func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if memberID == "" {
 		err = errors.New("missing required member_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/members/%s", query.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Whether the user is a member of the organization or has an invitation pending.
@@ -163,7 +163,7 @@ func (r Status) IsKnown() bool {
 
 type MemberDeleteResponse struct {
 	// Identifier
-	ID   string                   `json:"id,required"`
+	ID   string                   `json:"id" api:"required"`
 	JSON memberDeleteResponseJSON `json:"-"`
 }
 
@@ -185,8 +185,8 @@ func (r memberDeleteResponseJSON) RawJSON() string {
 
 type MemberNewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      MemberNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]      `path:"account_id" api:"required"`
+	Body      MemberNewParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
@@ -195,7 +195,7 @@ func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
 
 type MemberNewParamsBody struct {
 	// The contact email address of the user.
-	Email    param.Field[string]      `json:"email,required"`
+	Email    param.Field[string]      `json:"email" api:"required"`
 	Policies param.Field[interface{}] `json:"policies"`
 	Roles    param.Field[interface{}] `json:"roles"`
 	// Status of the member invitation. If not provided during creation, defaults to
@@ -219,9 +219,9 @@ type MemberNewParamsBodyUnion interface {
 
 type MemberNewParamsBodyIAMCreateMemberWithRoles struct {
 	// The contact email address of the user.
-	Email param.Field[string] `json:"email,required"`
+	Email param.Field[string] `json:"email" api:"required"`
 	// Array of roles associated with this member.
-	Roles param.Field[[]string] `json:"roles,required"`
+	Roles param.Field[[]string] `json:"roles" api:"required"`
 	// Status of the member invitation. If not provided during creation, defaults to
 	// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
 	// of the member resource in Terraform.
@@ -254,9 +254,9 @@ func (r MemberNewParamsBodyIAMCreateMemberWithRolesStatus) IsKnown() bool {
 
 type MemberNewParamsBodyIAMCreateMemberWithPolicies struct {
 	// The contact email address of the user.
-	Email param.Field[string] `json:"email,required"`
+	Email param.Field[string] `json:"email" api:"required"`
 	// Array of policies associated with this member.
-	Policies param.Field[[]MemberNewParamsBodyIAMCreateMemberWithPoliciesPolicy] `json:"policies,required"`
+	Policies param.Field[[]MemberNewParamsBodyIAMCreateMemberWithPoliciesPolicy] `json:"policies" api:"required"`
 	// Status of the member invitation. If not provided during creation, defaults to
 	// 'pending'. Changing from 'accepted' back to 'pending' will trigger a replacement
 	// of the member resource in Terraform.
@@ -271,11 +271,11 @@ func (r MemberNewParamsBodyIAMCreateMemberWithPolicies) implementsMemberNewParam
 
 type MemberNewParamsBodyIAMCreateMemberWithPoliciesPolicy struct {
 	// Allow or deny operations against the resources.
-	Access param.Field[MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesAccess] `json:"access,required"`
+	Access param.Field[MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesAccess] `json:"access" api:"required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesPermissionGroup] `json:"permission_groups,required"`
+	PermissionGroups param.Field[[]MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesPermissionGroup] `json:"permission_groups" api:"required"`
 	// A list of resource groups that the policy applies to.
-	ResourceGroups param.Field[[]MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesResourceGroup] `json:"resource_groups,required"`
+	ResourceGroups param.Field[[]MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesResourceGroup] `json:"resource_groups" api:"required"`
 }
 
 func (r MemberNewParamsBodyIAMCreateMemberWithPoliciesPolicy) MarshalJSON() (data []byte, err error) {
@@ -301,7 +301,7 @@ func (r MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesAccess) IsKnown() 
 // A group of permissions.
 type MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesPermissionGroup struct {
 	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
@@ -311,7 +311,7 @@ func (r MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesPermissionGroup) M
 // A group of scoped resources.
 type MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesResourceGroup struct {
 	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r MemberNewParamsBodyIAMCreateMemberWithPoliciesPoliciesResourceGroup) MarshalJSON() (data []byte, err error) {
@@ -355,10 +355,10 @@ func (r MemberNewParamsBodyStatus) IsKnown() bool {
 }
 
 type MemberNewResponseEnvelope struct {
-	Errors   []MemberNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MemberNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MemberNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MemberNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MemberNewResponseEnvelopeSuccess `json:"success,required"`
+	Success MemberNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  shared.Member                    `json:"result"`
 	JSON    memberNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -383,8 +383,8 @@ func (r memberNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MemberNewResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           MemberNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             memberNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -431,8 +431,8 @@ func (r memberNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MemberNewResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           MemberNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             memberNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -495,8 +495,8 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]         `path:"account_id,required"`
-	Body      MemberUpdateParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]         `path:"account_id" api:"required"`
+	Body      MemberUpdateParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -552,7 +552,7 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithRolesStatus) IsKnown() bool {
 // Details of the user associated to the membership.
 type MemberUpdateParamsBodyIAMUpdateMemberWithRolesUser struct {
 	// The contact email address of the user.
-	Email param.Field[string] `json:"email,required"`
+	Email param.Field[string] `json:"email" api:"required"`
 	// Identifier
 	ID param.Field[string] `json:"id"`
 	// User's first name
@@ -567,7 +567,7 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithRolesUser) MarshalJSON() (data 
 
 type MemberUpdateParamsBodyIAMUpdateMemberWithPolicies struct {
 	// Array of policies associated with this member.
-	Policies param.Field[[]MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPolicy] `json:"policies,required"`
+	Policies param.Field[[]MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPolicy] `json:"policies" api:"required"`
 }
 
 func (r MemberUpdateParamsBodyIAMUpdateMemberWithPolicies) MarshalJSON() (data []byte, err error) {
@@ -578,11 +578,11 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithPolicies) implementsMemberUpdat
 
 type MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPolicy struct {
 	// Allow or deny operations against the resources.
-	Access param.Field[MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesAccess] `json:"access,required"`
+	Access param.Field[MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesAccess] `json:"access" api:"required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesPermissionGroup] `json:"permission_groups,required"`
+	PermissionGroups param.Field[[]MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesPermissionGroup] `json:"permission_groups" api:"required"`
 	// A list of resource groups that the policy applies to.
-	ResourceGroups param.Field[[]MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesResourceGroup] `json:"resource_groups,required"`
+	ResourceGroups param.Field[[]MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesResourceGroup] `json:"resource_groups" api:"required"`
 }
 
 func (r MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPolicy) MarshalJSON() (data []byte, err error) {
@@ -608,7 +608,7 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesAccess) IsKnown
 // A group of permissions.
 type MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesPermissionGroup struct {
 	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
@@ -618,7 +618,7 @@ func (r MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesPermissionGroup
 // A group of scoped resources.
 type MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesResourceGroup struct {
 	// Identifier of the group.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r MemberUpdateParamsBodyIAMUpdateMemberWithPoliciesPoliciesResourceGroup) MarshalJSON() (data []byte, err error) {
@@ -642,10 +642,10 @@ func (r MemberUpdateParamsBodyStatus) IsKnown() bool {
 }
 
 type MemberUpdateResponseEnvelope struct {
-	Errors   []MemberUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MemberUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MemberUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MemberUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success MemberUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  shared.Member                       `json:"result"`
 	JSON    memberUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -670,8 +670,8 @@ func (r memberUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MemberUpdateResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           MemberUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             memberUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -718,8 +718,8 @@ func (r memberUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MemberUpdateResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           MemberUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             memberUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -782,7 +782,7 @@ func (r MemberUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order results.
 	Direction param.Field[MemberListParamsDirection] `query:"direction"`
 	// Field to order results by.
@@ -856,15 +856,15 @@ func (r MemberListParamsStatus) IsKnown() bool {
 
 type MemberDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MemberDeleteResponseEnvelope struct {
-	Errors   []MemberDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MemberDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MemberDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MemberDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MemberDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  MemberDeleteResponse                `json:"result,nullable"`
+	Success MemberDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  MemberDeleteResponse                `json:"result" api:"nullable"`
 	JSON    memberDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -888,8 +888,8 @@ func (r memberDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MemberDeleteResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           MemberDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             memberDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -936,8 +936,8 @@ func (r memberDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MemberDeleteResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           MemberDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             memberDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1000,14 +1000,14 @@ func (r MemberDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MemberGetResponseEnvelope struct {
-	Errors   []MemberGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MemberGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MemberGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MemberGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
+	Success MemberGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  shared.Member                    `json:"result"`
 	JSON    memberGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1032,8 +1032,8 @@ func (r memberGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MemberGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           MemberGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             memberGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1080,8 +1080,8 @@ func (r memberGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MemberGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           MemberGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             memberGetResponseEnvelopeMessagesJSON   `json:"-"`

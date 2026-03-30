@@ -42,19 +42,19 @@ func (r *OperationLabelService) New(ctx context.Context, operationID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/%s/labels", params.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Replace label(s) on an operation in endpoint management
@@ -63,19 +63,19 @@ func (r *OperationLabelService) Update(ctx context.Context, operationID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/%s/labels", params.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Remove label(s) on an operation in endpoint management
@@ -84,19 +84,19 @@ func (r *OperationLabelService) Delete(ctx context.Context, operationID string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/%s/labels", body.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Bulk attach label(s) on operation(s) in endpoint management
@@ -106,7 +106,7 @@ func (r *OperationLabelService) BulkNew(ctx context.Context, params OperationLab
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/labels", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -133,7 +133,7 @@ func (r *OperationLabelService) BulkDelete(ctx context.Context, body OperationLa
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/labels", body.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -160,7 +160,7 @@ func (r *OperationLabelService) BulkUpdate(ctx context.Context, params Operation
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/labels", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -185,14 +185,14 @@ type OperationLabelNewResponse struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method OperationLabelNewResponseMethod `json:"method,required"`
+	Method OperationLabelNewResponseMethod `json:"method" api:"required"`
 	// UUID.
-	OperationID string                           `json:"operation_id,required"`
+	OperationID string                           `json:"operation_id" api:"required"`
 	Labels      []OperationLabelNewResponseLabel `json:"labels"`
 	JSON        operationLabelNewResponseJSON    `json:"-"`
 }
@@ -242,17 +242,17 @@ func (r OperationLabelNewResponseMethod) IsKnown() bool {
 }
 
 type OperationLabelNewResponseLabel struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source OperationLabelNewResponseLabelsSource `json:"source,required"`
+	Source OperationLabelNewResponseLabelsSource `json:"source" api:"required"`
 	JSON   operationLabelNewResponseLabelJSON    `json:"-"`
 }
 
@@ -299,14 +299,14 @@ type OperationLabelUpdateResponse struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method OperationLabelUpdateResponseMethod `json:"method,required"`
+	Method OperationLabelUpdateResponseMethod `json:"method" api:"required"`
 	// UUID.
-	OperationID string                              `json:"operation_id,required"`
+	OperationID string                              `json:"operation_id" api:"required"`
 	Labels      []OperationLabelUpdateResponseLabel `json:"labels"`
 	JSON        operationLabelUpdateResponseJSON    `json:"-"`
 }
@@ -356,17 +356,17 @@ func (r OperationLabelUpdateResponseMethod) IsKnown() bool {
 }
 
 type OperationLabelUpdateResponseLabel struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source OperationLabelUpdateResponseLabelsSource `json:"source,required"`
+	Source OperationLabelUpdateResponseLabelsSource `json:"source" api:"required"`
 	JSON   operationLabelUpdateResponseLabelJSON    `json:"-"`
 }
 
@@ -413,14 +413,14 @@ type OperationLabelDeleteResponse struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method OperationLabelDeleteResponseMethod `json:"method,required"`
+	Method OperationLabelDeleteResponseMethod `json:"method" api:"required"`
 	// UUID.
-	OperationID string                              `json:"operation_id,required"`
+	OperationID string                              `json:"operation_id" api:"required"`
 	Labels      []OperationLabelDeleteResponseLabel `json:"labels"`
 	JSON        operationLabelDeleteResponseJSON    `json:"-"`
 }
@@ -470,17 +470,17 @@ func (r OperationLabelDeleteResponseMethod) IsKnown() bool {
 }
 
 type OperationLabelDeleteResponseLabel struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source OperationLabelDeleteResponseLabelsSource `json:"source,required"`
+	Source OperationLabelDeleteResponseLabelsSource `json:"source" api:"required"`
 	JSON   operationLabelDeleteResponseLabelJSON    `json:"-"`
 }
 
@@ -527,14 +527,14 @@ type OperationLabelBulkNewResponse struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method OperationLabelBulkNewResponseMethod `json:"method,required"`
+	Method OperationLabelBulkNewResponseMethod `json:"method" api:"required"`
 	// UUID.
-	OperationID string                               `json:"operation_id,required"`
+	OperationID string                               `json:"operation_id" api:"required"`
 	Labels      []OperationLabelBulkNewResponseLabel `json:"labels"`
 	JSON        operationLabelBulkNewResponseJSON    `json:"-"`
 }
@@ -584,17 +584,17 @@ func (r OperationLabelBulkNewResponseMethod) IsKnown() bool {
 }
 
 type OperationLabelBulkNewResponseLabel struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source OperationLabelBulkNewResponseLabelsSource `json:"source,required"`
+	Source OperationLabelBulkNewResponseLabelsSource `json:"source" api:"required"`
 	JSON   operationLabelBulkNewResponseLabelJSON    `json:"-"`
 }
 
@@ -641,14 +641,14 @@ type OperationLabelBulkDeleteResponse struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method OperationLabelBulkDeleteResponseMethod `json:"method,required"`
+	Method OperationLabelBulkDeleteResponseMethod `json:"method" api:"required"`
 	// UUID.
-	OperationID string                                  `json:"operation_id,required"`
+	OperationID string                                  `json:"operation_id" api:"required"`
 	Labels      []OperationLabelBulkDeleteResponseLabel `json:"labels"`
 	JSON        operationLabelBulkDeleteResponseJSON    `json:"-"`
 }
@@ -698,17 +698,17 @@ func (r OperationLabelBulkDeleteResponseMethod) IsKnown() bool {
 }
 
 type OperationLabelBulkDeleteResponseLabel struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source OperationLabelBulkDeleteResponseLabelsSource `json:"source,required"`
+	Source OperationLabelBulkDeleteResponseLabelsSource `json:"source" api:"required"`
 	JSON   operationLabelBulkDeleteResponseLabelJSON    `json:"-"`
 }
 
@@ -755,14 +755,14 @@ type OperationLabelBulkUpdateResponse struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method OperationLabelBulkUpdateResponseMethod `json:"method,required"`
+	Method OperationLabelBulkUpdateResponseMethod `json:"method" api:"required"`
 	// UUID.
-	OperationID string                                  `json:"operation_id,required"`
+	OperationID string                                  `json:"operation_id" api:"required"`
 	Labels      []OperationLabelBulkUpdateResponseLabel `json:"labels"`
 	JSON        operationLabelBulkUpdateResponseJSON    `json:"-"`
 }
@@ -812,17 +812,17 @@ func (r OperationLabelBulkUpdateResponseMethod) IsKnown() bool {
 }
 
 type OperationLabelBulkUpdateResponseLabel struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The description of the label
-	Description string    `json:"description,required"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Description string    `json:"description" api:"required"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// Metadata for the label
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata" api:"required"`
 	// The name of the label
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// - `user` - label is owned by the user
 	// - `managed` - label is owned by cloudflare
-	Source OperationLabelBulkUpdateResponseLabelsSource `json:"source,required"`
+	Source OperationLabelBulkUpdateResponseLabelsSource `json:"source" api:"required"`
 	JSON   operationLabelBulkUpdateResponseLabelJSON    `json:"-"`
 }
 
@@ -866,7 +866,7 @@ func (r OperationLabelBulkUpdateResponseLabelsSource) IsKnown() bool {
 
 type OperationLabelNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List of managed label names.
 	Managed param.Field[[]string] `json:"managed"`
 	// List of user label names.
@@ -878,11 +878,11 @@ func (r OperationLabelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OperationLabelNewResponseEnvelope struct {
-	Errors   Message                   `json:"errors,required"`
-	Messages Message                   `json:"messages,required"`
-	Result   OperationLabelNewResponse `json:"result,required"`
+	Errors   Message                   `json:"errors" api:"required"`
+	Messages Message                   `json:"messages" api:"required"`
+	Result   OperationLabelNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success OperationLabelNewResponseEnvelopeSuccess `json:"success,required"`
+	Success OperationLabelNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    operationLabelNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -922,7 +922,7 @@ func (r OperationLabelNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationLabelUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List of managed label names. Omitting this property or passing an empty array
 	// will result in all managed labels being removed from the operation
 	Managed param.Field[[]string] `json:"managed"`
@@ -936,11 +936,11 @@ func (r OperationLabelUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OperationLabelUpdateResponseEnvelope struct {
-	Errors   Message                      `json:"errors,required"`
-	Messages Message                      `json:"messages,required"`
-	Result   OperationLabelUpdateResponse `json:"result,required"`
+	Errors   Message                      `json:"errors" api:"required"`
+	Messages Message                      `json:"messages" api:"required"`
+	Result   OperationLabelUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success OperationLabelUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success OperationLabelUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    operationLabelUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -980,15 +980,15 @@ func (r OperationLabelUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationLabelDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OperationLabelDeleteResponseEnvelope struct {
-	Errors   Message                      `json:"errors,required"`
-	Messages Message                      `json:"messages,required"`
-	Result   OperationLabelDeleteResponse `json:"result,required"`
+	Errors   Message                      `json:"errors" api:"required"`
+	Messages Message                      `json:"messages" api:"required"`
+	Result   OperationLabelDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success OperationLabelDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success OperationLabelDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    operationLabelDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1028,9 +1028,9 @@ func (r OperationLabelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationLabelBulkNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Operation IDs selector
-	Selector param.Field[OperationLabelBulkNewParamsSelector] `json:"selector,required"`
+	Selector param.Field[OperationLabelBulkNewParamsSelector] `json:"selector" api:"required"`
 	Managed  param.Field[OperationLabelBulkNewParamsManaged]  `json:"managed"`
 	User     param.Field[OperationLabelBulkNewParamsUser]     `json:"user"`
 }
@@ -1041,7 +1041,7 @@ func (r OperationLabelBulkNewParams) MarshalJSON() (data []byte, err error) {
 
 // Operation IDs selector
 type OperationLabelBulkNewParamsSelector struct {
-	Include param.Field[OperationLabelBulkNewParamsSelectorInclude] `json:"include,required"`
+	Include param.Field[OperationLabelBulkNewParamsSelectorInclude] `json:"include" api:"required"`
 }
 
 func (r OperationLabelBulkNewParamsSelector) MarshalJSON() (data []byte, err error) {
@@ -1049,7 +1049,7 @@ func (r OperationLabelBulkNewParamsSelector) MarshalJSON() (data []byte, err err
 }
 
 type OperationLabelBulkNewParamsSelectorInclude struct {
-	OperationIDs param.Field[[]string] `json:"operation_ids,required"`
+	OperationIDs param.Field[[]string] `json:"operation_ids" api:"required"`
 }
 
 func (r OperationLabelBulkNewParamsSelectorInclude) MarshalJSON() (data []byte, err error) {
@@ -1076,18 +1076,18 @@ func (r OperationLabelBulkNewParamsUser) MarshalJSON() (data []byte, err error) 
 
 type OperationLabelBulkDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OperationLabelBulkUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Managed labels to replace for all affected operations
-	Managed param.Field[OperationLabelBulkUpdateParamsManaged] `json:"managed,required"`
+	Managed param.Field[OperationLabelBulkUpdateParamsManaged] `json:"managed" api:"required"`
 	// Operation IDs selector
-	Selector param.Field[OperationLabelBulkUpdateParamsSelector] `json:"selector,required"`
+	Selector param.Field[OperationLabelBulkUpdateParamsSelector] `json:"selector" api:"required"`
 	// User labels to replace for all affected operations
-	User param.Field[OperationLabelBulkUpdateParamsUser] `json:"user,required"`
+	User param.Field[OperationLabelBulkUpdateParamsUser] `json:"user" api:"required"`
 }
 
 func (r OperationLabelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1098,7 +1098,7 @@ func (r OperationLabelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 type OperationLabelBulkUpdateParamsManaged struct {
 	// List of managed label names. Providing an empty array will result in all managed
 	// labels being removed from all affected operations
-	Labels param.Field[[]string] `json:"labels,required"`
+	Labels param.Field[[]string] `json:"labels" api:"required"`
 }
 
 func (r OperationLabelBulkUpdateParamsManaged) MarshalJSON() (data []byte, err error) {
@@ -1107,7 +1107,7 @@ func (r OperationLabelBulkUpdateParamsManaged) MarshalJSON() (data []byte, err e
 
 // Operation IDs selector
 type OperationLabelBulkUpdateParamsSelector struct {
-	Include param.Field[OperationLabelBulkUpdateParamsSelectorInclude] `json:"include,required"`
+	Include param.Field[OperationLabelBulkUpdateParamsSelectorInclude] `json:"include" api:"required"`
 }
 
 func (r OperationLabelBulkUpdateParamsSelector) MarshalJSON() (data []byte, err error) {
@@ -1115,7 +1115,7 @@ func (r OperationLabelBulkUpdateParamsSelector) MarshalJSON() (data []byte, err 
 }
 
 type OperationLabelBulkUpdateParamsSelectorInclude struct {
-	OperationIDs param.Field[[]string] `json:"operation_ids,required"`
+	OperationIDs param.Field[[]string] `json:"operation_ids" api:"required"`
 }
 
 func (r OperationLabelBulkUpdateParamsSelectorInclude) MarshalJSON() (data []byte, err error) {
@@ -1126,7 +1126,7 @@ func (r OperationLabelBulkUpdateParamsSelectorInclude) MarshalJSON() (data []byt
 type OperationLabelBulkUpdateParamsUser struct {
 	// List of user label names. Providing an empty array will result in all user
 	// labels being removed from all affected operations
-	Labels param.Field[[]string] `json:"labels,required"`
+	Labels param.Field[[]string] `json:"labels" api:"required"`
 }
 
 func (r OperationLabelBulkUpdateParamsUser) MarshalJSON() (data []byte, err error) {

@@ -46,7 +46,7 @@ func (r *ResourceService) List(ctx context.Context, params ResourceListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/resources", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -72,11 +72,11 @@ func (r *ResourceService) Export(ctx context.Context, params ResourceExportParam
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/resources/export", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Read an resource from the Resource Catalog (Closed Beta).
@@ -85,19 +85,19 @@ func (r *ResourceService) Get(ctx context.Context, resourceID string, params Res
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if resourceID == "" {
 		err = errors.New("missing required resource_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/resources/%s", params.AccountID, resourceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Preview Rego query result against the latest resource catalog (Closed Beta).
@@ -106,38 +106,38 @@ func (r *ResourceService) PolicyPreview(ctx context.Context, params ResourcePoli
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/resources/policy-preview", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ResourceListResponse struct {
-	ID                  string                                     `json:"id,required" format:"uuid"`
-	AccountID           string                                     `json:"account_id,required"`
-	CloudType           ResourceListResponseCloudType              `json:"cloud_type,required"`
-	Config              map[string]interface{}                     `json:"config,required"`
-	DeploymentProvider  string                                     `json:"deployment_provider,required" format:"uuid"`
-	Managed             bool                                       `json:"managed,required"`
-	MonthlyCostEstimate ResourceListResponseMonthlyCostEstimate    `json:"monthly_cost_estimate,required"`
-	Name                string                                     `json:"name,required"`
-	NativeID            string                                     `json:"native_id,required"`
-	Observations        map[string]ResourceListResponseObservation `json:"observations,required"`
-	ProviderIDs         []string                                   `json:"provider_ids,required" format:"uuid"`
-	ProviderNamesByID   map[string]string                          `json:"provider_names_by_id,required"`
-	Region              string                                     `json:"region,required"`
-	ResourceGroup       string                                     `json:"resource_group,required"`
-	ResourceType        ResourceListResponseResourceType           `json:"resource_type,required"`
-	Sections            []ResourceListResponseSection              `json:"sections,required"`
-	State               map[string]interface{}                     `json:"state,required"`
-	Tags                map[string]string                          `json:"tags,required"`
-	UpdatedAt           string                                     `json:"updated_at,required"`
-	URL                 string                                     `json:"url,required"`
+	ID                  string                                     `json:"id" api:"required" format:"uuid"`
+	AccountID           string                                     `json:"account_id" api:"required"`
+	CloudType           ResourceListResponseCloudType              `json:"cloud_type" api:"required"`
+	Config              map[string]interface{}                     `json:"config" api:"required"`
+	DeploymentProvider  string                                     `json:"deployment_provider" api:"required" format:"uuid"`
+	Managed             bool                                       `json:"managed" api:"required"`
+	MonthlyCostEstimate ResourceListResponseMonthlyCostEstimate    `json:"monthly_cost_estimate" api:"required"`
+	Name                string                                     `json:"name" api:"required"`
+	NativeID            string                                     `json:"native_id" api:"required"`
+	Observations        map[string]ResourceListResponseObservation `json:"observations" api:"required"`
+	ProviderIDs         []string                                   `json:"provider_ids" api:"required" format:"uuid"`
+	ProviderNamesByID   map[string]string                          `json:"provider_names_by_id" api:"required"`
+	Region              string                                     `json:"region" api:"required"`
+	ResourceGroup       string                                     `json:"resource_group" api:"required"`
+	ResourceType        ResourceListResponseResourceType           `json:"resource_type" api:"required"`
+	Sections            []ResourceListResponseSection              `json:"sections" api:"required"`
+	State               map[string]interface{}                     `json:"state" api:"required"`
+	Tags                map[string]string                          `json:"tags" api:"required"`
+	UpdatedAt           string                                     `json:"updated_at" api:"required"`
+	URL                 string                                     `json:"url" api:"required"`
 	ManagedBy           []ResourceListResponseManagedBy            `json:"managed_by"`
 	JSON                resourceListResponseJSON                   `json:"-"`
 }
@@ -196,8 +196,8 @@ func (r ResourceListResponseCloudType) IsKnown() bool {
 }
 
 type ResourceListResponseMonthlyCostEstimate struct {
-	Currency    string                                      `json:"currency,required"`
-	MonthlyCost float64                                     `json:"monthly_cost,required"`
+	Currency    string                                      `json:"currency" api:"required"`
+	MonthlyCost float64                                     `json:"monthly_cost" api:"required"`
 	JSON        resourceListResponseMonthlyCostEstimateJSON `json:"-"`
 }
 
@@ -219,10 +219,10 @@ func (r resourceListResponseMonthlyCostEstimateJSON) RawJSON() string {
 }
 
 type ResourceListResponseObservation struct {
-	FirstObservedAt string                              `json:"first_observed_at,required"`
-	LastObservedAt  string                              `json:"last_observed_at,required"`
-	ProviderID      string                              `json:"provider_id,required" format:"uuid"`
-	ResourceID      string                              `json:"resource_id,required" format:"uuid"`
+	FirstObservedAt string                              `json:"first_observed_at" api:"required"`
+	LastObservedAt  string                              `json:"last_observed_at" api:"required"`
+	ProviderID      string                              `json:"provider_id" api:"required" format:"uuid"`
+	ResourceID      string                              `json:"resource_id" api:"required" format:"uuid"`
 	JSON            resourceListResponseObservationJSON `json:"-"`
 }
 
@@ -316,9 +316,9 @@ func (r ResourceListResponseResourceType) IsKnown() bool {
 }
 
 type ResourceListResponseSection struct {
-	HiddenItems  []ResourceListResponseSectionsHiddenItem  `json:"hidden_items,required"`
-	Name         string                                    `json:"name,required"`
-	VisibleItems []ResourceListResponseSectionsVisibleItem `json:"visible_items,required"`
+	HiddenItems  []ResourceListResponseSectionsHiddenItem  `json:"hidden_items" api:"required"`
+	Name         string                                    `json:"name" api:"required"`
+	VisibleItems []ResourceListResponseSectionsVisibleItem `json:"visible_items" api:"required"`
 	HelpText     string                                    `json:"help_text"`
 	JSON         resourceListResponseSectionJSON           `json:"-"`
 }
@@ -368,7 +368,7 @@ func (r resourceListResponseSectionsHiddenItemJSON) RawJSON() string {
 }
 
 type ResourceListResponseSectionsHiddenItemsValue struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [[]ResourceListResponseSectionsHiddenItemsValueMcnListItemList].
 	List interface{} `json:"list"`
@@ -460,8 +460,8 @@ func init() {
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnStringItem struct {
-	ItemType string                                                        `json:"item_type,required"`
-	String   string                                                        `json:"string,required"`
+	ItemType string                                                        `json:"item_type" api:"required"`
+	String   string                                                        `json:"string" api:"required"`
 	JSON     resourceListResponseSectionsHiddenItemsValueMcnStringItemJSON `json:"-"`
 }
 
@@ -487,8 +487,8 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnStringItem) implementsRes
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnYamlItem struct {
-	ItemType string                                                      `json:"item_type,required"`
-	Yaml     string                                                      `json:"yaml,required"`
+	ItemType string                                                      `json:"item_type" api:"required"`
+	Yaml     string                                                      `json:"yaml" api:"required"`
 	JSON     resourceListResponseSectionsHiddenItemsValueMcnYamlItemJSON `json:"-"`
 }
 
@@ -514,8 +514,8 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnYamlItem) implementsResou
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItem struct {
-	ItemType string                                                              `json:"item_type,required"`
-	YamlDiff ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff,required"`
+	ItemType string                                                              `json:"item_type" api:"required"`
+	YamlDiff ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff" api:"required"`
 	JSON     resourceListResponseSectionsHiddenItemsValueMcnYamlDiffItemJSON     `json:"-"`
 }
 
@@ -541,11 +541,11 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItem) implementsR
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiff struct {
-	Diff             string                                                                  `json:"diff,required"`
-	LeftDescription  string                                                                  `json:"left_description,required"`
-	LeftYaml         string                                                                  `json:"left_yaml,required"`
-	RightDescription string                                                                  `json:"right_description,required"`
-	RightYaml        string                                                                  `json:"right_yaml,required"`
+	Diff             string                                                                  `json:"diff" api:"required"`
+	LeftDescription  string                                                                  `json:"left_description" api:"required"`
+	LeftYaml         string                                                                  `json:"left_yaml" api:"required"`
+	RightDescription string                                                                  `json:"right_description" api:"required"`
+	RightYaml        string                                                                  `json:"right_yaml" api:"required"`
 	JSON             resourceListResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiffJSON `json:"-"`
 }
 
@@ -571,8 +571,8 @@ func (r resourceListResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiffJSON)
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItem struct {
-	ItemType        string                                                                            `json:"item_type,required"`
-	ResourcePreview ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                            `json:"item_type" api:"required"`
+	ResourcePreview ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -598,12 +598,12 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItem) impl
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                        `json:"id,required" format:"uuid"`
-	CloudType    ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                        `json:"detail,required"`
-	Name         string                                                                                        `json:"name,required"`
-	ResourceType ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                        `json:"title,required"`
+	ID           string                                                                                        `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                        `json:"detail" api:"required"`
+	Name         string                                                                                        `json:"name" api:"required"`
+	ResourceType ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                        `json:"title" api:"required"`
 	JSON         resourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -717,8 +717,8 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnResourcePreviewItemResour
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnListItem struct {
-	ItemType string                                                        `json:"item_type,required"`
-	List     []ResourceListResponseSectionsHiddenItemsValueMcnListItemList `json:"list,required"`
+	ItemType string                                                        `json:"item_type" api:"required"`
+	List     []ResourceListResponseSectionsHiddenItemsValueMcnListItemList `json:"list" api:"required"`
 	JSON     resourceListResponseSectionsHiddenItemsValueMcnListItemJSON   `json:"-"`
 }
 
@@ -744,7 +744,7 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnListItem) implementsResou
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnListItemList struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview].
 	ResourcePreview interface{}                                                     `json:"resource_preview"`
@@ -811,8 +811,8 @@ func init() {
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem struct {
-	ItemType string                                                                       `json:"item_type,required"`
-	String   string                                                                       `json:"string,required"`
+	ItemType string                                                                       `json:"item_type" api:"required"`
+	String   string                                                                       `json:"string" api:"required"`
 	JSON     resourceListResponseSectionsHiddenItemsValueMcnListItemListMcnStringItemJSON `json:"-"`
 }
 
@@ -838,8 +838,8 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem struct {
-	ItemType        string                                                                                           `json:"item_type,required"`
-	ResourcePreview ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                                           `json:"item_type" api:"required"`
+	ResourcePreview ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -865,12 +865,12 @@ func (r ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePr
 }
 
 type ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                                       `json:"id,required" format:"uuid"`
-	CloudType    ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                                       `json:"detail,required"`
-	Name         string                                                                                                       `json:"name,required"`
-	ResourceType ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                                       `json:"title,required"`
+	ID           string                                                                                                       `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                                       `json:"detail" api:"required"`
+	Name         string                                                                                                       `json:"name" api:"required"`
+	ResourceType ResourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                                       `json:"title" api:"required"`
 	JSON         resourceListResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -1009,7 +1009,7 @@ func (r resourceListResponseSectionsVisibleItemJSON) RawJSON() string {
 }
 
 type ResourceListResponseSectionsVisibleItemsValue struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [[]ResourceListResponseSectionsVisibleItemsValueMcnListItemList].
 	List interface{} `json:"list"`
@@ -1101,8 +1101,8 @@ func init() {
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnStringItem struct {
-	ItemType string                                                         `json:"item_type,required"`
-	String   string                                                         `json:"string,required"`
+	ItemType string                                                         `json:"item_type" api:"required"`
+	String   string                                                         `json:"string" api:"required"`
 	JSON     resourceListResponseSectionsVisibleItemsValueMcnStringItemJSON `json:"-"`
 }
 
@@ -1128,8 +1128,8 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnStringItem) implementsRe
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnYamlItem struct {
-	ItemType string                                                       `json:"item_type,required"`
-	Yaml     string                                                       `json:"yaml,required"`
+	ItemType string                                                       `json:"item_type" api:"required"`
+	Yaml     string                                                       `json:"yaml" api:"required"`
 	JSON     resourceListResponseSectionsVisibleItemsValueMcnYamlItemJSON `json:"-"`
 }
 
@@ -1155,8 +1155,8 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnYamlItem) implementsReso
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItem struct {
-	ItemType string                                                               `json:"item_type,required"`
-	YamlDiff ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff,required"`
+	ItemType string                                                               `json:"item_type" api:"required"`
+	YamlDiff ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff" api:"required"`
 	JSON     resourceListResponseSectionsVisibleItemsValueMcnYamlDiffItemJSON     `json:"-"`
 }
 
@@ -1182,11 +1182,11 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItem) implements
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiff struct {
-	Diff             string                                                                   `json:"diff,required"`
-	LeftDescription  string                                                                   `json:"left_description,required"`
-	LeftYaml         string                                                                   `json:"left_yaml,required"`
-	RightDescription string                                                                   `json:"right_description,required"`
-	RightYaml        string                                                                   `json:"right_yaml,required"`
+	Diff             string                                                                   `json:"diff" api:"required"`
+	LeftDescription  string                                                                   `json:"left_description" api:"required"`
+	LeftYaml         string                                                                   `json:"left_yaml" api:"required"`
+	RightDescription string                                                                   `json:"right_description" api:"required"`
+	RightYaml        string                                                                   `json:"right_yaml" api:"required"`
 	JSON             resourceListResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiffJSON `json:"-"`
 }
 
@@ -1212,8 +1212,8 @@ func (r resourceListResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiffJSON
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItem struct {
-	ItemType        string                                                                             `json:"item_type,required"`
-	ResourcePreview ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                             `json:"item_type" api:"required"`
+	ResourcePreview ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -1239,12 +1239,12 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItem) imp
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                         `json:"id,required" format:"uuid"`
-	CloudType    ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                         `json:"detail,required"`
-	Name         string                                                                                         `json:"name,required"`
-	ResourceType ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                         `json:"title,required"`
+	ID           string                                                                                         `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                         `json:"detail" api:"required"`
+	Name         string                                                                                         `json:"name" api:"required"`
+	ResourceType ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                         `json:"title" api:"required"`
 	JSON         resourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -1358,8 +1358,8 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnResourcePreviewItemResou
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnListItem struct {
-	ItemType string                                                         `json:"item_type,required"`
-	List     []ResourceListResponseSectionsVisibleItemsValueMcnListItemList `json:"list,required"`
+	ItemType string                                                         `json:"item_type" api:"required"`
+	List     []ResourceListResponseSectionsVisibleItemsValueMcnListItemList `json:"list" api:"required"`
 	JSON     resourceListResponseSectionsVisibleItemsValueMcnListItemJSON   `json:"-"`
 }
 
@@ -1385,7 +1385,7 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnListItem) implementsReso
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnListItemList struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview].
 	ResourcePreview interface{}                                                      `json:"resource_preview"`
@@ -1452,8 +1452,8 @@ func init() {
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem struct {
-	ItemType string                                                                        `json:"item_type,required"`
-	String   string                                                                        `json:"string,required"`
+	ItemType string                                                                        `json:"item_type" api:"required"`
+	String   string                                                                        `json:"string" api:"required"`
 	JSON     resourceListResponseSectionsVisibleItemsValueMcnListItemListMcnStringItemJSON `json:"-"`
 }
 
@@ -1479,8 +1479,8 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnStringIte
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem struct {
-	ItemType        string                                                                                            `json:"item_type,required"`
-	ResourcePreview ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                                            `json:"item_type" api:"required"`
+	ResourcePreview ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -1506,12 +1506,12 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourceP
 }
 
 type ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                                        `json:"id,required" format:"uuid"`
-	CloudType    ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                                        `json:"detail,required"`
-	Name         string                                                                                                        `json:"name,required"`
-	ResourceType ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                                        `json:"title,required"`
+	ID           string                                                                                                        `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                                        `json:"detail" api:"required"`
+	Name         string                                                                                                        `json:"name" api:"required"`
+	ResourceType ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                                        `json:"title" api:"required"`
 	JSON         resourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -1625,9 +1625,9 @@ func (r ResourceListResponseSectionsVisibleItemsValueMcnListItemListMcnResourceP
 }
 
 type ResourceListResponseManagedBy struct {
-	ID         string                                  `json:"id,required" format:"uuid"`
-	ClientType ResourceListResponseManagedByClientType `json:"client_type,required"`
-	Name       string                                  `json:"name,required"`
+	ID         string                                  `json:"id" api:"required" format:"uuid"`
+	ClientType ResourceListResponseManagedByClientType `json:"client_type" api:"required"`
+	Name       string                                  `json:"name" api:"required"`
 	JSON       resourceListResponseManagedByJSON       `json:"-"`
 }
 
@@ -1664,26 +1664,26 @@ func (r ResourceListResponseManagedByClientType) IsKnown() bool {
 }
 
 type ResourceGetResponse struct {
-	ID                  string                                    `json:"id,required" format:"uuid"`
-	AccountID           string                                    `json:"account_id,required"`
-	CloudType           ResourceGetResponseCloudType              `json:"cloud_type,required"`
-	Config              map[string]interface{}                    `json:"config,required"`
-	DeploymentProvider  string                                    `json:"deployment_provider,required" format:"uuid"`
-	Managed             bool                                      `json:"managed,required"`
-	MonthlyCostEstimate ResourceGetResponseMonthlyCostEstimate    `json:"monthly_cost_estimate,required"`
-	Name                string                                    `json:"name,required"`
-	NativeID            string                                    `json:"native_id,required"`
-	Observations        map[string]ResourceGetResponseObservation `json:"observations,required"`
-	ProviderIDs         []string                                  `json:"provider_ids,required" format:"uuid"`
-	ProviderNamesByID   map[string]string                         `json:"provider_names_by_id,required"`
-	Region              string                                    `json:"region,required"`
-	ResourceGroup       string                                    `json:"resource_group,required"`
-	ResourceType        ResourceGetResponseResourceType           `json:"resource_type,required"`
-	Sections            []ResourceGetResponseSection              `json:"sections,required"`
-	State               map[string]interface{}                    `json:"state,required"`
-	Tags                map[string]string                         `json:"tags,required"`
-	UpdatedAt           string                                    `json:"updated_at,required"`
-	URL                 string                                    `json:"url,required"`
+	ID                  string                                    `json:"id" api:"required" format:"uuid"`
+	AccountID           string                                    `json:"account_id" api:"required"`
+	CloudType           ResourceGetResponseCloudType              `json:"cloud_type" api:"required"`
+	Config              map[string]interface{}                    `json:"config" api:"required"`
+	DeploymentProvider  string                                    `json:"deployment_provider" api:"required" format:"uuid"`
+	Managed             bool                                      `json:"managed" api:"required"`
+	MonthlyCostEstimate ResourceGetResponseMonthlyCostEstimate    `json:"monthly_cost_estimate" api:"required"`
+	Name                string                                    `json:"name" api:"required"`
+	NativeID            string                                    `json:"native_id" api:"required"`
+	Observations        map[string]ResourceGetResponseObservation `json:"observations" api:"required"`
+	ProviderIDs         []string                                  `json:"provider_ids" api:"required" format:"uuid"`
+	ProviderNamesByID   map[string]string                         `json:"provider_names_by_id" api:"required"`
+	Region              string                                    `json:"region" api:"required"`
+	ResourceGroup       string                                    `json:"resource_group" api:"required"`
+	ResourceType        ResourceGetResponseResourceType           `json:"resource_type" api:"required"`
+	Sections            []ResourceGetResponseSection              `json:"sections" api:"required"`
+	State               map[string]interface{}                    `json:"state" api:"required"`
+	Tags                map[string]string                         `json:"tags" api:"required"`
+	UpdatedAt           string                                    `json:"updated_at" api:"required"`
+	URL                 string                                    `json:"url" api:"required"`
 	ManagedBy           []ResourceGetResponseManagedBy            `json:"managed_by"`
 	JSON                resourceGetResponseJSON                   `json:"-"`
 }
@@ -1742,8 +1742,8 @@ func (r ResourceGetResponseCloudType) IsKnown() bool {
 }
 
 type ResourceGetResponseMonthlyCostEstimate struct {
-	Currency    string                                     `json:"currency,required"`
-	MonthlyCost float64                                    `json:"monthly_cost,required"`
+	Currency    string                                     `json:"currency" api:"required"`
+	MonthlyCost float64                                    `json:"monthly_cost" api:"required"`
 	JSON        resourceGetResponseMonthlyCostEstimateJSON `json:"-"`
 }
 
@@ -1765,10 +1765,10 @@ func (r resourceGetResponseMonthlyCostEstimateJSON) RawJSON() string {
 }
 
 type ResourceGetResponseObservation struct {
-	FirstObservedAt string                             `json:"first_observed_at,required"`
-	LastObservedAt  string                             `json:"last_observed_at,required"`
-	ProviderID      string                             `json:"provider_id,required" format:"uuid"`
-	ResourceID      string                             `json:"resource_id,required" format:"uuid"`
+	FirstObservedAt string                             `json:"first_observed_at" api:"required"`
+	LastObservedAt  string                             `json:"last_observed_at" api:"required"`
+	ProviderID      string                             `json:"provider_id" api:"required" format:"uuid"`
+	ResourceID      string                             `json:"resource_id" api:"required" format:"uuid"`
 	JSON            resourceGetResponseObservationJSON `json:"-"`
 }
 
@@ -1862,9 +1862,9 @@ func (r ResourceGetResponseResourceType) IsKnown() bool {
 }
 
 type ResourceGetResponseSection struct {
-	HiddenItems  []ResourceGetResponseSectionsHiddenItem  `json:"hidden_items,required"`
-	Name         string                                   `json:"name,required"`
-	VisibleItems []ResourceGetResponseSectionsVisibleItem `json:"visible_items,required"`
+	HiddenItems  []ResourceGetResponseSectionsHiddenItem  `json:"hidden_items" api:"required"`
+	Name         string                                   `json:"name" api:"required"`
+	VisibleItems []ResourceGetResponseSectionsVisibleItem `json:"visible_items" api:"required"`
 	HelpText     string                                   `json:"help_text"`
 	JSON         resourceGetResponseSectionJSON           `json:"-"`
 }
@@ -1914,7 +1914,7 @@ func (r resourceGetResponseSectionsHiddenItemJSON) RawJSON() string {
 }
 
 type ResourceGetResponseSectionsHiddenItemsValue struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [[]ResourceGetResponseSectionsHiddenItemsValueMcnListItemList].
 	List interface{} `json:"list"`
@@ -2006,8 +2006,8 @@ func init() {
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnStringItem struct {
-	ItemType string                                                       `json:"item_type,required"`
-	String   string                                                       `json:"string,required"`
+	ItemType string                                                       `json:"item_type" api:"required"`
+	String   string                                                       `json:"string" api:"required"`
 	JSON     resourceGetResponseSectionsHiddenItemsValueMcnStringItemJSON `json:"-"`
 }
 
@@ -2033,8 +2033,8 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnStringItem) implementsReso
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnYamlItem struct {
-	ItemType string                                                     `json:"item_type,required"`
-	Yaml     string                                                     `json:"yaml,required"`
+	ItemType string                                                     `json:"item_type" api:"required"`
+	Yaml     string                                                     `json:"yaml" api:"required"`
 	JSON     resourceGetResponseSectionsHiddenItemsValueMcnYamlItemJSON `json:"-"`
 }
 
@@ -2059,8 +2059,8 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnYamlItem) implementsResour
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItem struct {
-	ItemType string                                                             `json:"item_type,required"`
-	YamlDiff ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff,required"`
+	ItemType string                                                             `json:"item_type" api:"required"`
+	YamlDiff ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff" api:"required"`
 	JSON     resourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItemJSON     `json:"-"`
 }
 
@@ -2086,11 +2086,11 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItem) implementsRe
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiff struct {
-	Diff             string                                                                 `json:"diff,required"`
-	LeftDescription  string                                                                 `json:"left_description,required"`
-	LeftYaml         string                                                                 `json:"left_yaml,required"`
-	RightDescription string                                                                 `json:"right_description,required"`
-	RightYaml        string                                                                 `json:"right_yaml,required"`
+	Diff             string                                                                 `json:"diff" api:"required"`
+	LeftDescription  string                                                                 `json:"left_description" api:"required"`
+	LeftYaml         string                                                                 `json:"left_yaml" api:"required"`
+	RightDescription string                                                                 `json:"right_description" api:"required"`
+	RightYaml        string                                                                 `json:"right_yaml" api:"required"`
 	JSON             resourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiffJSON `json:"-"`
 }
 
@@ -2116,8 +2116,8 @@ func (r resourceGetResponseSectionsHiddenItemsValueMcnYamlDiffItemYamlDiffJSON) 
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItem struct {
-	ItemType        string                                                                           `json:"item_type,required"`
-	ResourcePreview ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                           `json:"item_type" api:"required"`
+	ResourcePreview ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -2143,12 +2143,12 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItem) imple
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                       `json:"id,required" format:"uuid"`
-	CloudType    ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                       `json:"detail,required"`
-	Name         string                                                                                       `json:"name,required"`
-	ResourceType ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                       `json:"title,required"`
+	ID           string                                                                                       `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                       `json:"detail" api:"required"`
+	Name         string                                                                                       `json:"name" api:"required"`
+	ResourceType ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                       `json:"title" api:"required"`
 	JSON         resourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -2262,8 +2262,8 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnResourcePreviewItemResourc
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnListItem struct {
-	ItemType string                                                       `json:"item_type,required"`
-	List     []ResourceGetResponseSectionsHiddenItemsValueMcnListItemList `json:"list,required"`
+	ItemType string                                                       `json:"item_type" api:"required"`
+	List     []ResourceGetResponseSectionsHiddenItemsValueMcnListItemList `json:"list" api:"required"`
 	JSON     resourceGetResponseSectionsHiddenItemsValueMcnListItemJSON   `json:"-"`
 }
 
@@ -2288,7 +2288,7 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnListItem) implementsResour
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnListItemList struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview].
 	ResourcePreview interface{}                                                    `json:"resource_preview"`
@@ -2355,8 +2355,8 @@ func init() {
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem struct {
-	ItemType string                                                                      `json:"item_type,required"`
-	String   string                                                                      `json:"string,required"`
+	ItemType string                                                                      `json:"item_type" api:"required"`
+	String   string                                                                      `json:"string" api:"required"`
 	JSON     resourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnStringItemJSON `json:"-"`
 }
 
@@ -2382,8 +2382,8 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnStringItem)
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItem struct {
-	ItemType        string                                                                                          `json:"item_type,required"`
-	ResourcePreview ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                                          `json:"item_type" api:"required"`
+	ResourcePreview ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -2409,12 +2409,12 @@ func (r ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePre
 }
 
 type ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                                      `json:"id,required" format:"uuid"`
-	CloudType    ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                                      `json:"detail,required"`
-	Name         string                                                                                                      `json:"name,required"`
-	ResourceType ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                                      `json:"title,required"`
+	ID           string                                                                                                      `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                                      `json:"detail" api:"required"`
+	Name         string                                                                                                      `json:"name" api:"required"`
+	ResourceType ResourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                                      `json:"title" api:"required"`
 	JSON         resourceGetResponseSectionsHiddenItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -2553,7 +2553,7 @@ func (r resourceGetResponseSectionsVisibleItemJSON) RawJSON() string {
 }
 
 type ResourceGetResponseSectionsVisibleItemsValue struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [[]ResourceGetResponseSectionsVisibleItemsValueMcnListItemList].
 	List interface{} `json:"list"`
@@ -2645,8 +2645,8 @@ func init() {
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnStringItem struct {
-	ItemType string                                                        `json:"item_type,required"`
-	String   string                                                        `json:"string,required"`
+	ItemType string                                                        `json:"item_type" api:"required"`
+	String   string                                                        `json:"string" api:"required"`
 	JSON     resourceGetResponseSectionsVisibleItemsValueMcnStringItemJSON `json:"-"`
 }
 
@@ -2672,8 +2672,8 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnStringItem) implementsRes
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnYamlItem struct {
-	ItemType string                                                      `json:"item_type,required"`
-	Yaml     string                                                      `json:"yaml,required"`
+	ItemType string                                                      `json:"item_type" api:"required"`
+	Yaml     string                                                      `json:"yaml" api:"required"`
 	JSON     resourceGetResponseSectionsVisibleItemsValueMcnYamlItemJSON `json:"-"`
 }
 
@@ -2699,8 +2699,8 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnYamlItem) implementsResou
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItem struct {
-	ItemType string                                                              `json:"item_type,required"`
-	YamlDiff ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff,required"`
+	ItemType string                                                              `json:"item_type" api:"required"`
+	YamlDiff ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiff `json:"yaml_diff" api:"required"`
 	JSON     resourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItemJSON     `json:"-"`
 }
 
@@ -2726,11 +2726,11 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItem) implementsR
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiff struct {
-	Diff             string                                                                  `json:"diff,required"`
-	LeftDescription  string                                                                  `json:"left_description,required"`
-	LeftYaml         string                                                                  `json:"left_yaml,required"`
-	RightDescription string                                                                  `json:"right_description,required"`
-	RightYaml        string                                                                  `json:"right_yaml,required"`
+	Diff             string                                                                  `json:"diff" api:"required"`
+	LeftDescription  string                                                                  `json:"left_description" api:"required"`
+	LeftYaml         string                                                                  `json:"left_yaml" api:"required"`
+	RightDescription string                                                                  `json:"right_description" api:"required"`
+	RightYaml        string                                                                  `json:"right_yaml" api:"required"`
 	JSON             resourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiffJSON `json:"-"`
 }
 
@@ -2756,8 +2756,8 @@ func (r resourceGetResponseSectionsVisibleItemsValueMcnYamlDiffItemYamlDiffJSON)
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItem struct {
-	ItemType        string                                                                            `json:"item_type,required"`
-	ResourcePreview ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                            `json:"item_type" api:"required"`
+	ResourcePreview ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -2783,12 +2783,12 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItem) impl
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                        `json:"id,required" format:"uuid"`
-	CloudType    ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                        `json:"detail,required"`
-	Name         string                                                                                        `json:"name,required"`
-	ResourceType ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                        `json:"title,required"`
+	ID           string                                                                                        `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                        `json:"detail" api:"required"`
+	Name         string                                                                                        `json:"name" api:"required"`
+	ResourceType ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                        `json:"title" api:"required"`
 	JSON         resourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -2902,8 +2902,8 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnResourcePreviewItemResour
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnListItem struct {
-	ItemType string                                                        `json:"item_type,required"`
-	List     []ResourceGetResponseSectionsVisibleItemsValueMcnListItemList `json:"list,required"`
+	ItemType string                                                        `json:"item_type" api:"required"`
+	List     []ResourceGetResponseSectionsVisibleItemsValueMcnListItemList `json:"list" api:"required"`
 	JSON     resourceGetResponseSectionsVisibleItemsValueMcnListItemJSON   `json:"-"`
 }
 
@@ -2929,7 +2929,7 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnListItem) implementsResou
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnListItemList struct {
-	ItemType string `json:"item_type,required"`
+	ItemType string `json:"item_type" api:"required"`
 	// This field can have the runtime type of
 	// [ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview].
 	ResourcePreview interface{}                                                     `json:"resource_preview"`
@@ -2996,8 +2996,8 @@ func init() {
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem struct {
-	ItemType string                                                                       `json:"item_type,required"`
-	String   string                                                                       `json:"string,required"`
+	ItemType string                                                                       `json:"item_type" api:"required"`
+	String   string                                                                       `json:"string" api:"required"`
 	JSON     resourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnStringItemJSON `json:"-"`
 }
 
@@ -3023,8 +3023,8 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnStringItem
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItem struct {
-	ItemType        string                                                                                           `json:"item_type,required"`
-	ResourcePreview ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview,required"`
+	ItemType        string                                                                                           `json:"item_type" api:"required"`
+	ResourcePreview ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview `json:"resource_preview" api:"required"`
 	JSON            resourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemJSON            `json:"-"`
 }
 
@@ -3050,12 +3050,12 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePr
 }
 
 type ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreview struct {
-	ID           string                                                                                                       `json:"id,required" format:"uuid"`
-	CloudType    ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type,required"`
-	Detail       string                                                                                                       `json:"detail,required"`
-	Name         string                                                                                                       `json:"name,required"`
-	ResourceType ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type,required"`
-	Title        string                                                                                                       `json:"title,required"`
+	ID           string                                                                                                       `json:"id" api:"required" format:"uuid"`
+	CloudType    ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewCloudType    `json:"cloud_type" api:"required"`
+	Detail       string                                                                                                       `json:"detail" api:"required"`
+	Name         string                                                                                                       `json:"name" api:"required"`
+	ResourceType ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewResourceType `json:"resource_type" api:"required"`
+	Title        string                                                                                                       `json:"title" api:"required"`
 	JSON         resourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePreviewItemResourcePreviewJSON         `json:"-"`
 }
 
@@ -3169,9 +3169,9 @@ func (r ResourceGetResponseSectionsVisibleItemsValueMcnListItemListMcnResourcePr
 }
 
 type ResourceGetResponseManagedBy struct {
-	ID         string                                 `json:"id,required" format:"uuid"`
-	ClientType ResourceGetResponseManagedByClientType `json:"client_type,required"`
-	Name       string                                 `json:"name,required"`
+	ID         string                                 `json:"id" api:"required" format:"uuid"`
+	ClientType ResourceGetResponseManagedByClientType `json:"client_type" api:"required"`
+	Name       string                                 `json:"name" api:"required"`
 	JSON       resourceGetResponseManagedByJSON       `json:"-"`
 }
 
@@ -3208,7 +3208,7 @@ func (r ResourceGetResponseManagedByClientType) IsKnown() bool {
 }
 
 type ResourceListParams struct {
-	AccountID  param.Field[string] `path:"account_id,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	Cloudflare param.Field[bool]   `query:"cloudflare"`
 	Desc       param.Field[bool]   `query:"desc"`
 	Managed    param.Field[bool]   `query:"managed"`
@@ -3304,7 +3304,7 @@ func (r ResourceListParamsResourceType) IsKnown() bool {
 }
 
 type ResourceExportParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Desc      param.Field[bool]   `query:"desc"`
 	// One of ["id", "resource_type", "region"].
 	OrderBy       param.Field[string]                             `query:"order_by"`
@@ -3396,7 +3396,7 @@ func (r ResourceExportParamsResourceType) IsKnown() bool {
 }
 
 type ResourceGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	V2        param.Field[bool]   `query:"v2"`
 }
 
@@ -3409,10 +3409,10 @@ func (r ResourceGetParams) URLQuery() (v url.Values) {
 }
 
 type ResourceGetResponseEnvelope struct {
-	Errors   []ResourceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ResourceGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ResourceGetResponse                   `json:"result,required"`
-	Success  bool                                  `json:"success,required"`
+	Errors   []ResourceGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ResourceGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ResourceGetResponse                   `json:"result" api:"required"`
+	Success  bool                                  `json:"success" api:"required"`
 	JSON     resourceGetResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -3436,8 +3436,8 @@ func (r resourceGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ResourceGetResponseEnvelopeErrors struct {
-	Code             ResourceGetResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             ResourceGetResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Meta             ResourceGetResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           ResourceGetResponseEnvelopeErrorsSource `json:"source"`
@@ -3685,8 +3685,8 @@ func (r resourceGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ResourceGetResponseEnvelopeMessages struct {
-	Code             ResourceGetResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             ResourceGetResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Meta             ResourceGetResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           ResourceGetResponseEnvelopeMessagesSource `json:"source"`
@@ -3934,8 +3934,8 @@ func (r resourceGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type ResourcePolicyPreviewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Policy    param.Field[string] `json:"policy,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Policy    param.Field[string] `json:"policy" api:"required"`
 }
 
 func (r ResourcePolicyPreviewParams) MarshalJSON() (data []byte, err error) {
@@ -3943,10 +3943,10 @@ func (r ResourcePolicyPreviewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ResourcePolicyPreviewResponseEnvelope struct {
-	Errors   []ResourcePolicyPreviewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ResourcePolicyPreviewResponseEnvelopeMessages `json:"messages,required"`
-	Result   string                                          `json:"result,required"`
-	Success  bool                                            `json:"success,required"`
+	Errors   []ResourcePolicyPreviewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ResourcePolicyPreviewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   string                                          `json:"result" api:"required"`
+	Success  bool                                            `json:"success" api:"required"`
 	JSON     resourcePolicyPreviewResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -3970,8 +3970,8 @@ func (r resourcePolicyPreviewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ResourcePolicyPreviewResponseEnvelopeErrors struct {
-	Code             ResourcePolicyPreviewResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             ResourcePolicyPreviewResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Meta             ResourcePolicyPreviewResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           ResourcePolicyPreviewResponseEnvelopeErrorsSource `json:"source"`
@@ -4219,8 +4219,8 @@ func (r resourcePolicyPreviewResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type ResourcePolicyPreviewResponseEnvelopeMessages struct {
-	Code             ResourcePolicyPreviewResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             ResourcePolicyPreviewResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Meta             ResourcePolicyPreviewResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           ResourcePolicyPreviewResponseEnvelopeMessagesSource `json:"source"`

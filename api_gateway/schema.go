@@ -42,15 +42,15 @@ func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/schemas", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SchemaListResponse struct {
@@ -78,7 +78,7 @@ func (r schemaListResponseJSON) RawJSON() string {
 
 type SchemaListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Add feature(s) to the results. The feature name that is given here corresponds
 	// to the resulting feature object. Have a look at the top-level object description
 	// for more details on the specific meaning.
@@ -112,11 +112,11 @@ func (r SchemaListParamsFeature) IsKnown() bool {
 }
 
 type SchemaListResponseEnvelope struct {
-	Errors   Message            `json:"errors,required"`
-	Messages Message            `json:"messages,required"`
-	Result   SchemaListResponse `json:"result,required"`
+	Errors   Message            `json:"errors" api:"required"`
+	Messages Message            `json:"messages" api:"required"`
+	Result   SchemaListResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success SchemaListResponseEnvelopeSuccess `json:"success,required"`
+	Success SchemaListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    schemaListResponseEnvelopeJSON    `json:"-"`
 }
 

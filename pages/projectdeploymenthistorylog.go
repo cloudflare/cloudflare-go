@@ -40,29 +40,29 @@ func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectNam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if deploymentID == "" {
 		err = errors.New("missing required deployment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", query.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ProjectDeploymentHistoryLogGetResponse struct {
-	Data                  []ProjectDeploymentHistoryLogGetResponseData `json:"data,required"`
-	IncludesContainerLogs bool                                         `json:"includes_container_logs,required"`
-	Total                 int64                                        `json:"total,required"`
+	Data                  []ProjectDeploymentHistoryLogGetResponseData `json:"data" api:"required"`
+	IncludesContainerLogs bool                                         `json:"includes_container_logs" api:"required"`
+	Total                 int64                                        `json:"total" api:"required"`
 	JSON                  projectDeploymentHistoryLogGetResponseJSON   `json:"-"`
 }
 
@@ -85,8 +85,8 @@ func (r projectDeploymentHistoryLogGetResponseJSON) RawJSON() string {
 }
 
 type ProjectDeploymentHistoryLogGetResponseData struct {
-	Line string                                         `json:"line,required"`
-	Ts   string                                         `json:"ts,required"`
+	Line string                                         `json:"line" api:"required"`
+	Ts   string                                         `json:"ts" api:"required"`
 	JSON projectDeploymentHistoryLogGetResponseDataJSON `json:"-"`
 }
 
@@ -109,15 +109,15 @@ func (r projectDeploymentHistoryLogGetResponseDataJSON) RawJSON() string {
 
 type ProjectDeploymentHistoryLogGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelope struct {
-	Errors   []ProjectDeploymentHistoryLogGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentHistoryLogGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDeploymentHistoryLogGetResponse                   `json:"result,required"`
+	Errors   []ProjectDeploymentHistoryLogGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDeploymentHistoryLogGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectDeploymentHistoryLogGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDeploymentHistoryLogGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -141,8 +141,8 @@ func (r projectDeploymentHistoryLogGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelopeErrors struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           ProjectDeploymentHistoryLogGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDeploymentHistoryLogGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -190,8 +190,8 @@ func (r projectDeploymentHistoryLogGetResponseEnvelopeErrorsSourceJSON) RawJSON(
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelopeMessages struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           ProjectDeploymentHistoryLogGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDeploymentHistoryLogGetResponseEnvelopeMessagesJSON   `json:"-"`

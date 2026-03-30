@@ -46,10 +46,10 @@ func (r *GeolocationService) List(ctx context.Context, query GeolocationListPara
 	path := "radar/geolocations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the requested Geolocation information. Geolocation names can be
@@ -61,19 +61,19 @@ func (r *GeolocationService) Get(ctx context.Context, geoID string, query Geoloc
 	opts = slices.Concat(r.Options, opts)
 	if geoID == "" {
 		err = errors.New("missing required geo_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("radar/geolocations/%s", geoID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GeolocationListResponse struct {
-	Geolocations []GeolocationListResponseGeolocation `json:"geolocations,required"`
+	Geolocations []GeolocationListResponseGeolocation `json:"geolocations" api:"required"`
 	JSON         geolocationListResponseJSON          `json:"-"`
 }
 
@@ -94,15 +94,15 @@ func (r geolocationListResponseJSON) RawJSON() string {
 }
 
 type GeolocationListResponseGeolocation struct {
-	GeoID string `json:"geoId,required"`
+	GeoID string `json:"geoId" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string                                    `json:"longitude,required"`
-	Name      string                                    `json:"name,required"`
-	Parent    GeolocationListResponseGeolocationsParent `json:"parent,required"`
+	Longitude string                                    `json:"longitude" api:"required"`
+	Name      string                                    `json:"name" api:"required"`
+	Parent    GeolocationListResponseGeolocationsParent `json:"parent" api:"required"`
 	// The type of the geolocation.
-	Type GeolocationListResponseGeolocationsType `json:"type,required"`
+	Type GeolocationListResponseGeolocationsType `json:"type" api:"required"`
 	Code string                                  `json:"code"`
 	// BCP 47 locale code used for the geolocation name translation
 	Locale string                                 `json:"locale"`
@@ -133,15 +133,15 @@ func (r geolocationListResponseGeolocationJSON) RawJSON() string {
 }
 
 type GeolocationListResponseGeolocationsParent struct {
-	GeoID string `json:"geoId,required"`
+	GeoID string `json:"geoId" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string                                          `json:"longitude,required"`
-	Name      string                                          `json:"name,required"`
-	Parent    GeolocationListResponseGeolocationsParentParent `json:"parent,required"`
+	Longitude string                                          `json:"longitude" api:"required"`
+	Name      string                                          `json:"name" api:"required"`
+	Parent    GeolocationListResponseGeolocationsParentParent `json:"parent" api:"required"`
 	// The type of the geolocation.
-	Type GeolocationListResponseGeolocationsParentType `json:"type,required"`
+	Type GeolocationListResponseGeolocationsParentType `json:"type" api:"required"`
 	Code string                                        `json:"code"`
 	// BCP 47 locale code used for the geolocation name translation
 	Locale string                                        `json:"locale"`
@@ -172,14 +172,14 @@ func (r geolocationListResponseGeolocationsParentJSON) RawJSON() string {
 }
 
 type GeolocationListResponseGeolocationsParentParent struct {
-	GeoID string `json:"geoId,required"`
+	GeoID string `json:"geoId" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string `json:"longitude,required"`
-	Name      string `json:"name,required"`
+	Longitude string `json:"longitude" api:"required"`
+	Name      string `json:"name" api:"required"`
 	// The type of the geolocation.
-	Type GeolocationListResponseGeolocationsParentParentType `json:"type,required"`
+	Type GeolocationListResponseGeolocationsParentParentType `json:"type" api:"required"`
 	Code string                                              `json:"code"`
 	// BCP 47 locale code used for the geolocation name translation
 	Locale string                                              `json:"locale"`
@@ -260,7 +260,7 @@ func (r GeolocationListResponseGeolocationsType) IsKnown() bool {
 }
 
 type GeolocationGetResponse struct {
-	Geolocation GeolocationGetResponseGeolocation `json:"geolocation,required"`
+	Geolocation GeolocationGetResponseGeolocation `json:"geolocation" api:"required"`
 	JSON        geolocationGetResponseJSON        `json:"-"`
 }
 
@@ -281,15 +281,15 @@ func (r geolocationGetResponseJSON) RawJSON() string {
 }
 
 type GeolocationGetResponseGeolocation struct {
-	GeoID string `json:"geoId,required"`
+	GeoID string `json:"geoId" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string                                  `json:"longitude,required"`
-	Name      string                                  `json:"name,required"`
-	Parent    GeolocationGetResponseGeolocationParent `json:"parent,required"`
+	Longitude string                                  `json:"longitude" api:"required"`
+	Name      string                                  `json:"name" api:"required"`
+	Parent    GeolocationGetResponseGeolocationParent `json:"parent" api:"required"`
 	// The type of the geolocation.
-	Type GeolocationGetResponseGeolocationType `json:"type,required"`
+	Type GeolocationGetResponseGeolocationType `json:"type" api:"required"`
 	Code string                                `json:"code"`
 	// BCP 47 locale code used for the geolocation name translation
 	Locale string                                `json:"locale"`
@@ -320,15 +320,15 @@ func (r geolocationGetResponseGeolocationJSON) RawJSON() string {
 }
 
 type GeolocationGetResponseGeolocationParent struct {
-	GeoID string `json:"geoId,required"`
+	GeoID string `json:"geoId" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string                                        `json:"longitude,required"`
-	Name      string                                        `json:"name,required"`
-	Parent    GeolocationGetResponseGeolocationParentParent `json:"parent,required"`
+	Longitude string                                        `json:"longitude" api:"required"`
+	Name      string                                        `json:"name" api:"required"`
+	Parent    GeolocationGetResponseGeolocationParentParent `json:"parent" api:"required"`
 	// The type of the geolocation.
-	Type GeolocationGetResponseGeolocationParentType `json:"type,required"`
+	Type GeolocationGetResponseGeolocationParentType `json:"type" api:"required"`
 	Code string                                      `json:"code"`
 	// BCP 47 locale code used for the geolocation name translation
 	Locale string                                      `json:"locale"`
@@ -359,14 +359,14 @@ func (r geolocationGetResponseGeolocationParentJSON) RawJSON() string {
 }
 
 type GeolocationGetResponseGeolocationParentParent struct {
-	GeoID string `json:"geoId,required"`
+	GeoID string `json:"geoId" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string `json:"longitude,required"`
-	Name      string `json:"name,required"`
+	Longitude string `json:"longitude" api:"required"`
+	Name      string `json:"name" api:"required"`
 	// The type of the geolocation.
-	Type GeolocationGetResponseGeolocationParentParentType `json:"type,required"`
+	Type GeolocationGetResponseGeolocationParentParentType `json:"type" api:"required"`
 	Code string                                            `json:"code"`
 	// BCP 47 locale code used for the geolocation name translation
 	Locale string                                            `json:"locale"`
@@ -485,8 +485,8 @@ func (r GeolocationListParamsFormat) IsKnown() bool {
 }
 
 type GeolocationListResponseEnvelope struct {
-	Result  GeolocationListResponse             `json:"result,required"`
-	Success bool                                `json:"success,required"`
+	Result  GeolocationListResponse             `json:"result" api:"required"`
+	Success bool                                `json:"success" api:"required"`
 	JSON    geolocationListResponseEnvelopeJSON `json:"-"`
 }
 
@@ -537,8 +537,8 @@ func (r GeolocationGetParamsFormat) IsKnown() bool {
 }
 
 type GeolocationGetResponseEnvelope struct {
-	Result  GeolocationGetResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  GeolocationGetResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    geolocationGetResponseEnvelopeJSON `json:"-"`
 }
 

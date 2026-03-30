@@ -45,19 +45,19 @@ func (r *ConsumerService) New(ctx context.Context, queueID string, params Consum
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates the consumer for a queue, or creates one if it does not exist.
@@ -66,23 +66,23 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	if consumerID == "" {
 		err = errors.New("missing required consumer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", params.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the consumers for a Queue
@@ -92,11 +92,11 @@ func (r *ConsumerService) List(ctx context.Context, queueID string, query Consum
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", query.AccountID, queueID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -121,19 +121,19 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	if consumerID == "" {
 		err = errors.New("missing required consumer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", body.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Fetches the consumer for a queue by consumer id
@@ -142,23 +142,23 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, consumerID st
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	if consumerID == "" {
 		err = errors.New("missing required consumer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", query.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Response body representing a consumer
@@ -561,9 +561,9 @@ func (r ConsumerDeleteResponseSuccess) IsKnown() bool {
 
 type ConsumerNewParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request body for creating or updating a consumer
-	Body ConsumerNewParamsBodyUnion `json:"body"`
+	Body ConsumerNewParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
@@ -572,7 +572,7 @@ func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
 
 // Request body for creating or updating a consumer
 type ConsumerNewParamsBody struct {
-	Type            param.Field[ConsumerNewParamsBodyType] `json:"type,required"`
+	Type            param.Field[ConsumerNewParamsBodyType] `json:"type" api:"required"`
 	DeadLetterQueue param.Field[string]                    `json:"dead_letter_queue"`
 	// Name of a Worker
 	ScriptName param.Field[string]      `json:"script_name"`
@@ -595,8 +595,8 @@ type ConsumerNewParamsBodyUnion interface {
 
 type ConsumerNewParamsBodyMqWorkerConsumerRequest struct {
 	// Name of a Worker
-	ScriptName      param.Field[string]                                               `json:"script_name,required"`
-	Type            param.Field[ConsumerNewParamsBodyMqWorkerConsumerRequestType]     `json:"type,required"`
+	ScriptName      param.Field[string]                                               `json:"script_name" api:"required"`
+	Type            param.Field[ConsumerNewParamsBodyMqWorkerConsumerRequestType]     `json:"type" api:"required"`
 	DeadLetterQueue param.Field[string]                                               `json:"dead_letter_queue"`
 	Settings        param.Field[ConsumerNewParamsBodyMqWorkerConsumerRequestSettings] `json:"settings"`
 }
@@ -642,7 +642,7 @@ func (r ConsumerNewParamsBodyMqWorkerConsumerRequestSettings) MarshalJSON() (dat
 }
 
 type ConsumerNewParamsBodyMqHTTPConsumerRequest struct {
-	Type            param.Field[ConsumerNewParamsBodyMqHTTPConsumerRequestType]     `json:"type,required"`
+	Type            param.Field[ConsumerNewParamsBodyMqHTTPConsumerRequestType]     `json:"type" api:"required"`
 	DeadLetterQueue param.Field[string]                                             `json:"dead_letter_queue"`
 	Settings        param.Field[ConsumerNewParamsBodyMqHTTPConsumerRequestSettings] `json:"settings"`
 }
@@ -745,9 +745,9 @@ func (r ConsumerNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConsumerUpdateParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request body for creating or updating a consumer
-	Body ConsumerUpdateParamsBodyUnion `json:"body,required"`
+	Body ConsumerUpdateParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -756,7 +756,7 @@ func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
 
 // Request body for creating or updating a consumer
 type ConsumerUpdateParamsBody struct {
-	Type            param.Field[ConsumerUpdateParamsBodyType] `json:"type,required"`
+	Type            param.Field[ConsumerUpdateParamsBodyType] `json:"type" api:"required"`
 	DeadLetterQueue param.Field[string]                       `json:"dead_letter_queue"`
 	// Name of a Worker
 	ScriptName param.Field[string]      `json:"script_name"`
@@ -780,8 +780,8 @@ type ConsumerUpdateParamsBodyUnion interface {
 
 type ConsumerUpdateParamsBodyMqWorkerConsumerRequest struct {
 	// Name of a Worker
-	ScriptName      param.Field[string]                                                  `json:"script_name,required"`
-	Type            param.Field[ConsumerUpdateParamsBodyMqWorkerConsumerRequestType]     `json:"type,required"`
+	ScriptName      param.Field[string]                                                  `json:"script_name" api:"required"`
+	Type            param.Field[ConsumerUpdateParamsBodyMqWorkerConsumerRequestType]     `json:"type" api:"required"`
 	DeadLetterQueue param.Field[string]                                                  `json:"dead_letter_queue"`
 	Settings        param.Field[ConsumerUpdateParamsBodyMqWorkerConsumerRequestSettings] `json:"settings"`
 }
@@ -827,7 +827,7 @@ func (r ConsumerUpdateParamsBodyMqWorkerConsumerRequestSettings) MarshalJSON() (
 }
 
 type ConsumerUpdateParamsBodyMqHTTPConsumerRequest struct {
-	Type            param.Field[ConsumerUpdateParamsBodyMqHTTPConsumerRequestType]     `json:"type,required"`
+	Type            param.Field[ConsumerUpdateParamsBodyMqHTTPConsumerRequestType]     `json:"type" api:"required"`
 	DeadLetterQueue param.Field[string]                                                `json:"dead_letter_queue"`
 	Settings        param.Field[ConsumerUpdateParamsBodyMqHTTPConsumerRequestSettings] `json:"settings"`
 }
@@ -930,17 +930,17 @@ func (r ConsumerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConsumerListParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConsumerDeleteParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConsumerGetParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConsumerGetResponseEnvelope struct {

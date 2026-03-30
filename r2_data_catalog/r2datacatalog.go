@@ -48,15 +48,15 @@ func (r *R2DataCatalogService) List(ctx context.Context, query R2DataCatalogList
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disable an R2 bucket as a catalog. This operation deactivates the catalog but
@@ -66,15 +66,15 @@ func (r *R2DataCatalogService) Disable(ctx context.Context, bucketName string, b
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/disable", body.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Enable an R2 bucket as an Apache Iceberg catalog. This operation creates the
@@ -85,19 +85,19 @@ func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, bo
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/enable", body.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve detailed information about a specific R2 catalog by bucket name.
@@ -107,25 +107,25 @@ func (r *R2DataCatalogService) Get(ctx context.Context, bucketName string, query
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s", query.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Contains the list of catalogs.
 type R2DataCatalogListResponse struct {
 	// Lists catalogs in the account.
-	Warehouses []R2DataCatalogListResponseWarehouse `json:"warehouses,required"`
+	Warehouses []R2DataCatalogListResponseWarehouse `json:"warehouses" api:"required"`
 	JSON       r2DataCatalogListResponseJSON        `json:"-"`
 }
 
@@ -148,17 +148,17 @@ func (r r2DataCatalogListResponseJSON) RawJSON() string {
 // Contains R2 Data Catalog information.
 type R2DataCatalogListResponseWarehouse struct {
 	// Use this to uniquely identify the catalog.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Specifies the associated R2 bucket name.
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Specifies the catalog name (generated from account and bucket name).
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Indicates the status of the catalog.
-	Status R2DataCatalogListResponseWarehousesStatus `json:"status,required"`
+	Status R2DataCatalogListResponseWarehousesStatus `json:"status" api:"required"`
 	// Shows the credential configuration status.
-	CredentialStatus R2DataCatalogListResponseWarehousesCredentialStatus `json:"credential_status,nullable"`
+	CredentialStatus R2DataCatalogListResponseWarehousesCredentialStatus `json:"credential_status" api:"nullable"`
 	// Configures maintenance for the catalog.
-	MaintenanceConfig R2DataCatalogListResponseWarehousesMaintenanceConfig `json:"maintenance_config,nullable"`
+	MaintenanceConfig R2DataCatalogListResponseWarehousesMaintenanceConfig `json:"maintenance_config" api:"nullable"`
 	JSON              r2DataCatalogListResponseWarehouseJSON               `json:"-"`
 }
 
@@ -244,9 +244,9 @@ func (r r2DataCatalogListResponseWarehousesMaintenanceConfigJSON) RawJSON() stri
 // Configures compaction for catalog maintenance.
 type R2DataCatalogListResponseWarehousesMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
-	State R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionState `json:"state,required"`
+	State R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
-	TargetSizeMB R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
+	TargetSizeMB R2DataCatalogListResponseWarehousesMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
 	JSON         r2DataCatalogListResponseWarehousesMaintenanceConfigCompactionJSON         `json:"-"`
 }
 
@@ -308,11 +308,11 @@ type R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpiration stru
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
 	// minutes). Defaults to "7d".
-	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
-	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
-	State R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	State R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationState `json:"state" api:"required"`
 	JSON  r2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
 }
 
@@ -354,9 +354,9 @@ func (r R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpirationSt
 // Contains response from activating an R2 bucket as a catalog.
 type R2DataCatalogEnableResponse struct {
 	// Use this to uniquely identify the activated catalog.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Specifies the name of the activated catalog.
-	Name string                          `json:"name,required"`
+	Name string                          `json:"name" api:"required"`
 	JSON r2DataCatalogEnableResponseJSON `json:"-"`
 }
 
@@ -380,17 +380,17 @@ func (r r2DataCatalogEnableResponseJSON) RawJSON() string {
 // Contains R2 Data Catalog information.
 type R2DataCatalogGetResponse struct {
 	// Use this to uniquely identify the catalog.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Specifies the associated R2 bucket name.
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Specifies the catalog name (generated from account and bucket name).
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Indicates the status of the catalog.
-	Status R2DataCatalogGetResponseStatus `json:"status,required"`
+	Status R2DataCatalogGetResponseStatus `json:"status" api:"required"`
 	// Shows the credential configuration status.
-	CredentialStatus R2DataCatalogGetResponseCredentialStatus `json:"credential_status,nullable"`
+	CredentialStatus R2DataCatalogGetResponseCredentialStatus `json:"credential_status" api:"nullable"`
 	// Configures maintenance for the catalog.
-	MaintenanceConfig R2DataCatalogGetResponseMaintenanceConfig `json:"maintenance_config,nullable"`
+	MaintenanceConfig R2DataCatalogGetResponseMaintenanceConfig `json:"maintenance_config" api:"nullable"`
 	JSON              r2DataCatalogGetResponseJSON              `json:"-"`
 }
 
@@ -476,9 +476,9 @@ func (r r2DataCatalogGetResponseMaintenanceConfigJSON) RawJSON() string {
 // Configures compaction for catalog maintenance.
 type R2DataCatalogGetResponseMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
-	State R2DataCatalogGetResponseMaintenanceConfigCompactionState `json:"state,required"`
+	State R2DataCatalogGetResponseMaintenanceConfigCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
-	TargetSizeMB R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
+	TargetSizeMB R2DataCatalogGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
 	JSON         r2DataCatalogGetResponseMaintenanceConfigCompactionJSON         `json:"-"`
 }
 
@@ -539,11 +539,11 @@ type R2DataCatalogGetResponseMaintenanceConfigSnapshotExpiration struct {
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
 	// minutes). Defaults to "7d".
-	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
-	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
-	State R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	State R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState `json:"state" api:"required"`
 	JSON  r2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
 }
 
@@ -584,16 +584,16 @@ func (r R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState) IsKnow
 
 type R2DataCatalogListParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type R2DataCatalogListResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []R2DataCatalogListResponseEnvelopeErrors `json:"errors,required"`
+	Errors []R2DataCatalogListResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []R2DataCatalogListResponseEnvelopeMessages `json:"messages,required"`
+	Messages []R2DataCatalogListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Contains the list of catalogs.
 	Result R2DataCatalogListResponse             `json:"result"`
 	JSON   r2DataCatalogListResponseEnvelopeJSON `json:"-"`
@@ -620,9 +620,9 @@ func (r r2DataCatalogListResponseEnvelopeJSON) RawJSON() string {
 
 type R2DataCatalogListResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                      `json:"message,required"`
+	Message string                                      `json:"message" api:"required"`
 	JSON    r2DataCatalogListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -645,9 +645,9 @@ func (r r2DataCatalogListResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type R2DataCatalogListResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                        `json:"message,required"`
+	Message string                                        `json:"message" api:"required"`
 	JSON    r2DataCatalogListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -670,21 +670,21 @@ func (r r2DataCatalogListResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type R2DataCatalogDisableParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type R2DataCatalogEnableParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type R2DataCatalogEnableResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []R2DataCatalogEnableResponseEnvelopeErrors `json:"errors,required"`
+	Errors []R2DataCatalogEnableResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []R2DataCatalogEnableResponseEnvelopeMessages `json:"messages,required"`
+	Messages []R2DataCatalogEnableResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Contains response from activating an R2 bucket as a catalog.
 	Result R2DataCatalogEnableResponse             `json:"result"`
 	JSON   r2DataCatalogEnableResponseEnvelopeJSON `json:"-"`
@@ -711,9 +711,9 @@ func (r r2DataCatalogEnableResponseEnvelopeJSON) RawJSON() string {
 
 type R2DataCatalogEnableResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                        `json:"message,required"`
+	Message string                                        `json:"message" api:"required"`
 	JSON    r2DataCatalogEnableResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -736,9 +736,9 @@ func (r r2DataCatalogEnableResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type R2DataCatalogEnableResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                          `json:"message,required"`
+	Message string                                          `json:"message" api:"required"`
 	JSON    r2DataCatalogEnableResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -761,16 +761,16 @@ func (r r2DataCatalogEnableResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type R2DataCatalogGetParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type R2DataCatalogGetResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []R2DataCatalogGetResponseEnvelopeErrors `json:"errors,required"`
+	Errors []R2DataCatalogGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []R2DataCatalogGetResponseEnvelopeMessages `json:"messages,required"`
+	Messages []R2DataCatalogGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Contains R2 Data Catalog information.
 	Result R2DataCatalogGetResponse             `json:"result"`
 	JSON   r2DataCatalogGetResponseEnvelopeJSON `json:"-"`
@@ -797,9 +797,9 @@ func (r r2DataCatalogGetResponseEnvelopeJSON) RawJSON() string {
 
 type R2DataCatalogGetResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                     `json:"message,required"`
+	Message string                                     `json:"message" api:"required"`
 	JSON    r2DataCatalogGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -822,9 +822,9 @@ func (r r2DataCatalogGetResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type R2DataCatalogGetResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                       `json:"message,required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    r2DataCatalogGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 

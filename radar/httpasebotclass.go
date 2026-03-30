@@ -44,16 +44,16 @@ func (r *HTTPAseBotClassService) Get(ctx context.Context, botClass HTTPAseBotCla
 	path := fmt.Sprintf("radar/http/top/ases/bot_class/%v", botClass)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPAseBotClassGetResponse struct {
 	// Metadata for the results.
-	Meta HTTPAseBotClassGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPAseBotClassGetResponseTop0 `json:"top_0,required"`
+	Meta HTTPAseBotClassGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []HTTPAseBotClassGetResponseTop0 `json:"top_0" api:"required"`
 	JSON httpAseBotClassGetResponseJSON   `json:"-"`
 }
 
@@ -76,15 +76,15 @@ func (r httpAseBotClassGetResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPAseBotClassGetResponseMeta struct {
-	ConfidenceInfo HTTPAseBotClassGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []HTTPAseBotClassGetResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo HTTPAseBotClassGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []HTTPAseBotClassGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPAseBotClassGetResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPAseBotClassGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPAseBotClassGetResponseMetaUnit `json:"units,required"`
+	Units []HTTPAseBotClassGetResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpAseBotClassGetResponseMetaJSON   `json:"-"`
 }
 
@@ -109,9 +109,9 @@ func (r httpAseBotClassGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPAseBotClassGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                            `json:"level,required"`
+	Level int64                                            `json:"level" api:"required"`
 	JSON  httpAseBotClassGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -135,15 +135,15 @@ func (r httpAseBotClassGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                            `json:"description,required"`
-	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                            `json:"description" api:"required"`
+	EndDate     time.Time                                                         `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpAseBotClassGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -230,9 +230,9 @@ func (r HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnow
 
 type HTTPAseBotClassGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                   `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpAseBotClassGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -277,8 +277,8 @@ func (r HTTPAseBotClassGetResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPAseBotClassGetResponseMetaUnit struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
+	Name  string                                 `json:"name" api:"required"`
+	Value string                                 `json:"value" api:"required"`
 	JSON  httpAseBotClassGetResponseMetaUnitJSON `json:"-"`
 }
 
@@ -300,10 +300,10 @@ func (r httpAseBotClassGetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPAseBotClassGetResponseTop0 struct {
-	ClientASN    int64  `json:"clientASN,required"`
-	ClientAsName string `json:"clientASName,required"`
+	ClientASN    int64  `json:"clientASN" api:"required"`
+	ClientAsName string `json:"clientASName" api:"required"`
 	// A numeric string.
-	Value string                             `json:"value,required"`
+	Value string                             `json:"value" api:"required"`
 	JSON  httpAseBotClassGetResponseTop0JSON `json:"-"`
 }
 
@@ -534,8 +534,8 @@ func (r HTTPAseBotClassGetParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPAseBotClassGetResponseEnvelope struct {
-	Result  HTTPAseBotClassGetResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  HTTPAseBotClassGetResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    httpAseBotClassGetResponseEnvelopeJSON `json:"-"`
 }
 

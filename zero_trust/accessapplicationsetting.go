@@ -58,15 +58,15 @@ func (r *AccessApplicationSettingService) Update(ctx context.Context, appID AppI
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/settings", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates Access application settings.
@@ -93,15 +93,15 @@ func (r *AccessApplicationSettingService) Edit(ctx context.Context, appID AppIDP
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/settings", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessApplicationSettingUpdateResponse struct {
@@ -170,10 +170,10 @@ func (r AccessApplicationSettingUpdateParams) MarshalJSON() (data []byte, err er
 }
 
 type AccessApplicationSettingUpdateResponseEnvelope struct {
-	Errors   []AccessApplicationSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationSettingUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationSettingUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationSettingUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationSettingUpdateResponse                `json:"result"`
 	JSON    accessApplicationSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -198,8 +198,8 @@ func (r accessApplicationSettingUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationSettingUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           AccessApplicationSettingUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationSettingUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -247,8 +247,8 @@ func (r accessApplicationSettingUpdateResponseEnvelopeErrorsSourceJSON) RawJSON(
 }
 
 type AccessApplicationSettingUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           AccessApplicationSettingUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationSettingUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -326,10 +326,10 @@ func (r AccessApplicationSettingEditParams) MarshalJSON() (data []byte, err erro
 }
 
 type AccessApplicationSettingEditResponseEnvelope struct {
-	Errors   []AccessApplicationSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationSettingEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationSettingEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationSettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationSettingEditResponse                `json:"result"`
 	JSON    accessApplicationSettingEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -354,8 +354,8 @@ func (r accessApplicationSettingEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationSettingEditResponseEnvelopeErrors struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           AccessApplicationSettingEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationSettingEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -403,8 +403,8 @@ func (r accessApplicationSettingEditResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type AccessApplicationSettingEditResponseEnvelopeMessages struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           AccessApplicationSettingEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationSettingEditResponseEnvelopeMessagesJSON   `json:"-"`

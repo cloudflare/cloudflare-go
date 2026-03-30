@@ -45,19 +45,19 @@ func (r *PageTestService) New(ctx context.Context, url string, params PageTestNe
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if url == "" {
 		err = errors.New("missing required url parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Test history (list of tests) for a specific webpage.
@@ -67,11 +67,11 @@ func (r *PageTestService) List(ctx context.Context, url string, params PageTestL
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if url == "" {
 		err = errors.New("missing required url parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -98,19 +98,19 @@ func (r *PageTestService) Delete(ctx context.Context, url string, params PageTes
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if url == "" {
 		err = errors.New("missing required url parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the result of a specific test.
@@ -119,23 +119,23 @@ func (r *PageTestService) Get(ctx context.Context, url string, testID string, qu
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if url == "" {
 		err = errors.New("missing required url parameter")
-		return
+		return nil, err
 	}
 	if testID == "" {
 		err = errors.New("missing required test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", query.ZoneID, url, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Test struct {
@@ -216,7 +216,7 @@ func (r pageTestDeleteResponseJSON) RawJSON() string {
 
 type PageTestNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A test region.
 	Region param.Field[PageTestNewParamsRegion] `json:"region"`
 }
@@ -261,10 +261,10 @@ func (r PageTestNewParamsRegion) IsKnown() bool {
 }
 
 type PageTestNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	Result  Test                            `json:"result"`
 	JSON    pageTestNewResponseEnvelopeJSON `json:"-"`
 }
@@ -290,7 +290,7 @@ func (r pageTestNewResponseEnvelopeJSON) RawJSON() string {
 
 type PageTestListParams struct {
 	// Identifier.
-	ZoneID  param.Field[string] `path:"zone_id,required"`
+	ZoneID  param.Field[string] `path:"zone_id" api:"required"`
 	Page    param.Field[int64]  `query:"page"`
 	PerPage param.Field[int64]  `query:"per_page"`
 	// A test region.
@@ -342,7 +342,7 @@ func (r PageTestListParamsRegion) IsKnown() bool {
 
 type PageTestDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A test region.
 	Region param.Field[PageTestDeleteParamsRegion] `query:"region"`
 }
@@ -391,10 +391,10 @@ func (r PageTestDeleteParamsRegion) IsKnown() bool {
 }
 
 type PageTestDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                               `json:"success,required"`
+	Success bool                               `json:"success" api:"required"`
 	Result  PageTestDeleteResponse             `json:"result"`
 	JSON    pageTestDeleteResponseEnvelopeJSON `json:"-"`
 }
@@ -420,14 +420,14 @@ func (r pageTestDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type PageTestGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PageTestGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	Result  Test                            `json:"result"`
 	JSON    pageTestGetResponseEnvelopeJSON `json:"-"`
 }

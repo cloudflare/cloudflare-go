@@ -45,7 +45,7 @@ func (r *EvaluationTypeService) List(ctx context.Context, params EvaluationTypeL
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/evaluation-types", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -66,14 +66,14 @@ func (r *EvaluationTypeService) ListAutoPaging(ctx context.Context, params Evalu
 }
 
 type EvaluationTypeListResponse struct {
-	ID          string                         `json:"id,required"`
-	CreatedAt   time.Time                      `json:"created_at,required" format:"date-time"`
-	Description string                         `json:"description,required"`
-	Enable      bool                           `json:"enable,required"`
-	Mandatory   bool                           `json:"mandatory,required"`
-	ModifiedAt  time.Time                      `json:"modified_at,required" format:"date-time"`
-	Name        string                         `json:"name,required"`
-	Type        string                         `json:"type,required"`
+	ID          string                         `json:"id" api:"required"`
+	CreatedAt   time.Time                      `json:"created_at" api:"required" format:"date-time"`
+	Description string                         `json:"description" api:"required"`
+	Enable      bool                           `json:"enable" api:"required"`
+	Mandatory   bool                           `json:"mandatory" api:"required"`
+	ModifiedAt  time.Time                      `json:"modified_at" api:"required" format:"date-time"`
+	Name        string                         `json:"name" api:"required"`
+	Type        string                         `json:"type" api:"required"`
 	JSON        evaluationTypeListResponseJSON `json:"-"`
 }
 
@@ -101,7 +101,7 @@ func (r evaluationTypeListResponseJSON) RawJSON() string {
 }
 
 type EvaluationTypeListParams struct {
-	AccountID        param.Field[string]                                   `path:"account_id,required"`
+	AccountID        param.Field[string]                                   `path:"account_id" api:"required"`
 	OrderBy          param.Field[string]                                   `query:"order_by"`
 	OrderByDirection param.Field[EvaluationTypeListParamsOrderByDirection] `query:"order_by_direction"`
 	Page             param.Field[int64]                                    `query:"page"`

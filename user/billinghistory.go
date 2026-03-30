@@ -65,20 +65,20 @@ func (r *BillingHistoryService) ListAutoPaging(ctx context.Context, query Billin
 
 type BillingHistory struct {
 	// Billing item identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The billing item action.
-	Action string `json:"action,required"`
+	Action string `json:"action" api:"required"`
 	// The amount associated with this billing item.
-	Amount float64 `json:"amount,required"`
+	Amount float64 `json:"amount" api:"required"`
 	// The monetary unit in which pricing information is displayed.
-	Currency string `json:"currency,required"`
+	Currency string `json:"currency" api:"required"`
 	// The billing item description.
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// When the billing item was created.
-	OccurredAt time.Time `json:"occurred_at,required" format:"date-time"`
+	OccurredAt time.Time `json:"occurred_at" api:"required" format:"date-time"`
 	// The billing item type.
-	Type string             `json:"type,required"`
-	Zone BillingHistoryZone `json:"zone,required"`
+	Type string             `json:"type" api:"required"`
+	Zone BillingHistoryZone `json:"zone" api:"required"`
 	JSON billingHistoryJSON `json:"-"`
 }
 

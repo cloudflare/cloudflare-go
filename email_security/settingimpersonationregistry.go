@@ -45,15 +45,15 @@ func (r *SettingImpersonationRegistryService) New(ctx context.Context, params Se
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/impersonation_registry", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists, searches, and sorts entries in the impersonation registry.
@@ -63,7 +63,7 @@ func (r *SettingImpersonationRegistryService) List(ctx context.Context, params S
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/impersonation_registry", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -89,15 +89,15 @@ func (r *SettingImpersonationRegistryService) Delete(ctx context.Context, displa
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/impersonation_registry/%v", body.AccountID, displayNameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a display name entry used for impersonation protection.
@@ -106,15 +106,15 @@ func (r *SettingImpersonationRegistryService) Edit(ctx context.Context, displayN
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/impersonation_registry/%v", params.AccountID, displayNameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves a display name entry used for impersonation protection.
@@ -123,30 +123,30 @@ func (r *SettingImpersonationRegistryService) Get(ctx context.Context, displayNa
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/impersonation_registry/%v", query.AccountID, displayNameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingImpersonationRegistryNewResponse struct {
-	ID              int64     `json:"id,required"`
-	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
-	Email           string    `json:"email,required"`
-	IsEmailRegex    bool      `json:"is_email_regex,required"`
-	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
-	Name            string    `json:"name,required"`
-	Comments        string    `json:"comments,nullable"`
-	DirectoryID     int64     `json:"directory_id,nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id" api:"required"`
+	CreatedAt       time.Time `json:"created_at" api:"required" format:"date-time"`
+	Email           string    `json:"email" api:"required"`
+	IsEmailRegex    bool      `json:"is_email_regex" api:"required"`
+	LastModified    time.Time `json:"last_modified" api:"required" format:"date-time"`
+	Name            string    `json:"name" api:"required"`
+	Comments        string    `json:"comments" api:"nullable"`
+	DirectoryID     int64     `json:"directory_id" api:"nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	// Deprecated: deprecated
-	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id,nullable"`
-	Provenance              string                                      `json:"provenance,nullable"`
+	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id" api:"nullable"`
+	Provenance              string                                      `json:"provenance" api:"nullable"`
 	JSON                    settingImpersonationRegistryNewResponseJSON `json:"-"`
 }
 
@@ -177,18 +177,18 @@ func (r settingImpersonationRegistryNewResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryListResponse struct {
-	ID              int64     `json:"id,required"`
-	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
-	Email           string    `json:"email,required"`
-	IsEmailRegex    bool      `json:"is_email_regex,required"`
-	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
-	Name            string    `json:"name,required"`
-	Comments        string    `json:"comments,nullable"`
-	DirectoryID     int64     `json:"directory_id,nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id" api:"required"`
+	CreatedAt       time.Time `json:"created_at" api:"required" format:"date-time"`
+	Email           string    `json:"email" api:"required"`
+	IsEmailRegex    bool      `json:"is_email_regex" api:"required"`
+	LastModified    time.Time `json:"last_modified" api:"required" format:"date-time"`
+	Name            string    `json:"name" api:"required"`
+	Comments        string    `json:"comments" api:"nullable"`
+	DirectoryID     int64     `json:"directory_id" api:"nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	// Deprecated: deprecated
-	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
-	Provenance              string                                       `json:"provenance,nullable"`
+	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id" api:"nullable"`
+	Provenance              string                                       `json:"provenance" api:"nullable"`
 	JSON                    settingImpersonationRegistryListResponseJSON `json:"-"`
 }
 
@@ -219,7 +219,7 @@ func (r settingImpersonationRegistryListResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryDeleteResponse struct {
-	ID   int64                                          `json:"id,required"`
+	ID   int64                                          `json:"id" api:"required"`
 	JSON settingImpersonationRegistryDeleteResponseJSON `json:"-"`
 }
 
@@ -240,18 +240,18 @@ func (r settingImpersonationRegistryDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryEditResponse struct {
-	ID              int64     `json:"id,required"`
-	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
-	Email           string    `json:"email,required"`
-	IsEmailRegex    bool      `json:"is_email_regex,required"`
-	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
-	Name            string    `json:"name,required"`
-	Comments        string    `json:"comments,nullable"`
-	DirectoryID     int64     `json:"directory_id,nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id" api:"required"`
+	CreatedAt       time.Time `json:"created_at" api:"required" format:"date-time"`
+	Email           string    `json:"email" api:"required"`
+	IsEmailRegex    bool      `json:"is_email_regex" api:"required"`
+	LastModified    time.Time `json:"last_modified" api:"required" format:"date-time"`
+	Name            string    `json:"name" api:"required"`
+	Comments        string    `json:"comments" api:"nullable"`
+	DirectoryID     int64     `json:"directory_id" api:"nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	// Deprecated: deprecated
-	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
-	Provenance              string                                       `json:"provenance,nullable"`
+	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id" api:"nullable"`
+	Provenance              string                                       `json:"provenance" api:"nullable"`
 	JSON                    settingImpersonationRegistryEditResponseJSON `json:"-"`
 }
 
@@ -282,18 +282,18 @@ func (r settingImpersonationRegistryEditResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryGetResponse struct {
-	ID              int64     `json:"id,required"`
-	CreatedAt       time.Time `json:"created_at,required" format:"date-time"`
-	Email           string    `json:"email,required"`
-	IsEmailRegex    bool      `json:"is_email_regex,required"`
-	LastModified    time.Time `json:"last_modified,required" format:"date-time"`
-	Name            string    `json:"name,required"`
-	Comments        string    `json:"comments,nullable"`
-	DirectoryID     int64     `json:"directory_id,nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id,nullable"`
+	ID              int64     `json:"id" api:"required"`
+	CreatedAt       time.Time `json:"created_at" api:"required" format:"date-time"`
+	Email           string    `json:"email" api:"required"`
+	IsEmailRegex    bool      `json:"is_email_regex" api:"required"`
+	LastModified    time.Time `json:"last_modified" api:"required" format:"date-time"`
+	Name            string    `json:"name" api:"required"`
+	Comments        string    `json:"comments" api:"nullable"`
+	DirectoryID     int64     `json:"directory_id" api:"nullable"`
+	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	// Deprecated: deprecated
-	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id,nullable"`
-	Provenance              string                                      `json:"provenance,nullable"`
+	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id" api:"nullable"`
+	Provenance              string                                      `json:"provenance" api:"nullable"`
 	JSON                    settingImpersonationRegistryGetResponseJSON `json:"-"`
 }
 
@@ -325,10 +325,10 @@ func (r settingImpersonationRegistryGetResponseJSON) RawJSON() string {
 
 type SettingImpersonationRegistryNewParams struct {
 	// Account Identifier
-	AccountID    param.Field[string] `path:"account_id,required"`
-	Email        param.Field[string] `json:"email,required"`
-	IsEmailRegex param.Field[bool]   `json:"is_email_regex,required"`
-	Name         param.Field[string] `json:"name,required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
+	Email        param.Field[string] `json:"email" api:"required"`
+	IsEmailRegex param.Field[bool]   `json:"is_email_regex" api:"required"`
+	Name         param.Field[string] `json:"name" api:"required"`
 }
 
 func (r SettingImpersonationRegistryNewParams) MarshalJSON() (data []byte, err error) {
@@ -336,10 +336,10 @@ func (r SettingImpersonationRegistryNewParams) MarshalJSON() (data []byte, err e
 }
 
 type SettingImpersonationRegistryNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                               `json:"errors,required"`
-	Messages []shared.ResponseInfo                               `json:"messages,required"`
-	Result   SettingImpersonationRegistryNewResponse             `json:"result,required"`
-	Success  bool                                                `json:"success,required"`
+	Errors   []shared.ResponseInfo                               `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                               `json:"messages" api:"required"`
+	Result   SettingImpersonationRegistryNewResponse             `json:"result" api:"required"`
+	Success  bool                                                `json:"success" api:"required"`
 	JSON     settingImpersonationRegistryNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -364,7 +364,7 @@ func (r settingImpersonationRegistryNewResponseEnvelopeJSON) RawJSON() string {
 
 type SettingImpersonationRegistryListParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The sorting direction.
 	Direction param.Field[SettingImpersonationRegistryListParamsDirection] `query:"direction"`
 	// The field to sort by.
@@ -441,14 +441,14 @@ func (r SettingImpersonationRegistryListParamsProvenance) IsKnown() bool {
 
 type SettingImpersonationRegistryDeleteParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingImpersonationRegistryDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                                  `json:"messages,required"`
-	Result   SettingImpersonationRegistryDeleteResponse             `json:"result,required"`
-	Success  bool                                                   `json:"success,required"`
+	Errors   []shared.ResponseInfo                                  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                                  `json:"messages" api:"required"`
+	Result   SettingImpersonationRegistryDeleteResponse             `json:"result" api:"required"`
+	Success  bool                                                   `json:"success" api:"required"`
 	JSON     settingImpersonationRegistryDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -473,7 +473,7 @@ func (r settingImpersonationRegistryDeleteResponseEnvelopeJSON) RawJSON() string
 
 type SettingImpersonationRegistryEditParams struct {
 	// Account Identifier
-	AccountID    param.Field[string] `path:"account_id,required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	Email        param.Field[string] `json:"email"`
 	IsEmailRegex param.Field[bool]   `json:"is_email_regex"`
 	Name         param.Field[string] `json:"name"`
@@ -484,10 +484,10 @@ func (r SettingImpersonationRegistryEditParams) MarshalJSON() (data []byte, err 
 }
 
 type SettingImpersonationRegistryEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                `json:"errors,required"`
-	Messages []shared.ResponseInfo                                `json:"messages,required"`
-	Result   SettingImpersonationRegistryEditResponse             `json:"result,required"`
-	Success  bool                                                 `json:"success,required"`
+	Errors   []shared.ResponseInfo                                `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                                `json:"messages" api:"required"`
+	Result   SettingImpersonationRegistryEditResponse             `json:"result" api:"required"`
+	Success  bool                                                 `json:"success" api:"required"`
 	JSON     settingImpersonationRegistryEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -512,14 +512,14 @@ func (r settingImpersonationRegistryEditResponseEnvelopeJSON) RawJSON() string {
 
 type SettingImpersonationRegistryGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingImpersonationRegistryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                               `json:"errors,required"`
-	Messages []shared.ResponseInfo                               `json:"messages,required"`
-	Result   SettingImpersonationRegistryGetResponse             `json:"result,required"`
-	Success  bool                                                `json:"success,required"`
+	Errors   []shared.ResponseInfo                               `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                               `json:"messages" api:"required"`
+	Result   SettingImpersonationRegistryGetResponse             `json:"result" api:"required"`
+	Success  bool                                                `json:"success" api:"required"`
 	JSON     settingImpersonationRegistryGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -44,7 +44,7 @@ func (r *PermissionGroupService) List(ctx context.Context, params PermissionGrou
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/permission_groups", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -70,26 +70,26 @@ func (r *PermissionGroupService) Get(ctx context.Context, permissionGroupID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if permissionGroupID == "" {
 		err = errors.New("missing required permission_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/permission_groups/%s", query.AccountID, permissionGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A named group of permissions that map to a group of operations against
 // resources.
 type PermissionGroupListResponse struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta PermissionGroupListResponseMeta `json:"meta"`
 	// Name of the permission group.
@@ -143,7 +143,7 @@ func (r permissionGroupListResponseMetaJSON) RawJSON() string {
 // resources.
 type PermissionGroupGetResponse struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta PermissionGroupGetResponseMeta `json:"meta"`
 	// Name of the permission group.
@@ -195,7 +195,7 @@ func (r permissionGroupGetResponseMetaJSON) RawJSON() string {
 
 type PermissionGroupListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the permission group to be fetched.
 	ID param.Field[string] `query:"id"`
 	// Label of the permission group to be fetched.
@@ -219,14 +219,14 @@ func (r PermissionGroupListParams) URLQuery() (v url.Values) {
 
 type PermissionGroupGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PermissionGroupGetResponseEnvelope struct {
-	Errors   []PermissionGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PermissionGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PermissionGroupGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PermissionGroupGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PermissionGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PermissionGroupGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A named group of permissions that map to a group of operations against
 	// resources.
 	Result PermissionGroupGetResponse             `json:"result"`
@@ -253,8 +253,8 @@ func (r permissionGroupGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PermissionGroupGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           PermissionGroupGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             permissionGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -301,8 +301,8 @@ func (r permissionGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PermissionGroupGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           PermissionGroupGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             permissionGroupGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -43,19 +43,19 @@ func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userGroupID == "" {
 		err = errors.New("missing required user_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s/members", params.AccountID, userGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Replace the set of members attached to a User Group.
@@ -65,11 +65,11 @@ func (r *UserGroupMemberService) Update(ctx context.Context, userGroupID string,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userGroupID == "" {
 		err = errors.New("missing required user_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s/members", params.AccountID, userGroupID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -96,11 +96,11 @@ func (r *UserGroupMemberService) List(ctx context.Context, userGroupID string, p
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userGroupID == "" {
 		err = errors.New("missing required user_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s/members", params.AccountID, userGroupID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -126,29 +126,29 @@ func (r *UserGroupMemberService) Delete(ctx context.Context, userGroupID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userGroupID == "" {
 		err = errors.New("missing required user_group_id parameter")
-		return
+		return nil, err
 	}
 	if memberID == "" {
 		err = errors.New("missing required member_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s/members/%s", body.AccountID, userGroupID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Member attached to a User Group.
 type UserGroupMemberNewResponse struct {
 	// Account member identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The member's status in the account.
@@ -193,7 +193,7 @@ func (r UserGroupMemberNewResponseStatus) IsKnown() bool {
 // Member attached to a User Group.
 type UserGroupMemberUpdateResponse struct {
 	// Account member identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The member's status in the account.
@@ -238,7 +238,7 @@ func (r UserGroupMemberUpdateResponseStatus) IsKnown() bool {
 // Member attached to a User Group.
 type UserGroupMemberListResponse struct {
 	// Account member identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The member's status in the account.
@@ -283,7 +283,7 @@ func (r UserGroupMemberListResponseStatus) IsKnown() bool {
 // Member attached to a User Group.
 type UserGroupMemberDeleteResponse struct {
 	// Account member identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The member's status in the account.
@@ -327,8 +327,8 @@ func (r UserGroupMemberDeleteResponseStatus) IsKnown() bool {
 
 type UserGroupMemberNewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]            `path:"account_id,required"`
-	Body      []UserGroupMemberNewParamsBody `json:"body,required"`
+	AccountID param.Field[string]            `path:"account_id" api:"required"`
+	Body      []UserGroupMemberNewParamsBody `json:"body" api:"required"`
 }
 
 func (r UserGroupMemberNewParams) MarshalJSON() (data []byte, err error) {
@@ -337,7 +337,7 @@ func (r UserGroupMemberNewParams) MarshalJSON() (data []byte, err error) {
 
 type UserGroupMemberNewParamsBody struct {
 	// The identifier of an existing account Member.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r UserGroupMemberNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -345,10 +345,10 @@ func (r UserGroupMemberNewParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type UserGroupMemberNewResponseEnvelope struct {
-	Errors   []UserGroupMemberNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGroupMemberNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserGroupMemberNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGroupMemberNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserGroupMemberNewResponseEnvelopeSuccess `json:"success,required"`
+	Success UserGroupMemberNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Member attached to a User Group.
 	Result UserGroupMemberNewResponse             `json:"result"`
 	JSON   userGroupMemberNewResponseEnvelopeJSON `json:"-"`
@@ -374,8 +374,8 @@ func (r userGroupMemberNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserGroupMemberNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           UserGroupMemberNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userGroupMemberNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -422,8 +422,8 @@ func (r userGroupMemberNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UserGroupMemberNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           UserGroupMemberNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userGroupMemberNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -486,9 +486,9 @@ func (r UserGroupMemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserGroupMemberUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Set/Replace members to a user group.
-	Body []UserGroupMemberUpdateParamsBody `json:"body,required"`
+	Body []UserGroupMemberUpdateParamsBody `json:"body" api:"required"`
 }
 
 func (r UserGroupMemberUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -497,7 +497,7 @@ func (r UserGroupMemberUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type UserGroupMemberUpdateParamsBody struct {
 	// The identifier of an existing account Member.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r UserGroupMemberUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -506,7 +506,7 @@ func (r UserGroupMemberUpdateParamsBody) MarshalJSON() (data []byte, err error) 
 
 type UserGroupMemberListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page.
@@ -524,14 +524,14 @@ func (r UserGroupMemberListParams) URLQuery() (v url.Values) {
 
 type UserGroupMemberDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type UserGroupMemberDeleteResponseEnvelope struct {
-	Errors   []UserGroupMemberDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGroupMemberDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserGroupMemberDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGroupMemberDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserGroupMemberDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success UserGroupMemberDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Member attached to a User Group.
 	Result UserGroupMemberDeleteResponse             `json:"result"`
 	JSON   userGroupMemberDeleteResponseEnvelopeJSON `json:"-"`
@@ -557,8 +557,8 @@ func (r userGroupMemberDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserGroupMemberDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           UserGroupMemberDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userGroupMemberDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -605,8 +605,8 @@ func (r userGroupMemberDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type UserGroupMemberDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           UserGroupMemberDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userGroupMemberDeleteResponseEnvelopeMessagesJSON   `json:"-"`

@@ -43,15 +43,15 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a specific Magic static route. Use `?validate_only=true` as an optional
@@ -61,19 +61,19 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", params.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all Magic static routes.
@@ -82,15 +82,15 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disable and remove a specific Magic static route.
@@ -99,19 +99,19 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", body.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update multiple Magic static routes. Use `?validate_only=true` as an optional
@@ -122,15 +122,15 @@ func (r *RouteService) BulkUpdate(ctx context.Context, params RouteBulkUpdatePar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete multiple Magic static routes.
@@ -139,15 +139,15 @@ func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a specific Magic static route.
@@ -156,19 +156,19 @@ func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/routes/%s", query.AccountID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Used only for ECMP routes.
@@ -210,13 +210,13 @@ func (r ScopeParam) MarshalJSON() (data []byte, err error) {
 
 type RouteNewResponse struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
+	Nexthop string `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -279,13 +279,13 @@ func (r routeUpdateResponseJSON) RawJSON() string {
 
 type RouteUpdateResponseModifiedRoute struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
+	Nexthop string `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -346,13 +346,13 @@ func (r routeListResponseJSON) RawJSON() string {
 
 type RouteListResponseRoute struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
+	Nexthop string `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -415,13 +415,13 @@ func (r routeDeleteResponseJSON) RawJSON() string {
 
 type RouteDeleteResponseDeletedRoute struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
+	Nexthop string `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -484,13 +484,13 @@ func (r routeBulkUpdateResponseJSON) RawJSON() string {
 
 type RouteBulkUpdateResponseModifiedRoute struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
+	Nexthop string `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -553,13 +553,13 @@ func (r routeEmptyResponseJSON) RawJSON() string {
 
 type RouteEmptyResponseDeletedRoute struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
+	Nexthop string `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -620,13 +620,13 @@ func (r routeGetResponseJSON) RawJSON() string {
 
 type RouteGetResponseRoute struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop string `json:"nexthop,required"`
+	Nexthop string `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// When the route was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional human provided description of the static route.
@@ -666,13 +666,13 @@ func (r routeGetResponseRouteJSON) RawJSON() string {
 
 type RouteNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop param.Field[string] `json:"nexthop,required"`
+	Nexthop param.Field[string] `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix param.Field[string] `json:"prefix,required"`
+	Prefix param.Field[string] `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority param.Field[int64] `json:"priority,required"`
+	Priority param.Field[int64] `json:"priority" api:"required"`
 	// An optional human provided description of the static route.
 	Description param.Field[string] `json:"description"`
 	// Used only for ECMP routes.
@@ -686,11 +686,11 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteNewResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RouteNewResponse      `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -730,13 +730,13 @@ func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop param.Field[string] `json:"nexthop,required"`
+	Nexthop param.Field[string] `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix param.Field[string] `json:"prefix,required"`
+	Prefix param.Field[string] `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority param.Field[int64] `json:"priority,required"`
+	Priority param.Field[int64] `json:"priority" api:"required"`
 	// An optional human provided description of the static route.
 	Description param.Field[string] `json:"description"`
 	// Used only for ECMP routes.
@@ -750,11 +750,11 @@ func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteUpdateResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RouteUpdateResponse   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -794,15 +794,15 @@ func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RouteListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteListResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RouteListResponse     `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success RouteListResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -842,15 +842,15 @@ func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteDeleteResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RouteDeleteResponse   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -890,8 +890,8 @@ func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteBulkUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                       `path:"account_id,required"`
-	Routes    param.Field[[]RouteBulkUpdateParamsRoute] `json:"routes,required"`
+	AccountID param.Field[string]                       `path:"account_id" api:"required"`
+	Routes    param.Field[[]RouteBulkUpdateParamsRoute] `json:"routes" api:"required"`
 }
 
 func (r RouteBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -900,13 +900,13 @@ func (r RouteBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type RouteBulkUpdateParamsRoute struct {
 	// Identifier
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// The next-hop IP Address for the static route.
-	Nexthop param.Field[string] `json:"nexthop,required"`
+	Nexthop param.Field[string] `json:"nexthop" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Prefix param.Field[string] `json:"prefix,required"`
+	Prefix param.Field[string] `json:"prefix" api:"required"`
 	// Priority of the static route.
-	Priority param.Field[int64] `json:"priority,required"`
+	Priority param.Field[int64] `json:"priority" api:"required"`
 	// An optional human provided description of the static route.
 	Description param.Field[string] `json:"description"`
 	// Used only for ECMP routes.
@@ -920,11 +920,11 @@ func (r RouteBulkUpdateParamsRoute) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   RouteBulkUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   RouteBulkUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success RouteBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteBulkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeBulkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -964,15 +964,15 @@ func (r RouteBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteEmptyParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RouteEmptyResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteEmptyResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RouteEmptyResponse    `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success RouteEmptyResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteEmptyResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeEmptyResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1012,15 +1012,15 @@ func (r RouteEmptyResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteGetResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RouteGetResponse      `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -45,7 +45,7 @@ func (r *DEXCommandDeviceService) List(ctx context.Context, params DEXCommandDev
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/commands/devices", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -139,11 +139,11 @@ func (r dexCommandDeviceListResponseDeviceJSON) RawJSON() string {
 }
 
 type DEXCommandDeviceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results
-	Page param.Field[float64] `query:"page,required"`
+	Page param.Field[float64] `query:"page" api:"required"`
 	// Number of items per page
-	PerPage param.Field[float64] `query:"per_page,required"`
+	PerPage param.Field[float64] `query:"per_page" api:"required"`
 	// Filter devices by name or email
 	Search param.Field[string] `query:"search"`
 }

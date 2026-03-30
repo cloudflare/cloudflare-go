@@ -43,15 +43,15 @@ func (r *AccessTagService) New(ctx context.Context, params AccessTagNewParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/tags", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a tag
@@ -60,19 +60,19 @@ func (r *AccessTagService) Update(ctx context.Context, tagName string, params Ac
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tagName == "" {
 		err = errors.New("missing required tag_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", params.AccountID, tagName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List tags
@@ -82,7 +82,7 @@ func (r *AccessTagService) List(ctx context.Context, params AccessTagListParams,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/tags", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -108,19 +108,19 @@ func (r *AccessTagService) Delete(ctx context.Context, tagName string, body Acce
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tagName == "" {
 		err = errors.New("missing required tag_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", body.AccountID, tagName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a tag
@@ -129,25 +129,25 @@ func (r *AccessTagService) Get(ctx context.Context, tagName string, query Access
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tagName == "" {
 		err = errors.New("missing required tag_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", query.AccountID, tagName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A tag
 type Tag struct {
 	// The name of the tag
-	Name string  `json:"name,required"`
+	Name string  `json:"name" api:"required"`
 	JSON tagJSON `json:"-"`
 }
 
@@ -190,7 +190,7 @@ func (r accessTagDeleteResponseJSON) RawJSON() string {
 
 type AccessTagNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the tag
 	Name param.Field[string] `json:"name"`
 }
@@ -200,10 +200,10 @@ func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagNewResponseEnvelope struct {
-	Errors   []AccessTagNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessTagNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessTagNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessTagNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessTagNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessTagNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A tag
 	Result Tag                              `json:"result"`
 	JSON   accessTagNewResponseEnvelopeJSON `json:"-"`
@@ -229,8 +229,8 @@ func (r accessTagNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessTagNewResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AccessTagNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessTagNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -277,8 +277,8 @@ func (r accessTagNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessTagNewResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AccessTagNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessTagNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -341,9 +341,9 @@ func (r AccessTagNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessTagUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the tag
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -351,10 +351,10 @@ func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagUpdateResponseEnvelope struct {
-	Errors   []AccessTagUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessTagUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessTagUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessTagUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A tag
 	Result Tag                                 `json:"result"`
 	JSON   accessTagUpdateResponseEnvelopeJSON `json:"-"`
@@ -380,8 +380,8 @@ func (r accessTagUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessTagUpdateResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessTagUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessTagUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -428,8 +428,8 @@ func (r accessTagUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessTagUpdateResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessTagUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessTagUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -492,7 +492,7 @@ func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessTagListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page param.Field[int64] `query:"page"`
 	// Number of results per page.
@@ -509,14 +509,14 @@ func (r AccessTagListParams) URLQuery() (v url.Values) {
 
 type AccessTagDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessTagDeleteResponseEnvelope struct {
-	Errors   []AccessTagDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessTagDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessTagDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessTagDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessTagDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessTagDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessTagDeleteResponse                `json:"result"`
 	JSON    accessTagDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -541,8 +541,8 @@ func (r accessTagDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessTagDeleteResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessTagDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessTagDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -589,8 +589,8 @@ func (r accessTagDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessTagDeleteResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessTagDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessTagDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -653,14 +653,14 @@ func (r AccessTagDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessTagGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessTagGetResponseEnvelope struct {
-	Errors   []AccessTagGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessTagGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessTagGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessTagGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessTagGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessTagGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A tag
 	Result Tag                              `json:"result"`
 	JSON   accessTagGetResponseEnvelopeJSON `json:"-"`
@@ -686,8 +686,8 @@ func (r accessTagGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessTagGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AccessTagGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessTagGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -734,8 +734,8 @@ func (r accessTagGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessTagGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AccessTagGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessTagGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -40,18 +40,18 @@ func (r *V1BlobService) Get(ctx context.Context, imageID string, query V1BlobGet
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if imageID == "" {
 		err = errors.New("missing required image_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v1/%s/blob", query.AccountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type V1BlobGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

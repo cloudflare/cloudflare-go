@@ -46,34 +46,34 @@ func (r *NamespaceService) List(ctx context.Context, bucketName string, params N
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/namespaces", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Contains the list of namespaces with optional pagination.
 type NamespaceListResponse struct {
 	// Lists namespaces in the catalog.
-	Namespaces [][]string `json:"namespaces,required"`
+	Namespaces [][]string `json:"namespaces" api:"required"`
 	// Contains detailed metadata for each namespace when return_details is true. Each
 	// object includes the namespace, UUID, and timestamps.
-	Details []NamespaceListResponseDetail `json:"details,nullable"`
+	Details []NamespaceListResponseDetail `json:"details" api:"nullable"`
 	// Contains UUIDs for each namespace when return_uuids is true. The order
 	// corresponds to the namespaces array.
-	NamespaceUUIDs []string `json:"namespace_uuids,nullable" format:"uuid"`
+	NamespaceUUIDs []string `json:"namespace_uuids" api:"nullable" format:"uuid"`
 	// Use this opaque token to fetch the next page of results. A null or absent value
 	// indicates the last page.
-	NextPageToken string                    `json:"next_page_token,nullable"`
+	NextPageToken string                    `json:"next_page_token" api:"nullable"`
 	JSON          namespaceListResponseJSON `json:"-"`
 }
 
@@ -100,13 +100,13 @@ func (r namespaceListResponseJSON) RawJSON() string {
 type NamespaceListResponseDetail struct {
 	// Specifies the hierarchical namespace parts as an array of strings. For example,
 	// ["bronze", "analytics"] represents the namespace "bronze.analytics".
-	Namespace []string `json:"namespace,required"`
+	Namespace []string `json:"namespace" api:"required"`
 	// Contains the UUID that persists across renames.
-	NamespaceUUID string `json:"namespace_uuid,required" format:"uuid"`
+	NamespaceUUID string `json:"namespace_uuid" api:"required" format:"uuid"`
 	// Indicates the creation timestamp in ISO 8601 format.
-	CreatedAt time.Time `json:"created_at,nullable" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"nullable" format:"date-time"`
 	// Shows the last update timestamp in ISO 8601 format. Null if never updated.
-	UpdatedAt time.Time                       `json:"updated_at,nullable" format:"date-time"`
+	UpdatedAt time.Time                       `json:"updated_at" api:"nullable" format:"date-time"`
 	JSON      namespaceListResponseDetailJSON `json:"-"`
 }
 
@@ -131,7 +131,7 @@ func (r namespaceListResponseDetailJSON) RawJSON() string {
 
 type NamespaceListParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Maximum number of namespaces to return per page. Defaults to 100, maximum 1000.
 	PageSize param.Field[int64] `query:"page_size"`
 	// Opaque pagination token from a previous response. Use this to fetch the next
@@ -159,11 +159,11 @@ func (r NamespaceListParams) URLQuery() (v url.Values) {
 
 type NamespaceListResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []NamespaceListResponseEnvelopeErrors `json:"errors,required"`
+	Errors []NamespaceListResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []NamespaceListResponseEnvelopeMessages `json:"messages,required"`
+	Messages []NamespaceListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Contains the list of namespaces with optional pagination.
 	Result NamespaceListResponse             `json:"result"`
 	JSON   namespaceListResponseEnvelopeJSON `json:"-"`
@@ -190,9 +190,9 @@ func (r namespaceListResponseEnvelopeJSON) RawJSON() string {
 
 type NamespaceListResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                  `json:"message,required"`
+	Message string                                  `json:"message" api:"required"`
 	JSON    namespaceListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -215,9 +215,9 @@ func (r namespaceListResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type NamespaceListResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                    `json:"message,required"`
+	Message string                                    `json:"message" api:"required"`
 	JSON    namespaceListResponseEnvelopeMessagesJSON `json:"-"`
 }
 

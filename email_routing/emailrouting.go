@@ -50,15 +50,15 @@ func (r *EmailRoutingService) Disable(ctx context.Context, params EmailRoutingDi
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/disable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
@@ -69,15 +69,15 @@ func (r *EmailRoutingService) Enable(ctx context.Context, params EmailRoutingEna
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information about the settings for your Email Routing zone.
@@ -86,24 +86,24 @@ func (r *EmailRoutingService) Get(ctx context.Context, query EmailRoutingGetPara
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Settings struct {
 	// Email Routing settings identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// State of the zone settings for Email Routing.
-	Enabled SettingsEnabled `json:"enabled,required"`
+	Enabled SettingsEnabled `json:"enabled" api:"required"`
 	// Domain of your zone.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The date and time the settings have been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The date and time the settings have been modified.
@@ -195,8 +195,8 @@ func (r SettingsStatus) IsKnown() bool {
 
 type EmailRoutingDisableParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Body   interface{}         `json:"body" api:"required"`
 }
 
 func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
@@ -204,10 +204,10 @@ func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EmailRoutingDisableResponseEnvelope struct {
-	Errors   []EmailRoutingDisableResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingDisableResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EmailRoutingDisableResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EmailRoutingDisableResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EmailRoutingDisableResponseEnvelopeSuccess `json:"success,required"`
+	Success EmailRoutingDisableResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Settings                                   `json:"result"`
 	JSON    emailRoutingDisableResponseEnvelopeJSON    `json:"-"`
 }
@@ -232,8 +232,8 @@ func (r emailRoutingDisableResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingDisableResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           EmailRoutingDisableResponseEnvelopeErrorsSource `json:"source"`
 	JSON             emailRoutingDisableResponseEnvelopeErrorsJSON   `json:"-"`
@@ -280,8 +280,8 @@ func (r emailRoutingDisableResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type EmailRoutingDisableResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           EmailRoutingDisableResponseEnvelopeMessagesSource `json:"source"`
 	JSON             emailRoutingDisableResponseEnvelopeMessagesJSON   `json:"-"`
@@ -344,8 +344,8 @@ func (r EmailRoutingDisableResponseEnvelopeSuccess) IsKnown() bool {
 
 type EmailRoutingEnableParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Body   interface{}         `json:"body" api:"required"`
 }
 
 func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {
@@ -353,10 +353,10 @@ func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EmailRoutingEnableResponseEnvelope struct {
-	Errors   []EmailRoutingEnableResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingEnableResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EmailRoutingEnableResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EmailRoutingEnableResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EmailRoutingEnableResponseEnvelopeSuccess `json:"success,required"`
+	Success EmailRoutingEnableResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Settings                                  `json:"result"`
 	JSON    emailRoutingEnableResponseEnvelopeJSON    `json:"-"`
 }
@@ -381,8 +381,8 @@ func (r emailRoutingEnableResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingEnableResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           EmailRoutingEnableResponseEnvelopeErrorsSource `json:"source"`
 	JSON             emailRoutingEnableResponseEnvelopeErrorsJSON   `json:"-"`
@@ -429,8 +429,8 @@ func (r emailRoutingEnableResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type EmailRoutingEnableResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           EmailRoutingEnableResponseEnvelopeMessagesSource `json:"source"`
 	JSON             emailRoutingEnableResponseEnvelopeMessagesJSON   `json:"-"`
@@ -493,14 +493,14 @@ func (r EmailRoutingEnableResponseEnvelopeSuccess) IsKnown() bool {
 
 type EmailRoutingGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type EmailRoutingGetResponseEnvelope struct {
-	Errors   []EmailRoutingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []EmailRoutingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EmailRoutingGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success EmailRoutingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success EmailRoutingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Settings                               `json:"result"`
 	JSON    emailRoutingGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -525,8 +525,8 @@ func (r emailRoutingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailRoutingGetResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           EmailRoutingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             emailRoutingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -573,8 +573,8 @@ func (r emailRoutingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type EmailRoutingGetResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           EmailRoutingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             emailRoutingGetResponseEnvelopeMessagesJSON   `json:"-"`

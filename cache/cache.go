@@ -109,19 +109,19 @@ func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/purge_cache", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CachePurgeResponse struct {
-	ID   string                 `json:"id,required"`
+	ID   string                 `json:"id" api:"required"`
 	JSON cachePurgeResponseJSON `json:"-"`
 }
 
@@ -142,8 +142,8 @@ func (r cachePurgeResponseJSON) RawJSON() string {
 }
 
 type CachePurgeParams struct {
-	ZoneID param.Field[string]       `path:"zone_id,required"`
-	Body   CachePurgeParamsBodyUnion `json:"body,required"`
+	ZoneID param.Field[string]       `path:"zone_id" api:"required"`
+	Body   CachePurgeParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r CachePurgeParams) MarshalJSON() (data []byte, err error) {
@@ -260,11 +260,11 @@ func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJS
 }
 
 type CachePurgeResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicates the API call's success or failure.
-	Success bool                           `json:"success,required"`
-	Result  CachePurgeResponse             `json:"result,nullable"`
+	Success bool                           `json:"success" api:"required"`
+	Result  CachePurgeResponse             `json:"result" api:"nullable"`
 	JSON    cachePurgeResponseEnvelopeJSON `json:"-"`
 }
 

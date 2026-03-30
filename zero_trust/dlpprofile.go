@@ -51,7 +51,7 @@ func (r *DLPProfileService) List(ctx context.Context, params DLPProfileListParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -77,19 +77,19 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Scan the context of predefined entries to only return matches surrounded by
@@ -99,9 +99,9 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 type ContextAwareness struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Content types to exclude from context analysis and return all matches.
-	Skip SkipConfiguration    `json:"skip,required"`
+	Skip SkipConfiguration    `json:"skip" api:"required"`
 	JSON contextAwarenessJSON `json:"-"`
 }
 
@@ -129,9 +129,9 @@ func (r contextAwarenessJSON) RawJSON() string {
 type ContextAwarenessParam struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Content types to exclude from context analysis and return all matches.
-	Skip param.Field[SkipConfigurationParam] `json:"skip,required"`
+	Skip param.Field[SkipConfigurationParam] `json:"skip" api:"required"`
 }
 
 func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
@@ -140,10 +140,10 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 
 type Profile struct {
 	// The id of the profile (uuid).
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The name of the profile.
-	Name             string      `json:"name,required"`
-	Type             ProfileType `json:"type,required"`
+	Name             string      `json:"name" api:"required"`
+	Type             ProfileType `json:"type" api:"required"`
 	AIContextEnabled bool        `json:"ai_context_enabled"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   int64                      `json:"allowed_match_count"`
@@ -160,7 +160,7 @@ type Profile struct {
 	// This field can have the runtime type of [[]string].
 	DataTags interface{} `json:"data_tags"`
 	// The description of the profile.
-	Description string `json:"description,nullable"`
+	Description string `json:"description" api:"nullable"`
 	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
 	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
 	Entries    interface{} `json:"entries"`
@@ -250,17 +250,17 @@ func init() {
 
 type ProfileCustomProfile struct {
 	// The id of the profile (uuid).
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount int64 `json:"allowed_match_count,required"`
+	AllowedMatchCount int64 `json:"allowed_match_count" api:"required"`
 	// When the profile was created.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// The name of the profile.
-	Name       string                   `json:"name,required"`
-	OCREnabled bool                     `json:"ocr_enabled,required"`
-	Type       ProfileCustomProfileType `json:"type,required"`
+	Name       string                   `json:"name" api:"required"`
+	OCREnabled bool                     `json:"ocr_enabled" api:"required"`
+	Type       ProfileCustomProfileType `json:"type" api:"required"`
 	// When the profile was lasted updated.
-	UpdatedAt           time.Time                               `json:"updated_at,required" format:"date-time"`
+	UpdatedAt           time.Time                               `json:"updated_at" api:"required" format:"date-time"`
 	AIContextEnabled    bool                                    `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfileCustomProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
@@ -273,7 +273,7 @@ type ProfileCustomProfile struct {
 	// Data tags associated with this profile.
 	DataTags []string `json:"data_tags" format:"uuid"`
 	// The description of the profile.
-	Description string `json:"description,nullable"`
+	Description string `json:"description" api:"nullable"`
 	// Deprecated: deprecated
 	Entries []ProfileCustomProfileEntry `json:"entries"`
 	// Sensitivity levels associated with this profile as (group_id, level_id) tuples.
@@ -347,11 +347,11 @@ func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                            `json:"enabled,required"`
-	Name    string                          `json:"name,required"`
-	Type    ProfileCustomProfileEntriesType `json:"type,required"`
+	Enabled bool                            `json:"enabled" api:"required"`
+	Name    string                          `json:"name" api:"required"`
+	Type    ProfileCustomProfileEntriesType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
@@ -359,10 +359,10 @@ type ProfileCustomProfileEntry struct {
 	// [ProfileCustomProfileEntriesPredefinedEntryConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of
@@ -464,17 +464,17 @@ func init() {
 }
 
 type ProfileCustomProfileEntriesCustomEntry struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                                       `json:"enabled,required"`
-	Name        string                                     `json:"name,required"`
-	Pattern     Pattern                                    `json:"pattern,required"`
-	Type        ProfileCustomProfileEntriesCustomEntryType `json:"type,required"`
-	UpdatedAt   time.Time                                  `json:"updated_at,required" format:"date-time"`
-	Description string                                     `json:"description,nullable"`
+	Enabled     bool                                       `json:"enabled" api:"required"`
+	Name        string                                     `json:"name" api:"required"`
+	Pattern     Pattern                                    `json:"pattern" api:"required"`
+	Type        ProfileCustomProfileEntriesCustomEntryType `json:"type" api:"required"`
+	UpdatedAt   time.Time                                  `json:"updated_at" api:"required" format:"date-time"`
+	Description string                                     `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                     `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                     `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileEntriesCustomEntryJSON `json:"-"`
 }
 
@@ -519,13 +519,13 @@ func (r ProfileCustomProfileEntriesCustomEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntriesPredefinedEntry struct {
-	ID         string                                               `json:"id,required" format:"uuid"`
-	Confidence ProfileCustomProfileEntriesPredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                                 `json:"enabled,required"`
-	Name       string                                               `json:"name,required"`
-	Type       ProfileCustomProfileEntriesPredefinedEntryType       `json:"type,required"`
+	ID         string                                               `json:"id" api:"required" format:"uuid"`
+	Confidence ProfileCustomProfileEntriesPredefinedEntryConfidence `json:"confidence" api:"required"`
+	Enabled    bool                                                 `json:"enabled" api:"required"`
+	Name       string                                               `json:"name" api:"required"`
+	Type       ProfileCustomProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                            `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                            `json:"profile_id" api:"nullable" format:"uuid"`
 	Variant   ProfileCustomProfileEntriesPredefinedEntryVariant `json:"variant"`
 	JSON      profileCustomProfileEntriesPredefinedEntryJSON    `json:"-"`
 }
@@ -556,10 +556,10 @@ func (r ProfileCustomProfileEntriesPredefinedEntry) implementsProfileCustomProfi
 
 type ProfileCustomProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
+	AIContextAvailable bool `json:"ai_context_available" api:"required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                                     `json:"available,required"`
+	Available bool                                                     `json:"available" api:"required"`
 	JSON      profileCustomProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
@@ -595,9 +595,9 @@ func (r ProfileCustomProfileEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileCustomProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        ProfileCustomProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
-	Description string                                                     `json:"description,nullable"`
+	TopicType   ProfileCustomProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
+	Type        ProfileCustomProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Description string                                                     `json:"description" api:"nullable"`
 	JSON        profileCustomProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
@@ -649,13 +649,13 @@ func (r ProfileCustomProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntriesIntegrationEntry struct {
-	ID        string                                          `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                            `json:"enabled,required"`
-	Name      string                                          `json:"name,required"`
-	Type      ProfileCustomProfileEntriesIntegrationEntryType `json:"type,required"`
-	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                          `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                          `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                       `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                            `json:"enabled" api:"required"`
+	Name      string                                          `json:"name" api:"required"`
+	Type      ProfileCustomProfileEntriesIntegrationEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                       `json:"updated_at" api:"required" format:"date-time"`
+	ProfileID string                                          `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileEntriesIntegrationEntryJSON `json:"-"`
 }
 
@@ -698,16 +698,16 @@ func (r ProfileCustomProfileEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntriesExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                          `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                     `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                          `json:"enabled,required"`
-	Name          string                                        `json:"name,required"`
-	Secret        bool                                          `json:"secret,required"`
-	Type          ProfileCustomProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt     time.Time                                     `json:"updated_at,required" format:"date-time"`
+	CaseSensitive bool                                          `json:"case_sensitive" api:"required"`
+	CreatedAt     time.Time                                     `json:"created_at" api:"required" format:"date-time"`
+	Enabled       bool                                          `json:"enabled" api:"required"`
+	Name          string                                        `json:"name" api:"required"`
+	Secret        bool                                          `json:"secret" api:"required"`
+	Type          ProfileCustomProfileEntriesExactDataEntryType `json:"type" api:"required"`
+	UpdatedAt     time.Time                                     `json:"updated_at" api:"required" format:"date-time"`
 	JSON          profileCustomProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
@@ -751,12 +751,12 @@ func (r ProfileCustomProfileEntriesExactDataEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileEntriesDocumentFingerprintEntry struct {
-	ID        string                                                  `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                               `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                    `json:"enabled,required"`
-	Name      string                                                  `json:"name,required"`
-	Type      ProfileCustomProfileEntriesDocumentFingerprintEntryType `json:"type,required"`
-	UpdatedAt time.Time                                               `json:"updated_at,required" format:"date-time"`
+	ID        string                                                  `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                               `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                    `json:"enabled" api:"required"`
+	Name      string                                                  `json:"name" api:"required"`
+	Type      ProfileCustomProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                               `json:"updated_at" api:"required" format:"date-time"`
 	JSON      profileCustomProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
@@ -798,14 +798,14 @@ func (r ProfileCustomProfileEntriesDocumentFingerprintEntryType) IsKnown() bool 
 }
 
 type ProfileCustomProfileEntriesWordListEntry struct {
-	ID        string                                       `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                    `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                         `json:"enabled,required"`
-	Name      string                                       `json:"name,required"`
-	Type      ProfileCustomProfileEntriesWordListEntryType `json:"type,required"`
-	UpdatedAt time.Time                                    `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                  `json:"word_list,required"`
-	ProfileID string                                       `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                       `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                    `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                         `json:"enabled" api:"required"`
+	Name      string                                       `json:"name" api:"required"`
+	Type      ProfileCustomProfileEntriesWordListEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                    `json:"updated_at" api:"required" format:"date-time"`
+	WordList  interface{}                                  `json:"word_list" api:"required"`
+	ProfileID string                                       `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileEntriesWordListEntryJSON `json:"-"`
 }
 
@@ -868,11 +868,11 @@ func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 }
 
 type ProfileCustomProfileSharedEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                                  `json:"enabled,required"`
-	Name    string                                `json:"name,required"`
-	Type    ProfileCustomProfileSharedEntriesType `json:"type,required"`
+	Enabled bool                                  `json:"enabled" api:"required"`
+	Name    string                                `json:"name" api:"required"`
+	Type    ProfileCustomProfileSharedEntriesType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
@@ -880,10 +880,10 @@ type ProfileCustomProfileSharedEntry struct {
 	// [ProfileCustomProfileSharedEntriesPredefinedEntryConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of
@@ -985,17 +985,17 @@ func init() {
 }
 
 type ProfileCustomProfileSharedEntriesCustomEntry struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                                             `json:"enabled,required"`
-	Name        string                                           `json:"name,required"`
-	Pattern     Pattern                                          `json:"pattern,required"`
-	Type        ProfileCustomProfileSharedEntriesCustomEntryType `json:"type,required"`
-	UpdatedAt   time.Time                                        `json:"updated_at,required" format:"date-time"`
-	Description string                                           `json:"description,nullable"`
+	Enabled     bool                                             `json:"enabled" api:"required"`
+	Name        string                                           `json:"name" api:"required"`
+	Pattern     Pattern                                          `json:"pattern" api:"required"`
+	Type        ProfileCustomProfileSharedEntriesCustomEntryType `json:"type" api:"required"`
+	UpdatedAt   time.Time                                        `json:"updated_at" api:"required" format:"date-time"`
+	Description string                                           `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                           `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                           `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileSharedEntriesCustomEntryJSON `json:"-"`
 }
 
@@ -1040,13 +1040,13 @@ func (r ProfileCustomProfileSharedEntriesCustomEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileSharedEntriesPredefinedEntry struct {
-	ID         string                                                     `json:"id,required" format:"uuid"`
-	Confidence ProfileCustomProfileSharedEntriesPredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                                       `json:"enabled,required"`
-	Name       string                                                     `json:"name,required"`
-	Type       ProfileCustomProfileSharedEntriesPredefinedEntryType       `json:"type,required"`
+	ID         string                                                     `json:"id" api:"required" format:"uuid"`
+	Confidence ProfileCustomProfileSharedEntriesPredefinedEntryConfidence `json:"confidence" api:"required"`
+	Enabled    bool                                                       `json:"enabled" api:"required"`
+	Name       string                                                     `json:"name" api:"required"`
+	Type       ProfileCustomProfileSharedEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                  `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                                  `json:"profile_id" api:"nullable" format:"uuid"`
 	Variant   ProfileCustomProfileSharedEntriesPredefinedEntryVariant `json:"variant"`
 	JSON      profileCustomProfileSharedEntriesPredefinedEntryJSON    `json:"-"`
 }
@@ -1078,10 +1078,10 @@ func (r ProfileCustomProfileSharedEntriesPredefinedEntry) implementsProfileCusto
 
 type ProfileCustomProfileSharedEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
+	AIContextAvailable bool `json:"ai_context_available" api:"required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                                           `json:"available,required"`
+	Available bool                                                           `json:"available" api:"required"`
 	JSON      profileCustomProfileSharedEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
@@ -1118,9 +1118,9 @@ func (r ProfileCustomProfileSharedEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileSharedEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        ProfileCustomProfileSharedEntriesPredefinedEntryVariantType      `json:"type,required"`
-	Description string                                                           `json:"description,nullable"`
+	TopicType   ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
+	Type        ProfileCustomProfileSharedEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Description string                                                           `json:"description" api:"nullable"`
 	JSON        profileCustomProfileSharedEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
@@ -1173,13 +1173,13 @@ func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariantType) IsKnown() b
 }
 
 type ProfileCustomProfileSharedEntriesIntegrationEntry struct {
-	ID        string                                                `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                             `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                  `json:"enabled,required"`
-	Name      string                                                `json:"name,required"`
-	Type      ProfileCustomProfileSharedEntriesIntegrationEntryType `json:"type,required"`
-	UpdatedAt time.Time                                             `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                                `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                             `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                  `json:"enabled" api:"required"`
+	Name      string                                                `json:"name" api:"required"`
+	Type      ProfileCustomProfileSharedEntriesIntegrationEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                             `json:"updated_at" api:"required" format:"date-time"`
+	ProfileID string                                                `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileSharedEntriesIntegrationEntryJSON `json:"-"`
 }
 
@@ -1223,16 +1223,16 @@ func (r ProfileCustomProfileSharedEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileSharedEntriesExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                                `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                           `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                                `json:"enabled,required"`
-	Name          string                                              `json:"name,required"`
-	Secret        bool                                                `json:"secret,required"`
-	Type          ProfileCustomProfileSharedEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt     time.Time                                           `json:"updated_at,required" format:"date-time"`
+	CaseSensitive bool                                                `json:"case_sensitive" api:"required"`
+	CreatedAt     time.Time                                           `json:"created_at" api:"required" format:"date-time"`
+	Enabled       bool                                                `json:"enabled" api:"required"`
+	Name          string                                              `json:"name" api:"required"`
+	Secret        bool                                                `json:"secret" api:"required"`
+	Type          ProfileCustomProfileSharedEntriesExactDataEntryType `json:"type" api:"required"`
+	UpdatedAt     time.Time                                           `json:"updated_at" api:"required" format:"date-time"`
 	JSON          profileCustomProfileSharedEntriesExactDataEntryJSON `json:"-"`
 }
 
@@ -1277,12 +1277,12 @@ func (r ProfileCustomProfileSharedEntriesExactDataEntryType) IsKnown() bool {
 }
 
 type ProfileCustomProfileSharedEntriesDocumentFingerprintEntry struct {
-	ID        string                                                        `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                     `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                          `json:"enabled,required"`
-	Name      string                                                        `json:"name,required"`
-	Type      ProfileCustomProfileSharedEntriesDocumentFingerprintEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                     `json:"updated_at,required" format:"date-time"`
+	ID        string                                                        `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                                     `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                          `json:"enabled" api:"required"`
+	Name      string                                                        `json:"name" api:"required"`
+	Type      ProfileCustomProfileSharedEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                     `json:"updated_at" api:"required" format:"date-time"`
 	JSON      profileCustomProfileSharedEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
@@ -1326,14 +1326,14 @@ func (r ProfileCustomProfileSharedEntriesDocumentFingerprintEntryType) IsKnown()
 }
 
 type ProfileCustomProfileSharedEntriesWordListEntry struct {
-	ID        string                                             `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                          `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                               `json:"enabled,required"`
-	Name      string                                             `json:"name,required"`
-	Type      ProfileCustomProfileSharedEntriesWordListEntryType `json:"type,required"`
-	UpdatedAt time.Time                                          `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                        `json:"word_list,required"`
-	ProfileID string                                             `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                             `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                          `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                               `json:"enabled" api:"required"`
+	Name      string                                             `json:"name" api:"required"`
+	Type      ProfileCustomProfileSharedEntriesWordListEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                          `json:"updated_at" api:"required" format:"date-time"`
+	WordList  interface{}                                        `json:"word_list" api:"required"`
+	ProfileID string                                             `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileSharedEntriesWordListEntryJSON `json:"-"`
 }
 
@@ -1397,13 +1397,13 @@ func (r ProfileCustomProfileSharedEntriesType) IsKnown() bool {
 
 type ProfilePredefinedProfile struct {
 	// The id of the predefined profile (uuid).
-	ID                string `json:"id,required" format:"uuid"`
-	AllowedMatchCount int64  `json:"allowed_match_count,required"`
+	ID                string `json:"id" api:"required" format:"uuid"`
+	AllowedMatchCount int64  `json:"allowed_match_count" api:"required"`
 	// Deprecated: deprecated
-	Entries []ProfilePredefinedProfileEntry `json:"entries,required"`
+	Entries []ProfilePredefinedProfileEntry `json:"entries" api:"required"`
 	// The name of the predefined profile.
-	Name                string                                      `json:"name,required"`
-	Type                ProfilePredefinedProfileType                `json:"type,required"`
+	Name                string                                      `json:"name" api:"required"`
+	Type                ProfilePredefinedProfileType                `json:"type" api:"required"`
 	AIContextEnabled    bool                                        `json:"ai_context_enabled"`
 	ConfidenceThreshold ProfilePredefinedProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
@@ -1445,11 +1445,11 @@ func (r profilePredefinedProfileJSON) RawJSON() string {
 func (r ProfilePredefinedProfile) implementsProfile() {}
 
 type ProfilePredefinedProfileEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                                `json:"enabled,required"`
-	Name    string                              `json:"name,required"`
-	Type    ProfilePredefinedProfileEntriesType `json:"type,required"`
+	Enabled bool                                `json:"enabled" api:"required"`
+	Name    string                              `json:"name" api:"required"`
+	Type    ProfilePredefinedProfileEntriesType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
@@ -1457,10 +1457,10 @@ type ProfilePredefinedProfileEntry struct {
 	// [ProfilePredefinedProfileEntriesPredefinedEntryConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of
@@ -1562,17 +1562,17 @@ func init() {
 }
 
 type ProfilePredefinedProfileEntriesCustomEntry struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                                           `json:"enabled,required"`
-	Name        string                                         `json:"name,required"`
-	Pattern     Pattern                                        `json:"pattern,required"`
-	Type        ProfilePredefinedProfileEntriesCustomEntryType `json:"type,required"`
-	UpdatedAt   time.Time                                      `json:"updated_at,required" format:"date-time"`
-	Description string                                         `json:"description,nullable"`
+	Enabled     bool                                           `json:"enabled" api:"required"`
+	Name        string                                         `json:"name" api:"required"`
+	Pattern     Pattern                                        `json:"pattern" api:"required"`
+	Type        ProfilePredefinedProfileEntriesCustomEntryType `json:"type" api:"required"`
+	UpdatedAt   time.Time                                      `json:"updated_at" api:"required" format:"date-time"`
+	Description string                                         `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                         `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                         `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profilePredefinedProfileEntriesCustomEntryJSON `json:"-"`
 }
 
@@ -1617,13 +1617,13 @@ func (r ProfilePredefinedProfileEntriesCustomEntryType) IsKnown() bool {
 }
 
 type ProfilePredefinedProfileEntriesPredefinedEntry struct {
-	ID         string                                                   `json:"id,required" format:"uuid"`
-	Confidence ProfilePredefinedProfileEntriesPredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                                     `json:"enabled,required"`
-	Name       string                                                   `json:"name,required"`
-	Type       ProfilePredefinedProfileEntriesPredefinedEntryType       `json:"type,required"`
+	ID         string                                                   `json:"id" api:"required" format:"uuid"`
+	Confidence ProfilePredefinedProfileEntriesPredefinedEntryConfidence `json:"confidence" api:"required"`
+	Enabled    bool                                                     `json:"enabled" api:"required"`
+	Name       string                                                   `json:"name" api:"required"`
+	Type       ProfilePredefinedProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                                `json:"profile_id" api:"nullable" format:"uuid"`
 	Variant   ProfilePredefinedProfileEntriesPredefinedEntryVariant `json:"variant"`
 	JSON      profilePredefinedProfileEntriesPredefinedEntryJSON    `json:"-"`
 }
@@ -1654,10 +1654,10 @@ func (r ProfilePredefinedProfileEntriesPredefinedEntry) implementsProfilePredefi
 
 type ProfilePredefinedProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
+	AIContextAvailable bool `json:"ai_context_available" api:"required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                                         `json:"available,required"`
+	Available bool                                                         `json:"available" api:"required"`
 	JSON      profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
@@ -1694,9 +1694,9 @@ func (r ProfilePredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type ProfilePredefinedProfileEntriesPredefinedEntryVariant struct {
-	TopicType   ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        ProfilePredefinedProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
-	Description string                                                         `json:"description,nullable"`
+	TopicType   ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
+	Type        ProfilePredefinedProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Description string                                                         `json:"description" api:"nullable"`
 	JSON        profilePredefinedProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
@@ -1748,13 +1748,13 @@ func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantType) IsKnown() boo
 }
 
 type ProfilePredefinedProfileEntriesIntegrationEntry struct {
-	ID        string                                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                `json:"enabled,required"`
-	Name      string                                              `json:"name,required"`
-	Type      ProfilePredefinedProfileEntriesIntegrationEntryType `json:"type,required"`
-	UpdatedAt time.Time                                           `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                              `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                              `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                           `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                `json:"enabled" api:"required"`
+	Name      string                                              `json:"name" api:"required"`
+	Type      ProfilePredefinedProfileEntriesIntegrationEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                           `json:"updated_at" api:"required" format:"date-time"`
+	ProfileID string                                              `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profilePredefinedProfileEntriesIntegrationEntryJSON `json:"-"`
 }
 
@@ -1797,16 +1797,16 @@ func (r ProfilePredefinedProfileEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type ProfilePredefinedProfileEntriesExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                              `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                         `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                              `json:"enabled,required"`
-	Name          string                                            `json:"name,required"`
-	Secret        bool                                              `json:"secret,required"`
-	Type          ProfilePredefinedProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt     time.Time                                         `json:"updated_at,required" format:"date-time"`
+	CaseSensitive bool                                              `json:"case_sensitive" api:"required"`
+	CreatedAt     time.Time                                         `json:"created_at" api:"required" format:"date-time"`
+	Enabled       bool                                              `json:"enabled" api:"required"`
+	Name          string                                            `json:"name" api:"required"`
+	Secret        bool                                              `json:"secret" api:"required"`
+	Type          ProfilePredefinedProfileEntriesExactDataEntryType `json:"type" api:"required"`
+	UpdatedAt     time.Time                                         `json:"updated_at" api:"required" format:"date-time"`
 	JSON          profilePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
@@ -1850,12 +1850,12 @@ func (r ProfilePredefinedProfileEntriesExactDataEntryType) IsKnown() bool {
 }
 
 type ProfilePredefinedProfileEntriesDocumentFingerprintEntry struct {
-	ID        string                                                      `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                   `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                        `json:"enabled,required"`
-	Name      string                                                      `json:"name,required"`
-	Type      ProfilePredefinedProfileEntriesDocumentFingerprintEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                   `json:"updated_at,required" format:"date-time"`
+	ID        string                                                      `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                                   `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                        `json:"enabled" api:"required"`
+	Name      string                                                      `json:"name" api:"required"`
+	Type      ProfilePredefinedProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                   `json:"updated_at" api:"required" format:"date-time"`
 	JSON      profilePredefinedProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
@@ -1899,14 +1899,14 @@ func (r ProfilePredefinedProfileEntriesDocumentFingerprintEntryType) IsKnown() b
 }
 
 type ProfilePredefinedProfileEntriesWordListEntry struct {
-	ID        string                                           `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                        `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                             `json:"enabled,required"`
-	Name      string                                           `json:"name,required"`
-	Type      ProfilePredefinedProfileEntriesWordListEntryType `json:"type,required"`
-	UpdatedAt time.Time                                        `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                      `json:"word_list,required"`
-	ProfileID string                                           `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                           `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                        `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                             `json:"enabled" api:"required"`
+	Name      string                                           `json:"name" api:"required"`
+	Type      ProfilePredefinedProfileEntriesWordListEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                        `json:"updated_at" api:"required" format:"date-time"`
+	WordList  interface{}                                      `json:"word_list" api:"required"`
+	ProfileID string                                           `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profilePredefinedProfileEntriesWordListEntryJSON `json:"-"`
 }
 
@@ -2000,16 +2000,16 @@ func (r ProfilePredefinedProfileConfidenceThreshold) IsKnown() bool {
 }
 
 type ProfileIntegrationProfile struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Entries       []ProfileIntegrationProfileEntry       `json:"entries,required"`
-	Name          string                                 `json:"name,required"`
-	SharedEntries []ProfileIntegrationProfileSharedEntry `json:"shared_entries,required"`
-	Type          ProfileIntegrationProfileType          `json:"type,required"`
-	UpdatedAt     time.Time                              `json:"updated_at,required" format:"date-time"`
+	Entries       []ProfileIntegrationProfileEntry       `json:"entries" api:"required"`
+	Name          string                                 `json:"name" api:"required"`
+	SharedEntries []ProfileIntegrationProfileSharedEntry `json:"shared_entries" api:"required"`
+	Type          ProfileIntegrationProfileType          `json:"type" api:"required"`
+	UpdatedAt     time.Time                              `json:"updated_at" api:"required" format:"date-time"`
 	// The description of the profile.
-	Description string                        `json:"description,nullable"`
+	Description string                        `json:"description" api:"nullable"`
 	JSON        profileIntegrationProfileJSON `json:"-"`
 }
 
@@ -2039,11 +2039,11 @@ func (r profileIntegrationProfileJSON) RawJSON() string {
 func (r ProfileIntegrationProfile) implementsProfile() {}
 
 type ProfileIntegrationProfileEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                                 `json:"enabled,required"`
-	Name    string                               `json:"name,required"`
-	Type    ProfileIntegrationProfileEntriesType `json:"type,required"`
+	Enabled bool                                 `json:"enabled" api:"required"`
+	Name    string                               `json:"name" api:"required"`
+	Type    ProfileIntegrationProfileEntriesType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
@@ -2051,10 +2051,10 @@ type ProfileIntegrationProfileEntry struct {
 	// [ProfileIntegrationProfileEntriesPredefinedEntryConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of
@@ -2156,17 +2156,17 @@ func init() {
 }
 
 type ProfileIntegrationProfileEntriesCustomEntry struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                                            `json:"enabled,required"`
-	Name        string                                          `json:"name,required"`
-	Pattern     Pattern                                         `json:"pattern,required"`
-	Type        ProfileIntegrationProfileEntriesCustomEntryType `json:"type,required"`
-	UpdatedAt   time.Time                                       `json:"updated_at,required" format:"date-time"`
-	Description string                                          `json:"description,nullable"`
+	Enabled     bool                                            `json:"enabled" api:"required"`
+	Name        string                                          `json:"name" api:"required"`
+	Pattern     Pattern                                         `json:"pattern" api:"required"`
+	Type        ProfileIntegrationProfileEntriesCustomEntryType `json:"type" api:"required"`
+	UpdatedAt   time.Time                                       `json:"updated_at" api:"required" format:"date-time"`
+	Description string                                          `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                          `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                          `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileEntriesCustomEntryJSON `json:"-"`
 }
 
@@ -2211,13 +2211,13 @@ func (r ProfileIntegrationProfileEntriesCustomEntryType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileEntriesPredefinedEntry struct {
-	ID         string                                                    `json:"id,required" format:"uuid"`
-	Confidence ProfileIntegrationProfileEntriesPredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                                      `json:"enabled,required"`
-	Name       string                                                    `json:"name,required"`
-	Type       ProfileIntegrationProfileEntriesPredefinedEntryType       `json:"type,required"`
+	ID         string                                                    `json:"id" api:"required" format:"uuid"`
+	Confidence ProfileIntegrationProfileEntriesPredefinedEntryConfidence `json:"confidence" api:"required"`
+	Enabled    bool                                                      `json:"enabled" api:"required"`
+	Name       string                                                    `json:"name" api:"required"`
+	Type       ProfileIntegrationProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                 `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                                 `json:"profile_id" api:"nullable" format:"uuid"`
 	Variant   ProfileIntegrationProfileEntriesPredefinedEntryVariant `json:"variant"`
 	JSON      profileIntegrationProfileEntriesPredefinedEntryJSON    `json:"-"`
 }
@@ -2248,10 +2248,10 @@ func (r ProfileIntegrationProfileEntriesPredefinedEntry) implementsProfileIntegr
 
 type ProfileIntegrationProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
+	AIContextAvailable bool `json:"ai_context_available" api:"required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                                          `json:"available,required"`
+	Available bool                                                          `json:"available" api:"required"`
 	JSON      profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
@@ -2288,9 +2288,9 @@ func (r ProfileIntegrationProfileEntriesPredefinedEntryType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        ProfileIntegrationProfileEntriesPredefinedEntryVariantType      `json:"type,required"`
-	Description string                                                          `json:"description,nullable"`
+	TopicType   ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
+	Type        ProfileIntegrationProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Description string                                                          `json:"description" api:"nullable"`
 	JSON        profileIntegrationProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
@@ -2342,13 +2342,13 @@ func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantType) IsKnown() bo
 }
 
 type ProfileIntegrationProfileEntriesIntegrationEntry struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Type      ProfileIntegrationProfileEntriesIntegrationEntryType `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                               `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                               `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                            `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                 `json:"enabled" api:"required"`
+	Name      string                                               `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileEntriesIntegrationEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                            `json:"updated_at" api:"required" format:"date-time"`
+	ProfileID string                                               `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileEntriesIntegrationEntryJSON `json:"-"`
 }
 
@@ -2392,16 +2392,16 @@ func (r ProfileIntegrationProfileEntriesIntegrationEntryType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileEntriesExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                               `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                          `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                               `json:"enabled,required"`
-	Name          string                                             `json:"name,required"`
-	Secret        bool                                               `json:"secret,required"`
-	Type          ProfileIntegrationProfileEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt     time.Time                                          `json:"updated_at,required" format:"date-time"`
+	CaseSensitive bool                                               `json:"case_sensitive" api:"required"`
+	CreatedAt     time.Time                                          `json:"created_at" api:"required" format:"date-time"`
+	Enabled       bool                                               `json:"enabled" api:"required"`
+	Name          string                                             `json:"name" api:"required"`
+	Secret        bool                                               `json:"secret" api:"required"`
+	Type          ProfileIntegrationProfileEntriesExactDataEntryType `json:"type" api:"required"`
+	UpdatedAt     time.Time                                          `json:"updated_at" api:"required" format:"date-time"`
 	JSON          profileIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
@@ -2445,12 +2445,12 @@ func (r ProfileIntegrationProfileEntriesExactDataEntryType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileEntriesDocumentFingerprintEntry struct {
-	ID        string                                                       `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                    `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                         `json:"enabled,required"`
-	Name      string                                                       `json:"name,required"`
-	Type      ProfileIntegrationProfileEntriesDocumentFingerprintEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                    `json:"updated_at,required" format:"date-time"`
+	ID        string                                                       `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                                    `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                         `json:"enabled" api:"required"`
+	Name      string                                                       `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                    `json:"updated_at" api:"required" format:"date-time"`
 	JSON      profileIntegrationProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
@@ -2494,14 +2494,14 @@ func (r ProfileIntegrationProfileEntriesDocumentFingerprintEntryType) IsKnown() 
 }
 
 type ProfileIntegrationProfileEntriesWordListEntry struct {
-	ID        string                                            `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                         `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                              `json:"enabled,required"`
-	Name      string                                            `json:"name,required"`
-	Type      ProfileIntegrationProfileEntriesWordListEntryType `json:"type,required"`
-	UpdatedAt time.Time                                         `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                       `json:"word_list,required"`
-	ProfileID string                                            `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                            `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                         `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                              `json:"enabled" api:"required"`
+	Name      string                                            `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileEntriesWordListEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                         `json:"updated_at" api:"required" format:"date-time"`
+	WordList  interface{}                                       `json:"word_list" api:"required"`
+	ProfileID string                                            `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileEntriesWordListEntryJSON `json:"-"`
 }
 
@@ -2564,11 +2564,11 @@ func (r ProfileIntegrationProfileEntriesType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileSharedEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Deprecated: deprecated
-	Enabled bool                                       `json:"enabled,required"`
-	Name    string                                     `json:"name,required"`
-	Type    ProfileIntegrationProfileSharedEntriesType `json:"type,required"`
+	Enabled bool                                       `json:"enabled" api:"required"`
+	Name    string                                     `json:"name" api:"required"`
+	Type    ProfileIntegrationProfileSharedEntriesType `json:"type" api:"required"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
@@ -2576,10 +2576,10 @@ type ProfileIntegrationProfileSharedEntry struct {
 	// [ProfileIntegrationProfileSharedEntriesPredefinedEntryConfidence].
 	Confidence  interface{} `json:"confidence"`
 	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description,nullable"`
+	Description string      `json:"description" api:"nullable"`
 	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of
@@ -2681,17 +2681,17 @@ func init() {
 }
 
 type ProfileIntegrationProfileSharedEntriesCustomEntry struct {
-	ID        string    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
-	Enabled     bool                                                  `json:"enabled,required"`
-	Name        string                                                `json:"name,required"`
-	Pattern     Pattern                                               `json:"pattern,required"`
-	Type        ProfileIntegrationProfileSharedEntriesCustomEntryType `json:"type,required"`
-	UpdatedAt   time.Time                                             `json:"updated_at,required" format:"date-time"`
-	Description string                                                `json:"description,nullable"`
+	Enabled     bool                                                  `json:"enabled" api:"required"`
+	Name        string                                                `json:"name" api:"required"`
+	Pattern     Pattern                                               `json:"pattern" api:"required"`
+	Type        ProfileIntegrationProfileSharedEntriesCustomEntryType `json:"type" api:"required"`
+	UpdatedAt   time.Time                                             `json:"updated_at" api:"required" format:"date-time"`
+	Description string                                                `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                                `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileSharedEntriesCustomEntryJSON `json:"-"`
 }
 
@@ -2737,13 +2737,13 @@ func (r ProfileIntegrationProfileSharedEntriesCustomEntryType) IsKnown() bool {
 }
 
 type ProfileIntegrationProfileSharedEntriesPredefinedEntry struct {
-	ID         string                                                          `json:"id,required" format:"uuid"`
-	Confidence ProfileIntegrationProfileSharedEntriesPredefinedEntryConfidence `json:"confidence,required"`
-	Enabled    bool                                                            `json:"enabled,required"`
-	Name       string                                                          `json:"name,required"`
-	Type       ProfileIntegrationProfileSharedEntriesPredefinedEntryType       `json:"type,required"`
+	ID         string                                                          `json:"id" api:"required" format:"uuid"`
+	Confidence ProfileIntegrationProfileSharedEntriesPredefinedEntryConfidence `json:"confidence" api:"required"`
+	Enabled    bool                                                            `json:"enabled" api:"required"`
+	Name       string                                                          `json:"name" api:"required"`
+	Type       ProfileIntegrationProfileSharedEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                       `json:"profile_id,nullable" format:"uuid"`
+	ProfileID string                                                       `json:"profile_id" api:"nullable" format:"uuid"`
 	Variant   ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant `json:"variant"`
 	JSON      profileIntegrationProfileSharedEntriesPredefinedEntryJSON    `json:"-"`
 }
@@ -2775,10 +2775,10 @@ func (r ProfileIntegrationProfileSharedEntriesPredefinedEntry) implementsProfile
 
 type ProfileIntegrationProfileSharedEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available,required"`
+	AIContextAvailable bool `json:"ai_context_available" api:"required"`
 	// Indicates whether this entry has any form of validation that is not an AI remote
 	// service.
-	Available bool                                                                `json:"available,required"`
+	Available bool                                                                `json:"available" api:"required"`
 	JSON      profileIntegrationProfileSharedEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
@@ -2815,9 +2815,9 @@ func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryType) IsKnown() boo
 }
 
 type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type,required"`
-	Type        ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType      `json:"type,required"`
-	Description string                                                                `json:"description,nullable"`
+	TopicType   ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
+	Type        ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Description string                                                                `json:"description" api:"nullable"`
 	JSON        profileIntegrationProfileSharedEntriesPredefinedEntryVariantJSON      `json:"-"`
 }
 
@@ -2870,13 +2870,13 @@ func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType) IsKnow
 }
 
 type ProfileIntegrationProfileSharedEntriesIntegrationEntry struct {
-	ID        string                                                     `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                  `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                       `json:"enabled,required"`
-	Name      string                                                     `json:"name,required"`
-	Type      ProfileIntegrationProfileSharedEntriesIntegrationEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                  `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                                     `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                                     `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                                  `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                       `json:"enabled" api:"required"`
+	Name      string                                                     `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileSharedEntriesIntegrationEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                  `json:"updated_at" api:"required" format:"date-time"`
+	ProfileID string                                                     `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileSharedEntriesIntegrationEntryJSON `json:"-"`
 }
 
@@ -2920,16 +2920,16 @@ func (r ProfileIntegrationProfileSharedEntriesIntegrationEntryType) IsKnown() bo
 }
 
 type ProfileIntegrationProfileSharedEntriesExactDataEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Only applies to custom word lists. Determines if the words should be matched in
 	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                                     `json:"case_sensitive,required"`
-	CreatedAt     time.Time                                                `json:"created_at,required" format:"date-time"`
-	Enabled       bool                                                     `json:"enabled,required"`
-	Name          string                                                   `json:"name,required"`
-	Secret        bool                                                     `json:"secret,required"`
-	Type          ProfileIntegrationProfileSharedEntriesExactDataEntryType `json:"type,required"`
-	UpdatedAt     time.Time                                                `json:"updated_at,required" format:"date-time"`
+	CaseSensitive bool                                                     `json:"case_sensitive" api:"required"`
+	CreatedAt     time.Time                                                `json:"created_at" api:"required" format:"date-time"`
+	Enabled       bool                                                     `json:"enabled" api:"required"`
+	Name          string                                                   `json:"name" api:"required"`
+	Secret        bool                                                     `json:"secret" api:"required"`
+	Type          ProfileIntegrationProfileSharedEntriesExactDataEntryType `json:"type" api:"required"`
+	UpdatedAt     time.Time                                                `json:"updated_at" api:"required" format:"date-time"`
 	JSON          profileIntegrationProfileSharedEntriesExactDataEntryJSON `json:"-"`
 }
 
@@ -2974,12 +2974,12 @@ func (r ProfileIntegrationProfileSharedEntriesExactDataEntryType) IsKnown() bool
 }
 
 type ProfileIntegrationProfileSharedEntriesDocumentFingerprintEntry struct {
-	ID        string                                                             `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                                          `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                               `json:"enabled,required"`
-	Name      string                                                             `json:"name,required"`
-	Type      ProfileIntegrationProfileSharedEntriesDocumentFingerprintEntryType `json:"type,required"`
-	UpdatedAt time.Time                                                          `json:"updated_at,required" format:"date-time"`
+	ID        string                                                             `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                                          `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                               `json:"enabled" api:"required"`
+	Name      string                                                             `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileSharedEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                          `json:"updated_at" api:"required" format:"date-time"`
 	JSON      profileIntegrationProfileSharedEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
@@ -3023,14 +3023,14 @@ func (r ProfileIntegrationProfileSharedEntriesDocumentFingerprintEntryType) IsKn
 }
 
 type ProfileIntegrationProfileSharedEntriesWordListEntry struct {
-	ID        string                                                  `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                               `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                    `json:"enabled,required"`
-	Name      string                                                  `json:"name,required"`
-	Type      ProfileIntegrationProfileSharedEntriesWordListEntryType `json:"type,required"`
-	UpdatedAt time.Time                                               `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                             `json:"word_list,required"`
-	ProfileID string                                                  `json:"profile_id,nullable" format:"uuid"`
+	ID        string                                                  `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time                                               `json:"created_at" api:"required" format:"date-time"`
+	Enabled   bool                                                    `json:"enabled" api:"required"`
+	Name      string                                                  `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileSharedEntriesWordListEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                               `json:"updated_at" api:"required" format:"date-time"`
+	WordList  interface{}                                             `json:"word_list" api:"required"`
+	ProfileID string                                                  `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileSharedEntriesWordListEntryJSON `json:"-"`
 }
 
@@ -3143,7 +3143,7 @@ func (r ProfileConfidenceThreshold) IsKnown() bool {
 // Content types to exclude from context analysis and return all matches.
 type SkipConfiguration struct {
 	// If the content type is a file, skip context analysis and return all matches.
-	Files bool                  `json:"files,required"`
+	Files bool                  `json:"files" api:"required"`
 	JSON  skipConfigurationJSON `json:"-"`
 }
 
@@ -3166,7 +3166,7 @@ func (r skipConfigurationJSON) RawJSON() string {
 // Content types to exclude from context analysis and return all matches.
 type SkipConfigurationParam struct {
 	// If the content type is a file, skip context analysis and return all matches.
-	Files param.Field[bool] `json:"files,required"`
+	Files param.Field[bool] `json:"files" api:"required"`
 }
 
 func (r SkipConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -3174,7 +3174,7 @@ func (r SkipConfigurationParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Return all profiles, including those that current account does not have access
 	// to.
 	All param.Field[bool] `query:"all"`
@@ -3189,14 +3189,14 @@ func (r DLPProfileListParams) URLQuery() (v url.Values) {
 }
 
 type DLPProfileGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPProfileGetResponseEnvelope struct {
-	Errors   []DLPProfileGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPProfileGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfileGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPProfileGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPProfileGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Profile                              `json:"result"`
 	JSON    dlpProfileGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -3221,8 +3221,8 @@ func (r dlpProfileGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPProfileGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           DLPProfileGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpProfileGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3269,8 +3269,8 @@ func (r dlpProfileGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPProfileGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           DLPProfileGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpProfileGetResponseEnvelopeMessagesJSON   `json:"-"`

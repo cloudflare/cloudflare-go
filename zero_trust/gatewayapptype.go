@@ -45,7 +45,7 @@ func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeLi
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/app_types", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -202,5 +202,5 @@ func (r AppTypeZeroTrustGatewayApplicationType) implementsAppType() {}
 
 type GatewayAppTypeListParams struct {
 	// Provide the identifier string.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -39,19 +39,19 @@ func (r *ActiveSessionService) NewPoll(ctx context.Context, appID string, meetin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-session/poll", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of an ongoing active session for the given meeting ID.
@@ -59,19 +59,19 @@ func (r *ActiveSessionService) GetActiveSession(ctx context.Context, appID strin
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-session", query.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Kicks all participants from an active session for the given meeting ID.
@@ -79,19 +79,19 @@ func (r *ActiveSessionService) KickAllParticipants(ctx context.Context, appID st
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-session/kick-all", body.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Kicks one or more participants from an active session using user ID or custom
@@ -100,19 +100,19 @@ func (r *ActiveSessionService) KickParticipants(ctx context.Context, appID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-session/kick", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type ActiveSessionNewPollResponse struct {
@@ -163,11 +163,11 @@ func (r activeSessionNewPollResponseDataJSON) RawJSON() string {
 
 type ActiveSessionNewPollResponseDataPoll struct {
 	// ID of the poll
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Answer options
-	Options []ActiveSessionNewPollResponseDataPollOption `json:"options,required"`
+	Options []ActiveSessionNewPollResponseDataPollOption `json:"options" api:"required"`
 	// Question asked by the poll
-	Question  string                                   `json:"question,required"`
+	Question  string                                   `json:"question" api:"required"`
 	Anonymous bool                                     `json:"anonymous"`
 	CreatedBy string                                   `json:"created_by"`
 	HideVotes bool                                     `json:"hide_votes"`
@@ -198,10 +198,10 @@ func (r activeSessionNewPollResponseDataPollJSON) RawJSON() string {
 }
 
 type ActiveSessionNewPollResponseDataPollOption struct {
-	Count float64 `json:"count,required"`
+	Count float64 `json:"count" api:"required"`
 	// Text of the answer option
-	Text  string                                            `json:"text,required"`
-	Votes []ActiveSessionNewPollResponseDataPollOptionsVote `json:"votes,required"`
+	Text  string                                            `json:"text" api:"required"`
+	Votes []ActiveSessionNewPollResponseDataPollOptionsVote `json:"votes" api:"required"`
 	JSON  activeSessionNewPollResponseDataPollOptionJSON    `json:"-"`
 }
 
@@ -224,8 +224,8 @@ func (r activeSessionNewPollResponseDataPollOptionJSON) RawJSON() string {
 }
 
 type ActiveSessionNewPollResponseDataPollOptionsVote struct {
-	ID   string                                              `json:"id,required"`
-	Name string                                              `json:"name,required"`
+	ID   string                                              `json:"id" api:"required"`
+	Name string                                              `json:"name" api:"required"`
 	JSON activeSessionNewPollResponseDataPollOptionsVoteJSON `json:"-"`
 }
 
@@ -271,31 +271,31 @@ func (r activeSessionGetActiveSessionResponseJSON) RawJSON() string {
 
 type ActiveSessionGetActiveSessionResponseData struct {
 	// ID of the session
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ID of the meeting this session is associated with. In the case of V2 meetings,
 	// it is always a UUID. In V1 meetings, it is a room name of the form
 	// `abcdef-ghijkl`
-	AssociatedID string `json:"associated_id,required"`
+	AssociatedID string `json:"associated_id" api:"required"`
 	// timestamp when session created
-	CreatedAt string `json:"created_at,required"`
+	CreatedAt string `json:"created_at" api:"required"`
 	// number of participants currently in the session
-	LiveParticipants float64 `json:"live_participants,required"`
+	LiveParticipants float64 `json:"live_participants" api:"required"`
 	// number of maximum participants that were in the session
-	MaxConcurrentParticipants float64 `json:"max_concurrent_participants,required"`
+	MaxConcurrentParticipants float64 `json:"max_concurrent_participants" api:"required"`
 	// Title of the meeting this session belongs to
-	MeetingDisplayName string `json:"meeting_display_name,required"`
+	MeetingDisplayName string `json:"meeting_display_name" api:"required"`
 	// number of minutes consumed since the session started
-	MinutesConsumed float64 `json:"minutes_consumed,required"`
+	MinutesConsumed float64 `json:"minutes_consumed" api:"required"`
 	// App id that hosted this session
-	OrganizationID string `json:"organization_id,required"`
+	OrganizationID string `json:"organization_id" api:"required"`
 	// timestamp when session started
-	StartedAt string `json:"started_at,required"`
+	StartedAt string `json:"started_at" api:"required"`
 	// current status of session
-	Status ActiveSessionGetActiveSessionResponseDataStatus `json:"status,required"`
+	Status ActiveSessionGetActiveSessionResponseDataStatus `json:"status" api:"required"`
 	// type of session
-	Type ActiveSessionGetActiveSessionResponseDataType `json:"type,required"`
+	Type ActiveSessionGetActiveSessionResponseDataType `json:"type" api:"required"`
 	// timestamp when session was last updated
-	UpdatedAt     string        `json:"updated_at,required"`
+	UpdatedAt     string        `json:"updated_at" api:"required"`
 	BreakoutRooms []interface{} `json:"breakout_rooms"`
 	// timestamp when session ended
 	EndedAt string `json:"ended_at"`
@@ -461,9 +461,9 @@ func (r activeSessionKickParticipantsResponseDataJSON) RawJSON() string {
 
 type ActiveSessionKickParticipantsResponseDataParticipant struct {
 	// ID of the session participant
-	ID        string `json:"id,required"`
-	CreatedAt string `json:"created_at,required"`
-	UpdatedAt string `json:"updated_at,required"`
+	ID        string `json:"id" api:"required"`
+	CreatedAt string `json:"created_at" api:"required"`
+	UpdatedAt string `json:"updated_at" api:"required"`
 	// Email of the session participant.
 	Email string `json:"email"`
 	// Name of the session participant.
@@ -496,11 +496,11 @@ func (r activeSessionKickParticipantsResponseDataParticipantJSON) RawJSON() stri
 
 type ActiveSessionNewPollParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Different options for the question
-	Options param.Field[[]string] `json:"options,required"`
+	Options param.Field[[]string] `json:"options" api:"required"`
 	// Question of the poll
-	Question param.Field[string] `json:"question,required"`
+	Question param.Field[string] `json:"question" api:"required"`
 	// if voters on a poll are anonymous
 	Anonymous param.Field[bool] `json:"anonymous"`
 	// if votes on an option are visible before a person votes
@@ -513,19 +513,19 @@ func (r ActiveSessionNewPollParams) MarshalJSON() (data []byte, err error) {
 
 type ActiveSessionGetActiveSessionParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ActiveSessionKickAllParticipantsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ActiveSessionKickParticipantsParams struct {
 	// The account identifier tag.
-	AccountID            param.Field[string]   `path:"account_id,required"`
-	CustomParticipantIDs param.Field[[]string] `json:"custom_participant_ids,required"`
-	ParticipantIDs       param.Field[[]string] `json:"participant_ids,required"`
+	AccountID            param.Field[string]   `path:"account_id" api:"required"`
+	CustomParticipantIDs param.Field[[]string] `json:"custom_participant_ids" api:"required"`
+	ParticipantIDs       param.Field[[]string] `json:"participant_ids" api:"required"`
 }
 
 func (r ActiveSessionKickParticipantsParams) MarshalJSON() (data []byte, err error) {

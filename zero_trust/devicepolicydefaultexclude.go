@@ -42,7 +42,7 @@ func (r *DevicePolicyDefaultExcludeService) Update(ctx context.Context, params D
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -69,7 +69,7 @@ func (r *DevicePolicyDefaultExcludeService) Get(ctx context.Context, query Devic
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -90,8 +90,8 @@ func (r *DevicePolicyDefaultExcludeService) GetAutoPaging(ctx context.Context, q
 }
 
 type DevicePolicyDefaultExcludeUpdateParams struct {
-	AccountID param.Field[string]            `path:"account_id,required"`
-	Body      []SplitTunnelExcludeUnionParam `json:"body,required"`
+	AccountID param.Field[string]            `path:"account_id" api:"required"`
+	Body      []SplitTunnelExcludeUnionParam `json:"body" api:"required"`
 }
 
 func (r DevicePolicyDefaultExcludeUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -99,5 +99,5 @@ func (r DevicePolicyDefaultExcludeUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type DevicePolicyDefaultExcludeGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

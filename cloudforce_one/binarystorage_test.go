@@ -27,12 +27,13 @@ func TestBinaryStorageNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.BinaryStorage.New(context.TODO(), cloudforce_one.BinaryStorageNewParams{
 		AccountID: cloudflare.F("account_id"),
-		File:      cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+		File:      cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -54,6 +55,7 @@ func TestBinaryStorageGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

@@ -43,10 +43,10 @@ func (r *EntityLocationService) List(ctx context.Context, query EntityLocationLi
 	path := "radar/entities/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the requested location information. (A confidence level below `5`
@@ -57,19 +57,19 @@ func (r *EntityLocationService) Get(ctx context.Context, location string, query 
 	opts = slices.Concat(r.Options, opts)
 	if location == "" {
 		err = errors.New("missing required location parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("radar/entities/locations/%s", location)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EntityLocationListResponse struct {
-	Locations []EntityLocationListResponseLocation `json:"locations,required"`
+	Locations []EntityLocationListResponseLocation `json:"locations" api:"required"`
 	JSON      entityLocationListResponseJSON       `json:"-"`
 }
 
@@ -90,15 +90,15 @@ func (r entityLocationListResponseJSON) RawJSON() string {
 }
 
 type EntityLocationListResponseLocation struct {
-	Alpha2    string `json:"alpha2,required"`
-	Continent string `json:"continent,required"`
+	Alpha2    string `json:"alpha2" api:"required"`
+	Continent string `json:"continent" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string                                 `json:"longitude,required"`
-	Name      string                                 `json:"name,required"`
-	Region    string                                 `json:"region,required"`
-	Subregion string                                 `json:"subregion,required"`
+	Longitude string                                 `json:"longitude" api:"required"`
+	Name      string                                 `json:"name" api:"required"`
+	Region    string                                 `json:"region" api:"required"`
+	Subregion string                                 `json:"subregion" api:"required"`
 	JSON      entityLocationListResponseLocationJSON `json:"-"`
 }
 
@@ -125,7 +125,7 @@ func (r entityLocationListResponseLocationJSON) RawJSON() string {
 }
 
 type EntityLocationGetResponse struct {
-	Location EntityLocationGetResponseLocation `json:"location,required"`
+	Location EntityLocationGetResponseLocation `json:"location" api:"required"`
 	JSON     entityLocationGetResponseJSON     `json:"-"`
 }
 
@@ -146,16 +146,16 @@ func (r entityLocationGetResponseJSON) RawJSON() string {
 }
 
 type EntityLocationGetResponseLocation struct {
-	Alpha2          string `json:"alpha2,required"`
-	ConfidenceLevel int64  `json:"confidenceLevel,required"`
-	Continent       string `json:"continent,required"`
+	Alpha2          string `json:"alpha2" api:"required"`
+	ConfidenceLevel int64  `json:"confidenceLevel" api:"required"`
+	Continent       string `json:"continent" api:"required"`
 	// A numeric string.
-	Latitude string `json:"latitude,required"`
+	Latitude string `json:"latitude" api:"required"`
 	// A numeric string.
-	Longitude string                                `json:"longitude,required"`
-	Name      string                                `json:"name,required"`
-	Region    string                                `json:"region,required"`
-	Subregion string                                `json:"subregion,required"`
+	Longitude string                                `json:"longitude" api:"required"`
+	Name      string                                `json:"name" api:"required"`
+	Region    string                                `json:"region" api:"required"`
+	Subregion string                                `json:"subregion" api:"required"`
 	JSON      entityLocationGetResponseLocationJSON `json:"-"`
 }
 
@@ -246,8 +246,8 @@ func (r EntityLocationListParamsFormat) IsKnown() bool {
 }
 
 type EntityLocationListResponseEnvelope struct {
-	Result  EntityLocationListResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  EntityLocationListResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    entityLocationListResponseEnvelopeJSON `json:"-"`
 }
 
@@ -299,8 +299,8 @@ func (r EntityLocationGetParamsFormat) IsKnown() bool {
 }
 
 type EntityLocationGetResponseEnvelope struct {
-	Result  EntityLocationGetResponse             `json:"result,required"`
-	Success bool                                  `json:"success,required"`
+	Result  EntityLocationGetResponse             `json:"result" api:"required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    entityLocationGetResponseEnvelopeJSON `json:"-"`
 }
 

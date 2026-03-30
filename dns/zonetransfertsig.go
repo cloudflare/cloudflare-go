@@ -41,15 +41,15 @@ func (r *ZoneTransferTSIGService) New(ctx context.Context, params ZoneTransferTS
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify TSIG.
@@ -58,19 +58,19 @@ func (r *ZoneTransferTSIGService) Update(ctx context.Context, tsigID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tsigID == "" {
 		err = errors.New("missing required tsig_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", params.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List TSIGs.
@@ -80,7 +80,7 @@ func (r *ZoneTransferTSIGService) List(ctx context.Context, query ZoneTransferTS
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,19 +106,19 @@ func (r *ZoneTransferTSIGService) Delete(ctx context.Context, tsigID string, bod
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tsigID == "" {
 		err = errors.New("missing required tsig_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", body.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get TSIG.
@@ -127,29 +127,29 @@ func (r *ZoneTransferTSIGService) Get(ctx context.Context, tsigID string, query 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tsigID == "" {
 		err = errors.New("missing required tsig_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", query.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TSIG struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// TSIG algorithm.
-	Algo string `json:"algo,required"`
+	Algo string `json:"algo" api:"required"`
 	// TSIG key name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// TSIG secret.
-	Secret string   `json:"secret,required"`
+	Secret string   `json:"secret" api:"required"`
 	JSON   tsigJSON `json:"-"`
 }
 
@@ -173,11 +173,11 @@ func (r tsigJSON) RawJSON() string {
 
 type TSIGParam struct {
 	// TSIG algorithm.
-	Algo param.Field[string] `json:"algo,required"`
+	Algo param.Field[string] `json:"algo" api:"required"`
 	// TSIG key name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// TSIG secret.
-	Secret param.Field[string] `json:"secret,required"`
+	Secret param.Field[string] `json:"secret" api:"required"`
 }
 
 func (r TSIGParam) MarshalJSON() (data []byte, err error) {
@@ -206,8 +206,8 @@ func (r zoneTransferTSIGDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	TSIG      TSIGParam           `json:"tsig,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	TSIG      TSIGParam           `json:"tsig" api:"required"`
 }
 
 func (r ZoneTransferTSIGNewParams) MarshalJSON() (data []byte, err error) {
@@ -215,10 +215,10 @@ func (r ZoneTransferTSIGNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferTSIGNewResponseEnvelope struct {
-	Errors   []ZoneTransferTSIGNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferTSIGNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferTSIGNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferTSIGNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferTSIGNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferTSIGNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TSIG                                       `json:"result"`
 	JSON    zoneTransferTSIGNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -243,8 +243,8 @@ func (r zoneTransferTSIGNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ZoneTransferTSIGNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferTSIGNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -291,8 +291,8 @@ func (r zoneTransferTSIGNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ZoneTransferTSIGNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferTSIGNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -354,8 +354,8 @@ func (r ZoneTransferTSIGNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferTSIGUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	TSIG      TSIGParam           `json:"tsig,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	TSIG      TSIGParam           `json:"tsig" api:"required"`
 }
 
 func (r ZoneTransferTSIGUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -363,10 +363,10 @@ func (r ZoneTransferTSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferTSIGUpdateResponseEnvelope struct {
-	Errors   []ZoneTransferTSIGUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferTSIGUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferTSIGUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferTSIGUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferTSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferTSIGUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TSIG                                          `json:"result"`
 	JSON    zoneTransferTSIGUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -391,8 +391,8 @@ func (r zoneTransferTSIGUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGUpdateResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ZoneTransferTSIGUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferTSIGUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -439,8 +439,8 @@ func (r zoneTransferTSIGUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ZoneTransferTSIGUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ZoneTransferTSIGUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferTSIGUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -502,18 +502,18 @@ func (r ZoneTransferTSIGUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferTSIGListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferTSIGDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferTSIGDeleteResponseEnvelope struct {
-	Errors   []ZoneTransferTSIGDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferTSIGDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferTSIGDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferTSIGDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferTSIGDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferTSIGDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ZoneTransferTSIGDeleteResponse                `json:"result"`
 	JSON    zoneTransferTSIGDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -538,8 +538,8 @@ func (r zoneTransferTSIGDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGDeleteResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ZoneTransferTSIGDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferTSIGDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -586,8 +586,8 @@ func (r zoneTransferTSIGDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ZoneTransferTSIGDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ZoneTransferTSIGDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferTSIGDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -649,14 +649,14 @@ func (r ZoneTransferTSIGDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferTSIGGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferTSIGGetResponseEnvelope struct {
-	Errors   []ZoneTransferTSIGGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferTSIGGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferTSIGGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferTSIGGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferTSIGGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferTSIGGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TSIG                                       `json:"result"`
 	JSON    zoneTransferTSIGGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -681,8 +681,8 @@ func (r zoneTransferTSIGGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ZoneTransferTSIGGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferTSIGGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -729,8 +729,8 @@ func (r zoneTransferTSIGGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ZoneTransferTSIGGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferTSIGGetResponseEnvelopeMessagesJSON   `json:"-"`

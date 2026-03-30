@@ -46,19 +46,19 @@ func (r *RecipientService) New(ctx context.Context, shareID string, params Recip
 	opts = slices.Concat(r.Options, opts)
 	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if shareID == "" {
 		err = errors.New("missing required share_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares/%s/recipients", params.PathAccountID, shareID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List share recipients by share ID.
@@ -68,11 +68,11 @@ func (r *RecipientService) List(ctx context.Context, shareID string, params Reci
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if shareID == "" {
 		err = errors.New("missing required share_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares/%s/recipients", params.AccountID, shareID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -99,23 +99,23 @@ func (r *RecipientService) Delete(ctx context.Context, shareID string, recipient
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if shareID == "" {
 		err = errors.New("missing required share_id parameter")
-		return
+		return nil, err
 	}
 	if recipientID == "" {
 		err = errors.New("missing required recipient_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares/%s/recipients/%s", body.AccountID, shareID, recipientID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get share recipient by ID.
@@ -124,36 +124,36 @@ func (r *RecipientService) Get(ctx context.Context, shareID string, recipientID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if shareID == "" {
 		err = errors.New("missing required share_id parameter")
-		return
+		return nil, err
 	}
 	if recipientID == "" {
 		err = errors.New("missing required recipient_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares/%s/recipients/%s", params.AccountID, shareID, recipientID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RecipientNewResponse struct {
 	// Share Recipient identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// Share Recipient association status.
-	AssociationStatus RecipientNewResponseAssociationStatus `json:"association_status,required"`
+	AssociationStatus RecipientNewResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified  time.Time                      `json:"modified,required" format:"date-time"`
+	Modified  time.Time                      `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientNewResponseResource `json:"resources"`
 	JSON      recipientNewResponseJSON       `json:"-"`
 }
@@ -199,13 +199,13 @@ func (r RecipientNewResponseAssociationStatus) IsKnown() bool {
 
 type RecipientNewResponseResource struct {
 	// Share Recipient error message.
-	Error string `json:"error,required"`
+	Error string `json:"error" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                             `json:"terminal,required"`
+	Terminal bool                             `json:"terminal" api:"required"`
 	JSON     recipientNewResponseResourceJSON `json:"-"`
 }
 
@@ -230,15 +230,15 @@ func (r recipientNewResponseResourceJSON) RawJSON() string {
 
 type RecipientListResponse struct {
 	// Share Recipient identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// Share Recipient association status.
-	AssociationStatus RecipientListResponseAssociationStatus `json:"association_status,required"`
+	AssociationStatus RecipientListResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified  time.Time                       `json:"modified,required" format:"date-time"`
+	Modified  time.Time                       `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientListResponseResource `json:"resources"`
 	JSON      recipientListResponseJSON       `json:"-"`
 }
@@ -284,13 +284,13 @@ func (r RecipientListResponseAssociationStatus) IsKnown() bool {
 
 type RecipientListResponseResource struct {
 	// Share Recipient error message.
-	Error string `json:"error,required"`
+	Error string `json:"error" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                              `json:"terminal,required"`
+	Terminal bool                              `json:"terminal" api:"required"`
 	JSON     recipientListResponseResourceJSON `json:"-"`
 }
 
@@ -315,15 +315,15 @@ func (r recipientListResponseResourceJSON) RawJSON() string {
 
 type RecipientDeleteResponse struct {
 	// Share Recipient identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// Share Recipient association status.
-	AssociationStatus RecipientDeleteResponseAssociationStatus `json:"association_status,required"`
+	AssociationStatus RecipientDeleteResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified  time.Time                         `json:"modified,required" format:"date-time"`
+	Modified  time.Time                         `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientDeleteResponseResource `json:"resources"`
 	JSON      recipientDeleteResponseJSON       `json:"-"`
 }
@@ -369,13 +369,13 @@ func (r RecipientDeleteResponseAssociationStatus) IsKnown() bool {
 
 type RecipientDeleteResponseResource struct {
 	// Share Recipient error message.
-	Error string `json:"error,required"`
+	Error string `json:"error" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                                `json:"terminal,required"`
+	Terminal bool                                `json:"terminal" api:"required"`
 	JSON     recipientDeleteResponseResourceJSON `json:"-"`
 }
 
@@ -400,15 +400,15 @@ func (r recipientDeleteResponseResourceJSON) RawJSON() string {
 
 type RecipientGetResponse struct {
 	// Share Recipient identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// Share Recipient association status.
-	AssociationStatus RecipientGetResponseAssociationStatus `json:"association_status,required"`
+	AssociationStatus RecipientGetResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified  time.Time                      `json:"modified,required" format:"date-time"`
+	Modified  time.Time                      `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientGetResponseResource `json:"resources"`
 	JSON      recipientGetResponseJSON       `json:"-"`
 }
@@ -454,13 +454,13 @@ func (r RecipientGetResponseAssociationStatus) IsKnown() bool {
 
 type RecipientGetResponseResource struct {
 	// Share Recipient error message.
-	Error string `json:"error,required"`
+	Error string `json:"error" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                             `json:"terminal,required"`
+	Terminal bool                             `json:"terminal" api:"required"`
 	JSON     recipientGetResponseResourceJSON `json:"-"`
 }
 
@@ -485,7 +485,7 @@ func (r recipientGetResponseResourceJSON) RawJSON() string {
 
 type RecipientNewParams struct {
 	// Account identifier.
-	PathAccountID param.Field[string] `path:"account_id,required"`
+	PathAccountID param.Field[string] `path:"account_id" api:"required"`
 	// Account identifier.
 	BodyAccountID param.Field[string] `json:"account_id"`
 	// Organization identifier.
@@ -497,9 +497,9 @@ func (r RecipientNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecipientNewResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                             `json:"success,required"`
+	Success bool                             `json:"success" api:"required"`
 	Result  RecipientNewResponse             `json:"result"`
 	JSON    recipientNewResponseEnvelopeJSON `json:"-"`
 }
@@ -524,7 +524,7 @@ func (r recipientNewResponseEnvelopeJSON) RawJSON() string {
 
 type RecipientListParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`
 	// Page number.
@@ -543,13 +543,13 @@ func (r RecipientListParams) URLQuery() (v url.Values) {
 
 type RecipientDeleteParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RecipientDeleteResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                `json:"success,required"`
+	Success bool                                `json:"success" api:"required"`
 	Result  RecipientDeleteResponse             `json:"result"`
 	JSON    recipientDeleteResponseEnvelopeJSON `json:"-"`
 }
@@ -574,7 +574,7 @@ func (r recipientDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RecipientGetParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`
 }
@@ -588,9 +588,9 @@ func (r RecipientGetParams) URLQuery() (v url.Values) {
 }
 
 type RecipientGetResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                             `json:"success,required"`
+	Success bool                             `json:"success" api:"required"`
 	Result  RecipientGetResponse             `json:"result"`
 	JSON    recipientGetResponseEnvelopeJSON `json:"-"`
 }

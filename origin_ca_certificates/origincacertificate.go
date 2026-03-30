@@ -48,10 +48,10 @@ func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACerti
 	path := "certificates"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all existing Origin CA certificates for a given zone. You can use an Origin
@@ -89,15 +89,15 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 	opts = slices.Concat(r.Options, opts)
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("certificates/%s", certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get an existing Origin CA certificate by its serial number. You can use an
@@ -108,20 +108,20 @@ func (r *OriginCACertificateService) Get(ctx context.Context, certificateID stri
 	opts = slices.Concat(r.Options, opts)
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("certificates/%s", certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OriginCACertificate struct {
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
-	Csr string `json:"csr,required"`
+	Csr string `json:"csr" api:"required"`
 	// Array of hostnames or wildcard names bound to the certificate. Hostnames must be
 	// fully qualified domain names (FQDNs) belonging to zones on your account (e.g.,
 	// `example.com` or `sub.example.com`). Wildcards are supported only as a `*.`
@@ -130,12 +130,12 @@ type OriginCACertificate struct {
 	// allowed. The wildcard suffix must be a multi-label domain (`*.example.com` is
 	// valid, but `*.com` is not). Unicode/IDN hostnames are accepted and automatically
 	// converted to punycode.
-	Hostnames []string `json:"hostnames,required"`
+	Hostnames []string `json:"hostnames" api:"required"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType shared.CertificateRequestType `json:"request_type,required"`
+	RequestType shared.CertificateRequestType `json:"request_type" api:"required"`
 	// The number of days for which the certificate should be valid.
-	RequestedValidity ssl.RequestValidity `json:"requested_validity,required"`
+	RequestedValidity ssl.RequestValidity `json:"requested_validity" api:"required"`
 	// Identifier.
 	ID string `json:"id"`
 	// The Origin CA certificate. Will be newline-encoded.
@@ -194,7 +194,7 @@ func (r originCACertificateDeleteResponseJSON) RawJSON() string {
 
 type OriginCACertificateNewParams struct {
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
-	Csr param.Field[string] `json:"csr,required"`
+	Csr param.Field[string] `json:"csr" api:"required"`
 	// Array of hostnames or wildcard names bound to the certificate. Hostnames must be
 	// fully qualified domain names (FQDNs) belonging to zones on your account (e.g.,
 	// `example.com` or `sub.example.com`). Wildcards are supported only as a `*.`
@@ -203,10 +203,10 @@ type OriginCACertificateNewParams struct {
 	// allowed. The wildcard suffix must be a multi-label domain (`*.example.com` is
 	// valid, but `*.com` is not). Unicode/IDN hostnames are accepted and automatically
 	// converted to punycode.
-	Hostnames param.Field[[]string] `json:"hostnames,required"`
+	Hostnames param.Field[[]string] `json:"hostnames" api:"required"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType param.Field[shared.CertificateRequestType] `json:"request_type,required"`
+	RequestType param.Field[shared.CertificateRequestType] `json:"request_type" api:"required"`
 	// The number of days for which the certificate should be valid.
 	RequestedValidity param.Field[ssl.RequestValidity] `json:"requested_validity"`
 }
@@ -216,10 +216,10 @@ func (r OriginCACertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []OriginCACertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginCACertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OriginCACertificateNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OriginCACertificateNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OriginCACertificate                           `json:"result"`
 	JSON    originCACertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -244,8 +244,8 @@ func (r originCACertificateNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OriginCACertificateNewResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           OriginCACertificateNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             originCACertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -292,8 +292,8 @@ func (r originCACertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type OriginCACertificateNewResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           OriginCACertificateNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             originCACertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -356,7 +356,7 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCACertificateListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `query:"zone_id,required"`
+	ZoneID param.Field[string] `query:"zone_id" api:"required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`
 	// Offset the results
@@ -398,10 +398,10 @@ func (r originCACertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []OriginCACertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginCACertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OriginCACertificateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OriginCACertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OriginCACertificate                           `json:"result"`
 	JSON    originCACertificateGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -426,8 +426,8 @@ func (r originCACertificateGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OriginCACertificateGetResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           OriginCACertificateGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             originCACertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -474,8 +474,8 @@ func (r originCACertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type OriginCACertificateGetResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           OriginCACertificateGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             originCACertificateGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -89,21 +89,21 @@ func (r *V2Service) List(ctx context.Context, params V2ListParams, opts ...optio
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/images/v2", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type V2ListResponse struct {
 	// Continuation token to fetch next page. Passed as a query param when requesting
 	// List V2 api endpoint.
-	ContinuationToken string             `json:"continuation_token,nullable"`
+	ContinuationToken string             `json:"continuation_token" api:"nullable"`
 	Images            []Image            `json:"images"`
 	JSON              v2ListResponseJSON `json:"-"`
 }
@@ -126,7 +126,7 @@ func (r v2ListResponseJSON) RawJSON() string {
 
 type V2ListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Continuation token to fetch next page. Passed as a query param when requesting
 	// List V2 api endpoint.
 	ContinuationToken param.Field[string] `query:"continuation_token"`
@@ -190,11 +190,11 @@ func (r V2ListParamsSortOrder) IsKnown() bool {
 }
 
 type V2ListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V2ListResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   V2ListResponse        `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success V2ListResponseEnvelopeSuccess `json:"success,required"`
+	Success V2ListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    v2ListResponseEnvelopeJSON    `json:"-"`
 }
 

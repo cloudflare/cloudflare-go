@@ -42,15 +42,15 @@ func (r *SettingAccountService) Edit(ctx context.Context, params SettingAccountE
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Show DNS settings for an account
@@ -59,19 +59,19 @@ func (r *SettingAccountService) Get(ctx context.Context, query SettingAccountGet
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingAccountEditResponse struct {
-	ZoneDefaults SettingAccountEditResponseZoneDefaults `json:"zone_defaults,required"`
+	ZoneDefaults SettingAccountEditResponseZoneDefaults `json:"zone_defaults" api:"required"`
 	JSON         settingAccountEditResponseJSON         `json:"-"`
 }
 
@@ -94,26 +94,26 @@ func (r settingAccountEditResponseJSON) RawJSON() string {
 type SettingAccountEditResponseZoneDefaults struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs bool `json:"flatten_all_cnames,required"`
+	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
-	FoundationDNS bool `json:"foundation_dns,required"`
+	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
-	InternalDNS SettingAccountEditResponseZoneDefaultsInternalDNS `json:"internal_dns,required"`
+	InternalDNS SettingAccountEditResponseZoneDefaultsInternalDNS `json:"internal_dns" api:"required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
-	MultiProvider bool `json:"multi_provider,required"`
+	MultiProvider bool `json:"multi_provider" api:"required"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers SettingAccountEditResponseZoneDefaultsNameservers `json:"nameservers,required"`
+	Nameservers SettingAccountEditResponseZoneDefaultsNameservers `json:"nameservers" api:"required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
-	NSTTL float64 `json:"ns_ttl,required"`
+	NSTTL float64 `json:"ns_ttl" api:"required"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
-	SecondaryOverrides bool `json:"secondary_overrides,required"`
+	SecondaryOverrides bool `json:"secondary_overrides" api:"required"`
 	// Components of the zone's SOA record.
-	SOA SettingAccountEditResponseZoneDefaultsSOA `json:"soa,required"`
+	SOA SettingAccountEditResponseZoneDefaultsSOA `json:"soa" api:"required"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode SettingAccountEditResponseZoneDefaultsZoneMode `json:"zone_mode,required"`
+	ZoneMode SettingAccountEditResponseZoneDefaultsZoneMode `json:"zone_mode" api:"required"`
 	JSON     settingAccountEditResponseZoneDefaultsJSON     `json:"-"`
 }
 
@@ -167,7 +167,7 @@ func (r settingAccountEditResponseZoneDefaultsInternalDNSJSON) RawJSON() string 
 // Settings determining the nameservers through which the zone should be available.
 type SettingAccountEditResponseZoneDefaultsNameservers struct {
 	// Nameserver type
-	Type SettingAccountEditResponseZoneDefaultsNameserversType `json:"type,required"`
+	Type SettingAccountEditResponseZoneDefaultsNameserversType `json:"type" api:"required"`
 	JSON settingAccountEditResponseZoneDefaultsNameserversJSON `json:"-"`
 }
 
@@ -214,7 +214,7 @@ type SettingAccountEditResponseZoneDefaultsSOA struct {
 	MinTTL float64 `json:"min_ttl"`
 	// The primary nameserver, which may be used for outbound zone transfers. If null,
 	// a Cloudflare-assigned value will be used.
-	MNAME string `json:"mname,nullable"`
+	MNAME string `json:"mname" api:"nullable"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
 	Refresh float64 `json:"refresh"`
@@ -269,7 +269,7 @@ func (r SettingAccountEditResponseZoneDefaultsZoneMode) IsKnown() bool {
 }
 
 type SettingAccountGetResponse struct {
-	ZoneDefaults SettingAccountGetResponseZoneDefaults `json:"zone_defaults,required"`
+	ZoneDefaults SettingAccountGetResponseZoneDefaults `json:"zone_defaults" api:"required"`
 	JSON         settingAccountGetResponseJSON         `json:"-"`
 }
 
@@ -292,26 +292,26 @@ func (r settingAccountGetResponseJSON) RawJSON() string {
 type SettingAccountGetResponseZoneDefaults struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs bool `json:"flatten_all_cnames,required"`
+	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
-	FoundationDNS bool `json:"foundation_dns,required"`
+	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
-	InternalDNS SettingAccountGetResponseZoneDefaultsInternalDNS `json:"internal_dns,required"`
+	InternalDNS SettingAccountGetResponseZoneDefaultsInternalDNS `json:"internal_dns" api:"required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
-	MultiProvider bool `json:"multi_provider,required"`
+	MultiProvider bool `json:"multi_provider" api:"required"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers SettingAccountGetResponseZoneDefaultsNameservers `json:"nameservers,required"`
+	Nameservers SettingAccountGetResponseZoneDefaultsNameservers `json:"nameservers" api:"required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
-	NSTTL float64 `json:"ns_ttl,required"`
+	NSTTL float64 `json:"ns_ttl" api:"required"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
-	SecondaryOverrides bool `json:"secondary_overrides,required"`
+	SecondaryOverrides bool `json:"secondary_overrides" api:"required"`
 	// Components of the zone's SOA record.
-	SOA SettingAccountGetResponseZoneDefaultsSOA `json:"soa,required"`
+	SOA SettingAccountGetResponseZoneDefaultsSOA `json:"soa" api:"required"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode SettingAccountGetResponseZoneDefaultsZoneMode `json:"zone_mode,required"`
+	ZoneMode SettingAccountGetResponseZoneDefaultsZoneMode `json:"zone_mode" api:"required"`
 	JSON     settingAccountGetResponseZoneDefaultsJSON     `json:"-"`
 }
 
@@ -365,7 +365,7 @@ func (r settingAccountGetResponseZoneDefaultsInternalDNSJSON) RawJSON() string {
 // Settings determining the nameservers through which the zone should be available.
 type SettingAccountGetResponseZoneDefaultsNameservers struct {
 	// Nameserver type
-	Type SettingAccountGetResponseZoneDefaultsNameserversType `json:"type,required"`
+	Type SettingAccountGetResponseZoneDefaultsNameserversType `json:"type" api:"required"`
 	JSON settingAccountGetResponseZoneDefaultsNameserversJSON `json:"-"`
 }
 
@@ -412,7 +412,7 @@ type SettingAccountGetResponseZoneDefaultsSOA struct {
 	MinTTL float64 `json:"min_ttl"`
 	// The primary nameserver, which may be used for outbound zone transfers. If null,
 	// a Cloudflare-assigned value will be used.
-	MNAME string `json:"mname,nullable"`
+	MNAME string `json:"mname" api:"nullable"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
 	Refresh float64 `json:"refresh"`
@@ -468,7 +468,7 @@ func (r SettingAccountGetResponseZoneDefaultsZoneMode) IsKnown() bool {
 
 type SettingAccountEditParams struct {
 	// Identifier.
-	AccountID    param.Field[string]                               `path:"account_id,required"`
+	AccountID    param.Field[string]                               `path:"account_id" api:"required"`
 	ZoneDefaults param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
 }
 
@@ -588,10 +588,10 @@ func (r SettingAccountEditParamsZoneDefaultsZoneMode) IsKnown() bool {
 }
 
 type SettingAccountEditResponseEnvelope struct {
-	Errors   []SettingAccountEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAccountEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingAccountEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingAccountEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingAccountEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingAccountEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingAccountEditResponse                `json:"result"`
 	JSON    settingAccountEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -616,8 +616,8 @@ func (r settingAccountEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingAccountEditResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           SettingAccountEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingAccountEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -664,8 +664,8 @@ func (r settingAccountEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingAccountEditResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           SettingAccountEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingAccountEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -728,14 +728,14 @@ func (r SettingAccountEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingAccountGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingAccountGetResponseEnvelope struct {
-	Errors   []SettingAccountGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAccountGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingAccountGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingAccountGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingAccountGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingAccountGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingAccountGetResponse                `json:"result"`
 	JSON    settingAccountGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -760,8 +760,8 @@ func (r settingAccountGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingAccountGetResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           SettingAccountGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingAccountGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -808,8 +808,8 @@ func (r settingAccountGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingAccountGetResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           SettingAccountGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingAccountGetResponseEnvelopeMessagesJSON   `json:"-"`

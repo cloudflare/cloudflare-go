@@ -47,19 +47,19 @@ func (r *DatasetService) New(ctx context.Context, gatewayID string, params Datas
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/datasets", params.AccountID, gatewayID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing AI Gateway dataset.
@@ -68,23 +68,23 @@ func (r *DatasetService) Update(ctx context.Context, gatewayID string, id string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/datasets/%s", params.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all AI Gateway evaluator types configured for the account.
@@ -94,11 +94,11 @@ func (r *DatasetService) List(ctx context.Context, gatewayID string, params Data
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/datasets", params.AccountID, gatewayID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -124,23 +124,23 @@ func (r *DatasetService) Delete(ctx context.Context, gatewayID string, id string
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/datasets/%s", body.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details for a specific AI Gateway dataset.
@@ -149,34 +149,34 @@ func (r *DatasetService) Get(ctx context.Context, gatewayID string, id string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/datasets/%s", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DatasetNewResponse struct {
-	ID        string                     `json:"id,required"`
-	CreatedAt time.Time                  `json:"created_at,required" format:"date-time"`
-	Enable    bool                       `json:"enable,required"`
-	Filters   []DatasetNewResponseFilter `json:"filters,required"`
+	ID        string                     `json:"id" api:"required"`
+	CreatedAt time.Time                  `json:"created_at" api:"required" format:"date-time"`
+	Enable    bool                       `json:"enable" api:"required"`
+	Filters   []DatasetNewResponseFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                 `json:"gateway_id,required"`
-	ModifiedAt time.Time              `json:"modified_at,required" format:"date-time"`
-	Name       string                 `json:"name,required"`
+	GatewayID  string                 `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time              `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                 `json:"name" api:"required"`
 	JSON       datasetNewResponseJSON `json:"-"`
 }
 
@@ -203,9 +203,9 @@ func (r datasetNewResponseJSON) RawJSON() string {
 }
 
 type DatasetNewResponseFilter struct {
-	Key      DatasetNewResponseFiltersKey          `json:"key,required"`
-	Operator DatasetNewResponseFiltersOperator     `json:"operator,required"`
-	Value    []DatasetNewResponseFiltersValueUnion `json:"value,required"`
+	Key      DatasetNewResponseFiltersKey          `json:"key" api:"required"`
+	Operator DatasetNewResponseFiltersOperator     `json:"operator" api:"required"`
+	Value    []DatasetNewResponseFiltersValueUnion `json:"value" api:"required"`
 	JSON     datasetNewResponseFilterJSON          `json:"-"`
 }
 
@@ -300,14 +300,14 @@ func init() {
 }
 
 type DatasetUpdateResponse struct {
-	ID        string                        `json:"id,required"`
-	CreatedAt time.Time                     `json:"created_at,required" format:"date-time"`
-	Enable    bool                          `json:"enable,required"`
-	Filters   []DatasetUpdateResponseFilter `json:"filters,required"`
+	ID        string                        `json:"id" api:"required"`
+	CreatedAt time.Time                     `json:"created_at" api:"required" format:"date-time"`
+	Enable    bool                          `json:"enable" api:"required"`
+	Filters   []DatasetUpdateResponseFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                    `json:"gateway_id,required"`
-	ModifiedAt time.Time                 `json:"modified_at,required" format:"date-time"`
-	Name       string                    `json:"name,required"`
+	GatewayID  string                    `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                 `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                    `json:"name" api:"required"`
 	JSON       datasetUpdateResponseJSON `json:"-"`
 }
 
@@ -334,9 +334,9 @@ func (r datasetUpdateResponseJSON) RawJSON() string {
 }
 
 type DatasetUpdateResponseFilter struct {
-	Key      DatasetUpdateResponseFiltersKey          `json:"key,required"`
-	Operator DatasetUpdateResponseFiltersOperator     `json:"operator,required"`
-	Value    []DatasetUpdateResponseFiltersValueUnion `json:"value,required"`
+	Key      DatasetUpdateResponseFiltersKey          `json:"key" api:"required"`
+	Operator DatasetUpdateResponseFiltersOperator     `json:"operator" api:"required"`
+	Value    []DatasetUpdateResponseFiltersValueUnion `json:"value" api:"required"`
 	JSON     datasetUpdateResponseFilterJSON          `json:"-"`
 }
 
@@ -431,14 +431,14 @@ func init() {
 }
 
 type DatasetListResponse struct {
-	ID        string                      `json:"id,required"`
-	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
-	Enable    bool                        `json:"enable,required"`
-	Filters   []DatasetListResponseFilter `json:"filters,required"`
+	ID        string                      `json:"id" api:"required"`
+	CreatedAt time.Time                   `json:"created_at" api:"required" format:"date-time"`
+	Enable    bool                        `json:"enable" api:"required"`
+	Filters   []DatasetListResponseFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                  `json:"gateway_id,required"`
-	ModifiedAt time.Time               `json:"modified_at,required" format:"date-time"`
-	Name       string                  `json:"name,required"`
+	GatewayID  string                  `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time               `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                  `json:"name" api:"required"`
 	JSON       datasetListResponseJSON `json:"-"`
 }
 
@@ -465,9 +465,9 @@ func (r datasetListResponseJSON) RawJSON() string {
 }
 
 type DatasetListResponseFilter struct {
-	Key      DatasetListResponseFiltersKey          `json:"key,required"`
-	Operator DatasetListResponseFiltersOperator     `json:"operator,required"`
-	Value    []DatasetListResponseFiltersValueUnion `json:"value,required"`
+	Key      DatasetListResponseFiltersKey          `json:"key" api:"required"`
+	Operator DatasetListResponseFiltersOperator     `json:"operator" api:"required"`
+	Value    []DatasetListResponseFiltersValueUnion `json:"value" api:"required"`
 	JSON     datasetListResponseFilterJSON          `json:"-"`
 }
 
@@ -562,14 +562,14 @@ func init() {
 }
 
 type DatasetDeleteResponse struct {
-	ID        string                        `json:"id,required"`
-	CreatedAt time.Time                     `json:"created_at,required" format:"date-time"`
-	Enable    bool                          `json:"enable,required"`
-	Filters   []DatasetDeleteResponseFilter `json:"filters,required"`
+	ID        string                        `json:"id" api:"required"`
+	CreatedAt time.Time                     `json:"created_at" api:"required" format:"date-time"`
+	Enable    bool                          `json:"enable" api:"required"`
+	Filters   []DatasetDeleteResponseFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                    `json:"gateway_id,required"`
-	ModifiedAt time.Time                 `json:"modified_at,required" format:"date-time"`
-	Name       string                    `json:"name,required"`
+	GatewayID  string                    `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                 `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                    `json:"name" api:"required"`
 	JSON       datasetDeleteResponseJSON `json:"-"`
 }
 
@@ -596,9 +596,9 @@ func (r datasetDeleteResponseJSON) RawJSON() string {
 }
 
 type DatasetDeleteResponseFilter struct {
-	Key      DatasetDeleteResponseFiltersKey          `json:"key,required"`
-	Operator DatasetDeleteResponseFiltersOperator     `json:"operator,required"`
-	Value    []DatasetDeleteResponseFiltersValueUnion `json:"value,required"`
+	Key      DatasetDeleteResponseFiltersKey          `json:"key" api:"required"`
+	Operator DatasetDeleteResponseFiltersOperator     `json:"operator" api:"required"`
+	Value    []DatasetDeleteResponseFiltersValueUnion `json:"value" api:"required"`
 	JSON     datasetDeleteResponseFilterJSON          `json:"-"`
 }
 
@@ -693,14 +693,14 @@ func init() {
 }
 
 type DatasetGetResponse struct {
-	ID        string                     `json:"id,required"`
-	CreatedAt time.Time                  `json:"created_at,required" format:"date-time"`
-	Enable    bool                       `json:"enable,required"`
-	Filters   []DatasetGetResponseFilter `json:"filters,required"`
+	ID        string                     `json:"id" api:"required"`
+	CreatedAt time.Time                  `json:"created_at" api:"required" format:"date-time"`
+	Enable    bool                       `json:"enable" api:"required"`
+	Filters   []DatasetGetResponseFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                 `json:"gateway_id,required"`
-	ModifiedAt time.Time              `json:"modified_at,required" format:"date-time"`
-	Name       string                 `json:"name,required"`
+	GatewayID  string                 `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time              `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                 `json:"name" api:"required"`
 	JSON       datasetGetResponseJSON `json:"-"`
 }
 
@@ -727,9 +727,9 @@ func (r datasetGetResponseJSON) RawJSON() string {
 }
 
 type DatasetGetResponseFilter struct {
-	Key      DatasetGetResponseFiltersKey          `json:"key,required"`
-	Operator DatasetGetResponseFiltersOperator     `json:"operator,required"`
-	Value    []DatasetGetResponseFiltersValueUnion `json:"value,required"`
+	Key      DatasetGetResponseFiltersKey          `json:"key" api:"required"`
+	Operator DatasetGetResponseFiltersOperator     `json:"operator" api:"required"`
+	Value    []DatasetGetResponseFiltersValueUnion `json:"value" api:"required"`
 	JSON     datasetGetResponseFilterJSON          `json:"-"`
 }
 
@@ -824,10 +824,10 @@ func init() {
 }
 
 type DatasetNewParams struct {
-	AccountID param.Field[string]                   `path:"account_id,required"`
-	Enable    param.Field[bool]                     `json:"enable,required"`
-	Filters   param.Field[[]DatasetNewParamsFilter] `json:"filters,required"`
-	Name      param.Field[string]                   `json:"name,required"`
+	AccountID param.Field[string]                   `path:"account_id" api:"required"`
+	Enable    param.Field[bool]                     `json:"enable" api:"required"`
+	Filters   param.Field[[]DatasetNewParamsFilter] `json:"filters" api:"required"`
+	Name      param.Field[string]                   `json:"name" api:"required"`
 }
 
 func (r DatasetNewParams) MarshalJSON() (data []byte, err error) {
@@ -835,9 +835,9 @@ func (r DatasetNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DatasetNewParamsFilter struct {
-	Key      param.Field[DatasetNewParamsFiltersKey]          `json:"key,required"`
-	Operator param.Field[DatasetNewParamsFiltersOperator]     `json:"operator,required"`
-	Value    param.Field[[]DatasetNewParamsFiltersValueUnion] `json:"value,required"`
+	Key      param.Field[DatasetNewParamsFiltersKey]          `json:"key" api:"required"`
+	Operator param.Field[DatasetNewParamsFiltersOperator]     `json:"operator" api:"required"`
+	Value    param.Field[[]DatasetNewParamsFiltersValueUnion] `json:"value" api:"required"`
 }
 
 func (r DatasetNewParamsFilter) MarshalJSON() (data []byte, err error) {
@@ -893,8 +893,8 @@ type DatasetNewParamsFiltersValueUnion interface {
 }
 
 type DatasetNewResponseEnvelope struct {
-	Result  DatasetNewResponse             `json:"result,required"`
-	Success bool                           `json:"success,required"`
+	Result  DatasetNewResponse             `json:"result" api:"required"`
+	Success bool                           `json:"success" api:"required"`
 	JSON    datasetNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -916,10 +916,10 @@ func (r datasetNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetUpdateParams struct {
-	AccountID param.Field[string]                      `path:"account_id,required"`
-	Enable    param.Field[bool]                        `json:"enable,required"`
-	Filters   param.Field[[]DatasetUpdateParamsFilter] `json:"filters,required"`
-	Name      param.Field[string]                      `json:"name,required"`
+	AccountID param.Field[string]                      `path:"account_id" api:"required"`
+	Enable    param.Field[bool]                        `json:"enable" api:"required"`
+	Filters   param.Field[[]DatasetUpdateParamsFilter] `json:"filters" api:"required"`
+	Name      param.Field[string]                      `json:"name" api:"required"`
 }
 
 func (r DatasetUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -927,9 +927,9 @@ func (r DatasetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DatasetUpdateParamsFilter struct {
-	Key      param.Field[DatasetUpdateParamsFiltersKey]          `json:"key,required"`
-	Operator param.Field[DatasetUpdateParamsFiltersOperator]     `json:"operator,required"`
-	Value    param.Field[[]DatasetUpdateParamsFiltersValueUnion] `json:"value,required"`
+	Key      param.Field[DatasetUpdateParamsFiltersKey]          `json:"key" api:"required"`
+	Operator param.Field[DatasetUpdateParamsFiltersOperator]     `json:"operator" api:"required"`
+	Value    param.Field[[]DatasetUpdateParamsFiltersValueUnion] `json:"value" api:"required"`
 }
 
 func (r DatasetUpdateParamsFilter) MarshalJSON() (data []byte, err error) {
@@ -985,8 +985,8 @@ type DatasetUpdateParamsFiltersValueUnion interface {
 }
 
 type DatasetUpdateResponseEnvelope struct {
-	Result  DatasetUpdateResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  DatasetUpdateResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    datasetUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1008,7 +1008,7 @@ func (r datasetUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Enable    param.Field[bool]   `query:"enable"`
 	Name      param.Field[string] `query:"name"`
 	Page      param.Field[int64]  `query:"page"`
@@ -1026,12 +1026,12 @@ func (r DatasetListParams) URLQuery() (v url.Values) {
 }
 
 type DatasetDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DatasetDeleteResponseEnvelope struct {
-	Result  DatasetDeleteResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  DatasetDeleteResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    datasetDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1053,12 +1053,12 @@ func (r datasetDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DatasetGetResponseEnvelope struct {
-	Result  DatasetGetResponse             `json:"result,required"`
-	Success bool                           `json:"success,required"`
+	Result  DatasetGetResponse             `json:"result" api:"required"`
+	Success bool                           `json:"success" api:"required"`
 	JSON    datasetGetResponseEnvelopeJSON `json:"-"`
 }
 

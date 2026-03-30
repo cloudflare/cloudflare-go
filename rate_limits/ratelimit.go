@@ -55,15 +55,15 @@ func (r *RateLimitService) New(ctx context.Context, params RateLimitNewParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/rate_limits", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the rate limits for a zone.
@@ -78,7 +78,7 @@ func (r *RateLimitService) List(ctx context.Context, params RateLimitListParams,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/rate_limits", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -114,19 +114,19 @@ func (r *RateLimitService) Delete(ctx context.Context, rateLimitID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if rateLimitID == "" {
 		err = errors.New("missing required rate_limit_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", body.ZoneID, rateLimitID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing rate limit.
@@ -140,19 +140,19 @@ func (r *RateLimitService) Edit(ctx context.Context, rateLimitID string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if rateLimitID == "" {
 		err = errors.New("missing required rate_limit_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", params.ZoneID, rateLimitID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the details of a rate limit.
@@ -166,19 +166,19 @@ func (r *RateLimitService) Get(ctx context.Context, rateLimitID string, query Ra
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if rateLimitID == "" {
 		err = errors.New("missing required rate_limit_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", query.ZoneID, rateLimitID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // The action to apply to a matched request. The `log` action is only available on
@@ -859,19 +859,19 @@ func (r rateLimitDeleteResponseMatchResponseJSON) RawJSON() string {
 
 type RateLimitNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
-	Action param.Field[RateLimitNewParamsAction] `json:"action,required"`
+	Action param.Field[RateLimitNewParamsAction] `json:"action" api:"required"`
 	// Determines which traffic the rate limit counts towards the threshold.
-	Match param.Field[RateLimitNewParamsMatch] `json:"match,required"`
+	Match param.Field[RateLimitNewParamsMatch] `json:"match" api:"required"`
 	// The time in seconds (an integer value) to count matching traffic. If the count
 	// exceeds the configured threshold within this period, Cloudflare will perform the
 	// configured action.
-	Period param.Field[float64] `json:"period,required"`
+	Period param.Field[float64] `json:"period" api:"required"`
 	// The threshold that will trigger the configured mitigation action. Configure this
 	// value along with the `period` property to establish a threshold per period.
-	Threshold param.Field[float64] `json:"threshold,required"`
+	Threshold param.Field[float64] `json:"threshold" api:"required"`
 }
 
 func (r RateLimitNewParams) MarshalJSON() (data []byte, err error) {
@@ -1034,11 +1034,11 @@ func (r RateLimitNewParamsMatchResponse) MarshalJSON() (data []byte, err error) 
 }
 
 type RateLimitNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RateLimit             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RateLimit             `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RateLimitNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1078,7 +1078,7 @@ func (r RateLimitNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RateLimitListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Defines the maximum number of results per page. You can only set the value to
@@ -1096,15 +1096,15 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 
 type RateLimitDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RateLimitDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   RateLimitDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   RateLimitDeleteResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success RateLimitDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RateLimitDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    rateLimitDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1144,19 +1144,19 @@ func (r RateLimitDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RateLimitEditParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
-	Action param.Field[RateLimitEditParamsAction] `json:"action,required"`
+	Action param.Field[RateLimitEditParamsAction] `json:"action" api:"required"`
 	// Determines which traffic the rate limit counts towards the threshold.
-	Match param.Field[RateLimitEditParamsMatch] `json:"match,required"`
+	Match param.Field[RateLimitEditParamsMatch] `json:"match" api:"required"`
 	// The time in seconds (an integer value) to count matching traffic. If the count
 	// exceeds the configured threshold within this period, Cloudflare will perform the
 	// configured action.
-	Period param.Field[float64] `json:"period,required"`
+	Period param.Field[float64] `json:"period" api:"required"`
 	// The threshold that will trigger the configured mitigation action. Configure this
 	// value along with the `period` property to establish a threshold per period.
-	Threshold param.Field[float64] `json:"threshold,required"`
+	Threshold param.Field[float64] `json:"threshold" api:"required"`
 }
 
 func (r RateLimitEditParams) MarshalJSON() (data []byte, err error) {
@@ -1319,11 +1319,11 @@ func (r RateLimitEditParamsMatchResponse) MarshalJSON() (data []byte, err error)
 }
 
 type RateLimitEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RateLimit             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RateLimit             `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success RateLimitEditResponseEnvelopeSuccess `json:"success,required"`
+	Success RateLimitEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    rateLimitEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1363,15 +1363,15 @@ func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RateLimitGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RateLimitGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RateLimit             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   RateLimit             `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success RateLimitGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RateLimitGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    rateLimitGetResponseEnvelopeJSON    `json:"-"`
 }
 

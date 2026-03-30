@@ -40,7 +40,7 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.Zones.New(context.Background(), zones.ZoneNewParams{
+	_, _ = client.Zones.New(context.Background(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),

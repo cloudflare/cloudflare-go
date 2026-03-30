@@ -42,19 +42,19 @@ func (r *ScriptAssetUploadService) New(ctx context.Context, scriptName string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/assets-upload-session", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ScriptAssetUploadNewResponse struct {
@@ -84,10 +84,10 @@ func (r scriptAssetUploadNewResponseJSON) RawJSON() string {
 
 type ScriptAssetUploadNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A manifest ([path]: {hash, size}) map of files to upload. As an example,
 	// `/blog/hello-world.html` would be a valid path key.
-	Manifest param.Field[map[string]ScriptAssetUploadNewParamsManifest] `json:"manifest,required"`
+	Manifest param.Field[map[string]ScriptAssetUploadNewParamsManifest] `json:"manifest" api:"required"`
 }
 
 func (r ScriptAssetUploadNewParams) MarshalJSON() (data []byte, err error) {
@@ -96,9 +96,9 @@ func (r ScriptAssetUploadNewParams) MarshalJSON() (data []byte, err error) {
 
 type ScriptAssetUploadNewParamsManifest struct {
 	// The hash of the file.
-	Hash param.Field[string] `json:"hash,required"`
+	Hash param.Field[string] `json:"hash" api:"required"`
 	// The size of the file in bytes.
-	Size param.Field[int64] `json:"size,required"`
+	Size param.Field[int64] `json:"size" api:"required"`
 }
 
 func (r ScriptAssetUploadNewParamsManifest) MarshalJSON() (data []byte, err error) {
@@ -106,10 +106,10 @@ func (r ScriptAssetUploadNewParamsManifest) MarshalJSON() (data []byte, err erro
 }
 
 type ScriptAssetUploadNewResponseEnvelope struct {
-	Errors   []ScriptAssetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptAssetUploadNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ScriptAssetUploadNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptAssetUploadNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptAssetUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptAssetUploadNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ScriptAssetUploadNewResponse                `json:"result"`
 	JSON    scriptAssetUploadNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -134,8 +134,8 @@ func (r scriptAssetUploadNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptAssetUploadNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ScriptAssetUploadNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptAssetUploadNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -182,8 +182,8 @@ func (r scriptAssetUploadNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptAssetUploadNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ScriptAssetUploadNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptAssetUploadNewResponseEnvelopeMessagesJSON   `json:"-"`

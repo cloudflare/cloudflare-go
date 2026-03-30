@@ -73,11 +73,11 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Gets a specific organization the user is associated with.
@@ -88,15 +88,15 @@ func (r *OrganizationService) Get(ctx context.Context, organizationID string, op
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Organization struct {
@@ -247,10 +247,10 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 }
 
 type OrganizationGetResponseEnvelope struct {
-	Errors   []OrganizationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OrganizationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OrganizationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success OrganizationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OrganizationGetResponse                `json:"result"`
 	JSON    organizationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -275,8 +275,8 @@ func (r organizationGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OrganizationGetResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           OrganizationGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             organizationGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -323,8 +323,8 @@ func (r organizationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type OrganizationGetResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           OrganizationGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             organizationGetResponseEnvelopeMessagesJSON   `json:"-"`

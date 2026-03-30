@@ -40,15 +40,15 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patch zone-level Waiting Room settings
@@ -57,15 +57,15 @@ func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get zone-level Waiting Room settings
@@ -74,22 +74,22 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingUpdateResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
-	SearchEngineCrawlerBypass bool                      `json:"search_engine_crawler_bypass,required"`
+	SearchEngineCrawlerBypass bool                      `json:"search_engine_crawler_bypass" api:"required"`
 	JSON                      settingUpdateResponseJSON `json:"-"`
 }
 
@@ -113,7 +113,7 @@ type SettingEditResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
-	SearchEngineCrawlerBypass bool                    `json:"search_engine_crawler_bypass,required"`
+	SearchEngineCrawlerBypass bool                    `json:"search_engine_crawler_bypass" api:"required"`
 	JSON                      settingEditResponseJSON `json:"-"`
 }
 
@@ -137,7 +137,7 @@ type SettingGetResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
-	SearchEngineCrawlerBypass bool                   `json:"search_engine_crawler_bypass,required"`
+	SearchEngineCrawlerBypass bool                   `json:"search_engine_crawler_bypass" api:"required"`
 	JSON                      settingGetResponseJSON `json:"-"`
 }
 
@@ -159,7 +159,7 @@ func (r settingGetResponseJSON) RawJSON() string {
 
 type SettingUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
@@ -171,7 +171,7 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Result SettingUpdateResponse             `json:"result,required"`
+	Result SettingUpdateResponse             `json:"result" api:"required"`
 	JSON   settingUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -193,7 +193,7 @@ func (r settingUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type SettingEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
@@ -205,7 +205,7 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingEditResponseEnvelope struct {
-	Result SettingEditResponse             `json:"result,required"`
+	Result SettingEditResponse             `json:"result" api:"required"`
 	JSON   settingEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -227,11 +227,11 @@ func (r settingEditResponseEnvelopeJSON) RawJSON() string {
 
 type SettingGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SettingGetResponseEnvelope struct {
-	Result SettingGetResponse             `json:"result,required"`
+	Result SettingGetResponse             `json:"result" api:"required"`
 	JSON   settingGetResponseEnvelopeJSON `json:"-"`
 }
 

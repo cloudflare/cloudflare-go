@@ -39,16 +39,16 @@ func (r *ThreatEventCountryService) List(ctx context.Context, query ThreatEventC
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/countries", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventCountryListResponse struct {
-	Result  []ThreatEventCountryListResponseResult `json:"result,required"`
-	Success string                                 `json:"success,required"`
+	Result  []ThreatEventCountryListResponseResult `json:"result" api:"required"`
+	Success string                                 `json:"success" api:"required"`
 	JSON    threatEventCountryListResponseJSON     `json:"-"`
 }
 
@@ -70,8 +70,8 @@ func (r threatEventCountryListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCountryListResponseResult struct {
-	Alpha3 string                                   `json:"alpha3,required"`
-	Name   string                                   `json:"name,required"`
+	Alpha3 string                                   `json:"alpha3" api:"required"`
+	Name   string                                   `json:"name" api:"required"`
 	JSON   threatEventCountryListResponseResultJSON `json:"-"`
 }
 
@@ -94,5 +94,5 @@ func (r threatEventCountryListResponseResultJSON) RawJSON() string {
 
 type ThreatEventCountryListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

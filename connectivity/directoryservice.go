@@ -46,15 +46,15 @@ func (r *DirectoryServiceService) New(ctx context.Context, params DirectoryServi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/connectivity/directory/services", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update Workers VPC connectivity service
@@ -63,19 +63,19 @@ func (r *DirectoryServiceService) Update(ctx context.Context, serviceID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if serviceID == "" {
 		err = errors.New("missing required service_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/connectivity/directory/services/%s", params.AccountID, serviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Workers VPC connectivity services
@@ -85,7 +85,7 @@ func (r *DirectoryServiceService) List(ctx context.Context, params DirectoryServ
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/connectivity/directory/services", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -111,15 +111,15 @@ func (r *DirectoryServiceService) Delete(ctx context.Context, serviceID string, 
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if serviceID == "" {
 		err = errors.New("missing required service_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/connectivity/directory/services/%s", body.AccountID, serviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Get Workers VPC connectivity service
@@ -128,28 +128,28 @@ func (r *DirectoryServiceService) Get(ctx context.Context, serviceID string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if serviceID == "" {
 		err = errors.New("missing required service_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/connectivity/directory/services/%s", query.AccountID, serviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DirectoryServiceNewResponse struct {
-	Host      DirectoryServiceNewResponseHost `json:"host,required"`
-	Name      string                          `json:"name,required"`
-	Type      DirectoryServiceNewResponseType `json:"type,required"`
+	Host      DirectoryServiceNewResponseHost `json:"host" api:"required"`
+	Name      string                          `json:"name" api:"required"`
+	Type      DirectoryServiceNewResponseType `json:"type" api:"required"`
 	CreatedAt time.Time                       `json:"created_at" format:"date-time"`
-	HTTPPort  int64                           `json:"http_port,nullable"`
-	HTTPSPort int64                           `json:"https_port,nullable"`
+	HTTPPort  int64                           `json:"http_port" api:"nullable"`
+	HTTPSPort int64                           `json:"https_port" api:"nullable"`
 	ServiceID string                          `json:"service_id" format:"uuid"`
 	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
 	JSON      directoryServiceNewResponseJSON `json:"-"`
@@ -263,8 +263,8 @@ func init() {
 }
 
 type DirectoryServiceNewResponseHostInfraIPv4Host struct {
-	IPV4    string                                              `json:"ipv4,required"`
-	Network DirectoryServiceNewResponseHostInfraIPv4HostNetwork `json:"network,required"`
+	IPV4    string                                              `json:"ipv4" api:"required"`
+	Network DirectoryServiceNewResponseHostInfraIPv4HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceNewResponseHostInfraIPv4HostJSON    `json:"-"`
 }
 
@@ -288,7 +288,7 @@ func (r directoryServiceNewResponseHostInfraIPv4HostJSON) RawJSON() string {
 func (r DirectoryServiceNewResponseHostInfraIPv4Host) implementsDirectoryServiceNewResponseHost() {}
 
 type DirectoryServiceNewResponseHostInfraIPv4HostNetwork struct {
-	TunnelID string                                                  `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                  `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceNewResponseHostInfraIPv4HostNetworkJSON `json:"-"`
 }
 
@@ -309,8 +309,8 @@ func (r directoryServiceNewResponseHostInfraIPv4HostNetworkJSON) RawJSON() strin
 }
 
 type DirectoryServiceNewResponseHostInfraIPv6Host struct {
-	IPV6    string                                              `json:"ipv6,required"`
-	Network DirectoryServiceNewResponseHostInfraIPv6HostNetwork `json:"network,required"`
+	IPV6    string                                              `json:"ipv6" api:"required"`
+	Network DirectoryServiceNewResponseHostInfraIPv6HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceNewResponseHostInfraIPv6HostJSON    `json:"-"`
 }
 
@@ -334,7 +334,7 @@ func (r directoryServiceNewResponseHostInfraIPv6HostJSON) RawJSON() string {
 func (r DirectoryServiceNewResponseHostInfraIPv6Host) implementsDirectoryServiceNewResponseHost() {}
 
 type DirectoryServiceNewResponseHostInfraIPv6HostNetwork struct {
-	TunnelID string                                                  `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                  `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceNewResponseHostInfraIPv6HostNetworkJSON `json:"-"`
 }
 
@@ -355,9 +355,9 @@ func (r directoryServiceNewResponseHostInfraIPv6HostNetworkJSON) RawJSON() strin
 }
 
 type DirectoryServiceNewResponseHostInfraDualStackHost struct {
-	IPV4    string                                                   `json:"ipv4,required"`
-	IPV6    string                                                   `json:"ipv6,required"`
-	Network DirectoryServiceNewResponseHostInfraDualStackHostNetwork `json:"network,required"`
+	IPV4    string                                                   `json:"ipv4" api:"required"`
+	IPV6    string                                                   `json:"ipv6" api:"required"`
+	Network DirectoryServiceNewResponseHostInfraDualStackHostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceNewResponseHostInfraDualStackHostJSON    `json:"-"`
 }
 
@@ -383,7 +383,7 @@ func (r DirectoryServiceNewResponseHostInfraDualStackHost) implementsDirectorySe
 }
 
 type DirectoryServiceNewResponseHostInfraDualStackHostNetwork struct {
-	TunnelID string                                                       `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                       `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceNewResponseHostInfraDualStackHostNetworkJSON `json:"-"`
 }
 
@@ -405,8 +405,8 @@ func (r directoryServiceNewResponseHostInfraDualStackHostNetworkJSON) RawJSON() 
 }
 
 type DirectoryServiceNewResponseHostInfraHostnameHost struct {
-	Hostname        string                                                          `json:"hostname,required"`
-	ResolverNetwork DirectoryServiceNewResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network,required"`
+	Hostname        string                                                          `json:"hostname" api:"required"`
+	ResolverNetwork DirectoryServiceNewResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network" api:"required"`
 	JSON            directoryServiceNewResponseHostInfraHostnameHostJSON            `json:"-"`
 }
 
@@ -431,8 +431,8 @@ func (r DirectoryServiceNewResponseHostInfraHostnameHost) implementsDirectorySer
 }
 
 type DirectoryServiceNewResponseHostInfraHostnameHostResolverNetwork struct {
-	TunnelID    string                                                              `json:"tunnel_id,required" format:"uuid"`
-	ResolverIPs []string                                                            `json:"resolver_ips,nullable"`
+	TunnelID    string                                                              `json:"tunnel_id" api:"required" format:"uuid"`
+	ResolverIPs []string                                                            `json:"resolver_ips" api:"nullable"`
 	JSON        directoryServiceNewResponseHostInfraHostnameHostResolverNetworkJSON `json:"-"`
 }
 
@@ -469,12 +469,12 @@ func (r DirectoryServiceNewResponseType) IsKnown() bool {
 }
 
 type DirectoryServiceUpdateResponse struct {
-	Host      DirectoryServiceUpdateResponseHost `json:"host,required"`
-	Name      string                             `json:"name,required"`
-	Type      DirectoryServiceUpdateResponseType `json:"type,required"`
+	Host      DirectoryServiceUpdateResponseHost `json:"host" api:"required"`
+	Name      string                             `json:"name" api:"required"`
+	Type      DirectoryServiceUpdateResponseType `json:"type" api:"required"`
 	CreatedAt time.Time                          `json:"created_at" format:"date-time"`
-	HTTPPort  int64                              `json:"http_port,nullable"`
-	HTTPSPort int64                              `json:"https_port,nullable"`
+	HTTPPort  int64                              `json:"http_port" api:"nullable"`
+	HTTPSPort int64                              `json:"https_port" api:"nullable"`
 	ServiceID string                             `json:"service_id" format:"uuid"`
 	UpdatedAt time.Time                          `json:"updated_at" format:"date-time"`
 	JSON      directoryServiceUpdateResponseJSON `json:"-"`
@@ -588,8 +588,8 @@ func init() {
 }
 
 type DirectoryServiceUpdateResponseHostInfraIPv4Host struct {
-	IPV4    string                                                 `json:"ipv4,required"`
-	Network DirectoryServiceUpdateResponseHostInfraIPv4HostNetwork `json:"network,required"`
+	IPV4    string                                                 `json:"ipv4" api:"required"`
+	Network DirectoryServiceUpdateResponseHostInfraIPv4HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceUpdateResponseHostInfraIPv4HostJSON    `json:"-"`
 }
 
@@ -614,7 +614,7 @@ func (r DirectoryServiceUpdateResponseHostInfraIPv4Host) implementsDirectoryServ
 }
 
 type DirectoryServiceUpdateResponseHostInfraIPv4HostNetwork struct {
-	TunnelID string                                                     `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                     `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceUpdateResponseHostInfraIPv4HostNetworkJSON `json:"-"`
 }
 
@@ -635,8 +635,8 @@ func (r directoryServiceUpdateResponseHostInfraIPv4HostNetworkJSON) RawJSON() st
 }
 
 type DirectoryServiceUpdateResponseHostInfraIPv6Host struct {
-	IPV6    string                                                 `json:"ipv6,required"`
-	Network DirectoryServiceUpdateResponseHostInfraIPv6HostNetwork `json:"network,required"`
+	IPV6    string                                                 `json:"ipv6" api:"required"`
+	Network DirectoryServiceUpdateResponseHostInfraIPv6HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceUpdateResponseHostInfraIPv6HostJSON    `json:"-"`
 }
 
@@ -661,7 +661,7 @@ func (r DirectoryServiceUpdateResponseHostInfraIPv6Host) implementsDirectoryServ
 }
 
 type DirectoryServiceUpdateResponseHostInfraIPv6HostNetwork struct {
-	TunnelID string                                                     `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                     `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceUpdateResponseHostInfraIPv6HostNetworkJSON `json:"-"`
 }
 
@@ -682,9 +682,9 @@ func (r directoryServiceUpdateResponseHostInfraIPv6HostNetworkJSON) RawJSON() st
 }
 
 type DirectoryServiceUpdateResponseHostInfraDualStackHost struct {
-	IPV4    string                                                      `json:"ipv4,required"`
-	IPV6    string                                                      `json:"ipv6,required"`
-	Network DirectoryServiceUpdateResponseHostInfraDualStackHostNetwork `json:"network,required"`
+	IPV4    string                                                      `json:"ipv4" api:"required"`
+	IPV6    string                                                      `json:"ipv6" api:"required"`
+	Network DirectoryServiceUpdateResponseHostInfraDualStackHostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceUpdateResponseHostInfraDualStackHostJSON    `json:"-"`
 }
 
@@ -710,7 +710,7 @@ func (r DirectoryServiceUpdateResponseHostInfraDualStackHost) implementsDirector
 }
 
 type DirectoryServiceUpdateResponseHostInfraDualStackHostNetwork struct {
-	TunnelID string                                                          `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                          `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceUpdateResponseHostInfraDualStackHostNetworkJSON `json:"-"`
 }
 
@@ -732,8 +732,8 @@ func (r directoryServiceUpdateResponseHostInfraDualStackHostNetworkJSON) RawJSON
 }
 
 type DirectoryServiceUpdateResponseHostInfraHostnameHost struct {
-	Hostname        string                                                             `json:"hostname,required"`
-	ResolverNetwork DirectoryServiceUpdateResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network,required"`
+	Hostname        string                                                             `json:"hostname" api:"required"`
+	ResolverNetwork DirectoryServiceUpdateResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network" api:"required"`
 	JSON            directoryServiceUpdateResponseHostInfraHostnameHostJSON            `json:"-"`
 }
 
@@ -758,8 +758,8 @@ func (r DirectoryServiceUpdateResponseHostInfraHostnameHost) implementsDirectory
 }
 
 type DirectoryServiceUpdateResponseHostInfraHostnameHostResolverNetwork struct {
-	TunnelID    string                                                                 `json:"tunnel_id,required" format:"uuid"`
-	ResolverIPs []string                                                               `json:"resolver_ips,nullable"`
+	TunnelID    string                                                                 `json:"tunnel_id" api:"required" format:"uuid"`
+	ResolverIPs []string                                                               `json:"resolver_ips" api:"nullable"`
 	JSON        directoryServiceUpdateResponseHostInfraHostnameHostResolverNetworkJSON `json:"-"`
 }
 
@@ -796,12 +796,12 @@ func (r DirectoryServiceUpdateResponseType) IsKnown() bool {
 }
 
 type DirectoryServiceListResponse struct {
-	Host      DirectoryServiceListResponseHost `json:"host,required"`
-	Name      string                           `json:"name,required"`
-	Type      DirectoryServiceListResponseType `json:"type,required"`
+	Host      DirectoryServiceListResponseHost `json:"host" api:"required"`
+	Name      string                           `json:"name" api:"required"`
+	Type      DirectoryServiceListResponseType `json:"type" api:"required"`
 	CreatedAt time.Time                        `json:"created_at" format:"date-time"`
-	HTTPPort  int64                            `json:"http_port,nullable"`
-	HTTPSPort int64                            `json:"https_port,nullable"`
+	HTTPPort  int64                            `json:"http_port" api:"nullable"`
+	HTTPSPort int64                            `json:"https_port" api:"nullable"`
 	ServiceID string                           `json:"service_id" format:"uuid"`
 	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
 	JSON      directoryServiceListResponseJSON `json:"-"`
@@ -915,8 +915,8 @@ func init() {
 }
 
 type DirectoryServiceListResponseHostInfraIPv4Host struct {
-	IPV4    string                                               `json:"ipv4,required"`
-	Network DirectoryServiceListResponseHostInfraIPv4HostNetwork `json:"network,required"`
+	IPV4    string                                               `json:"ipv4" api:"required"`
+	Network DirectoryServiceListResponseHostInfraIPv4HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceListResponseHostInfraIPv4HostJSON    `json:"-"`
 }
 
@@ -940,7 +940,7 @@ func (r directoryServiceListResponseHostInfraIPv4HostJSON) RawJSON() string {
 func (r DirectoryServiceListResponseHostInfraIPv4Host) implementsDirectoryServiceListResponseHost() {}
 
 type DirectoryServiceListResponseHostInfraIPv4HostNetwork struct {
-	TunnelID string                                                   `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                   `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceListResponseHostInfraIPv4HostNetworkJSON `json:"-"`
 }
 
@@ -961,8 +961,8 @@ func (r directoryServiceListResponseHostInfraIPv4HostNetworkJSON) RawJSON() stri
 }
 
 type DirectoryServiceListResponseHostInfraIPv6Host struct {
-	IPV6    string                                               `json:"ipv6,required"`
-	Network DirectoryServiceListResponseHostInfraIPv6HostNetwork `json:"network,required"`
+	IPV6    string                                               `json:"ipv6" api:"required"`
+	Network DirectoryServiceListResponseHostInfraIPv6HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceListResponseHostInfraIPv6HostJSON    `json:"-"`
 }
 
@@ -986,7 +986,7 @@ func (r directoryServiceListResponseHostInfraIPv6HostJSON) RawJSON() string {
 func (r DirectoryServiceListResponseHostInfraIPv6Host) implementsDirectoryServiceListResponseHost() {}
 
 type DirectoryServiceListResponseHostInfraIPv6HostNetwork struct {
-	TunnelID string                                                   `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                   `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceListResponseHostInfraIPv6HostNetworkJSON `json:"-"`
 }
 
@@ -1007,9 +1007,9 @@ func (r directoryServiceListResponseHostInfraIPv6HostNetworkJSON) RawJSON() stri
 }
 
 type DirectoryServiceListResponseHostInfraDualStackHost struct {
-	IPV4    string                                                    `json:"ipv4,required"`
-	IPV6    string                                                    `json:"ipv6,required"`
-	Network DirectoryServiceListResponseHostInfraDualStackHostNetwork `json:"network,required"`
+	IPV4    string                                                    `json:"ipv4" api:"required"`
+	IPV6    string                                                    `json:"ipv6" api:"required"`
+	Network DirectoryServiceListResponseHostInfraDualStackHostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceListResponseHostInfraDualStackHostJSON    `json:"-"`
 }
 
@@ -1035,7 +1035,7 @@ func (r DirectoryServiceListResponseHostInfraDualStackHost) implementsDirectoryS
 }
 
 type DirectoryServiceListResponseHostInfraDualStackHostNetwork struct {
-	TunnelID string                                                        `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                        `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceListResponseHostInfraDualStackHostNetworkJSON `json:"-"`
 }
 
@@ -1057,8 +1057,8 @@ func (r directoryServiceListResponseHostInfraDualStackHostNetworkJSON) RawJSON()
 }
 
 type DirectoryServiceListResponseHostInfraHostnameHost struct {
-	Hostname        string                                                           `json:"hostname,required"`
-	ResolverNetwork DirectoryServiceListResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network,required"`
+	Hostname        string                                                           `json:"hostname" api:"required"`
+	ResolverNetwork DirectoryServiceListResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network" api:"required"`
 	JSON            directoryServiceListResponseHostInfraHostnameHostJSON            `json:"-"`
 }
 
@@ -1083,8 +1083,8 @@ func (r DirectoryServiceListResponseHostInfraHostnameHost) implementsDirectorySe
 }
 
 type DirectoryServiceListResponseHostInfraHostnameHostResolverNetwork struct {
-	TunnelID    string                                                               `json:"tunnel_id,required" format:"uuid"`
-	ResolverIPs []string                                                             `json:"resolver_ips,nullable"`
+	TunnelID    string                                                               `json:"tunnel_id" api:"required" format:"uuid"`
+	ResolverIPs []string                                                             `json:"resolver_ips" api:"nullable"`
 	JSON        directoryServiceListResponseHostInfraHostnameHostResolverNetworkJSON `json:"-"`
 }
 
@@ -1121,12 +1121,12 @@ func (r DirectoryServiceListResponseType) IsKnown() bool {
 }
 
 type DirectoryServiceGetResponse struct {
-	Host      DirectoryServiceGetResponseHost `json:"host,required"`
-	Name      string                          `json:"name,required"`
-	Type      DirectoryServiceGetResponseType `json:"type,required"`
+	Host      DirectoryServiceGetResponseHost `json:"host" api:"required"`
+	Name      string                          `json:"name" api:"required"`
+	Type      DirectoryServiceGetResponseType `json:"type" api:"required"`
 	CreatedAt time.Time                       `json:"created_at" format:"date-time"`
-	HTTPPort  int64                           `json:"http_port,nullable"`
-	HTTPSPort int64                           `json:"https_port,nullable"`
+	HTTPPort  int64                           `json:"http_port" api:"nullable"`
+	HTTPSPort int64                           `json:"https_port" api:"nullable"`
 	ServiceID string                          `json:"service_id" format:"uuid"`
 	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
 	JSON      directoryServiceGetResponseJSON `json:"-"`
@@ -1240,8 +1240,8 @@ func init() {
 }
 
 type DirectoryServiceGetResponseHostInfraIPv4Host struct {
-	IPV4    string                                              `json:"ipv4,required"`
-	Network DirectoryServiceGetResponseHostInfraIPv4HostNetwork `json:"network,required"`
+	IPV4    string                                              `json:"ipv4" api:"required"`
+	Network DirectoryServiceGetResponseHostInfraIPv4HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceGetResponseHostInfraIPv4HostJSON    `json:"-"`
 }
 
@@ -1265,7 +1265,7 @@ func (r directoryServiceGetResponseHostInfraIPv4HostJSON) RawJSON() string {
 func (r DirectoryServiceGetResponseHostInfraIPv4Host) implementsDirectoryServiceGetResponseHost() {}
 
 type DirectoryServiceGetResponseHostInfraIPv4HostNetwork struct {
-	TunnelID string                                                  `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                  `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceGetResponseHostInfraIPv4HostNetworkJSON `json:"-"`
 }
 
@@ -1286,8 +1286,8 @@ func (r directoryServiceGetResponseHostInfraIPv4HostNetworkJSON) RawJSON() strin
 }
 
 type DirectoryServiceGetResponseHostInfraIPv6Host struct {
-	IPV6    string                                              `json:"ipv6,required"`
-	Network DirectoryServiceGetResponseHostInfraIPv6HostNetwork `json:"network,required"`
+	IPV6    string                                              `json:"ipv6" api:"required"`
+	Network DirectoryServiceGetResponseHostInfraIPv6HostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceGetResponseHostInfraIPv6HostJSON    `json:"-"`
 }
 
@@ -1311,7 +1311,7 @@ func (r directoryServiceGetResponseHostInfraIPv6HostJSON) RawJSON() string {
 func (r DirectoryServiceGetResponseHostInfraIPv6Host) implementsDirectoryServiceGetResponseHost() {}
 
 type DirectoryServiceGetResponseHostInfraIPv6HostNetwork struct {
-	TunnelID string                                                  `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                  `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceGetResponseHostInfraIPv6HostNetworkJSON `json:"-"`
 }
 
@@ -1332,9 +1332,9 @@ func (r directoryServiceGetResponseHostInfraIPv6HostNetworkJSON) RawJSON() strin
 }
 
 type DirectoryServiceGetResponseHostInfraDualStackHost struct {
-	IPV4    string                                                   `json:"ipv4,required"`
-	IPV6    string                                                   `json:"ipv6,required"`
-	Network DirectoryServiceGetResponseHostInfraDualStackHostNetwork `json:"network,required"`
+	IPV4    string                                                   `json:"ipv4" api:"required"`
+	IPV6    string                                                   `json:"ipv6" api:"required"`
+	Network DirectoryServiceGetResponseHostInfraDualStackHostNetwork `json:"network" api:"required"`
 	JSON    directoryServiceGetResponseHostInfraDualStackHostJSON    `json:"-"`
 }
 
@@ -1360,7 +1360,7 @@ func (r DirectoryServiceGetResponseHostInfraDualStackHost) implementsDirectorySe
 }
 
 type DirectoryServiceGetResponseHostInfraDualStackHostNetwork struct {
-	TunnelID string                                                       `json:"tunnel_id,required" format:"uuid"`
+	TunnelID string                                                       `json:"tunnel_id" api:"required" format:"uuid"`
 	JSON     directoryServiceGetResponseHostInfraDualStackHostNetworkJSON `json:"-"`
 }
 
@@ -1382,8 +1382,8 @@ func (r directoryServiceGetResponseHostInfraDualStackHostNetworkJSON) RawJSON() 
 }
 
 type DirectoryServiceGetResponseHostInfraHostnameHost struct {
-	Hostname        string                                                          `json:"hostname,required"`
-	ResolverNetwork DirectoryServiceGetResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network,required"`
+	Hostname        string                                                          `json:"hostname" api:"required"`
+	ResolverNetwork DirectoryServiceGetResponseHostInfraHostnameHostResolverNetwork `json:"resolver_network" api:"required"`
 	JSON            directoryServiceGetResponseHostInfraHostnameHostJSON            `json:"-"`
 }
 
@@ -1408,8 +1408,8 @@ func (r DirectoryServiceGetResponseHostInfraHostnameHost) implementsDirectorySer
 }
 
 type DirectoryServiceGetResponseHostInfraHostnameHostResolverNetwork struct {
-	TunnelID    string                                                              `json:"tunnel_id,required" format:"uuid"`
-	ResolverIPs []string                                                            `json:"resolver_ips,nullable"`
+	TunnelID    string                                                              `json:"tunnel_id" api:"required" format:"uuid"`
+	ResolverIPs []string                                                            `json:"resolver_ips" api:"nullable"`
 	JSON        directoryServiceGetResponseHostInfraHostnameHostResolverNetworkJSON `json:"-"`
 }
 
@@ -1447,10 +1447,10 @@ func (r DirectoryServiceGetResponseType) IsKnown() bool {
 
 type DirectoryServiceNewParams struct {
 	// Account identifier
-	AccountID param.Field[string]                             `path:"account_id,required"`
-	Host      param.Field[DirectoryServiceNewParamsHostUnion] `json:"host,required"`
-	Name      param.Field[string]                             `json:"name,required"`
-	Type      param.Field[DirectoryServiceNewParamsType]      `json:"type,required"`
+	AccountID param.Field[string]                             `path:"account_id" api:"required"`
+	Host      param.Field[DirectoryServiceNewParamsHostUnion] `json:"host" api:"required"`
+	Name      param.Field[string]                             `json:"name" api:"required"`
+	Type      param.Field[DirectoryServiceNewParamsType]      `json:"type" api:"required"`
 	HTTPPort  param.Field[int64]                              `json:"http_port"`
 	HTTPSPort param.Field[int64]                              `json:"https_port"`
 }
@@ -1483,8 +1483,8 @@ type DirectoryServiceNewParamsHostUnion interface {
 }
 
 type DirectoryServiceNewParamsHostInfraIPv4Host struct {
-	IPV4    param.Field[string]                                            `json:"ipv4,required"`
-	Network param.Field[DirectoryServiceNewParamsHostInfraIPv4HostNetwork] `json:"network,required"`
+	IPV4    param.Field[string]                                            `json:"ipv4" api:"required"`
+	Network param.Field[DirectoryServiceNewParamsHostInfraIPv4HostNetwork] `json:"network" api:"required"`
 }
 
 func (r DirectoryServiceNewParamsHostInfraIPv4Host) MarshalJSON() (data []byte, err error) {
@@ -1494,7 +1494,7 @@ func (r DirectoryServiceNewParamsHostInfraIPv4Host) MarshalJSON() (data []byte, 
 func (r DirectoryServiceNewParamsHostInfraIPv4Host) implementsDirectoryServiceNewParamsHostUnion() {}
 
 type DirectoryServiceNewParamsHostInfraIPv4HostNetwork struct {
-	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
+	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
 }
 
 func (r DirectoryServiceNewParamsHostInfraIPv4HostNetwork) MarshalJSON() (data []byte, err error) {
@@ -1502,8 +1502,8 @@ func (r DirectoryServiceNewParamsHostInfraIPv4HostNetwork) MarshalJSON() (data [
 }
 
 type DirectoryServiceNewParamsHostInfraIPv6Host struct {
-	IPV6    param.Field[string]                                            `json:"ipv6,required"`
-	Network param.Field[DirectoryServiceNewParamsHostInfraIPv6HostNetwork] `json:"network,required"`
+	IPV6    param.Field[string]                                            `json:"ipv6" api:"required"`
+	Network param.Field[DirectoryServiceNewParamsHostInfraIPv6HostNetwork] `json:"network" api:"required"`
 }
 
 func (r DirectoryServiceNewParamsHostInfraIPv6Host) MarshalJSON() (data []byte, err error) {
@@ -1513,7 +1513,7 @@ func (r DirectoryServiceNewParamsHostInfraIPv6Host) MarshalJSON() (data []byte, 
 func (r DirectoryServiceNewParamsHostInfraIPv6Host) implementsDirectoryServiceNewParamsHostUnion() {}
 
 type DirectoryServiceNewParamsHostInfraIPv6HostNetwork struct {
-	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
+	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
 }
 
 func (r DirectoryServiceNewParamsHostInfraIPv6HostNetwork) MarshalJSON() (data []byte, err error) {
@@ -1521,9 +1521,9 @@ func (r DirectoryServiceNewParamsHostInfraIPv6HostNetwork) MarshalJSON() (data [
 }
 
 type DirectoryServiceNewParamsHostInfraDualStackHost struct {
-	IPV4    param.Field[string]                                                 `json:"ipv4,required"`
-	IPV6    param.Field[string]                                                 `json:"ipv6,required"`
-	Network param.Field[DirectoryServiceNewParamsHostInfraDualStackHostNetwork] `json:"network,required"`
+	IPV4    param.Field[string]                                                 `json:"ipv4" api:"required"`
+	IPV6    param.Field[string]                                                 `json:"ipv6" api:"required"`
+	Network param.Field[DirectoryServiceNewParamsHostInfraDualStackHostNetwork] `json:"network" api:"required"`
 }
 
 func (r DirectoryServiceNewParamsHostInfraDualStackHost) MarshalJSON() (data []byte, err error) {
@@ -1534,7 +1534,7 @@ func (r DirectoryServiceNewParamsHostInfraDualStackHost) implementsDirectoryServ
 }
 
 type DirectoryServiceNewParamsHostInfraDualStackHostNetwork struct {
-	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
+	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
 }
 
 func (r DirectoryServiceNewParamsHostInfraDualStackHostNetwork) MarshalJSON() (data []byte, err error) {
@@ -1542,8 +1542,8 @@ func (r DirectoryServiceNewParamsHostInfraDualStackHostNetwork) MarshalJSON() (d
 }
 
 type DirectoryServiceNewParamsHostInfraHostnameHost struct {
-	Hostname        param.Field[string]                                                        `json:"hostname,required"`
-	ResolverNetwork param.Field[DirectoryServiceNewParamsHostInfraHostnameHostResolverNetwork] `json:"resolver_network,required"`
+	Hostname        param.Field[string]                                                        `json:"hostname" api:"required"`
+	ResolverNetwork param.Field[DirectoryServiceNewParamsHostInfraHostnameHostResolverNetwork] `json:"resolver_network" api:"required"`
 }
 
 func (r DirectoryServiceNewParamsHostInfraHostnameHost) MarshalJSON() (data []byte, err error) {
@@ -1554,7 +1554,7 @@ func (r DirectoryServiceNewParamsHostInfraHostnameHost) implementsDirectoryServi
 }
 
 type DirectoryServiceNewParamsHostInfraHostnameHostResolverNetwork struct {
-	TunnelID    param.Field[string]   `json:"tunnel_id,required" format:"uuid"`
+	TunnelID    param.Field[string]   `json:"tunnel_id" api:"required" format:"uuid"`
 	ResolverIPs param.Field[[]string] `json:"resolver_ips"`
 }
 
@@ -1577,10 +1577,10 @@ func (r DirectoryServiceNewParamsType) IsKnown() bool {
 }
 
 type DirectoryServiceNewResponseEnvelope struct {
-	Errors   []DirectoryServiceNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DirectoryServiceNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DirectoryServiceNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DirectoryServiceNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DirectoryServiceNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DirectoryServiceNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DirectoryServiceNewResponse                `json:"result"`
 	JSON    directoryServiceNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1605,8 +1605,8 @@ func (r directoryServiceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DirectoryServiceNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DirectoryServiceNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             directoryServiceNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1653,8 +1653,8 @@ func (r directoryServiceNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DirectoryServiceNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           DirectoryServiceNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             directoryServiceNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1716,10 +1716,10 @@ func (r DirectoryServiceNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DirectoryServiceUpdateParams struct {
-	AccountID param.Field[string]                                `path:"account_id,required"`
-	Host      param.Field[DirectoryServiceUpdateParamsHostUnion] `json:"host,required"`
-	Name      param.Field[string]                                `json:"name,required"`
-	Type      param.Field[DirectoryServiceUpdateParamsType]      `json:"type,required"`
+	AccountID param.Field[string]                                `path:"account_id" api:"required"`
+	Host      param.Field[DirectoryServiceUpdateParamsHostUnion] `json:"host" api:"required"`
+	Name      param.Field[string]                                `json:"name" api:"required"`
+	Type      param.Field[DirectoryServiceUpdateParamsType]      `json:"type" api:"required"`
 	HTTPPort  param.Field[int64]                                 `json:"http_port"`
 	HTTPSPort param.Field[int64]                                 `json:"https_port"`
 }
@@ -1752,8 +1752,8 @@ type DirectoryServiceUpdateParamsHostUnion interface {
 }
 
 type DirectoryServiceUpdateParamsHostInfraIPv4Host struct {
-	IPV4    param.Field[string]                                               `json:"ipv4,required"`
-	Network param.Field[DirectoryServiceUpdateParamsHostInfraIPv4HostNetwork] `json:"network,required"`
+	IPV4    param.Field[string]                                               `json:"ipv4" api:"required"`
+	Network param.Field[DirectoryServiceUpdateParamsHostInfraIPv4HostNetwork] `json:"network" api:"required"`
 }
 
 func (r DirectoryServiceUpdateParamsHostInfraIPv4Host) MarshalJSON() (data []byte, err error) {
@@ -1764,7 +1764,7 @@ func (r DirectoryServiceUpdateParamsHostInfraIPv4Host) implementsDirectoryServic
 }
 
 type DirectoryServiceUpdateParamsHostInfraIPv4HostNetwork struct {
-	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
+	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
 }
 
 func (r DirectoryServiceUpdateParamsHostInfraIPv4HostNetwork) MarshalJSON() (data []byte, err error) {
@@ -1772,8 +1772,8 @@ func (r DirectoryServiceUpdateParamsHostInfraIPv4HostNetwork) MarshalJSON() (dat
 }
 
 type DirectoryServiceUpdateParamsHostInfraIPv6Host struct {
-	IPV6    param.Field[string]                                               `json:"ipv6,required"`
-	Network param.Field[DirectoryServiceUpdateParamsHostInfraIPv6HostNetwork] `json:"network,required"`
+	IPV6    param.Field[string]                                               `json:"ipv6" api:"required"`
+	Network param.Field[DirectoryServiceUpdateParamsHostInfraIPv6HostNetwork] `json:"network" api:"required"`
 }
 
 func (r DirectoryServiceUpdateParamsHostInfraIPv6Host) MarshalJSON() (data []byte, err error) {
@@ -1784,7 +1784,7 @@ func (r DirectoryServiceUpdateParamsHostInfraIPv6Host) implementsDirectoryServic
 }
 
 type DirectoryServiceUpdateParamsHostInfraIPv6HostNetwork struct {
-	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
+	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
 }
 
 func (r DirectoryServiceUpdateParamsHostInfraIPv6HostNetwork) MarshalJSON() (data []byte, err error) {
@@ -1792,9 +1792,9 @@ func (r DirectoryServiceUpdateParamsHostInfraIPv6HostNetwork) MarshalJSON() (dat
 }
 
 type DirectoryServiceUpdateParamsHostInfraDualStackHost struct {
-	IPV4    param.Field[string]                                                    `json:"ipv4,required"`
-	IPV6    param.Field[string]                                                    `json:"ipv6,required"`
-	Network param.Field[DirectoryServiceUpdateParamsHostInfraDualStackHostNetwork] `json:"network,required"`
+	IPV4    param.Field[string]                                                    `json:"ipv4" api:"required"`
+	IPV6    param.Field[string]                                                    `json:"ipv6" api:"required"`
+	Network param.Field[DirectoryServiceUpdateParamsHostInfraDualStackHostNetwork] `json:"network" api:"required"`
 }
 
 func (r DirectoryServiceUpdateParamsHostInfraDualStackHost) MarshalJSON() (data []byte, err error) {
@@ -1805,7 +1805,7 @@ func (r DirectoryServiceUpdateParamsHostInfraDualStackHost) implementsDirectoryS
 }
 
 type DirectoryServiceUpdateParamsHostInfraDualStackHostNetwork struct {
-	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
+	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
 }
 
 func (r DirectoryServiceUpdateParamsHostInfraDualStackHostNetwork) MarshalJSON() (data []byte, err error) {
@@ -1813,8 +1813,8 @@ func (r DirectoryServiceUpdateParamsHostInfraDualStackHostNetwork) MarshalJSON()
 }
 
 type DirectoryServiceUpdateParamsHostInfraHostnameHost struct {
-	Hostname        param.Field[string]                                                           `json:"hostname,required"`
-	ResolverNetwork param.Field[DirectoryServiceUpdateParamsHostInfraHostnameHostResolverNetwork] `json:"resolver_network,required"`
+	Hostname        param.Field[string]                                                           `json:"hostname" api:"required"`
+	ResolverNetwork param.Field[DirectoryServiceUpdateParamsHostInfraHostnameHostResolverNetwork] `json:"resolver_network" api:"required"`
 }
 
 func (r DirectoryServiceUpdateParamsHostInfraHostnameHost) MarshalJSON() (data []byte, err error) {
@@ -1825,7 +1825,7 @@ func (r DirectoryServiceUpdateParamsHostInfraHostnameHost) implementsDirectorySe
 }
 
 type DirectoryServiceUpdateParamsHostInfraHostnameHostResolverNetwork struct {
-	TunnelID    param.Field[string]   `json:"tunnel_id,required" format:"uuid"`
+	TunnelID    param.Field[string]   `json:"tunnel_id" api:"required" format:"uuid"`
 	ResolverIPs param.Field[[]string] `json:"resolver_ips"`
 }
 
@@ -1848,10 +1848,10 @@ func (r DirectoryServiceUpdateParamsType) IsKnown() bool {
 }
 
 type DirectoryServiceUpdateResponseEnvelope struct {
-	Errors   []DirectoryServiceUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DirectoryServiceUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DirectoryServiceUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DirectoryServiceUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DirectoryServiceUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DirectoryServiceUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DirectoryServiceUpdateResponse                `json:"result"`
 	JSON    directoryServiceUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1876,8 +1876,8 @@ func (r directoryServiceUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DirectoryServiceUpdateResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DirectoryServiceUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             directoryServiceUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1924,8 +1924,8 @@ func (r directoryServiceUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type DirectoryServiceUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           DirectoryServiceUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             directoryServiceUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1988,7 +1988,7 @@ func (r DirectoryServiceUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DirectoryServiceListParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Current page in the response
 	Page param.Field[int64] `query:"page"`
 	// Max amount of entries returned per page
@@ -2020,18 +2020,18 @@ func (r DirectoryServiceListParamsType) IsKnown() bool {
 }
 
 type DirectoryServiceDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DirectoryServiceGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DirectoryServiceGetResponseEnvelope struct {
-	Errors   []DirectoryServiceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DirectoryServiceGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DirectoryServiceGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DirectoryServiceGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DirectoryServiceGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DirectoryServiceGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DirectoryServiceGetResponse                `json:"result"`
 	JSON    directoryServiceGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -2056,8 +2056,8 @@ func (r directoryServiceGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DirectoryServiceGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DirectoryServiceGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             directoryServiceGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -2104,8 +2104,8 @@ func (r directoryServiceGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DirectoryServiceGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           DirectoryServiceGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             directoryServiceGetResponseEnvelopeMessagesJSON   `json:"-"`

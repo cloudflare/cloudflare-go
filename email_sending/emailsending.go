@@ -42,15 +42,15 @@ func (r *EmailSendingService) Send(ctx context.Context, params EmailSendingSendP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email/sending/send", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Send a raw MIME email message.
@@ -59,24 +59,24 @@ func (r *EmailSendingService) SendRaw(ctx context.Context, params EmailSendingSe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email/sending/send_raw", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EmailSendingSendResponse struct {
 	// Email addresses to which the message was delivered immediately.
-	Delivered []string `json:"delivered,required" format:"email"`
+	Delivered []string `json:"delivered" api:"required" format:"email"`
 	// Email addresses that permanently bounced.
-	PermanentBounces []string `json:"permanent_bounces,required" format:"email"`
+	PermanentBounces []string `json:"permanent_bounces" api:"required" format:"email"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                     `json:"queued,required" format:"email"`
+	Queued []string                     `json:"queued" api:"required" format:"email"`
 	JSON   emailSendingSendResponseJSON `json:"-"`
 }
 
@@ -100,11 +100,11 @@ func (r emailSendingSendResponseJSON) RawJSON() string {
 
 type EmailSendingSendRawResponse struct {
 	// Email addresses to which the message was delivered immediately.
-	Delivered []string `json:"delivered,required" format:"email"`
+	Delivered []string `json:"delivered" api:"required" format:"email"`
 	// Email addresses that permanently bounced.
-	PermanentBounces []string `json:"permanent_bounces,required" format:"email"`
+	PermanentBounces []string `json:"permanent_bounces" api:"required" format:"email"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                        `json:"queued,required" format:"email"`
+	Queued []string                        `json:"queued" api:"required" format:"email"`
 	JSON   emailSendingSendRawResponseJSON `json:"-"`
 }
 
@@ -128,13 +128,13 @@ func (r emailSendingSendRawResponseJSON) RawJSON() string {
 
 type EmailSendingSendParams struct {
 	// Identifier of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sender email address. Either a plain string or an object with address and name.
-	From param.Field[EmailSendingSendParamsFromUnion] `json:"from,required"`
+	From param.Field[EmailSendingSendParamsFromUnion] `json:"from" api:"required"`
 	// Email subject line.
-	Subject param.Field[string] `json:"subject,required"`
+	Subject param.Field[string] `json:"subject" api:"required"`
 	// Recipient(s). A single email string or an array of email strings.
-	To param.Field[EmailSendingSendParamsToUnion] `json:"to,required"`
+	To param.Field[EmailSendingSendParamsToUnion] `json:"to" api:"required"`
 	// File attachments and inline images.
 	Attachments param.Field[[]EmailSendingSendParamsAttachmentUnion] `json:"attachments"`
 	// BCC recipient(s). A single email string or an array of email strings.
@@ -165,9 +165,9 @@ type EmailSendingSendParamsFromUnion interface {
 
 type EmailSendingSendParamsFromEmailSendingEmailAddressObject struct {
 	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address,required"`
+	Address param.Field[string] `json:"address" api:"required"`
 	// Display name for the email address (e.g., 'John Doe').
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r EmailSendingSendParamsFromEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
@@ -192,13 +192,13 @@ func (r EmailSendingSendParamsToEmailSendingEmailAddressList) ImplementsEmailSen
 
 type EmailSendingSendParamsAttachment struct {
 	// Base64-encoded content of the attachment.
-	Content param.Field[string] `json:"content,required"`
+	Content param.Field[string] `json:"content" api:"required"`
 	// Must be 'inline'. Indicates the attachment is embedded in the email body.
-	Disposition param.Field[EmailSendingSendParamsAttachmentsDisposition] `json:"disposition,required"`
+	Disposition param.Field[EmailSendingSendParamsAttachmentsDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
-	Filename param.Field[string] `json:"filename,required"`
+	Filename param.Field[string] `json:"filename" api:"required"`
 	// MIME type of the attachment (e.g., 'image/png', 'text/plain').
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[string] `json:"type" api:"required"`
 	// Content ID used to reference this attachment in HTML via cid: URI (e.g.,
 	// <img src="cid:logo">).
 	ContentID param.Field[string] `json:"content_id"`
@@ -220,16 +220,16 @@ type EmailSendingSendParamsAttachmentUnion interface {
 
 type EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment struct {
 	// Base64-encoded content of the attachment.
-	Content param.Field[string] `json:"content,required"`
+	Content param.Field[string] `json:"content" api:"required"`
 	// Content ID used to reference this attachment in HTML via cid: URI (e.g.,
 	// <img src="cid:logo">).
-	ContentID param.Field[string] `json:"content_id,required"`
+	ContentID param.Field[string] `json:"content_id" api:"required"`
 	// Must be 'inline'. Indicates the attachment is embedded in the email body.
-	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDisposition] `json:"disposition,required"`
+	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
-	Filename param.Field[string] `json:"filename,required"`
+	Filename param.Field[string] `json:"filename" api:"required"`
 	// MIME type of the attachment (e.g., 'image/png', 'text/plain').
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[string] `json:"type" api:"required"`
 }
 
 func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment) MarshalJSON() (data []byte, err error) {
@@ -256,13 +256,13 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDispos
 
 type EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment struct {
 	// Base64-encoded content of the attachment.
-	Content param.Field[string] `json:"content,required"`
+	Content param.Field[string] `json:"content" api:"required"`
 	// Must be 'attachment'. Indicates a standard file attachment.
-	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition] `json:"disposition,required"`
+	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
-	Filename param.Field[string] `json:"filename,required"`
+	Filename param.Field[string] `json:"filename" api:"required"`
 	// MIME type of the attachment (e.g., 'application/pdf', 'text/plain').
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[string] `json:"type" api:"required"`
 }
 
 func (r EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment) MarshalJSON() (data []byte, err error) {
@@ -339,9 +339,9 @@ type EmailSendingSendParamsReplyToUnion interface {
 
 type EmailSendingSendParamsReplyToEmailSendingEmailAddressObject struct {
 	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address,required"`
+	Address param.Field[string] `json:"address" api:"required"`
 	// Display name for the email address (e.g., 'John Doe').
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r EmailSendingSendParamsReplyToEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
@@ -352,10 +352,10 @@ func (r EmailSendingSendParamsReplyToEmailSendingEmailAddressObject) ImplementsE
 }
 
 type EmailSendingSendResponseEnvelope struct {
-	Errors     []EmailSendingSendResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []EmailSendingSendResponseEnvelopeMessages `json:"messages,required"`
-	Result     EmailSendingSendResponse                   `json:"result,required"`
-	Success    EmailSendingSendResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []EmailSendingSendResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []EmailSendingSendResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     EmailSendingSendResponse                   `json:"result" api:"required"`
+	Success    EmailSendingSendResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo EmailSendingSendResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       emailSendingSendResponseEnvelopeJSON       `json:"-"`
 }
@@ -381,8 +381,8 @@ func (r emailSendingSendResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSendingSendResponseEnvelopeErrors struct {
-	Code    float64                                    `json:"code,required"`
-	Message string                                     `json:"message,required"`
+	Code    float64                                    `json:"code" api:"required"`
+	Message string                                     `json:"message" api:"required"`
 	JSON    emailSendingSendResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -404,8 +404,8 @@ func (r emailSendingSendResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type EmailSendingSendResponseEnvelopeMessages struct {
-	Code    float64                                      `json:"code,required"`
-	Message string                                       `json:"message,required"`
+	Code    float64                                      `json:"code" api:"required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    emailSendingSendResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -441,9 +441,9 @@ func (r EmailSendingSendResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type EmailSendingSendResponseEnvelopeResultInfo struct {
-	Count      float64                                        `json:"count,required"`
-	PerPage    float64                                        `json:"per_page,required"`
-	TotalCount float64                                        `json:"total_count,required"`
+	Count      float64                                        `json:"count" api:"required"`
+	PerPage    float64                                        `json:"per_page" api:"required"`
+	TotalCount float64                                        `json:"total_count" api:"required"`
 	Cursor     string                                         `json:"cursor"`
 	Page       float64                                        `json:"page"`
 	JSON       emailSendingSendResponseEnvelopeResultInfoJSON `json:"-"`
@@ -471,16 +471,16 @@ func (r emailSendingSendResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type EmailSendingSendRawParams struct {
 	// Identifier of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sender email address.
-	From param.Field[string] `json:"from,required" format:"email"`
+	From param.Field[string] `json:"from" api:"required" format:"email"`
 	// The full MIME-encoded email message. Should include standard RFC 5322 headers
 	// such as From, To, Subject, and Content-Type. The from and recipients fields in
 	// the request body control SMTP envelope routing; the From and To headers in the
 	// MIME message control what the recipient's email client displays.
-	MimeMessage param.Field[string] `json:"mime_message,required"`
+	MimeMessage param.Field[string] `json:"mime_message" api:"required"`
 	// List of recipient email addresses.
-	Recipients param.Field[[]string] `json:"recipients,required" format:"email"`
+	Recipients param.Field[[]string] `json:"recipients" api:"required" format:"email"`
 }
 
 func (r EmailSendingSendRawParams) MarshalJSON() (data []byte, err error) {
@@ -488,10 +488,10 @@ func (r EmailSendingSendRawParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EmailSendingSendRawResponseEnvelope struct {
-	Errors     []EmailSendingSendRawResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []EmailSendingSendRawResponseEnvelopeMessages `json:"messages,required"`
-	Result     EmailSendingSendRawResponse                   `json:"result,required"`
-	Success    EmailSendingSendRawResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []EmailSendingSendRawResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []EmailSendingSendRawResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     EmailSendingSendRawResponse                   `json:"result" api:"required"`
+	Success    EmailSendingSendRawResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo EmailSendingSendRawResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       emailSendingSendRawResponseEnvelopeJSON       `json:"-"`
 }
@@ -517,8 +517,8 @@ func (r emailSendingSendRawResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EmailSendingSendRawResponseEnvelopeErrors struct {
-	Code    float64                                       `json:"code,required"`
-	Message string                                        `json:"message,required"`
+	Code    float64                                       `json:"code" api:"required"`
+	Message string                                        `json:"message" api:"required"`
 	JSON    emailSendingSendRawResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -540,8 +540,8 @@ func (r emailSendingSendRawResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type EmailSendingSendRawResponseEnvelopeMessages struct {
-	Code    float64                                         `json:"code,required"`
-	Message string                                          `json:"message,required"`
+	Code    float64                                         `json:"code" api:"required"`
+	Message string                                          `json:"message" api:"required"`
 	JSON    emailSendingSendRawResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -577,9 +577,9 @@ func (r EmailSendingSendRawResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type EmailSendingSendRawResponseEnvelopeResultInfo struct {
-	Count      float64                                           `json:"count,required"`
-	PerPage    float64                                           `json:"per_page,required"`
-	TotalCount float64                                           `json:"total_count,required"`
+	Count      float64                                           `json:"count" api:"required"`
+	PerPage    float64                                           `json:"per_page" api:"required"`
+	TotalCount float64                                           `json:"total_count" api:"required"`
 	Cursor     string                                            `json:"cursor"`
 	Page       float64                                           `json:"page"`
 	JSON       emailSendingSendRawResponseEnvelopeResultInfoJSON `json:"-"`

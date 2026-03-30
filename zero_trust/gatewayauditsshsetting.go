@@ -43,15 +43,15 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/audit_ssh_settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve all Zero Trust Audit SSH and SSH with Access for Infrastructure
@@ -61,15 +61,15 @@ func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAu
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/audit_ssh_settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Rotate the SSH account seed that generates the host key identity when connecting
@@ -79,15 +79,15 @@ func (r *GatewayAuditSSHSettingService) RotateSeed(ctx context.Context, body Gat
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/audit_ssh_settings/rotate_seed", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GatewaySettings struct {
@@ -120,10 +120,10 @@ func (r gatewaySettingsJSON) RawJSON() string {
 }
 
 type GatewayAuditSSHSettingUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Provide the Base64-encoded HPKE public key that encrypts SSH session logs. See
 	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging.
-	PublicKey param.Field[string] `json:"public_key,required"`
+	PublicKey param.Field[string] `json:"public_key" api:"required"`
 }
 
 func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -131,10 +131,10 @@ func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayAuditSSHSettingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewaySettings                                     `json:"result"`
 	JSON    gatewayAuditSSHSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -174,14 +174,14 @@ func (r GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayAuditSSHSettingGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewaySettings                                  `json:"result"`
 	JSON    gatewayAuditSSHSettingGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -221,14 +221,14 @@ func (r GatewayAuditSSHSettingGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayAuditSSHSettingRotateSeedParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayAuditSSHSettingRotateSeedResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewaySettings                                         `json:"result"`
 	JSON    gatewayAuditSSHSettingRotateSeedResponseEnvelopeJSON    `json:"-"`
 }

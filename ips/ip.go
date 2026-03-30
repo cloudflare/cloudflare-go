@@ -47,10 +47,10 @@ func (r *IPService) List(ctx context.Context, query IPListParams, opts ...option
 	path := "ips"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type IPs []IPsItem
@@ -221,10 +221,10 @@ func (r IPListParams) URLQuery() (v url.Values) {
 }
 
 type IPListResponseEnvelope struct {
-	Errors   []IPListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []IPListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []IPListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success IPListResponseEnvelopeSuccess `json:"success,required"`
+	Success IPListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  IPListResponse                `json:"result"`
 	JSON    ipListResponseEnvelopeJSON    `json:"-"`
 }
@@ -249,8 +249,8 @@ func (r ipListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type IPListResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           IPListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ipListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -297,8 +297,8 @@ func (r ipListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type IPListResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           IPListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ipListResponseEnvelopeMessagesJSON   `json:"-"`

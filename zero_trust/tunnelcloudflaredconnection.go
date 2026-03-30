@@ -48,19 +48,19 @@ func (r *TunnelCloudflaredConnectionService) Delete(ctx context.Context, tunnelI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connections", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches connection details for a Cloudflare Tunnel.
@@ -70,11 +70,11 @@ func (r *TunnelCloudflaredConnectionService) Get(ctx context.Context, tunnelID s
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connections", query.AccountID, tunnelID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -185,7 +185,7 @@ type TunnelCloudflaredConnectionDeleteResponse = interface{}
 
 type TunnelCloudflaredConnectionDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// UUID of the Cloudflare Tunnel connector.
 	ClientID param.Field[string] `query:"client_id" format:"uuid"`
 }
@@ -200,11 +200,11 @@ func (r TunnelCloudflaredConnectionDeleteParams) URLQuery() (v url.Values) {
 }
 
 type TunnelCloudflaredConnectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   TunnelCloudflaredConnectionDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                     `json:"messages" api:"required"`
+	Result   TunnelCloudflaredConnectionDeleteResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -244,5 +244,5 @@ func (r TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess) IsKnown() bool
 
 type TunnelCloudflaredConnectionGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

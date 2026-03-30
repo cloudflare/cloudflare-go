@@ -41,11 +41,11 @@ func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEvent
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/categories/create", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Lists categories across multiple datasets
@@ -53,11 +53,11 @@ func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEven
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/categories", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Deletes a category
@@ -65,15 +65,15 @@ func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID stri
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if categoryID == "" {
 		err = errors.New("missing required category_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/categories/%s", body.AccountID, categoryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates a category
@@ -81,15 +81,15 @@ func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if categoryID == "" {
 		err = errors.New("missing required category_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/categories/%s", params.AccountID, categoryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Reads a category
@@ -97,21 +97,21 @@ func (r *ThreatEventCategoryService) Get(ctx context.Context, categoryID string,
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if categoryID == "" {
 		err = errors.New("missing required category_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/categories/%s", query.AccountID, categoryID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventCategoryNewResponse struct {
-	KillChain   float64                            `json:"killChain,required"`
-	Name        string                             `json:"name,required"`
-	UUID        string                             `json:"uuid,required"`
+	KillChain   float64                            `json:"killChain" api:"required"`
+	Name        string                             `json:"name" api:"required"`
+	UUID        string                             `json:"uuid" api:"required"`
 	MitreAttack []string                           `json:"mitreAttack"`
 	MitreCapec  []string                           `json:"mitreCapec"`
 	Shortname   string                             `json:"shortname"`
@@ -140,9 +140,9 @@ func (r threatEventCategoryNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCategoryListResponse struct {
-	KillChain   float64                             `json:"killChain,required"`
-	Name        string                              `json:"name,required"`
-	UUID        string                              `json:"uuid,required"`
+	KillChain   float64                             `json:"killChain" api:"required"`
+	Name        string                              `json:"name" api:"required"`
+	UUID        string                              `json:"uuid" api:"required"`
 	MitreAttack []string                            `json:"mitreAttack"`
 	MitreCapec  []string                            `json:"mitreCapec"`
 	Shortname   string                              `json:"shortname"`
@@ -171,7 +171,7 @@ func (r threatEventCategoryListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCategoryDeleteResponse struct {
-	UUID string                                `json:"uuid,required"`
+	UUID string                                `json:"uuid" api:"required"`
 	JSON threatEventCategoryDeleteResponseJSON `json:"-"`
 }
 
@@ -192,9 +192,9 @@ func (r threatEventCategoryDeleteResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCategoryEditResponse struct {
-	KillChain   float64                             `json:"killChain,required"`
-	Name        string                              `json:"name,required"`
-	UUID        string                              `json:"uuid,required"`
+	KillChain   float64                             `json:"killChain" api:"required"`
+	Name        string                              `json:"name" api:"required"`
+	UUID        string                              `json:"uuid" api:"required"`
 	MitreAttack []string                            `json:"mitreAttack"`
 	MitreCapec  []string                            `json:"mitreCapec"`
 	Shortname   string                              `json:"shortname"`
@@ -223,9 +223,9 @@ func (r threatEventCategoryEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCategoryGetResponse struct {
-	KillChain   float64                            `json:"killChain,required"`
-	Name        string                             `json:"name,required"`
-	UUID        string                             `json:"uuid,required"`
+	KillChain   float64                            `json:"killChain" api:"required"`
+	Name        string                             `json:"name" api:"required"`
+	UUID        string                             `json:"uuid" api:"required"`
 	MitreAttack []string                           `json:"mitreAttack"`
 	MitreCapec  []string                           `json:"mitreCapec"`
 	Shortname   string                             `json:"shortname"`
@@ -255,9 +255,9 @@ func (r threatEventCategoryGetResponseJSON) RawJSON() string {
 
 type ThreatEventCategoryNewParams struct {
 	// Account ID.
-	AccountID   param.Field[string]   `path:"account_id,required"`
-	KillChain   param.Field[float64]  `json:"killChain,required"`
-	Name        param.Field[string]   `json:"name,required"`
+	AccountID   param.Field[string]   `path:"account_id" api:"required"`
+	KillChain   param.Field[float64]  `json:"killChain" api:"required"`
+	Name        param.Field[string]   `json:"name" api:"required"`
 	MitreAttack param.Field[[]string] `json:"mitreAttack"`
 	MitreCapec  param.Field[[]string] `json:"mitreCapec"`
 	Shortname   param.Field[string]   `json:"shortname"`
@@ -269,7 +269,7 @@ func (r ThreatEventCategoryNewParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventCategoryListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of dataset IDs to query categories from. If not provided, uses the default
 	// dataset.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
@@ -286,12 +286,12 @@ func (r ThreatEventCategoryListParams) URLQuery() (v url.Values) {
 
 type ThreatEventCategoryDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventCategoryEditParams struct {
 	// Account ID.
-	AccountID   param.Field[string]   `path:"account_id,required"`
+	AccountID   param.Field[string]   `path:"account_id" api:"required"`
 	KillChain   param.Field[float64]  `json:"killChain"`
 	MitreAttack param.Field[[]string] `json:"mitreAttack"`
 	MitreCapec  param.Field[[]string] `json:"mitreCapec"`
@@ -305,5 +305,5 @@ func (r ThreatEventCategoryEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventCategoryGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

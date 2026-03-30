@@ -31,9 +31,9 @@ func NewEmailService(opts ...option.RequestOption) (r *EmailService) {
 }
 
 type RadarEmailSeries struct {
-	Fail []string             `json:"FAIL,required"`
-	None []string             `json:"NONE,required"`
-	Pass []string             `json:"PASS,required"`
+	Fail []string             `json:"FAIL" api:"required"`
+	None []string             `json:"NONE" api:"required"`
+	Pass []string             `json:"PASS" api:"required"`
 	JSON radarEmailSeriesJSON `json:"-"`
 }
 
@@ -57,11 +57,11 @@ func (r radarEmailSeriesJSON) RawJSON() string {
 
 type RadarEmailSummary struct {
 	// A numeric string.
-	Fail string `json:"FAIL,required"`
+	Fail string `json:"FAIL" api:"required"`
 	// A numeric string.
-	None string `json:"NONE,required"`
+	None string `json:"NONE" api:"required"`
 	// A numeric string.
-	Pass string                `json:"PASS,required"`
+	Pass string                `json:"PASS" api:"required"`
 	JSON radarEmailSummaryJSON `json:"-"`
 }
 

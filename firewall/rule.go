@@ -59,7 +59,7 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -95,19 +95,19 @@ func (r *RuleService) Update(ctx context.Context, ruleID string, params RuleUpda
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", params.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches firewall rules in a zone. You can filter the results using several
@@ -123,7 +123,7 @@ func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -160,19 +160,19 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", body.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes existing firewall rules.
@@ -187,7 +187,7 @@ func (r *RuleService) BulkDelete(ctx context.Context, body RuleBulkDeleteParams,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules", body.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -224,7 +224,7 @@ func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
@@ -261,7 +261,7 @@ func (r *RuleService) BulkUpdate(ctx context.Context, params RuleBulkUpdateParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -298,11 +298,11 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, body RuleEditPara
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", body.ZoneID, ruleID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -338,26 +338,26 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", query.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DeletedFilter struct {
 	// The unique identifier of the filter.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When true, indicates that the firewall rule was deleted.
-	Deleted bool              `json:"deleted,required"`
+	Deleted bool              `json:"deleted" api:"required"`
 	JSON    deletedFilterJSON `json:"-"`
 }
 
@@ -518,11 +518,11 @@ func (r Product) IsKnown() bool {
 
 type RuleNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
-	Action param.Field[RuleNewParamsAction]         `json:"action,required"`
-	Filter param.Field[filters.FirewallFilterParam] `json:"filter,required"`
+	Action param.Field[RuleNewParamsAction]         `json:"action" api:"required"`
+	Filter param.Field[filters.FirewallFilterParam] `json:"filter" api:"required"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
@@ -592,11 +592,11 @@ func (r RuleNewParamsActionResponse) MarshalJSON() (data []byte, err error) {
 
 type RuleUpdateParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
-	Action param.Field[RuleUpdateParamsAction]      `json:"action,required"`
-	Filter param.Field[filters.FirewallFilterParam] `json:"filter,required"`
+	Action param.Field[RuleUpdateParamsAction]      `json:"action" api:"required"`
+	Filter param.Field[filters.FirewallFilterParam] `json:"filter" api:"required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -665,11 +665,11 @@ func (r RuleUpdateParamsActionResponse) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallRule          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   FirewallRule          `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -709,7 +709,7 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The unique identifier of the firewall rule.
 	ID param.Field[string] `query:"id"`
 	// The action to search for. Must be an exact match.
@@ -734,15 +734,15 @@ func (r RuleListParams) URLQuery() (v url.Values) {
 
 type RuleDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallRule          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   FirewallRule          `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -782,13 +782,13 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleBulkDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleBulkEditParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Body   interface{}         `json:"body" api:"required"`
 }
 
 func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
@@ -797,8 +797,8 @@ func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
 
 type RuleBulkUpdateParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Body   interface{}         `json:"body" api:"required"`
 }
 
 func (r RuleBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -807,7 +807,7 @@ func (r RuleBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type RuleEditParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
@@ -816,15 +816,15 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 
 type RuleGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallRule          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   FirewallRule          `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
 }
 

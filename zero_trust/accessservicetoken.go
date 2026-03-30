@@ -65,10 +65,10 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 	path := fmt.Sprintf("%s/%s/access/service_tokens", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured service token.
@@ -95,15 +95,15 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, serviceTokenID s
 	}
 	if serviceTokenID == "" {
 		err = errors.New("missing required service_token_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all service tokens.
@@ -171,15 +171,15 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, serviceTokenID s
 	}
 	if serviceTokenID == "" {
 		err = errors.New("missing required service_token_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single service token.
@@ -206,15 +206,15 @@ func (r *AccessServiceTokenService) Get(ctx context.Context, serviceTokenID stri
 	}
 	if serviceTokenID == "" {
 		err = errors.New("missing required service_token_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Refreshes the expiration of a service token.
@@ -223,19 +223,19 @@ func (r *AccessServiceTokenService) Refresh(ctx context.Context, serviceTokenID 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if serviceTokenID == "" {
 		err = errors.New("missing required service_token_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", body.AccountID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Generates a new Client Secret for a service token and revokes the old one.
@@ -244,19 +244,19 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, serviceTokenID s
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if serviceTokenID == "" {
 		err = errors.New("missing required service_token_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/rotate", params.AccountID, serviceTokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ServiceToken struct {
@@ -372,7 +372,7 @@ func (r accessServiceTokenRotateResponseJSON) RawJSON() string {
 
 type AccessServiceTokenNewParams struct {
 	// The name of the service token.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -398,10 +398,10 @@ func (r AccessServiceTokenNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenNewResponseEnvelope struct {
-	Errors   []AccessServiceTokenNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessServiceTokenNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessServiceTokenNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessServiceTokenNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessServiceTokenNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessServiceTokenNewResponse                `json:"result"`
 	JSON    accessServiceTokenNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -426,8 +426,8 @@ func (r accessServiceTokenNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessServiceTokenNewResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           AccessServiceTokenNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessServiceTokenNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -474,8 +474,8 @@ func (r accessServiceTokenNewResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type AccessServiceTokenNewResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AccessServiceTokenNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessServiceTokenNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -564,10 +564,10 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenUpdateResponseEnvelope struct {
-	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ServiceToken                                    `json:"result"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -592,8 +592,8 @@ func (r accessServiceTokenUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessServiceTokenUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AccessServiceTokenUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessServiceTokenUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -640,8 +640,8 @@ func (r accessServiceTokenUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type AccessServiceTokenUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AccessServiceTokenUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessServiceTokenUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -734,10 +734,10 @@ type AccessServiceTokenDeleteParams struct {
 }
 
 type AccessServiceTokenDeleteResponseEnvelope struct {
-	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ServiceToken                                    `json:"result"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -762,8 +762,8 @@ func (r accessServiceTokenDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessServiceTokenDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AccessServiceTokenDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessServiceTokenDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -810,8 +810,8 @@ func (r accessServiceTokenDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type AccessServiceTokenDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AccessServiceTokenDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessServiceTokenDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -880,10 +880,10 @@ type AccessServiceTokenGetParams struct {
 }
 
 type AccessServiceTokenGetResponseEnvelope struct {
-	Errors   []AccessServiceTokenGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessServiceTokenGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessServiceTokenGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessServiceTokenGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessServiceTokenGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ServiceToken                                 `json:"result"`
 	JSON    accessServiceTokenGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -908,8 +908,8 @@ func (r accessServiceTokenGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessServiceTokenGetResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           AccessServiceTokenGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessServiceTokenGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -956,8 +956,8 @@ func (r accessServiceTokenGetResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type AccessServiceTokenGetResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AccessServiceTokenGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessServiceTokenGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1020,14 +1020,14 @@ func (r AccessServiceTokenGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessServiceTokenRefreshParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessServiceTokenRefreshResponseEnvelope struct {
-	Errors   []AccessServiceTokenRefreshResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenRefreshResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessServiceTokenRefreshResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessServiceTokenRefreshResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ServiceToken                                     `json:"result"`
 	JSON    accessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`
 }
@@ -1052,8 +1052,8 @@ func (r accessServiceTokenRefreshResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessServiceTokenRefreshResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           AccessServiceTokenRefreshResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessServiceTokenRefreshResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1100,8 +1100,8 @@ func (r accessServiceTokenRefreshResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type AccessServiceTokenRefreshResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           AccessServiceTokenRefreshResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessServiceTokenRefreshResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1165,7 +1165,7 @@ func (r AccessServiceTokenRefreshResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessServiceTokenRotateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The expiration of the previous `client_secret`. If not provided, it defaults to
 	// the current timestamp in order to immediately expire the previous secret.
 	PreviousClientSecretExpiresAt param.Field[time.Time] `json:"previous_client_secret_expires_at" format:"date-time"`
@@ -1176,10 +1176,10 @@ func (r AccessServiceTokenRotateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenRotateResponseEnvelope struct {
-	Errors   []AccessServiceTokenRotateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenRotateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessServiceTokenRotateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessServiceTokenRotateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessServiceTokenRotateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessServiceTokenRotateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessServiceTokenRotateResponse                `json:"result"`
 	JSON    accessServiceTokenRotateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1204,8 +1204,8 @@ func (r accessServiceTokenRotateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessServiceTokenRotateResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AccessServiceTokenRotateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessServiceTokenRotateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1252,8 +1252,8 @@ func (r accessServiceTokenRotateResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type AccessServiceTokenRotateResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AccessServiceTokenRotateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessServiceTokenRotateResponseEnvelopeMessagesJSON   `json:"-"`

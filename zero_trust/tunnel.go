@@ -52,7 +52,7 @@ func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -396,7 +396,7 @@ func (r TunnelListResponseTunType) IsKnown() bool {
 
 type TunnelListParams struct {
 	// Cloudflare account ID
-	AccountID     param.Field[string] `path:"account_id,required"`
+	AccountID     param.Field[string] `path:"account_id" api:"required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only resources that were created (and not deleted) before
 	// this time. URL encoded.

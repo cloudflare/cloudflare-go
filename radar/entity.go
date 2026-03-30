@@ -45,14 +45,14 @@ func (r *EntityService) Get(ctx context.Context, query EntityGetParams, opts ...
 	path := "radar/entities/ip"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EntityGetResponse struct {
-	IP   EntityGetResponseIP   `json:"ip,required"`
+	IP   EntityGetResponseIP   `json:"ip" api:"required"`
 	JSON entityGetResponseJSON `json:"-"`
 }
 
@@ -73,14 +73,14 @@ func (r entityGetResponseJSON) RawJSON() string {
 }
 
 type EntityGetResponseIP struct {
-	ASN          string                  `json:"asn,required"`
-	ASNLocation  string                  `json:"asnLocation,required"`
-	ASNName      string                  `json:"asnName,required"`
-	ASNOrgName   string                  `json:"asnOrgName,required"`
-	IP           string                  `json:"ip,required"`
-	IPVersion    string                  `json:"ipVersion,required"`
-	Location     string                  `json:"location,required"`
-	LocationName string                  `json:"locationName,required"`
+	ASN          string                  `json:"asn" api:"required"`
+	ASNLocation  string                  `json:"asnLocation" api:"required"`
+	ASNName      string                  `json:"asnName" api:"required"`
+	ASNOrgName   string                  `json:"asnOrgName" api:"required"`
+	IP           string                  `json:"ip" api:"required"`
+	IPVersion    string                  `json:"ipVersion" api:"required"`
+	Location     string                  `json:"location" api:"required"`
+	LocationName string                  `json:"locationName" api:"required"`
 	JSON         entityGetResponseIPJSON `json:"-"`
 }
 
@@ -109,7 +109,7 @@ func (r entityGetResponseIPJSON) RawJSON() string {
 
 type EntityGetParams struct {
 	// IP address.
-	IP param.Field[string] `query:"ip,required" format:"ip"`
+	IP param.Field[string] `query:"ip" api:"required" format:"ip"`
 	// Format in which results will be returned.
 	Format param.Field[EntityGetParamsFormat] `query:"format"`
 }
@@ -139,8 +139,8 @@ func (r EntityGetParamsFormat) IsKnown() bool {
 }
 
 type EntityGetResponseEnvelope struct {
-	Result  EntityGetResponse             `json:"result,required"`
-	Success bool                          `json:"success,required"`
+	Result  EntityGetResponse             `json:"result" api:"required"`
+	Success bool                          `json:"success" api:"required"`
 	JSON    entityGetResponseEnvelopeJSON `json:"-"`
 }
 

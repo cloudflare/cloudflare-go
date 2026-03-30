@@ -45,15 +45,15 @@ func (r *FraudService) Update(ctx context.Context, params FraudUpdateParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/fraud_detection/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve Fraud Detection settings for a zone.
@@ -62,15 +62,15 @@ func (r *FraudService) Get(ctx context.Context, query FraudGetParams, opts ...op
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/fraud_detection/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type FraudSettings struct {
@@ -138,8 +138,8 @@ func (r FraudSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type FraudUpdateParams struct {
 	// Identifier.
-	ZoneID        param.Field[string] `path:"zone_id,required"`
-	FraudSettings FraudSettingsParam  `json:"fraud_settings,required"`
+	ZoneID        param.Field[string] `path:"zone_id" api:"required"`
+	FraudSettings FraudSettingsParam  `json:"fraud_settings" api:"required"`
 }
 
 func (r FraudUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -147,10 +147,10 @@ func (r FraudUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FraudUpdateResponseEnvelope struct {
-	Errors   []FraudUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FraudUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []FraudUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []FraudUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success FraudUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success FraudUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  FraudSettings                      `json:"result"`
 	JSON    fraudUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -175,8 +175,8 @@ func (r fraudUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type FraudUpdateResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           FraudUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             fraudUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -223,8 +223,8 @@ func (r fraudUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type FraudUpdateResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           FraudUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             fraudUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -287,14 +287,14 @@ func (r FraudUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type FraudGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type FraudGetResponseEnvelope struct {
-	Errors   []FraudGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FraudGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []FraudGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []FraudGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success FraudGetResponseEnvelopeSuccess `json:"success,required"`
+	Success FraudGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  FraudSettings                   `json:"result"`
 	JSON    fraudGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -319,8 +319,8 @@ func (r fraudGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type FraudGetResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           FraudGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             fraudGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -367,8 +367,8 @@ func (r fraudGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type FraudGetResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           FraudGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             fraudGetResponseEnvelopeMessagesJSON   `json:"-"`

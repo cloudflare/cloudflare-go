@@ -43,20 +43,20 @@ func NewCatalogSyncService(opts ...option.RequestOption) (r *CatalogSyncService)
 func (r *CatalogSyncService) New(ctx context.Context, params CatalogSyncNewParams, opts ...option.RequestOption) (res *CatalogSyncNewResponse, err error) {
 	var env CatalogSyncNewResponseEnvelope
 	if params.Forwarded.Present {
-		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%s", params.Forwarded)))
+		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%v", params.Forwarded)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Catalog Sync (Closed Beta).
@@ -65,19 +65,19 @@ func (r *CatalogSyncService) Update(ctx context.Context, syncID string, params C
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if syncID == "" {
 		err = errors.New("missing required sync_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs/%s", params.AccountID, syncID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Catalog Syncs (Closed Beta).
@@ -87,7 +87,7 @@ func (r *CatalogSyncService) List(ctx context.Context, query CatalogSyncListPara
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -113,19 +113,19 @@ func (r *CatalogSyncService) Delete(ctx context.Context, syncID string, params C
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if syncID == "" {
 		err = errors.New("missing required sync_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs/%s", params.AccountID, syncID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Catalog Sync (Closed Beta).
@@ -134,19 +134,19 @@ func (r *CatalogSyncService) Edit(ctx context.Context, syncID string, params Cat
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if syncID == "" {
 		err = errors.New("missing required sync_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs/%s", params.AccountID, syncID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Read a Catalog Sync (Closed Beta).
@@ -155,19 +155,19 @@ func (r *CatalogSyncService) Get(ctx context.Context, syncID string, query Catal
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if syncID == "" {
 		err = errors.New("missing required sync_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs/%s", query.AccountID, syncID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Refresh a Catalog Sync's destination by running the sync policy against latest
@@ -177,30 +177,30 @@ func (r *CatalogSyncService) Refresh(ctx context.Context, syncID string, body Ca
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if syncID == "" {
 		err = errors.New("missing required sync_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/catalog-syncs/%s/refresh", body.AccountID, syncID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CatalogSyncNewResponse struct {
-	ID                       string                                 `json:"id,required" format:"uuid"`
-	Description              string                                 `json:"description,required"`
-	DestinationID            string                                 `json:"destination_id,required" format:"uuid"`
-	DestinationType          CatalogSyncNewResponseDestinationType  `json:"destination_type,required"`
-	LastUserUpdateAt         string                                 `json:"last_user_update_at,required"`
-	Name                     string                                 `json:"name,required"`
-	Policy                   string                                 `json:"policy,required"`
-	UpdateMode               CatalogSyncNewResponseUpdateMode       `json:"update_mode,required"`
+	ID                       string                                 `json:"id" api:"required" format:"uuid"`
+	Description              string                                 `json:"description" api:"required"`
+	DestinationID            string                                 `json:"destination_id" api:"required" format:"uuid"`
+	DestinationType          CatalogSyncNewResponseDestinationType  `json:"destination_type" api:"required"`
+	LastUserUpdateAt         string                                 `json:"last_user_update_at" api:"required"`
+	Name                     string                                 `json:"name" api:"required"`
+	Policy                   string                                 `json:"policy" api:"required"`
+	UpdateMode               CatalogSyncNewResponseUpdateMode       `json:"update_mode" api:"required"`
 	Errors                   map[string]CatalogSyncNewResponseError `json:"errors"`
 	IncludesDiscoveriesUntil string                                 `json:"includes_discoveries_until"`
 	LastAttemptedUpdateAt    string                                 `json:"last_attempted_update_at"`
@@ -266,8 +266,8 @@ func (r CatalogSyncNewResponseUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncNewResponseError struct {
-	Code             CatalogSyncNewResponseErrorsCode   `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             CatalogSyncNewResponseErrorsCode   `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Meta             CatalogSyncNewResponseErrorsMeta   `json:"meta"`
 	Source           CatalogSyncNewResponseErrorsSource `json:"source"`
@@ -515,14 +515,14 @@ func (r catalogSyncNewResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncUpdateResponse struct {
-	ID                       string                                    `json:"id,required" format:"uuid"`
-	Description              string                                    `json:"description,required"`
-	DestinationID            string                                    `json:"destination_id,required" format:"uuid"`
-	DestinationType          CatalogSyncUpdateResponseDestinationType  `json:"destination_type,required"`
-	LastUserUpdateAt         string                                    `json:"last_user_update_at,required"`
-	Name                     string                                    `json:"name,required"`
-	Policy                   string                                    `json:"policy,required"`
-	UpdateMode               CatalogSyncUpdateResponseUpdateMode       `json:"update_mode,required"`
+	ID                       string                                    `json:"id" api:"required" format:"uuid"`
+	Description              string                                    `json:"description" api:"required"`
+	DestinationID            string                                    `json:"destination_id" api:"required" format:"uuid"`
+	DestinationType          CatalogSyncUpdateResponseDestinationType  `json:"destination_type" api:"required"`
+	LastUserUpdateAt         string                                    `json:"last_user_update_at" api:"required"`
+	Name                     string                                    `json:"name" api:"required"`
+	Policy                   string                                    `json:"policy" api:"required"`
+	UpdateMode               CatalogSyncUpdateResponseUpdateMode       `json:"update_mode" api:"required"`
 	Errors                   map[string]CatalogSyncUpdateResponseError `json:"errors"`
 	IncludesDiscoveriesUntil string                                    `json:"includes_discoveries_until"`
 	LastAttemptedUpdateAt    string                                    `json:"last_attempted_update_at"`
@@ -588,8 +588,8 @@ func (r CatalogSyncUpdateResponseUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncUpdateResponseError struct {
-	Code             CatalogSyncUpdateResponseErrorsCode   `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             CatalogSyncUpdateResponseErrorsCode   `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Meta             CatalogSyncUpdateResponseErrorsMeta   `json:"meta"`
 	Source           CatalogSyncUpdateResponseErrorsSource `json:"source"`
@@ -837,14 +837,14 @@ func (r catalogSyncUpdateResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncListResponse struct {
-	ID                       string                                  `json:"id,required" format:"uuid"`
-	Description              string                                  `json:"description,required"`
-	DestinationID            string                                  `json:"destination_id,required" format:"uuid"`
-	DestinationType          CatalogSyncListResponseDestinationType  `json:"destination_type,required"`
-	LastUserUpdateAt         string                                  `json:"last_user_update_at,required"`
-	Name                     string                                  `json:"name,required"`
-	Policy                   string                                  `json:"policy,required"`
-	UpdateMode               CatalogSyncListResponseUpdateMode       `json:"update_mode,required"`
+	ID                       string                                  `json:"id" api:"required" format:"uuid"`
+	Description              string                                  `json:"description" api:"required"`
+	DestinationID            string                                  `json:"destination_id" api:"required" format:"uuid"`
+	DestinationType          CatalogSyncListResponseDestinationType  `json:"destination_type" api:"required"`
+	LastUserUpdateAt         string                                  `json:"last_user_update_at" api:"required"`
+	Name                     string                                  `json:"name" api:"required"`
+	Policy                   string                                  `json:"policy" api:"required"`
+	UpdateMode               CatalogSyncListResponseUpdateMode       `json:"update_mode" api:"required"`
 	Errors                   map[string]CatalogSyncListResponseError `json:"errors"`
 	IncludesDiscoveriesUntil string                                  `json:"includes_discoveries_until"`
 	LastAttemptedUpdateAt    string                                  `json:"last_attempted_update_at"`
@@ -910,8 +910,8 @@ func (r CatalogSyncListResponseUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncListResponseError struct {
-	Code             CatalogSyncListResponseErrorsCode   `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             CatalogSyncListResponseErrorsCode   `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Meta             CatalogSyncListResponseErrorsMeta   `json:"meta"`
 	Source           CatalogSyncListResponseErrorsSource `json:"source"`
@@ -1159,7 +1159,7 @@ func (r catalogSyncListResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncDeleteResponse struct {
-	ID   string                        `json:"id,required" format:"uuid"`
+	ID   string                        `json:"id" api:"required" format:"uuid"`
 	JSON catalogSyncDeleteResponseJSON `json:"-"`
 }
 
@@ -1180,14 +1180,14 @@ func (r catalogSyncDeleteResponseJSON) RawJSON() string {
 }
 
 type CatalogSyncEditResponse struct {
-	ID                       string                                  `json:"id,required" format:"uuid"`
-	Description              string                                  `json:"description,required"`
-	DestinationID            string                                  `json:"destination_id,required" format:"uuid"`
-	DestinationType          CatalogSyncEditResponseDestinationType  `json:"destination_type,required"`
-	LastUserUpdateAt         string                                  `json:"last_user_update_at,required"`
-	Name                     string                                  `json:"name,required"`
-	Policy                   string                                  `json:"policy,required"`
-	UpdateMode               CatalogSyncEditResponseUpdateMode       `json:"update_mode,required"`
+	ID                       string                                  `json:"id" api:"required" format:"uuid"`
+	Description              string                                  `json:"description" api:"required"`
+	DestinationID            string                                  `json:"destination_id" api:"required" format:"uuid"`
+	DestinationType          CatalogSyncEditResponseDestinationType  `json:"destination_type" api:"required"`
+	LastUserUpdateAt         string                                  `json:"last_user_update_at" api:"required"`
+	Name                     string                                  `json:"name" api:"required"`
+	Policy                   string                                  `json:"policy" api:"required"`
+	UpdateMode               CatalogSyncEditResponseUpdateMode       `json:"update_mode" api:"required"`
 	Errors                   map[string]CatalogSyncEditResponseError `json:"errors"`
 	IncludesDiscoveriesUntil string                                  `json:"includes_discoveries_until"`
 	LastAttemptedUpdateAt    string                                  `json:"last_attempted_update_at"`
@@ -1253,8 +1253,8 @@ func (r CatalogSyncEditResponseUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncEditResponseError struct {
-	Code             CatalogSyncEditResponseErrorsCode   `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             CatalogSyncEditResponseErrorsCode   `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Meta             CatalogSyncEditResponseErrorsMeta   `json:"meta"`
 	Source           CatalogSyncEditResponseErrorsSource `json:"source"`
@@ -1502,14 +1502,14 @@ func (r catalogSyncEditResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncGetResponse struct {
-	ID                       string                                 `json:"id,required" format:"uuid"`
-	Description              string                                 `json:"description,required"`
-	DestinationID            string                                 `json:"destination_id,required" format:"uuid"`
-	DestinationType          CatalogSyncGetResponseDestinationType  `json:"destination_type,required"`
-	LastUserUpdateAt         string                                 `json:"last_user_update_at,required"`
-	Name                     string                                 `json:"name,required"`
-	Policy                   string                                 `json:"policy,required"`
-	UpdateMode               CatalogSyncGetResponseUpdateMode       `json:"update_mode,required"`
+	ID                       string                                 `json:"id" api:"required" format:"uuid"`
+	Description              string                                 `json:"description" api:"required"`
+	DestinationID            string                                 `json:"destination_id" api:"required" format:"uuid"`
+	DestinationType          CatalogSyncGetResponseDestinationType  `json:"destination_type" api:"required"`
+	LastUserUpdateAt         string                                 `json:"last_user_update_at" api:"required"`
+	Name                     string                                 `json:"name" api:"required"`
+	Policy                   string                                 `json:"policy" api:"required"`
+	UpdateMode               CatalogSyncGetResponseUpdateMode       `json:"update_mode" api:"required"`
 	Errors                   map[string]CatalogSyncGetResponseError `json:"errors"`
 	IncludesDiscoveriesUntil string                                 `json:"includes_discoveries_until"`
 	LastAttemptedUpdateAt    string                                 `json:"last_attempted_update_at"`
@@ -1575,8 +1575,8 @@ func (r CatalogSyncGetResponseUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncGetResponseError struct {
-	Code             CatalogSyncGetResponseErrorsCode   `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             CatalogSyncGetResponseErrorsCode   `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Meta             CatalogSyncGetResponseErrorsMeta   `json:"meta"`
 	Source           CatalogSyncGetResponseErrorsSource `json:"source"`
@@ -1824,10 +1824,10 @@ func (r catalogSyncGetResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncNewParams struct {
-	AccountID       param.Field[string]                              `path:"account_id,required"`
-	DestinationType param.Field[CatalogSyncNewParamsDestinationType] `json:"destination_type,required"`
-	Name            param.Field[string]                              `json:"name,required"`
-	UpdateMode      param.Field[CatalogSyncNewParamsUpdateMode]      `json:"update_mode,required"`
+	AccountID       param.Field[string]                              `path:"account_id" api:"required"`
+	DestinationType param.Field[CatalogSyncNewParamsDestinationType] `json:"destination_type" api:"required"`
+	Name            param.Field[string]                              `json:"name" api:"required"`
+	UpdateMode      param.Field[CatalogSyncNewParamsUpdateMode]      `json:"update_mode" api:"required"`
 	Description     param.Field[string]                              `json:"description"`
 	Policy          param.Field[string]                              `json:"policy"`
 	Forwarded       param.Field[string]                              `header:"forwarded"`
@@ -1868,10 +1868,10 @@ func (r CatalogSyncNewParamsUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncNewResponseEnvelope struct {
-	Errors   []CatalogSyncNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CatalogSyncNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CatalogSyncNewResponse                   `json:"result,required"`
-	Success  bool                                     `json:"success,required"`
+	Errors   []CatalogSyncNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CatalogSyncNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CatalogSyncNewResponse                   `json:"result" api:"required"`
+	Success  bool                                     `json:"success" api:"required"`
 	JSON     catalogSyncNewResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -1895,8 +1895,8 @@ func (r catalogSyncNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CatalogSyncNewResponseEnvelopeErrors struct {
-	Code             CatalogSyncNewResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             CatalogSyncNewResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Meta             CatalogSyncNewResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CatalogSyncNewResponseEnvelopeErrorsSource `json:"source"`
@@ -2144,8 +2144,8 @@ func (r catalogSyncNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncNewResponseEnvelopeMessages struct {
-	Code             CatalogSyncNewResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             CatalogSyncNewResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Meta             CatalogSyncNewResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CatalogSyncNewResponseEnvelopeMessagesSource `json:"source"`
@@ -2393,7 +2393,7 @@ func (r catalogSyncNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncUpdateParams struct {
-	AccountID   param.Field[string]                            `path:"account_id,required"`
+	AccountID   param.Field[string]                            `path:"account_id" api:"required"`
 	Description param.Field[string]                            `json:"description"`
 	Name        param.Field[string]                            `json:"name"`
 	Policy      param.Field[string]                            `json:"policy"`
@@ -2420,10 +2420,10 @@ func (r CatalogSyncUpdateParamsUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncUpdateResponseEnvelope struct {
-	Errors   []CatalogSyncUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CatalogSyncUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CatalogSyncUpdateResponse                   `json:"result,required"`
-	Success  bool                                        `json:"success,required"`
+	Errors   []CatalogSyncUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CatalogSyncUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CatalogSyncUpdateResponse                   `json:"result" api:"required"`
+	Success  bool                                        `json:"success" api:"required"`
 	JSON     catalogSyncUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -2447,8 +2447,8 @@ func (r catalogSyncUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CatalogSyncUpdateResponseEnvelopeErrors struct {
-	Code             CatalogSyncUpdateResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             CatalogSyncUpdateResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Meta             CatalogSyncUpdateResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CatalogSyncUpdateResponseEnvelopeErrorsSource `json:"source"`
@@ -2696,8 +2696,8 @@ func (r catalogSyncUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncUpdateResponseEnvelopeMessages struct {
-	Code             CatalogSyncUpdateResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             CatalogSyncUpdateResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Meta             CatalogSyncUpdateResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CatalogSyncUpdateResponseEnvelopeMessagesSource `json:"source"`
@@ -2945,11 +2945,11 @@ func (r catalogSyncUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CatalogSyncDeleteParams struct {
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	DeleteDestination param.Field[bool]   `query:"delete_destination"`
 }
 
@@ -2963,10 +2963,10 @@ func (r CatalogSyncDeleteParams) URLQuery() (v url.Values) {
 }
 
 type CatalogSyncDeleteResponseEnvelope struct {
-	Errors   []CatalogSyncDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CatalogSyncDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CatalogSyncDeleteResponse                   `json:"result,required"`
-	Success  bool                                        `json:"success,required"`
+	Errors   []CatalogSyncDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CatalogSyncDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CatalogSyncDeleteResponse                   `json:"result" api:"required"`
+	Success  bool                                        `json:"success" api:"required"`
 	JSON     catalogSyncDeleteResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -2990,8 +2990,8 @@ func (r catalogSyncDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CatalogSyncDeleteResponseEnvelopeErrors struct {
-	Code             CatalogSyncDeleteResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             CatalogSyncDeleteResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Meta             CatalogSyncDeleteResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CatalogSyncDeleteResponseEnvelopeErrorsSource `json:"source"`
@@ -3239,8 +3239,8 @@ func (r catalogSyncDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncDeleteResponseEnvelopeMessages struct {
-	Code             CatalogSyncDeleteResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             CatalogSyncDeleteResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Meta             CatalogSyncDeleteResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CatalogSyncDeleteResponseEnvelopeMessagesSource `json:"source"`
@@ -3488,7 +3488,7 @@ func (r catalogSyncDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncEditParams struct {
-	AccountID   param.Field[string]                          `path:"account_id,required"`
+	AccountID   param.Field[string]                          `path:"account_id" api:"required"`
 	Description param.Field[string]                          `json:"description"`
 	Name        param.Field[string]                          `json:"name"`
 	Policy      param.Field[string]                          `json:"policy"`
@@ -3515,10 +3515,10 @@ func (r CatalogSyncEditParamsUpdateMode) IsKnown() bool {
 }
 
 type CatalogSyncEditResponseEnvelope struct {
-	Errors   []CatalogSyncEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CatalogSyncEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   CatalogSyncEditResponse                   `json:"result,required"`
-	Success  bool                                      `json:"success,required"`
+	Errors   []CatalogSyncEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CatalogSyncEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CatalogSyncEditResponse                   `json:"result" api:"required"`
+	Success  bool                                      `json:"success" api:"required"`
 	JSON     catalogSyncEditResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -3542,8 +3542,8 @@ func (r catalogSyncEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CatalogSyncEditResponseEnvelopeErrors struct {
-	Code             CatalogSyncEditResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             CatalogSyncEditResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Meta             CatalogSyncEditResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CatalogSyncEditResponseEnvelopeErrorsSource `json:"source"`
@@ -3791,8 +3791,8 @@ func (r catalogSyncEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncEditResponseEnvelopeMessages struct {
-	Code             CatalogSyncEditResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             CatalogSyncEditResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Meta             CatalogSyncEditResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CatalogSyncEditResponseEnvelopeMessagesSource `json:"source"`
@@ -4040,14 +4040,14 @@ func (r catalogSyncEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CatalogSyncGetResponseEnvelope struct {
-	Errors   []CatalogSyncGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CatalogSyncGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CatalogSyncGetResponse                   `json:"result,required"`
-	Success  bool                                     `json:"success,required"`
+	Errors   []CatalogSyncGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CatalogSyncGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CatalogSyncGetResponse                   `json:"result" api:"required"`
+	Success  bool                                     `json:"success" api:"required"`
 	JSON     catalogSyncGetResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -4071,8 +4071,8 @@ func (r catalogSyncGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CatalogSyncGetResponseEnvelopeErrors struct {
-	Code             CatalogSyncGetResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             CatalogSyncGetResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Meta             CatalogSyncGetResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CatalogSyncGetResponseEnvelopeErrorsSource `json:"source"`
@@ -4320,8 +4320,8 @@ func (r catalogSyncGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncGetResponseEnvelopeMessages struct {
-	Code             CatalogSyncGetResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             CatalogSyncGetResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Meta             CatalogSyncGetResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CatalogSyncGetResponseEnvelopeMessagesSource `json:"source"`
@@ -4569,14 +4569,14 @@ func (r catalogSyncGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncRefreshParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CatalogSyncRefreshResponseEnvelope struct {
-	Errors   []CatalogSyncRefreshResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CatalogSyncRefreshResponseEnvelopeMessages `json:"messages,required"`
-	Result   string                                       `json:"result,required"`
-	Success  bool                                         `json:"success,required"`
+	Errors   []CatalogSyncRefreshResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CatalogSyncRefreshResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   string                                       `json:"result" api:"required"`
+	Success  bool                                         `json:"success" api:"required"`
 	JSON     catalogSyncRefreshResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -4600,8 +4600,8 @@ func (r catalogSyncRefreshResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CatalogSyncRefreshResponseEnvelopeErrors struct {
-	Code             CatalogSyncRefreshResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             CatalogSyncRefreshResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Meta             CatalogSyncRefreshResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CatalogSyncRefreshResponseEnvelopeErrorsSource `json:"source"`
@@ -4849,8 +4849,8 @@ func (r catalogSyncRefreshResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CatalogSyncRefreshResponseEnvelopeMessages struct {
-	Code             CatalogSyncRefreshResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             CatalogSyncRefreshResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Meta             CatalogSyncRefreshResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CatalogSyncRefreshResponseEnvelopeMessagesSource `json:"source"`

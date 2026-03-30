@@ -46,7 +46,7 @@ func (r *CookieService) List(ctx context.Context, params CookieListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/cookies", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -72,29 +72,29 @@ func (r *CookieService) Get(ctx context.Context, cookieID string, query CookieGe
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if cookieID == "" {
 		err = errors.New("missing required cookie_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/cookies/%s", query.ZoneID, cookieID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CookieListResponse struct {
 	// Identifier
-	ID                string                              `json:"id,required"`
-	FirstSeenAt       time.Time                           `json:"first_seen_at,required" format:"date-time"`
-	Host              string                              `json:"host,required"`
-	LastSeenAt        time.Time                           `json:"last_seen_at,required" format:"date-time"`
-	Name              string                              `json:"name,required"`
-	Type              CookieListResponseType              `json:"type,required"`
+	ID                string                              `json:"id" api:"required"`
+	FirstSeenAt       time.Time                           `json:"first_seen_at" api:"required" format:"date-time"`
+	Host              string                              `json:"host" api:"required"`
+	LastSeenAt        time.Time                           `json:"last_seen_at" api:"required" format:"date-time"`
+	Name              string                              `json:"name" api:"required"`
+	Type              CookieListResponseType              `json:"type" api:"required"`
 	DomainAttribute   string                              `json:"domain_attribute"`
 	ExpiresAttribute  time.Time                           `json:"expires_attribute" format:"date-time"`
 	HTTPOnlyAttribute bool                                `json:"http_only_attribute"`
@@ -168,12 +168,12 @@ func (r CookieListResponseSameSiteAttribute) IsKnown() bool {
 
 type CookieGetResponse struct {
 	// Identifier
-	ID                string                             `json:"id,required"`
-	FirstSeenAt       time.Time                          `json:"first_seen_at,required" format:"date-time"`
-	Host              string                             `json:"host,required"`
-	LastSeenAt        time.Time                          `json:"last_seen_at,required" format:"date-time"`
-	Name              string                             `json:"name,required"`
-	Type              CookieGetResponseType              `json:"type,required"`
+	ID                string                             `json:"id" api:"required"`
+	FirstSeenAt       time.Time                          `json:"first_seen_at" api:"required" format:"date-time"`
+	Host              string                             `json:"host" api:"required"`
+	LastSeenAt        time.Time                          `json:"last_seen_at" api:"required" format:"date-time"`
+	Name              string                             `json:"name" api:"required"`
+	Type              CookieGetResponseType              `json:"type" api:"required"`
 	DomainAttribute   string                             `json:"domain_attribute"`
 	ExpiresAttribute  time.Time                          `json:"expires_attribute" format:"date-time"`
 	HTTPOnlyAttribute bool                               `json:"http_only_attribute"`
@@ -247,7 +247,7 @@ func (r CookieGetResponseSameSiteAttribute) IsKnown() bool {
 
 type CookieListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned cookies.'
 	Direction param.Field[CookieListParamsDirection] `query:"direction"`
 	// Filters the returned cookies that match the specified domain attribute
@@ -384,13 +384,13 @@ func (r CookieListParamsType) IsKnown() bool {
 
 type CookieGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CookieGetResponseEnvelope struct {
-	Result CookieGetResponse `json:"result,required,nullable"`
+	Result CookieGetResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success  CookieGetResponseEnvelopeSuccess `json:"success,required"`
+	Success  CookieGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo            `json:"errors"`
 	Messages []shared.ResponseInfo            `json:"messages"`
 	JSON     cookieGetResponseEnvelopeJSON    `json:"-"`

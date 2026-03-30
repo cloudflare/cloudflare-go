@@ -39,52 +39,52 @@ func NewBucketEventNotificationService(opts ...option.RequestOption) (r *BucketE
 func (r *BucketEventNotificationService) Update(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationUpdateParams, opts ...option.RequestOption) (res *BucketEventNotificationUpdateResponse, err error) {
 	var env BucketEventNotificationUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", params.AccountID, bucketName, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all event notification rules for a bucket.
 func (r *BucketEventNotificationService) List(ctx context.Context, bucketName string, params BucketEventNotificationListParams, opts ...option.RequestOption) (res *BucketEventNotificationListResponse, err error) {
 	var env BucketEventNotificationListResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete an event notification rule. **If no body is provided, all rules for
@@ -92,56 +92,56 @@ func (r *BucketEventNotificationService) List(ctx context.Context, bucketName st
 func (r *BucketEventNotificationService) Delete(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationDeleteParams, opts ...option.RequestOption) (res *BucketEventNotificationDeleteResponse, err error) {
 	var env BucketEventNotificationDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", params.AccountID, bucketName, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a single event notification rule.
 func (r *BucketEventNotificationService) Get(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationGetParams, opts ...option.RequestOption) (res *BucketEventNotificationGetResponse, err error) {
 	var env BucketEventNotificationGetResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", params.AccountID, bucketName, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BucketEventNotificationUpdateResponse = interface{}
@@ -200,7 +200,7 @@ func (r bucketEventNotificationListResponseQueueJSON) RawJSON() string {
 
 type BucketEventNotificationListResponseQueuesRule struct {
 	// Array of R2 object actions that will trigger notifications.
-	Actions []BucketEventNotificationListResponseQueuesRulesAction `json:"actions,required"`
+	Actions []BucketEventNotificationListResponseQueuesRulesAction `json:"actions" api:"required"`
 	// Timestamp when the rule was created.
 	CreatedAt string `json:"createdAt"`
 	// A description that can be used to identify the event notification rule after
@@ -285,7 +285,7 @@ func (r bucketEventNotificationGetResponseJSON) RawJSON() string {
 
 type BucketEventNotificationGetResponseRule struct {
 	// Array of R2 object actions that will trigger notifications.
-	Actions []BucketEventNotificationGetResponseRulesAction `json:"actions,required"`
+	Actions []BucketEventNotificationGetResponseRulesAction `json:"actions" api:"required"`
 	// Timestamp when the rule was created.
 	CreatedAt string `json:"createdAt"`
 	// A description that can be used to identify the event notification rule after
@@ -341,9 +341,9 @@ func (r BucketEventNotificationGetResponseRulesAction) IsKnown() bool {
 
 type BucketEventNotificationUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of rules to drive notifications.
-	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules,required"`
+	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -354,7 +354,7 @@ func (r BucketEventNotificationUpdateParams) MarshalJSON() (data []byte, err err
 
 type BucketEventNotificationUpdateParamsRule struct {
 	// Array of R2 object actions that will trigger notifications.
-	Actions param.Field[[]BucketEventNotificationUpdateParamsRulesAction] `json:"actions,required"`
+	Actions param.Field[[]BucketEventNotificationUpdateParamsRulesAction] `json:"actions" api:"required"`
 	// A description that can be used to identify the event notification rule after
 	// creation.
 	Description param.Field[string] `json:"description"`
@@ -404,11 +404,11 @@ func (r BucketEventNotificationUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []string                              `json:"messages,required"`
-	Result   BucketEventNotificationUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors" api:"required"`
+	Messages []string                              `json:"messages" api:"required"`
+	Result   BucketEventNotificationUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketEventNotificationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketEventNotificationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketEventNotificationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -448,7 +448,7 @@ func (r BucketEventNotificationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -471,11 +471,11 @@ func (r BucketEventNotificationListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []string                            `json:"messages,required"`
-	Result   BucketEventNotificationListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors" api:"required"`
+	Messages []string                            `json:"messages" api:"required"`
+	Result   BucketEventNotificationListResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketEventNotificationListResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketEventNotificationListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketEventNotificationListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -515,7 +515,7 @@ func (r BucketEventNotificationListResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -538,11 +538,11 @@ func (r BucketEventNotificationDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []string                              `json:"messages,required"`
-	Result   BucketEventNotificationDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors" api:"required"`
+	Messages []string                              `json:"messages" api:"required"`
+	Result   BucketEventNotificationDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketEventNotificationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketEventNotificationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketEventNotificationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -582,7 +582,7 @@ func (r BucketEventNotificationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketEventNotificationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -605,11 +605,11 @@ func (r BucketEventNotificationGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEventNotificationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []string                           `json:"messages,required"`
-	Result   BucketEventNotificationGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors" api:"required"`
+	Messages []string                           `json:"messages" api:"required"`
+	Result   BucketEventNotificationGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketEventNotificationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketEventNotificationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketEventNotificationGetResponseEnvelopeJSON    `json:"-"`
 }
 

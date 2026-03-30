@@ -43,20 +43,20 @@ func (r *DEXTestUniqueDeviceService) List(ctx context.Context, params DEXTestUni
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/tests/unique-devices", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type UniqueDevices struct {
 	// total number of unique devices
-	UniqueDevicesTotal int64             `json:"uniqueDevicesTotal,required"`
+	UniqueDevicesTotal int64             `json:"uniqueDevicesTotal" api:"required"`
 	JSON               uniqueDevicesJSON `json:"-"`
 }
 
@@ -76,7 +76,7 @@ func (r uniqueDevicesJSON) RawJSON() string {
 }
 
 type DEXTestUniqueDeviceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optionally filter result stats to a specific device(s). Cannot be used in
 	// combination with colo param.
 	DeviceID param.Field[[]string] `query:"deviceId"`
@@ -94,10 +94,10 @@ func (r DEXTestUniqueDeviceListParams) URLQuery() (v url.Values) {
 }
 
 type DEXTestUniqueDeviceListResponseEnvelope struct {
-	Errors   []DEXTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXTestUniqueDeviceListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXTestUniqueDeviceListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXTestUniqueDeviceListResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXTestUniqueDeviceListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  UniqueDevices                                  `json:"result"`
 	JSON    dexTestUniqueDeviceListResponseEnvelopeJSON    `json:"-"`
 }
@@ -122,8 +122,8 @@ func (r dexTestUniqueDeviceListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXTestUniqueDeviceListResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           DEXTestUniqueDeviceListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexTestUniqueDeviceListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -170,8 +170,8 @@ func (r dexTestUniqueDeviceListResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type DEXTestUniqueDeviceListResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           DEXTestUniqueDeviceListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexTestUniqueDeviceListResponseEnvelopeMessagesJSON   `json:"-"`

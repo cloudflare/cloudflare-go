@@ -39,11 +39,11 @@ func (r *AppService) Get(ctx context.Context, query AppGetParams, opts ...option
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/apps", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Create new app for your account
@@ -51,11 +51,11 @@ func (r *AppService) Post(ctx context.Context, params AppPostParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/apps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type AppGetResponse struct {
@@ -175,12 +175,12 @@ func (r appPostResponseDataAppJSON) RawJSON() string {
 
 type AppGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AppPostParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Name      param.Field[string] `json:"name,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Name      param.Field[string] `json:"name" api:"required"`
 }
 
 func (r AppPostParams) MarshalJSON() (data []byte, err error) {

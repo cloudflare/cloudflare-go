@@ -50,15 +50,15 @@ func (r *RequestService) New(ctx context.Context, params RequestNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/new", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updating a request alters the request in the Cloudforce One queue. This API may
@@ -69,19 +69,19 @@ func (r *RequestService) Update(ctx context.Context, requestID string, params Re
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if requestID == "" {
 		err = errors.New("missing required request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", params.AccountID, requestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Requests
@@ -91,7 +91,7 @@ func (r *RequestService) List(ctx context.Context, params RequestListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -116,15 +116,15 @@ func (r *RequestService) Delete(ctx context.Context, requestID string, body Requ
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if requestID == "" {
 		err = errors.New("missing required request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", body.AccountID, requestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Request Priority, Status, and TLP constants
@@ -133,15 +133,15 @@ func (r *RequestService) Constants(ctx context.Context, query RequestConstantsPa
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/constants", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a Request
@@ -150,19 +150,19 @@ func (r *RequestService) Get(ctx context.Context, requestID string, query Reques
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if requestID == "" {
 		err = errors.New("missing required request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", query.AccountID, requestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Request Quota
@@ -171,15 +171,15 @@ func (r *RequestService) Quota(ctx context.Context, query RequestQuotaParams, op
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/quota", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Request Types
@@ -189,7 +189,7 @@ func (r *RequestService) Types(ctx context.Context, query RequestTypesParams, op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/types", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -211,18 +211,18 @@ func (r *RequestService) TypesAutoPaging(ctx context.Context, query RequestTypes
 
 type Item struct {
 	// UUID.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Request content.
-	Content  string    `json:"content,required"`
-	Created  time.Time `json:"created,required" format:"date-time"`
-	Priority time.Time `json:"priority,required" format:"date-time"`
+	Content  string    `json:"content" api:"required"`
+	Created  time.Time `json:"created" api:"required" format:"date-time"`
+	Priority time.Time `json:"priority" api:"required" format:"date-time"`
 	// Requested information from request.
-	Request string `json:"request,required"`
+	Request string `json:"request" api:"required"`
 	// Brief description of the request.
-	Summary string `json:"summary,required"`
+	Summary string `json:"summary" api:"required"`
 	// The CISA defined Traffic Light Protocol (TLP).
-	TLP       ItemTLP   `json:"tlp,required"`
-	Updated   time.Time `json:"updated,required" format:"date-time"`
+	TLP       ItemTLP   `json:"tlp" api:"required"`
+	Updated   time.Time `json:"updated" api:"required" format:"date-time"`
 	Completed time.Time `json:"completed" format:"date-time"`
 	// Tokens for the request messages.
 	MessageTokens int64 `json:"message_tokens"`
@@ -303,18 +303,18 @@ func (r ItemStatus) IsKnown() bool {
 
 type ListItem struct {
 	// UUID.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Request creation time.
-	Created  time.Time        `json:"created,required" format:"date-time"`
-	Priority ListItemPriority `json:"priority,required"`
+	Created  time.Time        `json:"created" api:"required" format:"date-time"`
+	Priority ListItemPriority `json:"priority" api:"required"`
 	// Requested information from request.
-	Request string `json:"request,required"`
+	Request string `json:"request" api:"required"`
 	// Brief description of the request.
-	Summary string `json:"summary,required"`
+	Summary string `json:"summary" api:"required"`
 	// The CISA defined Traffic Light Protocol (TLP).
-	TLP ListItemTLP `json:"tlp,required"`
+	TLP ListItemTLP `json:"tlp" api:"required"`
 	// Request last updated time.
-	Updated time.Time `json:"updated,required" format:"date-time"`
+	Updated time.Time `json:"updated" api:"required" format:"date-time"`
 	// Request completion time.
 	Completed time.Time `json:"completed" format:"date-time"`
 	// Tokens for the request messages.
@@ -522,10 +522,10 @@ func (r RequestConstantsTLP) IsKnown() bool {
 type RequestTypes []string
 
 type RequestDeleteResponse struct {
-	Errors   []RequestDeleteResponseError   `json:"errors,required"`
-	Messages []RequestDeleteResponseMessage `json:"messages,required"`
+	Errors   []RequestDeleteResponseError   `json:"errors" api:"required"`
+	Messages []RequestDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestDeleteResponseSuccess `json:"success,required"`
+	Success RequestDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    requestDeleteResponseJSON    `json:"-"`
 }
 
@@ -548,8 +548,8 @@ func (r requestDeleteResponseJSON) RawJSON() string {
 }
 
 type RequestDeleteResponseError struct {
-	Code             int64                             `json:"code,required"`
-	Message          string                            `json:"message,required"`
+	Code             int64                             `json:"code" api:"required"`
+	Message          string                            `json:"message" api:"required"`
 	DocumentationURL string                            `json:"documentation_url"`
 	Source           RequestDeleteResponseErrorsSource `json:"source"`
 	JSON             requestDeleteResponseErrorJSON    `json:"-"`
@@ -596,8 +596,8 @@ func (r requestDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestDeleteResponseMessage struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           RequestDeleteResponseMessagesSource `json:"source"`
 	JSON             requestDeleteResponseMessageJSON    `json:"-"`
@@ -660,7 +660,7 @@ func (r RequestDeleteResponseSuccess) IsKnown() bool {
 
 type RequestNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request content.
 	Content param.Field[string] `json:"content"`
 	// Priority for analyzing the request.
@@ -697,10 +697,10 @@ func (r RequestNewParamsTLP) IsKnown() bool {
 }
 
 type RequestNewResponseEnvelope struct {
-	Errors   []RequestNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Item                              `json:"result"`
 	JSON    requestNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -725,8 +725,8 @@ func (r requestNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestNewResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RequestNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -773,8 +773,8 @@ func (r requestNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestNewResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RequestNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -837,7 +837,7 @@ func (r RequestNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request content.
 	Content param.Field[string] `json:"content"`
 	// Priority for analyzing the request.
@@ -874,10 +874,10 @@ func (r RequestUpdateParamsTLP) IsKnown() bool {
 }
 
 type RequestUpdateResponseEnvelope struct {
-	Errors   []RequestUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Item                                 `json:"result"`
 	JSON    requestUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -902,8 +902,8 @@ func (r requestUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestUpdateResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           RequestUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -950,8 +950,8 @@ func (r requestUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestUpdateResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           RequestUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1014,11 +1014,11 @@ func (r RequestUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
-	Page param.Field[int64] `json:"page,required"`
+	Page param.Field[int64] `json:"page" api:"required"`
 	// Number of results per page.
-	PerPage param.Field[int64] `json:"per_page,required"`
+	PerPage param.Field[int64] `json:"per_page" api:"required"`
 	// Retrieve requests completed after this time.
 	CompletedAfter param.Field[time.Time] `json:"completed_after" format:"date-time"`
 	// Retrieve requests completed before this time.
@@ -1079,19 +1079,19 @@ func (r RequestListParamsStatus) IsKnown() bool {
 
 type RequestDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestConstantsParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestConstantsResponseEnvelope struct {
-	Errors   []RequestConstantsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestConstantsResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestConstantsResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestConstantsResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestConstantsResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestConstantsResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RequestConstants                        `json:"result"`
 	JSON    requestConstantsResponseEnvelopeJSON    `json:"-"`
 }
@@ -1116,8 +1116,8 @@ func (r requestConstantsResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestConstantsResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           RequestConstantsResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestConstantsResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1164,8 +1164,8 @@ func (r requestConstantsResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestConstantsResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           RequestConstantsResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestConstantsResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1228,14 +1228,14 @@ func (r RequestConstantsResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestGetResponseEnvelope struct {
-	Errors   []RequestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Item                              `json:"result"`
 	JSON    requestGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1260,8 +1260,8 @@ func (r requestGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RequestGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1308,8 +1308,8 @@ func (r requestGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RequestGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1372,14 +1372,14 @@ func (r RequestGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestQuotaParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestQuotaResponseEnvelope struct {
-	Errors   []RequestQuotaResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestQuotaResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RequestQuotaResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RequestQuotaResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RequestQuotaResponseEnvelopeSuccess `json:"success,required"`
+	Success RequestQuotaResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Quota                               `json:"result"`
 	JSON    requestQuotaResponseEnvelopeJSON    `json:"-"`
 }
@@ -1404,8 +1404,8 @@ func (r requestQuotaResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RequestQuotaResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RequestQuotaResponseEnvelopeErrorsSource `json:"source"`
 	JSON             requestQuotaResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1452,8 +1452,8 @@ func (r requestQuotaResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RequestQuotaResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           RequestQuotaResponseEnvelopeMessagesSource `json:"source"`
 	JSON             requestQuotaResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1516,5 +1516,5 @@ func (r RequestQuotaResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestTypesParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

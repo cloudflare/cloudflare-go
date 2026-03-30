@@ -45,15 +45,15 @@ func (r *DomainHistoryService) Get(ctx context.Context, params DomainHistoryGetP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/domain-history", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DomainHistory struct {
@@ -128,7 +128,7 @@ func (r domainHistoryCategorizationsCategoryJSON) RawJSON() string {
 
 type DomainHistoryGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Domain    param.Field[string] `query:"domain"`
 }
 
@@ -141,11 +141,11 @@ func (r DomainHistoryGetParams) URLQuery() (v url.Values) {
 }
 
 type DomainHistoryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []DomainHistory       `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   []DomainHistory       `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success    DomainHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    DomainHistoryGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo DomainHistoryGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       domainHistoryGetResponseEnvelopeJSON       `json:"-"`
 }

@@ -42,7 +42,7 @@ func (r *TracerouteService) New(ctx context.Context, params TracerouteNewParams,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/traceroute", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -241,8 +241,8 @@ func (r tracerouteColosHopsNodeJSON) RawJSON() string {
 
 type TracerouteNewParams struct {
 	// Identifier
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Targets   param.Field[[]string] `json:"targets,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
+	Targets   param.Field[[]string] `json:"targets" api:"required"`
 	// If no source colo names specified, all colos will be used. China colos are
 	// unavailable for traceroutes.
 	Colos   param.Field[[]string]                   `json:"colos"`

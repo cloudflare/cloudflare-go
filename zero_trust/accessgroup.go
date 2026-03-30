@@ -63,10 +63,10 @@ func (r *AccessGroupService) New(ctx context.Context, params AccessGroupNewParam
 	path := fmt.Sprintf("%s/%s/access/groups", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured Access group.
@@ -93,15 +93,15 @@ func (r *AccessGroupService) Update(ctx context.Context, groupID string, params 
 	}
 	if groupID == "" {
 		err = errors.New("missing required group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all Access groups.
@@ -169,15 +169,15 @@ func (r *AccessGroupService) Delete(ctx context.Context, groupID string, body Ac
 	}
 	if groupID == "" {
 		err = errors.New("missing required group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single Access group.
@@ -204,15 +204,15 @@ func (r *AccessGroupService) Get(ctx context.Context, groupID string, query Acce
 	}
 	if groupID == "" {
 		err = errors.New("missing required group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, groupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ZeroTrustGroup struct {
@@ -463,9 +463,9 @@ func (r accessGroupGetResponseJSON) RawJSON() string {
 type AccessGroupNewParams struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
 	// The name of the Access group.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -485,10 +485,10 @@ func (r AccessGroupNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessGroupNewResponseEnvelope struct {
-	Errors   []AccessGroupNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessGroupNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessGroupNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessGroupNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessGroupNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessGroupNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessGroupNewResponse                `json:"result"`
 	JSON    accessGroupNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -513,8 +513,8 @@ func (r accessGroupNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessGroupNewResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AccessGroupNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessGroupNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -561,8 +561,8 @@ func (r accessGroupNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessGroupNewResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AccessGroupNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessGroupNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -626,9 +626,9 @@ func (r AccessGroupNewResponseEnvelopeSuccess) IsKnown() bool {
 type AccessGroupUpdateParams struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
 	// The name of the Access group.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -648,10 +648,10 @@ func (r AccessGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessGroupUpdateResponseEnvelope struct {
-	Errors   []AccessGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessGroupUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessGroupUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessGroupUpdateResponse                `json:"result"`
 	JSON    accessGroupUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -676,8 +676,8 @@ func (r accessGroupUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessGroupUpdateResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessGroupUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessGroupUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -724,8 +724,8 @@ func (r accessGroupUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessGroupUpdateResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           AccessGroupUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessGroupUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -817,10 +817,10 @@ type AccessGroupDeleteParams struct {
 }
 
 type AccessGroupDeleteResponseEnvelope struct {
-	Errors   []AccessGroupDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessGroupDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessGroupDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessGroupDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessGroupDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessGroupDeleteResponse                `json:"result"`
 	JSON    accessGroupDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -845,8 +845,8 @@ func (r accessGroupDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessGroupDeleteResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessGroupDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessGroupDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -893,8 +893,8 @@ func (r accessGroupDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessGroupDeleteResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           AccessGroupDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessGroupDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -963,10 +963,10 @@ type AccessGroupGetParams struct {
 }
 
 type AccessGroupGetResponseEnvelope struct {
-	Errors   []AccessGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessGroupGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessGroupGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessGroupGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessGroupGetResponse                `json:"result"`
 	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -991,8 +991,8 @@ func (r accessGroupGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessGroupGetResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AccessGroupGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1039,8 +1039,8 @@ func (r accessGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessGroupGetResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AccessGroupGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessGroupGetResponseEnvelopeMessagesJSON   `json:"-"`

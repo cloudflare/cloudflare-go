@@ -528,7 +528,7 @@ func (r MemberPoliciesAccess) IsKnown() bool {
 // resources.
 type MemberPoliciesPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta MemberPoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -581,9 +581,9 @@ func (r memberPoliciesPermissionGroupsMetaJSON) RawJSON() string {
 // A group of scoped resources.
 type MemberPoliciesResourceGroup struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []MemberPoliciesResourceGroupsScope `json:"scope,required"`
+	Scope []MemberPoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MemberPoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -614,9 +614,9 @@ func (r memberPoliciesResourceGroupJSON) RawJSON() string {
 type MemberPoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []MemberPoliciesResourceGroupsScopeObject `json:"objects,required"`
+	Objects []MemberPoliciesResourceGroupsScopeObject `json:"objects" api:"required"`
 	JSON    memberPoliciesResourceGroupsScopeJSON     `json:"-"`
 }
 
@@ -642,7 +642,7 @@ func (r memberPoliciesResourceGroupsScopeJSON) RawJSON() string {
 type MemberPoliciesResourceGroupsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                      `json:"key,required"`
+	Key  string                                      `json:"key" api:"required"`
 	JSON memberPoliciesResourceGroupsScopeObjectJSON `json:"-"`
 }
 
@@ -705,13 +705,13 @@ func (r MemberStatus) IsKnown() bool {
 // Details of the user associated to the membership.
 type MemberUser struct {
 	// The contact email address of the user.
-	Email string `json:"email,required"`
+	Email string `json:"email" api:"required"`
 	// Identifier
 	ID string `json:"id"`
 	// User's first name
-	FirstName string `json:"first_name,nullable"`
+	FirstName string `json:"first_name" api:"nullable"`
 	// User's last name
-	LastName string `json:"last_name,nullable"`
+	LastName string `json:"last_name" api:"nullable"`
 	// Indicates whether two-factor authentication is enabled for the user account.
 	// Does not apply to API authentication.
 	TwoFactorAuthenticationEnabled bool           `json:"two_factor_authentication_enabled"`
@@ -857,8 +857,8 @@ func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ResponseInfo struct {
-	Code             int64              `json:"code,required"`
-	Message          string             `json:"message,required"`
+	Code             int64              `json:"code" api:"required"`
+	Message          string             `json:"message" api:"required"`
 	DocumentationURL string             `json:"documentation_url"`
 	Source           ResponseInfoSource `json:"source"`
 	JSON             responseInfoJSON   `json:"-"`
@@ -905,12 +905,12 @@ func (r responseInfoSourceJSON) RawJSON() string {
 
 type Role struct {
 	// Role identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Description of role's permissions.
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// Role name.
-	Name        string          `json:"name,required"`
-	Permissions RolePermissions `json:"permissions,required"`
+	Name        string          `json:"name" api:"required"`
+	Permissions RolePermissions `json:"permissions" api:"required"`
 	JSON        roleJSON        `json:"-"`
 }
 
@@ -976,7 +976,7 @@ func (r rolePermissionsJSON) RawJSON() string {
 
 type RoleParam struct {
 	// Role identifier tag.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r RoleParam) MarshalJSON() (data []byte, err error) {
@@ -1269,13 +1269,13 @@ type TokenConditionCIDRListParam = string
 
 type TokenPolicy struct {
 	// Policy identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Allow or deny operations against the resources.
-	Effect TokenPolicyEffect `json:"effect,required"`
+	Effect TokenPolicyEffect `json:"effect" api:"required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups []TokenPolicyPermissionGroup `json:"permission_groups,required"`
+	PermissionGroups []TokenPolicyPermissionGroup `json:"permission_groups" api:"required"`
 	// A list of resource names that the policy applies to.
-	Resources TokenPolicyResourcesUnion `json:"resources,required"`
+	Resources TokenPolicyResourcesUnion `json:"resources" api:"required"`
 	JSON      tokenPolicyJSON           `json:"-"`
 }
 
@@ -1317,7 +1317,7 @@ func (r TokenPolicyEffect) IsKnown() bool {
 // resources.
 type TokenPolicyPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta TokenPolicyPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -1400,11 +1400,11 @@ func (r TokenPolicyResourcesIAMResourcesTypeObjectNested) implementsTokenPolicyR
 
 type TokenPolicyParam struct {
 	// Allow or deny operations against the resources.
-	Effect param.Field[TokenPolicyEffect] `json:"effect,required"`
+	Effect param.Field[TokenPolicyEffect] `json:"effect" api:"required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]TokenPolicyPermissionGroupParam] `json:"permission_groups,required"`
+	PermissionGroups param.Field[[]TokenPolicyPermissionGroupParam] `json:"permission_groups" api:"required"`
 	// A list of resource names that the policy applies to.
-	Resources param.Field[TokenPolicyResourcesUnionParam] `json:"resources,required"`
+	Resources param.Field[TokenPolicyResourcesUnionParam] `json:"resources" api:"required"`
 }
 
 func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -1415,7 +1415,7 @@ func (r TokenPolicyParam) MarshalJSON() (data []byte, err error) {
 // resources.
 type TokenPolicyPermissionGroupParam struct {
 	// Identifier of the permission group.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta param.Field[TokenPolicyPermissionGroupsMetaParam] `json:"meta"`
 }

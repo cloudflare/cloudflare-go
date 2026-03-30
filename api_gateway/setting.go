@@ -48,7 +48,7 @@ type Settings struct {
 	//
 	// - `none` will skip running schema validation entirely for the request
 	// - `null` indicates that no override is in place
-	ValidationOverrideMitigationAction SettingsValidationOverrideMitigationAction `json:"validation_override_mitigation_action,nullable"`
+	ValidationOverrideMitigationAction SettingsValidationOverrideMitigationAction `json:"validation_override_mitigation_action" api:"nullable"`
 	JSON                               settingsJSON                               `json:"-"`
 }
 

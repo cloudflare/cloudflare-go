@@ -75,10 +75,10 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an Access application.
@@ -105,15 +105,15 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam,
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all Access applications in an account or zone.
@@ -181,15 +181,15 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam,
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches information about an Access application.
@@ -216,15 +216,15 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, qu
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Revokes all tokens issued for an application.
@@ -251,15 +251,15 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppID
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/revoke_tokens", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AllowedHeaders = string
@@ -1027,11 +1027,11 @@ func (r SAMLSaaSAppCustomAttributesSourceNameByIdPParam) MarshalJSON() (data []b
 // provisioning to an application.
 type SCIMConfigAuthenticationHTTPBasic struct {
 	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password,required"`
+	Password string `json:"password" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme SCIMConfigAuthenticationHTTPBasicScheme `json:"scheme,required"`
+	Scheme SCIMConfigAuthenticationHTTPBasicScheme `json:"scheme" api:"required"`
 	// User name used to authenticate with the remote SCIM service.
-	User string                                `json:"user,required"`
+	User string                                `json:"user" api:"required"`
 	JSON scimConfigAuthenticationHTTPBasicJSON `json:"-"`
 }
 
@@ -1240,11 +1240,11 @@ func (r SCIMConfigAuthenticationHTTPBasicScheme) IsKnown() bool {
 // provisioning to an application.
 type SCIMConfigAuthenticationHTTPBasicParam struct {
 	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password,required"`
+	Password param.Field[string] `json:"password" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[SCIMConfigAuthenticationHTTPBasicScheme] `json:"scheme,required"`
+	Scheme param.Field[SCIMConfigAuthenticationHTTPBasicScheme] `json:"scheme" api:"required"`
 	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user,required"`
+	User param.Field[string] `json:"user" api:"required"`
 }
 
 func (r SCIMConfigAuthenticationHTTPBasicParam) MarshalJSON() (data []byte, err error) {
@@ -1339,9 +1339,9 @@ func (r SCIMConfigAuthenticationHTTPBasicParam) implementsAccessApplicationUpdat
 // provisioning to an application.
 type SCIMConfigAuthenticationOAuthBearerToken struct {
 	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token,required"`
+	Token string `json:"token" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme SCIMConfigAuthenticationOAuthBearerTokenScheme `json:"scheme,required"`
+	Scheme SCIMConfigAuthenticationOAuthBearerTokenScheme `json:"scheme" api:"required"`
 	JSON   scimConfigAuthenticationOAuthBearerTokenJSON   `json:"-"`
 }
 
@@ -1549,9 +1549,9 @@ func (r SCIMConfigAuthenticationOAuthBearerTokenScheme) IsKnown() bool {
 // provisioning to an application.
 type SCIMConfigAuthenticationOAuthBearerTokenParam struct {
 	// Token used to authenticate with the remote SCIM service.
-	Token param.Field[string] `json:"token,required"`
+	Token param.Field[string] `json:"token" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[SCIMConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[SCIMConfigAuthenticationOAuthBearerTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) MarshalJSON() (data []byte, err error) {
@@ -1646,18 +1646,18 @@ func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsAccessApplicati
 // to an application.
 type SCIMConfigAuthenticationOauth2 struct {
 	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url,required"`
+	AuthorizationURL string `json:"authorization_url" api:"required"`
 	// Client ID used to authenticate when generating a token for authenticating with
 	// the remote SCIM service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme SCIMConfigAuthenticationOauth2Scheme `json:"scheme,required"`
+	Scheme SCIMConfigAuthenticationOauth2Scheme `json:"scheme" api:"required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string `json:"token_url,required"`
+	TokenURL string `json:"token_url" api:"required"`
 	// The authorization scopes to request when generating the token used to
 	// authenticate with the remove SCIM service.
 	Scopes []string                           `json:"scopes"`
@@ -1872,18 +1872,18 @@ func (r SCIMConfigAuthenticationOauth2Scheme) IsKnown() bool {
 // to an application.
 type SCIMConfigAuthenticationOauth2Param struct {
 	// URL used to generate the auth code used during token generation.
-	AuthorizationURL param.Field[string] `json:"authorization_url,required"`
+	AuthorizationURL param.Field[string] `json:"authorization_url" api:"required"`
 	// Client ID used to authenticate when generating a token for authenticating with
 	// the remote SCIM service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[SCIMConfigAuthenticationOauth2Scheme] `json:"scheme,required"`
+	Scheme param.Field[SCIMConfigAuthenticationOauth2Scheme] `json:"scheme" api:"required"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL param.Field[string] `json:"token_url,required"`
+	TokenURL param.Field[string] `json:"token_url" api:"required"`
 	// The authorization scopes to request when generating the token used to
 	// authenticate with the remove SCIM service.
 	Scopes param.Field[[]string] `json:"scopes"`
@@ -1981,7 +1981,7 @@ func (r SCIMConfigAuthenticationOauth2Param) implementsAccessApplicationUpdatePa
 // the remote SCIM service.
 type SCIMConfigMapping struct {
 	// Which SCIM resource type this mapping applies to.
-	Schema string `json:"schema,required"`
+	Schema string `json:"schema" api:"required"`
 	// Whether or not this mapping is enabled.
 	Enabled bool `json:"enabled"`
 	// A
@@ -2072,7 +2072,7 @@ func (r SCIMConfigMappingStrictness) IsKnown() bool {
 // the remote SCIM service.
 type SCIMConfigMappingParam struct {
 	// Which SCIM resource type this mapping applies to.
-	Schema param.Field[string] `json:"schema,required"`
+	Schema param.Field[string] `json:"schema" api:"required"`
 	// Whether or not this mapping is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 	// A
@@ -2424,9 +2424,9 @@ func init() {
 type AccessApplicationNewResponseSelfHostedApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -3232,9 +3232,9 @@ func (r AccessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfigAllowe
 type AccessApplicationNewResponseSelfHostedApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -3316,12 +3316,12 @@ func init() {
 type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -3371,7 +3371,7 @@ func (r AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -3474,12 +3474,12 @@ func init() {
 type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -3965,9 +3965,9 @@ func (r AccessApplicationNewResponseSaaSApplicationSaaSAppAuthType) IsKnown() bo
 type AccessApplicationNewResponseSaaSApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -4048,12 +4048,12 @@ func init() {
 type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -4103,7 +4103,7 @@ func (r AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAcces
 // provisioning to an application.
 type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -4206,12 +4206,12 @@ func init() {
 type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -4273,9 +4273,9 @@ func (r AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationAcces
 type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationNewResponseBrowserSSHApplicationType `json:"type,required"`
+	Type AccessApplicationNewResponseBrowserSSHApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -5109,9 +5109,9 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfigAllowe
 type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -5193,12 +5193,12 @@ func init() {
 type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -5248,7 +5248,7 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -5351,12 +5351,12 @@ func init() {
 type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -5418,9 +5418,9 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationNewResponseBrowserVNCApplicationType `json:"type,required"`
+	Type AccessApplicationNewResponseBrowserVNCApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -6254,9 +6254,9 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfigAllowe
 type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -6338,12 +6338,12 @@ func init() {
 type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -6393,7 +6393,7 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -6496,12 +6496,12 @@ func init() {
 type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -6562,7 +6562,7 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 
 type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The application type.
-	Type AccessApplicationNewResponseAppLauncherApplicationType `json:"type,required"`
+	Type AccessApplicationNewResponseAppLauncherApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -6672,9 +6672,9 @@ func (r AccessApplicationNewResponseAppLauncherApplicationType) IsKnown() bool {
 
 type AccessApplicationNewResponseAppLauncherApplicationFooterLink struct {
 	// The hypertext in the footer link.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// the hyperlink in the footer link.
-	URL  string                                                           `json:"url,required"`
+	URL  string                                                           `json:"url" api:"required"`
 	JSON accessApplicationNewResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
 }
 
@@ -6944,7 +6944,7 @@ func (r AccessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfigAllow
 
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -7219,7 +7219,7 @@ func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolici
 
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -7494,7 +7494,7 @@ func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolici
 
 type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -8025,9 +8025,9 @@ func (r AccessApplicationNewResponseBookmarkApplicationPoliciesMfaConfigAllowedA
 }
 
 type AccessApplicationNewResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
@@ -8065,11 +8065,11 @@ func (r AccessApplicationNewResponseInfrastructureApplication) implementsAccessA
 type AccessApplicationNewResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                      `json:"target_attributes" api:"required"`
 	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -8187,7 +8187,7 @@ func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionR
 // by your application.
 type AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
 	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string `json:"usernames,required"`
+	Usernames []string `json:"usernames" api:"required"`
 	// Enables using Identity Provider email alias as SSH username.
 	AllowEmailAlias bool                                                                                `json:"allow_email_alias"`
 	JSON            accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
@@ -8214,10 +8214,10 @@ func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionR
 type AccessApplicationNewResponseBrowserRDPApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain         string                                                             `json:"domain,required"`
-	TargetCriteria []AccessApplicationNewResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria,required"`
+	Domain         string                                                             `json:"domain" api:"required"`
+	TargetCriteria []AccessApplicationNewResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -8371,11 +8371,11 @@ func (r AccessApplicationNewResponseBrowserRDPApplication) implementsAccessAppli
 type AccessApplicationNewResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                  `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                  `json:"target_attributes" api:"required"`
 	JSON             accessApplicationNewResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -9069,9 +9069,9 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfigAllowe
 type AccessApplicationNewResponseBrowserRDPApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -9153,12 +9153,12 @@ func init() {
 type AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -9208,7 +9208,7 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -9311,12 +9311,12 @@ func init() {
 type AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -9377,7 +9377,7 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationSCIMConfigAuthenticatio
 
 type AccessApplicationNewResponseMcpServerApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -10086,9 +10086,9 @@ func (r AccessApplicationNewResponseMcpServerApplicationPoliciesMfaConfigAllowed
 type AccessApplicationNewResponseMcpServerApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -10170,12 +10170,12 @@ func init() {
 type AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -10225,7 +10225,7 @@ func (r AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthentication
 // provisioning to an application.
 type AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -10328,12 +10328,12 @@ func init() {
 type AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -10394,7 +10394,7 @@ func (r AccessApplicationNewResponseMcpServerApplicationSCIMConfigAuthentication
 
 type AccessApplicationNewResponseMcpServerPortalApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -11109,9 +11109,9 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfigA
 type AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -11193,12 +11193,12 @@ func init() {
 type AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -11248,7 +11248,7 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenti
 // provisioning to an application.
 type AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -11351,12 +11351,12 @@ func init() {
 type AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -11727,9 +11727,9 @@ func init() {
 type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -12536,9 +12536,9 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfigAll
 type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -12620,12 +12620,12 @@ func init() {
 type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -12675,7 +12675,7 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentica
 // provisioning to an application.
 type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -12778,12 +12778,12 @@ func init() {
 type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -13269,9 +13269,9 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSaaSAppAuthType) IsKnown()
 type AccessApplicationUpdateResponseSaaSApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -13353,12 +13353,12 @@ func init() {
 type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -13408,7 +13408,7 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAc
 // provisioning to an application.
 type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -13511,12 +13511,12 @@ func init() {
 type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -13578,9 +13578,9 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationAc
 type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationUpdateResponseBrowserSSHApplicationType `json:"type,required"`
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -14415,9 +14415,9 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfigAll
 type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -14499,12 +14499,12 @@ func init() {
 type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -14554,7 +14554,7 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentica
 // provisioning to an application.
 type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -14657,12 +14657,12 @@ func init() {
 type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -14724,9 +14724,9 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentica
 type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationUpdateResponseBrowserVNCApplicationType `json:"type,required"`
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -15561,9 +15561,9 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfigAll
 type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -15645,12 +15645,12 @@ func init() {
 type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -15700,7 +15700,7 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentica
 // provisioning to an application.
 type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -15803,12 +15803,12 @@ func init() {
 type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -15869,7 +15869,7 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentica
 
 type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The application type.
-	Type AccessApplicationUpdateResponseAppLauncherApplicationType `json:"type,required"`
+	Type AccessApplicationUpdateResponseAppLauncherApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -15979,9 +15979,9 @@ func (r AccessApplicationUpdateResponseAppLauncherApplicationType) IsKnown() boo
 
 type AccessApplicationUpdateResponseAppLauncherApplicationFooterLink struct {
 	// The hypertext in the footer link.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// the hyperlink in the footer link.
-	URL  string                                                              `json:"url,required"`
+	URL  string                                                              `json:"url" api:"required"`
 	JSON accessApplicationUpdateResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
 }
 
@@ -16251,7 +16251,7 @@ func (r AccessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfigAl
 
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -16526,7 +16526,7 @@ func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPol
 
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -16801,7 +16801,7 @@ func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPol
 
 type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -17334,9 +17334,9 @@ func (r AccessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfigAllow
 }
 
 type AccessApplicationUpdateResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	TargetCriteria []AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
@@ -17375,11 +17375,11 @@ func (r AccessApplicationUpdateResponseInfrastructureApplication) implementsAcce
 type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                         `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                         `json:"target_attributes" api:"required"`
 	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -17497,7 +17497,7 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnecti
 // by your application.
 type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
 	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string `json:"usernames,required"`
+	Usernames []string `json:"usernames" api:"required"`
 	// Enables using Identity Provider email alias as SSH username.
 	AllowEmailAlias bool                                                                                   `json:"allow_email_alias"`
 	JSON            accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
@@ -17524,10 +17524,10 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnecti
 type AccessApplicationUpdateResponseBrowserRDPApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain         string                                                                `json:"domain,required"`
-	TargetCriteria []AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria,required"`
+	Domain         string                                                                `json:"domain" api:"required"`
+	TargetCriteria []AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -17682,11 +17682,11 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplication) implementsAccessAp
 type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                     `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                     `json:"target_attributes" api:"required"`
 	JSON             accessApplicationUpdateResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -18380,9 +18380,9 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfigAll
 type AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -18464,12 +18464,12 @@ func init() {
 type AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -18519,7 +18519,7 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthentica
 // provisioning to an application.
 type AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -18622,12 +18622,12 @@ func init() {
 type AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -18688,7 +18688,7 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationSCIMConfigAuthentica
 
 type AccessApplicationUpdateResponseMcpServerApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -19399,9 +19399,9 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfigAllo
 type AccessApplicationUpdateResponseMcpServerApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -19483,12 +19483,12 @@ func init() {
 type AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -19538,7 +19538,7 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticat
 // provisioning to an application.
 type AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -19641,12 +19641,12 @@ func init() {
 type AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -19707,7 +19707,7 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationSCIMConfigAuthenticat
 
 type AccessApplicationUpdateResponseMcpServerPortalApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -20423,9 +20423,9 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConf
 type AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -20507,12 +20507,12 @@ func init() {
 type AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -20562,7 +20562,7 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthe
 // provisioning to an application.
 type AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -20665,12 +20665,12 @@ func init() {
 type AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -21041,9 +21041,9 @@ func init() {
 type AccessApplicationListResponseSelfHostedApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -21850,9 +21850,9 @@ func (r AccessApplicationListResponseSelfHostedApplicationPoliciesMfaConfigAllow
 type AccessApplicationListResponseSelfHostedApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -21934,12 +21934,12 @@ func init() {
 type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -21989,7 +21989,7 @@ func (r AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticati
 // provisioning to an application.
 type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -22092,12 +22092,12 @@ func init() {
 type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -22583,9 +22583,9 @@ func (r AccessApplicationListResponseSaaSApplicationSaaSAppAuthType) IsKnown() b
 type AccessApplicationListResponseSaaSApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -22666,12 +22666,12 @@ func init() {
 type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -22721,7 +22721,7 @@ func (r AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAcce
 // provisioning to an application.
 type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -22824,12 +22824,12 @@ func init() {
 type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -22891,9 +22891,9 @@ func (r AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationAcce
 type AccessApplicationListResponseBrowserSSHApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationListResponseBrowserSSHApplicationType `json:"type,required"`
+	Type AccessApplicationListResponseBrowserSSHApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -23728,9 +23728,9 @@ func (r AccessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfigAllow
 type AccessApplicationListResponseBrowserSSHApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -23812,12 +23812,12 @@ func init() {
 type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -23867,7 +23867,7 @@ func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticati
 // provisioning to an application.
 type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -23970,12 +23970,12 @@ func init() {
 type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -24037,9 +24037,9 @@ func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticati
 type AccessApplicationListResponseBrowserVNCApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationListResponseBrowserVNCApplicationType `json:"type,required"`
+	Type AccessApplicationListResponseBrowserVNCApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -24874,9 +24874,9 @@ func (r AccessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfigAllow
 type AccessApplicationListResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -24958,12 +24958,12 @@ func init() {
 type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -25013,7 +25013,7 @@ func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticati
 // provisioning to an application.
 type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -25116,12 +25116,12 @@ func init() {
 type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -25182,7 +25182,7 @@ func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticati
 
 type AccessApplicationListResponseAppLauncherApplication struct {
 	// The application type.
-	Type AccessApplicationListResponseAppLauncherApplicationType `json:"type,required"`
+	Type AccessApplicationListResponseAppLauncherApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -25292,9 +25292,9 @@ func (r AccessApplicationListResponseAppLauncherApplicationType) IsKnown() bool 
 
 type AccessApplicationListResponseAppLauncherApplicationFooterLink struct {
 	// The hypertext in the footer link.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// the hyperlink in the footer link.
-	URL  string                                                            `json:"url,required"`
+	URL  string                                                            `json:"url" api:"required"`
 	JSON accessApplicationListResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
 }
 
@@ -25564,7 +25564,7 @@ func (r AccessApplicationListResponseAppLauncherApplicationPoliciesMfaConfigAllo
 
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -25839,7 +25839,7 @@ func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolic
 
 type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -26114,7 +26114,7 @@ func (r AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolic
 
 type AccessApplicationListResponseGatewayIdentityProxyEndpointApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -26645,9 +26645,9 @@ func (r AccessApplicationListResponseBookmarkApplicationPoliciesMfaConfigAllowed
 }
 
 type AccessApplicationListResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
@@ -26685,11 +26685,11 @@ func (r AccessApplicationListResponseInfrastructureApplication) implementsAccess
 type AccessApplicationListResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                       `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                       `json:"target_attributes" api:"required"`
 	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -26807,7 +26807,7 @@ func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnection
 // by your application.
 type AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
 	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string `json:"usernames,required"`
+	Usernames []string `json:"usernames" api:"required"`
 	// Enables using Identity Provider email alias as SSH username.
 	AllowEmailAlias bool                                                                                 `json:"allow_email_alias"`
 	JSON            accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
@@ -26834,10 +26834,10 @@ func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnection
 type AccessApplicationListResponseBrowserRDPApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain         string                                                              `json:"domain,required"`
-	TargetCriteria []AccessApplicationListResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria,required"`
+	Domain         string                                                              `json:"domain" api:"required"`
+	TargetCriteria []AccessApplicationListResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -26992,11 +26992,11 @@ func (r AccessApplicationListResponseBrowserRDPApplication) implementsAccessAppl
 type AccessApplicationListResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                   `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                   `json:"target_attributes" api:"required"`
 	JSON             accessApplicationListResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -27690,9 +27690,9 @@ func (r AccessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfigAllow
 type AccessApplicationListResponseBrowserRDPApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -27774,12 +27774,12 @@ func init() {
 type AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -27829,7 +27829,7 @@ func (r AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticati
 // provisioning to an application.
 type AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -27932,12 +27932,12 @@ func init() {
 type AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -27998,7 +27998,7 @@ func (r AccessApplicationListResponseBrowserRDPApplicationSCIMConfigAuthenticati
 
 type AccessApplicationListResponseMcpServerApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -28709,9 +28709,9 @@ func (r AccessApplicationListResponseMcpServerApplicationPoliciesMfaConfigAllowe
 type AccessApplicationListResponseMcpServerApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -28793,12 +28793,12 @@ func init() {
 type AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -28848,7 +28848,7 @@ func (r AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -28951,12 +28951,12 @@ func init() {
 type AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -29017,7 +29017,7 @@ func (r AccessApplicationListResponseMcpServerApplicationSCIMConfigAuthenticatio
 
 type AccessApplicationListResponseMcpServerPortalApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -29733,9 +29733,9 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfig
 type AccessApplicationListResponseMcpServerPortalApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -29817,12 +29817,12 @@ func init() {
 type AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -29872,7 +29872,7 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthent
 // provisioning to an application.
 type AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -29975,12 +29975,12 @@ func init() {
 type AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -30373,9 +30373,9 @@ func init() {
 type AccessApplicationGetResponseSelfHostedApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -31181,9 +31181,9 @@ func (r AccessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfigAllowe
 type AccessApplicationGetResponseSelfHostedApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -31265,12 +31265,12 @@ func init() {
 type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -31320,7 +31320,7 @@ func (r AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -31423,12 +31423,12 @@ func init() {
 type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -31914,9 +31914,9 @@ func (r AccessApplicationGetResponseSaaSApplicationSaaSAppAuthType) IsKnown() bo
 type AccessApplicationGetResponseSaaSApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -31997,12 +31997,12 @@ func init() {
 type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -32052,7 +32052,7 @@ func (r AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAcces
 // provisioning to an application.
 type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -32155,12 +32155,12 @@ func init() {
 type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -32222,9 +32222,9 @@ func (r AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationAcces
 type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationGetResponseBrowserSSHApplicationType `json:"type,required"`
+	Type AccessApplicationGetResponseBrowserSSHApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -33058,9 +33058,9 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfigAllowe
 type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -33142,12 +33142,12 @@ func init() {
 type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -33197,7 +33197,7 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -33300,12 +33300,12 @@ func init() {
 type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -33367,9 +33367,9 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// The application type.
-	Type AccessApplicationGetResponseBrowserVNCApplicationType `json:"type,required"`
+	Type AccessApplicationGetResponseBrowserVNCApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -34203,9 +34203,9 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfigAllowe
 type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -34287,12 +34287,12 @@ func init() {
 type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -34342,7 +34342,7 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -34445,12 +34445,12 @@ func init() {
 type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -34511,7 +34511,7 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 
 type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The application type.
-	Type AccessApplicationGetResponseAppLauncherApplicationType `json:"type,required"`
+	Type AccessApplicationGetResponseAppLauncherApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -34621,9 +34621,9 @@ func (r AccessApplicationGetResponseAppLauncherApplicationType) IsKnown() bool {
 
 type AccessApplicationGetResponseAppLauncherApplicationFooterLink struct {
 	// The hypertext in the footer link.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// the hyperlink in the footer link.
-	URL  string                                                           `json:"url,required"`
+	URL  string                                                           `json:"url" api:"required"`
 	JSON accessApplicationGetResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
 }
 
@@ -34893,7 +34893,7 @@ func (r AccessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfigAllow
 
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -35168,7 +35168,7 @@ func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolici
 
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -35443,7 +35443,7 @@ func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolici
 
 type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -35974,9 +35974,9 @@ func (r AccessApplicationGetResponseBookmarkApplicationPoliciesMfaConfigAllowedA
 }
 
 type AccessApplicationGetResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// Audience tag.
@@ -36014,11 +36014,11 @@ func (r AccessApplicationGetResponseInfrastructureApplication) implementsAccessA
 type AccessApplicationGetResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                      `json:"target_attributes" api:"required"`
 	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -36136,7 +36136,7 @@ func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionR
 // by your application.
 type AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
 	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string `json:"usernames,required"`
+	Usernames []string `json:"usernames" api:"required"`
 	// Enables using Identity Provider email alias as SSH username.
 	AllowEmailAlias bool                                                                                `json:"allow_email_alias"`
 	JSON            accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
@@ -36163,10 +36163,10 @@ func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionR
 type AccessApplicationGetResponseBrowserRDPApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain         string                                                             `json:"domain,required"`
-	TargetCriteria []AccessApplicationGetResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria,required"`
+	Domain         string                                                             `json:"domain" api:"required"`
+	TargetCriteria []AccessApplicationGetResponseBrowserRDPApplicationTargetCriterion `json:"target_criteria" api:"required"`
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -36320,11 +36320,11 @@ func (r AccessApplicationGetResponseBrowserRDPApplication) implementsAccessAppli
 type AccessApplicationGetResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	Protocol AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                  `json:"target_attributes,required"`
+	TargetAttributes map[string][]string                                                  `json:"target_attributes" api:"required"`
 	JSON             accessApplicationGetResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -37018,9 +37018,9 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfigAllowe
 type AccessApplicationGetResponseBrowserRDPApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -37102,12 +37102,12 @@ func init() {
 type AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -37157,7 +37157,7 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticatio
 // provisioning to an application.
 type AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -37260,12 +37260,12 @@ func init() {
 type AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -37326,7 +37326,7 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationSCIMConfigAuthenticatio
 
 type AccessApplicationGetResponseMcpServerApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -38035,9 +38035,9 @@ func (r AccessApplicationGetResponseMcpServerApplicationPoliciesMfaConfigAllowed
 type AccessApplicationGetResponseMcpServerApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -38119,12 +38119,12 @@ func init() {
 type AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -38174,7 +38174,7 @@ func (r AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthentication
 // provisioning to an application.
 type AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -38277,12 +38277,12 @@ func init() {
 type AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -38343,7 +38343,7 @@ func (r AccessApplicationGetResponseMcpServerApplicationSCIMConfigAuthentication
 
 type AccessApplicationGetResponseMcpServerPortalApplication struct {
 	// The application type.
-	Type ApplicationType `json:"type,required"`
+	Type ApplicationType `json:"type" api:"required"`
 	// UUID.
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -39058,9 +39058,9 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfigA
 type AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID string `json:"idp_uid,required"`
+	IdPUID string `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
+	RemoteURI string `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationUnion `json:"authentication"`
@@ -39142,12 +39142,12 @@ func init() {
 type AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -39197,7 +39197,7 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenti
 // provisioning to an application.
 type AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -39300,12 +39300,12 @@ func init() {
 type AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret string `json:"client_secret,required"`
+	ClientSecret string `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme `json:"scheme" api:"required"`
 	JSON   accessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenJSON   `json:"-"`
 }
 
@@ -39368,7 +39368,7 @@ type AccessApplicationRevokeTokensResponse = interface{}
 
 type AccessApplicationNewParams struct {
 	// Contains the targets secured by the application.
-	Body AccessApplicationNewParamsBodyUnion `json:"body,required"`
+	Body AccessApplicationNewParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -39500,9 +39500,9 @@ type AccessApplicationNewParamsBodyUnion interface {
 type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -40068,9 +40068,9 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectMfaConf
 type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -40093,7 +40093,7 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig) MarshalJS
 // provisioning to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -40139,12 +40139,12 @@ type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -40178,7 +40178,7 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticat
 // provisioning to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -40223,12 +40223,12 @@ type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -40598,9 +40598,9 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSaaSAppAuthType) IsKnown() 
 type AccessApplicationNewParamsBodySaaSApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -40623,7 +40623,7 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfig) MarshalJSON() (
 // provisioning to an application.
 type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -40669,12 +40669,12 @@ type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationUnion 
 type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -40708,7 +40708,7 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAcc
 // provisioning to an application.
 type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -40753,12 +40753,12 @@ type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccess
 type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -40822,9 +40822,9 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationSch
 type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 	// The application type.
-	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -41418,9 +41418,9 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectMfaConf
 type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -41443,7 +41443,7 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfig) MarshalJS
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -41489,12 +41489,12 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -41528,7 +41528,7 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -41573,12 +41573,12 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -41642,9 +41642,9 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 	// The application type.
-	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -42238,9 +42238,9 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectMfaConf
 type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -42263,7 +42263,7 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig) MarshalJS
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -42309,12 +42309,12 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -42348,7 +42348,7 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticat
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -42393,12 +42393,12 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -42461,7 +42461,7 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticat
 
 type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// The application type.
-	Type param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -42535,9 +42535,9 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationType) IsKnown() bool
 
 type AccessApplicationNewParamsBodyAppLauncherApplicationFooterLink struct {
 	// The hypertext in the footer link.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// the hyperlink in the footer link.
-	URL param.Field[string] `json:"url,required"`
+	URL param.Field[string] `json:"url" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationFooterLink) MarshalJSON() (data []byte, err error) {
@@ -42747,7 +42747,7 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectMfaCon
 
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -42964,7 +42964,7 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -43181,7 +43181,7 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 
 type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -43612,9 +43612,9 @@ func (r AccessApplicationNewParamsBodyBookmarkApplicationPoliciesObjectMfaConfig
 }
 
 type AccessApplicationNewParamsBodyInfrastructureApplication struct {
-	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
+	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria" api:"required"`
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
@@ -43631,11 +43631,11 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplication) implementsAcces
 type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port param.Field[int64] `json:"port,required"`
+	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	Protocol param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -43660,12 +43660,12 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaPro
 type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
-	Decision param.Field[Decision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision" api:"required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
 	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The rules that define how users may connect to the targets secured by your
 	// application.
 	ConnectionRules param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRules] `json:"connection_rules"`
@@ -43697,7 +43697,7 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectio
 // by your application.
 type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH struct {
 	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
+	Usernames param.Field[[]string] `json:"usernames" api:"required"`
 	// Enables using Identity Provider email alias as SSH username.
 	AllowEmailAlias param.Field[bool] `json:"allow_email_alias"`
 }
@@ -43710,10 +43710,10 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectio
 type AccessApplicationNewParamsBodyBrowserRDPApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain         param.Field[string]                                                               `json:"domain,required"`
-	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriterion] `json:"target_criteria,required"`
+	Domain         param.Field[string]                                                               `json:"domain" api:"required"`
+	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriterion] `json:"target_criteria" api:"required"`
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -43821,11 +43821,11 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplication) implementsAccessApp
 type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port param.Field[int64] `json:"port,required"`
+	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	Protocol param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -44308,9 +44308,9 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationPoliciesObjectMfaConf
 type AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -44333,7 +44333,7 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfig) MarshalJS
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -44379,12 +44379,12 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -44418,7 +44418,7 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticat
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -44463,12 +44463,12 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthentication
 type AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -44531,7 +44531,7 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationSCIMConfigAuthenticat
 
 type AccessApplicationNewParamsBodyMcpServerApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -45029,9 +45029,9 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationPoliciesObjectMfaConfi
 type AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -45054,7 +45054,7 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfig) MarshalJSO
 // provisioning to an application.
 type AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -45100,12 +45100,12 @@ type AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationU
 type AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -45139,7 +45139,7 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticati
 // provisioning to an application.
 type AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -45184,12 +45184,12 @@ type AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationA
 type AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -45252,7 +45252,7 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfigAuthenticati
 
 type AccessApplicationNewParamsBodyMcpServerPortalApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -45753,9 +45753,9 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationPoliciesObjectMf
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -45778,7 +45778,7 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfig) Mars
 // provisioning to an application.
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -45824,12 +45824,12 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthentic
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -45863,7 +45863,7 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthen
 // provisioning to an application.
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -45908,12 +45908,12 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthentic
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -45975,10 +45975,10 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthen
 }
 
 type AccessApplicationNewResponseEnvelope struct {
-	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationNewResponse                `json:"result"`
 	JSON    accessApplicationNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -46003,8 +46003,8 @@ func (r accessApplicationNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessApplicationNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -46051,8 +46051,8 @@ func (r accessApplicationNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessApplicationNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessApplicationNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -46115,7 +46115,7 @@ func (r AccessApplicationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationUpdateParams struct {
 	// Contains the targets secured by the application.
-	Body AccessApplicationUpdateParamsBodyUnion `json:"body,required"`
+	Body AccessApplicationUpdateParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -46248,9 +46248,9 @@ type AccessApplicationUpdateParamsBodyUnion interface {
 type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -46816,9 +46816,9 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectMfaC
 type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -46841,7 +46841,7 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig) Marsha
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -46887,12 +46887,12 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -46926,7 +46926,7 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenti
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -46971,12 +46971,12 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -47346,9 +47346,9 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAuthType) IsKnown
 type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -47371,7 +47371,7 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfig) MarshalJSON(
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -47417,12 +47417,12 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationUni
 type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -47456,7 +47456,7 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -47501,12 +47501,12 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAcc
 type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -47570,9 +47570,9 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication
 type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 	// The application type.
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -48166,9 +48166,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectMfaC
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -48191,7 +48191,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfig) Marsha
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -48237,12 +48237,12 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -48276,7 +48276,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenti
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -48321,12 +48321,12 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -48390,9 +48390,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenti
 type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 	// The application type.
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -48986,9 +48986,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectMfaC
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -49011,7 +49011,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig) Marsha
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -49057,12 +49057,12 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -49096,7 +49096,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenti
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -49141,12 +49141,12 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -49209,7 +49209,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenti
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// The application type.
-	Type param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationType] `json:"type,required"`
+	Type param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -49283,9 +49283,9 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationType) IsKnown() b
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationFooterLink struct {
 	// The hypertext in the footer link.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// the hyperlink in the footer link.
-	URL param.Field[string] `json:"url,required"`
+	URL param.Field[string] `json:"url" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationFooterLink) MarshalJSON() (data []byte, err error) {
@@ -49495,7 +49495,7 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectMfa
 
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -49712,7 +49712,7 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -49929,7 +49929,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 
 type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
@@ -50360,9 +50360,9 @@ func (r AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesObjectMfaCon
 }
 
 type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
-	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
+	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria" api:"required"`
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
@@ -50379,11 +50379,11 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) implementsAc
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port param.Field[int64] `json:"port,required"`
+	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	Protocol param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -50408,12 +50408,12 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteria
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
-	Decision param.Field[Decision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision" api:"required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
 	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The rules that define how users may connect to the targets secured by your
 	// application.
 	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRules] `json:"connection_rules"`
@@ -50445,7 +50445,7 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnec
 // by your application.
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH struct {
 	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
+	Usernames param.Field[[]string] `json:"usernames" api:"required"`
 	// Enables using Identity Provider email alias as SSH username.
 	AllowEmailAlias param.Field[bool] `json:"allow_email_alias"`
 }
@@ -50458,10 +50458,10 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnec
 type AccessApplicationUpdateParamsBodyBrowserRDPApplication struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
-	Domain         param.Field[string]                                                                  `json:"domain,required"`
-	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriterion] `json:"target_criteria,required"`
+	Domain         param.Field[string]                                                                  `json:"domain" api:"required"`
+	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriterion] `json:"target_criteria" api:"required"`
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -50569,11 +50569,11 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplication) implementsAccess
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
-	Port param.Field[int64] `json:"port,required"`
+	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
-	Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -51056,9 +51056,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationPoliciesObjectMfaC
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -51081,7 +51081,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfig) Marsha
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -51127,12 +51127,12 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -51166,7 +51166,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenti
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -51211,12 +51211,12 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticat
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -51279,7 +51279,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationSCIMConfigAuthenti
 
 type AccessApplicationUpdateParamsBodyMcpServerApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -51777,9 +51777,9 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationPoliciesObjectMfaCo
 type AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -51802,7 +51802,7 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfig) Marshal
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -51848,12 +51848,12 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticati
 type AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -51887,7 +51887,7 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthentic
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -51932,12 +51932,12 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticati
 type AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -52000,7 +52000,7 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfigAuthentic
 
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplication struct {
 	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
+	Type param.Field[ApplicationType] `json:"type" api:"required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -52501,9 +52501,9 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPoliciesObjec
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
-	IdPUID param.Field[string] `json:"idp_uid,required"`
+	IdPUID param.Field[string] `json:"idp_uid" api:"required"`
 	// The base URI for the application's SCIM-compatible API.
-	RemoteURI param.Field[string] `json:"remote_uri,required"`
+	RemoteURI param.Field[string] `json:"remote_uri" api:"required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
 	Authentication param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
@@ -52526,7 +52526,7 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfig) M
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthentication struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -52572,12 +52572,12 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthen
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -52611,7 +52611,7 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAut
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationItem struct {
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationScheme] `json:"scheme" api:"required"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -52656,12 +52656,12 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthen
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken struct {
 	// Client ID of the Access service token used to authenticate with the remote
 	// service.
-	ClientID param.Field[string] `json:"client_id,required"`
+	ClientID param.Field[string] `json:"client_id" api:"required"`
 	// Client secret of the Access service token used to authenticate with the remote
 	// service.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
+	ClientSecret param.Field[string] `json:"client_secret" api:"required"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceTokenScheme] `json:"scheme" api:"required"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationAccessSCIMConfigMultiAuthenticationAccessSCIMConfigAuthenticationAccessServiceToken) MarshalJSON() (data []byte, err error) {
@@ -52723,10 +52723,10 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAut
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
-	Errors   []AccessApplicationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationUpdateResponse                `json:"result"`
 	JSON    accessApplicationUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -52751,8 +52751,8 @@ func (r accessApplicationUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationUpdateResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AccessApplicationUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -52799,8 +52799,8 @@ func (r accessApplicationUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type AccessApplicationUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           AccessApplicationUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -52901,10 +52901,10 @@ type AccessApplicationDeleteParams struct {
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
-	Errors   []AccessApplicationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationDeleteResponse                `json:"result"`
 	JSON    accessApplicationDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -52929,8 +52929,8 @@ func (r accessApplicationDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationDeleteResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AccessApplicationDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -52977,8 +52977,8 @@ func (r accessApplicationDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type AccessApplicationDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           AccessApplicationDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -53047,10 +53047,10 @@ type AccessApplicationGetParams struct {
 }
 
 type AccessApplicationGetResponseEnvelope struct {
-	Errors   []AccessApplicationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationGetResponse                `json:"result"`
 	JSON    accessApplicationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -53075,8 +53075,8 @@ func (r accessApplicationGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationGetResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessApplicationGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -53123,8 +53123,8 @@ func (r accessApplicationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessApplicationGetResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessApplicationGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -53193,7 +53193,7 @@ type AccessApplicationRevokeTokensParams struct {
 }
 
 type AccessApplicationRevokeTokensResponseEnvelope struct {
-	Result  AccessApplicationRevokeTokensResponse                `json:"result,nullable"`
+	Result  AccessApplicationRevokeTokensResponse                `json:"result" api:"nullable"`
 	Success AccessApplicationRevokeTokensResponseEnvelopeSuccess `json:"success"`
 	JSON    accessApplicationRevokeTokensResponseEnvelopeJSON    `json:"-"`
 }

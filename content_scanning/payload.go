@@ -42,7 +42,7 @@ func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/payloads", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -69,7 +69,7 @@ func (r *PayloadService) List(ctx context.Context, query PayloadListParams, opts
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/payloads", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -96,11 +96,11 @@ func (r *PayloadService) Delete(ctx context.Context, expressionID string, body P
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if expressionID == "" {
 		err = errors.New("missing required expression_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/content-upload-scan/payloads/%s", body.ZoneID, expressionID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -200,8 +200,8 @@ func (r payloadDeleteResponseJSON) RawJSON() string {
 
 type PayloadNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string]    `path:"zone_id,required"`
-	Body   []PayloadNewParamsBody `json:"body,required"`
+	ZoneID param.Field[string]    `path:"zone_id" api:"required"`
+	Body   []PayloadNewParamsBody `json:"body" api:"required"`
 }
 
 func (r PayloadNewParams) MarshalJSON() (data []byte, err error) {
@@ -210,7 +210,7 @@ func (r PayloadNewParams) MarshalJSON() (data []byte, err error) {
 
 type PayloadNewParamsBody struct {
 	// Defines the ruleset expression to use in matching content objects.
-	Payload param.Field[string] `json:"payload,required"`
+	Payload param.Field[string] `json:"payload" api:"required"`
 }
 
 func (r PayloadNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -219,10 +219,10 @@ func (r PayloadNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type PayloadListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PayloadDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

@@ -55,15 +55,15 @@ func (r *TunnelCloudflaredService) New(ctx context.Context, params TunnelCloudfl
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists and filters Cloudflare Tunnels in an account.
@@ -73,7 +73,7 @@ func (r *TunnelCloudflaredService) List(ctx context.Context, params TunnelCloudf
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -99,19 +99,19 @@ func (r *TunnelCloudflaredService) Delete(ctx context.Context, tunnelID string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", body.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing Cloudflare Tunnel.
@@ -120,19 +120,19 @@ func (r *TunnelCloudflaredService) Edit(ctx context.Context, tunnelID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single Cloudflare Tunnel.
@@ -141,26 +141,26 @@ func (r *TunnelCloudflaredService) Get(ctx context.Context, tunnelID string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TunnelCloudflaredNewParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
 	// the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 	// tunnel on the Zero Trust dashboard.
@@ -193,12 +193,12 @@ func (r TunnelCloudflaredNewParamsConfigSrc) IsKnown() bool {
 }
 
 type TunnelCloudflaredNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.CloudflareTunnel `json:"result,required"`
+	Result shared.CloudflareTunnel `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredNewResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -238,7 +238,7 @@ func (r TunnelCloudflaredNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelCloudflaredListParams struct {
 	// Cloudflare account ID
-	AccountID     param.Field[string] `path:"account_id,required"`
+	AccountID     param.Field[string] `path:"account_id" api:"required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only resources that were created (and not deleted) before
 	// this time. URL encoded.
@@ -296,16 +296,16 @@ func (r TunnelCloudflaredListParamsStatus) IsKnown() bool {
 
 type TunnelCloudflaredDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelCloudflaredDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.CloudflareTunnel `json:"result,required"`
+	Result shared.CloudflareTunnel `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -345,7 +345,7 @@ func (r TunnelCloudflaredDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelCloudflaredEditParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name"`
 	// Sets the password required to run a locally-managed tunnel. Must be at least 32
@@ -358,12 +358,12 @@ func (r TunnelCloudflaredEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelCloudflaredEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.CloudflareTunnel `json:"result,required"`
+	Result shared.CloudflareTunnel `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredEditResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -403,16 +403,16 @@ func (r TunnelCloudflaredEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelCloudflaredGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelCloudflaredGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.CloudflareTunnel `json:"result,required"`
+	Result shared.CloudflareTunnel `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredGetResponseEnvelopeJSON    `json:"-"`
 }
 

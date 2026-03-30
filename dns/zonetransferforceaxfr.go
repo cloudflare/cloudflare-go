@@ -40,22 +40,22 @@ func (r *ZoneTransferForceAXFRService) New(ctx context.Context, params ZoneTrans
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ForceAXFR = string
 
 type ZoneTransferForceAXFRNewParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Body   interface{}         `json:"body" api:"required"`
 }
 
 func (r ZoneTransferForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
@@ -63,10 +63,10 @@ func (r ZoneTransferForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneTransferForceAXFRNewResponseEnvelope struct {
-	Errors   []ZoneTransferForceAXFRNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferForceAXFRNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferForceAXFRNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferForceAXFRNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferForceAXFRNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferForceAXFRNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// When force_axfr query parameter is set to true, the response is a simple string.
 	Result ForceAXFR                                    `json:"result"`
 	JSON   zoneTransferForceAXFRNewResponseEnvelopeJSON `json:"-"`
@@ -92,8 +92,8 @@ func (r zoneTransferForceAXFRNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferForceAXFRNewResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ZoneTransferForceAXFRNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferForceAXFRNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -140,8 +140,8 @@ func (r zoneTransferForceAXFRNewResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type ZoneTransferForceAXFRNewResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           ZoneTransferForceAXFRNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferForceAXFRNewResponseEnvelopeMessagesJSON   `json:"-"`

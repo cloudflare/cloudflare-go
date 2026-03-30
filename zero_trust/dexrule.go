@@ -43,15 +43,15 @@ func (r *DEXRuleService) New(ctx context.Context, params DEXRuleNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/rules", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a DEX Rule
@@ -60,19 +60,19 @@ func (r *DEXRuleService) Update(ctx context.Context, ruleID string, params DEXRu
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/rules/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List DEX Rules
@@ -82,7 +82,7 @@ func (r *DEXRuleService) List(ctx context.Context, params DEXRuleListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/rules", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -108,19 +108,19 @@ func (r *DEXRuleService) Delete(ctx context.Context, ruleID string, body DEXRule
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/rules/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get details for a DEX Rule
@@ -129,27 +129,27 @@ func (r *DEXRuleService) Get(ctx context.Context, ruleID string, query DEXRuleGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/rules/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DEXRuleNewResponse struct {
 	// API Resource UUID tag.
-	ID            string                           `json:"id,required"`
-	CreatedAt     string                           `json:"created_at,required"`
-	Match         string                           `json:"match,required"`
-	Name          string                           `json:"name,required"`
+	ID            string                           `json:"id" api:"required"`
+	CreatedAt     string                           `json:"created_at" api:"required"`
+	Match         string                           `json:"match" api:"required"`
+	Name          string                           `json:"name" api:"required"`
 	Description   string                           `json:"description"`
 	TargetedTests []DEXRuleNewResponseTargetedTest `json:"targeted_tests"`
 	UpdatedAt     string                           `json:"updated_at"`
@@ -181,10 +181,10 @@ func (r dexRuleNewResponseJSON) RawJSON() string {
 type DEXRuleNewResponseTargetedTest struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data    DEXRuleNewResponseTargetedTestsData `json:"data,required"`
-	Enabled bool                                `json:"enabled,required"`
-	Name    string                              `json:"name,required"`
-	TestID  string                              `json:"test_id,required"`
+	Data    DEXRuleNewResponseTargetedTestsData `json:"data" api:"required"`
+	Enabled bool                                `json:"enabled" api:"required"`
+	Name    string                              `json:"name" api:"required"`
+	TestID  string                              `json:"test_id" api:"required"`
 	JSON    dexRuleNewResponseTargetedTestJSON  `json:"-"`
 }
 
@@ -211,9 +211,9 @@ func (r dexRuleNewResponseTargetedTestJSON) RawJSON() string {
 // conduct the test.
 type DEXRuleNewResponseTargetedTestsData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DEXRuleNewResponseTargetedTestsDataKind `json:"kind,required"`
+	Kind DEXRuleNewResponseTargetedTestsDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DEXRuleNewResponseTargetedTestsDataMethod `json:"method"`
 	JSON   dexRuleNewResponseTargetedTestsDataJSON   `json:"-"`
@@ -270,10 +270,10 @@ func (r DEXRuleNewResponseTargetedTestsDataMethod) IsKnown() bool {
 
 type DEXRuleUpdateResponse struct {
 	// API Resource UUID tag.
-	ID            string                              `json:"id,required"`
-	CreatedAt     string                              `json:"created_at,required"`
-	Match         string                              `json:"match,required"`
-	Name          string                              `json:"name,required"`
+	ID            string                              `json:"id" api:"required"`
+	CreatedAt     string                              `json:"created_at" api:"required"`
+	Match         string                              `json:"match" api:"required"`
+	Name          string                              `json:"name" api:"required"`
 	Description   string                              `json:"description"`
 	TargetedTests []DEXRuleUpdateResponseTargetedTest `json:"targeted_tests"`
 	UpdatedAt     string                              `json:"updated_at"`
@@ -305,10 +305,10 @@ func (r dexRuleUpdateResponseJSON) RawJSON() string {
 type DEXRuleUpdateResponseTargetedTest struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data    DEXRuleUpdateResponseTargetedTestsData `json:"data,required"`
-	Enabled bool                                   `json:"enabled,required"`
-	Name    string                                 `json:"name,required"`
-	TestID  string                                 `json:"test_id,required"`
+	Data    DEXRuleUpdateResponseTargetedTestsData `json:"data" api:"required"`
+	Enabled bool                                   `json:"enabled" api:"required"`
+	Name    string                                 `json:"name" api:"required"`
+	TestID  string                                 `json:"test_id" api:"required"`
 	JSON    dexRuleUpdateResponseTargetedTestJSON  `json:"-"`
 }
 
@@ -335,9 +335,9 @@ func (r dexRuleUpdateResponseTargetedTestJSON) RawJSON() string {
 // conduct the test.
 type DEXRuleUpdateResponseTargetedTestsData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DEXRuleUpdateResponseTargetedTestsDataKind `json:"kind,required"`
+	Kind DEXRuleUpdateResponseTargetedTestsDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DEXRuleUpdateResponseTargetedTestsDataMethod `json:"method"`
 	JSON   dexRuleUpdateResponseTargetedTestsDataJSON   `json:"-"`
@@ -415,10 +415,10 @@ func (r dexRuleListResponseJSON) RawJSON() string {
 
 type DEXRuleListResponseRule struct {
 	// API Resource UUID tag.
-	ID            string                                 `json:"id,required"`
-	CreatedAt     string                                 `json:"created_at,required"`
-	Match         string                                 `json:"match,required"`
-	Name          string                                 `json:"name,required"`
+	ID            string                                 `json:"id" api:"required"`
+	CreatedAt     string                                 `json:"created_at" api:"required"`
+	Match         string                                 `json:"match" api:"required"`
+	Name          string                                 `json:"name" api:"required"`
 	Description   string                                 `json:"description"`
 	TargetedTests []DEXRuleListResponseRulesTargetedTest `json:"targeted_tests"`
 	UpdatedAt     string                                 `json:"updated_at"`
@@ -450,10 +450,10 @@ func (r dexRuleListResponseRuleJSON) RawJSON() string {
 type DEXRuleListResponseRulesTargetedTest struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data    DEXRuleListResponseRulesTargetedTestsData `json:"data,required"`
-	Enabled bool                                      `json:"enabled,required"`
-	Name    string                                    `json:"name,required"`
-	TestID  string                                    `json:"test_id,required"`
+	Data    DEXRuleListResponseRulesTargetedTestsData `json:"data" api:"required"`
+	Enabled bool                                      `json:"enabled" api:"required"`
+	Name    string                                    `json:"name" api:"required"`
+	TestID  string                                    `json:"test_id" api:"required"`
 	JSON    dexRuleListResponseRulesTargetedTestJSON  `json:"-"`
 }
 
@@ -480,9 +480,9 @@ func (r dexRuleListResponseRulesTargetedTestJSON) RawJSON() string {
 // conduct the test.
 type DEXRuleListResponseRulesTargetedTestsData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DEXRuleListResponseRulesTargetedTestsDataKind `json:"kind,required"`
+	Kind DEXRuleListResponseRulesTargetedTestsDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DEXRuleListResponseRulesTargetedTestsDataMethod `json:"method"`
 	JSON   dexRuleListResponseRulesTargetedTestsDataJSON   `json:"-"`
@@ -539,10 +539,10 @@ func (r DEXRuleListResponseRulesTargetedTestsDataMethod) IsKnown() bool {
 
 type DEXRuleGetResponse struct {
 	// API Resource UUID tag.
-	ID            string                           `json:"id,required"`
-	CreatedAt     string                           `json:"created_at,required"`
-	Match         string                           `json:"match,required"`
-	Name          string                           `json:"name,required"`
+	ID            string                           `json:"id" api:"required"`
+	CreatedAt     string                           `json:"created_at" api:"required"`
+	Match         string                           `json:"match" api:"required"`
+	Name          string                           `json:"name" api:"required"`
 	Description   string                           `json:"description"`
 	TargetedTests []DEXRuleGetResponseTargetedTest `json:"targeted_tests"`
 	UpdatedAt     string                           `json:"updated_at"`
@@ -574,10 +574,10 @@ func (r dexRuleGetResponseJSON) RawJSON() string {
 type DEXRuleGetResponseTargetedTest struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data    DEXRuleGetResponseTargetedTestsData `json:"data,required"`
-	Enabled bool                                `json:"enabled,required"`
-	Name    string                              `json:"name,required"`
-	TestID  string                              `json:"test_id,required"`
+	Data    DEXRuleGetResponseTargetedTestsData `json:"data" api:"required"`
+	Enabled bool                                `json:"enabled" api:"required"`
+	Name    string                              `json:"name" api:"required"`
+	TestID  string                              `json:"test_id" api:"required"`
 	JSON    dexRuleGetResponseTargetedTestJSON  `json:"-"`
 }
 
@@ -604,9 +604,9 @@ func (r dexRuleGetResponseTargetedTestJSON) RawJSON() string {
 // conduct the test.
 type DEXRuleGetResponseTargetedTestsData struct {
 	// The desired endpoint to test.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// The type of test.
-	Kind DEXRuleGetResponseTargetedTestsDataKind `json:"kind,required"`
+	Kind DEXRuleGetResponseTargetedTestsDataKind `json:"kind" api:"required"`
 	// The HTTP request method type.
 	Method DEXRuleGetResponseTargetedTestsDataMethod `json:"method"`
 	JSON   dexRuleGetResponseTargetedTestsDataJSON   `json:"-"`
@@ -662,11 +662,11 @@ func (r DEXRuleGetResponseTargetedTestsDataMethod) IsKnown() bool {
 }
 
 type DEXRuleNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The wirefilter expression to match.
-	Match param.Field[string] `json:"match,required"`
+	Match param.Field[string] `json:"match" api:"required"`
 	// The name of the Rule.
-	Name        param.Field[string] `json:"name,required"`
+	Name        param.Field[string] `json:"name" api:"required"`
 	Description param.Field[string] `json:"description"`
 }
 
@@ -675,10 +675,10 @@ func (r DEXRuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DEXRuleNewResponseEnvelope struct {
-	Errors   []DEXRuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXRuleNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXRuleNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXRuleNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXRuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DEXRuleNewResponse                `json:"result"`
 	JSON    dexRuleNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -703,8 +703,8 @@ func (r dexRuleNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXRuleNewResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           DEXRuleNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexRuleNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -751,8 +751,8 @@ func (r dexRuleNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DEXRuleNewResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           DEXRuleNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexRuleNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -814,7 +814,7 @@ func (r DEXRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleUpdateParams struct {
-	AccountID   param.Field[string] `path:"account_id,required"`
+	AccountID   param.Field[string] `path:"account_id" api:"required"`
 	Description param.Field[string] `json:"description"`
 	// The wirefilter expression to match.
 	Match param.Field[string] `json:"match"`
@@ -827,10 +827,10 @@ func (r DEXRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DEXRuleUpdateResponseEnvelope struct {
-	Errors   []DEXRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXRuleUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXRuleUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXRuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DEXRuleUpdateResponse                `json:"result"`
 	JSON    dexRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -855,8 +855,8 @@ func (r dexRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXRuleUpdateResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           DEXRuleUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexRuleUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -903,8 +903,8 @@ func (r dexRuleUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DEXRuleUpdateResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           DEXRuleUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexRuleUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -966,11 +966,11 @@ func (r DEXRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results
-	Page param.Field[float64] `query:"page,required"`
+	Page param.Field[float64] `query:"page" api:"required"`
 	// Number of items per page
-	PerPage param.Field[float64] `query:"per_page,required"`
+	PerPage param.Field[float64] `query:"per_page" api:"required"`
 	// Filter results by rule name
 	Name param.Field[string] `query:"name"`
 	// Which property to sort results by
@@ -1021,15 +1021,15 @@ func (r DEXRuleListParamsSortOrder) IsKnown() bool {
 }
 
 type DEXRuleDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DEXRuleDeleteResponseEnvelope struct {
-	Errors   []DEXRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXRuleDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXRuleDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  bool                                 `json:"result,nullable"`
+	Success DEXRuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  bool                                 `json:"result" api:"nullable"`
 	JSON    dexRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1053,8 +1053,8 @@ func (r dexRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXRuleDeleteResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           DEXRuleDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexRuleDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1101,8 +1101,8 @@ func (r dexRuleDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DEXRuleDeleteResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           DEXRuleDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexRuleDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1164,14 +1164,14 @@ func (r DEXRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DEXRuleGetResponseEnvelope struct {
-	Errors   []DEXRuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXRuleGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DEXRuleGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DEXRuleGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXRuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXRuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DEXRuleGetResponse                `json:"result"`
 	JSON    dexRuleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1196,8 +1196,8 @@ func (r dexRuleGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DEXRuleGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           DEXRuleGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexRuleGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1244,8 +1244,8 @@ func (r dexRuleGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DEXRuleGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           DEXRuleGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexRuleGetResponseEnvelopeMessagesJSON   `json:"-"`

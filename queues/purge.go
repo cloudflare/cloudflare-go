@@ -41,19 +41,19 @@ func (r *PurgeService) Start(ctx context.Context, queueID string, params PurgeSt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/purge", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get details about a Queue's purge status.
@@ -62,19 +62,19 @@ func (r *PurgeService) Status(ctx context.Context, queueID string, query PurgeSt
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if queueID == "" {
 		err = errors.New("missing required queue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/purge", query.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PurgeStatusResponse struct {
@@ -104,7 +104,7 @@ func (r purgeStatusResponseJSON) RawJSON() string {
 
 type PurgeStartParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Confimation that all messages will be deleted permanently.
 	DeleteMessagesPermanently param.Field[bool] `json:"delete_messages_permanently"`
 }
@@ -158,7 +158,7 @@ func (r PurgeStartResponseEnvelopeSuccess) IsKnown() bool {
 
 type PurgeStatusParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PurgeStatusResponseEnvelope struct {

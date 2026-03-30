@@ -46,15 +46,15 @@ func (r *UserGroupService) New(ctx context.Context, params UserGroupNewParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify an existing user group.
@@ -63,19 +63,19 @@ func (r *UserGroupService) Update(ctx context.Context, userGroupID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userGroupID == "" {
 		err = errors.New("missing required user_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s", params.AccountID, userGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all the user groups for an account.
@@ -85,7 +85,7 @@ func (r *UserGroupService) List(ctx context.Context, params UserGroupListParams,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -111,19 +111,19 @@ func (r *UserGroupService) Delete(ctx context.Context, userGroupID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userGroupID == "" {
 		err = errors.New("missing required user_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s", body.AccountID, userGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information about a specific user group in an account.
@@ -132,31 +132,31 @@ func (r *UserGroupService) Get(ctx context.Context, userGroupID string, query Us
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userGroupID == "" {
 		err = errors.New("missing required user_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s", query.AccountID, userGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A group of policies resources.
 type UserGroupNewResponse struct {
 	// User Group identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Last time the user group was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Name of the user group.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Policies attached to the User group
 	Policies []UserGroupNewResponsePolicy `json:"policies"`
 	JSON     userGroupNewResponseJSON     `json:"-"`
@@ -234,7 +234,7 @@ func (r UserGroupNewResponsePoliciesAccess) IsKnown() bool {
 // resources.
 type UserGroupNewResponsePoliciesPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta UserGroupNewResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -287,9 +287,9 @@ func (r userGroupNewResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string {
 // A group of scoped resources.
 type UserGroupNewResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []UserGroupNewResponsePoliciesResourceGroupsScope `json:"scope,required"`
+	Scope []UserGroupNewResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupNewResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -320,9 +320,9 @@ func (r userGroupNewResponsePoliciesResourceGroupJSON) RawJSON() string {
 type UserGroupNewResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []UserGroupNewResponsePoliciesResourceGroupsScopeObject `json:"objects,required"`
+	Objects []UserGroupNewResponsePoliciesResourceGroupsScopeObject `json:"objects" api:"required"`
 	JSON    userGroupNewResponsePoliciesResourceGroupsScopeJSON     `json:"-"`
 }
 
@@ -348,7 +348,7 @@ func (r userGroupNewResponsePoliciesResourceGroupsScopeJSON) RawJSON() string {
 type UserGroupNewResponsePoliciesResourceGroupsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                                    `json:"key,required"`
+	Key  string                                                    `json:"key" api:"required"`
 	JSON userGroupNewResponsePoliciesResourceGroupsScopeObjectJSON `json:"-"`
 }
 
@@ -395,13 +395,13 @@ func (r userGroupNewResponsePoliciesResourceGroupsMetaJSON) RawJSON() string {
 // A group of policies resources.
 type UserGroupUpdateResponse struct {
 	// User Group identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Last time the user group was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Name of the user group.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Policies attached to the User group
 	Policies []UserGroupUpdateResponsePolicy `json:"policies"`
 	JSON     userGroupUpdateResponseJSON     `json:"-"`
@@ -479,7 +479,7 @@ func (r UserGroupUpdateResponsePoliciesAccess) IsKnown() bool {
 // resources.
 type UserGroupUpdateResponsePoliciesPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta UserGroupUpdateResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -532,9 +532,9 @@ func (r userGroupUpdateResponsePoliciesPermissionGroupsMetaJSON) RawJSON() strin
 // A group of scoped resources.
 type UserGroupUpdateResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []UserGroupUpdateResponsePoliciesResourceGroupsScope `json:"scope,required"`
+	Scope []UserGroupUpdateResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupUpdateResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -565,9 +565,9 @@ func (r userGroupUpdateResponsePoliciesResourceGroupJSON) RawJSON() string {
 type UserGroupUpdateResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []UserGroupUpdateResponsePoliciesResourceGroupsScopeObject `json:"objects,required"`
+	Objects []UserGroupUpdateResponsePoliciesResourceGroupsScopeObject `json:"objects" api:"required"`
 	JSON    userGroupUpdateResponsePoliciesResourceGroupsScopeJSON     `json:"-"`
 }
 
@@ -593,7 +593,7 @@ func (r userGroupUpdateResponsePoliciesResourceGroupsScopeJSON) RawJSON() string
 type UserGroupUpdateResponsePoliciesResourceGroupsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                                       `json:"key,required"`
+	Key  string                                                       `json:"key" api:"required"`
 	JSON userGroupUpdateResponsePoliciesResourceGroupsScopeObjectJSON `json:"-"`
 }
 
@@ -641,13 +641,13 @@ func (r userGroupUpdateResponsePoliciesResourceGroupsMetaJSON) RawJSON() string 
 // A group of policies resources.
 type UserGroupListResponse struct {
 	// User Group identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Last time the user group was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Name of the user group.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Policies attached to the User group
 	Policies []UserGroupListResponsePolicy `json:"policies"`
 	JSON     userGroupListResponseJSON     `json:"-"`
@@ -725,7 +725,7 @@ func (r UserGroupListResponsePoliciesAccess) IsKnown() bool {
 // resources.
 type UserGroupListResponsePoliciesPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta UserGroupListResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -778,9 +778,9 @@ func (r userGroupListResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string 
 // A group of scoped resources.
 type UserGroupListResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []UserGroupListResponsePoliciesResourceGroupsScope `json:"scope,required"`
+	Scope []UserGroupListResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupListResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -811,9 +811,9 @@ func (r userGroupListResponsePoliciesResourceGroupJSON) RawJSON() string {
 type UserGroupListResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []UserGroupListResponsePoliciesResourceGroupsScopeObject `json:"objects,required"`
+	Objects []UserGroupListResponsePoliciesResourceGroupsScopeObject `json:"objects" api:"required"`
 	JSON    userGroupListResponsePoliciesResourceGroupsScopeJSON     `json:"-"`
 }
 
@@ -839,7 +839,7 @@ func (r userGroupListResponsePoliciesResourceGroupsScopeJSON) RawJSON() string {
 type UserGroupListResponsePoliciesResourceGroupsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                                     `json:"key,required"`
+	Key  string                                                     `json:"key" api:"required"`
 	JSON userGroupListResponsePoliciesResourceGroupsScopeObjectJSON `json:"-"`
 }
 
@@ -885,7 +885,7 @@ func (r userGroupListResponsePoliciesResourceGroupsMetaJSON) RawJSON() string {
 
 type UserGroupDeleteResponse struct {
 	// Identifier
-	ID   string                      `json:"id,required"`
+	ID   string                      `json:"id" api:"required"`
 	JSON userGroupDeleteResponseJSON `json:"-"`
 }
 
@@ -908,13 +908,13 @@ func (r userGroupDeleteResponseJSON) RawJSON() string {
 // A group of policies resources.
 type UserGroupGetResponse struct {
 	// User Group identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Last time the user group was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Name of the user group.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Policies attached to the User group
 	Policies []UserGroupGetResponsePolicy `json:"policies"`
 	JSON     userGroupGetResponseJSON     `json:"-"`
@@ -992,7 +992,7 @@ func (r UserGroupGetResponsePoliciesAccess) IsKnown() bool {
 // resources.
 type UserGroupGetResponsePoliciesPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta UserGroupGetResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -1045,9 +1045,9 @@ func (r userGroupGetResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string {
 // A group of scoped resources.
 type UserGroupGetResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []UserGroupGetResponsePoliciesResourceGroupsScope `json:"scope,required"`
+	Scope []UserGroupGetResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupGetResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -1078,9 +1078,9 @@ func (r userGroupGetResponsePoliciesResourceGroupJSON) RawJSON() string {
 type UserGroupGetResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []UserGroupGetResponsePoliciesResourceGroupsScopeObject `json:"objects,required"`
+	Objects []UserGroupGetResponsePoliciesResourceGroupsScopeObject `json:"objects" api:"required"`
 	JSON    userGroupGetResponsePoliciesResourceGroupsScopeJSON     `json:"-"`
 }
 
@@ -1106,7 +1106,7 @@ func (r userGroupGetResponsePoliciesResourceGroupsScopeJSON) RawJSON() string {
 type UserGroupGetResponsePoliciesResourceGroupsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                                    `json:"key,required"`
+	Key  string                                                    `json:"key" api:"required"`
 	JSON userGroupGetResponsePoliciesResourceGroupsScopeObjectJSON `json:"-"`
 }
 
@@ -1152,11 +1152,11 @@ func (r userGroupGetResponsePoliciesResourceGroupsMetaJSON) RawJSON() string {
 
 type UserGroupNewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the User group.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Policies attached to the User group
-	Policies param.Field[[]UserGroupNewParamsPolicy] `json:"policies,required"`
+	Policies param.Field[[]UserGroupNewParamsPolicy] `json:"policies" api:"required"`
 }
 
 func (r UserGroupNewParams) MarshalJSON() (data []byte, err error) {
@@ -1165,11 +1165,11 @@ func (r UserGroupNewParams) MarshalJSON() (data []byte, err error) {
 
 type UserGroupNewParamsPolicy struct {
 	// Allow or deny operations against the resources.
-	Access param.Field[UserGroupNewParamsPoliciesAccess] `json:"access,required"`
+	Access param.Field[UserGroupNewParamsPoliciesAccess] `json:"access" api:"required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]UserGroupNewParamsPoliciesPermissionGroup] `json:"permission_groups,required"`
+	PermissionGroups param.Field[[]UserGroupNewParamsPoliciesPermissionGroup] `json:"permission_groups" api:"required"`
 	// A set of resource groups that are specified to the policy.
-	ResourceGroups param.Field[[]UserGroupNewParamsPoliciesResourceGroup] `json:"resource_groups,required"`
+	ResourceGroups param.Field[[]UserGroupNewParamsPoliciesResourceGroup] `json:"resource_groups" api:"required"`
 }
 
 func (r UserGroupNewParamsPolicy) MarshalJSON() (data []byte, err error) {
@@ -1196,7 +1196,7 @@ func (r UserGroupNewParamsPoliciesAccess) IsKnown() bool {
 // resources.
 type UserGroupNewParamsPoliciesPermissionGroup struct {
 	// Permission Group identifier tag.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r UserGroupNewParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
@@ -1206,7 +1206,7 @@ func (r UserGroupNewParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, e
 // A group of scoped resources.
 type UserGroupNewParamsPoliciesResourceGroup struct {
 	// Resource Group identifier tag.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r UserGroupNewParamsPoliciesResourceGroup) MarshalJSON() (data []byte, err error) {
@@ -1214,10 +1214,10 @@ func (r UserGroupNewParamsPoliciesResourceGroup) MarshalJSON() (data []byte, err
 }
 
 type UserGroupNewResponseEnvelope struct {
-	Errors   []UserGroupNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGroupNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserGroupNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGroupNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserGroupNewResponseEnvelopeSuccess `json:"success,required"`
+	Success UserGroupNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A group of policies resources.
 	Result UserGroupNewResponse             `json:"result"`
 	JSON   userGroupNewResponseEnvelopeJSON `json:"-"`
@@ -1243,8 +1243,8 @@ func (r userGroupNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserGroupNewResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           UserGroupNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userGroupNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1291,8 +1291,8 @@ func (r userGroupNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UserGroupNewResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           UserGroupNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userGroupNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1355,7 +1355,7 @@ func (r UserGroupNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserGroupUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the User group.
 	Name param.Field[string] `json:"name"`
 	// Policies attached to the User group
@@ -1368,13 +1368,13 @@ func (r UserGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type UserGroupUpdateParamsPolicy struct {
 	// Policy identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Allow or deny operations against the resources.
-	Access param.Field[UserGroupUpdateParamsPoliciesAccess] `json:"access,required"`
+	Access param.Field[UserGroupUpdateParamsPoliciesAccess] `json:"access" api:"required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]UserGroupUpdateParamsPoliciesPermissionGroup] `json:"permission_groups,required"`
+	PermissionGroups param.Field[[]UserGroupUpdateParamsPoliciesPermissionGroup] `json:"permission_groups" api:"required"`
 	// A set of resource groups that are specified to the policy.
-	ResourceGroups param.Field[[]UserGroupUpdateParamsPoliciesResourceGroup] `json:"resource_groups,required"`
+	ResourceGroups param.Field[[]UserGroupUpdateParamsPoliciesResourceGroup] `json:"resource_groups" api:"required"`
 }
 
 func (r UserGroupUpdateParamsPolicy) MarshalJSON() (data []byte, err error) {
@@ -1401,7 +1401,7 @@ func (r UserGroupUpdateParamsPoliciesAccess) IsKnown() bool {
 // resources.
 type UserGroupUpdateParamsPoliciesPermissionGroup struct {
 	// Permission Group identifier tag.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r UserGroupUpdateParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
@@ -1411,7 +1411,7 @@ func (r UserGroupUpdateParamsPoliciesPermissionGroup) MarshalJSON() (data []byte
 // A group of scoped resources.
 type UserGroupUpdateParamsPoliciesResourceGroup struct {
 	// Resource Group identifier tag.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r UserGroupUpdateParamsPoliciesResourceGroup) MarshalJSON() (data []byte, err error) {
@@ -1419,10 +1419,10 @@ func (r UserGroupUpdateParamsPoliciesResourceGroup) MarshalJSON() (data []byte, 
 }
 
 type UserGroupUpdateResponseEnvelope struct {
-	Errors   []UserGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserGroupUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGroupUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success UserGroupUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A group of policies resources.
 	Result UserGroupUpdateResponse             `json:"result"`
 	JSON   userGroupUpdateResponseEnvelopeJSON `json:"-"`
@@ -1448,8 +1448,8 @@ func (r userGroupUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserGroupUpdateResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           UserGroupUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userGroupUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1496,8 +1496,8 @@ func (r userGroupUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UserGroupUpdateResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           UserGroupUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userGroupUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1560,7 +1560,7 @@ func (r UserGroupUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserGroupListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the user group to be fetched.
 	ID param.Field[string] `query:"id"`
 	// The sort order of returned user groups by name. Default sort order is ascending.
@@ -1586,15 +1586,15 @@ func (r UserGroupListParams) URLQuery() (v url.Values) {
 
 type UserGroupDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type UserGroupDeleteResponseEnvelope struct {
-	Errors   []UserGroupDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGroupDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserGroupDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGroupDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  UserGroupDeleteResponse                `json:"result,nullable"`
+	Success UserGroupDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  UserGroupDeleteResponse                `json:"result" api:"nullable"`
 	JSON    userGroupDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1618,8 +1618,8 @@ func (r userGroupDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserGroupDeleteResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           UserGroupDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userGroupDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1666,8 +1666,8 @@ func (r userGroupDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UserGroupDeleteResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           UserGroupDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userGroupDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1730,14 +1730,14 @@ func (r UserGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserGroupGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type UserGroupGetResponseEnvelope struct {
-	Errors   []UserGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []UserGroupGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGroupGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success UserGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	Success UserGroupGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A group of policies resources.
 	Result UserGroupGetResponse             `json:"result"`
 	JSON   userGroupGetResponseEnvelopeJSON `json:"-"`
@@ -1763,8 +1763,8 @@ func (r userGroupGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type UserGroupGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           UserGroupGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             userGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1811,8 +1811,8 @@ func (r userGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type UserGroupGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           UserGroupGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             userGroupGetResponseEnvelopeMessagesJSON   `json:"-"`

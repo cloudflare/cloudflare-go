@@ -45,11 +45,11 @@ func (r *LogService) List(ctx context.Context, gatewayID string, params LogListP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, gatewayID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -74,15 +74,15 @@ func (r *LogService) Delete(ctx context.Context, gatewayID string, params LogDel
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, gatewayID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates metadata for an AI Gateway log entry.
@@ -91,23 +91,23 @@ func (r *LogService) Edit(ctx context.Context, gatewayID string, id string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s", params.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves detailed information for a specific AI Gateway log entry.
@@ -116,23 +116,23 @@ func (r *LogService) Get(ctx context.Context, gatewayID string, id string, query
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the original request payload for an AI Gateway log entry.
@@ -140,19 +140,19 @@ func (r *LogService) Request(ctx context.Context, gatewayID string, id string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s/request", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieves the response payload for an AI Gateway log entry.
@@ -160,32 +160,32 @@ func (r *LogService) Response(ctx context.Context, gatewayID string, id string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s/response", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type LogListResponse struct {
-	ID                  string              `json:"id,required"`
-	Cached              bool                `json:"cached,required"`
-	CreatedAt           time.Time           `json:"created_at,required" format:"date-time"`
-	Duration            int64               `json:"duration,required"`
-	Model               string              `json:"model,required"`
-	Path                string              `json:"path,required"`
-	Provider            string              `json:"provider,required"`
-	Success             bool                `json:"success,required"`
-	TokensIn            int64               `json:"tokens_in,required,nullable"`
-	TokensOut           int64               `json:"tokens_out,required,nullable"`
+	ID                  string              `json:"id" api:"required"`
+	Cached              bool                `json:"cached" api:"required"`
+	CreatedAt           time.Time           `json:"created_at" api:"required" format:"date-time"`
+	Duration            int64               `json:"duration" api:"required"`
+	Model               string              `json:"model" api:"required"`
+	Path                string              `json:"path" api:"required"`
+	Provider            string              `json:"provider" api:"required"`
+	Success             bool                `json:"success" api:"required"`
+	TokensIn            int64               `json:"tokens_in" api:"required,nullable"`
+	TokensOut           int64               `json:"tokens_out" api:"required,nullable"`
 	Cost                float64             `json:"cost"`
 	CustomCost          bool                `json:"custom_cost"`
 	Metadata            string              `json:"metadata"`
@@ -232,7 +232,7 @@ func (r logListResponseJSON) RawJSON() string {
 }
 
 type LogDeleteResponse struct {
-	Success bool                  `json:"success,required"`
+	Success bool                  `json:"success" api:"required"`
 	JSON    logDeleteResponseJSON `json:"-"`
 }
 
@@ -255,16 +255,16 @@ func (r logDeleteResponseJSON) RawJSON() string {
 type LogEditResponse = interface{}
 
 type LogGetResponse struct {
-	ID                   string             `json:"id,required"`
-	Cached               bool               `json:"cached,required"`
-	CreatedAt            time.Time          `json:"created_at,required" format:"date-time"`
-	Duration             int64              `json:"duration,required"`
-	Model                string             `json:"model,required"`
-	Path                 string             `json:"path,required"`
-	Provider             string             `json:"provider,required"`
-	Success              bool               `json:"success,required"`
-	TokensIn             int64              `json:"tokens_in,required,nullable"`
-	TokensOut            int64              `json:"tokens_out,required,nullable"`
+	ID                   string             `json:"id" api:"required"`
+	Cached               bool               `json:"cached" api:"required"`
+	CreatedAt            time.Time          `json:"created_at" api:"required" format:"date-time"`
+	Duration             int64              `json:"duration" api:"required"`
+	Model                string             `json:"model" api:"required"`
+	Path                 string             `json:"path" api:"required"`
+	Provider             string             `json:"provider" api:"required"`
+	Success              bool               `json:"success" api:"required"`
+	TokensIn             int64              `json:"tokens_in" api:"required,nullable"`
+	TokensOut            int64              `json:"tokens_out" api:"required,nullable"`
 	Cost                 float64            `json:"cost"`
 	CustomCost           bool               `json:"custom_cost"`
 	Metadata             string             `json:"metadata"`
@@ -327,7 +327,7 @@ type LogRequestResponse = interface{}
 type LogResponseResponse = interface{}
 
 type LogListParams struct {
-	AccountID           param.Field[string]                        `path:"account_id,required"`
+	AccountID           param.Field[string]                        `path:"account_id" api:"required"`
 	Cached              param.Field[bool]                          `query:"cached"`
 	Direction           param.Field[LogListParamsDirection]        `query:"direction"`
 	EndDate             param.Field[time.Time]                     `query:"end_date" format:"date-time"`
@@ -397,9 +397,9 @@ func (r LogListParamsFeedback) IsKnown() bool {
 }
 
 type LogListParamsFilter struct {
-	Key      param.Field[LogListParamsFiltersKey]          `query:"key,required"`
-	Operator param.Field[LogListParamsFiltersOperator]     `query:"operator,required"`
-	Value    param.Field[[]LogListParamsFiltersValueUnion] `query:"value,required"`
+	Key      param.Field[LogListParamsFiltersKey]          `query:"key" api:"required"`
+	Operator param.Field[LogListParamsFiltersOperator]     `query:"operator" api:"required"`
+	Value    param.Field[[]LogListParamsFiltersValueUnion] `query:"value" api:"required"`
 }
 
 // URLQuery serializes [LogListParamsFilter]'s query parameters as `url.Values`.
@@ -504,7 +504,7 @@ func (r LogListParamsOrderByDirection) IsKnown() bool {
 }
 
 type LogDeleteParams struct {
-	AccountID        param.Field[string]                          `path:"account_id,required"`
+	AccountID        param.Field[string]                          `path:"account_id" api:"required"`
 	Filters          param.Field[[]LogDeleteParamsFilter]         `query:"filters"`
 	Limit            param.Field[int64]                           `query:"limit"`
 	OrderBy          param.Field[LogDeleteParamsOrderBy]          `query:"order_by"`
@@ -520,9 +520,9 @@ func (r LogDeleteParams) URLQuery() (v url.Values) {
 }
 
 type LogDeleteParamsFilter struct {
-	Key      param.Field[LogDeleteParamsFiltersKey]          `query:"key,required"`
-	Operator param.Field[LogDeleteParamsFiltersOperator]     `query:"operator,required"`
-	Value    param.Field[[]LogDeleteParamsFiltersValueUnion] `query:"value,required"`
+	Key      param.Field[LogDeleteParamsFiltersKey]          `query:"key" api:"required"`
+	Operator param.Field[LogDeleteParamsFiltersOperator]     `query:"operator" api:"required"`
+	Value    param.Field[[]LogDeleteParamsFiltersValueUnion] `query:"value" api:"required"`
 }
 
 // URLQuery serializes [LogDeleteParamsFilter]'s query parameters as `url.Values`.
@@ -632,7 +632,7 @@ func (r LogDeleteParamsOrderByDirection) IsKnown() bool {
 }
 
 type LogEditParams struct {
-	AccountID param.Field[string]                                `path:"account_id,required"`
+	AccountID param.Field[string]                                `path:"account_id" api:"required"`
 	Feedback  param.Field[float64]                               `json:"feedback"`
 	Metadata  param.Field[map[string]LogEditParamsMetadataUnion] `json:"metadata"`
 	Score     param.Field[float64]                               `json:"score"`
@@ -648,8 +648,8 @@ type LogEditParamsMetadataUnion interface {
 }
 
 type LogEditResponseEnvelope struct {
-	Result  LogEditResponse             `json:"result,required"`
-	Success bool                        `json:"success,required"`
+	Result  LogEditResponse             `json:"result" api:"required"`
+	Success bool                        `json:"success" api:"required"`
 	JSON    logEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -671,12 +671,12 @@ func (r logEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LogGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LogGetResponseEnvelope struct {
-	Result  LogGetResponse             `json:"result,required"`
-	Success bool                       `json:"success,required"`
+	Result  LogGetResponse             `json:"result" api:"required"`
+	Success bool                       `json:"success" api:"required"`
 	JSON    logGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -698,9 +698,9 @@ func (r logGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LogRequestParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LogResponseParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

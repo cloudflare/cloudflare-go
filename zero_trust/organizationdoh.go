@@ -41,15 +41,15 @@ func (r *OrganizationDOHService) Update(ctx context.Context, params Organization
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/organizations/doh", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the DoH settings for your Zero Trust organization.
@@ -58,15 +58,15 @@ func (r *OrganizationDOHService) Get(ctx context.Context, query OrganizationDOHG
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/organizations/doh", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OrganizationDOHUpdateResponse struct {
@@ -154,7 +154,7 @@ func (r organizationDOHGetResponseJSON) RawJSON() string {
 
 type OrganizationDOHUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
 	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
 	// duration for this setting is the same as the key rotation period on the account.
@@ -169,10 +169,10 @@ func (r OrganizationDOHUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationDOHUpdateResponseEnvelope struct {
-	Errors   []OrganizationDOHUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationDOHUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OrganizationDOHUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OrganizationDOHUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OrganizationDOHUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success OrganizationDOHUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OrganizationDOHUpdateResponse                `json:"result"`
 	JSON    organizationDOHUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -197,8 +197,8 @@ func (r organizationDOHUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OrganizationDOHUpdateResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           OrganizationDOHUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             organizationDOHUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -245,8 +245,8 @@ func (r organizationDOHUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type OrganizationDOHUpdateResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           OrganizationDOHUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             organizationDOHUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -309,14 +309,14 @@ func (r OrganizationDOHUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type OrganizationDOHGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type OrganizationDOHGetResponseEnvelope struct {
-	Errors   []OrganizationDOHGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationDOHGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OrganizationDOHGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OrganizationDOHGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OrganizationDOHGetResponseEnvelopeSuccess `json:"success,required"`
+	Success OrganizationDOHGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  OrganizationDOHGetResponse                `json:"result"`
 	JSON    organizationDOHGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -341,8 +341,8 @@ func (r organizationDOHGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OrganizationDOHGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           OrganizationDOHGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             organizationDOHGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -389,8 +389,8 @@ func (r organizationDOHGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type OrganizationDOHGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           OrganizationDOHGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             organizationDOHGetResponseEnvelopeMessagesJSON   `json:"-"`

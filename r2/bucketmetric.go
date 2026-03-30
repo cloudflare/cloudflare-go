@@ -42,15 +42,15 @@ func (r *BucketMetricService) List(ctx context.Context, query BucketMetricListPa
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/metrics", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Metrics based on the class they belong to.
@@ -249,16 +249,16 @@ func (r bucketMetricListResponseStandardUploadedJSON) RawJSON() string {
 
 type BucketMetricListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type BucketMetricListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
 	// Metrics based on the class they belong to.
-	Result BucketMetricListResponse `json:"result,required"`
+	Result BucketMetricListResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketMetricListResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketMetricListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketMetricListResponseEnvelopeJSON    `json:"-"`
 }
 

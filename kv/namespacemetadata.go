@@ -43,37 +43,37 @@ func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	if keyName == "" {
 		err = errors.New("missing required key_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/metadata/%s", query.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type NamespaceMetadataGetResponse = interface{}
 
 type NamespaceMetadataGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NamespaceMetadataGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success,required"`
+	Success NamespaceMetadataGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Arbitrary JSON that is associated with a key.
 	Result NamespaceMetadataGetResponse             `json:"result"`
 	JSON   namespaceMetadataGetResponseEnvelopeJSON `json:"-"`

@@ -39,29 +39,29 @@ func NewCopyService(opts ...option.RequestOption) (r *CopyService) {
 func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...option.RequestOption) (res *Video, err error) {
 	var env CopyNewResponseEnvelope
 	if params.UploadCreator.Present {
-		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
+		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%v", params.UploadCreator)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/copy", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CopyNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A video's URL. The server must be publicly routable and support `HTTP HEAD`
 	// requests and `HTTP GET` range requests. The server should respond to `HTTP HEAD`
 	// requests with a `content-range` header that includes the size of the file.
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -102,10 +102,10 @@ func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type CopyNewResponseEnvelope struct {
-	Errors   []CopyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CopyNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CopyNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CopyNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CopyNewResponseEnvelopeSuccess `json:"success,required"`
+	Success CopyNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Video                          `json:"result"`
 	JSON    copyNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -130,8 +130,8 @@ func (r copyNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CopyNewResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           CopyNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             copyNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -178,8 +178,8 @@ func (r copyNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CopyNewResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           CopyNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             copyNewResponseEnvelopeMessagesJSON   `json:"-"`

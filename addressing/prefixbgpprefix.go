@@ -44,19 +44,19 @@ func (r *PrefixBGPPrefixService) New(ctx context.Context, prefixID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", params.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all BGP Prefixes within the specified IP Prefix. BGP Prefixes are used to
@@ -69,11 +69,11 @@ func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, quer
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", query.AccountID, prefixID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -103,23 +103,23 @@ func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	if bgpPrefixID == "" {
 		err = errors.New("missing required bgp_prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", params.AccountID, prefixID, bgpPrefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve a single BGP Prefix according to its identifier
@@ -128,30 +128,30 @@ func (r *PrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPr
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	if bgpPrefixID == "" {
 		err = errors.New("missing required bgp_prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", query.AccountID, prefixID, bgpPrefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BGPPrefix struct {
 	// Identifier of BGP Prefix.
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN int64 `json:"asn,nullable"`
+	ASN int64 `json:"asn" api:"nullable"`
 	// Number of times to prepend the Cloudflare ASN to the BGP AS-Path attribute
 	ASNPrependCount int64 `json:"asn_prepend_count"`
 	// Determines if Cloudflare advertises a BYOIP BGP prefix even when there is no
@@ -197,7 +197,7 @@ type BGPPrefixBGPSignalOpts struct {
 	Enabled bool `json:"enabled"`
 	// Last time BGP signaling control was toggled. This field is null if BGP signaling
 	// has never been enabled.
-	ModifiedAt time.Time                  `json:"modified_at,nullable" format:"date-time"`
+	ModifiedAt time.Time                  `json:"modified_at" api:"nullable" format:"date-time"`
 	JSON       bgpPrefixBGPSignalOptsJSON `json:"-"`
 }
 
@@ -221,10 +221,10 @@ func (r bgpPrefixBGPSignalOptsJSON) RawJSON() string {
 type BGPPrefixOnDemand struct {
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
+	Advertised bool `json:"advertised" api:"nullable"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
+	AdvertisedModifiedAt time.Time `json:"advertised_modified_at" api:"nullable" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
 	OnDemandEnabled bool `json:"on_demand_enabled"`
@@ -255,9 +255,9 @@ func (r bgpPrefixOnDemandJSON) RawJSON() string {
 
 type PrefixBGPPrefixNewParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR param.Field[string] `json:"cidr,required"`
+	CIDR param.Field[string] `json:"cidr" api:"required"`
 }
 
 func (r PrefixBGPPrefixNewParams) MarshalJSON() (data []byte, err error) {
@@ -265,10 +265,10 @@ func (r PrefixBGPPrefixNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPPrefixNewResponseEnvelope struct {
-	Errors   []PrefixBGPPrefixNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPPrefixNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixBGPPrefixNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixBGPPrefixNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixBGPPrefixNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixBGPPrefixNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  BGPPrefix                                 `json:"result"`
 	JSON    prefixBGPPrefixNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -293,8 +293,8 @@ func (r prefixBGPPrefixNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixBGPPrefixNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           PrefixBGPPrefixNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixBGPPrefixNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -341,8 +341,8 @@ func (r prefixBGPPrefixNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixBGPPrefixNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           PrefixBGPPrefixNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixBGPPrefixNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -405,12 +405,12 @@ func (r PrefixBGPPrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixBGPPrefixListParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixBGPPrefixEditParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Number of times to prepend the Cloudflare ASN to the BGP AS-Path attribute
 	ASNPrependCount param.Field[int64] `json:"asn_prepend_count"`
 	// Determines if Cloudflare advertises a BYOIP BGP prefix even when there is no
@@ -434,10 +434,10 @@ func (r PrefixBGPPrefixEditParamsOnDemand) MarshalJSON() (data []byte, err error
 }
 
 type PrefixBGPPrefixEditResponseEnvelope struct {
-	Errors   []PrefixBGPPrefixEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPPrefixEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixBGPPrefixEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixBGPPrefixEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixBGPPrefixEditResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixBGPPrefixEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  BGPPrefix                                  `json:"result"`
 	JSON    prefixBGPPrefixEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -462,8 +462,8 @@ func (r prefixBGPPrefixEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixBGPPrefixEditResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           PrefixBGPPrefixEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixBGPPrefixEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -510,8 +510,8 @@ func (r prefixBGPPrefixEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixBGPPrefixEditResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           PrefixBGPPrefixEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixBGPPrefixEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -574,14 +574,14 @@ func (r PrefixBGPPrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixBGPPrefixGetParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixBGPPrefixGetResponseEnvelope struct {
-	Errors   []PrefixBGPPrefixGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPPrefixGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixBGPPrefixGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixBGPPrefixGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixBGPPrefixGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixBGPPrefixGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  BGPPrefix                                 `json:"result"`
 	JSON    prefixBGPPrefixGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -606,8 +606,8 @@ func (r prefixBGPPrefixGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixBGPPrefixGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           PrefixBGPPrefixGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixBGPPrefixGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -654,8 +654,8 @@ func (r prefixBGPPrefixGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixBGPPrefixGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           PrefixBGPPrefixGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixBGPPrefixGetResponseEnvelopeMessagesJSON   `json:"-"`

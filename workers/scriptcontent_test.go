@@ -29,6 +29,7 @@ func TestScriptContentUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -41,7 +42,7 @@ func TestScriptContentUpdateWithOptionalParams(t *testing.T) {
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),
 			}),
-			Files:                  cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			Files:                  cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("Example data")))}),
 			CfWorkerBodyPart:       cloudflare.F("CF-WORKER-BODY-PART"),
 			CfWorkerMainModulePart: cloudflare.F("CF-WORKER-MAIN-MODULE-PART"),
 		},
@@ -64,6 +65,7 @@ func TestScriptContentGet(t *testing.T) {
 	baseURL := server.URL
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

@@ -42,29 +42,29 @@ func (r *InstanceStatusService) Edit(ctx context.Context, workflowName string, i
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	if instanceID == "" {
 		err = errors.New("missing required instance_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/%s/status", params.AccountID, workflowName, instanceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InstanceStatusEditResponse struct {
-	Status InstanceStatusEditResponseStatus `json:"status,required"`
+	Status InstanceStatusEditResponseStatus `json:"status" api:"required"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
-	Timestamp time.Time                      `json:"timestamp,required" format:"date-time"`
+	Timestamp time.Time                      `json:"timestamp" api:"required" format:"date-time"`
 	JSON      instanceStatusEditResponseJSON `json:"-"`
 }
 
@@ -107,9 +107,9 @@ func (r InstanceStatusEditResponseStatus) IsKnown() bool {
 }
 
 type InstanceStatusEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Apply action to instance.
-	Status param.Field[InstanceStatusEditParamsStatus] `json:"status,required"`
+	Status param.Field[InstanceStatusEditParamsStatus] `json:"status" api:"required"`
 }
 
 func (r InstanceStatusEditParams) MarshalJSON() (data []byte, err error) {
@@ -135,10 +135,10 @@ func (r InstanceStatusEditParamsStatus) IsKnown() bool {
 }
 
 type InstanceStatusEditResponseEnvelope struct {
-	Errors     []InstanceStatusEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []InstanceStatusEditResponseEnvelopeMessages `json:"messages,required"`
-	Result     InstanceStatusEditResponse                   `json:"result,required"`
-	Success    InstanceStatusEditResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []InstanceStatusEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []InstanceStatusEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     InstanceStatusEditResponse                   `json:"result" api:"required"`
+	Success    InstanceStatusEditResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo InstanceStatusEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       instanceStatusEditResponseEnvelopeJSON       `json:"-"`
 }
@@ -164,8 +164,8 @@ func (r instanceStatusEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceStatusEditResponseEnvelopeErrors struct {
-	Code    float64                                      `json:"code,required"`
-	Message string                                       `json:"message,required"`
+	Code    float64                                      `json:"code" api:"required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    instanceStatusEditResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -187,8 +187,8 @@ func (r instanceStatusEditResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type InstanceStatusEditResponseEnvelopeMessages struct {
-	Code    float64                                        `json:"code,required"`
-	Message string                                         `json:"message,required"`
+	Code    float64                                        `json:"code" api:"required"`
+	Message string                                         `json:"message" api:"required"`
 	JSON    instanceStatusEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -224,9 +224,9 @@ func (r InstanceStatusEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InstanceStatusEditResponseEnvelopeResultInfo struct {
-	Count      float64                                          `json:"count,required"`
-	PerPage    float64                                          `json:"per_page,required"`
-	TotalCount float64                                          `json:"total_count,required"`
+	Count      float64                                          `json:"count" api:"required"`
+	PerPage    float64                                          `json:"per_page" api:"required"`
+	TotalCount float64                                          `json:"total_count" api:"required"`
 	Cursor     string                                           `json:"cursor"`
 	Page       float64                                          `json:"page"`
 	JSON       instanceStatusEditResponseEnvelopeResultInfoJSON `json:"-"`

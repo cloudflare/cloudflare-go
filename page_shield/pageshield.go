@@ -49,15 +49,15 @@ func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateP
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the Page Shield settings.
@@ -66,27 +66,27 @@ func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, 
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Setting struct {
 	// When true, indicates that Page Shield is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The timestamp of when Page Shield was last updated.
-	UpdatedAt string `json:"updated_at,required"`
+	UpdatedAt string `json:"updated_at" api:"required"`
 	// When true, CSP reports will be sent to
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint,required"`
+	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint" api:"required"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool        `json:"use_connection_url_path,required"`
+	UseConnectionURLPath bool        `json:"use_connection_url_path" api:"required"`
 	JSON                 settingJSON `json:"-"`
 }
 
@@ -110,14 +110,14 @@ func (r settingJSON) RawJSON() string {
 
 type PageShieldUpdateResponse struct {
 	// When true, indicates that Page Shield is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The timestamp of when Page Shield was last updated.
-	UpdatedAt string `json:"updated_at,required"`
+	UpdatedAt string `json:"updated_at" api:"required"`
 	// When true, CSP reports will be sent to
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint,required"`
+	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint" api:"required"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                         `json:"use_connection_url_path,required"`
+	UseConnectionURLPath bool                         `json:"use_connection_url_path" api:"required"`
 	JSON                 pageShieldUpdateResponseJSON `json:"-"`
 }
 
@@ -142,7 +142,7 @@ func (r pageShieldUpdateResponseJSON) RawJSON() string {
 
 type PageShieldUpdateParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When true, indicates that Page Shield is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 	// When true, CSP reports will be sent to
@@ -158,7 +158,7 @@ func (r PageShieldUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type PageShieldUpdateResponseEnvelope struct {
 	// Whether the API call was successful
-	Success  PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success  PageShieldUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo                   `json:"errors"`
 	Messages []shared.ResponseInfo                   `json:"messages"`
 	Result   PageShieldUpdateResponse                `json:"result"`
@@ -201,15 +201,15 @@ func (r PageShieldUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageShieldGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PageShieldGetResponseEnvelope struct {
 	// Whether the API call was successful
-	Success  PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
+	Success  PageShieldGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo                `json:"errors"`
 	Messages []shared.ResponseInfo                `json:"messages"`
-	Result   Setting                              `json:"result,nullable"`
+	Result   Setting                              `json:"result" api:"nullable"`
 	JSON     pageShieldGetResponseEnvelopeJSON    `json:"-"`
 }
 

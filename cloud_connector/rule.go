@@ -42,7 +42,7 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cloud_connector/rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -69,7 +69,7 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/cloud_connector/rules", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -239,7 +239,7 @@ func (r RuleListResponseProvider) IsKnown() bool {
 
 type RuleUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string]    `path:"zone_id,required"`
+	ZoneID param.Field[string]    `path:"zone_id" api:"required"`
 	Rules  []RuleUpdateParamsRule `json:"rules"`
 }
 
@@ -292,5 +292,5 @@ func (r RuleUpdateParamsRulesProvider) IsKnown() bool {
 
 type RuleListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

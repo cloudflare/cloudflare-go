@@ -55,15 +55,15 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/load_balancers", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a configured load balancer.
@@ -72,19 +72,19 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List configured load balancers.
@@ -94,7 +94,7 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -120,19 +120,19 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Apply changes to an existing load balancer, overwriting the supplied properties.
@@ -141,19 +141,19 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single configured load balancer.
@@ -162,19 +162,19 @@ func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, qu
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", query.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Controls features that modify the routing of requests to pools and origins in
@@ -269,10 +269,10 @@ type DefaultPoolsParam = string
 // reset.
 type FilterOptions struct {
 	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable bool `json:"disable,nullable"`
+	Disable bool `json:"disable" api:"nullable"`
 	// If present, send notifications only for this health status (e.g. false for only
 	// DOWN events). Use null to reset (all events).
-	Healthy bool              `json:"healthy,nullable"`
+	Healthy bool              `json:"healthy" api:"nullable"`
 	JSON    filterOptionsJSON `json:"-"`
 }
 
@@ -709,10 +709,10 @@ func (r LocationStrategyParam) MarshalJSON() (data []byte, err error) {
 type NotificationFilter struct {
 	// Filter options for a particular resource type (pool or origin). Use null to
 	// reset.
-	Origin FilterOptions `json:"origin,nullable"`
+	Origin FilterOptions `json:"origin" api:"nullable"`
 	// Filter options for a particular resource type (pool or origin). Use null to
 	// reset.
-	Pool FilterOptions          `json:"pool,nullable"`
+	Pool FilterOptions          `json:"pool" api:"nullable"`
 	JSON notificationFilterJSON `json:"-"`
 }
 
@@ -1638,16 +1638,16 @@ func (r loadBalancerDeleteResponseJSON) RawJSON() string {
 }
 
 type LoadBalancerNewParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools,required"`
+	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools" api:"required"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[string] `json:"fallback_pool,required"`
+	FallbackPool param.Field[string] `json:"fallback_pool" api:"required"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -1756,11 +1756,11 @@ func (r LoadBalancerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancer          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LoadBalancer          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LoadBalancerNewResponseEnvelopeSuccess `json:"success,required"`
+	Success LoadBalancerNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    loadBalancerNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1799,16 +1799,16 @@ func (r LoadBalancerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerUpdateParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools,required"`
+	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools" api:"required"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[string] `json:"fallback_pool,required"`
+	FallbackPool param.Field[string] `json:"fallback_pool" api:"required"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -1919,11 +1919,11 @@ func (r LoadBalancerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancer          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LoadBalancer          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LoadBalancerUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success LoadBalancerUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    loadBalancerUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1962,19 +1962,19 @@ func (r LoadBalancerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerListParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LoadBalancerDeleteParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LoadBalancerDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   LoadBalancerDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   LoadBalancerDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LoadBalancerDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success LoadBalancerDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    loadBalancerDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2013,7 +2013,7 @@ func (r LoadBalancerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerEditParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -2131,11 +2131,11 @@ func (r LoadBalancerEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancer          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LoadBalancer          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LoadBalancerEditResponseEnvelopeSuccess `json:"success,required"`
+	Success LoadBalancerEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    loadBalancerEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2174,15 +2174,15 @@ func (r LoadBalancerEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerGetParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LoadBalancerGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancer          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LoadBalancer          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success LoadBalancerGetResponseEnvelopeSuccess `json:"success,required"`
+	Success LoadBalancerGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    loadBalancerGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -50,11 +50,11 @@ func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, q
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if deviceID == "" {
 		err = errors.New("missing required device_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/%s/override_codes", query.AccountID, deviceID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -89,19 +89,19 @@ func (r *DeviceOverrideCodeService) Get(ctx context.Context, registrationID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if registrationID == "" {
 		err = errors.New("missing required registration_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/registrations/%s/override_codes", query.AccountID, registrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DeviceOverrideCodeListResponse = interface{}
@@ -128,19 +128,19 @@ func (r deviceOverrideCodeGetResponseJSON) RawJSON() string {
 }
 
 type DeviceOverrideCodeListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceOverrideCodeGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceOverrideCodeGetResponseEnvelope struct {
-	Errors   []DeviceOverrideCodeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceOverrideCodeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceOverrideCodeGetResponse                   `json:"result,required"`
+	Errors   []DeviceOverrideCodeGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceOverrideCodeGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   DeviceOverrideCodeGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                      `json:"success,required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    deviceOverrideCodeGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -166,8 +166,8 @@ func (r deviceOverrideCodeGetResponseEnvelopeJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceOverrideCodeGetResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
+	Code    int64                                           `json:"code" api:"required"`
+	Message string                                          `json:"message" api:"required"`
 	JSON    deviceOverrideCodeGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -191,8 +191,8 @@ func (r deviceOverrideCodeGetResponseEnvelopeErrorsJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceOverrideCodeGetResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
+	Code    int64                                             `json:"code" api:"required"`
+	Message string                                            `json:"message" api:"required"`
 	JSON    deviceOverrideCodeGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 

@@ -27,6 +27,7 @@ func TestV1NewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -34,7 +35,7 @@ func TestV1NewWithOptionalParams(t *testing.T) {
 		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:                cloudflare.F("id"),
 		Creator:           cloudflare.F("creator"),
-		File:              cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+		File:              cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
 		Metadata:          cloudflare.F[any](map[string]interface{}{}),
 		RequireSignedURLs: cloudflare.F(true),
 		URL:               cloudflare.F("https://example.com/path/to/logo.png"),
@@ -58,6 +59,7 @@ func TestV1ListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -86,6 +88,7 @@ func TestV1Delete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -115,6 +118,7 @@ func TestV1EditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -147,6 +151,7 @@ func TestV1Get(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

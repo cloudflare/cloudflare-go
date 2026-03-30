@@ -44,7 +44,7 @@ func (r *PrioritizeService) Update(ctx context.Context, params PrioritizeUpdateP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_certificates/prioritize", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -68,9 +68,9 @@ func (r *PrioritizeService) UpdateAutoPaging(ctx context.Context, params Priorit
 
 type PrioritizeUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Array of ordered certificates.
-	Certificates param.Field[[]PrioritizeUpdateParamsCertificate] `json:"certificates,required"`
+	Certificates param.Field[[]PrioritizeUpdateParamsCertificate] `json:"certificates" api:"required"`
 }
 
 func (r PrioritizeUpdateParams) MarshalJSON() (data []byte, err error) {

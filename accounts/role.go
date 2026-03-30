@@ -45,7 +45,7 @@ func (r *RoleService) List(ctx context.Context, params RoleListParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/roles", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -71,24 +71,24 @@ func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if roleID == "" {
 		err = errors.New("missing required role_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/roles/%s", query.AccountID, roleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RoleListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of roles per page.
@@ -105,14 +105,14 @@ func (r RoleListParams) URLQuery() (v url.Values) {
 
 type RoleGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RoleGetResponseEnvelope struct {
-	Errors   []RoleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RoleGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RoleGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RoleGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RoleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  shared.Role                    `json:"result"`
 	JSON    roleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -137,8 +137,8 @@ func (r roleGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RoleGetResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           RoleGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             roleGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -185,8 +185,8 @@ func (r roleGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RoleGetResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           RoleGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             roleGetResponseEnvelopeMessagesJSON   `json:"-"`

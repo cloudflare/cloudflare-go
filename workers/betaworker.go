@@ -46,15 +46,15 @@ func (r *BetaWorkerService) New(ctx context.Context, params BetaWorkerNewParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Perform a complete replacement of a Worker, where omitted properties are set to
@@ -66,19 +66,19 @@ func (r *BetaWorkerService) Update(ctx context.Context, workerID string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s", params.AccountID, workerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all Workers for an account.
@@ -88,7 +88,7 @@ func (r *BetaWorkerService) List(ctx context.Context, params BetaWorkerListParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -113,15 +113,15 @@ func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, body Be
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s", body.AccountID, workerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Perform a partial update on a Worker, where omitted properties are left
@@ -131,19 +131,19 @@ func (r *BetaWorkerService) Edit(ctx context.Context, workerID string, params Be
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s", params.AccountID, workerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get details about a specific Worker.
@@ -152,45 +152,45 @@ func (r *BetaWorkerService) Get(ctx context.Context, workerID string, query Beta
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s", query.AccountID, workerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Worker struct {
 	// Immutable ID of the Worker.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the Worker was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Whether logpush is enabled for the Worker.
-	Logpush bool `json:"logpush,required"`
+	Logpush bool `json:"logpush" api:"required"`
 	// Name of the Worker.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Observability settings for the Worker.
-	Observability WorkerObservability `json:"observability,required"`
+	Observability WorkerObservability `json:"observability" api:"required"`
 	// Other resources that reference the Worker and depend on it existing.
-	References WorkerReferences `json:"references,required"`
+	References WorkerReferences `json:"references" api:"required"`
 	// Subdomain settings for the Worker.
-	Subdomain WorkerSubdomain `json:"subdomain,required"`
+	Subdomain WorkerSubdomain `json:"subdomain" api:"required"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags,required"`
+	Tags []string `json:"tags" api:"required"`
 	// Other Workers that should consume logs from the Worker.
-	TailConsumers []WorkerTailConsumer `json:"tail_consumers,required"`
+	TailConsumers []WorkerTailConsumer `json:"tail_consumers" api:"required"`
 	// When the Worker was most recently updated.
-	UpdatedOn time.Time `json:"updated_on,required" format:"date-time"`
+	UpdatedOn time.Time `json:"updated_on" api:"required" format:"date-time"`
 	// When the Worker's most recent deployment was created. `null` if the Worker has
 	// never been deployed.
-	DeployedOn time.Time  `json:"deployed_on,nullable" format:"date-time"`
+	DeployedOn time.Time  `json:"deployed_on" api:"nullable" format:"date-time"`
 	JSON       workerJSON `json:"-"`
 }
 
@@ -323,16 +323,16 @@ func (r workerObservabilityTracesJSON) RawJSON() string {
 // Other resources that reference the Worker and depend on it existing.
 type WorkerReferences struct {
 	// Other Workers that reference the Worker as an outbound for a dispatch namespace.
-	DispatchNamespaceOutbounds []WorkerReferencesDispatchNamespaceOutbound `json:"dispatch_namespace_outbounds,required"`
+	DispatchNamespaceOutbounds []WorkerReferencesDispatchNamespaceOutbound `json:"dispatch_namespace_outbounds" api:"required"`
 	// Custom domains connected to the Worker.
-	Domains []WorkerReferencesDomain `json:"domains,required"`
+	Domains []WorkerReferencesDomain `json:"domains" api:"required"`
 	// Other Workers that reference Durable Object classes implemented by the Worker.
-	DurableObjects []WorkerReferencesDurableObject `json:"durable_objects,required"`
+	DurableObjects []WorkerReferencesDurableObject `json:"durable_objects" api:"required"`
 	// Queues that send messages to the Worker.
-	Queues []WorkerReferencesQueue `json:"queues,required"`
+	Queues []WorkerReferencesQueue `json:"queues" api:"required"`
 	// Other Workers that reference the Worker using
 	// [service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/).
-	Workers []WorkerReferencesWorker `json:"workers,required"`
+	Workers []WorkerReferencesWorker `json:"workers" api:"required"`
 	JSON    workerReferencesJSON     `json:"-"`
 }
 
@@ -358,13 +358,13 @@ func (r workerReferencesJSON) RawJSON() string {
 
 type WorkerReferencesDispatchNamespaceOutbound struct {
 	// ID of the dispatch namespace.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// Name of the dispatch namespace.
-	NamespaceName string `json:"namespace_name,required"`
+	NamespaceName string `json:"namespace_name" api:"required"`
 	// ID of the Worker using the dispatch namespace.
-	WorkerID string `json:"worker_id,required"`
+	WorkerID string `json:"worker_id" api:"required"`
 	// Name of the Worker using the dispatch namespace.
-	WorkerName string                                        `json:"worker_name,required"`
+	WorkerName string                                        `json:"worker_name" api:"required"`
 	JSON       workerReferencesDispatchNamespaceOutboundJSON `json:"-"`
 }
 
@@ -389,15 +389,15 @@ func (r workerReferencesDispatchNamespaceOutboundJSON) RawJSON() string {
 
 type WorkerReferencesDomain struct {
 	// ID of the custom domain.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the custom domain.
-	CertificateID string `json:"certificate_id,required"`
+	CertificateID string `json:"certificate_id" api:"required"`
 	// Full hostname of the custom domain, including the zone name.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// ID of the zone.
-	ZoneID string `json:"zone_id,required"`
+	ZoneID string `json:"zone_id" api:"required"`
 	// Name of the zone.
-	ZoneName string                     `json:"zone_name,required"`
+	ZoneName string                     `json:"zone_name" api:"required"`
 	JSON     workerReferencesDomainJSON `json:"-"`
 }
 
@@ -423,13 +423,13 @@ func (r workerReferencesDomainJSON) RawJSON() string {
 
 type WorkerReferencesDurableObject struct {
 	// ID of the Durable Object namespace being used.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// Name of the Durable Object namespace being used.
-	NamespaceName string `json:"namespace_name,required"`
+	NamespaceName string `json:"namespace_name" api:"required"`
 	// ID of the Worker using the Durable Object implementation.
-	WorkerID string `json:"worker_id,required"`
+	WorkerID string `json:"worker_id" api:"required"`
 	// Name of the Worker using the Durable Object implementation.
-	WorkerName string                            `json:"worker_name,required"`
+	WorkerName string                            `json:"worker_name" api:"required"`
 	JSON       workerReferencesDurableObjectJSON `json:"-"`
 }
 
@@ -454,11 +454,11 @@ func (r workerReferencesDurableObjectJSON) RawJSON() string {
 
 type WorkerReferencesQueue struct {
 	// ID of the queue consumer configuration.
-	QueueConsumerID string `json:"queue_consumer_id,required"`
+	QueueConsumerID string `json:"queue_consumer_id" api:"required"`
 	// ID of the queue.
-	QueueID string `json:"queue_id,required"`
+	QueueID string `json:"queue_id" api:"required"`
 	// Name of the queue.
-	QueueName string                    `json:"queue_name,required"`
+	QueueName string                    `json:"queue_name" api:"required"`
 	JSON      workerReferencesQueueJSON `json:"-"`
 }
 
@@ -482,9 +482,9 @@ func (r workerReferencesQueueJSON) RawJSON() string {
 
 type WorkerReferencesWorker struct {
 	// ID of the referencing Worker.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Name of the referencing Worker.
-	Name string                     `json:"name,required"`
+	Name string                     `json:"name" api:"required"`
 	JSON workerReferencesWorkerJSON `json:"-"`
 }
 
@@ -534,7 +534,7 @@ func (r workerSubdomainJSON) RawJSON() string {
 
 type WorkerTailConsumer struct {
 	// Name of the consumer Worker.
-	Name string                 `json:"name,required"`
+	Name string                 `json:"name" api:"required"`
 	JSON workerTailConsumerJSON `json:"-"`
 }
 
@@ -556,17 +556,17 @@ func (r workerTailConsumerJSON) RawJSON() string {
 
 type WorkerParam struct {
 	// Whether logpush is enabled for the Worker.
-	Logpush param.Field[bool] `json:"logpush,required"`
+	Logpush param.Field[bool] `json:"logpush" api:"required"`
 	// Name of the Worker.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Observability settings for the Worker.
-	Observability param.Field[WorkerObservabilityParam] `json:"observability,required"`
+	Observability param.Field[WorkerObservabilityParam] `json:"observability" api:"required"`
 	// Subdomain settings for the Worker.
-	Subdomain param.Field[WorkerSubdomainParam] `json:"subdomain,required"`
+	Subdomain param.Field[WorkerSubdomainParam] `json:"subdomain" api:"required"`
 	// Tags associated with the Worker.
-	Tags param.Field[[]string] `json:"tags,required"`
+	Tags param.Field[[]string] `json:"tags" api:"required"`
 	// Other Workers that should consume logs from the Worker.
-	TailConsumers param.Field[[]WorkerTailConsumerParam] `json:"tail_consumers,required"`
+	TailConsumers param.Field[[]WorkerTailConsumerParam] `json:"tail_consumers" api:"required"`
 }
 
 func (r WorkerParam) MarshalJSON() (data []byte, err error) {
@@ -628,16 +628,16 @@ func (r WorkerObservabilityTracesParam) MarshalJSON() (data []byte, err error) {
 // Other resources that reference the Worker and depend on it existing.
 type WorkerReferencesParam struct {
 	// Other Workers that reference the Worker as an outbound for a dispatch namespace.
-	DispatchNamespaceOutbounds param.Field[[]WorkerReferencesDispatchNamespaceOutboundParam] `json:"dispatch_namespace_outbounds,required"`
+	DispatchNamespaceOutbounds param.Field[[]WorkerReferencesDispatchNamespaceOutboundParam] `json:"dispatch_namespace_outbounds" api:"required"`
 	// Custom domains connected to the Worker.
-	Domains param.Field[[]WorkerReferencesDomainParam] `json:"domains,required"`
+	Domains param.Field[[]WorkerReferencesDomainParam] `json:"domains" api:"required"`
 	// Other Workers that reference Durable Object classes implemented by the Worker.
-	DurableObjects param.Field[[]WorkerReferencesDurableObjectParam] `json:"durable_objects,required"`
+	DurableObjects param.Field[[]WorkerReferencesDurableObjectParam] `json:"durable_objects" api:"required"`
 	// Queues that send messages to the Worker.
-	Queues param.Field[[]WorkerReferencesQueueParam] `json:"queues,required"`
+	Queues param.Field[[]WorkerReferencesQueueParam] `json:"queues" api:"required"`
 	// Other Workers that reference the Worker using
 	// [service bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/).
-	Workers param.Field[[]WorkerReferencesWorkerParam] `json:"workers,required"`
+	Workers param.Field[[]WorkerReferencesWorkerParam] `json:"workers" api:"required"`
 }
 
 func (r WorkerReferencesParam) MarshalJSON() (data []byte, err error) {
@@ -646,13 +646,13 @@ func (r WorkerReferencesParam) MarshalJSON() (data []byte, err error) {
 
 type WorkerReferencesDispatchNamespaceOutboundParam struct {
 	// ID of the dispatch namespace.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// Name of the dispatch namespace.
-	NamespaceName param.Field[string] `json:"namespace_name,required"`
+	NamespaceName param.Field[string] `json:"namespace_name" api:"required"`
 	// ID of the Worker using the dispatch namespace.
-	WorkerID param.Field[string] `json:"worker_id,required"`
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
 	// Name of the Worker using the dispatch namespace.
-	WorkerName param.Field[string] `json:"worker_name,required"`
+	WorkerName param.Field[string] `json:"worker_name" api:"required"`
 }
 
 func (r WorkerReferencesDispatchNamespaceOutboundParam) MarshalJSON() (data []byte, err error) {
@@ -661,15 +661,15 @@ func (r WorkerReferencesDispatchNamespaceOutboundParam) MarshalJSON() (data []by
 
 type WorkerReferencesDomainParam struct {
 	// ID of the custom domain.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the custom domain.
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 	// Full hostname of the custom domain, including the zone name.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// ID of the zone.
-	ZoneID param.Field[string] `json:"zone_id,required"`
+	ZoneID param.Field[string] `json:"zone_id" api:"required"`
 	// Name of the zone.
-	ZoneName param.Field[string] `json:"zone_name,required"`
+	ZoneName param.Field[string] `json:"zone_name" api:"required"`
 }
 
 func (r WorkerReferencesDomainParam) MarshalJSON() (data []byte, err error) {
@@ -678,13 +678,13 @@ func (r WorkerReferencesDomainParam) MarshalJSON() (data []byte, err error) {
 
 type WorkerReferencesDurableObjectParam struct {
 	// ID of the Durable Object namespace being used.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// Name of the Durable Object namespace being used.
-	NamespaceName param.Field[string] `json:"namespace_name,required"`
+	NamespaceName param.Field[string] `json:"namespace_name" api:"required"`
 	// ID of the Worker using the Durable Object implementation.
-	WorkerID param.Field[string] `json:"worker_id,required"`
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
 	// Name of the Worker using the Durable Object implementation.
-	WorkerName param.Field[string] `json:"worker_name,required"`
+	WorkerName param.Field[string] `json:"worker_name" api:"required"`
 }
 
 func (r WorkerReferencesDurableObjectParam) MarshalJSON() (data []byte, err error) {
@@ -693,11 +693,11 @@ func (r WorkerReferencesDurableObjectParam) MarshalJSON() (data []byte, err erro
 
 type WorkerReferencesQueueParam struct {
 	// ID of the queue consumer configuration.
-	QueueConsumerID param.Field[string] `json:"queue_consumer_id,required"`
+	QueueConsumerID param.Field[string] `json:"queue_consumer_id" api:"required"`
 	// ID of the queue.
-	QueueID param.Field[string] `json:"queue_id,required"`
+	QueueID param.Field[string] `json:"queue_id" api:"required"`
 	// Name of the queue.
-	QueueName param.Field[string] `json:"queue_name,required"`
+	QueueName param.Field[string] `json:"queue_name" api:"required"`
 }
 
 func (r WorkerReferencesQueueParam) MarshalJSON() (data []byte, err error) {
@@ -706,9 +706,9 @@ func (r WorkerReferencesQueueParam) MarshalJSON() (data []byte, err error) {
 
 type WorkerReferencesWorkerParam struct {
 	// ID of the referencing Worker.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Name of the referencing Worker.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r WorkerReferencesWorkerParam) MarshalJSON() (data []byte, err error) {
@@ -731,7 +731,7 @@ func (r WorkerSubdomainParam) MarshalJSON() (data []byte, err error) {
 
 type WorkerTailConsumerParam struct {
 	// Name of the consumer Worker.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r WorkerTailConsumerParam) MarshalJSON() (data []byte, err error) {
@@ -739,10 +739,10 @@ func (r WorkerTailConsumerParam) MarshalJSON() (data []byte, err error) {
 }
 
 type BetaWorkerDeleteResponse struct {
-	Errors   []BetaWorkerDeleteResponseError   `json:"errors,required"`
-	Messages []BetaWorkerDeleteResponseMessage `json:"messages,required"`
+	Errors   []BetaWorkerDeleteResponseError   `json:"errors" api:"required"`
+	Messages []BetaWorkerDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerDeleteResponseSuccess `json:"success,required"`
+	Success BetaWorkerDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    betaWorkerDeleteResponseJSON    `json:"-"`
 }
 
@@ -765,8 +765,8 @@ func (r betaWorkerDeleteResponseJSON) RawJSON() string {
 }
 
 type BetaWorkerDeleteResponseError struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           BetaWorkerDeleteResponseErrorsSource `json:"source"`
 	JSON             betaWorkerDeleteResponseErrorJSON    `json:"-"`
@@ -813,8 +813,8 @@ func (r betaWorkerDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerDeleteResponseMessage struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           BetaWorkerDeleteResponseMessagesSource `json:"source"`
 	JSON             betaWorkerDeleteResponseMessageJSON    `json:"-"`
@@ -877,8 +877,8 @@ func (r BetaWorkerDeleteResponseSuccess) IsKnown() bool {
 
 type BetaWorkerNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Worker    WorkerParam         `json:"worker,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Worker    WorkerParam         `json:"worker" api:"required"`
 }
 
 func (r BetaWorkerNewParams) MarshalJSON() (data []byte, err error) {
@@ -886,11 +886,11 @@ func (r BetaWorkerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BetaWorkerNewResponseEnvelope struct {
-	Errors   []BetaWorkerNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BetaWorkerNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Worker                                  `json:"result,required"`
+	Errors   []BetaWorkerNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BetaWorkerNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Worker                                  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerNewResponseEnvelopeSuccess `json:"success,required"`
+	Success BetaWorkerNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    betaWorkerNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -914,8 +914,8 @@ func (r betaWorkerNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BetaWorkerNewResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           BetaWorkerNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             betaWorkerNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -962,8 +962,8 @@ func (r betaWorkerNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerNewResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           BetaWorkerNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             betaWorkerNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1026,8 +1026,8 @@ func (r BetaWorkerNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Worker    WorkerParam         `json:"worker,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Worker    WorkerParam         `json:"worker" api:"required"`
 }
 
 func (r BetaWorkerUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1035,11 +1035,11 @@ func (r BetaWorkerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BetaWorkerUpdateResponseEnvelope struct {
-	Errors   []BetaWorkerUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BetaWorkerUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   Worker                                     `json:"result,required"`
+	Errors   []BetaWorkerUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BetaWorkerUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Worker                                     `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success BetaWorkerUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    betaWorkerUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1063,8 +1063,8 @@ func (r betaWorkerUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BetaWorkerUpdateResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           BetaWorkerUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             betaWorkerUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1111,8 +1111,8 @@ func (r betaWorkerUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerUpdateResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           BetaWorkerUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             betaWorkerUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1175,7 +1175,7 @@ func (r BetaWorkerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction.
 	Order param.Field[BetaWorkerListParamsOrder] `query:"order"`
 	// Property to sort results by.
@@ -1230,13 +1230,13 @@ func (r BetaWorkerListParamsOrderBy) IsKnown() bool {
 
 type BetaWorkerDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type BetaWorkerEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Worker    WorkerParam         `json:"worker,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Worker    WorkerParam         `json:"worker" api:"required"`
 }
 
 func (r BetaWorkerEditParams) MarshalJSON() (data []byte, err error) {
@@ -1244,11 +1244,11 @@ func (r BetaWorkerEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BetaWorkerEditResponseEnvelope struct {
-	Errors   []BetaWorkerEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BetaWorkerEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   Worker                                   `json:"result,required"`
+	Errors   []BetaWorkerEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BetaWorkerEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Worker                                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerEditResponseEnvelopeSuccess `json:"success,required"`
+	Success BetaWorkerEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    betaWorkerEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1272,8 +1272,8 @@ func (r betaWorkerEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BetaWorkerEditResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           BetaWorkerEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             betaWorkerEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1320,8 +1320,8 @@ func (r betaWorkerEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerEditResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           BetaWorkerEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             betaWorkerEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1384,15 +1384,15 @@ func (r BetaWorkerEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type BetaWorkerGetResponseEnvelope struct {
-	Errors   []BetaWorkerGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BetaWorkerGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Worker                                  `json:"result,required"`
+	Errors   []BetaWorkerGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BetaWorkerGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Worker                                  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BetaWorkerGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    betaWorkerGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1416,8 +1416,8 @@ func (r betaWorkerGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BetaWorkerGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           BetaWorkerGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             betaWorkerGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1464,8 +1464,8 @@ func (r betaWorkerGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           BetaWorkerGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             betaWorkerGetResponseEnvelopeMessagesJSON   `json:"-"`

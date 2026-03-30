@@ -47,19 +47,19 @@ func (r *EvaluationService) New(ctx context.Context, gatewayID string, params Ev
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/evaluations", params.AccountID, gatewayID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all AI Gateway evaluator types configured for the account.
@@ -69,11 +69,11 @@ func (r *EvaluationService) List(ctx context.Context, gatewayID string, params E
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/evaluations", params.AccountID, gatewayID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -99,23 +99,23 @@ func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id str
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/evaluations/%s", body.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details for a specific AI Gateway dataset.
@@ -124,36 +124,36 @@ func (r *EvaluationService) Get(ctx context.Context, gatewayID string, id string
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/evaluations/%s", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EvaluationNewResponse struct {
-	ID        string                         `json:"id,required"`
-	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
-	Datasets  []EvaluationNewResponseDataset `json:"datasets,required"`
+	ID        string                         `json:"id" api:"required"`
+	CreatedAt time.Time                      `json:"created_at" api:"required" format:"date-time"`
+	Datasets  []EvaluationNewResponseDataset `json:"datasets" api:"required"`
 	// gateway id
-	GatewayID  string                        `json:"gateway_id,required"`
-	ModifiedAt time.Time                     `json:"modified_at,required" format:"date-time"`
-	Name       string                        `json:"name,required"`
-	Processed  bool                          `json:"processed,required"`
-	Results    []EvaluationNewResponseResult `json:"results,required"`
-	TotalLogs  float64                       `json:"total_logs,required"`
+	GatewayID  string                        `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                     `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                        `json:"name" api:"required"`
+	Processed  bool                          `json:"processed" api:"required"`
+	Results    []EvaluationNewResponseResult `json:"results" api:"required"`
+	TotalLogs  float64                       `json:"total_logs" api:"required"`
 	JSON       evaluationNewResponseJSON     `json:"-"`
 }
 
@@ -182,16 +182,16 @@ func (r evaluationNewResponseJSON) RawJSON() string {
 }
 
 type EvaluationNewResponseDataset struct {
-	ID         string                                `json:"id,required"`
-	AccountID  string                                `json:"account_id,required"`
-	AccountTag string                                `json:"account_tag,required"`
-	CreatedAt  time.Time                             `json:"created_at,required" format:"date-time"`
-	Enable     bool                                  `json:"enable,required"`
-	Filters    []EvaluationNewResponseDatasetsFilter `json:"filters,required"`
+	ID         string                                `json:"id" api:"required"`
+	AccountID  string                                `json:"account_id" api:"required"`
+	AccountTag string                                `json:"account_tag" api:"required"`
+	CreatedAt  time.Time                             `json:"created_at" api:"required" format:"date-time"`
+	Enable     bool                                  `json:"enable" api:"required"`
+	Filters    []EvaluationNewResponseDatasetsFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                           `json:"gateway_id,required"`
-	ModifiedAt time.Time                        `json:"modified_at,required" format:"date-time"`
-	Name       string                           `json:"name,required"`
+	GatewayID  string                           `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                        `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                           `json:"name" api:"required"`
 	JSON       evaluationNewResponseDatasetJSON `json:"-"`
 }
 
@@ -220,9 +220,9 @@ func (r evaluationNewResponseDatasetJSON) RawJSON() string {
 }
 
 type EvaluationNewResponseDatasetsFilter struct {
-	Key      EvaluationNewResponseDatasetsFiltersKey          `json:"key,required"`
-	Operator EvaluationNewResponseDatasetsFiltersOperator     `json:"operator,required"`
-	Value    []EvaluationNewResponseDatasetsFiltersValueUnion `json:"value,required"`
+	Key      EvaluationNewResponseDatasetsFiltersKey          `json:"key" api:"required"`
+	Operator EvaluationNewResponseDatasetsFiltersOperator     `json:"operator" api:"required"`
+	Value    []EvaluationNewResponseDatasetsFiltersValueUnion `json:"value" api:"required"`
 	JSON     evaluationNewResponseDatasetsFilterJSON          `json:"-"`
 }
 
@@ -317,15 +317,15 @@ func init() {
 }
 
 type EvaluationNewResponseResult struct {
-	ID                string                          `json:"id,required"`
-	CreatedAt         time.Time                       `json:"created_at,required" format:"date-time"`
-	EvaluationID      string                          `json:"evaluation_id,required"`
-	EvaluationTypeID  string                          `json:"evaluation_type_id,required"`
-	ModifiedAt        time.Time                       `json:"modified_at,required" format:"date-time"`
-	Result            string                          `json:"result,required"`
-	Status            float64                         `json:"status,required"`
-	StatusDescription string                          `json:"status_description,required"`
-	TotalLogs         float64                         `json:"total_logs,required"`
+	ID                string                          `json:"id" api:"required"`
+	CreatedAt         time.Time                       `json:"created_at" api:"required" format:"date-time"`
+	EvaluationID      string                          `json:"evaluation_id" api:"required"`
+	EvaluationTypeID  string                          `json:"evaluation_type_id" api:"required"`
+	ModifiedAt        time.Time                       `json:"modified_at" api:"required" format:"date-time"`
+	Result            string                          `json:"result" api:"required"`
+	Status            float64                         `json:"status" api:"required"`
+	StatusDescription string                          `json:"status_description" api:"required"`
+	TotalLogs         float64                         `json:"total_logs" api:"required"`
 	JSON              evaluationNewResponseResultJSON `json:"-"`
 }
 
@@ -354,16 +354,16 @@ func (r evaluationNewResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationListResponse struct {
-	ID        string                          `json:"id,required"`
-	CreatedAt time.Time                       `json:"created_at,required" format:"date-time"`
-	Datasets  []EvaluationListResponseDataset `json:"datasets,required"`
+	ID        string                          `json:"id" api:"required"`
+	CreatedAt time.Time                       `json:"created_at" api:"required" format:"date-time"`
+	Datasets  []EvaluationListResponseDataset `json:"datasets" api:"required"`
 	// gateway id
-	GatewayID  string                         `json:"gateway_id,required"`
-	ModifiedAt time.Time                      `json:"modified_at,required" format:"date-time"`
-	Name       string                         `json:"name,required"`
-	Processed  bool                           `json:"processed,required"`
-	Results    []EvaluationListResponseResult `json:"results,required"`
-	TotalLogs  float64                        `json:"total_logs,required"`
+	GatewayID  string                         `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                      `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                         `json:"name" api:"required"`
+	Processed  bool                           `json:"processed" api:"required"`
+	Results    []EvaluationListResponseResult `json:"results" api:"required"`
+	TotalLogs  float64                        `json:"total_logs" api:"required"`
 	JSON       evaluationListResponseJSON     `json:"-"`
 }
 
@@ -392,16 +392,16 @@ func (r evaluationListResponseJSON) RawJSON() string {
 }
 
 type EvaluationListResponseDataset struct {
-	ID         string                                 `json:"id,required"`
-	AccountID  string                                 `json:"account_id,required"`
-	AccountTag string                                 `json:"account_tag,required"`
-	CreatedAt  time.Time                              `json:"created_at,required" format:"date-time"`
-	Enable     bool                                   `json:"enable,required"`
-	Filters    []EvaluationListResponseDatasetsFilter `json:"filters,required"`
+	ID         string                                 `json:"id" api:"required"`
+	AccountID  string                                 `json:"account_id" api:"required"`
+	AccountTag string                                 `json:"account_tag" api:"required"`
+	CreatedAt  time.Time                              `json:"created_at" api:"required" format:"date-time"`
+	Enable     bool                                   `json:"enable" api:"required"`
+	Filters    []EvaluationListResponseDatasetsFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                            `json:"gateway_id,required"`
-	ModifiedAt time.Time                         `json:"modified_at,required" format:"date-time"`
-	Name       string                            `json:"name,required"`
+	GatewayID  string                            `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                         `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                            `json:"name" api:"required"`
 	JSON       evaluationListResponseDatasetJSON `json:"-"`
 }
 
@@ -430,9 +430,9 @@ func (r evaluationListResponseDatasetJSON) RawJSON() string {
 }
 
 type EvaluationListResponseDatasetsFilter struct {
-	Key      EvaluationListResponseDatasetsFiltersKey          `json:"key,required"`
-	Operator EvaluationListResponseDatasetsFiltersOperator     `json:"operator,required"`
-	Value    []EvaluationListResponseDatasetsFiltersValueUnion `json:"value,required"`
+	Key      EvaluationListResponseDatasetsFiltersKey          `json:"key" api:"required"`
+	Operator EvaluationListResponseDatasetsFiltersOperator     `json:"operator" api:"required"`
+	Value    []EvaluationListResponseDatasetsFiltersValueUnion `json:"value" api:"required"`
 	JSON     evaluationListResponseDatasetsFilterJSON          `json:"-"`
 }
 
@@ -527,15 +527,15 @@ func init() {
 }
 
 type EvaluationListResponseResult struct {
-	ID                string                           `json:"id,required"`
-	CreatedAt         time.Time                        `json:"created_at,required" format:"date-time"`
-	EvaluationID      string                           `json:"evaluation_id,required"`
-	EvaluationTypeID  string                           `json:"evaluation_type_id,required"`
-	ModifiedAt        time.Time                        `json:"modified_at,required" format:"date-time"`
-	Result            string                           `json:"result,required"`
-	Status            float64                          `json:"status,required"`
-	StatusDescription string                           `json:"status_description,required"`
-	TotalLogs         float64                          `json:"total_logs,required"`
+	ID                string                           `json:"id" api:"required"`
+	CreatedAt         time.Time                        `json:"created_at" api:"required" format:"date-time"`
+	EvaluationID      string                           `json:"evaluation_id" api:"required"`
+	EvaluationTypeID  string                           `json:"evaluation_type_id" api:"required"`
+	ModifiedAt        time.Time                        `json:"modified_at" api:"required" format:"date-time"`
+	Result            string                           `json:"result" api:"required"`
+	Status            float64                          `json:"status" api:"required"`
+	StatusDescription string                           `json:"status_description" api:"required"`
+	TotalLogs         float64                          `json:"total_logs" api:"required"`
 	JSON              evaluationListResponseResultJSON `json:"-"`
 }
 
@@ -564,16 +564,16 @@ func (r evaluationListResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationDeleteResponse struct {
-	ID        string                            `json:"id,required"`
-	CreatedAt time.Time                         `json:"created_at,required" format:"date-time"`
-	Datasets  []EvaluationDeleteResponseDataset `json:"datasets,required"`
+	ID        string                            `json:"id" api:"required"`
+	CreatedAt time.Time                         `json:"created_at" api:"required" format:"date-time"`
+	Datasets  []EvaluationDeleteResponseDataset `json:"datasets" api:"required"`
 	// gateway id
-	GatewayID  string                           `json:"gateway_id,required"`
-	ModifiedAt time.Time                        `json:"modified_at,required" format:"date-time"`
-	Name       string                           `json:"name,required"`
-	Processed  bool                             `json:"processed,required"`
-	Results    []EvaluationDeleteResponseResult `json:"results,required"`
-	TotalLogs  float64                          `json:"total_logs,required"`
+	GatewayID  string                           `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                        `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                           `json:"name" api:"required"`
+	Processed  bool                             `json:"processed" api:"required"`
+	Results    []EvaluationDeleteResponseResult `json:"results" api:"required"`
+	TotalLogs  float64                          `json:"total_logs" api:"required"`
 	JSON       evaluationDeleteResponseJSON     `json:"-"`
 }
 
@@ -602,16 +602,16 @@ func (r evaluationDeleteResponseJSON) RawJSON() string {
 }
 
 type EvaluationDeleteResponseDataset struct {
-	ID         string                                   `json:"id,required"`
-	AccountID  string                                   `json:"account_id,required"`
-	AccountTag string                                   `json:"account_tag,required"`
-	CreatedAt  time.Time                                `json:"created_at,required" format:"date-time"`
-	Enable     bool                                     `json:"enable,required"`
-	Filters    []EvaluationDeleteResponseDatasetsFilter `json:"filters,required"`
+	ID         string                                   `json:"id" api:"required"`
+	AccountID  string                                   `json:"account_id" api:"required"`
+	AccountTag string                                   `json:"account_tag" api:"required"`
+	CreatedAt  time.Time                                `json:"created_at" api:"required" format:"date-time"`
+	Enable     bool                                     `json:"enable" api:"required"`
+	Filters    []EvaluationDeleteResponseDatasetsFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                              `json:"gateway_id,required"`
-	ModifiedAt time.Time                           `json:"modified_at,required" format:"date-time"`
-	Name       string                              `json:"name,required"`
+	GatewayID  string                              `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                           `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                              `json:"name" api:"required"`
 	JSON       evaluationDeleteResponseDatasetJSON `json:"-"`
 }
 
@@ -640,9 +640,9 @@ func (r evaluationDeleteResponseDatasetJSON) RawJSON() string {
 }
 
 type EvaluationDeleteResponseDatasetsFilter struct {
-	Key      EvaluationDeleteResponseDatasetsFiltersKey          `json:"key,required"`
-	Operator EvaluationDeleteResponseDatasetsFiltersOperator     `json:"operator,required"`
-	Value    []EvaluationDeleteResponseDatasetsFiltersValueUnion `json:"value,required"`
+	Key      EvaluationDeleteResponseDatasetsFiltersKey          `json:"key" api:"required"`
+	Operator EvaluationDeleteResponseDatasetsFiltersOperator     `json:"operator" api:"required"`
+	Value    []EvaluationDeleteResponseDatasetsFiltersValueUnion `json:"value" api:"required"`
 	JSON     evaluationDeleteResponseDatasetsFilterJSON          `json:"-"`
 }
 
@@ -737,15 +737,15 @@ func init() {
 }
 
 type EvaluationDeleteResponseResult struct {
-	ID                string                             `json:"id,required"`
-	CreatedAt         time.Time                          `json:"created_at,required" format:"date-time"`
-	EvaluationID      string                             `json:"evaluation_id,required"`
-	EvaluationTypeID  string                             `json:"evaluation_type_id,required"`
-	ModifiedAt        time.Time                          `json:"modified_at,required" format:"date-time"`
-	Result            string                             `json:"result,required"`
-	Status            float64                            `json:"status,required"`
-	StatusDescription string                             `json:"status_description,required"`
-	TotalLogs         float64                            `json:"total_logs,required"`
+	ID                string                             `json:"id" api:"required"`
+	CreatedAt         time.Time                          `json:"created_at" api:"required" format:"date-time"`
+	EvaluationID      string                             `json:"evaluation_id" api:"required"`
+	EvaluationTypeID  string                             `json:"evaluation_type_id" api:"required"`
+	ModifiedAt        time.Time                          `json:"modified_at" api:"required" format:"date-time"`
+	Result            string                             `json:"result" api:"required"`
+	Status            float64                            `json:"status" api:"required"`
+	StatusDescription string                             `json:"status_description" api:"required"`
+	TotalLogs         float64                            `json:"total_logs" api:"required"`
 	JSON              evaluationDeleteResponseResultJSON `json:"-"`
 }
 
@@ -774,16 +774,16 @@ func (r evaluationDeleteResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationGetResponse struct {
-	ID        string                         `json:"id,required"`
-	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
-	Datasets  []EvaluationGetResponseDataset `json:"datasets,required"`
+	ID        string                         `json:"id" api:"required"`
+	CreatedAt time.Time                      `json:"created_at" api:"required" format:"date-time"`
+	Datasets  []EvaluationGetResponseDataset `json:"datasets" api:"required"`
 	// gateway id
-	GatewayID  string                        `json:"gateway_id,required"`
-	ModifiedAt time.Time                     `json:"modified_at,required" format:"date-time"`
-	Name       string                        `json:"name,required"`
-	Processed  bool                          `json:"processed,required"`
-	Results    []EvaluationGetResponseResult `json:"results,required"`
-	TotalLogs  float64                       `json:"total_logs,required"`
+	GatewayID  string                        `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                     `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                        `json:"name" api:"required"`
+	Processed  bool                          `json:"processed" api:"required"`
+	Results    []EvaluationGetResponseResult `json:"results" api:"required"`
+	TotalLogs  float64                       `json:"total_logs" api:"required"`
 	JSON       evaluationGetResponseJSON     `json:"-"`
 }
 
@@ -812,16 +812,16 @@ func (r evaluationGetResponseJSON) RawJSON() string {
 }
 
 type EvaluationGetResponseDataset struct {
-	ID         string                                `json:"id,required"`
-	AccountID  string                                `json:"account_id,required"`
-	AccountTag string                                `json:"account_tag,required"`
-	CreatedAt  time.Time                             `json:"created_at,required" format:"date-time"`
-	Enable     bool                                  `json:"enable,required"`
-	Filters    []EvaluationGetResponseDatasetsFilter `json:"filters,required"`
+	ID         string                                `json:"id" api:"required"`
+	AccountID  string                                `json:"account_id" api:"required"`
+	AccountTag string                                `json:"account_tag" api:"required"`
+	CreatedAt  time.Time                             `json:"created_at" api:"required" format:"date-time"`
+	Enable     bool                                  `json:"enable" api:"required"`
+	Filters    []EvaluationGetResponseDatasetsFilter `json:"filters" api:"required"`
 	// gateway id
-	GatewayID  string                           `json:"gateway_id,required"`
-	ModifiedAt time.Time                        `json:"modified_at,required" format:"date-time"`
-	Name       string                           `json:"name,required"`
+	GatewayID  string                           `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                        `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                           `json:"name" api:"required"`
 	JSON       evaluationGetResponseDatasetJSON `json:"-"`
 }
 
@@ -850,9 +850,9 @@ func (r evaluationGetResponseDatasetJSON) RawJSON() string {
 }
 
 type EvaluationGetResponseDatasetsFilter struct {
-	Key      EvaluationGetResponseDatasetsFiltersKey          `json:"key,required"`
-	Operator EvaluationGetResponseDatasetsFiltersOperator     `json:"operator,required"`
-	Value    []EvaluationGetResponseDatasetsFiltersValueUnion `json:"value,required"`
+	Key      EvaluationGetResponseDatasetsFiltersKey          `json:"key" api:"required"`
+	Operator EvaluationGetResponseDatasetsFiltersOperator     `json:"operator" api:"required"`
+	Value    []EvaluationGetResponseDatasetsFiltersValueUnion `json:"value" api:"required"`
 	JSON     evaluationGetResponseDatasetsFilterJSON          `json:"-"`
 }
 
@@ -947,15 +947,15 @@ func init() {
 }
 
 type EvaluationGetResponseResult struct {
-	ID                string                          `json:"id,required"`
-	CreatedAt         time.Time                       `json:"created_at,required" format:"date-time"`
-	EvaluationID      string                          `json:"evaluation_id,required"`
-	EvaluationTypeID  string                          `json:"evaluation_type_id,required"`
-	ModifiedAt        time.Time                       `json:"modified_at,required" format:"date-time"`
-	Result            string                          `json:"result,required"`
-	Status            float64                         `json:"status,required"`
-	StatusDescription string                          `json:"status_description,required"`
-	TotalLogs         float64                         `json:"total_logs,required"`
+	ID                string                          `json:"id" api:"required"`
+	CreatedAt         time.Time                       `json:"created_at" api:"required" format:"date-time"`
+	EvaluationID      string                          `json:"evaluation_id" api:"required"`
+	EvaluationTypeID  string                          `json:"evaluation_type_id" api:"required"`
+	ModifiedAt        time.Time                       `json:"modified_at" api:"required" format:"date-time"`
+	Result            string                          `json:"result" api:"required"`
+	Status            float64                         `json:"status" api:"required"`
+	StatusDescription string                          `json:"status_description" api:"required"`
+	TotalLogs         float64                         `json:"total_logs" api:"required"`
 	JSON              evaluationGetResponseResultJSON `json:"-"`
 }
 
@@ -984,10 +984,10 @@ func (r evaluationGetResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationNewParams struct {
-	AccountID         param.Field[string]   `path:"account_id,required"`
-	DatasetIDs        param.Field[[]string] `json:"dataset_ids,required"`
-	EvaluationTypeIDs param.Field[[]string] `json:"evaluation_type_ids,required"`
-	Name              param.Field[string]   `json:"name,required"`
+	AccountID         param.Field[string]   `path:"account_id" api:"required"`
+	DatasetIDs        param.Field[[]string] `json:"dataset_ids" api:"required"`
+	EvaluationTypeIDs param.Field[[]string] `json:"evaluation_type_ids" api:"required"`
+	Name              param.Field[string]   `json:"name" api:"required"`
 }
 
 func (r EvaluationNewParams) MarshalJSON() (data []byte, err error) {
@@ -995,8 +995,8 @@ func (r EvaluationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EvaluationNewResponseEnvelope struct {
-	Result  EvaluationNewResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  EvaluationNewResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    evaluationNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1018,7 +1018,7 @@ func (r evaluationNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EvaluationListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `query:"name"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
@@ -1036,12 +1036,12 @@ func (r EvaluationListParams) URLQuery() (v url.Values) {
 }
 
 type EvaluationDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type EvaluationDeleteResponseEnvelope struct {
-	Result  EvaluationDeleteResponse             `json:"result,required"`
-	Success bool                                 `json:"success,required"`
+	Result  EvaluationDeleteResponse             `json:"result" api:"required"`
+	Success bool                                 `json:"success" api:"required"`
 	JSON    evaluationDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1063,12 +1063,12 @@ func (r evaluationDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EvaluationGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type EvaluationGetResponseEnvelope struct {
-	Result  EvaluationGetResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  EvaluationGetResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    evaluationGetResponseEnvelopeJSON `json:"-"`
 }
 

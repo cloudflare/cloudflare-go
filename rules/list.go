@@ -46,15 +46,15 @@ func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates the description of a list.
@@ -63,19 +63,19 @@ func (r *ListService) Update(ctx context.Context, listID string, params ListUpda
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches all lists in the account.
@@ -85,7 +85,7 @@ func (r *ListService) List(ctx context.Context, query ListListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -111,19 +111,19 @@ func (r *ListService) Delete(ctx context.Context, listID string, body ListDelete
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the details of a list.
@@ -132,25 +132,25 @@ func (r *ListService) Get(ctx context.Context, listID string, query ListGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", query.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
 type Hostname struct {
-	URLHostname string `json:"url_hostname,required"`
+	URLHostname string `json:"url_hostname" api:"required"`
 	// Only applies to wildcard hostnames (e.g., \*.example.com). When true (default),
 	// only subdomains are blocked. When false, both the root domain and subdomains are
 	// blocked.
@@ -177,7 +177,7 @@ func (r hostnameJSON) RawJSON() string {
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
 type HostnameParam struct {
-	URLHostname param.Field[string] `json:"url_hostname,required"`
+	URLHostname param.Field[string] `json:"url_hostname" api:"required"`
 	// Only applies to wildcard hostnames (e.g., \*.example.com). When true (default),
 	// only subdomains are blocked. When false, both the root domain and subdomains are
 	// blocked.
@@ -190,20 +190,20 @@ func (r HostnameParam) MarshalJSON() (data []byte, err error) {
 
 type ListsList struct {
 	// The unique ID of the list.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListsListKind `json:"kind,required"`
+	Kind ListsListKind `json:"kind" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items,required"`
+	NumItems float64 `json:"num_items" api:"required"`
 	// The number of [filters](/api/resources/filters/) referencing the list.
-	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	NumReferencingFilters float64 `json:"num_referencing_filters" api:"required"`
 	// An informative summary of the list.
 	Description string        `json:"description"`
 	JSON        listsListJSON `json:"-"`
@@ -252,8 +252,8 @@ func (r ListsListKind) IsKnown() bool {
 
 // The definition of the redirect.
 type Redirect struct {
-	SourceURL           string             `json:"source_url,required"`
-	TargetURL           string             `json:"target_url,required"`
+	SourceURL           string             `json:"source_url" api:"required"`
+	TargetURL           string             `json:"target_url" api:"required"`
 	IncludeSubdomains   bool               `json:"include_subdomains"`
 	PreservePathSuffix  bool               `json:"preserve_path_suffix"`
 	PreserveQueryString bool               `json:"preserve_query_string"`
@@ -302,8 +302,8 @@ func (r RedirectStatusCode) IsKnown() bool {
 
 // The definition of the redirect.
 type RedirectParam struct {
-	SourceURL           param.Field[string]             `json:"source_url,required"`
-	TargetURL           param.Field[string]             `json:"target_url,required"`
+	SourceURL           param.Field[string]             `json:"source_url" api:"required"`
+	TargetURL           param.Field[string]             `json:"target_url" api:"required"`
 	IncludeSubdomains   param.Field[bool]               `json:"include_subdomains"`
 	PreservePathSuffix  param.Field[bool]               `json:"preserve_path_suffix"`
 	PreserveQueryString param.Field[bool]               `json:"preserve_query_string"`
@@ -317,20 +317,20 @@ func (r RedirectParam) MarshalJSON() (data []byte, err error) {
 
 type ListNewResponse struct {
 	// The unique ID of the list.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListNewResponseKind `json:"kind,required"`
+	Kind ListNewResponseKind `json:"kind" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items,required"`
+	NumItems float64 `json:"num_items" api:"required"`
 	// The number of [filters](/api/resources/filters/) referencing the list.
-	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	NumReferencingFilters float64 `json:"num_referencing_filters" api:"required"`
 	// An informative summary of the list.
 	Description string              `json:"description"`
 	JSON        listNewResponseJSON `json:"-"`
@@ -379,20 +379,20 @@ func (r ListNewResponseKind) IsKnown() bool {
 
 type ListUpdateResponse struct {
 	// The unique ID of the list.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListUpdateResponseKind `json:"kind,required"`
+	Kind ListUpdateResponseKind `json:"kind" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items,required"`
+	NumItems float64 `json:"num_items" api:"required"`
 	// The number of [filters](/api/resources/filters/) referencing the list.
-	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	NumReferencingFilters float64 `json:"num_referencing_filters" api:"required"`
 	// An informative summary of the list.
 	Description string                 `json:"description"`
 	JSON        listUpdateResponseJSON `json:"-"`
@@ -442,7 +442,7 @@ func (r ListUpdateResponseKind) IsKnown() bool {
 
 type ListDeleteResponse struct {
 	// The unique ID of the list.
-	ID   string                 `json:"id,required"`
+	ID   string                 `json:"id" api:"required"`
 	JSON listDeleteResponseJSON `json:"-"`
 }
 
@@ -464,20 +464,20 @@ func (r listDeleteResponseJSON) RawJSON() string {
 
 type ListGetResponse struct {
 	// The unique ID of the list.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind ListGetResponseKind `json:"kind,required"`
+	Kind ListGetResponseKind `json:"kind" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The number of items in the list.
-	NumItems float64 `json:"num_items,required"`
+	NumItems float64 `json:"num_items" api:"required"`
 	// The number of [filters](/api/resources/filters/) referencing the list.
-	NumReferencingFilters float64 `json:"num_referencing_filters,required"`
+	NumReferencingFilters float64 `json:"num_referencing_filters" api:"required"`
 	// An informative summary of the list.
 	Description string              `json:"description"`
 	JSON        listGetResponseJSON `json:"-"`
@@ -526,12 +526,12 @@ func (r ListGetResponseKind) IsKnown() bool {
 
 type ListNewParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind param.Field[ListNewParamsKind] `json:"kind,required"`
+	Kind param.Field[ListNewParamsKind] `json:"kind" api:"required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// An informative summary of the list.
 	Description param.Field[string] `json:"description"`
 }
@@ -560,11 +560,11 @@ func (r ListNewParamsKind) IsKnown() bool {
 }
 
 type ListNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListNewResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ListNewResponse       `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ListNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -604,7 +604,7 @@ func (r ListNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListUpdateParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An informative summary of the list.
 	Description param.Field[string] `json:"description"`
 }
@@ -614,11 +614,11 @@ func (r ListUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ListUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListUpdateResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ListUpdateResponse    `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ListUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -658,20 +658,20 @@ func (r ListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListListParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ListDeleteParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ListDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListDeleteResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ListDeleteResponse    `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ListDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -711,15 +711,15 @@ func (r ListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListGetParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ListGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListGetResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ListGetResponse       `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ListGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listGetResponseEnvelopeJSON    `json:"-"`
 }
 

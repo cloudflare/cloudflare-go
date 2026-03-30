@@ -39,139 +39,139 @@ func NewBucketDomainCustomService(opts ...option.RequestOption) (r *BucketDomain
 func (r *BucketDomainCustomService) New(ctx context.Context, bucketName string, params BucketDomainCustomNewParams, opts ...option.RequestOption) (res *BucketDomainCustomNewResponse, err error) {
 	var env BucketDomainCustomNewResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Edit the configuration for a custom domain on an existing R2 bucket.
 func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName string, domain string, params BucketDomainCustomUpdateParams, opts ...option.RequestOption) (res *BucketDomainCustomUpdateResponse, err error) {
 	var env BucketDomainCustomUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if domain == "" {
 		err = errors.New("missing required domain parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets a list of all custom domains registered with an existing R2 bucket.
 func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string, params BucketDomainCustomListParams, opts ...option.RequestOption) (res *BucketDomainCustomListResponse, err error) {
 	var env BucketDomainCustomListResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Remove custom domain registration from an existing R2 bucket.
 func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName string, domain string, params BucketDomainCustomDeleteParams, opts ...option.RequestOption) (res *BucketDomainCustomDeleteResponse, err error) {
 	var env BucketDomainCustomDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if domain == "" {
 		err = errors.New("missing required domain parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get the configuration for a custom domain on an existing R2 bucket.
 func (r *BucketDomainCustomService) Get(ctx context.Context, bucketName string, domain string, params BucketDomainCustomGetParams, opts ...option.RequestOption) (res *BucketDomainCustomGetResponse, err error) {
 	var env BucketDomainCustomGetResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if domain == "" {
 		err = errors.New("missing required domain parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domain)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BucketDomainCustomNewResponse struct {
 	// Domain name of the affected custom domain.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// Whether this bucket is publicly accessible at the specified custom domain.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
@@ -221,7 +221,7 @@ func (r BucketDomainCustomNewResponseMinTLS) IsKnown() bool {
 
 type BucketDomainCustomUpdateResponse struct {
 	// Domain name of the affected custom domain.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
@@ -272,7 +272,7 @@ func (r BucketDomainCustomUpdateResponseMinTLS) IsKnown() bool {
 }
 
 type BucketDomainCustomListResponse struct {
-	Domains []BucketDomainCustomListResponseDomain `json:"domains,required"`
+	Domains []BucketDomainCustomListResponseDomain `json:"domains" api:"required"`
 	JSON    bucketDomainCustomListResponseJSON     `json:"-"`
 }
 
@@ -294,10 +294,10 @@ func (r bucketDomainCustomListResponseJSON) RawJSON() string {
 
 type BucketDomainCustomListResponseDomain struct {
 	// Domain name of the custom domain to be added.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// Whether this bucket is publicly accessible at the specified custom domain.
-	Enabled bool                                        `json:"enabled,required"`
-	Status  BucketDomainCustomListResponseDomainsStatus `json:"status,required"`
+	Enabled bool                                        `json:"enabled" api:"required"`
+	Status  BucketDomainCustomListResponseDomainsStatus `json:"status" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
@@ -335,9 +335,9 @@ func (r bucketDomainCustomListResponseDomainJSON) RawJSON() string {
 
 type BucketDomainCustomListResponseDomainsStatus struct {
 	// Ownership status of the domain.
-	Ownership BucketDomainCustomListResponseDomainsStatusOwnership `json:"ownership,required"`
+	Ownership BucketDomainCustomListResponseDomainsStatusOwnership `json:"ownership" api:"required"`
 	// SSL certificate status.
-	SSL  BucketDomainCustomListResponseDomainsStatusSSL  `json:"ssl,required"`
+	SSL  BucketDomainCustomListResponseDomainsStatusSSL  `json:"ssl" api:"required"`
 	JSON bucketDomainCustomListResponseDomainsStatusJSON `json:"-"`
 }
 
@@ -419,7 +419,7 @@ func (r BucketDomainCustomListResponseDomainsMinTLS) IsKnown() bool {
 
 type BucketDomainCustomDeleteResponse struct {
 	// Name of the removed custom domain.
-	Domain string                               `json:"domain,required"`
+	Domain string                               `json:"domain" api:"required"`
 	JSON   bucketDomainCustomDeleteResponseJSON `json:"-"`
 }
 
@@ -441,10 +441,10 @@ func (r bucketDomainCustomDeleteResponseJSON) RawJSON() string {
 
 type BucketDomainCustomGetResponse struct {
 	// Domain name of the custom domain to be added.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// Whether this bucket is publicly accessible at the specified custom domain.
-	Enabled bool                                `json:"enabled,required"`
-	Status  BucketDomainCustomGetResponseStatus `json:"status,required"`
+	Enabled bool                                `json:"enabled" api:"required"`
+	Status  BucketDomainCustomGetResponseStatus `json:"status" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
@@ -482,9 +482,9 @@ func (r bucketDomainCustomGetResponseJSON) RawJSON() string {
 
 type BucketDomainCustomGetResponseStatus struct {
 	// Ownership status of the domain.
-	Ownership BucketDomainCustomGetResponseStatusOwnership `json:"ownership,required"`
+	Ownership BucketDomainCustomGetResponseStatusOwnership `json:"ownership" api:"required"`
 	// SSL certificate status.
-	SSL  BucketDomainCustomGetResponseStatusSSL  `json:"ssl,required"`
+	SSL  BucketDomainCustomGetResponseStatusSSL  `json:"ssl" api:"required"`
 	JSON bucketDomainCustomGetResponseStatusJSON `json:"-"`
 }
 
@@ -566,14 +566,14 @@ func (r BucketDomainCustomGetResponseMinTLS) IsKnown() bool {
 
 type BucketDomainCustomNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the custom domain to be added.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 	// Whether to enable public bucket access at the custom domain. If undefined, the
 	// domain will be enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Zone ID of the custom domain.
-	ZoneID param.Field[string] `json:"zoneId,required"`
+	ZoneID param.Field[string] `json:"zoneId" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers param.Field[[]string] `json:"ciphers"`
@@ -625,11 +625,11 @@ func (r BucketDomainCustomNewParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []string                      `json:"messages,required"`
-	Result   BucketDomainCustomNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors" api:"required"`
+	Messages []string                      `json:"messages" api:"required"`
+	Result   BucketDomainCustomNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDomainCustomNewResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDomainCustomNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDomainCustomNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -669,7 +669,7 @@ func (r BucketDomainCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainCustomUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers param.Field[[]string] `json:"ciphers"`
@@ -723,11 +723,11 @@ func (r BucketDomainCustomUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []string                         `json:"messages,required"`
-	Result   BucketDomainCustomUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors" api:"required"`
+	Messages []string                         `json:"messages" api:"required"`
+	Result   BucketDomainCustomUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDomainCustomUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDomainCustomUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDomainCustomUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -767,7 +767,7 @@ func (r BucketDomainCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainCustomListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -790,11 +790,11 @@ func (r BucketDomainCustomListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []string                       `json:"messages,required"`
-	Result   BucketDomainCustomListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []string                       `json:"messages" api:"required"`
+	Result   BucketDomainCustomListResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDomainCustomListResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDomainCustomListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDomainCustomListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -834,7 +834,7 @@ func (r BucketDomainCustomListResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainCustomDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -857,11 +857,11 @@ func (r BucketDomainCustomDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []string                         `json:"messages,required"`
-	Result   BucketDomainCustomDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors" api:"required"`
+	Messages []string                         `json:"messages" api:"required"`
+	Result   BucketDomainCustomDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDomainCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDomainCustomDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDomainCustomDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -901,7 +901,7 @@ func (r BucketDomainCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainCustomGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainCustomGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -924,11 +924,11 @@ func (r BucketDomainCustomGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainCustomGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []string                      `json:"messages,required"`
-	Result   BucketDomainCustomGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors" api:"required"`
+	Messages []string                      `json:"messages" api:"required"`
+	Result   BucketDomainCustomGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDomainCustomGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDomainCustomGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDomainCustomGetResponseEnvelopeJSON    `json:"-"`
 }
 

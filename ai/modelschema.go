@@ -42,20 +42,20 @@ func (r *ModelSchemaService) Get(ctx context.Context, params ModelSchemaGetParam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/models/schema", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ModelSchemaGetResponse struct {
-	Input  ModelSchemaGetResponseInput  `json:"input,required"`
-	Output ModelSchemaGetResponseOutput `json:"output,required"`
+	Input  ModelSchemaGetResponseInput  `json:"input" api:"required"`
+	Output ModelSchemaGetResponseOutput `json:"output" api:"required"`
 	JSON   modelSchemaGetResponseJSON   `json:"-"`
 }
 
@@ -77,9 +77,9 @@ func (r modelSchemaGetResponseJSON) RawJSON() string {
 }
 
 type ModelSchemaGetResponseInput struct {
-	AdditionalProperties bool                            `json:"additionalProperties,required"`
-	Description          string                          `json:"description,required"`
-	Type                 string                          `json:"type,required"`
+	AdditionalProperties bool                            `json:"additionalProperties" api:"required"`
+	Description          string                          `json:"description" api:"required"`
+	Type                 string                          `json:"type" api:"required"`
 	JSON                 modelSchemaGetResponseInputJSON `json:"-"`
 }
 
@@ -102,9 +102,9 @@ func (r modelSchemaGetResponseInputJSON) RawJSON() string {
 }
 
 type ModelSchemaGetResponseOutput struct {
-	AdditionalProperties bool                             `json:"additionalProperties,required"`
-	Description          string                           `json:"description,required"`
-	Type                 string                           `json:"type,required"`
+	AdditionalProperties bool                             `json:"additionalProperties" api:"required"`
+	Description          string                           `json:"description" api:"required"`
+	Type                 string                           `json:"type" api:"required"`
 	JSON                 modelSchemaGetResponseOutputJSON `json:"-"`
 }
 
@@ -127,9 +127,9 @@ func (r modelSchemaGetResponseOutputJSON) RawJSON() string {
 }
 
 type ModelSchemaGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Model Name
-	Model param.Field[string] `query:"model,required"`
+	Model param.Field[string] `query:"model" api:"required"`
 }
 
 // URLQuery serializes [ModelSchemaGetParams]'s query parameters as `url.Values`.
@@ -141,8 +141,8 @@ func (r ModelSchemaGetParams) URLQuery() (v url.Values) {
 }
 
 type ModelSchemaGetResponseEnvelope struct {
-	Result  ModelSchemaGetResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  ModelSchemaGetResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    modelSchemaGetResponseEnvelopeJSON `json:"-"`
 }
 

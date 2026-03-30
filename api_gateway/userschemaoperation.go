@@ -52,11 +52,11 @@ func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if schemaID == "" {
 		err = errors.New("missing required schema_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/user_schemas/%s/operations", params.ZoneID, schemaID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -86,11 +86,11 @@ type UserSchemaOperationListResponse struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host string `json:"host,required" format:"hostname"`
+	Host string `json:"host" api:"required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method UserSchemaOperationListResponseMethod `json:"method,required"`
+	Method UserSchemaOperationListResponseMethod `json:"method" api:"required"`
 	// This field can have the runtime type of
 	// [UserSchemaOperationListResponseAPIShieldOperationFeatures].
 	Features    interface{} `json:"features"`
@@ -163,14 +163,14 @@ type UserSchemaOperationListResponseAPIShieldOperation struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host        string    `json:"host,required" format:"hostname"`
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	Host        string    `json:"host" api:"required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method UserSchemaOperationListResponseAPIShieldOperationMethod `json:"method,required"`
+	Method UserSchemaOperationListResponseAPIShieldOperationMethod `json:"method" api:"required"`
 	// UUID.
-	OperationID string                                                    `json:"operation_id,required"`
+	OperationID string                                                    `json:"operation_id" api:"required"`
 	Features    UserSchemaOperationListResponseAPIShieldOperationFeatures `json:"features"`
 	JSON        userSchemaOperationListResponseAPIShieldOperationJSON     `json:"-"`
 }
@@ -392,7 +392,7 @@ func (r userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 }
 
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemas struct {
-	ParameterSchemas UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas `json:"parameter_schemas,required"`
+	ParameterSchemas UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas `json:"parameter_schemas" api:"required"`
 	JSON             userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemasJSON             `json:"-"`
 }
 
@@ -447,7 +447,7 @@ type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperation
 	Parameters []interface{} `json:"parameters"`
 	// An empty response object. This field is required to yield a valid operation
 	// schema.
-	Responses interface{}                                                                                                                            `json:"responses,nullable"`
+	Responses interface{}                                                                                                                            `json:"responses" api:"nullable"`
 	JSON      userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON `json:"-"`
 }
 
@@ -736,7 +736,7 @@ type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperation
 	// True if a Cloudflare-provided learned schema is available for this endpoint.
 	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
-	MitigationAction UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action,nullable"`
+	MitigationAction UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action" api:"nullable"`
 	JSON             userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON             `json:"-"`
 }
 
@@ -813,11 +813,11 @@ type UserSchemaOperationListResponseAPIShieldBasicOperation struct {
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
 	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	Endpoint string `json:"endpoint" api:"required" format:"uri-template"`
 	// RFC3986-compliant host.
-	Host string `json:"host,required" format:"hostname"`
+	Host string `json:"host" api:"required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method UserSchemaOperationListResponseAPIShieldBasicOperationMethod `json:"method,required"`
+	Method UserSchemaOperationListResponseAPIShieldBasicOperationMethod `json:"method" api:"required"`
 	JSON   userSchemaOperationListResponseAPIShieldBasicOperationJSON   `json:"-"`
 }
 
@@ -890,7 +890,7 @@ func (r UserSchemaOperationListResponseMethod) IsKnown() bool {
 
 type UserSchemaOperationListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Filter results to only include endpoints containing this pattern.
 	Endpoint param.Field[string] `query:"endpoint"`
 	// Add feature(s) to the results. The feature name that is given here corresponds

@@ -45,15 +45,15 @@ func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatc
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/bindings", query.AccountID, dispatchNamespace, scriptName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -77,9 +77,9 @@ func (r *DispatchNamespaceScriptBindingService) GetAutoPaging(ctx context.Contex
 // A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptBindingGetResponse struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseType `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
@@ -494,9 +494,9 @@ func init() {
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIJSON `json:"-"`
 }
 
@@ -539,11 +539,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAIType) IsKno
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearch struct {
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
 	// chat, update, and manage items/jobs on this instance.
-	InstanceName string `json:"instance_name,required"`
+	InstanceName string `json:"instance_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchType `json:"type" api:"required"`
 	// The namespace the instance belongs to. Defaults to "default" if omitted.
 	// Customers who don't use namespaces can simply omit this field.
 	Namespace string                                                                  `json:"namespace"`
@@ -590,14 +590,14 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchType)
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
 	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
 	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
 	// chat) to all instances within the namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNamespaceJSON `json:"-"`
 }
 
@@ -640,11 +640,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAISearchNames
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
-	Dataset string `json:"dataset,required"`
+	Dataset string `json:"dataset" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngineJSON `json:"-"`
 }
 
@@ -687,9 +687,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAnalyticsEngi
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsJSON `json:"-"`
 }
 
@@ -731,9 +731,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindAssetsType) I
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserJSON `json:"-"`
 }
 
@@ -775,11 +775,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindBrowserType) 
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1JSON `json:"-"`
 }
 
@@ -822,14 +822,14 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindD1Type) IsKno
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDataBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the data content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDataBlobType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDataBlobType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDataBlobJSON `json:"-"`
 }
 
@@ -872,11 +872,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDataBlobType)
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the dispatch namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceType `json:"type" api:"required"`
 	// Outbound worker.
 	Outbound DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
 	JSON     dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
@@ -950,7 +950,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNames
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceOutboundParam struct {
 	// Name of the parameter.
-	Name string                                                                                        `json:"name,required"`
+	Name string                                                                                        `json:"name" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNamespaceOutboundParamJSON `json:"-"`
 }
 
@@ -1003,9 +1003,9 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDispatchNames
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceType `json:"type" api:"required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
 	// The dispatch namespace the Durable Object script belongs to.
@@ -1063,11 +1063,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObject
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveJSON `json:"-"`
 }
 
@@ -1110,9 +1110,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdriveTyp
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindInherit struct {
 	// The name of the inherited binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindInheritType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindInheritType `json:"type" api:"required"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -1164,9 +1164,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindInheritType) 
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindImages struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindImagesType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindImagesType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindImagesJSON `json:"-"`
 }
 
@@ -1208,11 +1208,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindImagesType) I
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json interface{} `json:"json,required"`
+	Json interface{} `json:"json" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonJSON `json:"-"`
 }
 
@@ -1255,11 +1255,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindJsonType) IsK
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceJSON `json:"-"`
 }
 
@@ -1302,9 +1302,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindKVNamespaceTy
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMedia struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMediaType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMediaType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindMediaJSON `json:"-"`
 }
 
@@ -1346,11 +1346,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMediaType) Is
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
-	CertificateID string `json:"certificate_id,required"`
+	CertificateID string `json:"certificate_id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertificateJSON `json:"-"`
 }
 
@@ -1393,11 +1393,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindMTLSCertifica
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The text value to use.
-	Text string `json:"text,required"`
+	Text string `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextJSON `json:"-"`
 }
 
@@ -1440,11 +1440,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPlainTextType
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Pipeline to bind to.
-	Pipeline string `json:"pipeline,required"`
+	Pipeline string `json:"pipeline" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesJSON `json:"-"`
 }
 
@@ -1487,11 +1487,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindPipelinesType
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Queue to bind to.
-	QueueName string `json:"queue_name,required"`
+	QueueName string `json:"queue_name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueJSON `json:"-"`
 }
 
@@ -1534,13 +1534,13 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindQueueType) Is
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the rate limit namespace to bind to.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The rate limit configuration.
-	Simple DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple `json:"simple,required"`
+	Simple DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple `json:"simple" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitJSON `json:"-"`
 }
 
@@ -1570,9 +1570,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimit) im
 // The rate limit configuration.
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimple struct {
 	// The limit (requests per period).
-	Limit float64 `json:"limit,required"`
+	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                                          `json:"period,required"`
+	Period int64                                                                          `json:"period" api:"required"`
 	JSON   dispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
@@ -1611,11 +1611,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindRatelimitType
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
-	BucketName string `json:"bucket_name,required"`
+	BucketName string `json:"bucket_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketType `json:"type" api:"required"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -1682,9 +1682,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJuris
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
@@ -1726,9 +1726,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretTextTyp
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmail struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmailType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmailType `json:"type" api:"required"`
 	// List of allowed destination addresses.
 	AllowedDestinationAddresses []string `json:"allowed_destination_addresses" format:"email"`
 	// List of allowed sender addresses.
@@ -1779,11 +1779,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSendEmailType
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of Worker to bind to.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType `json:"type" api:"required"`
 	// Entrypoint to invoke on the target Worker.
 	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
@@ -1832,14 +1832,14 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindServiceType) 
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the text content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlobType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlobType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlobJSON `json:"-"`
 }
 
@@ -1882,11 +1882,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindTextBlobType)
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
-	IndexName string `json:"index_name,required"`
+	IndexName string `json:"index_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeJSON `json:"-"`
 }
 
@@ -1929,9 +1929,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVectorizeType
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetadataJSON `json:"-"`
 }
 
@@ -1973,13 +1973,13 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVersionMetada
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the secret in the store.
-	SecretName string `json:"secret_name,required"`
+	SecretName string `json:"secret_name" api:"required"`
 	// ID of the store containing the secret.
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
 }
 
@@ -2024,17 +2024,17 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretsStoreS
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm interface{} `json:"algorithm,required"`
+	Algorithm interface{} `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyType `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	Usages []DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
 	JSON   dispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
@@ -2119,11 +2119,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsag
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType `json:"type" api:"required"`
 	// Name of the Workflow to bind to.
-	WorkflowName string `json:"workflow_name,required"`
+	WorkflowName string `json:"workflow_name" api:"required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
 	// this script.
 	ClassName string `json:"class_name"`
@@ -2174,14 +2174,14 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWorkflowType)
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWasmModule struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the WebAssembly module content. Only accepted
 	// for `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWasmModuleType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWasmModuleType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindWasmModuleJSON `json:"-"`
 }
 
@@ -2224,11 +2224,11 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindWasmModuleTyp
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the VPC service to bind to.
-	ServiceID string `json:"service_id,required"`
+	ServiceID string `json:"service_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCServiceType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCServiceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCServiceJSON `json:"-"`
 }
 
@@ -2271,9 +2271,9 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCServiceTyp
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetwork struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkType `json:"type,required"`
+	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2408,5 +2408,5 @@ func (r DispatchNamespaceScriptBindingGetResponseJurisdiction) IsKnown() bool {
 
 type DispatchNamespaceScriptBindingGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

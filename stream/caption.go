@@ -44,11 +44,11 @@ func (r *CaptionService) Get(ctx context.Context, identifier string, query Capti
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions", query.AccountID, identifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -117,5 +117,5 @@ func (r CaptionStatus) IsKnown() bool {
 
 type CaptionGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

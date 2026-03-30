@@ -47,19 +47,19 @@ func (r *BetaWorkerVersionService) New(ctx context.Context, workerID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions", params.AccountID, workerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all versions for a Worker.
@@ -69,11 +69,11 @@ func (r *BetaWorkerVersionService) List(ctx context.Context, workerID string, pa
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions", params.AccountID, workerID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -98,19 +98,19 @@ func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	if versionID == "" {
 		err = errors.New("missing required version_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions/%s", body.AccountID, workerID, versionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get details about a specific version.
@@ -119,35 +119,35 @@ func (r *BetaWorkerVersionService) Get(ctx context.Context, workerID string, ver
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workerID == "" {
 		err = errors.New("missing required worker_id parameter")
-		return
+		return nil, err
 	}
 	if versionID == "" {
 		err = errors.New("missing required version_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions/%s", params.AccountID, workerID, versionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Version struct {
 	// Version identifier.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// When the version was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// The integer version number, starting from one.
-	Number int64 `json:"number,required"`
+	Number int64 `json:"number" api:"required"`
 	// All routable URLs that always point to this version. Does not include alias
 	// URLs, since aliases can be updated to point to a different version.
-	URLs []string `json:"urls,required" format:"uri"`
+	URLs []string `json:"urls" api:"required" format:"uri"`
 	// Metadata about the version.
 	Annotations VersionAnnotations `json:"annotations"`
 	// Configuration for assets within a Worker.
@@ -401,9 +401,9 @@ func (r VersionAssetsConfigRunWorkerFirstArray) ImplementsVersionAssetsConfigRun
 // A binding to allow the Worker to communicate with resources.
 type VersionBinding struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsType `json:"type,required"`
+	Type VersionBindingsType `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
@@ -815,9 +815,9 @@ func init() {
 
 type VersionBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindAIType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindAIType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindAIJSON `json:"-"`
 }
 
@@ -858,11 +858,11 @@ func (r VersionBindingsWorkersBindingKindAIType) IsKnown() bool {
 type VersionBindingsWorkersBindingKindAISearch struct {
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
 	// chat, update, and manage items/jobs on this instance.
-	InstanceName string `json:"instance_name,required"`
+	InstanceName string `json:"instance_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindAISearchType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindAISearchType `json:"type" api:"required"`
 	// The namespace the instance belongs to. Defaults to "default" if omitted.
 	// Customers who don't use namespaces can simply omit this field.
 	Namespace string                                        `json:"namespace"`
@@ -907,14 +907,14 @@ func (r VersionBindingsWorkersBindingKindAISearchType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindAISearchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
 	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
 	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
 	// chat) to all instances within the namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindAISearchNamespaceType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindAISearchNamespaceType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindAISearchNamespaceJSON `json:"-"`
 }
 
@@ -955,11 +955,11 @@ func (r VersionBindingsWorkersBindingKindAISearchNamespaceType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
-	Dataset string `json:"dataset,required"`
+	Dataset string `json:"dataset" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindAnalyticsEngineType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindAnalyticsEngineType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindAnalyticsEngineJSON `json:"-"`
 }
 
@@ -1000,9 +1000,9 @@ func (r VersionBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindAssetsType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindAssetsType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindAssetsJSON `json:"-"`
 }
 
@@ -1042,9 +1042,9 @@ func (r VersionBindingsWorkersBindingKindAssetsType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindBrowserType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindBrowserType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindBrowserJSON `json:"-"`
 }
 
@@ -1084,11 +1084,11 @@ func (r VersionBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindD1Type `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindD1Type `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindD1JSON `json:"-"`
 }
 
@@ -1129,14 +1129,14 @@ func (r VersionBindingsWorkersBindingKindD1Type) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindDataBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the data content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type VersionBindingsWorkersBindingKindDataBlobType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindDataBlobType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindDataBlobJSON `json:"-"`
 }
 
@@ -1177,11 +1177,11 @@ func (r VersionBindingsWorkersBindingKindDataBlobType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the dispatch namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindDispatchNamespaceType `json:"type" api:"required"`
 	// Outbound worker.
 	Outbound VersionBindingsWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
 	JSON     versionBindingsWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
@@ -1253,7 +1253,7 @@ func (r versionBindingsWorkersBindingKindDispatchNamespaceOutboundJSON) RawJSON(
 
 type VersionBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
 	// Name of the parameter.
-	Name string                                                              `json:"name,required"`
+	Name string                                                              `json:"name" api:"required"`
 	JSON versionBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON `json:"-"`
 }
 
@@ -1306,9 +1306,9 @@ func (r versionBindingsWorkersBindingKindDispatchNamespaceOutboundWorkerJSON) Ra
 
 type VersionBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type" api:"required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
 	// The dispatch namespace the Durable Object script belongs to.
@@ -1365,11 +1365,11 @@ func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() b
 
 type VersionBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindHyperdriveType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindHyperdriveType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindHyperdriveJSON `json:"-"`
 }
 
@@ -1410,9 +1410,9 @@ func (r VersionBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindInherit struct {
 	// The name of the inherited binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindInheritType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindInheritType `json:"type" api:"required"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -1462,9 +1462,9 @@ func (r VersionBindingsWorkersBindingKindInheritType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindImages struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindImagesType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindImagesType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindImagesJSON `json:"-"`
 }
 
@@ -1504,11 +1504,11 @@ func (r VersionBindingsWorkersBindingKindImagesType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json interface{} `json:"json,required"`
+	Json interface{} `json:"json" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindJsonType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindJsonType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindJsonJSON `json:"-"`
 }
 
@@ -1549,11 +1549,11 @@ func (r VersionBindingsWorkersBindingKindJsonType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindKVNamespaceType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindKVNamespaceType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindKVNamespaceJSON `json:"-"`
 }
 
@@ -1594,9 +1594,9 @@ func (r VersionBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindMedia struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindMediaType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindMediaType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindMediaJSON `json:"-"`
 }
 
@@ -1636,11 +1636,11 @@ func (r VersionBindingsWorkersBindingKindMediaType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
-	CertificateID string `json:"certificate_id,required"`
+	CertificateID string `json:"certificate_id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindMTLSCertificateType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindMTLSCertificateType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindMTLSCertificateJSON `json:"-"`
 }
 
@@ -1681,11 +1681,11 @@ func (r VersionBindingsWorkersBindingKindMTLSCertificateType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The text value to use.
-	Text string `json:"text,required"`
+	Text string `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindPlainTextType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindPlainTextType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindPlainTextJSON `json:"-"`
 }
 
@@ -1726,11 +1726,11 @@ func (r VersionBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Pipeline to bind to.
-	Pipeline string `json:"pipeline,required"`
+	Pipeline string `json:"pipeline" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindPipelinesType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindPipelinesType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindPipelinesJSON `json:"-"`
 }
 
@@ -1771,11 +1771,11 @@ func (r VersionBindingsWorkersBindingKindPipelinesType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Queue to bind to.
-	QueueName string `json:"queue_name,required"`
+	QueueName string `json:"queue_name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindQueueType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindQueueType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindQueueJSON `json:"-"`
 }
 
@@ -1816,13 +1816,13 @@ func (r VersionBindingsWorkersBindingKindQueueType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindRatelimit struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the rate limit namespace to bind to.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The rate limit configuration.
-	Simple VersionBindingsWorkersBindingKindRatelimitSimple `json:"simple,required"`
+	Simple VersionBindingsWorkersBindingKindRatelimitSimple `json:"simple" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindRatelimitType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindRatelimitType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindRatelimitJSON `json:"-"`
 }
 
@@ -1850,9 +1850,9 @@ func (r VersionBindingsWorkersBindingKindRatelimit) implementsVersionBinding() {
 // The rate limit configuration.
 type VersionBindingsWorkersBindingKindRatelimitSimple struct {
 	// The limit (requests per period).
-	Limit float64 `json:"limit,required"`
+	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                `json:"period,required"`
+	Period int64                                                `json:"period" api:"required"`
 	JSON   versionBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
@@ -1890,11 +1890,11 @@ func (r VersionBindingsWorkersBindingKindRatelimitType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
-	BucketName string `json:"bucket_name,required"`
+	BucketName string `json:"bucket_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindR2BucketType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindR2BucketType `json:"type" api:"required"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -1959,9 +1959,9 @@ func (r VersionBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindSecretTextType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindSecretTextType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
@@ -2001,9 +2001,9 @@ func (r VersionBindingsWorkersBindingKindSecretTextType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindSendEmail struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindSendEmailType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindSendEmailType `json:"type" api:"required"`
 	// List of allowed destination addresses.
 	AllowedDestinationAddresses []string `json:"allowed_destination_addresses" format:"email"`
 	// List of allowed sender addresses.
@@ -2052,11 +2052,11 @@ func (r VersionBindingsWorkersBindingKindSendEmailType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of Worker to bind to.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindServiceType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindServiceType `json:"type" api:"required"`
 	// Entrypoint to invoke on the target Worker.
 	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
@@ -2103,14 +2103,14 @@ func (r VersionBindingsWorkersBindingKindServiceType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the text content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type VersionBindingsWorkersBindingKindTextBlobType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindTextBlobType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindTextBlobJSON `json:"-"`
 }
 
@@ -2151,11 +2151,11 @@ func (r VersionBindingsWorkersBindingKindTextBlobType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
-	IndexName string `json:"index_name,required"`
+	IndexName string `json:"index_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindVectorizeType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindVectorizeType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindVectorizeJSON `json:"-"`
 }
 
@@ -2196,9 +2196,9 @@ func (r VersionBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindVersionMetadataType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindVersionMetadataType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindVersionMetadataJSON `json:"-"`
 }
 
@@ -2238,13 +2238,13 @@ func (r VersionBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the secret in the store.
-	SecretName string `json:"secret_name,required"`
+	SecretName string `json:"secret_name" api:"required"`
 	// ID of the store containing the secret.
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindSecretsStoreSecretType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
 }
 
@@ -2287,17 +2287,17 @@ func (r VersionBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool 
 type VersionBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm interface{} `json:"algorithm,required"`
+	Algorithm interface{} `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format VersionBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format VersionBindingsWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindSecretKeyType `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []VersionBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	Usages []VersionBindingsWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
 	JSON   versionBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
@@ -2380,11 +2380,11 @@ func (r VersionBindingsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindWorkflowType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindWorkflowType `json:"type" api:"required"`
 	// Name of the Workflow to bind to.
-	WorkflowName string `json:"workflow_name,required"`
+	WorkflowName string `json:"workflow_name" api:"required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
 	// this script.
 	ClassName string `json:"class_name"`
@@ -2433,14 +2433,14 @@ func (r VersionBindingsWorkersBindingKindWorkflowType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindWasmModule struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the WebAssembly module content. Only accepted
 	// for `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type VersionBindingsWorkersBindingKindWasmModuleType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindWasmModuleType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindWasmModuleJSON `json:"-"`
 }
 
@@ -2481,11 +2481,11 @@ func (r VersionBindingsWorkersBindingKindWasmModuleType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindVPCService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the VPC service to bind to.
-	ServiceID string `json:"service_id,required"`
+	ServiceID string `json:"service_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindVPCServiceType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindVPCServiceType `json:"type" api:"required"`
 	JSON versionBindingsWorkersBindingKindVPCServiceJSON `json:"-"`
 }
 
@@ -2526,9 +2526,9 @@ func (r VersionBindingsWorkersBindingKindVPCServiceType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindVPCNetwork struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type VersionBindingsWorkersBindingKindVPCNetworkType `json:"type,required"`
+	Type VersionBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2662,7 +2662,7 @@ func (r VersionBindingsJurisdiction) IsKnown() bool {
 // Resource limits enforced at runtime.
 type VersionLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs int64             `json:"cpu_ms,required"`
+	CPUMs int64             `json:"cpu_ms" api:"required"`
 	JSON  versionLimitsJSON `json:"-"`
 }
 
@@ -2782,11 +2782,11 @@ func (r VersionMigrationsWorkersMultipleStepMigrations) implementsVersionMigrati
 
 type VersionModule struct {
 	// The base64-encoded module content.
-	ContentBase64 string `json:"content_base64,required" format:"byte"`
+	ContentBase64 string `json:"content_base64" api:"required" format:"byte"`
 	// The content type of the module.
-	ContentType string `json:"content_type,required"`
+	ContentType string `json:"content_type" api:"required"`
 	// The name of the module.
-	Name string            `json:"name,required"`
+	Name string            `json:"name" api:"required"`
 	JSON versionModuleJSON `json:"-"`
 }
 
@@ -2915,7 +2915,7 @@ func init() {
 type VersionPlacementMode struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode VersionPlacementModeMode `json:"mode,required"`
+	Mode VersionPlacementModeMode `json:"mode" api:"required"`
 	JSON versionPlacementModeJSON `json:"-"`
 }
 
@@ -2955,7 +2955,7 @@ func (r VersionPlacementModeMode) IsKnown() bool {
 
 type VersionPlacementRegion struct {
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                     `json:"region,required"`
+	Region string                     `json:"region" api:"required"`
 	JSON   versionPlacementRegionJSON `json:"-"`
 }
 
@@ -2979,7 +2979,7 @@ func (r VersionPlacementRegion) implementsVersionPlacement() {}
 
 type VersionPlacementHostname struct {
 	// HTTP hostname for targeted placement.
-	Hostname string                       `json:"hostname,required"`
+	Hostname string                       `json:"hostname" api:"required"`
 	JSON     versionPlacementHostnameJSON `json:"-"`
 }
 
@@ -3003,7 +3003,7 @@ func (r VersionPlacementHostname) implementsVersionPlacement() {}
 
 type VersionPlacementHost struct {
 	// TCP host and port for targeted placement.
-	Host string                   `json:"host,required"`
+	Host string                   `json:"host" api:"required"`
 	JSON versionPlacementHostJSON `json:"-"`
 }
 
@@ -3027,9 +3027,9 @@ func (r VersionPlacementHost) implementsVersionPlacement() {}
 
 type VersionPlacementObject struct {
 	// Targeted placement mode.
-	Mode VersionPlacementObjectMode `json:"mode,required"`
+	Mode VersionPlacementObjectMode `json:"mode" api:"required"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                     `json:"region,required"`
+	Region string                     `json:"region" api:"required"`
 	JSON   versionPlacementObjectJSON `json:"-"`
 }
 
@@ -3206,9 +3206,9 @@ func (r VersionAssetsConfigRunWorkerFirstArrayParam) ImplementsVersionAssetsConf
 // A binding to allow the Worker to communicate with resources.
 type VersionBindingParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsType] `json:"type,required"`
+	Type param.Field[VersionBindingsType] `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
 	ID                          param.Field[string]      `json:"id"`
 	Algorithm                   param.Field[interface{}] `json:"algorithm"`
@@ -3340,9 +3340,9 @@ type VersionBindingsUnionParam interface {
 
 type VersionBindingsWorkersBindingKindAIParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindAIType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindAIType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindAIParam) MarshalJSON() (data []byte, err error) {
@@ -3354,11 +3354,11 @@ func (r VersionBindingsWorkersBindingKindAIParam) implementsVersionBindingsUnion
 type VersionBindingsWorkersBindingKindAISearchParam struct {
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
 	// chat, update, and manage items/jobs on this instance.
-	InstanceName param.Field[string] `json:"instance_name,required"`
+	InstanceName param.Field[string] `json:"instance_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindAISearchType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindAISearchType] `json:"type" api:"required"`
 	// The namespace the instance belongs to. Defaults to "default" if omitted.
 	// Customers who don't use namespaces can simply omit this field.
 	Namespace param.Field[string] `json:"namespace"`
@@ -3372,14 +3372,14 @@ func (r VersionBindingsWorkersBindingKindAISearchParam) implementsVersionBinding
 
 type VersionBindingsWorkersBindingKindAISearchNamespaceParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
 	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
 	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
 	// chat) to all instances within the namespace.
-	Namespace param.Field[string] `json:"namespace,required"`
+	Namespace param.Field[string] `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindAISearchNamespaceType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindAISearchNamespaceType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindAISearchNamespaceParam) MarshalJSON() (data []byte, err error) {
@@ -3391,11 +3391,11 @@ func (r VersionBindingsWorkersBindingKindAISearchNamespaceParam) implementsVersi
 
 type VersionBindingsWorkersBindingKindAnalyticsEngineParam struct {
 	// The name of the dataset to bind to.
-	Dataset param.Field[string] `json:"dataset,required"`
+	Dataset param.Field[string] `json:"dataset" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindAnalyticsEngineType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindAnalyticsEngineType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindAnalyticsEngineParam) MarshalJSON() (data []byte, err error) {
@@ -3407,9 +3407,9 @@ func (r VersionBindingsWorkersBindingKindAnalyticsEngineParam) implementsVersion
 
 type VersionBindingsWorkersBindingKindAssetsParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindAssetsType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindAssetsType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindAssetsParam) MarshalJSON() (data []byte, err error) {
@@ -3420,9 +3420,9 @@ func (r VersionBindingsWorkersBindingKindAssetsParam) implementsVersionBindingsU
 
 type VersionBindingsWorkersBindingKindBrowserParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindBrowserType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindBrowserType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindBrowserParam) MarshalJSON() (data []byte, err error) {
@@ -3433,11 +3433,11 @@ func (r VersionBindingsWorkersBindingKindBrowserParam) implementsVersionBindings
 
 type VersionBindingsWorkersBindingKindD1Param struct {
 	// Identifier of the D1 database to bind to.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindD1Type] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindD1Type] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindD1Param) MarshalJSON() (data []byte, err error) {
@@ -3448,14 +3448,14 @@ func (r VersionBindingsWorkersBindingKindD1Param) implementsVersionBindingsUnion
 
 type VersionBindingsWorkersBindingKindDataBlobParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the data content. Only accepted for
 	// `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[VersionBindingsWorkersBindingKindDataBlobType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindDataBlobType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindDataBlobParam) MarshalJSON() (data []byte, err error) {
@@ -3466,11 +3466,11 @@ func (r VersionBindingsWorkersBindingKindDataBlobParam) implementsVersionBinding
 
 type VersionBindingsWorkersBindingKindDispatchNamespaceParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the dispatch namespace.
-	Namespace param.Field[string] `json:"namespace,required"`
+	Namespace param.Field[string] `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindDispatchNamespaceType] `json:"type" api:"required"`
 	// Outbound worker.
 	Outbound param.Field[VersionBindingsWorkersBindingKindDispatchNamespaceOutboundParam] `json:"outbound"`
 }
@@ -3484,9 +3484,9 @@ func (r VersionBindingsWorkersBindingKindDispatchNamespaceParam) implementsVersi
 
 type VersionBindingsWorkersBindingKindDurableObjectNamespaceParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type" api:"required"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
 	// The dispatch namespace the Durable Object script belongs to.
@@ -3509,11 +3509,11 @@ func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceParam) implements
 
 type VersionBindingsWorkersBindingKindHyperdriveParam struct {
 	// Identifier of the Hyperdrive connection to bind to.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindHyperdriveType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindHyperdriveType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindHyperdriveParam) MarshalJSON() (data []byte, err error) {
@@ -3524,9 +3524,9 @@ func (r VersionBindingsWorkersBindingKindHyperdriveParam) implementsVersionBindi
 
 type VersionBindingsWorkersBindingKindInheritParam struct {
 	// The name of the inherited binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindInheritType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindInheritType] `json:"type" api:"required"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -3545,9 +3545,9 @@ func (r VersionBindingsWorkersBindingKindInheritParam) implementsVersionBindings
 
 type VersionBindingsWorkersBindingKindImagesParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindImagesType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindImagesType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindImagesParam) MarshalJSON() (data []byte, err error) {
@@ -3558,11 +3558,11 @@ func (r VersionBindingsWorkersBindingKindImagesParam) implementsVersionBindingsU
 
 type VersionBindingsWorkersBindingKindJsonParam struct {
 	// JSON data to use.
-	Json param.Field[interface{}] `json:"json,required"`
+	Json param.Field[interface{}] `json:"json" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindJsonType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindJsonType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindJsonParam) MarshalJSON() (data []byte, err error) {
@@ -3573,11 +3573,11 @@ func (r VersionBindingsWorkersBindingKindJsonParam) implementsVersionBindingsUni
 
 type VersionBindingsWorkersBindingKindKVNamespaceParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Namespace identifier tag.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindKVNamespaceType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindKVNamespaceType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindKVNamespaceParam) MarshalJSON() (data []byte, err error) {
@@ -3588,9 +3588,9 @@ func (r VersionBindingsWorkersBindingKindKVNamespaceParam) implementsVersionBind
 
 type VersionBindingsWorkersBindingKindMediaParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindMediaType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindMediaType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindMediaParam) MarshalJSON() (data []byte, err error) {
@@ -3601,11 +3601,11 @@ func (r VersionBindingsWorkersBindingKindMediaParam) implementsVersionBindingsUn
 
 type VersionBindingsWorkersBindingKindMTLSCertificateParam struct {
 	// Identifier of the certificate to bind to.
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindMTLSCertificateType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindMTLSCertificateType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindMTLSCertificateParam) MarshalJSON() (data []byte, err error) {
@@ -3617,11 +3617,11 @@ func (r VersionBindingsWorkersBindingKindMTLSCertificateParam) implementsVersion
 
 type VersionBindingsWorkersBindingKindPlainTextParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The text value to use.
-	Text param.Field[string] `json:"text,required"`
+	Text param.Field[string] `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindPlainTextType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindPlainTextType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindPlainTextParam) MarshalJSON() (data []byte, err error) {
@@ -3632,11 +3632,11 @@ func (r VersionBindingsWorkersBindingKindPlainTextParam) implementsVersionBindin
 
 type VersionBindingsWorkersBindingKindPipelinesParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the Pipeline to bind to.
-	Pipeline param.Field[string] `json:"pipeline,required"`
+	Pipeline param.Field[string] `json:"pipeline" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindPipelinesType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindPipelinesParam) MarshalJSON() (data []byte, err error) {
@@ -3647,11 +3647,11 @@ func (r VersionBindingsWorkersBindingKindPipelinesParam) implementsVersionBindin
 
 type VersionBindingsWorkersBindingKindQueueParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the Queue to bind to.
-	QueueName param.Field[string] `json:"queue_name,required"`
+	QueueName param.Field[string] `json:"queue_name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindQueueType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindQueueType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindQueueParam) MarshalJSON() (data []byte, err error) {
@@ -3662,13 +3662,13 @@ func (r VersionBindingsWorkersBindingKindQueueParam) implementsVersionBindingsUn
 
 type VersionBindingsWorkersBindingKindRatelimitParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Identifier of the rate limit namespace to bind to.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// The rate limit configuration.
-	Simple param.Field[VersionBindingsWorkersBindingKindRatelimitSimpleParam] `json:"simple,required"`
+	Simple param.Field[VersionBindingsWorkersBindingKindRatelimitSimpleParam] `json:"simple" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindRatelimitType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindRatelimitType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindRatelimitParam) MarshalJSON() (data []byte, err error) {
@@ -3680,9 +3680,9 @@ func (r VersionBindingsWorkersBindingKindRatelimitParam) implementsVersionBindin
 // The rate limit configuration.
 type VersionBindingsWorkersBindingKindRatelimitSimpleParam struct {
 	// The limit (requests per period).
-	Limit param.Field[float64] `json:"limit,required"`
+	Limit param.Field[float64] `json:"limit" api:"required"`
 	// The period in seconds.
-	Period param.Field[int64] `json:"period,required"`
+	Period param.Field[int64] `json:"period" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindRatelimitSimpleParam) MarshalJSON() (data []byte, err error) {
@@ -3691,11 +3691,11 @@ func (r VersionBindingsWorkersBindingKindRatelimitSimpleParam) MarshalJSON() (da
 
 type VersionBindingsWorkersBindingKindR2BucketParam struct {
 	// R2 bucket to bind to.
-	BucketName param.Field[string] `json:"bucket_name,required"`
+	BucketName param.Field[string] `json:"bucket_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindR2BucketType] `json:"type" api:"required"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -3710,11 +3710,11 @@ func (r VersionBindingsWorkersBindingKindR2BucketParam) implementsVersionBinding
 
 type VersionBindingsWorkersBindingKindSecretTextParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The secret value to use.
-	Text param.Field[string] `json:"text,required"`
+	Text param.Field[string] `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindSecretTextType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindSecretTextType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindSecretTextParam) MarshalJSON() (data []byte, err error) {
@@ -3725,9 +3725,9 @@ func (r VersionBindingsWorkersBindingKindSecretTextParam) implementsVersionBindi
 
 type VersionBindingsWorkersBindingKindSendEmailParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindSendEmailType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindSendEmailType] `json:"type" api:"required"`
 	// List of allowed destination addresses.
 	AllowedDestinationAddresses param.Field[[]string] `json:"allowed_destination_addresses" format:"email"`
 	// List of allowed sender addresses.
@@ -3744,11 +3744,11 @@ func (r VersionBindingsWorkersBindingKindSendEmailParam) implementsVersionBindin
 
 type VersionBindingsWorkersBindingKindServiceParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of Worker to bind to.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindServiceType] `json:"type" api:"required"`
 	// Entrypoint to invoke on the target Worker.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
@@ -3763,14 +3763,14 @@ func (r VersionBindingsWorkersBindingKindServiceParam) implementsVersionBindings
 
 type VersionBindingsWorkersBindingKindTextBlobParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the text content. Only accepted for
 	// `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[VersionBindingsWorkersBindingKindTextBlobType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindTextBlobType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindTextBlobParam) MarshalJSON() (data []byte, err error) {
@@ -3781,11 +3781,11 @@ func (r VersionBindingsWorkersBindingKindTextBlobParam) implementsVersionBinding
 
 type VersionBindingsWorkersBindingKindVectorizeParam struct {
 	// Name of the Vectorize index to bind to.
-	IndexName param.Field[string] `json:"index_name,required"`
+	IndexName param.Field[string] `json:"index_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindVectorizeType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindVectorizeType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindVectorizeParam) MarshalJSON() (data []byte, err error) {
@@ -3796,9 +3796,9 @@ func (r VersionBindingsWorkersBindingKindVectorizeParam) implementsVersionBindin
 
 type VersionBindingsWorkersBindingKindVersionMetadataParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindVersionMetadataType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindVersionMetadataType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindVersionMetadataParam) MarshalJSON() (data []byte, err error) {
@@ -3810,13 +3810,13 @@ func (r VersionBindingsWorkersBindingKindVersionMetadataParam) implementsVersion
 
 type VersionBindingsWorkersBindingKindSecretsStoreSecretParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the secret in the store.
-	SecretName param.Field[string] `json:"secret_name,required"`
+	SecretName param.Field[string] `json:"secret_name" api:"required"`
 	// ID of the store containing the secret.
-	StoreID param.Field[string] `json:"store_id,required"`
+	StoreID param.Field[string] `json:"store_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindSecretsStoreSecretParam) MarshalJSON() (data []byte, err error) {
@@ -3829,17 +3829,17 @@ func (r VersionBindingsWorkersBindingKindSecretsStoreSecretParam) implementsVers
 type VersionBindingsWorkersBindingKindSecretKeyParam struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm param.Field[interface{}] `json:"algorithm,required"`
+	Algorithm param.Field[interface{}] `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format param.Field[VersionBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
+	Format param.Field[VersionBindingsWorkersBindingKindSecretKeyFormat] `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindSecretKeyType] `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages param.Field[[]VersionBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
+	Usages param.Field[[]VersionBindingsWorkersBindingKindSecretKeyUsage] `json:"usages" api:"required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
 	// Key data in
@@ -3856,11 +3856,11 @@ func (r VersionBindingsWorkersBindingKindSecretKeyParam) implementsVersionBindin
 
 type VersionBindingsWorkersBindingKindWorkflowParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindWorkflowType] `json:"type" api:"required"`
 	// Name of the Workflow to bind to.
-	WorkflowName param.Field[string] `json:"workflow_name,required"`
+	WorkflowName param.Field[string] `json:"workflow_name" api:"required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
 	// this script.
 	ClassName param.Field[string] `json:"class_name"`
@@ -3877,14 +3877,14 @@ func (r VersionBindingsWorkersBindingKindWorkflowParam) implementsVersionBinding
 
 type VersionBindingsWorkersBindingKindWasmModuleParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the WebAssembly module content. Only accepted
 	// for `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[VersionBindingsWorkersBindingKindWasmModuleType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindWasmModuleType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindWasmModuleParam) MarshalJSON() (data []byte, err error) {
@@ -3895,11 +3895,11 @@ func (r VersionBindingsWorkersBindingKindWasmModuleParam) implementsVersionBindi
 
 type VersionBindingsWorkersBindingKindVPCServiceParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Identifier of the VPC service to bind to.
-	ServiceID param.Field[string] `json:"service_id,required"`
+	ServiceID param.Field[string] `json:"service_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindVPCServiceType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindVPCServiceType] `json:"type" api:"required"`
 }
 
 func (r VersionBindingsWorkersBindingKindVPCServiceParam) MarshalJSON() (data []byte, err error) {
@@ -3910,9 +3910,9 @@ func (r VersionBindingsWorkersBindingKindVPCServiceParam) implementsVersionBindi
 
 type VersionBindingsWorkersBindingKindVPCNetworkParam struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[VersionBindingsWorkersBindingKindVPCNetworkType] `json:"type,required"`
+	Type param.Field[VersionBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -3929,7 +3929,7 @@ func (r VersionBindingsWorkersBindingKindVPCNetworkParam) implementsVersionBindi
 // Resource limits enforced at runtime.
 type VersionLimitsParam struct {
 	// CPU time limit in milliseconds.
-	CPUMs param.Field[int64] `json:"cpu_ms,required"`
+	CPUMs param.Field[int64] `json:"cpu_ms" api:"required"`
 }
 
 func (r VersionLimitsParam) MarshalJSON() (data []byte, err error) {
@@ -3987,11 +3987,11 @@ func (r VersionMigrationsWorkersMultipleStepMigrationsParam) implementsVersionMi
 
 type VersionModuleParam struct {
 	// The base64-encoded module content.
-	ContentBase64 param.Field[string] `json:"content_base64,required" format:"byte"`
+	ContentBase64 param.Field[string] `json:"content_base64" api:"required" format:"byte"`
 	// The content type of the module.
-	ContentType param.Field[string] `json:"content_type,required"`
+	ContentType param.Field[string] `json:"content_type" api:"required"`
 	// The name of the module.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r VersionModuleParam) MarshalJSON() (data []byte, err error) {
@@ -4036,7 +4036,7 @@ type VersionPlacementUnionParam interface {
 type VersionPlacementModeParam struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode param.Field[VersionPlacementModeMode] `json:"mode,required"`
+	Mode param.Field[VersionPlacementModeMode] `json:"mode" api:"required"`
 }
 
 func (r VersionPlacementModeParam) MarshalJSON() (data []byte, err error) {
@@ -4047,7 +4047,7 @@ func (r VersionPlacementModeParam) implementsVersionPlacementUnionParam() {}
 
 type VersionPlacementRegionParam struct {
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region param.Field[string] `json:"region,required"`
+	Region param.Field[string] `json:"region" api:"required"`
 }
 
 func (r VersionPlacementRegionParam) MarshalJSON() (data []byte, err error) {
@@ -4058,7 +4058,7 @@ func (r VersionPlacementRegionParam) implementsVersionPlacementUnionParam() {}
 
 type VersionPlacementHostnameParam struct {
 	// HTTP hostname for targeted placement.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 }
 
 func (r VersionPlacementHostnameParam) MarshalJSON() (data []byte, err error) {
@@ -4069,7 +4069,7 @@ func (r VersionPlacementHostnameParam) implementsVersionPlacementUnionParam() {}
 
 type VersionPlacementHostParam struct {
 	// TCP host and port for targeted placement.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 }
 
 func (r VersionPlacementHostParam) MarshalJSON() (data []byte, err error) {
@@ -4080,9 +4080,9 @@ func (r VersionPlacementHostParam) implementsVersionPlacementUnionParam() {}
 
 type VersionPlacementObjectParam struct {
 	// Targeted placement mode.
-	Mode param.Field[VersionPlacementObjectMode] `json:"mode,required"`
+	Mode param.Field[VersionPlacementObjectMode] `json:"mode" api:"required"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region param.Field[string] `json:"region,required"`
+	Region param.Field[string] `json:"region" api:"required"`
 }
 
 func (r VersionPlacementObjectParam) MarshalJSON() (data []byte, err error) {
@@ -4092,10 +4092,10 @@ func (r VersionPlacementObjectParam) MarshalJSON() (data []byte, err error) {
 func (r VersionPlacementObjectParam) implementsVersionPlacementUnionParam() {}
 
 type BetaWorkerVersionDeleteResponse struct {
-	Errors   []BetaWorkerVersionDeleteResponseError   `json:"errors,required"`
-	Messages []BetaWorkerVersionDeleteResponseMessage `json:"messages,required"`
+	Errors   []BetaWorkerVersionDeleteResponseError   `json:"errors" api:"required"`
+	Messages []BetaWorkerVersionDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerVersionDeleteResponseSuccess `json:"success,required"`
+	Success BetaWorkerVersionDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    betaWorkerVersionDeleteResponseJSON    `json:"-"`
 }
 
@@ -4118,8 +4118,8 @@ func (r betaWorkerVersionDeleteResponseJSON) RawJSON() string {
 }
 
 type BetaWorkerVersionDeleteResponseError struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           BetaWorkerVersionDeleteResponseErrorsSource `json:"source"`
 	JSON             betaWorkerVersionDeleteResponseErrorJSON    `json:"-"`
@@ -4166,8 +4166,8 @@ func (r betaWorkerVersionDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerVersionDeleteResponseMessage struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           BetaWorkerVersionDeleteResponseMessagesSource `json:"source"`
 	JSON             betaWorkerVersionDeleteResponseMessageJSON    `json:"-"`
@@ -4230,8 +4230,8 @@ func (r BetaWorkerVersionDeleteResponseSuccess) IsKnown() bool {
 
 type BetaWorkerVersionNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Version   VersionParam        `json:"version,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Version   VersionParam        `json:"version" api:"required"`
 	// If true, a deployment will be created that sends 100% of traffic to the new
 	// version.
 	Deploy param.Field[bool] `query:"deploy"`
@@ -4251,11 +4251,11 @@ func (r BetaWorkerVersionNewParams) URLQuery() (v url.Values) {
 }
 
 type BetaWorkerVersionNewResponseEnvelope struct {
-	Errors   []BetaWorkerVersionNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BetaWorkerVersionNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Version                                        `json:"result,required"`
+	Errors   []BetaWorkerVersionNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BetaWorkerVersionNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Version                                        `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerVersionNewResponseEnvelopeSuccess `json:"success,required"`
+	Success BetaWorkerVersionNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    betaWorkerVersionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4279,8 +4279,8 @@ func (r betaWorkerVersionNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BetaWorkerVersionNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           BetaWorkerVersionNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             betaWorkerVersionNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4327,8 +4327,8 @@ func (r betaWorkerVersionNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerVersionNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           BetaWorkerVersionNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             betaWorkerVersionNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -4391,7 +4391,7 @@ func (r BetaWorkerVersionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerVersionListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Current page.
 	Page param.Field[int64] `query:"page"`
 	// Items per-page.
@@ -4409,12 +4409,12 @@ func (r BetaWorkerVersionListParams) URLQuery() (v url.Values) {
 
 type BetaWorkerVersionDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type BetaWorkerVersionGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether to include the `modules` property of the version in the response, which
 	// contains code and sourcemap content and may add several megabytes to the
 	// response size.
@@ -4448,11 +4448,11 @@ func (r BetaWorkerVersionGetParamsInclude) IsKnown() bool {
 }
 
 type BetaWorkerVersionGetResponseEnvelope struct {
-	Errors   []BetaWorkerVersionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BetaWorkerVersionGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Version                                        `json:"result,required"`
+	Errors   []BetaWorkerVersionGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BetaWorkerVersionGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Version                                        `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BetaWorkerVersionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BetaWorkerVersionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    betaWorkerVersionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4476,8 +4476,8 @@ func (r betaWorkerVersionGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BetaWorkerVersionGetResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           BetaWorkerVersionGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             betaWorkerVersionGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4524,8 +4524,8 @@ func (r betaWorkerVersionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BetaWorkerVersionGetResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           BetaWorkerVersionGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             betaWorkerVersionGetResponseEnvelopeMessagesJSON   `json:"-"`

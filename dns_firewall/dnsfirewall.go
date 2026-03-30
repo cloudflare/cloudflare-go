@@ -48,15 +48,15 @@ func (r *DNSFirewallService) New(ctx context.Context, params DNSFirewallNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List DNS Firewall clusters for an account
@@ -66,7 +66,7 @@ func (r *DNSFirewallService) List(ctx context.Context, params DNSFirewallListPar
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -92,19 +92,19 @@ func (r *DNSFirewallService) Delete(ctx context.Context, dnsFirewallID string, b
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dnsFirewallID == "" {
 		err = errors.New("missing required dns_firewall_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", body.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify the configuration of a DNS Firewall cluster
@@ -113,19 +113,19 @@ func (r *DNSFirewallService) Edit(ctx context.Context, dnsFirewallID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dnsFirewallID == "" {
 		err = errors.New("missing required dns_firewall_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", params.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Show a single DNS Firewall cluster for an account
@@ -134,19 +134,19 @@ func (r *DNSFirewallService) Get(ctx context.Context, dnsFirewallID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dnsFirewallID == "" {
 		err = errors.New("missing required dns_firewall_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", query.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Attack mitigation settings
@@ -197,12 +197,12 @@ type UpstreamIPsParam = string
 
 type DNSFirewallNewResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether to refuse to answer queries for the ANY type
-	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests" api:"required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips" api:"required" format:"ipv4"`
 	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
-	ECSFallback bool `json:"ecs_fallback,required"`
+	ECSFallback bool `json:"ecs_fallback" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets an upper bound on
 	// this duration. For caching purposes, higher TTLs will be decreased to the
@@ -211,7 +211,7 @@ type DNSFirewallNewResponse struct {
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets a lower bound on
 	// this duration. For caching purposes, lower TTLs will be increased to the minimum
@@ -224,27 +224,27 @@ type DNSFirewallNewResponse struct {
 	// Note that, even with this setting, there is no guarantee that a response will be
 	// cached for at least the specified duration. Cached responses may be removed
 	// earlier for capacity or other operational reasons.
-	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl" api:"required"`
 	// Last modification of DNS Firewall cluster
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// DNS Firewall cluster name
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// This setting controls how long DNS Firewall should cache negative responses
 	// (e.g., NXDOMAIN) from the upstream servers.
 	//
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
+	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster)
-	Ratelimit float64 `json:"ratelimit,required,nullable"`
+	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
-	Retries     float64       `json:"retries,required"`
-	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	Retries     float64       `json:"retries" api:"required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips" api:"required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation           `json:"attack_mitigation,nullable"`
+	AttackMitigation AttackMitigation           `json:"attack_mitigation" api:"nullable"`
 	JSON             dnsFirewallNewResponseJSON `json:"-"`
 }
 
@@ -278,12 +278,12 @@ func (r dnsFirewallNewResponseJSON) RawJSON() string {
 
 type DNSFirewallListResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether to refuse to answer queries for the ANY type
-	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests" api:"required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips" api:"required" format:"ipv4"`
 	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
-	ECSFallback bool `json:"ecs_fallback,required"`
+	ECSFallback bool `json:"ecs_fallback" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets an upper bound on
 	// this duration. For caching purposes, higher TTLs will be decreased to the
@@ -292,7 +292,7 @@ type DNSFirewallListResponse struct {
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets a lower bound on
 	// this duration. For caching purposes, lower TTLs will be increased to the minimum
@@ -305,27 +305,27 @@ type DNSFirewallListResponse struct {
 	// Note that, even with this setting, there is no guarantee that a response will be
 	// cached for at least the specified duration. Cached responses may be removed
 	// earlier for capacity or other operational reasons.
-	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl" api:"required"`
 	// Last modification of DNS Firewall cluster
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// DNS Firewall cluster name
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// This setting controls how long DNS Firewall should cache negative responses
 	// (e.g., NXDOMAIN) from the upstream servers.
 	//
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
+	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster)
-	Ratelimit float64 `json:"ratelimit,required,nullable"`
+	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
-	Retries     float64       `json:"retries,required"`
-	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	Retries     float64       `json:"retries" api:"required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips" api:"required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation            `json:"attack_mitigation,nullable"`
+	AttackMitigation AttackMitigation            `json:"attack_mitigation" api:"nullable"`
 	JSON             dnsFirewallListResponseJSON `json:"-"`
 }
 
@@ -381,12 +381,12 @@ func (r dnsFirewallDeleteResponseJSON) RawJSON() string {
 
 type DNSFirewallEditResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether to refuse to answer queries for the ANY type
-	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests" api:"required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips" api:"required" format:"ipv4"`
 	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
-	ECSFallback bool `json:"ecs_fallback,required"`
+	ECSFallback bool `json:"ecs_fallback" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets an upper bound on
 	// this duration. For caching purposes, higher TTLs will be decreased to the
@@ -395,7 +395,7 @@ type DNSFirewallEditResponse struct {
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets a lower bound on
 	// this duration. For caching purposes, lower TTLs will be increased to the minimum
@@ -408,27 +408,27 @@ type DNSFirewallEditResponse struct {
 	// Note that, even with this setting, there is no guarantee that a response will be
 	// cached for at least the specified duration. Cached responses may be removed
 	// earlier for capacity or other operational reasons.
-	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl" api:"required"`
 	// Last modification of DNS Firewall cluster
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// DNS Firewall cluster name
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// This setting controls how long DNS Firewall should cache negative responses
 	// (e.g., NXDOMAIN) from the upstream servers.
 	//
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
+	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster)
-	Ratelimit float64 `json:"ratelimit,required,nullable"`
+	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
-	Retries     float64       `json:"retries,required"`
-	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	Retries     float64       `json:"retries" api:"required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips" api:"required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation            `json:"attack_mitigation,nullable"`
+	AttackMitigation AttackMitigation            `json:"attack_mitigation" api:"nullable"`
 	JSON             dnsFirewallEditResponseJSON `json:"-"`
 }
 
@@ -462,12 +462,12 @@ func (r dnsFirewallEditResponseJSON) RawJSON() string {
 
 type DNSFirewallGetResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Whether to refuse to answer queries for the ANY type
-	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests" api:"required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips" api:"required" format:"ipv4"`
 	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
-	ECSFallback bool `json:"ecs_fallback,required"`
+	ECSFallback bool `json:"ecs_fallback" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets an upper bound on
 	// this duration. For caching purposes, higher TTLs will be decreased to the
@@ -476,7 +476,7 @@ type DNSFirewallGetResponse struct {
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl" api:"required"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
 	// the TTL received from upstream nameservers. This setting sets a lower bound on
 	// this duration. For caching purposes, lower TTLs will be increased to the minimum
@@ -489,27 +489,27 @@ type DNSFirewallGetResponse struct {
 	// Note that, even with this setting, there is no guarantee that a response will be
 	// cached for at least the specified duration. Cached responses may be removed
 	// earlier for capacity or other operational reasons.
-	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl" api:"required"`
 	// Last modification of DNS Firewall cluster
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// DNS Firewall cluster name
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// This setting controls how long DNS Firewall should cache negative responses
 	// (e.g., NXDOMAIN) from the upstream servers.
 	//
 	// This setting does not affect the TTL value in the DNS response Cloudflare
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
-	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
+	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster)
-	Ratelimit float64 `json:"ratelimit,required,nullable"`
+	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
-	Retries     float64       `json:"retries,required"`
-	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	Retries     float64       `json:"retries" api:"required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips" api:"required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation           `json:"attack_mitigation,nullable"`
+	AttackMitigation AttackMitigation           `json:"attack_mitigation" api:"nullable"`
 	JSON             dnsFirewallGetResponseJSON `json:"-"`
 }
 
@@ -543,10 +543,10 @@ func (r dnsFirewallGetResponseJSON) RawJSON() string {
 
 type DNSFirewallNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// DNS Firewall cluster name
-	Name        param.Field[string]             `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips,required" format:"ipv4"`
+	Name        param.Field[string]             `json:"name" api:"required"`
+	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips" api:"required" format:"ipv4"`
 	// Attack mitigation settings
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Whether to refuse to answer queries for the ANY type
@@ -595,10 +595,10 @@ func (r DNSFirewallNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSFirewallNewResponseEnvelope struct {
-	Errors   []DNSFirewallNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DNSFirewallNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSFirewallNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DNSFirewallNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DNSFirewallNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DNSFirewallNewResponse                `json:"result"`
 	JSON    dnsFirewallNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -623,8 +623,8 @@ func (r dnsFirewallNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSFirewallNewResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DNSFirewallNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dnsFirewallNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -671,8 +671,8 @@ func (r dnsFirewallNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DNSFirewallNewResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DNSFirewallNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dnsFirewallNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -735,7 +735,7 @@ func (r DNSFirewallNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSFirewallListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page"`
 	// Number of clusters per page
@@ -752,14 +752,14 @@ func (r DNSFirewallListParams) URLQuery() (v url.Values) {
 
 type DNSFirewallDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DNSFirewallDeleteResponseEnvelope struct {
-	Errors   []DNSFirewallDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DNSFirewallDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSFirewallDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DNSFirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DNSFirewallDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DNSFirewallDeleteResponse                `json:"result"`
 	JSON    dnsFirewallDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -784,8 +784,8 @@ func (r dnsFirewallDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSFirewallDeleteResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           DNSFirewallDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dnsFirewallDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -832,8 +832,8 @@ func (r dnsFirewallDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DNSFirewallDeleteResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DNSFirewallDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dnsFirewallDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -896,7 +896,7 @@ func (r DNSFirewallDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSFirewallEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Attack mitigation settings
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Whether to refuse to answer queries for the ANY type
@@ -948,10 +948,10 @@ func (r DNSFirewallEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSFirewallEditResponseEnvelope struct {
-	Errors   []DNSFirewallEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DNSFirewallEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSFirewallEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DNSFirewallEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DNSFirewallEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DNSFirewallEditResponse                `json:"result"`
 	JSON    dnsFirewallEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -976,8 +976,8 @@ func (r dnsFirewallEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSFirewallEditResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           DNSFirewallEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dnsFirewallEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1024,8 +1024,8 @@ func (r dnsFirewallEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DNSFirewallEditResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           DNSFirewallEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dnsFirewallEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1088,14 +1088,14 @@ func (r DNSFirewallEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSFirewallGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DNSFirewallGetResponseEnvelope struct {
-	Errors   []DNSFirewallGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DNSFirewallGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSFirewallGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DNSFirewallGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DNSFirewallGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DNSFirewallGetResponse                `json:"result"`
 	JSON    dnsFirewallGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1120,8 +1120,8 @@ func (r dnsFirewallGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSFirewallGetResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DNSFirewallGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dnsFirewallGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1168,8 +1168,8 @@ func (r dnsFirewallGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DNSFirewallGetResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DNSFirewallGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dnsFirewallGetResponseEnvelopeMessagesJSON   `json:"-"`

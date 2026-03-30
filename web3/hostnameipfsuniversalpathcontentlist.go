@@ -44,19 +44,19 @@ func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", params.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // IPFS Universal Path Gateway Content List Details
@@ -65,19 +65,19 @@ func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, i
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", query.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ContentList struct {
@@ -118,11 +118,11 @@ func (r ContentListAction) IsKnown() bool {
 
 type HostnameIPFSUniversalPathContentListUpdateParams struct {
 	// Specify the identifier of the hostname.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Behavior of the content list.
-	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action,required"`
+	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action" api:"required"`
 	// Provides content list entries.
-	Entries param.Field[[]HostnameIPFSUniversalPathContentListUpdateParamsEntry] `json:"entries,required"`
+	Entries param.Field[[]HostnameIPFSUniversalPathContentListUpdateParamsEntry] `json:"entries" api:"required"`
 }
 
 func (r HostnameIPFSUniversalPathContentListUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -175,11 +175,11 @@ func (r HostnameIPFSUniversalPathContentListUpdateParamsEntriesType) IsKnown() b
 }
 
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ContentList           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ContentList           `json:"result" api:"required"`
 	// Specifies whether the API call was successful.
-	Success HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Provides the API response.
 	ResultInfo interface{}                                                    `json:"result_info"`
 	JSON       hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON `json:"-"`
@@ -223,15 +223,15 @@ func (r HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess) IsKno
 
 type HostnameIPFSUniversalPathContentListGetParams struct {
 	// Specify the identifier of the hostname.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ContentList           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ContentList           `json:"result" api:"required"`
 	// Specifies whether the API call was successful.
-	Success HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Provides the API response.
 	ResultInfo interface{}                                                 `json:"result_info"`
 	JSON       hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON `json:"-"`

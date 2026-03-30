@@ -43,24 +43,24 @@ func (r *InvestigateTraceService) Get(ctx context.Context, postfixID string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if postfixID == "" {
 		err = errors.New("missing required postfix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/trace", query.AccountID, postfixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InvestigateTraceGetResponse struct {
-	Inbound  InvestigateTraceGetResponseInbound  `json:"inbound,required"`
-	Outbound InvestigateTraceGetResponseOutbound `json:"outbound,required"`
+	Inbound  InvestigateTraceGetResponseInbound  `json:"inbound" api:"required"`
+	Outbound InvestigateTraceGetResponseOutbound `json:"outbound" api:"required"`
 	JSON     investigateTraceGetResponseJSON     `json:"-"`
 }
 
@@ -82,8 +82,8 @@ func (r investigateTraceGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseInbound struct {
-	Lines   []InvestigateTraceGetResponseInboundLine `json:"lines,nullable"`
-	Pending bool                                     `json:"pending,nullable"`
+	Lines   []InvestigateTraceGetResponseInboundLine `json:"lines" api:"nullable"`
+	Pending bool                                     `json:"pending" api:"nullable"`
 	JSON    investigateTraceGetResponseInboundJSON   `json:"-"`
 }
 
@@ -105,9 +105,9 @@ func (r investigateTraceGetResponseInboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseInboundLine struct {
-	Lineno  int64                                      `json:"lineno,required"`
-	Message string                                     `json:"message,required"`
-	Ts      time.Time                                  `json:"ts,required" format:"date-time"`
+	Lineno  int64                                      `json:"lineno" api:"required"`
+	Message string                                     `json:"message" api:"required"`
+	Ts      time.Time                                  `json:"ts" api:"required" format:"date-time"`
 	JSON    investigateTraceGetResponseInboundLineJSON `json:"-"`
 }
 
@@ -130,8 +130,8 @@ func (r investigateTraceGetResponseInboundLineJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseOutbound struct {
-	Lines   []InvestigateTraceGetResponseOutboundLine `json:"lines,nullable"`
-	Pending bool                                      `json:"pending,nullable"`
+	Lines   []InvestigateTraceGetResponseOutboundLine `json:"lines" api:"nullable"`
+	Pending bool                                      `json:"pending" api:"nullable"`
 	JSON    investigateTraceGetResponseOutboundJSON   `json:"-"`
 }
 
@@ -153,9 +153,9 @@ func (r investigateTraceGetResponseOutboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseOutboundLine struct {
-	Lineno  int64                                       `json:"lineno,required"`
-	Message string                                      `json:"message,required"`
-	Ts      time.Time                                   `json:"ts,required" format:"date-time"`
+	Lineno  int64                                       `json:"lineno" api:"required"`
+	Message string                                      `json:"message" api:"required"`
+	Ts      time.Time                                   `json:"ts" api:"required" format:"date-time"`
 	JSON    investigateTraceGetResponseOutboundLineJSON `json:"-"`
 }
 
@@ -179,14 +179,14 @@ func (r investigateTraceGetResponseOutboundLineJSON) RawJSON() string {
 
 type InvestigateTraceGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InvestigateTraceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   InvestigateTraceGetResponse             `json:"result,required"`
-	Success  bool                                    `json:"success,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                   `json:"messages" api:"required"`
+	Result   InvestigateTraceGetResponse             `json:"result" api:"required"`
+	Success  bool                                    `json:"success" api:"required"`
 	JSON     investigateTraceGetResponseEnvelopeJSON `json:"-"`
 }
 

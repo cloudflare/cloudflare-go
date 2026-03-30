@@ -50,15 +50,15 @@ func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharing
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updating is not immediate, an updated share object with a new status will be
@@ -68,19 +68,19 @@ func (r *ResourceSharingService) Update(ctx context.Context, shareID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if shareID == "" {
 		err = errors.New("missing required share_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares/%s", params.AccountID, shareID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all account shares.
@@ -90,7 +90,7 @@ func (r *ResourceSharingService) List(ctx context.Context, params ResourceSharin
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -117,19 +117,19 @@ func (r *ResourceSharingService) Delete(ctx context.Context, shareID string, bod
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if shareID == "" {
 		err = errors.New("missing required share_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares/%s", body.AccountID, shareID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches share by ID.
@@ -138,38 +138,38 @@ func (r *ResourceSharingService) Get(ctx context.Context, shareID string, params
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if shareID == "" {
 		err = errors.New("missing required share_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/shares/%s", params.AccountID, shareID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ResourceSharingNewResponse struct {
 	// Share identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
-	AccountName string `json:"account_name,required"`
+	AccountName string `json:"account_name" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Organization identifier.
-	OrganizationID string                               `json:"organization_id,required"`
-	Status         ResourceSharingNewResponseStatus     `json:"status,required"`
-	TargetType     ResourceSharingNewResponseTargetType `json:"target_type,required"`
+	OrganizationID string                               `json:"organization_id" api:"required"`
+	Status         ResourceSharingNewResponseStatus     `json:"status" api:"required"`
+	TargetType     ResourceSharingNewResponseTargetType `json:"target_type" api:"required"`
 	// The number of recipients in the 'associated' state. This field is only included
 	// when requested via the 'include_recipient_counts' parameter.
 	AssociatedRecipientCount int64 `json:"associated_recipient_count"`
@@ -267,23 +267,23 @@ func (r ResourceSharingNewResponseKind) IsKnown() bool {
 
 type ResourceSharingNewResponseResource struct {
 	// Share Resource identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
-	ResourceAccountID string `json:"resource_account_id,required"`
+	ResourceAccountID string `json:"resource_account_id" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
-	ResourceType ResourceSharingNewResponseResourcesResourceType `json:"resource_type,required"`
+	ResourceType ResourceSharingNewResponseResourcesResourceType `json:"resource_type" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Resource Status.
-	Status ResourceSharingNewResponseResourcesStatus `json:"status,required"`
+	Status ResourceSharingNewResponseResourcesStatus `json:"status" api:"required"`
 	JSON   resourceSharingNewResponseResourceJSON    `json:"-"`
 }
 
@@ -349,21 +349,21 @@ func (r ResourceSharingNewResponseResourcesStatus) IsKnown() bool {
 
 type ResourceSharingUpdateResponse struct {
 	// Share identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
-	AccountName string `json:"account_name,required"`
+	AccountName string `json:"account_name" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Organization identifier.
-	OrganizationID string                                  `json:"organization_id,required"`
-	Status         ResourceSharingUpdateResponseStatus     `json:"status,required"`
-	TargetType     ResourceSharingUpdateResponseTargetType `json:"target_type,required"`
+	OrganizationID string                                  `json:"organization_id" api:"required"`
+	Status         ResourceSharingUpdateResponseStatus     `json:"status" api:"required"`
+	TargetType     ResourceSharingUpdateResponseTargetType `json:"target_type" api:"required"`
 	// The number of recipients in the 'associated' state. This field is only included
 	// when requested via the 'include_recipient_counts' parameter.
 	AssociatedRecipientCount int64 `json:"associated_recipient_count"`
@@ -461,23 +461,23 @@ func (r ResourceSharingUpdateResponseKind) IsKnown() bool {
 
 type ResourceSharingUpdateResponseResource struct {
 	// Share Resource identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
-	ResourceAccountID string `json:"resource_account_id,required"`
+	ResourceAccountID string `json:"resource_account_id" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
-	ResourceType ResourceSharingUpdateResponseResourcesResourceType `json:"resource_type,required"`
+	ResourceType ResourceSharingUpdateResponseResourcesResourceType `json:"resource_type" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Resource Status.
-	Status ResourceSharingUpdateResponseResourcesStatus `json:"status,required"`
+	Status ResourceSharingUpdateResponseResourcesStatus `json:"status" api:"required"`
 	JSON   resourceSharingUpdateResponseResourceJSON    `json:"-"`
 }
 
@@ -543,21 +543,21 @@ func (r ResourceSharingUpdateResponseResourcesStatus) IsKnown() bool {
 
 type ResourceSharingListResponse struct {
 	// Share identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
-	AccountName string `json:"account_name,required"`
+	AccountName string `json:"account_name" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Organization identifier.
-	OrganizationID string                                `json:"organization_id,required"`
-	Status         ResourceSharingListResponseStatus     `json:"status,required"`
-	TargetType     ResourceSharingListResponseTargetType `json:"target_type,required"`
+	OrganizationID string                                `json:"organization_id" api:"required"`
+	Status         ResourceSharingListResponseStatus     `json:"status" api:"required"`
+	TargetType     ResourceSharingListResponseTargetType `json:"target_type" api:"required"`
 	// The number of recipients in the 'associated' state. This field is only included
 	// when requested via the 'include_recipient_counts' parameter.
 	AssociatedRecipientCount int64 `json:"associated_recipient_count"`
@@ -655,23 +655,23 @@ func (r ResourceSharingListResponseKind) IsKnown() bool {
 
 type ResourceSharingListResponseResource struct {
 	// Share Resource identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
-	ResourceAccountID string `json:"resource_account_id,required"`
+	ResourceAccountID string `json:"resource_account_id" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
-	ResourceType ResourceSharingListResponseResourcesResourceType `json:"resource_type,required"`
+	ResourceType ResourceSharingListResponseResourcesResourceType `json:"resource_type" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Resource Status.
-	Status ResourceSharingListResponseResourcesStatus `json:"status,required"`
+	Status ResourceSharingListResponseResourcesStatus `json:"status" api:"required"`
 	JSON   resourceSharingListResponseResourceJSON    `json:"-"`
 }
 
@@ -737,21 +737,21 @@ func (r ResourceSharingListResponseResourcesStatus) IsKnown() bool {
 
 type ResourceSharingDeleteResponse struct {
 	// Share identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
-	AccountName string `json:"account_name,required"`
+	AccountName string `json:"account_name" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Organization identifier.
-	OrganizationID string                                  `json:"organization_id,required"`
-	Status         ResourceSharingDeleteResponseStatus     `json:"status,required"`
-	TargetType     ResourceSharingDeleteResponseTargetType `json:"target_type,required"`
+	OrganizationID string                                  `json:"organization_id" api:"required"`
+	Status         ResourceSharingDeleteResponseStatus     `json:"status" api:"required"`
+	TargetType     ResourceSharingDeleteResponseTargetType `json:"target_type" api:"required"`
 	// The number of recipients in the 'associated' state. This field is only included
 	// when requested via the 'include_recipient_counts' parameter.
 	AssociatedRecipientCount int64 `json:"associated_recipient_count"`
@@ -849,23 +849,23 @@ func (r ResourceSharingDeleteResponseKind) IsKnown() bool {
 
 type ResourceSharingDeleteResponseResource struct {
 	// Share Resource identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
-	ResourceAccountID string `json:"resource_account_id,required"`
+	ResourceAccountID string `json:"resource_account_id" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
-	ResourceType ResourceSharingDeleteResponseResourcesResourceType `json:"resource_type,required"`
+	ResourceType ResourceSharingDeleteResponseResourcesResourceType `json:"resource_type" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Resource Status.
-	Status ResourceSharingDeleteResponseResourcesStatus `json:"status,required"`
+	Status ResourceSharingDeleteResponseResourcesStatus `json:"status" api:"required"`
 	JSON   resourceSharingDeleteResponseResourceJSON    `json:"-"`
 }
 
@@ -931,21 +931,21 @@ func (r ResourceSharingDeleteResponseResourcesStatus) IsKnown() bool {
 
 type ResourceSharingGetResponse struct {
 	// Share identifier tag.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Account identifier.
-	AccountID string `json:"account_id,required"`
+	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
-	AccountName string `json:"account_name,required"`
+	AccountName string `json:"account_name" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Organization identifier.
-	OrganizationID string                               `json:"organization_id,required"`
-	Status         ResourceSharingGetResponseStatus     `json:"status,required"`
-	TargetType     ResourceSharingGetResponseTargetType `json:"target_type,required"`
+	OrganizationID string                               `json:"organization_id" api:"required"`
+	Status         ResourceSharingGetResponseStatus     `json:"status" api:"required"`
+	TargetType     ResourceSharingGetResponseTargetType `json:"target_type" api:"required"`
 	// The number of recipients in the 'associated' state. This field is only included
 	// when requested via the 'include_recipient_counts' parameter.
 	AssociatedRecipientCount int64 `json:"associated_recipient_count"`
@@ -1043,23 +1043,23 @@ func (r ResourceSharingGetResponseKind) IsKnown() bool {
 
 type ResourceSharingGetResponseResource struct {
 	// Share Resource identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the share was created.
-	Created time.Time `json:"created,required" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the share was modified.
-	Modified time.Time `json:"modified,required" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
-	ResourceAccountID string `json:"resource_account_id,required"`
+	ResourceAccountID string `json:"resource_account_id" api:"required"`
 	// Share Resource identifier.
-	ResourceID string `json:"resource_id,required"`
+	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
-	ResourceType ResourceSharingGetResponseResourcesResourceType `json:"resource_type,required"`
+	ResourceType ResourceSharingGetResponseResourcesResourceType `json:"resource_type" api:"required"`
 	// Resource Version.
-	ResourceVersion int64 `json:"resource_version,required"`
+	ResourceVersion int64 `json:"resource_version" api:"required"`
 	// Resource Status.
-	Status ResourceSharingGetResponseResourcesStatus `json:"status,required"`
+	Status ResourceSharingGetResponseResourcesStatus `json:"status" api:"required"`
 	JSON   resourceSharingGetResponseResourceJSON    `json:"-"`
 }
 
@@ -1125,11 +1125,11 @@ func (r ResourceSharingGetResponseResourcesStatus) IsKnown() bool {
 
 type ResourceSharingNewParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the share.
-	Name       param.Field[string]                              `json:"name,required"`
-	Recipients param.Field[[]ResourceSharingNewParamsRecipient] `json:"recipients,required"`
-	Resources  param.Field[[]ResourceSharingNewParamsResource]  `json:"resources,required"`
+	Name       param.Field[string]                              `json:"name" api:"required"`
+	Recipients param.Field[[]ResourceSharingNewParamsRecipient] `json:"recipients" api:"required"`
+	Resources  param.Field[[]ResourceSharingNewParamsResource]  `json:"resources" api:"required"`
 }
 
 func (r ResourceSharingNewParams) MarshalJSON() (data []byte, err error) {
@@ -1150,13 +1150,13 @@ func (r ResourceSharingNewParamsRecipient) MarshalJSON() (data []byte, err error
 
 type ResourceSharingNewParamsResource struct {
 	// Resource Metadata.
-	Meta param.Field[interface{}] `json:"meta,required"`
+	Meta param.Field[interface{}] `json:"meta" api:"required"`
 	// Account identifier.
-	ResourceAccountID param.Field[string] `json:"resource_account_id,required"`
+	ResourceAccountID param.Field[string] `json:"resource_account_id" api:"required"`
 	// Share Resource identifier.
-	ResourceID param.Field[string] `json:"resource_id,required"`
+	ResourceID param.Field[string] `json:"resource_id" api:"required"`
 	// Resource Type.
-	ResourceType param.Field[ResourceSharingNewParamsResourcesResourceType] `json:"resource_type,required"`
+	ResourceType param.Field[ResourceSharingNewParamsResourcesResourceType] `json:"resource_type" api:"required"`
 }
 
 func (r ResourceSharingNewParamsResource) MarshalJSON() (data []byte, err error) {
@@ -1183,9 +1183,9 @@ func (r ResourceSharingNewParamsResourcesResourceType) IsKnown() bool {
 }
 
 type ResourceSharingNewResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                   `json:"success,required"`
+	Success bool                                   `json:"success" api:"required"`
 	Result  ResourceSharingNewResponse             `json:"result"`
 	JSON    resourceSharingNewResponseEnvelopeJSON `json:"-"`
 }
@@ -1210,9 +1210,9 @@ func (r resourceSharingNewResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceSharingUpdateParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the share.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ResourceSharingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1220,9 +1220,9 @@ func (r ResourceSharingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ResourceSharingUpdateResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                      `json:"success,required"`
+	Success bool                                      `json:"success" api:"required"`
 	Result  ResourceSharingUpdateResponse             `json:"result"`
 	JSON    resourceSharingUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -1247,7 +1247,7 @@ func (r resourceSharingUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceSharingListParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to sort objects.
 	Direction param.Field[ResourceSharingListParamsDirection] `query:"direction"`
 	// Include recipient counts in the response.
@@ -1381,13 +1381,13 @@ func (r ResourceSharingListParamsTargetType) IsKnown() bool {
 
 type ResourceSharingDeleteParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ResourceSharingDeleteResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                      `json:"success,required"`
+	Success bool                                      `json:"success" api:"required"`
 	Result  ResourceSharingDeleteResponse             `json:"result"`
 	JSON    resourceSharingDeleteResponseEnvelopeJSON `json:"-"`
 }
@@ -1412,7 +1412,7 @@ func (r resourceSharingDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceSharingGetParams struct {
 	// Account identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include recipient counts in the response.
 	IncludeRecipientCounts param.Field[bool] `query:"include_recipient_counts"`
 	// Include resources in the response.
@@ -1429,9 +1429,9 @@ func (r ResourceSharingGetParams) URLQuery() (v url.Values) {
 }
 
 type ResourceSharingGetResponseEnvelope struct {
-	Errors []shared.ResponseInfo `json:"errors,required"`
+	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                   `json:"success,required"`
+	Success bool                                   `json:"success" api:"required"`
 	Result  ResourceSharingGetResponse             `json:"result"`
 	JSON    resourceSharingGetResponseEnvelopeJSON `json:"-"`
 }

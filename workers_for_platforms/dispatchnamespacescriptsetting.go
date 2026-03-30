@@ -46,23 +46,23 @@ func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispat
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/settings", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get script settings from a script uploaded to a Workers for Platforms namespace.
@@ -71,23 +71,23 @@ func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatc
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/settings", query.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Script and version settings for Workers for Platforms namespace scripts. Same as
@@ -116,9 +116,9 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 	Placement DispatchNamespaceScriptSettingEditResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags,nullable"`
+	Tags []string `json:"tags" api:"nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []workers.ConsumerScript `json:"tail_consumers,nullable"`
+	TailConsumers []workers.ConsumerScript `json:"tail_consumers" api:"nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel DispatchNamespaceScriptSettingEditResponseUsageModel `json:"usage_model"`
 	JSON       dispatchNamespaceScriptSettingEditResponseJSON       `json:"-"`
@@ -152,9 +152,9 @@ func (r dispatchNamespaceScriptSettingEditResponseJSON) RawJSON() string {
 // A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsType `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
@@ -570,9 +570,9 @@ func init() {
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAIType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAIType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAIJSON `json:"-"`
 }
 
@@ -615,11 +615,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAITy
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISearch struct {
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
 	// chat, update, and manage items/jobs on this instance.
-	InstanceName string `json:"instance_name,required"`
+	InstanceName string `json:"instance_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISearchType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISearchType `json:"type" api:"required"`
 	// The namespace the instance belongs to. Defaults to "default" if omitted.
 	// Customers who don't use namespaces can simply omit this field.
 	Namespace string                                                                           `json:"namespace"`
@@ -666,14 +666,14 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISe
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISearchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
 	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
 	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
 	// chat) to all instances within the namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISearchNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISearchNamespaceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISearchNamespaceJSON `json:"-"`
 }
 
@@ -716,11 +716,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAISe
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
-	Dataset string `json:"dataset,required"`
+	Dataset string `json:"dataset" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnalyticsEngineJSON `json:"-"`
 }
 
@@ -763,9 +763,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAnal
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssetsType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssetsType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAssetsJSON `json:"-"`
 }
 
@@ -807,9 +807,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindAsse
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowserType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowserType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrowserJSON `json:"-"`
 }
 
@@ -851,11 +851,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindBrow
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1Type `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1Type `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1JSON `json:"-"`
 }
 
@@ -898,14 +898,14 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindD1Ty
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDataBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the data content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDataBlobType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDataBlobType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDataBlobJSON `json:"-"`
 }
 
@@ -948,11 +948,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindData
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the dispatch namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceType `json:"type" api:"required"`
 	// Outbound worker.
 	Outbound DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
 	JSON     dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
@@ -1026,7 +1026,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDisp
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
 	// Name of the parameter.
-	Name string                                                                                                 `json:"name,required"`
+	Name string                                                                                                 `json:"name" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON `json:"-"`
 }
 
@@ -1079,9 +1079,9 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDisp
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type" api:"required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
 	// The dispatch namespace the Durable Object script belongs to.
@@ -1139,11 +1139,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDura
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdriveType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdriveType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdriveJSON `json:"-"`
 }
 
@@ -1186,9 +1186,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHype
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindInherit struct {
 	// The name of the inherited binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindInheritType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindInheritType `json:"type" api:"required"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -1240,9 +1240,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindInhe
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindImages struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindImagesType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindImagesType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindImagesJSON `json:"-"`
 }
 
@@ -1284,11 +1284,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindImag
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json interface{} `json:"json,required"`
+	Json interface{} `json:"json" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonJSON `json:"-"`
 }
 
@@ -1331,11 +1331,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespaceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespaceJSON `json:"-"`
 }
 
@@ -1378,9 +1378,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNa
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMedia struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMediaType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMediaType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMediaJSON `json:"-"`
 }
 
@@ -1422,11 +1422,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMedi
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
-	CertificateID string `json:"certificate_id,required"`
+	CertificateID string `json:"certificate_id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificateType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificateJSON `json:"-"`
 }
 
@@ -1469,11 +1469,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLS
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The text value to use.
-	Text string `json:"text,required"`
+	Text string `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainTextType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainTextType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainTextJSON `json:"-"`
 }
 
@@ -1516,11 +1516,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlai
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Pipeline to bind to.
-	Pipeline string `json:"pipeline,required"`
+	Pipeline string `json:"pipeline" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelinesJSON `json:"-"`
 }
 
@@ -1563,11 +1563,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipe
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Queue to bind to.
-	QueueName string `json:"queue_name,required"`
+	QueueName string `json:"queue_name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueueType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueueType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueueJSON `json:"-"`
 }
 
@@ -1610,13 +1610,13 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueu
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimit struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the rate limit namespace to bind to.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The rate limit configuration.
-	Simple DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitSimple `json:"simple,required"`
+	Simple DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitSimple `json:"simple" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitJSON `json:"-"`
 }
 
@@ -1646,9 +1646,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRate
 // The rate limit configuration.
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitSimple struct {
 	// The limit (requests per period).
-	Limit float64 `json:"limit,required"`
+	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                                                   `json:"period,required"`
+	Period int64                                                                                   `json:"period" api:"required"`
 	JSON   dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
@@ -1687,11 +1687,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRate
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
-	BucketName string `json:"bucket_name,required"`
+	BucketName string `json:"bucket_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2BucketType `json:"type" api:"required"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -1758,9 +1758,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bu
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretTextType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretTextType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
@@ -1802,9 +1802,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecr
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSendEmail struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSendEmailType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSendEmailType `json:"type" api:"required"`
 	// List of allowed destination addresses.
 	AllowedDestinationAddresses []string `json:"allowed_destination_addresses" format:"email"`
 	// List of allowed sender addresses.
@@ -1855,11 +1855,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSend
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of Worker to bind to.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindServiceType `json:"type" api:"required"`
 	// Entrypoint to invoke on the target Worker.
 	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
@@ -1908,14 +1908,14 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindServ
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the text content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTextBlobType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTextBlobType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindTextBlobJSON `json:"-"`
 }
 
@@ -1958,11 +1958,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindText
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
-	IndexName string `json:"index_name,required"`
+	IndexName string `json:"index_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorizeType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorizeType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVectorizeJSON `json:"-"`
 }
 
@@ -2005,9 +2005,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVect
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadataType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadataType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVersionMetadataJSON `json:"-"`
 }
 
@@ -2049,13 +2049,13 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVers
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the secret in the store.
-	SecretName string `json:"secret_name,required"`
+	SecretName string `json:"secret_name" api:"required"`
 	// ID of the store containing the secret.
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
 }
 
@@ -2100,17 +2100,17 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecr
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm interface{} `json:"algorithm,required"`
+	Algorithm interface{} `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyType `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	Usages []DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
 	JSON   dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
@@ -2195,11 +2195,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindSecr
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWorkflowType `json:"type" api:"required"`
 	// Name of the Workflow to bind to.
-	WorkflowName string `json:"workflow_name,required"`
+	WorkflowName string `json:"workflow_name" api:"required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
 	// this script.
 	ClassName string `json:"class_name"`
@@ -2250,14 +2250,14 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWork
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModule struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the WebAssembly module content. Only accepted
 	// for `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModuleType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModuleType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasmModuleJSON `json:"-"`
 }
 
@@ -2300,11 +2300,11 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindWasm
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the VPC service to bind to.
-	ServiceID string `json:"service_id,required"`
+	ServiceID string `json:"service_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCServiceJSON `json:"-"`
 }
 
@@ -2347,9 +2347,9 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCS
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetwork struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2609,14 +2609,14 @@ func (r DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepM
 // Observability settings for the Worker.
 type DispatchNamespaceScriptSettingEditResponseObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
-	Logs DispatchNamespaceScriptSettingEditResponseObservabilityLogs `json:"logs,nullable"`
+	Logs DispatchNamespaceScriptSettingEditResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Trace settings for the Worker.
-	Traces DispatchNamespaceScriptSettingEditResponseObservabilityTraces `json:"traces,nullable"`
+	Traces DispatchNamespaceScriptSettingEditResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   dispatchNamespaceScriptSettingEditResponseObservabilityJSON   `json:"-"`
 }
 
@@ -2643,15 +2643,15 @@ func (r dispatchNamespaceScriptSettingEditResponseObservabilityJSON) RawJSON() s
 // Log settings for the Worker.
 type DispatchNamespaceScriptSettingEditResponseObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs bool `json:"invocation_logs,required"`
+	InvocationLogs bool `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether log persistence is enabled for the Worker.
 	Persist bool                                                            `json:"persist"`
 	JSON    dispatchNamespaceScriptSettingEditResponseObservabilityLogsJSON `json:"-"`
@@ -2685,7 +2685,7 @@ type DispatchNamespaceScriptSettingEditResponseObservabilityTraces struct {
 	// Whether traces are enabled for the Worker.
 	Enabled bool `json:"enabled"`
 	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool                                                              `json:"persist"`
 	JSON    dispatchNamespaceScriptSettingEditResponseObservabilityTracesJSON `json:"-"`
@@ -2830,7 +2830,7 @@ func init() {
 type DispatchNamespaceScriptSettingEditResponsePlacementMode struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingEditResponsePlacementModeMode `json:"mode,required"`
+	Mode DispatchNamespaceScriptSettingEditResponsePlacementModeMode `json:"mode" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponsePlacementModeJSON `json:"-"`
 }
 
@@ -2872,7 +2872,7 @@ func (r DispatchNamespaceScriptSettingEditResponsePlacementModeMode) IsKnown() b
 
 type DispatchNamespaceScriptSettingEditResponsePlacementRegion struct {
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                                                        `json:"region,required"`
+	Region string                                                        `json:"region" api:"required"`
 	JSON   dispatchNamespaceScriptSettingEditResponsePlacementRegionJSON `json:"-"`
 }
 
@@ -2898,7 +2898,7 @@ func (r DispatchNamespaceScriptSettingEditResponsePlacementRegion) implementsDis
 
 type DispatchNamespaceScriptSettingEditResponsePlacementHostname struct {
 	// HTTP hostname for targeted placement.
-	Hostname string                                                          `json:"hostname,required"`
+	Hostname string                                                          `json:"hostname" api:"required"`
 	JSON     dispatchNamespaceScriptSettingEditResponsePlacementHostnameJSON `json:"-"`
 }
 
@@ -2924,7 +2924,7 @@ func (r DispatchNamespaceScriptSettingEditResponsePlacementHostname) implementsD
 
 type DispatchNamespaceScriptSettingEditResponsePlacementHost struct {
 	// TCP host and port for targeted placement.
-	Host string                                                      `json:"host,required"`
+	Host string                                                      `json:"host" api:"required"`
 	JSON dispatchNamespaceScriptSettingEditResponsePlacementHostJSON `json:"-"`
 }
 
@@ -2950,9 +2950,9 @@ func (r DispatchNamespaceScriptSettingEditResponsePlacementHost) implementsDispa
 
 type DispatchNamespaceScriptSettingEditResponsePlacementObject struct {
 	// Targeted placement mode.
-	Mode DispatchNamespaceScriptSettingEditResponsePlacementObjectMode `json:"mode,required"`
+	Mode DispatchNamespaceScriptSettingEditResponsePlacementObjectMode `json:"mode" api:"required"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                                                        `json:"region,required"`
+	Region string                                                        `json:"region" api:"required"`
 	JSON   dispatchNamespaceScriptSettingEditResponsePlacementObjectJSON `json:"-"`
 }
 
@@ -3035,9 +3035,9 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	// Specify mode='smart' for Smart Placement, or one of region/hostname/host.
 	Placement DispatchNamespaceScriptSettingGetResponsePlacement `json:"placement"`
 	// Tags associated with the Worker.
-	Tags []string `json:"tags,nullable"`
+	Tags []string `json:"tags" api:"nullable"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []workers.ConsumerScript `json:"tail_consumers,nullable"`
+	TailConsumers []workers.ConsumerScript `json:"tail_consumers" api:"nullable"`
 	// Usage model for the Worker invocations.
 	UsageModel DispatchNamespaceScriptSettingGetResponseUsageModel `json:"usage_model"`
 	JSON       dispatchNamespaceScriptSettingGetResponseJSON       `json:"-"`
@@ -3071,9 +3071,9 @@ func (r dispatchNamespaceScriptSettingGetResponseJSON) RawJSON() string {
 // A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsType `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
@@ -3489,9 +3489,9 @@ func init() {
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAIType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAIType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAIJSON `json:"-"`
 }
 
@@ -3534,11 +3534,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAITyp
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISearch struct {
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
 	// chat, update, and manage items/jobs on this instance.
-	InstanceName string `json:"instance_name,required"`
+	InstanceName string `json:"instance_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISearchType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISearchType `json:"type" api:"required"`
 	// The namespace the instance belongs to. Defaults to "default" if omitted.
 	// Customers who don't use namespaces can simply omit this field.
 	Namespace string                                                                          `json:"namespace"`
@@ -3585,14 +3585,14 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISea
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISearchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
 	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
 	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
 	// chat) to all instances within the namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISearchNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISearchNamespaceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISearchNamespaceJSON `json:"-"`
 }
 
@@ -3635,11 +3635,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAISea
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
-	Dataset string `json:"dataset,required"`
+	Dataset string `json:"dataset" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnalyticsEngineJSON `json:"-"`
 }
 
@@ -3682,9 +3682,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAnaly
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssetsType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssetsType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAssetsJSON `json:"-"`
 }
 
@@ -3726,9 +3726,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindAsset
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowserType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowserType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrowserJSON `json:"-"`
 }
 
@@ -3770,11 +3770,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindBrows
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1Type `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1Type `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1JSON `json:"-"`
 }
 
@@ -3817,14 +3817,14 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindD1Typ
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDataBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the data content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDataBlobType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDataBlobType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDataBlobJSON `json:"-"`
 }
 
@@ -3867,11 +3867,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDataB
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the dispatch namespace.
-	Namespace string `json:"namespace,required"`
+	Namespace string `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceType `json:"type" api:"required"`
 	// Outbound worker.
 	Outbound DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutbound `json:"outbound"`
 	JSON     dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceJSON     `json:"-"`
@@ -3945,7 +3945,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispa
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
 	// Name of the parameter.
-	Name string                                                                                                `json:"name,required"`
+	Name string                                                                                                `json:"name" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespaceOutboundParamJSON `json:"-"`
 }
 
@@ -3998,9 +3998,9 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispa
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceType `json:"type" api:"required"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
 	// The dispatch namespace the Durable Object script belongs to.
@@ -4058,11 +4058,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDurab
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdriveType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdriveType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdriveJSON `json:"-"`
 }
 
@@ -4105,9 +4105,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyper
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindInherit struct {
 	// The name of the inherited binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindInheritType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindInheritType `json:"type" api:"required"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -4159,9 +4159,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindInher
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindImages struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindImagesType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindImagesType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindImagesJSON `json:"-"`
 }
 
@@ -4203,11 +4203,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindImage
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json interface{} `json:"json,required"`
+	Json interface{} `json:"json" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonJSON `json:"-"`
 }
 
@@ -4250,11 +4250,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonT
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespaceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespaceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespaceJSON `json:"-"`
 }
 
@@ -4297,9 +4297,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNam
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMedia struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMediaType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMediaType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMediaJSON `json:"-"`
 }
 
@@ -4341,11 +4341,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMedia
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
-	CertificateID string `json:"certificate_id,required"`
+	CertificateID string `json:"certificate_id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificateType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificateJSON `json:"-"`
 }
 
@@ -4388,11 +4388,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSC
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The text value to use.
-	Text string `json:"text,required"`
+	Text string `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainTextType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainTextType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainTextJSON `json:"-"`
 }
 
@@ -4435,11 +4435,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlain
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Pipeline to bind to.
-	Pipeline string `json:"pipeline,required"`
+	Pipeline string `json:"pipeline" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelinesJSON `json:"-"`
 }
 
@@ -4482,11 +4482,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipel
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the Queue to bind to.
-	QueueName string `json:"queue_name,required"`
+	QueueName string `json:"queue_name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueueType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueueType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueueJSON `json:"-"`
 }
 
@@ -4529,13 +4529,13 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimit struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the rate limit namespace to bind to.
-	NamespaceID string `json:"namespace_id,required"`
+	NamespaceID string `json:"namespace_id" api:"required"`
 	// The rate limit configuration.
-	Simple DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitSimple `json:"simple,required"`
+	Simple DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitSimple `json:"simple" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitJSON `json:"-"`
 }
 
@@ -4565,9 +4565,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatel
 // The rate limit configuration.
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitSimple struct {
 	// The limit (requests per period).
-	Limit float64 `json:"limit,required"`
+	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                                                  `json:"period,required"`
+	Period int64                                                                                  `json:"period" api:"required"`
 	JSON   dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
@@ -4606,11 +4606,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatel
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
-	BucketName string `json:"bucket_name,required"`
+	BucketName string `json:"bucket_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2BucketType `json:"type" api:"required"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -4677,9 +4677,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Buc
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretTextType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretTextType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretTextJSON `json:"-"`
 }
 
@@ -4721,9 +4721,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecre
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSendEmail struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSendEmailType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSendEmailType `json:"type" api:"required"`
 	// List of allowed destination addresses.
 	AllowedDestinationAddresses []string `json:"allowed_destination_addresses" format:"email"`
 	// List of allowed sender addresses.
@@ -4774,11 +4774,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSendE
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of Worker to bind to.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindServiceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindServiceType `json:"type" api:"required"`
 	// Entrypoint to invoke on the target Worker.
 	Entrypoint string `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
@@ -4827,14 +4827,14 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindServi
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the text content. Only accepted for
 	// `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTextBlobType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTextBlobType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTextBlobJSON `json:"-"`
 }
 
@@ -4877,11 +4877,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindTextB
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
-	IndexName string `json:"index_name,required"`
+	IndexName string `json:"index_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorizeType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorizeType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVectorizeJSON `json:"-"`
 }
 
@@ -4924,9 +4924,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVecto
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadataType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadataType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersionMetadataJSON `json:"-"`
 }
 
@@ -4968,13 +4968,13 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVersi
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Name of the secret in the store.
-	SecretName string `json:"secret_name,required"`
+	SecretName string `json:"secret_name" api:"required"`
 	// ID of the store containing the secret.
-	StoreID string `json:"store_id,required"`
+	StoreID string `json:"store_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretsStoreSecretJSON `json:"-"`
 }
 
@@ -5019,17 +5019,17 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecre
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm interface{} `json:"algorithm,required"`
+	Algorithm interface{} `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format,required"`
+	Format DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyType `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages []DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages,required"`
+	Usages []DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
 	JSON   dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecretKeyJSON    `json:"-"`
 }
 
@@ -5114,11 +5114,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindSecre
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkflowType `json:"type" api:"required"`
 	// Name of the Workflow to bind to.
-	WorkflowName string `json:"workflow_name,required"`
+	WorkflowName string `json:"workflow_name" api:"required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
 	// this script.
 	ClassName string `json:"class_name"`
@@ -5169,14 +5169,14 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWorkf
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModule struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the file containing the WebAssembly module content. Only accepted
 	// for `service worker syntax` Workers.
-	Part string `json:"part,required"`
+	Part string `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModuleType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModuleType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmModuleJSON `json:"-"`
 }
 
@@ -5219,11 +5219,11 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindWasmM
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCService struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Identifier of the VPC service to bind to.
-	ServiceID string `json:"service_id,required"`
+	ServiceID string `json:"service_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceType `json:"type" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCServiceJSON `json:"-"`
 }
 
@@ -5266,9 +5266,9 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCSe
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetwork struct {
 	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkType `json:"type,required"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -5528,14 +5528,14 @@ func (r DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMi
 // Observability settings for the Worker.
 type DispatchNamespaceScriptSettingGetResponseObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
-	Logs DispatchNamespaceScriptSettingGetResponseObservabilityLogs `json:"logs,nullable"`
+	Logs DispatchNamespaceScriptSettingGetResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Trace settings for the Worker.
-	Traces DispatchNamespaceScriptSettingGetResponseObservabilityTraces `json:"traces,nullable"`
+	Traces DispatchNamespaceScriptSettingGetResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   dispatchNamespaceScriptSettingGetResponseObservabilityJSON   `json:"-"`
 }
 
@@ -5561,15 +5561,15 @@ func (r dispatchNamespaceScriptSettingGetResponseObservabilityJSON) RawJSON() st
 // Log settings for the Worker.
 type DispatchNamespaceScriptSettingGetResponseObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs bool `json:"invocation_logs,required"`
+	InvocationLogs bool `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations []string `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether log persistence is enabled for the Worker.
 	Persist bool                                                           `json:"persist"`
 	JSON    dispatchNamespaceScriptSettingGetResponseObservabilityLogsJSON `json:"-"`
@@ -5603,7 +5603,7 @@ type DispatchNamespaceScriptSettingGetResponseObservabilityTraces struct {
 	// Whether traces are enabled for the Worker.
 	Enabled bool `json:"enabled"`
 	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
-	HeadSamplingRate float64 `json:"head_sampling_rate,nullable"`
+	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool                                                             `json:"persist"`
 	JSON    dispatchNamespaceScriptSettingGetResponseObservabilityTracesJSON `json:"-"`
@@ -5748,7 +5748,7 @@ func init() {
 type DispatchNamespaceScriptSettingGetResponsePlacementMode struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingGetResponsePlacementModeMode `json:"mode,required"`
+	Mode DispatchNamespaceScriptSettingGetResponsePlacementModeMode `json:"mode" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponsePlacementModeJSON `json:"-"`
 }
 
@@ -5789,7 +5789,7 @@ func (r DispatchNamespaceScriptSettingGetResponsePlacementModeMode) IsKnown() bo
 
 type DispatchNamespaceScriptSettingGetResponsePlacementRegion struct {
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                                                       `json:"region,required"`
+	Region string                                                       `json:"region" api:"required"`
 	JSON   dispatchNamespaceScriptSettingGetResponsePlacementRegionJSON `json:"-"`
 }
 
@@ -5815,7 +5815,7 @@ func (r DispatchNamespaceScriptSettingGetResponsePlacementRegion) implementsDisp
 
 type DispatchNamespaceScriptSettingGetResponsePlacementHostname struct {
 	// HTTP hostname for targeted placement.
-	Hostname string                                                         `json:"hostname,required"`
+	Hostname string                                                         `json:"hostname" api:"required"`
 	JSON     dispatchNamespaceScriptSettingGetResponsePlacementHostnameJSON `json:"-"`
 }
 
@@ -5841,7 +5841,7 @@ func (r DispatchNamespaceScriptSettingGetResponsePlacementHostname) implementsDi
 
 type DispatchNamespaceScriptSettingGetResponsePlacementHost struct {
 	// TCP host and port for targeted placement.
-	Host string                                                     `json:"host,required"`
+	Host string                                                     `json:"host" api:"required"`
 	JSON dispatchNamespaceScriptSettingGetResponsePlacementHostJSON `json:"-"`
 }
 
@@ -5866,9 +5866,9 @@ func (r DispatchNamespaceScriptSettingGetResponsePlacementHost) implementsDispat
 
 type DispatchNamespaceScriptSettingGetResponsePlacementObject struct {
 	// Targeted placement mode.
-	Mode DispatchNamespaceScriptSettingGetResponsePlacementObjectMode `json:"mode,required"`
+	Mode DispatchNamespaceScriptSettingGetResponsePlacementObjectMode `json:"mode" api:"required"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region string                                                       `json:"region,required"`
+	Region string                                                       `json:"region" api:"required"`
 	JSON   dispatchNamespaceScriptSettingGetResponsePlacementObjectJSON `json:"-"`
 }
 
@@ -5927,7 +5927,7 @@ func (r DispatchNamespaceScriptSettingGetResponseUsageModel) IsKnown() bool {
 
 type DispatchNamespaceScriptSettingEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Script and version settings for Workers for Platforms namespace scripts. Same as
 	// script-and-version-settings-item but without annotations, which are not
 	// supported for namespace scripts.
@@ -5991,9 +5991,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettings) MarshalJSON() (data []
 // A binding to allow the Worker to communicate with resources.
 type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsType] `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
 	ID                          param.Field[string]      `json:"id"`
 	Algorithm                   param.Field[interface{}] `json:"algorithm"`
@@ -6127,9 +6127,9 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBindingUnion interface {
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAI struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAIType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAIType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAI) MarshalJSON() (data []byte, err error) {
@@ -6157,11 +6157,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAISearch struct {
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
 	// chat, update, and manage items/jobs on this instance.
-	InstanceName param.Field[string] `json:"instance_name,required"`
+	InstanceName param.Field[string] `json:"instance_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAISearchType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAISearchType] `json:"type" api:"required"`
 	// The namespace the instance belongs to. Defaults to "default" if omitted.
 	// Customers who don't use namespaces can simply omit this field.
 	Namespace param.Field[string] `json:"namespace"`
@@ -6191,14 +6191,14 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAISearchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The user-chosen namespace name. Must exist before deploy -- Wrangler handles
 	// auto-creation on deploy failure (R2 bucket pattern). The "default" namespace is
 	// auto-created by config-api for new accounts. Grants full access (CRUD + search +
 	// chat) to all instances within the namespace.
-	Namespace param.Field[string] `json:"namespace,required"`
+	Namespace param.Field[string] `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAISearchNamespaceType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAISearchNamespaceType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAISearchNamespace) MarshalJSON() (data []byte, err error) {
@@ -6225,11 +6225,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngine struct {
 	// The name of the dataset to bind to.
-	Dataset param.Field[string] `json:"dataset,required"`
+	Dataset param.Field[string] `json:"dataset" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngineType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAnalyticsEngine) MarshalJSON() (data []byte, err error) {
@@ -6256,9 +6256,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAssets struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAssetsType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindAssets) MarshalJSON() (data []byte, err error) {
@@ -6285,9 +6285,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindBrowser struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindBrowserType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindBrowserType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindBrowser) MarshalJSON() (data []byte, err error) {
@@ -6314,11 +6314,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindD1Type] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindD1Type] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindD1) MarshalJSON() (data []byte, err error) {
@@ -6345,14 +6345,14 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDataBlob struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the data content. Only accepted for
 	// `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDataBlobType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDataBlob) MarshalJSON() (data []byte, err error) {
@@ -6379,11 +6379,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the dispatch namespace.
-	Namespace param.Field[string] `json:"namespace,required"`
+	Namespace param.Field[string] `json:"namespace" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceType] `json:"type" api:"required"`
 	// Outbound worker.
 	Outbound param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutbound] `json:"outbound"`
 }
@@ -6425,7 +6425,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutboundParam struct {
 	// Name of the parameter.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespaceOutboundParam) MarshalJSON() (data []byte, err error) {
@@ -6448,9 +6448,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceType] `json:"type" api:"required"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
 	// The dispatch namespace the Durable Object script belongs to.
@@ -6488,11 +6488,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindHyperdrive struct {
 	// Identifier of the Hyperdrive connection to bind to.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindHyperdriveType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindHyperdrive) MarshalJSON() (data []byte, err error) {
@@ -6519,9 +6519,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindInherit struct {
 	// The name of the inherited binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindInheritType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindInheritType] `json:"type" api:"required"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
@@ -6556,9 +6556,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindImages struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindImagesType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindImagesType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindImages) MarshalJSON() (data []byte, err error) {
@@ -6585,11 +6585,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson struct {
 	// JSON data to use.
-	Json param.Field[interface{}] `json:"json,required"`
+	Json param.Field[interface{}] `json:"json" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
@@ -6616,11 +6616,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespace struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Namespace identifier tag.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespaceType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespace) MarshalJSON() (data []byte, err error) {
@@ -6647,9 +6647,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMedia struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMediaType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMediaType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMedia) MarshalJSON() (data []byte, err error) {
@@ -6676,11 +6676,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificate struct {
 	// Identifier of the certificate to bind to.
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificateType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificate) MarshalJSON() (data []byte, err error) {
@@ -6707,11 +6707,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The text value to use.
-	Text param.Field[string] `json:"text,required"`
+	Text param.Field[string] `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainTextType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText) MarshalJSON() (data []byte, err error) {
@@ -6738,11 +6738,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelines struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the Pipeline to bind to.
-	Pipeline param.Field[string] `json:"pipeline,required"`
+	Pipeline param.Field[string] `json:"pipeline" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelinesType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelines) MarshalJSON() (data []byte, err error) {
@@ -6769,11 +6769,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the Queue to bind to.
-	QueueName param.Field[string] `json:"queue_name,required"`
+	QueueName param.Field[string] `json:"queue_name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueueType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueueType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue) MarshalJSON() (data []byte, err error) {
@@ -6800,13 +6800,13 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimit struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Identifier of the rate limit namespace to bind to.
-	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	NamespaceID param.Field[string] `json:"namespace_id" api:"required"`
 	// The rate limit configuration.
-	Simple param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimitSimple] `json:"simple,required"`
+	Simple param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimitSimple] `json:"simple" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimitType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimitType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimit) MarshalJSON() (data []byte, err error) {
@@ -6819,9 +6819,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 // The rate limit configuration.
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimitSimple struct {
 	// The limit (requests per period).
-	Limit param.Field[float64] `json:"limit,required"`
+	Limit param.Field[float64] `json:"limit" api:"required"`
 	// The period in seconds.
-	Period param.Field[int64] `json:"period,required"`
+	Period param.Field[int64] `json:"period" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimitSimple) MarshalJSON() (data []byte, err error) {
@@ -6845,11 +6845,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2Bucket struct {
 	// R2 bucket to bind to.
-	BucketName param.Field[string] `json:"bucket_name,required"`
+	BucketName param.Field[string] `json:"bucket_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2BucketType] `json:"type" api:"required"`
 	// The
 	// [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 	// of the R2 bucket.
@@ -6899,11 +6899,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretText struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The secret value to use.
-	Text param.Field[string] `json:"text,required"`
+	Text param.Field[string] `json:"text" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretTextType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
@@ -6930,9 +6930,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSendEmail struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSendEmailType] `json:"type" api:"required"`
 	// List of allowed destination addresses.
 	AllowedDestinationAddresses param.Field[[]string] `json:"allowed_destination_addresses" format:"email"`
 	// List of allowed sender addresses.
@@ -6965,11 +6965,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindService struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of Worker to bind to.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindServiceType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindServiceType] `json:"type" api:"required"`
 	// Entrypoint to invoke on the target Worker.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// Optional environment if the Worker utilizes one.
@@ -7000,14 +7000,14 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindTextBlob struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the text content. Only accepted for
 	// `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindTextBlobType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindTextBlob) MarshalJSON() (data []byte, err error) {
@@ -7034,11 +7034,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVectorize struct {
 	// Name of the Vectorize index to bind to.
-	IndexName param.Field[string] `json:"index_name,required"`
+	IndexName param.Field[string] `json:"index_name" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVectorizeType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVectorize) MarshalJSON() (data []byte, err error) {
@@ -7065,9 +7065,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadataType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVersionMetadata) MarshalJSON() (data []byte, err error) {
@@ -7094,13 +7094,13 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Name of the secret in the store.
-	SecretName param.Field[string] `json:"secret_name,required"`
+	SecretName param.Field[string] `json:"secret_name" api:"required"`
 	// ID of the store containing the secret.
-	StoreID param.Field[string] `json:"store_id,required"`
+	StoreID param.Field[string] `json:"store_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecretType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretsStoreSecret) MarshalJSON() (data []byte, err error) {
@@ -7128,17 +7128,17 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
-	Algorithm param.Field[interface{}] `json:"algorithm,required"`
+	Algorithm param.Field[interface{}] `json:"algorithm" api:"required"`
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
-	Format param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat] `json:"format,required"`
+	Format param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyFormat] `json:"format" api:"required"`
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyType] `json:"type" api:"required"`
 	// Allowed operations with the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
-	Usages param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage] `json:"usages,required"`
+	Usages param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindSecretKeyUsage] `json:"usages" api:"required"`
 	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
 	KeyBase64 param.Field[string] `json:"key_base64"`
 	// Key data in
@@ -7211,11 +7211,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflow struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWorkflowType] `json:"type" api:"required"`
 	// Name of the Workflow to bind to.
-	WorkflowName param.Field[string] `json:"workflow_name,required"`
+	WorkflowName param.Field[string] `json:"workflow_name" api:"required"`
 	// Class name of the Workflow. Should only be provided if the Workflow belongs to
 	// this script.
 	ClassName param.Field[string] `json:"class_name"`
@@ -7248,14 +7248,14 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the file containing the WebAssembly module content. Only accepted
 	// for `service worker syntax` Workers.
-	Part param.Field[string] `json:"part,required"`
+	Part param.Field[string] `json:"part" api:"required"`
 	// The kind of resource that the binding provides.
 	//
 	// Deprecated: deprecated
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWasmModuleType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindWasmModule) MarshalJSON() (data []byte, err error) {
@@ -7282,11 +7282,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCService struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Identifier of the VPC service to bind to.
-	ServiceID param.Field[string] `json:"service_id,required"`
+	ServiceID param.Field[string] `json:"service_id" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCServiceType] `json:"type" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCService) MarshalJSON() (data []byte, err error) {
@@ -7313,9 +7313,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetwork struct {
 	// A JavaScript variable name for the binding.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -7492,7 +7492,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipl
 // Observability settings for the Worker.
 type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 	// Whether observability is enabled for the Worker.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
@@ -7509,11 +7509,11 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsObservability) MarshalJS
 // Log settings for the Worker.
 type DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs struct {
 	// Whether logs are enabled for the Worker.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Whether
 	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
 	// are enabled for the Worker.
-	InvocationLogs param.Field[bool] `json:"invocation_logs,required"`
+	InvocationLogs param.Field[bool] `json:"invocation_logs" api:"required"`
 	// A list of destinations where logs will be exported to.
 	Destinations param.Field[[]string] `json:"destinations"`
 	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
@@ -7586,7 +7586,7 @@ type DispatchNamespaceScriptSettingEditParamsSettingsPlacementUnion interface {
 type DispatchNamespaceScriptSettingEditParamsSettingsPlacementMode struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacementModeMode] `json:"mode,required"`
+	Mode param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacementModeMode] `json:"mode" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementMode) MarshalJSON() (data []byte, err error) {
@@ -7614,7 +7614,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementModeMode) IsKno
 
 type DispatchNamespaceScriptSettingEditParamsSettingsPlacementRegion struct {
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region param.Field[string] `json:"region,required"`
+	Region param.Field[string] `json:"region" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementRegion) MarshalJSON() (data []byte, err error) {
@@ -7626,7 +7626,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementRegion) impleme
 
 type DispatchNamespaceScriptSettingEditParamsSettingsPlacementHostname struct {
 	// HTTP hostname for targeted placement.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementHostname) MarshalJSON() (data []byte, err error) {
@@ -7638,7 +7638,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementHostname) imple
 
 type DispatchNamespaceScriptSettingEditParamsSettingsPlacementHost struct {
 	// TCP host and port for targeted placement.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementHost) MarshalJSON() (data []byte, err error) {
@@ -7650,9 +7650,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementHost) implement
 
 type DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject struct {
 	// Targeted placement mode.
-	Mode param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectMode] `json:"mode,required"`
+	Mode param.Field[DispatchNamespaceScriptSettingEditParamsSettingsPlacementObjectMode] `json:"mode" api:"required"`
 	// Cloud region for targeted placement in format 'provider:region'.
-	Region param.Field[string] `json:"region,required"`
+	Region param.Field[string] `json:"region" api:"required"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsPlacementObject) MarshalJSON() (data []byte, err error) {
@@ -7695,10 +7695,10 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsUsageModel) IsKnown() bo
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
-	Errors   []DispatchNamespaceScriptSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceScriptSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptSettingEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceScriptSettingEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Script and version settings for Workers for Platforms namespace scripts. Same as
 	// script-and-version-settings-item but without annotations, which are not
 	// supported for namespace scripts.
@@ -7726,8 +7726,8 @@ func (r dispatchNamespaceScriptSettingEditResponseEnvelopeJSON) RawJSON() string
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelopeErrors struct {
-	Code             int64                                                          `json:"code,required"`
-	Message          string                                                         `json:"message,required"`
+	Code             int64                                                          `json:"code" api:"required"`
+	Message          string                                                         `json:"message" api:"required"`
 	DocumentationURL string                                                         `json:"documentation_url"`
 	Source           DispatchNamespaceScriptSettingEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceScriptSettingEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -7776,8 +7776,8 @@ func (r dispatchNamespaceScriptSettingEditResponseEnvelopeErrorsSourceJSON) RawJ
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelopeMessages struct {
-	Code             int64                                                            `json:"code,required"`
-	Message          string                                                           `json:"message,required"`
+	Code             int64                                                            `json:"code" api:"required"`
+	Message          string                                                           `json:"message" api:"required"`
 	DocumentationURL string                                                           `json:"documentation_url"`
 	Source           DispatchNamespaceScriptSettingEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceScriptSettingEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -7842,14 +7842,14 @@ func (r DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess) IsKnown() boo
 
 type DispatchNamespaceScriptSettingGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
-	Errors   []DispatchNamespaceScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptSettingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceScriptSettingGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Script and version settings for Workers for Platforms namespace scripts. Same as
 	// script-and-version-settings-item but without annotations, which are not
 	// supported for namespace scripts.
@@ -7877,8 +7877,8 @@ func (r dispatchNamespaceScriptSettingGetResponseEnvelopeJSON) RawJSON() string 
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelopeErrors struct {
-	Code             int64                                                         `json:"code,required"`
-	Message          string                                                        `json:"message,required"`
+	Code             int64                                                         `json:"code" api:"required"`
+	Message          string                                                        `json:"message" api:"required"`
 	DocumentationURL string                                                        `json:"documentation_url"`
 	Source           DispatchNamespaceScriptSettingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceScriptSettingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -7927,8 +7927,8 @@ func (r dispatchNamespaceScriptSettingGetResponseEnvelopeErrorsSourceJSON) RawJS
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelopeMessages struct {
-	Code             int64                                                           `json:"code,required"`
-	Message          string                                                          `json:"message,required"`
+	Code             int64                                                           `json:"code" api:"required"`
+	Message          string                                                          `json:"message" api:"required"`
 	DocumentationURL string                                                          `json:"documentation_url"`
 	Source           DispatchNamespaceScriptSettingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceScriptSettingGetResponseEnvelopeMessagesJSON   `json:"-"`

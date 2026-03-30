@@ -43,15 +43,15 @@ func (r *GatewayCertificateService) New(ctx context.Context, params GatewayCerti
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/certificates", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all Zero Trust certificates for an account.
@@ -61,7 +61,7 @@ func (r *GatewayCertificateService) List(ctx context.Context, query GatewayCerti
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/certificates", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -88,19 +88,19 @@ func (r *GatewayCertificateService) Delete(ctx context.Context, certificateID st
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s", body.AccountID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Bind a single Zero Trust certificate to the edge.
@@ -109,19 +109,19 @@ func (r *GatewayCertificateService) Activate(ctx context.Context, certificateID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/activate", params.AccountID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Unbind a single Zero Trust certificate from the edge.
@@ -130,19 +130,19 @@ func (r *GatewayCertificateService) Deactivate(ctx context.Context, certificateI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/deactivate", params.AccountID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a single Zero Trust certificate.
@@ -151,19 +151,19 @@ func (r *GatewayCertificateService) Get(ctx context.Context, certificateID strin
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s", query.AccountID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GatewayCertificateNewResponse struct {
@@ -713,7 +713,7 @@ func (r GatewayCertificateGetResponseType) IsKnown() bool {
 }
 
 type GatewayCertificateNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sets the certificate validity period in days (range: 1-10,950 days / ~30 years).
 	// Defaults to 1,825 days (5 years). **Important**: This field is only settable
 	// during the certificate creation. Certificates becomes immutable after creation -
@@ -726,10 +726,10 @@ func (r GatewayCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayCertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayCertificateNewResponse                `json:"result"`
 	JSON    gatewayCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -769,18 +769,18 @@ func (r GatewayCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayCertificateDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayCertificateDeleteResponse                `json:"result"`
 	JSON    gatewayCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -820,8 +820,8 @@ func (r GatewayCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateActivateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r GatewayCertificateActivateParams) MarshalJSON() (data []byte, err error) {
@@ -829,10 +829,10 @@ func (r GatewayCertificateActivateParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayCertificateActivateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayCertificateActivateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayCertificateActivateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayCertificateActivateResponse                `json:"result"`
 	JSON    gatewayCertificateActivateResponseEnvelopeJSON    `json:"-"`
 }
@@ -872,8 +872,8 @@ func (r GatewayCertificateActivateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateDeactivateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r GatewayCertificateDeactivateParams) MarshalJSON() (data []byte, err error) {
@@ -881,10 +881,10 @@ func (r GatewayCertificateDeactivateParams) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayCertificateDeactivateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayCertificateDeactivateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayCertificateDeactivateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayCertificateDeactivateResponse                `json:"result"`
 	JSON    gatewayCertificateDeactivateResponseEnvelopeJSON    `json:"-"`
 }
@@ -924,14 +924,14 @@ func (r GatewayCertificateDeactivateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayCertificateGetResponse                `json:"result"`
 	JSON    gatewayCertificateGetResponseEnvelopeJSON    `json:"-"`
 }

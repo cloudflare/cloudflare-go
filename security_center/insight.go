@@ -112,11 +112,11 @@ func (r *InsightService) Dismiss(ctx context.Context, issueID string, params Ins
 	}
 	if issueID == "" {
 		err = errors.New("missing required issue_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/security-center/insights/%s/dismiss", accountOrZone, accountOrZoneID, issueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type InsightListResponse struct {
@@ -231,10 +231,10 @@ func (r InsightListResponseIssuesSeverity) IsKnown() bool {
 }
 
 type InsightDismissResponse struct {
-	Errors   []InsightDismissResponseError   `json:"errors,required"`
-	Messages []InsightDismissResponseMessage `json:"messages,required"`
+	Errors   []InsightDismissResponseError   `json:"errors" api:"required"`
+	Messages []InsightDismissResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success InsightDismissResponseSuccess `json:"success,required"`
+	Success InsightDismissResponseSuccess `json:"success" api:"required"`
 	JSON    insightDismissResponseJSON    `json:"-"`
 }
 
@@ -257,8 +257,8 @@ func (r insightDismissResponseJSON) RawJSON() string {
 }
 
 type InsightDismissResponseError struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           InsightDismissResponseErrorsSource `json:"source"`
 	JSON             insightDismissResponseErrorJSON    `json:"-"`
@@ -305,8 +305,8 @@ func (r insightDismissResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type InsightDismissResponseMessage struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           InsightDismissResponseMessagesSource `json:"source"`
 	JSON             insightDismissResponseMessageJSON    `json:"-"`

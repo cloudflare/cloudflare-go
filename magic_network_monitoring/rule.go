@@ -45,15 +45,15 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update network monitoring rules for account.
@@ -62,15 +62,15 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists network monitoring rules for account.
@@ -80,7 +80,7 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,19 +106,19 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a network monitoring rule for account.
@@ -127,19 +127,19 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditPa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List a single network monitoring rule for account.
@@ -148,33 +148,33 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type MagicNetworkMonitoringRule struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
+	AutomaticAdvertisement bool `json:"automatic_advertisement" api:"required,nullable"`
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
-	Name     string   `json:"name,required"`
-	Prefixes []string `json:"prefixes,required"`
+	Name     string   `json:"name" api:"required"`
+	Prefixes []string `json:"prefixes" api:"required"`
 	// MNM rule type.
-	Type MagicNetworkMonitoringRuleType `json:"type,required"`
+	Type MagicNetworkMonitoringRuleType `json:"type" api:"required"`
 	// The id of the rule. Must be unique.
 	ID string `json:"id"`
 	// The number of bits per second for the rule. When this value is exceeded for the
@@ -189,11 +189,11 @@ type MagicNetworkMonitoringRule struct {
 	PacketThreshold float64 `json:"packet_threshold"`
 	// Prefix match type to be applied for a prefix auto advertisement when using an
 	// advanced_ddos rule.
-	PrefixMatch MagicNetworkMonitoringRulePrefixMatch `json:"prefix_match,nullable"`
+	PrefixMatch MagicNetworkMonitoringRulePrefixMatch `json:"prefix_match" api:"nullable"`
 	// Level of sensitivity set for zscore rules.
-	ZscoreSensitivity MagicNetworkMonitoringRuleZscoreSensitivity `json:"zscore_sensitivity,nullable"`
+	ZscoreSensitivity MagicNetworkMonitoringRuleZscoreSensitivity `json:"zscore_sensitivity" api:"nullable"`
 	// Target of the zscore rule analysis.
-	ZscoreTarget MagicNetworkMonitoringRuleZscoreTarget `json:"zscore_target,nullable"`
+	ZscoreTarget MagicNetworkMonitoringRuleZscoreTarget `json:"zscore_target" api:"nullable"`
 	JSON         magicNetworkMonitoringRuleJSON         `json:"-"`
 }
 
@@ -316,15 +316,15 @@ func (r MagicNetworkMonitoringRuleZscoreTarget) IsKnown() bool {
 }
 
 type RuleNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The amount of time that the rule threshold must be exceeded to send an alert
 	// notification. The final value must be equivalent to one of the following 8
 	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
-	Duration param.Field[RuleNewParamsDuration] `json:"duration,required"`
+	Duration param.Field[RuleNewParamsDuration] `json:"duration" api:"required"`
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
@@ -367,11 +367,11 @@ func (r RuleNewParamsDuration) IsKnown() bool {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   MagicNetworkMonitoringRule `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -410,15 +410,15 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The amount of time that the rule threshold must be exceeded to send an alert
 	// notification. The final value must be equivalent to one of the following 8
 	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
-	Duration param.Field[RuleUpdateParamsDuration] `json:"duration,required"`
+	Duration param.Field[RuleUpdateParamsDuration] `json:"duration" api:"required"`
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The id of the rule. Must be unique.
 	ID param.Field[string] `json:"id"`
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
@@ -463,11 +463,11 @@ func (r RuleUpdateParamsDuration) IsKnown() bool {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   MagicNetworkMonitoringRule `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -506,19 +506,19 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RuleDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   MagicNetworkMonitoringRule `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -557,7 +557,7 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
@@ -608,11 +608,11 @@ func (r RuleEditParamsDuration) IsKnown() bool {
 }
 
 type RuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   MagicNetworkMonitoringRule `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success RuleEditResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -651,15 +651,15 @@ func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   MagicNetworkMonitoringRule `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
 }
 

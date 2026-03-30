@@ -43,15 +43,15 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/domains", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all domains for an account.
@@ -61,7 +61,7 @@ func (r *DomainService) List(ctx context.Context, params DomainListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/domains", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -87,15 +87,15 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, body Domain
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if domainID == "" {
 		err = errors.New("missing required domain_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/domains/%s", body.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Gets information about a domain.
@@ -104,40 +104,40 @@ func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if domainID == "" {
 		err = errors.New("missing required domain_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/domains/%s", query.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DomainUpdateResponse struct {
 	// Immutable ID of the domain.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
-	CERTID string `json:"cert_id,required" format:"uuid"`
+	CERTID string `json:"cert_id" api:"required" format:"uuid"`
 	// Worker environment associated with the domain.
 	//
 	// Deprecated: deprecated
-	Environment string `json:"environment,required"`
+	Environment string `json:"environment" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// ID of the zone containing the domain hostname.
-	ZoneID string `json:"zone_id,required"`
+	ZoneID string `json:"zone_id" api:"required"`
 	// Name of the zone containing the domain hostname.
-	ZoneName string                   `json:"zone_name,required"`
+	ZoneName string                   `json:"zone_name" api:"required"`
 	JSON     domainUpdateResponseJSON `json:"-"`
 }
 
@@ -165,23 +165,23 @@ func (r domainUpdateResponseJSON) RawJSON() string {
 
 type DomainListResponse struct {
 	// Immutable ID of the domain.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
-	CERTID string `json:"cert_id,required" format:"uuid"`
+	CERTID string `json:"cert_id" api:"required" format:"uuid"`
 	// Worker environment associated with the domain.
 	//
 	// Deprecated: deprecated
-	Environment string `json:"environment,required"`
+	Environment string `json:"environment" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// ID of the zone containing the domain hostname.
-	ZoneID string `json:"zone_id,required"`
+	ZoneID string `json:"zone_id" api:"required"`
 	// Name of the zone containing the domain hostname.
-	ZoneName string                 `json:"zone_name,required"`
+	ZoneName string                 `json:"zone_name" api:"required"`
 	JSON     domainListResponseJSON `json:"-"`
 }
 
@@ -208,10 +208,10 @@ func (r domainListResponseJSON) RawJSON() string {
 }
 
 type DomainDeleteResponse struct {
-	Errors   []DomainDeleteResponseError   `json:"errors,required"`
-	Messages []DomainDeleteResponseMessage `json:"messages,required"`
+	Errors   []DomainDeleteResponseError   `json:"errors" api:"required"`
+	Messages []DomainDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DomainDeleteResponseSuccess `json:"success,required"`
+	Success DomainDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    domainDeleteResponseJSON    `json:"-"`
 }
 
@@ -234,8 +234,8 @@ func (r domainDeleteResponseJSON) RawJSON() string {
 }
 
 type DomainDeleteResponseError struct {
-	Code             int64                            `json:"code,required"`
-	Message          string                           `json:"message,required"`
+	Code             int64                            `json:"code" api:"required"`
+	Message          string                           `json:"message" api:"required"`
 	DocumentationURL string                           `json:"documentation_url"`
 	Source           DomainDeleteResponseErrorsSource `json:"source"`
 	JSON             domainDeleteResponseErrorJSON    `json:"-"`
@@ -282,8 +282,8 @@ func (r domainDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type DomainDeleteResponseMessage struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           DomainDeleteResponseMessagesSource `json:"source"`
 	JSON             domainDeleteResponseMessageJSON    `json:"-"`
@@ -346,23 +346,23 @@ func (r DomainDeleteResponseSuccess) IsKnown() bool {
 
 type DomainGetResponse struct {
 	// Immutable ID of the domain.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
-	CERTID string `json:"cert_id,required" format:"uuid"`
+	CERTID string `json:"cert_id" api:"required" format:"uuid"`
 	// Worker environment associated with the domain.
 	//
 	// Deprecated: deprecated
-	Environment string `json:"environment,required"`
+	Environment string `json:"environment" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// ID of the zone containing the domain hostname.
-	ZoneID string `json:"zone_id,required"`
+	ZoneID string `json:"zone_id" api:"required"`
 	// Name of the zone containing the domain hostname.
-	ZoneName string                `json:"zone_name,required"`
+	ZoneName string                `json:"zone_name" api:"required"`
 	JSON     domainGetResponseJSON `json:"-"`
 }
 
@@ -390,13 +390,13 @@ func (r domainGetResponseJSON) RawJSON() string {
 
 type DomainUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// Worker environment associated with the domain.
 	Environment param.Field[string] `json:"environment"`
 	// ID of the zone containing the domain hostname.
@@ -410,11 +410,11 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []DomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainUpdateResponse                   `json:"result,required"`
+	Errors   []DomainUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DomainUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   DomainUpdateResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DomainUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -438,8 +438,8 @@ func (r domainUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DomainUpdateResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           DomainUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             domainUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -486,8 +486,8 @@ func (r domainUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DomainUpdateResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DomainUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             domainUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -550,7 +550,7 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DomainListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Worker environment associated with the domain.
 	Environment param.Field[string] `query:"environment"`
 	// Hostname of the domain.
@@ -573,20 +573,20 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 
 type DomainDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []DomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainGetResponse                   `json:"result,required"`
+	Errors   []DomainGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DomainGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   DomainGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -610,8 +610,8 @@ func (r domainGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DomainGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           DomainGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             domainGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -658,8 +658,8 @@ func (r domainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DomainGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           DomainGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             domainGetResponseEnvelopeMessagesJSON   `json:"-"`

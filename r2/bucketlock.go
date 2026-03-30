@@ -42,48 +42,48 @@ func NewBucketLockService(opts ...option.RequestOption) (r *BucketLockService) {
 func (r *BucketLockService) Update(ctx context.Context, bucketName string, params BucketLockUpdateParams, opts ...option.RequestOption) (res *BucketLockUpdateResponse, err error) {
 	var env BucketLockUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/lock", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get lock rules for a bucket.
 func (r *BucketLockService) Get(ctx context.Context, bucketName string, params BucketLockGetParams, opts ...option.RequestOption) (res *BucketLockGetResponse, err error) {
 	var env BucketLockGetResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/lock", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BucketLockUpdateResponse = interface{}
@@ -111,11 +111,11 @@ func (r bucketLockGetResponseJSON) RawJSON() string {
 
 type BucketLockGetResponseRule struct {
 	// Unique identifier for this rule.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Condition to apply a lock rule to an object for how long in seconds.
-	Condition BucketLockGetResponseRulesCondition `json:"condition,required"`
+	Condition BucketLockGetResponseRulesCondition `json:"condition" api:"required"`
 	// Whether or not this rule is in effect.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Rule will only apply to objects/uploads in the bucket that start with the given
 	// prefix, an empty prefix can be provided to scope rule to all objects/uploads.
 	Prefix string                        `json:"prefix"`
@@ -143,7 +143,7 @@ func (r bucketLockGetResponseRuleJSON) RawJSON() string {
 
 // Condition to apply a lock rule to an object for how long in seconds.
 type BucketLockGetResponseRulesCondition struct {
-	Type          BucketLockGetResponseRulesConditionType `json:"type,required"`
+	Type          BucketLockGetResponseRulesConditionType `json:"type" api:"required"`
 	Date          time.Time                               `json:"date" format:"date-time"`
 	MaxAgeSeconds int64                                   `json:"maxAgeSeconds"`
 	JSON          bucketLockGetResponseRulesConditionJSON `json:"-"`
@@ -214,8 +214,8 @@ func init() {
 
 // Condition to apply a lock rule to an object for how long in seconds.
 type BucketLockGetResponseRulesConditionR2LockRuleAgeCondition struct {
-	MaxAgeSeconds int64                                                         `json:"maxAgeSeconds,required"`
-	Type          BucketLockGetResponseRulesConditionR2LockRuleAgeConditionType `json:"type,required"`
+	MaxAgeSeconds int64                                                         `json:"maxAgeSeconds" api:"required"`
+	Type          BucketLockGetResponseRulesConditionR2LockRuleAgeConditionType `json:"type" api:"required"`
 	JSON          bucketLockGetResponseRulesConditionR2LockRuleAgeConditionJSON `json:"-"`
 }
 
@@ -256,8 +256,8 @@ func (r BucketLockGetResponseRulesConditionR2LockRuleAgeConditionType) IsKnown()
 
 // Condition to apply a lock rule to an object until a specific date.
 type BucketLockGetResponseRulesConditionR2LockRuleDateCondition struct {
-	Date time.Time                                                      `json:"date,required" format:"date-time"`
-	Type BucketLockGetResponseRulesConditionR2LockRuleDateConditionType `json:"type,required"`
+	Date time.Time                                                      `json:"date" api:"required" format:"date-time"`
+	Type BucketLockGetResponseRulesConditionR2LockRuleDateConditionType `json:"type" api:"required"`
 	JSON bucketLockGetResponseRulesConditionR2LockRuleDateConditionJSON `json:"-"`
 }
 
@@ -298,7 +298,7 @@ func (r BucketLockGetResponseRulesConditionR2LockRuleDateConditionType) IsKnown(
 
 // Condition to apply a lock rule indefinitely.
 type BucketLockGetResponseRulesConditionR2LockRuleIndefiniteCondition struct {
-	Type BucketLockGetResponseRulesConditionR2LockRuleIndefiniteConditionType `json:"type,required"`
+	Type BucketLockGetResponseRulesConditionR2LockRuleIndefiniteConditionType `json:"type" api:"required"`
 	JSON bucketLockGetResponseRulesConditionR2LockRuleIndefiniteConditionJSON `json:"-"`
 }
 
@@ -354,7 +354,7 @@ func (r BucketLockGetResponseRulesConditionType) IsKnown() bool {
 
 type BucketLockUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string]                       `path:"account_id,required"`
+	AccountID param.Field[string]                       `path:"account_id" api:"required"`
 	Rules     param.Field[[]BucketLockUpdateParamsRule] `json:"rules"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLockUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
@@ -366,11 +366,11 @@ func (r BucketLockUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type BucketLockUpdateParamsRule struct {
 	// Unique identifier for this rule.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Condition to apply a lock rule to an object for how long in seconds.
-	Condition param.Field[BucketLockUpdateParamsRulesConditionUnion] `json:"condition,required"`
+	Condition param.Field[BucketLockUpdateParamsRulesConditionUnion] `json:"condition" api:"required"`
 	// Whether or not this rule is in effect.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Rule will only apply to objects/uploads in the bucket that start with the given
 	// prefix, an empty prefix can be provided to scope rule to all objects/uploads.
 	Prefix param.Field[string] `json:"prefix"`
@@ -382,7 +382,7 @@ func (r BucketLockUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 
 // Condition to apply a lock rule to an object for how long in seconds.
 type BucketLockUpdateParamsRulesCondition struct {
-	Type          param.Field[BucketLockUpdateParamsRulesConditionType] `json:"type,required"`
+	Type          param.Field[BucketLockUpdateParamsRulesConditionType] `json:"type" api:"required"`
 	Date          param.Field[time.Time]                                `json:"date" format:"date-time"`
 	MaxAgeSeconds param.Field[int64]                                    `json:"maxAgeSeconds"`
 }
@@ -405,8 +405,8 @@ type BucketLockUpdateParamsRulesConditionUnion interface {
 
 // Condition to apply a lock rule to an object for how long in seconds.
 type BucketLockUpdateParamsRulesConditionR2LockRuleAgeCondition struct {
-	MaxAgeSeconds param.Field[int64]                                                          `json:"maxAgeSeconds,required"`
-	Type          param.Field[BucketLockUpdateParamsRulesConditionR2LockRuleAgeConditionType] `json:"type,required"`
+	MaxAgeSeconds param.Field[int64]                                                          `json:"maxAgeSeconds" api:"required"`
+	Type          param.Field[BucketLockUpdateParamsRulesConditionR2LockRuleAgeConditionType] `json:"type" api:"required"`
 }
 
 func (r BucketLockUpdateParamsRulesConditionR2LockRuleAgeCondition) MarshalJSON() (data []byte, err error) {
@@ -432,8 +432,8 @@ func (r BucketLockUpdateParamsRulesConditionR2LockRuleAgeConditionType) IsKnown(
 
 // Condition to apply a lock rule to an object until a specific date.
 type BucketLockUpdateParamsRulesConditionR2LockRuleDateCondition struct {
-	Date param.Field[time.Time]                                                       `json:"date,required" format:"date-time"`
-	Type param.Field[BucketLockUpdateParamsRulesConditionR2LockRuleDateConditionType] `json:"type,required"`
+	Date param.Field[time.Time]                                                       `json:"date" api:"required" format:"date-time"`
+	Type param.Field[BucketLockUpdateParamsRulesConditionR2LockRuleDateConditionType] `json:"type" api:"required"`
 }
 
 func (r BucketLockUpdateParamsRulesConditionR2LockRuleDateCondition) MarshalJSON() (data []byte, err error) {
@@ -459,7 +459,7 @@ func (r BucketLockUpdateParamsRulesConditionR2LockRuleDateConditionType) IsKnown
 
 // Condition to apply a lock rule indefinitely.
 type BucketLockUpdateParamsRulesConditionR2LockRuleIndefiniteCondition struct {
-	Type param.Field[BucketLockUpdateParamsRulesConditionR2LockRuleIndefiniteConditionType] `json:"type,required"`
+	Type param.Field[BucketLockUpdateParamsRulesConditionR2LockRuleIndefiniteConditionType] `json:"type" api:"required"`
 }
 
 func (r BucketLockUpdateParamsRulesConditionR2LockRuleIndefiniteCondition) MarshalJSON() (data []byte, err error) {
@@ -517,11 +517,11 @@ func (r BucketLockUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLockUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []string                 `json:"messages,required"`
-	Result   BucketLockUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []string                 `json:"messages" api:"required"`
+	Result   BucketLockUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketLockUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketLockUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketLockUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -561,7 +561,7 @@ func (r BucketLockUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketLockGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketLockGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -584,11 +584,11 @@ func (r BucketLockGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketLockGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   BucketLockGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
+	Result   BucketLockGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketLockGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketLockGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketLockGetResponseEnvelopeJSON    `json:"-"`
 }
 

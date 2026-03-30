@@ -47,15 +47,15 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured Zero Trust list. Skips updating list items if not included
@@ -65,19 +65,19 @@ func (r *GatewayListService) Update(ctx context.Context, listID string, params G
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch all Zero Trust lists for an account.
@@ -87,7 +87,7 @@ func (r *GatewayListService) List(ctx context.Context, params GatewayListListPar
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -113,19 +113,19 @@ func (r *GatewayListService) Delete(ctx context.Context, listID string, body Gat
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Appends or removes an item from a configured Zero Trust list.
@@ -134,19 +134,19 @@ func (r *GatewayListService) Edit(ctx context.Context, listID string, params Gat
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single Zero Trust list.
@@ -155,19 +155,19 @@ func (r *GatewayListService) Get(ctx context.Context, listID string, query Gatew
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", query.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GatewayItem struct {
@@ -321,11 +321,11 @@ func (r GatewayListNewResponseType) IsKnown() bool {
 type GatewayListDeleteResponse = interface{}
 
 type GatewayListNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Specify the list type.
-	Type param.Field[GatewayListNewParamsType] `json:"type,required"`
+	Type param.Field[GatewayListNewParamsType] `json:"type" api:"required"`
 	// Provide the list description.
 	Description param.Field[string] `json:"description"`
 	// Add items to the list.
@@ -370,10 +370,10 @@ func (r GatewayListNewParamsItem) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayListNewResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayListNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayListNewResponse                `json:"result"`
 	JSON    gatewayListNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -413,9 +413,9 @@ func (r GatewayListNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Provide the list description.
 	Description param.Field[string] `json:"description"`
 	// Add items to the list.
@@ -438,10 +438,10 @@ func (r GatewayListUpdateParamsItem) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayListUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayListUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayList                              `json:"result"`
 	JSON    gatewayListUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -481,7 +481,7 @@ func (r GatewayListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list type.
 	Type param.Field[GatewayListListParamsType] `query:"type"`
 }
@@ -517,14 +517,14 @@ func (r GatewayListListParamsType) IsKnown() bool {
 }
 
 type GatewayListDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayListDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayListDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayListDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayListDeleteResponse                `json:"result"`
 	JSON    gatewayListDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -564,7 +564,7 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Add items to the list.
 	Append param.Field[[]GatewayListEditParamsAppend] `json:"append"`
 	// Lists of item values you want to remove.
@@ -587,10 +587,10 @@ func (r GatewayListEditParamsAppend) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayListEditResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayListEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayList                            `json:"result"`
 	JSON    gatewayListEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -630,14 +630,14 @@ func (r GatewayListEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayListGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayListGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayListGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayList                           `json:"result"`
 	JSON    gatewayListGetResponseEnvelopeJSON    `json:"-"`
 }

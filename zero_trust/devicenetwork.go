@@ -42,15 +42,15 @@ func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/networks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured device managed network.
@@ -59,19 +59,19 @@ func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if networkID == "" {
 		err = errors.New("missing required network_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", params.AccountID, networkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a list of managed networks for an account.
@@ -81,7 +81,7 @@ func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkList
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/networks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -109,11 +109,11 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, bod
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if networkID == "" {
 		err = errors.New("missing required network_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", body.AccountID, networkID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -140,19 +140,19 @@ func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if networkID == "" {
 		err = errors.New("missing required network_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", query.AccountID, networkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DeviceNetwork struct {
@@ -191,7 +191,7 @@ func (r deviceNetworkJSON) RawJSON() string {
 type DeviceNetworkConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
-	TLSSockaddr string `json:"tls_sockaddr,required"`
+	TLSSockaddr string `json:"tls_sockaddr" api:"required"`
 	// The SHA-256 hash of the TLS certificate presented by the host found at
 	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
 	// timestamp, etc) will be used to validate the certificate.
@@ -232,14 +232,14 @@ func (r DeviceNetworkType) IsKnown() bool {
 }
 
 type DeviceNetworkNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
-	Config param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
+	Config param.Field[DeviceNetworkNewParamsConfig] `json:"config" api:"required"`
 	// The name of the device managed network. This name must be unique.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The type of device managed network.
-	Type param.Field[DeviceNetworkNewParamsType] `json:"type,required"`
+	Type param.Field[DeviceNetworkNewParamsType] `json:"type" api:"required"`
 }
 
 func (r DeviceNetworkNewParams) MarshalJSON() (data []byte, err error) {
@@ -251,7 +251,7 @@ func (r DeviceNetworkNewParams) MarshalJSON() (data []byte, err error) {
 type DeviceNetworkNewParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
-	TLSSockaddr param.Field[string] `json:"tls_sockaddr,required"`
+	TLSSockaddr param.Field[string] `json:"tls_sockaddr" api:"required"`
 	// The SHA-256 hash of the TLS certificate presented by the host found at
 	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
 	// timestamp, etc) will be used to validate the certificate.
@@ -278,11 +278,11 @@ func (r DeviceNetworkNewParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceNetwork         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceNetwork         `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceNetworkNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -321,7 +321,7 @@ func (r DeviceNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
 	Config param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
@@ -340,7 +340,7 @@ func (r DeviceNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
 type DeviceNetworkUpdateParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
-	TLSSockaddr param.Field[string] `json:"tls_sockaddr,required"`
+	TLSSockaddr param.Field[string] `json:"tls_sockaddr" api:"required"`
 	// The SHA-256 hash of the TLS certificate presented by the host found at
 	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
 	// timestamp, etc) will be used to validate the certificate.
@@ -367,11 +367,11 @@ func (r DeviceNetworkUpdateParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceNetwork         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceNetwork         `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceNetworkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -410,23 +410,23 @@ func (r DeviceNetworkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceNetworkListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceNetworkDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceNetworkGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceNetworkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceNetwork         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceNetwork         `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceNetworkGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceNetworkGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceNetworkGetResponseEnvelopeJSON    `json:"-"`
 }
 

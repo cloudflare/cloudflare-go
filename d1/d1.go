@@ -38,7 +38,7 @@ type D1 struct {
 	FileSize float64 `json:"file_size"`
 	// Specify the location to restrict the D1 database to run and store data. If this
 	// option is present, the location hint is ignored.
-	Jurisdiction D1Jurisdiction `json:"jurisdiction,nullable"`
+	Jurisdiction D1Jurisdiction `json:"jurisdiction" api:"nullable"`
 	// D1 database name.
 	Name      string  `json:"name"`
 	NumTables float64 `json:"num_tables"`
@@ -94,7 +94,7 @@ type D1ReadReplication struct {
 	// The read replication mode for the database. Use 'auto' to create replicas and
 	// allow D1 automatically place them around the world, or 'disabled' to not use any
 	// database replicas (it can take a few hours for all replicas to be deleted).
-	Mode D1ReadReplicationMode `json:"mode,required"`
+	Mode D1ReadReplicationMode `json:"mode" api:"required"`
 	JSON d1ReadReplicationJSON `json:"-"`
 }
 

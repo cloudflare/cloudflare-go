@@ -49,15 +49,15 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update instances.
@@ -66,19 +66,19 @@ func (r *InstanceService) Update(ctx context.Context, id string, params Instance
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List instances.
@@ -88,7 +88,7 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -114,19 +114,19 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s", body.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Performs a chat completion request against an AI Search instance, using indexed
@@ -135,15 +135,15 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/chat/completions", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Read instances.
@@ -152,19 +152,19 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Executes a semantic search query against an AI Search instance to find relevant
@@ -174,19 +174,19 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/search", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves usage statistics for AI Search instances.
@@ -195,59 +195,59 @@ func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceSt
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/stats", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InstanceNewResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                  `json:"id,required"`
-	CreatedAt            time.Time                               `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                               `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                  `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model,nullable"`
+	ID                   string                                  `json:"id" api:"required"`
+	CreatedAt            time.Time                               `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt           time.Time                               `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID          string                                  `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
 	Cache                bool                                    `json:"cache"`
 	CacheThreshold       InstanceNewResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                   `json:"chunk_overlap"`
 	ChunkSize            int64                                   `json:"chunk_size"`
-	CreatedBy            string                                  `json:"created_by,nullable"`
+	CreatedBy            string                                  `json:"created_by" api:"nullable"`
 	CustomMetadata       []InstanceNewResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model,nullable"`
+	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
 	Enable               bool                                    `json:"enable"`
 	EngineVersion        float64                                 `json:"engine_version"`
 	FusionMethod         InstanceNewResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                    `json:"hybrid_search_enabled"`
-	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options,nullable"`
-	LastActivity         time.Time                               `json:"last_activity,nullable" format:"date-time"`
+	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                               `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                   `json:"max_num_results"`
 	Metadata             InstanceNewResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                  `json:"modified_by,nullable"`
-	Namespace            string                                  `json:"namespace,nullable"`
+	ModifiedBy           string                                  `json:"modified_by" api:"nullable"`
+	Namespace            string                                  `json:"namespace" api:"nullable"`
 	Paused               bool                                    `json:"paused"`
-	PublicEndpointID     string                                  `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                  `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceNewResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                    `json:"reranking"`
-	RerankingModel       InstanceNewResponseRerankingModel       `json:"reranking_model,nullable"`
-	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model,nullable"`
+	RerankingModel       InstanceNewResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                    `json:"rewrite_query"`
 	ScoreThreshold       float64                                 `json:"score_threshold"`
-	Source               string                                  `json:"source,nullable"`
-	SourceParams         InstanceNewResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                  `json:"source" api:"nullable"`
+	SourceParams         InstanceNewResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                  `json:"status"`
 	TokenID              string                                  `json:"token_id" format:"uuid"`
-	Type                 InstanceNewResponseType                 `json:"type,nullable"`
+	Type                 InstanceNewResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceNewResponseJSON                 `json:"-"`
 }
 
@@ -361,8 +361,8 @@ func (r InstanceNewResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceNewResponseCustomMetadata struct {
-	DataType  InstanceNewResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                    `json:"field_name,required"`
+	DataType  InstanceNewResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                    `json:"field_name" api:"required"`
 	JSON      instanceNewResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -695,7 +695,7 @@ type InstanceNewResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -947,10 +947,10 @@ func (r instanceNewResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() str
 type InstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                   `json:"selector,required"`
+	Selector string                                                                   `json:"selector" api:"required"`
 	JSON     instanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -989,7 +989,7 @@ func (r InstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceNewResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                    `json:"storage_id,required"`
+	StorageID      string                                                    `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                    `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                               `json:"storage_type"`
 	JSON           instanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -1030,42 +1030,42 @@ func (r InstanceNewResponseType) IsKnown() bool {
 
 type InstanceUpdateResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                     `json:"id,required"`
-	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model,nullable"`
+	ID                   string                                     `json:"id" api:"required"`
+	CreatedAt            time.Time                                  `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt           time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID          string                                     `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
 	Cache                bool                                       `json:"cache"`
 	CacheThreshold       InstanceUpdateResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                      `json:"chunk_overlap"`
 	ChunkSize            int64                                      `json:"chunk_size"`
-	CreatedBy            string                                     `json:"created_by,nullable"`
+	CreatedBy            string                                     `json:"created_by" api:"nullable"`
 	CustomMetadata       []InstanceUpdateResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model,nullable"`
+	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
 	Enable               bool                                       `json:"enable"`
 	EngineVersion        float64                                    `json:"engine_version"`
 	FusionMethod         InstanceUpdateResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
-	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options,nullable"`
-	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
+	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
 	Metadata             InstanceUpdateResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                     `json:"modified_by,nullable"`
-	Namespace            string                                     `json:"namespace,nullable"`
+	ModifiedBy           string                                     `json:"modified_by" api:"nullable"`
+	Namespace            string                                     `json:"namespace" api:"nullable"`
 	Paused               bool                                       `json:"paused"`
-	PublicEndpointID     string                                     `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                     `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceUpdateResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
-	RerankingModel       InstanceUpdateResponseRerankingModel       `json:"reranking_model,nullable"`
-	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model,nullable"`
+	RerankingModel       InstanceUpdateResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source,nullable"`
-	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                     `json:"source" api:"nullable"`
+	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceUpdateResponseType                 `json:"type,nullable"`
+	Type                 InstanceUpdateResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceUpdateResponseJSON                 `json:"-"`
 }
 
@@ -1179,8 +1179,8 @@ func (r InstanceUpdateResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceUpdateResponseCustomMetadata struct {
-	DataType  InstanceUpdateResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                       `json:"field_name,required"`
+	DataType  InstanceUpdateResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                       `json:"field_name" api:"required"`
 	JSON      instanceUpdateResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -1514,7 +1514,7 @@ type InstanceUpdateResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -1768,10 +1768,10 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() 
 type InstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                      `json:"selector,required"`
+	Selector string                                                                      `json:"selector" api:"required"`
 	JSON     instanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -1810,7 +1810,7 @@ func (r InstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                       `json:"storage_id,required"`
+	StorageID      string                                                       `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                       `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                  `json:"storage_type"`
 	JSON           instanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -1852,42 +1852,42 @@ func (r InstanceUpdateResponseType) IsKnown() bool {
 
 type InstanceListResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                   `json:"id,required"`
-	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model,nullable"`
+	ID                   string                                   `json:"id" api:"required"`
+	CreatedAt            time.Time                                `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt           time.Time                                `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID          string                                   `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
 	Cache                bool                                     `json:"cache"`
 	CacheThreshold       InstanceListResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                    `json:"chunk_overlap"`
 	ChunkSize            int64                                    `json:"chunk_size"`
-	CreatedBy            string                                   `json:"created_by,nullable"`
+	CreatedBy            string                                   `json:"created_by" api:"nullable"`
 	CustomMetadata       []InstanceListResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model,nullable"`
+	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
 	Enable               bool                                     `json:"enable"`
 	EngineVersion        float64                                  `json:"engine_version"`
 	FusionMethod         InstanceListResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
-	IndexingOptions      InstanceListResponseIndexingOptions      `json:"indexing_options,nullable"`
-	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
+	IndexingOptions      InstanceListResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
 	Metadata             InstanceListResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                   `json:"modified_by,nullable"`
-	Namespace            string                                   `json:"namespace,nullable"`
+	ModifiedBy           string                                   `json:"modified_by" api:"nullable"`
+	Namespace            string                                   `json:"namespace" api:"nullable"`
 	Paused               bool                                     `json:"paused"`
-	PublicEndpointID     string                                   `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                   `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceListResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
-	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model,nullable"`
-	RetrievalOptions     InstanceListResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model,nullable"`
+	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceListResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source,nullable"`
-	SourceParams         InstanceListResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                   `json:"source" api:"nullable"`
+	SourceParams         InstanceListResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceListResponseType                 `json:"type,nullable"`
+	Type                 InstanceListResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceListResponseJSON                 `json:"-"`
 }
 
@@ -2001,8 +2001,8 @@ func (r InstanceListResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceListResponseCustomMetadata struct {
-	DataType  InstanceListResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                     `json:"field_name,required"`
+	DataType  InstanceListResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                     `json:"field_name" api:"required"`
 	JSON      instanceListResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -2335,7 +2335,7 @@ type InstanceListResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -2587,10 +2587,10 @@ func (r instanceListResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() st
 type InstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                    `json:"selector,required"`
+	Selector string                                                                    `json:"selector" api:"required"`
 	JSON     instanceListResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -2629,7 +2629,7 @@ func (r InstanceListResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceListResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                     `json:"storage_id,required"`
+	StorageID      string                                                     `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                     `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                `json:"storage_type"`
 	JSON           instanceListResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -2670,42 +2670,42 @@ func (r InstanceListResponseType) IsKnown() bool {
 
 type InstanceDeleteResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                     `json:"id,required"`
-	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model,nullable"`
+	ID                   string                                     `json:"id" api:"required"`
+	CreatedAt            time.Time                                  `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt           time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID          string                                     `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
 	Cache                bool                                       `json:"cache"`
 	CacheThreshold       InstanceDeleteResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                      `json:"chunk_overlap"`
 	ChunkSize            int64                                      `json:"chunk_size"`
-	CreatedBy            string                                     `json:"created_by,nullable"`
+	CreatedBy            string                                     `json:"created_by" api:"nullable"`
 	CustomMetadata       []InstanceDeleteResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model,nullable"`
+	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
 	Enable               bool                                       `json:"enable"`
 	EngineVersion        float64                                    `json:"engine_version"`
 	FusionMethod         InstanceDeleteResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
-	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options,nullable"`
-	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
+	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
 	Metadata             InstanceDeleteResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                     `json:"modified_by,nullable"`
-	Namespace            string                                     `json:"namespace,nullable"`
+	ModifiedBy           string                                     `json:"modified_by" api:"nullable"`
+	Namespace            string                                     `json:"namespace" api:"nullable"`
 	Paused               bool                                       `json:"paused"`
-	PublicEndpointID     string                                     `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                     `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceDeleteResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
-	RerankingModel       InstanceDeleteResponseRerankingModel       `json:"reranking_model,nullable"`
-	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model,nullable"`
+	RerankingModel       InstanceDeleteResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source,nullable"`
-	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                     `json:"source" api:"nullable"`
+	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceDeleteResponseType                 `json:"type,nullable"`
+	Type                 InstanceDeleteResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceDeleteResponseJSON                 `json:"-"`
 }
 
@@ -2819,8 +2819,8 @@ func (r InstanceDeleteResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceDeleteResponseCustomMetadata struct {
-	DataType  InstanceDeleteResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                       `json:"field_name,required"`
+	DataType  InstanceDeleteResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                       `json:"field_name" api:"required"`
 	JSON      instanceDeleteResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -3154,7 +3154,7 @@ type InstanceDeleteResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -3408,10 +3408,10 @@ func (r instanceDeleteResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() 
 type InstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                      `json:"selector,required"`
+	Selector string                                                                      `json:"selector" api:"required"`
 	JSON     instanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -3450,7 +3450,7 @@ func (r InstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                       `json:"storage_id,required"`
+	StorageID      string                                                       `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                       `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                  `json:"storage_type"`
 	JSON           instanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -3491,12 +3491,12 @@ func (r InstanceDeleteResponseType) IsKnown() bool {
 }
 
 type InstanceChatCompletionsResponse struct {
-	Choices     []InstanceChatCompletionsResponseChoice `json:"choices,required"`
-	Chunks      []InstanceChatCompletionsResponseChunk  `json:"chunks,required"`
+	Choices     []InstanceChatCompletionsResponseChoice `json:"choices" api:"required"`
+	Chunks      []InstanceChatCompletionsResponseChunk  `json:"chunks" api:"required"`
 	ID          string                                  `json:"id"`
 	Model       string                                  `json:"model"`
 	Object      string                                  `json:"object"`
-	ExtraFields map[string]interface{}                  `json:"-,extras"`
+	ExtraFields map[string]interface{}                  `json:"-" api:"extrafields"`
 	JSON        instanceChatCompletionsResponseJSON     `json:"-"`
 }
 
@@ -3521,7 +3521,7 @@ func (r instanceChatCompletionsResponseJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChoice struct {
-	Message InstanceChatCompletionsResponseChoicesMessage `json:"message,required"`
+	Message InstanceChatCompletionsResponseChoicesMessage `json:"message" api:"required"`
 	Index   int64                                         `json:"index"`
 	JSON    instanceChatCompletionsResponseChoiceJSON     `json:"-"`
 }
@@ -3544,9 +3544,9 @@ func (r instanceChatCompletionsResponseChoiceJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChoicesMessage struct {
-	Content     string                                            `json:"content,required,nullable"`
-	Role        InstanceChatCompletionsResponseChoicesMessageRole `json:"role,required"`
-	ExtraFields map[string]interface{}                            `json:"-,extras"`
+	Content     string                                            `json:"content" api:"required,nullable"`
+	Role        InstanceChatCompletionsResponseChoicesMessageRole `json:"role" api:"required"`
+	ExtraFields map[string]interface{}                            `json:"-" api:"extrafields"`
 	JSON        instanceChatCompletionsResponseChoicesMessageJSON `json:"-"`
 }
 
@@ -3586,10 +3586,10 @@ func (r InstanceChatCompletionsResponseChoicesMessageRole) IsKnown() bool {
 }
 
 type InstanceChatCompletionsResponseChunk struct {
-	ID             string                                              `json:"id,required"`
-	Score          float64                                             `json:"score,required"`
-	Text           string                                              `json:"text,required"`
-	Type           string                                              `json:"type,required"`
+	ID             string                                              `json:"id" api:"required"`
+	Score          float64                                             `json:"score" api:"required"`
+	Text           string                                              `json:"text" api:"required"`
+	Type           string                                              `json:"type" api:"required"`
 	Item           InstanceChatCompletionsResponseChunksItem           `json:"item"`
 	ScoringDetails InstanceChatCompletionsResponseChunksScoringDetails `json:"scoring_details"`
 	JSON           instanceChatCompletionsResponseChunkJSON            `json:"-"`
@@ -3617,7 +3617,7 @@ func (r instanceChatCompletionsResponseChunkJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChunksItem struct {
-	Key       string                                        `json:"key,required"`
+	Key       string                                        `json:"key" api:"required"`
 	Metadata  map[string]interface{}                        `json:"metadata"`
 	Timestamp float64                                       `json:"timestamp"`
 	JSON      instanceChatCompletionsResponseChunksItemJSON `json:"-"`
@@ -3689,42 +3689,42 @@ func (r InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnown
 
 type InstanceReadResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                   `json:"id,required"`
-	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model,nullable"`
+	ID                   string                                   `json:"id" api:"required"`
+	CreatedAt            time.Time                                `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt           time.Time                                `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID          string                                   `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
 	Cache                bool                                     `json:"cache"`
 	CacheThreshold       InstanceReadResponseCacheThreshold       `json:"cache_threshold"`
 	ChunkOverlap         int64                                    `json:"chunk_overlap"`
 	ChunkSize            int64                                    `json:"chunk_size"`
-	CreatedBy            string                                   `json:"created_by,nullable"`
+	CreatedBy            string                                   `json:"created_by" api:"nullable"`
 	CustomMetadata       []InstanceReadResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model,nullable"`
+	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
 	Enable               bool                                     `json:"enable"`
 	EngineVersion        float64                                  `json:"engine_version"`
 	FusionMethod         InstanceReadResponseFusionMethod         `json:"fusion_method"`
 	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
-	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options,nullable"`
-	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
+	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
 	Metadata             InstanceReadResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                   `json:"modified_by,nullable"`
-	Namespace            string                                   `json:"namespace,nullable"`
+	ModifiedBy           string                                   `json:"modified_by" api:"nullable"`
+	Namespace            string                                   `json:"namespace" api:"nullable"`
 	Paused               bool                                     `json:"paused"`
-	PublicEndpointID     string                                   `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                   `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceReadResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
-	RerankingModel       InstanceReadResponseRerankingModel       `json:"reranking_model,nullable"`
-	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model,nullable"`
+	RerankingModel       InstanceReadResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source,nullable"`
-	SourceParams         InstanceReadResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                   `json:"source" api:"nullable"`
+	SourceParams         InstanceReadResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceReadResponseType                 `json:"type,nullable"`
+	Type                 InstanceReadResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceReadResponseJSON                 `json:"-"`
 }
 
@@ -3838,8 +3838,8 @@ func (r InstanceReadResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceReadResponseCustomMetadata struct {
-	DataType  InstanceReadResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                     `json:"field_name,required"`
+	DataType  InstanceReadResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                     `json:"field_name" api:"required"`
 	JSON      instanceReadResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -4172,7 +4172,7 @@ type InstanceReadResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -4424,10 +4424,10 @@ func (r instanceReadResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() st
 type InstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                    `json:"selector,required"`
+	Selector string                                                                    `json:"selector" api:"required"`
 	JSON     instanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -4466,7 +4466,7 @@ func (r InstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceReadResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                     `json:"storage_id,required"`
+	StorageID      string                                                     `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                     `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                `json:"storage_type"`
 	JSON           instanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -4506,8 +4506,8 @@ func (r InstanceReadResponseType) IsKnown() bool {
 }
 
 type InstanceSearchResponse struct {
-	Chunks      []InstanceSearchResponseChunk `json:"chunks,required"`
-	SearchQuery string                        `json:"search_query,required"`
+	Chunks      []InstanceSearchResponseChunk `json:"chunks" api:"required"`
+	SearchQuery string                        `json:"search_query" api:"required"`
 	JSON        instanceSearchResponseJSON    `json:"-"`
 }
 
@@ -4529,10 +4529,10 @@ func (r instanceSearchResponseJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunk struct {
-	ID             string                                     `json:"id,required"`
-	Score          float64                                    `json:"score,required"`
-	Text           string                                     `json:"text,required"`
-	Type           string                                     `json:"type,required"`
+	ID             string                                     `json:"id" api:"required"`
+	Score          float64                                    `json:"score" api:"required"`
+	Text           string                                     `json:"text" api:"required"`
+	Type           string                                     `json:"type" api:"required"`
 	Item           InstanceSearchResponseChunksItem           `json:"item"`
 	ScoringDetails InstanceSearchResponseChunksScoringDetails `json:"scoring_details"`
 	JSON           instanceSearchResponseChunkJSON            `json:"-"`
@@ -4560,7 +4560,7 @@ func (r instanceSearchResponseChunkJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunksItem struct {
-	Key       string                               `json:"key,required"`
+	Key       string                               `json:"key" api:"required"`
 	Metadata  map[string]interface{}               `json:"metadata"`
 	Timestamp float64                              `json:"timestamp"`
 	JSON      instanceSearchResponseChunksItemJSON `json:"-"`
@@ -4668,9 +4668,9 @@ func (r instanceStatsResponseJSON) RawJSON() string {
 }
 
 type InstanceNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   param.Field[string]                                `json:"id,required"`
+	ID                   param.Field[string]                                `json:"id" api:"required"`
 	AIGatewayID          param.Field[string]                                `json:"ai_gateway_id"`
 	AISearchModel        param.Field[InstanceNewParamsAISearchModel]        `json:"ai_search_model"`
 	Cache                param.Field[bool]                                  `json:"cache"`
@@ -4761,8 +4761,8 @@ func (r InstanceNewParamsCacheThreshold) IsKnown() bool {
 }
 
 type InstanceNewParamsCustomMetadata struct {
-	DataType  param.Field[InstanceNewParamsCustomMetadataDataType] `json:"data_type,required"`
-	FieldName param.Field[string]                                  `json:"field_name,required"`
+	DataType  param.Field[InstanceNewParamsCustomMetadataDataType] `json:"data_type" api:"required"`
+	FieldName param.Field[string]                                  `json:"field_name" api:"required"`
 }
 
 func (r InstanceNewParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
@@ -4966,7 +4966,7 @@ type InstanceNewParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -5137,10 +5137,10 @@ func (r InstanceNewParamsSourceParamsWebCrawlerParseOptions) MarshalJSON() (data
 type InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector param.Field[string] `json:"selector,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
 func (r InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector) MarshalJSON() (data []byte, err error) {
@@ -5164,7 +5164,7 @@ func (r InstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceNewParamsSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      param.Field[string]      `json:"storage_id,required"`
+	StorageID      param.Field[string]      `json:"storage_id" api:"required"`
 	R2Jurisdiction param.Field[string]      `json:"r2_jurisdiction"`
 	StorageType    param.Field[r2.Provider] `json:"storage_type"`
 }
@@ -5189,8 +5189,8 @@ func (r InstanceNewParamsType) IsKnown() bool {
 }
 
 type InstanceNewResponseEnvelope struct {
-	Result  InstanceNewResponse             `json:"result,required"`
-	Success bool                            `json:"success,required"`
+	Result  InstanceNewResponse             `json:"result" api:"required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    instanceNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5212,7 +5212,7 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
-	AccountID                      param.Field[string]                                   `path:"account_id,required"`
+	AccountID                      param.Field[string]                                   `path:"account_id" api:"required"`
 	AIGatewayID                    param.Field[string]                                   `json:"ai_gateway_id"`
 	AISearchModel                  param.Field[InstanceUpdateParamsAISearchModel]        `json:"ai_search_model"`
 	Cache                          param.Field[bool]                                     `json:"cache"`
@@ -5307,8 +5307,8 @@ func (r InstanceUpdateParamsCacheThreshold) IsKnown() bool {
 }
 
 type InstanceUpdateParamsCustomMetadata struct {
-	DataType  param.Field[InstanceUpdateParamsCustomMetadataDataType] `json:"data_type,required"`
-	FieldName param.Field[string]                                     `json:"field_name,required"`
+	DataType  param.Field[InstanceUpdateParamsCustomMetadataDataType] `json:"data_type" api:"required"`
+	FieldName param.Field[string]                                     `json:"field_name" api:"required"`
 }
 
 func (r InstanceUpdateParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
@@ -5512,7 +5512,7 @@ type InstanceUpdateParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -5683,10 +5683,10 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerParseOptions) MarshalJSON() (d
 type InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector param.Field[string] `json:"selector,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
 func (r InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector) MarshalJSON() (data []byte, err error) {
@@ -5710,7 +5710,7 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      param.Field[string]      `json:"storage_id,required"`
+	StorageID      param.Field[string]      `json:"storage_id" api:"required"`
 	R2Jurisdiction param.Field[string]      `json:"r2_jurisdiction"`
 	StorageType    param.Field[r2.Provider] `json:"storage_type"`
 }
@@ -5761,8 +5761,8 @@ func (r InstanceUpdateParamsSummarizationModel) IsKnown() bool {
 }
 
 type InstanceUpdateResponseEnvelope struct {
-	Result  InstanceUpdateResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  InstanceUpdateResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    instanceUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5784,7 +5784,7 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Namespace param.Field[string] `query:"namespace"`
 	// Order By Column Name
 	OrderBy param.Field[InstanceListParamsOrderBy] `query:"order_by"`
@@ -5836,12 +5836,12 @@ func (r InstanceListParamsOrderByDirection) IsKnown() bool {
 }
 
 type InstanceDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InstanceDeleteResponseEnvelope struct {
-	Result  InstanceDeleteResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  InstanceDeleteResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    instanceDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5863,8 +5863,8 @@ func (r instanceDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsParams struct {
-	AccountID       param.Field[string]                                       `path:"account_id,required"`
-	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages,required"`
+	AccountID       param.Field[string]                                       `path:"account_id" api:"required"`
+	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceChatCompletionsParamsAISearchOptions] `json:"ai_search_options"`
 	Model           param.Field[InstanceChatCompletionsParamsModel]           `json:"model"`
 	Stream          param.Field[bool]                                         `json:"stream"`
@@ -5875,8 +5875,8 @@ func (r InstanceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceChatCompletionsParamsMessage struct {
-	Content     param.Field[string]                                    `json:"content,required"`
-	Role        param.Field[InstanceChatCompletionsParamsMessagesRole] `json:"role,required"`
+	Content     param.Field[string]                                    `json:"content" api:"required"`
+	Role        param.Field[InstanceChatCompletionsParamsMessagesRole] `json:"role" api:"required"`
 	ExtraFields map[string]interface{}                                 `json:"-,extras"`
 }
 
@@ -6044,7 +6044,7 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -6170,12 +6170,12 @@ func (r InstanceChatCompletionsParamsModel) IsKnown() bool {
 }
 
 type InstanceReadParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InstanceReadResponseEnvelope struct {
-	Result  InstanceReadResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  InstanceReadResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    instanceReadResponseEnvelopeJSON `json:"-"`
 }
 
@@ -6197,8 +6197,8 @@ func (r instanceReadResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceSearchParams struct {
-	AccountID       param.Field[string]                              `path:"account_id,required"`
-	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages,required"`
+	AccountID       param.Field[string]                              `path:"account_id" api:"required"`
+	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceSearchParamsAISearchOptions] `json:"ai_search_options"`
 }
 
@@ -6207,8 +6207,8 @@ func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceSearchParamsMessage struct {
-	Content     param.Field[string]                           `json:"content,required"`
-	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role,required"`
+	Content     param.Field[string]                           `json:"content" api:"required"`
+	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role" api:"required"`
 	ExtraFields map[string]interface{}                        `json:"-,extras"`
 }
 
@@ -6376,7 +6376,7 @@ type InstanceSearchParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -6461,8 +6461,8 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalRetrievalType) IsKnown() boo
 }
 
 type InstanceSearchResponseEnvelope struct {
-	Result  InstanceSearchResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  InstanceSearchResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    instanceSearchResponseEnvelopeJSON `json:"-"`
 }
 
@@ -6484,12 +6484,12 @@ func (r instanceSearchResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceStatsParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InstanceStatsResponseEnvelope struct {
-	Result  InstanceStatsResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  InstanceStatsResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    instanceStatsResponseEnvelopeJSON `json:"-"`
 }
 

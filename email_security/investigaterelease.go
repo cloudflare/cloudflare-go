@@ -43,7 +43,7 @@ func (r *InvestigateReleaseService) Bulk(ctx context.Context, params Investigate
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/release", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -65,12 +65,12 @@ func (r *InvestigateReleaseService) BulkAutoPaging(ctx context.Context, params I
 }
 
 type InvestigateReleaseBulkResponse struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The identifier of the message.
-	PostfixID   string                             `json:"postfix_id,required"`
-	Delivered   []string                           `json:"delivered,nullable"`
-	Failed      []string                           `json:"failed,nullable"`
-	Undelivered []string                           `json:"undelivered,nullable"`
+	PostfixID   string                             `json:"postfix_id" api:"required"`
+	Delivered   []string                           `json:"delivered" api:"nullable"`
+	Failed      []string                           `json:"failed" api:"nullable"`
+	Undelivered []string                           `json:"undelivered" api:"nullable"`
 	JSON        investigateReleaseBulkResponseJSON `json:"-"`
 }
 
@@ -96,9 +96,9 @@ func (r investigateReleaseBulkResponseJSON) RawJSON() string {
 
 type InvestigateReleaseBulkParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of messages identfied by their `postfix_id`s that should be released.
-	Body []string `json:"body,required"`
+	Body []string `json:"body" api:"required"`
 }
 
 func (r InvestigateReleaseBulkParams) MarshalJSON() (data []byte, err error) {

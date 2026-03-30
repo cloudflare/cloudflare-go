@@ -50,7 +50,7 @@ func (r *UserSchemaHostService) List(ctx context.Context, params UserSchemaHostL
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/user_schemas/hosts", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -76,13 +76,13 @@ func (r *UserSchemaHostService) ListAutoPaging(ctx context.Context, params UserS
 }
 
 type UserSchemaHostListResponse struct {
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Hosts serving the schema, e.g zone.host.com
-	Hosts []string `json:"hosts,required"`
+	Hosts []string `json:"hosts" api:"required"`
 	// Name of the schema
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// UUID.
-	SchemaID string                         `json:"schema_id,required"`
+	SchemaID string                         `json:"schema_id" api:"required"`
 	JSON     userSchemaHostListResponseJSON `json:"-"`
 }
 
@@ -107,7 +107,7 @@ func (r userSchemaHostListResponseJSON) RawJSON() string {
 
 type UserSchemaHostListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`
 	// Maximum number of results per page.

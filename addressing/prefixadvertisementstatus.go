@@ -46,19 +46,19 @@ func (r *PrefixAdvertisementStatusService) Edit(ctx context.Context, prefixID st
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", params.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // View the current advertisement state for a prefix.
@@ -72,19 +72,19 @@ func (r *PrefixAdvertisementStatusService) Get(ctx context.Context, prefixID str
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", query.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PrefixAdvertisementStatusEditResponse struct {
@@ -93,7 +93,7 @@ type PrefixAdvertisementStatusEditResponse struct {
 	Advertised bool `json:"advertised"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
-	AdvertisedModifiedAt time.Time                                 `json:"advertised_modified_at,nullable" format:"date-time"`
+	AdvertisedModifiedAt time.Time                                 `json:"advertised_modified_at" api:"nullable" format:"date-time"`
 	JSON                 prefixAdvertisementStatusEditResponseJSON `json:"-"`
 }
 
@@ -120,7 +120,7 @@ type PrefixAdvertisementStatusGetResponse struct {
 	Advertised bool `json:"advertised"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
-	AdvertisedModifiedAt time.Time                                `json:"advertised_modified_at,nullable" format:"date-time"`
+	AdvertisedModifiedAt time.Time                                `json:"advertised_modified_at" api:"nullable" format:"date-time"`
 	JSON                 prefixAdvertisementStatusGetResponseJSON `json:"-"`
 }
 
@@ -143,10 +143,10 @@ func (r prefixAdvertisementStatusGetResponseJSON) RawJSON() string {
 
 type PrefixAdvertisementStatusEditParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Advertisement status of the prefix. If `true`, the BGP route for the prefix is
 	// advertised to the Internet. If `false`, the BGP route is withdrawn.
-	Advertised param.Field[bool] `json:"advertised,required"`
+	Advertised param.Field[bool] `json:"advertised" api:"required"`
 }
 
 func (r PrefixAdvertisementStatusEditParams) MarshalJSON() (data []byte, err error) {
@@ -154,10 +154,10 @@ func (r PrefixAdvertisementStatusEditParams) MarshalJSON() (data []byte, err err
 }
 
 type PrefixAdvertisementStatusEditResponseEnvelope struct {
-	Errors   []PrefixAdvertisementStatusEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixAdvertisementStatusEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixAdvertisementStatusEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixAdvertisementStatusEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixAdvertisementStatusEditResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixAdvertisementStatusEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PrefixAdvertisementStatusEditResponse                `json:"result"`
 	JSON    prefixAdvertisementStatusEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -182,8 +182,8 @@ func (r prefixAdvertisementStatusEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixAdvertisementStatusEditResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           PrefixAdvertisementStatusEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixAdvertisementStatusEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -231,8 +231,8 @@ func (r prefixAdvertisementStatusEditResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type PrefixAdvertisementStatusEditResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           PrefixAdvertisementStatusEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixAdvertisementStatusEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -296,14 +296,14 @@ func (r PrefixAdvertisementStatusEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixAdvertisementStatusGetParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixAdvertisementStatusGetResponseEnvelope struct {
-	Errors   []PrefixAdvertisementStatusGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixAdvertisementStatusGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixAdvertisementStatusGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixAdvertisementStatusGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixAdvertisementStatusGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixAdvertisementStatusGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PrefixAdvertisementStatusGetResponse                `json:"result"`
 	JSON    prefixAdvertisementStatusGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -328,8 +328,8 @@ func (r prefixAdvertisementStatusGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixAdvertisementStatusGetResponseEnvelopeErrors struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           PrefixAdvertisementStatusGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixAdvertisementStatusGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -377,8 +377,8 @@ func (r prefixAdvertisementStatusGetResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type PrefixAdvertisementStatusGetResponseEnvelopeMessages struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           PrefixAdvertisementStatusGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixAdvertisementStatusGetResponseEnvelopeMessagesJSON   `json:"-"`
