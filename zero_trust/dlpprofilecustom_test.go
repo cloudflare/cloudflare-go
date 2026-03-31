@@ -52,8 +52,11 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 			}),
 			Description: cloudflare.F("description"),
 		}}),
-		OCREnabled:        cloudflare.F(true),
-		SensitivityLevels: cloudflare.F([][]string{{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}}),
+		OCREnabled: cloudflare.F(true),
+		SensitivityLevels: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsSensitivityLevel{{
+			GroupID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			LevelID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+		}}),
 		SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsSharedEntry{{
 			Enabled: cloudflare.F(true),
 			EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
@@ -110,8 +113,11 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Description: cloudflare.F("description"),
 			}}),
-			OCREnabled:        cloudflare.F(true),
-			SensitivityLevels: cloudflare.F([][]string{{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}}),
+			OCREnabled: cloudflare.F(true),
+			SensitivityLevels: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSensitivityLevel{{
+				GroupID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				LevelID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			}}),
 			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntry{{
 				Enabled: cloudflare.F(true),
 				EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
