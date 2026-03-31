@@ -30,6 +30,7 @@ type ZoneService struct {
 	Options         []option.RequestOption
 	ActivationCheck *ActivationCheckService
 	Settings        *SettingService
+	Environments    *EnvironmentService
 	// Deprecated: Use DNS settings API instead.
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
@@ -46,6 +47,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Options = opts
 	r.ActivationCheck = NewActivationCheckService(opts...)
 	r.Settings = NewSettingService(opts...)
+	r.Environments = NewEnvironmentService(opts...)
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.Holds = NewHoldService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)

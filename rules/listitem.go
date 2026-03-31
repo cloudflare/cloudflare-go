@@ -200,6 +200,15 @@ func (r listCursorJSON) RawJSON() string {
 	return r.raw
 }
 
+type ListCursorParam struct {
+	After  param.Field[string] `json:"after"`
+	Before param.Field[string] `json:"before"`
+}
+
+func (r ListCursorParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ListItemNewResponse struct {
 	// The unique operation ID of the asynchronous action.
 	OperationID string                  `json:"operation_id" api:"required"`
