@@ -43,9 +43,12 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			DataType:  cloudflare.F(ai_search.InstanceNewParamsCustomMetadataDataTypeText),
 			FieldName: cloudflare.F("x"),
 		}}),
-		EmbeddingModel:      cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
-		FusionMethod:        cloudflare.F(ai_search.InstanceNewParamsFusionMethodMax),
-		HybridSearchEnabled: cloudflare.F(true),
+		EmbeddingModel: cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
+		FusionMethod:   cloudflare.F(ai_search.InstanceNewParamsFusionMethodMax),
+		IndexMethod: cloudflare.F(ai_search.InstanceNewParamsIndexMethod{
+			Keyword: cloudflare.F(true),
+			Vector:  cloudflare.F(true),
+		}),
 		IndexingOptions: cloudflare.F(ai_search.InstanceNewParamsIndexingOptions{
 			KeywordTokenizer: cloudflare.F(ai_search.InstanceNewParamsIndexingOptionsKeywordTokenizerPorter),
 		}),
@@ -161,9 +164,12 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				DataType:  cloudflare.F(ai_search.InstanceUpdateParamsCustomMetadataDataTypeText),
 				FieldName: cloudflare.F("x"),
 			}}),
-			EmbeddingModel:      cloudflare.F(ai_search.InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
-			FusionMethod:        cloudflare.F(ai_search.InstanceUpdateParamsFusionMethodMax),
-			HybridSearchEnabled: cloudflare.F(true),
+			EmbeddingModel: cloudflare.F(ai_search.InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
+			FusionMethod:   cloudflare.F(ai_search.InstanceUpdateParamsFusionMethodMax),
+			IndexMethod: cloudflare.F(ai_search.InstanceUpdateParamsIndexMethod{
+				Keyword: cloudflare.F(true),
+				Vector:  cloudflare.F(true),
+			}),
 			IndexingOptions: cloudflare.F(ai_search.InstanceUpdateParamsIndexingOptions{
 				KeywordTokenizer: cloudflare.F(ai_search.InstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter),
 			}),
@@ -270,7 +276,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AISearch.Instances.List(context.TODO(), ai_search.InstanceListParams{
 		AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-		Namespace:        cloudflare.F("x"),
+		Namespace:        cloudflare.F("namespace"),
 		OrderBy:          cloudflare.F(ai_search.InstanceListParamsOrderByCreatedAt),
 		OrderByDirection: cloudflare.F(ai_search.InstanceListParamsOrderByDirectionAsc),
 		Page:             cloudflare.F(int64(1)),
