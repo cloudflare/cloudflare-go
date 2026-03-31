@@ -212,22 +212,28 @@ func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceSt
 
 type InstanceNewResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                  `json:"id" api:"required"`
-	CreatedAt            time.Time                               `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt           time.Time                               `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID          string                                  `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
-	Cache                bool                                    `json:"cache"`
-	CacheThreshold       InstanceNewResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                   `json:"chunk_overlap"`
-	ChunkSize            int64                                   `json:"chunk_size"`
-	CreatedBy            string                                  `json:"created_by" api:"nullable"`
-	CustomMetadata       []InstanceNewResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
-	Enable               bool                                    `json:"enable"`
-	EngineVersion        float64                                 `json:"engine_version"`
-	FusionMethod         InstanceNewResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                    `json:"hybrid_search_enabled"`
+	ID             string                              `json:"id" api:"required"`
+	CreatedAt      time.Time                           `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                           `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                              `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceNewResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                `json:"cache"`
+	CacheThreshold InstanceNewResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                               `json:"chunk_overlap"`
+	ChunkSize      int64                               `json:"chunk_size"`
+	CreatedBy      string                              `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceNewResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceNewResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                `json:"enable"`
+	EngineVersion  float64                             `json:"engine_version"`
+	FusionMethod   InstanceNewResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceNewResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                               `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                   `json:"max_num_results"`
@@ -270,6 +276,7 @@ type instanceNewResponseJSON struct {
 	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
 	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -435,6 +442,33 @@ func (r InstanceNewResponseFusionMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceNewResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                               `json:"vector" api:"required"`
+	JSON   instanceNewResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceNewResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceNewResponseIndexMethod]
+type instanceNewResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceNewResponseIndexingOptions struct {
@@ -1030,22 +1064,28 @@ func (r InstanceNewResponseType) IsKnown() bool {
 
 type InstanceUpdateResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                     `json:"id" api:"required"`
-	CreatedAt            time.Time                                  `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt           time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID          string                                     `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
-	Cache                bool                                       `json:"cache"`
-	CacheThreshold       InstanceUpdateResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                      `json:"chunk_overlap"`
-	ChunkSize            int64                                      `json:"chunk_size"`
-	CreatedBy            string                                     `json:"created_by" api:"nullable"`
-	CustomMetadata       []InstanceUpdateResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
-	Enable               bool                                       `json:"enable"`
-	EngineVersion        float64                                    `json:"engine_version"`
-	FusionMethod         InstanceUpdateResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
+	ID             string                                 `json:"id" api:"required"`
+	CreatedAt      time.Time                              `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                              `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                                 `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceUpdateResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                   `json:"cache"`
+	CacheThreshold InstanceUpdateResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                  `json:"chunk_overlap"`
+	ChunkSize      int64                                  `json:"chunk_size"`
+	CreatedBy      string                                 `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceUpdateResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceUpdateResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                   `json:"enable"`
+	EngineVersion  float64                                `json:"engine_version"`
+	FusionMethod   InstanceUpdateResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceUpdateResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
@@ -1088,6 +1128,7 @@ type instanceUpdateResponseJSON struct {
 	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
 	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -1253,6 +1294,33 @@ func (r InstanceUpdateResponseFusionMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceUpdateResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                  `json:"vector" api:"required"`
+	JSON   instanceUpdateResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceUpdateResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceUpdateResponseIndexMethod]
+type instanceUpdateResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceUpdateResponseIndexingOptions struct {
@@ -1852,22 +1920,28 @@ func (r InstanceUpdateResponseType) IsKnown() bool {
 
 type InstanceListResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                   `json:"id" api:"required"`
-	CreatedAt            time.Time                                `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt           time.Time                                `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID          string                                   `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
-	Cache                bool                                     `json:"cache"`
-	CacheThreshold       InstanceListResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                    `json:"chunk_overlap"`
-	ChunkSize            int64                                    `json:"chunk_size"`
-	CreatedBy            string                                   `json:"created_by" api:"nullable"`
-	CustomMetadata       []InstanceListResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
-	Enable               bool                                     `json:"enable"`
-	EngineVersion        float64                                  `json:"engine_version"`
-	FusionMethod         InstanceListResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
+	ID             string                               `json:"id" api:"required"`
+	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceListResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                 `json:"cache"`
+	CacheThreshold InstanceListResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                `json:"chunk_overlap"`
+	ChunkSize      int64                                `json:"chunk_size"`
+	CreatedBy      string                               `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceListResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceListResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                 `json:"enable"`
+	EngineVersion  float64                              `json:"engine_version"`
+	FusionMethod   InstanceListResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceListResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceListResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
@@ -1910,6 +1984,7 @@ type instanceListResponseJSON struct {
 	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
 	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -2075,6 +2150,33 @@ func (r InstanceListResponseFusionMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceListResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                `json:"vector" api:"required"`
+	JSON   instanceListResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceListResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceListResponseIndexMethod]
+type instanceListResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceListResponseIndexingOptions struct {
@@ -2670,22 +2772,28 @@ func (r InstanceListResponseType) IsKnown() bool {
 
 type InstanceDeleteResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                     `json:"id" api:"required"`
-	CreatedAt            time.Time                                  `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt           time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID          string                                     `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
-	Cache                bool                                       `json:"cache"`
-	CacheThreshold       InstanceDeleteResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                      `json:"chunk_overlap"`
-	ChunkSize            int64                                      `json:"chunk_size"`
-	CreatedBy            string                                     `json:"created_by" api:"nullable"`
-	CustomMetadata       []InstanceDeleteResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
-	Enable               bool                                       `json:"enable"`
-	EngineVersion        float64                                    `json:"engine_version"`
-	FusionMethod         InstanceDeleteResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
+	ID             string                                 `json:"id" api:"required"`
+	CreatedAt      time.Time                              `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                              `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                                 `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceDeleteResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                   `json:"cache"`
+	CacheThreshold InstanceDeleteResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                  `json:"chunk_overlap"`
+	ChunkSize      int64                                  `json:"chunk_size"`
+	CreatedBy      string                                 `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceDeleteResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceDeleteResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                   `json:"enable"`
+	EngineVersion  float64                                `json:"engine_version"`
+	FusionMethod   InstanceDeleteResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceDeleteResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
@@ -2728,6 +2836,7 @@ type instanceDeleteResponseJSON struct {
 	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
 	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -2893,6 +3002,33 @@ func (r InstanceDeleteResponseFusionMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceDeleteResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                  `json:"vector" api:"required"`
+	JSON   instanceDeleteResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceDeleteResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceDeleteResponseIndexMethod]
+type instanceDeleteResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceDeleteResponseIndexingOptions struct {
@@ -3689,22 +3825,28 @@ func (r InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnown
 
 type InstanceReadResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   string                                   `json:"id" api:"required"`
-	CreatedAt            time.Time                                `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt           time.Time                                `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID          string                                   `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model" api:"nullable"`
-	Cache                bool                                     `json:"cache"`
-	CacheThreshold       InstanceReadResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                    `json:"chunk_overlap"`
-	ChunkSize            int64                                    `json:"chunk_size"`
-	CreatedBy            string                                   `json:"created_by" api:"nullable"`
-	CustomMetadata       []InstanceReadResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model" api:"nullable"`
-	Enable               bool                                     `json:"enable"`
-	EngineVersion        float64                                  `json:"engine_version"`
-	FusionMethod         InstanceReadResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
+	ID             string                               `json:"id" api:"required"`
+	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceReadResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                 `json:"cache"`
+	CacheThreshold InstanceReadResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                `json:"chunk_overlap"`
+	ChunkSize      int64                                `json:"chunk_size"`
+	CreatedBy      string                               `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceReadResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceReadResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                 `json:"enable"`
+	EngineVersion  float64                              `json:"engine_version"`
+	FusionMethod   InstanceReadResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceReadResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
@@ -3747,6 +3889,7 @@ type instanceReadResponseJSON struct {
 	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
 	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
@@ -3912,6 +4055,33 @@ func (r InstanceReadResponseFusionMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceReadResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                `json:"vector" api:"required"`
+	JSON   instanceReadResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceReadResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceReadResponseIndexMethod]
+type instanceReadResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceReadResponseIndexingOptions struct {
@@ -4670,18 +4840,20 @@ func (r instanceStatsResponseJSON) RawJSON() string {
 type InstanceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID                   param.Field[string]                                `json:"id" api:"required"`
-	AIGatewayID          param.Field[string]                                `json:"ai_gateway_id"`
-	AISearchModel        param.Field[InstanceNewParamsAISearchModel]        `json:"ai_search_model"`
-	Cache                param.Field[bool]                                  `json:"cache"`
-	CacheThreshold       param.Field[InstanceNewParamsCacheThreshold]       `json:"cache_threshold"`
-	Chunk                param.Field[bool]                                  `json:"chunk"`
-	ChunkOverlap         param.Field[int64]                                 `json:"chunk_overlap"`
-	ChunkSize            param.Field[int64]                                 `json:"chunk_size"`
-	CustomMetadata       param.Field[[]InstanceNewParamsCustomMetadata]     `json:"custom_metadata"`
-	EmbeddingModel       param.Field[InstanceNewParamsEmbeddingModel]       `json:"embedding_model"`
-	FusionMethod         param.Field[InstanceNewParamsFusionMethod]         `json:"fusion_method"`
-	HybridSearchEnabled  param.Field[bool]                                  `json:"hybrid_search_enabled"`
+	ID             param.Field[string]                            `json:"id" api:"required"`
+	AIGatewayID    param.Field[string]                            `json:"ai_gateway_id"`
+	AISearchModel  param.Field[InstanceNewParamsAISearchModel]    `json:"ai_search_model"`
+	Cache          param.Field[bool]                              `json:"cache"`
+	CacheThreshold param.Field[InstanceNewParamsCacheThreshold]   `json:"cache_threshold"`
+	Chunk          param.Field[bool]                              `json:"chunk"`
+	ChunkOverlap   param.Field[int64]                             `json:"chunk_overlap"`
+	ChunkSize      param.Field[int64]                             `json:"chunk_size"`
+	CustomMetadata param.Field[[]InstanceNewParamsCustomMetadata] `json:"custom_metadata"`
+	EmbeddingModel param.Field[InstanceNewParamsEmbeddingModel]   `json:"embedding_model"`
+	FusionMethod   param.Field[InstanceNewParamsFusionMethod]     `json:"fusion_method"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          param.Field[InstanceNewParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions      param.Field[InstanceNewParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
 	Metadata             param.Field[InstanceNewParamsMetadata]             `json:"metadata"`
@@ -4821,6 +4993,19 @@ func (r InstanceNewParamsFusionMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceNewParamsIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword param.Field[bool] `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector param.Field[bool] `json:"vector" api:"required"`
+}
+
+func (r InstanceNewParamsIndexMethod) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type InstanceNewParamsIndexingOptions struct {
@@ -5212,18 +5397,20 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
-	AccountID                      param.Field[string]                                   `path:"account_id" api:"required"`
-	AIGatewayID                    param.Field[string]                                   `json:"ai_gateway_id"`
-	AISearchModel                  param.Field[InstanceUpdateParamsAISearchModel]        `json:"ai_search_model"`
-	Cache                          param.Field[bool]                                     `json:"cache"`
-	CacheThreshold                 param.Field[InstanceUpdateParamsCacheThreshold]       `json:"cache_threshold"`
-	Chunk                          param.Field[bool]                                     `json:"chunk"`
-	ChunkOverlap                   param.Field[int64]                                    `json:"chunk_overlap"`
-	ChunkSize                      param.Field[int64]                                    `json:"chunk_size"`
-	CustomMetadata                 param.Field[[]InstanceUpdateParamsCustomMetadata]     `json:"custom_metadata"`
-	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]       `json:"embedding_model"`
-	FusionMethod                   param.Field[InstanceUpdateParamsFusionMethod]         `json:"fusion_method"`
-	HybridSearchEnabled            param.Field[bool]                                     `json:"hybrid_search_enabled"`
+	AccountID      param.Field[string]                               `path:"account_id" api:"required"`
+	AIGatewayID    param.Field[string]                               `json:"ai_gateway_id"`
+	AISearchModel  param.Field[InstanceUpdateParamsAISearchModel]    `json:"ai_search_model"`
+	Cache          param.Field[bool]                                 `json:"cache"`
+	CacheThreshold param.Field[InstanceUpdateParamsCacheThreshold]   `json:"cache_threshold"`
+	Chunk          param.Field[bool]                                 `json:"chunk"`
+	ChunkOverlap   param.Field[int64]                                `json:"chunk_overlap"`
+	ChunkSize      param.Field[int64]                                `json:"chunk_size"`
+	CustomMetadata param.Field[[]InstanceUpdateParamsCustomMetadata] `json:"custom_metadata"`
+	EmbeddingModel param.Field[InstanceUpdateParamsEmbeddingModel]   `json:"embedding_model"`
+	FusionMethod   param.Field[InstanceUpdateParamsFusionMethod]     `json:"fusion_method"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod                    param.Field[InstanceUpdateParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions                param.Field[InstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
 	Metadata                       param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
@@ -5367,6 +5554,19 @@ func (r InstanceUpdateParamsFusionMethod) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceUpdateParamsIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword param.Field[bool] `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector param.Field[bool] `json:"vector" api:"required"`
+}
+
+func (r InstanceUpdateParamsIndexMethod) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type InstanceUpdateParamsIndexingOptions struct {

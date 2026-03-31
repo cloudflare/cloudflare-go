@@ -35,7 +35,7 @@ func NewTokenPermissionGroupService(opts ...option.RequestOption) (r *TokenPermi
 	return
 }
 
-// Find all available permission groups for API Tokens
+// Find all available permission groups for API Tokens.
 func (r *TokenPermissionGroupService) List(ctx context.Context, query TokenPermissionGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenPermissionGroupListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +53,7 @@ func (r *TokenPermissionGroupService) List(ctx context.Context, query TokenPermi
 	return res, nil
 }
 
-// Find all available permission groups for API Tokens
+// Find all available permission groups for API Tokens.
 func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, query TokenPermissionGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
