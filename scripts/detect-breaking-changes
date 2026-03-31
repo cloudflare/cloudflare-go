@@ -38,6 +38,7 @@ TEST_PATHS=(
 	zones/zone_test.go
 	zones/activationcheck_test.go
 	zones/setting_test.go
+	zones/environment_test.go
 	zones/customnameserver_test.go
 	zones/hold_test.go
 	zones/subscription_test.go
