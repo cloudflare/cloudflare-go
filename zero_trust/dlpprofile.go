@@ -167,7 +167,8 @@ type Profile struct {
 	OCREnabled bool        `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.
 	OpenAccess bool `json:"open_access"`
-	// This field can have the runtime type of [[][]string].
+	// This field can have the runtime type of
+	// [[]ProfileCustomProfileSensitivityLevel].
 	SensitivityLevels interface{} `json:"sensitivity_levels"`
 	// This field can have the runtime type of [[]ProfileCustomProfileSharedEntry],
 	// [[]ProfileIntegrationProfileSharedEntry].
@@ -276,10 +277,10 @@ type ProfileCustomProfile struct {
 	Description string `json:"description" api:"nullable"`
 	// Deprecated: deprecated
 	Entries []ProfileCustomProfileEntry `json:"entries"`
-	// Sensitivity levels associated with this profile as (group_id, level_id) tuples.
-	SensitivityLevels [][]string                        `json:"sensitivity_levels" format:"uuid"`
-	SharedEntries     []ProfileCustomProfileSharedEntry `json:"shared_entries"`
-	JSON              profileCustomProfileJSON          `json:"-"`
+	// Sensitivity levels associated with this profile.
+	SensitivityLevels []ProfileCustomProfileSensitivityLevel `json:"sensitivity_levels"`
+	SharedEntries     []ProfileCustomProfileSharedEntry      `json:"shared_entries"`
+	JSON              profileCustomProfileJSON               `json:"-"`
 }
 
 // profileCustomProfileJSON contains the JSON metadata for the struct
@@ -865,6 +866,30 @@ func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// A reference pairing a sensitivity group with a specific level within that group.
+type ProfileCustomProfileSensitivityLevel struct {
+	GroupID string                                   `json:"group_id" api:"required" format:"uuid"`
+	LevelID string                                   `json:"level_id" api:"required" format:"uuid"`
+	JSON    profileCustomProfileSensitivityLevelJSON `json:"-"`
+}
+
+// profileCustomProfileSensitivityLevelJSON contains the JSON metadata for the
+// struct [ProfileCustomProfileSensitivityLevel]
+type profileCustomProfileSensitivityLevelJSON struct {
+	GroupID     apijson.Field
+	LevelID     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomProfileSensitivityLevel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomProfileSensitivityLevelJSON) RawJSON() string {
+	return r.raw
 }
 
 type ProfileCustomProfileSharedEntry struct {
