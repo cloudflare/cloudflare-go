@@ -174,6 +174,9 @@ type Version struct {
 	// The name of the main module in the `modules` array (e.g. the name of the module
 	// that exports a `fetch` handler).
 	MainModule string `json:"main_module"`
+	// Durable Object migration tag. Set when the version is deployed. Omitted if the
+	// version has not been deployed or the Worker does not use Durable Objects.
+	MigrationTag string `json:"migration_tag"`
 	// Migrations for Durable Objects associated with the version. Migrations are
 	// applied when the version is deployed.
 	Migrations VersionMigrations `json:"migrations"`
@@ -217,6 +220,7 @@ type versionJSON struct {
 	CompatibilityFlags apijson.Field
 	Limits             apijson.Field
 	MainModule         apijson.Field
+	MigrationTag       apijson.Field
 	Migrations         apijson.Field
 	Modules            apijson.Field
 	Placement          apijson.Field
