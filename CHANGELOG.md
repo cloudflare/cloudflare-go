@@ -1,5 +1,29 @@
 # Changelog
 
+## 6.9.0 (2026-04-01)
+
+Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
+
+### Features
+
+* feat: add billable usage PayGo endpoint to billing resource ([69e048f](https://github.com/cloudflare/cloudflare-go/commit/69e048fca95c1d0581d864d0d92e230effd17c99))
+* feat(tags): GRM-385 add resource_tagging routes ([aee0f8b](https://github.com/cloudflare/cloudflare-go/commit/aee0f8b76c4461db803e03003229118ae9d45631))
+
+
+### Bug Fixes
+
+* add check for transport errors, pass error in retry logic ([f2eddeb](https://github.com/cloudflare/cloudflare-go/commit/f2eddeb26b235e5810c9c691b4480b957bb97beb))
+
+
+### Chores
+
+* **api:** update composite API spec ([4f5f60e](https://github.com/cloudflare/cloudflare-go/commit/4f5f60e249862f761c6da28821676917e706fec3))
+* **api:** update composite API spec ([5b59c6c](https://github.com/cloudflare/cloudflare-go/commit/5b59c6c3daa884275f95b6a9b5ac7420123a31eb))
+* **api:** update composite API spec ([9410b35](https://github.com/cloudflare/cloudflare-go/commit/9410b35f80fdaa2ff813e7c346b0a5272f6e7acf))
+* **api:** update composite API spec ([d45e9a7](https://github.com/cloudflare/cloudflare-go/commit/d45e9a72691f667da4e96f82f05d72692f955e3c))
+* **api:** update composite API spec ([5393dad](https://github.com/cloudflare/cloudflare-go/commit/5393dad2c7a85344a751b1214106a99f31b02de5))
+* sync manual ([#4242](https://github.com/cloudflare/cloudflare-go/issues/4242)) ([14d83b4](https://github.com/cloudflare/cloudflare-go/commit/14d83b4af0d2339cb2fe9b0e3e561dafadd3ab67))
+
 ## 6.8.0 (2026-02-27)
 
 Full Changelog: [v6.7.0...v6.8.0](https://github.com/cloudflare/cloudflare-go/compare/v6.7.0...v6.8.0)
