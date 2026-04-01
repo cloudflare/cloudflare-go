@@ -26,6 +26,7 @@ func TestToMarkdownSupported(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -52,13 +53,14 @@ func TestToMarkdownTransform(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AI.ToMarkdown.Transform(context.TODO(), ai.ToMarkdownTransformParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		File: ai.ToMarkdownTransformParamsFile{
-			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			Files: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("Example data")))}),
 		},
 	})
 	if err != nil {

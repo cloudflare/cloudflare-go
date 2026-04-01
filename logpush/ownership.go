@@ -59,10 +59,10 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 	path := fmt.Sprintf("%s/%s/logpush/ownership", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Validates ownership challenge of the destination.
@@ -90,10 +90,10 @@ func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidat
 	path := fmt.Sprintf("%s/%s/logpush/ownership/validate", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OwnershipValidation struct {
@@ -146,7 +146,7 @@ type OwnershipNewParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
 	// pushed. Additional configuration parameters supported by the destination may be
 	// included.
-	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
+	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -158,11 +158,11 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipNewResponseEnvelope struct {
-	Errors   []OwnershipNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OwnershipNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OwnershipNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OwnershipNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  OwnershipNewResponse                `json:"result,nullable"`
+	Success OwnershipNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  OwnershipNewResponse                `json:"result" api:"nullable"`
 	JSON    ownershipNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -186,8 +186,8 @@ func (r ownershipNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OwnershipNewResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           OwnershipNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ownershipNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -234,8 +234,8 @@ func (r ownershipNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type OwnershipNewResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           OwnershipNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ownershipNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -300,9 +300,9 @@ type OwnershipValidateParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
 	// pushed. Additional configuration parameters supported by the destination may be
 	// included.
-	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
+	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// Ownership challenge token to prove destination ownership.
-	OwnershipChallenge param.Field[string] `json:"ownership_challenge,required"`
+	OwnershipChallenge param.Field[string] `json:"ownership_challenge" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -314,11 +314,11 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipValidateResponseEnvelope struct {
-	Errors   []OwnershipValidateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OwnershipValidateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []OwnershipValidateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []OwnershipValidateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
-	Result  OwnershipValidation                      `json:"result,nullable"`
+	Success OwnershipValidateResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  OwnershipValidation                      `json:"result" api:"nullable"`
 	JSON    ownershipValidateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -342,8 +342,8 @@ func (r ownershipValidateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OwnershipValidateResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           OwnershipValidateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ownershipValidateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -390,8 +390,8 @@ func (r ownershipValidateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type OwnershipValidateResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           OwnershipValidateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ownershipValidateResponseEnvelopeMessagesJSON   `json:"-"`

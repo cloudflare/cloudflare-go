@@ -42,11 +42,11 @@ func (r *AccessUserActiveSessionService) List(ctx context.Context, userID string
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions", query.AccountID, userID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -72,23 +72,23 @@ func (r *AccessUserActiveSessionService) Get(ctx context.Context, userID string,
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	if nonce == "" {
 		err = errors.New("missing required nonce parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions/%s", query.AccountID, userID, nonce)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessUserActiveSessionListResponse struct {
@@ -364,19 +364,19 @@ func (r accessUserActiveSessionGetResponseMTLSAuthJSON) RawJSON() string {
 
 type AccessUserActiveSessionListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessUserActiveSessionGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessUserActiveSessionGetResponseEnvelope struct {
-	Errors   []AccessUserActiveSessionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserActiveSessionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessUserActiveSessionGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessUserActiveSessionGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessUserActiveSessionGetResponse                `json:"result"`
 	JSON    accessUserActiveSessionGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -401,8 +401,8 @@ func (r accessUserActiveSessionGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessUserActiveSessionGetResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AccessUserActiveSessionGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessUserActiveSessionGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -449,8 +449,8 @@ func (r accessUserActiveSessionGetResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type AccessUserActiveSessionGetResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           AccessUserActiveSessionGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessUserActiveSessionGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -46,14 +46,14 @@ func (r *TrafficAnomalyService) Get(ctx context.Context, query TrafficAnomalyGet
 	path := "radar/traffic_anomalies"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TrafficAnomalyGetResponse struct {
-	TrafficAnomalies []TrafficAnomalyGetResponseTrafficAnomaly `json:"trafficAnomalies,required"`
+	TrafficAnomalies []TrafficAnomalyGetResponseTrafficAnomaly `json:"trafficAnomalies" api:"required"`
 	JSON             trafficAnomalyGetResponseJSON             `json:"-"`
 }
 
@@ -74,10 +74,10 @@ func (r trafficAnomalyGetResponseJSON) RawJSON() string {
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaly struct {
-	StartDate            string                                                   `json:"startDate,required"`
-	Status               string                                                   `json:"status,required"`
-	Type                 string                                                   `json:"type,required"`
-	UUID                 string                                                   `json:"uuid,required"`
+	StartDate            string                                                   `json:"startDate" api:"required"`
+	Status               string                                                   `json:"status" api:"required"`
+	Type                 string                                                   `json:"type" api:"required"`
+	UUID                 string                                                   `json:"uuid" api:"required"`
 	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails"`
 	EndDate              time.Time                                                `json:"endDate" format:"date-time"`
 	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails"`
@@ -111,8 +111,8 @@ func (r trafficAnomalyGetResponseTrafficAnomalyJSON) RawJSON() string {
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaliesASNDetails struct {
-	ASN       string                                                       `json:"asn,required"`
-	Name      string                                                       `json:"name,required"`
+	ASN       string                                                       `json:"asn" api:"required"`
+	Name      string                                                       `json:"name" api:"required"`
 	Locations TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations `json:"locations"`
 	JSON      trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON      `json:"-"`
 }
@@ -136,8 +136,8 @@ func (r trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON) RawJSON() strin
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations struct {
-	Code string                                                           `json:"code,required"`
-	Name string                                                           `json:"name,required"`
+	Code string                                                           `json:"code" api:"required"`
+	Name string                                                           `json:"name" api:"required"`
 	JSON trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON `json:"-"`
 }
 
@@ -160,8 +160,8 @@ func (r trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON) RawJSO
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails struct {
-	Code string                                                       `json:"code,required"`
-	Name string                                                       `json:"name,required"`
+	Code string                                                       `json:"code" api:"required"`
+	Name string                                                       `json:"name" api:"required"`
 	JSON trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON `json:"-"`
 }
 
@@ -184,8 +184,8 @@ func (r trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON) RawJSON() 
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails struct {
-	Name   string                                                     `json:"name,required"`
-	Origin string                                                     `json:"origin,required"`
+	Name   string                                                     `json:"name" api:"required"`
+	Origin string                                                     `json:"origin" api:"required"`
 	JSON   trafficAnomalyGetResponseTrafficAnomaliesOriginDetailsJSON `json:"-"`
 }
 
@@ -288,8 +288,8 @@ func (r TrafficAnomalyGetParamsType) IsKnown() bool {
 }
 
 type TrafficAnomalyGetResponseEnvelope struct {
-	Result  TrafficAnomalyGetResponse             `json:"result,required"`
-	Success bool                                  `json:"success,required"`
+	Result  TrafficAnomalyGetResponse             `json:"result" api:"required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    trafficAnomalyGetResponseEnvelopeJSON `json:"-"`
 }
 

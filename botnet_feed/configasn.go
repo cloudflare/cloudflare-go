@@ -40,15 +40,15 @@ func (r *ConfigASNService) Delete(ctx context.Context, asnID int64, body ConfigA
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/botnet_feed/configs/asn/%v", body.AccountID, asnID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets a list of all ASNs registered for a user for the DDoS Botnet Feed API.
@@ -57,15 +57,15 @@ func (r *ConfigASNService) Get(ctx context.Context, query ConfigASNGetParams, op
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/botnet_feed/configs/asn", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConfigASNDeleteResponse struct {
@@ -112,14 +112,14 @@ func (r configASNGetResponseJSON) RawJSON() string {
 
 type ConfigASNDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigASNDeleteResponseEnvelope struct {
-	Errors   []ConfigASNDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigASNDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ConfigASNDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConfigASNDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigASNDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigASNDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ConfigASNDeleteResponse                `json:"result"`
 	JSON    configASNDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -144,8 +144,8 @@ func (r configASNDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConfigASNDeleteResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           ConfigASNDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             configASNDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -192,8 +192,8 @@ func (r configASNDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ConfigASNDeleteResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           ConfigASNDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             configASNDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -256,14 +256,14 @@ func (r ConfigASNDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigASNGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigASNGetResponseEnvelope struct {
-	Errors   []ConfigASNGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigASNGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ConfigASNGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConfigASNGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigASNGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigASNGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ConfigASNGetResponse                `json:"result"`
 	JSON    configASNGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -288,8 +288,8 @@ func (r configASNGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConfigASNGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ConfigASNGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             configASNGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -336,8 +336,8 @@ func (r configASNGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ConfigASNGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ConfigASNGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             configASNGetResponseEnvelopeMessagesJSON   `json:"-"`

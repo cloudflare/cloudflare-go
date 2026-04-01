@@ -47,15 +47,15 @@ func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates the specified D1 database.
@@ -64,19 +64,19 @@ func (r *DatabaseService) Update(ctx context.Context, databaseID string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", params.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns a list of D1 databases.
@@ -86,7 +86,7 @@ func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -112,19 +112,19 @@ func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body Da
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", body.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates partially the specified D1 database.
@@ -133,19 +133,19 @@ func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params Da
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", params.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns a URL where the SQL contents of your D1 can be downloaded. Note: this
@@ -157,19 +157,19 @@ func (r *DatabaseService) Export(ctx context.Context, databaseID string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/export", params.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the specified D1 database.
@@ -178,19 +178,19 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, query Data
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", query.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Generates a temporary URL for uploading an SQL file to, then instructing the D1
@@ -201,19 +201,19 @@ func (r *DatabaseService) Import(ctx context.Context, databaseID string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/import", params.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the query result as an object.
@@ -223,11 +223,11 @@ func (r *DatabaseService) Query(ctx context.Context, databaseID string, params D
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/query", params.AccountID, databaseID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -255,11 +255,11 @@ func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params Dat
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/raw", params.AccountID, databaseID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -408,7 +408,7 @@ type DatabaseListResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Specify the location to restrict the D1 database to run and store data. If this
 	// option is present, the location hint is ignored.
-	Jurisdiction DatabaseListResponseJurisdiction `json:"jurisdiction,nullable"`
+	Jurisdiction DatabaseListResponseJurisdiction `json:"jurisdiction" api:"nullable"`
 	// D1 database name.
 	Name string `json:"name"`
 	// D1 database identifier (UUID).
@@ -905,9 +905,9 @@ func (r databaseRawResponseResultsJSON) RawJSON() string {
 
 type DatabaseNewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// D1 database name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Specify the location to restrict the D1 database to run and store data. If this
 	// option is present, the location hint is ignored.
 	Jurisdiction param.Field[DatabaseNewParamsJurisdiction] `json:"jurisdiction"`
@@ -959,12 +959,12 @@ func (r DatabaseNewParamsPrimaryLocationHint) IsKnown() bool {
 }
 
 type DatabaseNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// The details of the D1 database.
-	Result D1 `json:"result,required"`
+	Result D1 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1004,9 +1004,9 @@ func (r DatabaseNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Configuration for D1 read replication.
-	ReadReplication param.Field[DatabaseUpdateParamsReadReplication] `json:"read_replication,required"`
+	ReadReplication param.Field[DatabaseUpdateParamsReadReplication] `json:"read_replication" api:"required"`
 }
 
 func (r DatabaseUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1018,7 +1018,7 @@ type DatabaseUpdateParamsReadReplication struct {
 	// The read replication mode for the database. Use 'auto' to create replicas and
 	// allow D1 automatically place them around the world, or 'disabled' to not use any
 	// database replicas (it can take a few hours for all replicas to be deleted).
-	Mode param.Field[DatabaseUpdateParamsReadReplicationMode] `json:"mode,required"`
+	Mode param.Field[DatabaseUpdateParamsReadReplicationMode] `json:"mode" api:"required"`
 }
 
 func (r DatabaseUpdateParamsReadReplication) MarshalJSON() (data []byte, err error) {
@@ -1044,12 +1044,12 @@ func (r DatabaseUpdateParamsReadReplicationMode) IsKnown() bool {
 }
 
 type DatabaseUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// The details of the D1 database.
-	Result D1 `json:"result,required"`
+	Result D1 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1089,7 +1089,7 @@ func (r DatabaseUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// a database name to search for.
 	Name param.Field[string] `query:"name"`
 	// Page number of paginated results.
@@ -1108,15 +1108,15 @@ func (r DatabaseListParams) URLQuery() (v url.Values) {
 
 type DatabaseDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DatabaseDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   DatabaseDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   DatabaseDeleteResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1156,7 +1156,7 @@ func (r DatabaseDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseEditParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Configuration for D1 read replication.
 	ReadReplication param.Field[DatabaseEditParamsReadReplication] `json:"read_replication"`
 }
@@ -1170,7 +1170,7 @@ type DatabaseEditParamsReadReplication struct {
 	// The read replication mode for the database. Use 'auto' to create replicas and
 	// allow D1 automatically place them around the world, or 'disabled' to not use any
 	// database replicas (it can take a few hours for all replicas to be deleted).
-	Mode param.Field[DatabaseEditParamsReadReplicationMode] `json:"mode,required"`
+	Mode param.Field[DatabaseEditParamsReadReplicationMode] `json:"mode" api:"required"`
 }
 
 func (r DatabaseEditParamsReadReplication) MarshalJSON() (data []byte, err error) {
@@ -1196,12 +1196,12 @@ func (r DatabaseEditParamsReadReplicationMode) IsKnown() bool {
 }
 
 type DatabaseEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// The details of the D1 database.
-	Result D1 `json:"result,required"`
+	Result D1 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1241,9 +1241,9 @@ func (r DatabaseEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseExportParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies that you will poll this endpoint until the export completes
-	OutputFormat param.Field[DatabaseExportParamsOutputFormat] `json:"output_format,required"`
+	OutputFormat param.Field[DatabaseExportParamsOutputFormat] `json:"output_format" api:"required"`
 	// To poll an in-progress export, provide the current bookmark (returned by your
 	// first polling response)
 	CurrentBookmark param.Field[string]                          `json:"current_bookmark"`
@@ -1284,11 +1284,11 @@ func (r DatabaseExportParamsDumpOptions) MarshalJSON() (data []byte, err error) 
 }
 
 type DatabaseExportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   DatabaseExportResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   DatabaseExportResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseExportResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseExportResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseExportResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1328,16 +1328,16 @@ func (r DatabaseExportResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DatabaseGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// The details of the D1 database.
-	Result D1 `json:"result,required"`
+	Result D1 `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1377,8 +1377,8 @@ func (r DatabaseGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseImportParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]           `path:"account_id,required"`
-	Body      DatabaseImportParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]           `path:"account_id" api:"required"`
+	Body      DatabaseImportParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r DatabaseImportParams) MarshalJSON() (data []byte, err error) {
@@ -1387,7 +1387,7 @@ func (r DatabaseImportParams) MarshalJSON() (data []byte, err error) {
 
 type DatabaseImportParamsBody struct {
 	// Indicates you have a new SQL file to upload.
-	Action param.Field[DatabaseImportParamsBodyAction] `json:"action,required"`
+	Action param.Field[DatabaseImportParamsBodyAction] `json:"action" api:"required"`
 	// This identifies the currently-running import, checking its status.
 	CurrentBookmark param.Field[string] `json:"current_bookmark"`
 	// Required when action is 'init' or 'ingest'. An md5 hash of the file you're
@@ -1413,11 +1413,11 @@ type DatabaseImportParamsBodyUnion interface {
 
 type DatabaseImportParamsBodyInit struct {
 	// Indicates you have a new SQL file to upload.
-	Action param.Field[DatabaseImportParamsBodyInitAction] `json:"action,required"`
+	Action param.Field[DatabaseImportParamsBodyInitAction] `json:"action" api:"required"`
 	// Required when action is 'init' or 'ingest'. An md5 hash of the file you're
 	// uploading. Used to check if it already exists, and validate its contents before
 	// ingesting.
-	Etag param.Field[string] `json:"etag,required"`
+	Etag param.Field[string] `json:"etag" api:"required"`
 }
 
 func (r DatabaseImportParamsBodyInit) MarshalJSON() (data []byte, err error) {
@@ -1443,12 +1443,12 @@ func (r DatabaseImportParamsBodyInitAction) IsKnown() bool {
 
 type DatabaseImportParamsBodyIngest struct {
 	// Indicates you've finished uploading to tell the D1 to start consuming it
-	Action param.Field[DatabaseImportParamsBodyIngestAction] `json:"action,required"`
+	Action param.Field[DatabaseImportParamsBodyIngestAction] `json:"action" api:"required"`
 	// An md5 hash of the file you're uploading. Used to check if it already exists,
 	// and validate its contents before ingesting.
-	Etag param.Field[string] `json:"etag,required"`
+	Etag param.Field[string] `json:"etag" api:"required"`
 	// The filename you have successfully uploaded.
-	Filename param.Field[string] `json:"filename,required"`
+	Filename param.Field[string] `json:"filename" api:"required"`
 }
 
 func (r DatabaseImportParamsBodyIngest) MarshalJSON() (data []byte, err error) {
@@ -1474,9 +1474,9 @@ func (r DatabaseImportParamsBodyIngestAction) IsKnown() bool {
 
 type DatabaseImportParamsBodyPoll struct {
 	// Indicates you've finished uploading to tell the D1 to start consuming it
-	Action param.Field[DatabaseImportParamsBodyPollAction] `json:"action,required"`
+	Action param.Field[DatabaseImportParamsBodyPollAction] `json:"action" api:"required"`
 	// This identifies the currently-running import, checking its status.
-	CurrentBookmark param.Field[string] `json:"current_bookmark,required"`
+	CurrentBookmark param.Field[string] `json:"current_bookmark" api:"required"`
 }
 
 func (r DatabaseImportParamsBodyPoll) MarshalJSON() (data []byte, err error) {
@@ -1518,11 +1518,11 @@ func (r DatabaseImportParamsBodyAction) IsKnown() bool {
 }
 
 type DatabaseImportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   DatabaseImportResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   DatabaseImportResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseImportResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseImportResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseImportResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1562,9 +1562,9 @@ func (r DatabaseImportResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseQueryParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A single query object or a batch query object
-	Body DatabaseQueryParamsBodyUnion `json:"body,required"`
+	Body DatabaseQueryParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
@@ -1598,7 +1598,7 @@ type DatabaseQueryParamsBodyUnion interface {
 type DatabaseQueryParamsBodyD1SingleQuery struct {
 	// Your SQL query. Supports multiple statements, joined by semicolons, which will
 	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
+	Sql    param.Field[string]   `json:"sql" api:"required"`
 	Params param.Field[[]string] `json:"params"`
 }
 
@@ -1609,7 +1609,7 @@ func (r DatabaseQueryParamsBodyD1SingleQuery) MarshalJSON() (data []byte, err er
 func (r DatabaseQueryParamsBodyD1SingleQuery) implementsDatabaseQueryParamsBodyUnion() {}
 
 type DatabaseQueryParamsBodyMultipleQueries struct {
-	Batch param.Field[[]DatabaseQueryParamsBodyMultipleQueriesBatch] `json:"batch,required"`
+	Batch param.Field[[]DatabaseQueryParamsBodyMultipleQueriesBatch] `json:"batch" api:"required"`
 }
 
 func (r DatabaseQueryParamsBodyMultipleQueries) MarshalJSON() (data []byte, err error) {
@@ -1622,7 +1622,7 @@ func (r DatabaseQueryParamsBodyMultipleQueries) implementsDatabaseQueryParamsBod
 type DatabaseQueryParamsBodyMultipleQueriesBatch struct {
 	// Your SQL query. Supports multiple statements, joined by semicolons, which will
 	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
+	Sql    param.Field[string]   `json:"sql" api:"required"`
 	Params param.Field[[]string] `json:"params"`
 }
 
@@ -1632,9 +1632,9 @@ func (r DatabaseQueryParamsBodyMultipleQueriesBatch) MarshalJSON() (data []byte,
 
 type DatabaseRawParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A single query object or a batch query object
-	Body DatabaseRawParamsBodyUnion `json:"body,required"`
+	Body DatabaseRawParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {
@@ -1668,7 +1668,7 @@ type DatabaseRawParamsBodyUnion interface {
 type DatabaseRawParamsBodyD1SingleQuery struct {
 	// Your SQL query. Supports multiple statements, joined by semicolons, which will
 	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
+	Sql    param.Field[string]   `json:"sql" api:"required"`
 	Params param.Field[[]string] `json:"params"`
 }
 
@@ -1679,7 +1679,7 @@ func (r DatabaseRawParamsBodyD1SingleQuery) MarshalJSON() (data []byte, err erro
 func (r DatabaseRawParamsBodyD1SingleQuery) implementsDatabaseRawParamsBodyUnion() {}
 
 type DatabaseRawParamsBodyMultipleQueries struct {
-	Batch param.Field[[]DatabaseRawParamsBodyMultipleQueriesBatch] `json:"batch,required"`
+	Batch param.Field[[]DatabaseRawParamsBodyMultipleQueriesBatch] `json:"batch" api:"required"`
 }
 
 func (r DatabaseRawParamsBodyMultipleQueries) MarshalJSON() (data []byte, err error) {
@@ -1692,7 +1692,7 @@ func (r DatabaseRawParamsBodyMultipleQueries) implementsDatabaseRawParamsBodyUni
 type DatabaseRawParamsBodyMultipleQueriesBatch struct {
 	// Your SQL query. Supports multiple statements, joined by semicolons, which will
 	// be executed as a batch.
-	Sql    param.Field[string]   `json:"sql,required"`
+	Sql    param.Field[string]   `json:"sql" api:"required"`
 	Params param.Field[[]string] `json:"params"`
 }
 

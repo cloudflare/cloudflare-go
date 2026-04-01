@@ -55,7 +55,7 @@ func (r *FilterService) New(ctx context.Context, params FilterNewParams, opts ..
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/filters", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -91,19 +91,19 @@ func (r *FilterService) Update(ctx context.Context, filterID string, params Filt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if filterID == "" {
 		err = errors.New("missing required filter_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/filters/%s", params.ZoneID, filterID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches filters in a zone. You can filter the results using several optional
@@ -119,7 +119,7 @@ func (r *FilterService) List(ctx context.Context, params FilterListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/filters", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -156,19 +156,19 @@ func (r *FilterService) Delete(ctx context.Context, filterID string, body Filter
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if filterID == "" {
 		err = errors.New("missing required filter_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/filters/%s", body.ZoneID, filterID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes one or more existing filters.
@@ -182,15 +182,15 @@ func (r *FilterService) BulkDelete(ctx context.Context, params FilterBulkDeleteP
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/filters", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates one or more existing filters.
@@ -205,7 +205,7 @@ func (r *FilterService) BulkUpdate(ctx context.Context, params FilterBulkUpdateP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/filters", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -241,19 +241,19 @@ func (r *FilterService) Get(ctx context.Context, filterID string, query FilterGe
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if filterID == "" {
 		err = errors.New("missing required filter_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/filters/%s", query.ZoneID, filterID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type FirewallFilter struct {
@@ -310,7 +310,7 @@ func (r FirewallFilterParam) MarshalJSON() (data []byte, err error) {
 
 type FilterDeleteResponse struct {
 	// The unique identifier of the filter.
-	ID   string                   `json:"id,required"`
+	ID   string                   `json:"id" api:"required"`
 	JSON filterDeleteResponseJSON `json:"-"`
 }
 
@@ -354,8 +354,8 @@ func (r filterBulkDeleteResponseJSON) RawJSON() string {
 
 type FilterNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string]   `path:"zone_id,required"`
-	Body   []FirewallFilterParam `json:"body,required"`
+	ZoneID param.Field[string]   `path:"zone_id" api:"required"`
+	Body   []FirewallFilterParam `json:"body" api:"required"`
 }
 
 func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
@@ -364,8 +364,8 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 
 type FilterUpdateParams struct {
 	// Defines an identifier.
-	ZoneID         param.Field[string] `path:"zone_id,required"`
-	FirewallFilter FirewallFilterParam `json:"firewall_filter,required"`
+	ZoneID         param.Field[string] `path:"zone_id" api:"required"`
+	FirewallFilter FirewallFilterParam `json:"firewall_filter" api:"required"`
 }
 
 func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -373,11 +373,11 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallFilter        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   FirewallFilter        `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success FilterUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -417,7 +417,7 @@ func (r FilterUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type FilterListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The unique identifier of the filter.
 	ID param.Field[string] `query:"id"`
 	// A case-insensitive string to find in the description.
@@ -444,15 +444,15 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 
 type FilterDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type FilterDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FilterDeleteResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   FilterDeleteResponse  `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success FilterDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -492,8 +492,8 @@ func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type FilterBulkDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string]   `path:"zone_id,required"`
-	ID     param.Field[[]string] `query:"id,required"`
+	ZoneID param.Field[string]   `path:"zone_id" api:"required"`
+	ID     param.Field[[]string] `query:"id" api:"required"`
 }
 
 // URLQuery serializes [FilterBulkDeleteParams]'s query parameters as `url.Values`.
@@ -505,11 +505,11 @@ func (r FilterBulkDeleteParams) URLQuery() (v url.Values) {
 }
 
 type FilterBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   []FilterBulkDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   []FilterBulkDeleteResponse `json:"result" api:"required,nullable"`
 	// Defines whether the API call was successful.
-	Success    FilterBulkDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Success    FilterBulkDeleteResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo FilterBulkDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       filterBulkDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -582,8 +582,8 @@ func (r filterBulkDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type FilterBulkUpdateParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string]          `path:"zone_id,required"`
-	Body   []FilterBulkUpdateParamsBody `json:"body,required"`
+	ZoneID param.Field[string]          `path:"zone_id" api:"required"`
+	Body   []FilterBulkUpdateParamsBody `json:"body" api:"required"`
 }
 
 func (r FilterBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -608,15 +608,15 @@ func (r FilterBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 type FilterGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type FilterGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallFilter        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   FirewallFilter        `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success FilterGetResponseEnvelopeSuccess `json:"success,required"`
+	Success FilterGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    filterGetResponseEnvelopeJSON    `json:"-"`
 }
 

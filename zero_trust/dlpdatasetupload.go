@@ -38,25 +38,26 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 	return
 }
 
-// Prepare to upload a new version of a dataset
+// Creates a new version of a DLP dataset, allowing you to stage changes before
+// activation. Used for single-column EDM and custom word lists.
 func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
 	var env DLPDatasetUploadNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload", body.AccountID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // This is used for single-column EDMv1 and Custom Word Lists. The EDM format can
@@ -69,25 +70,25 @@ func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, ve
 	opts = append([]option.RequestOption{option.WithRequestBody("application/octet-stream", dataset)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if datasetID == "" {
 		err = errors.New("missing required dataset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", params.AccountID, datasetID, version)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type NewVersion struct {
-	EncodingVersion int64              `json:"encoding_version,required"`
-	MaxCells        int64              `json:"max_cells,required"`
-	Version         int64              `json:"version,required"`
+	EncodingVersion int64              `json:"encoding_version" api:"required"`
+	MaxCells        int64              `json:"max_cells" api:"required"`
+	Version         int64              `json:"version" api:"required"`
 	CaseSensitive   bool               `json:"case_sensitive"`
 	Columns         []NewVersionColumn `json:"columns"`
 	Secret          string             `json:"secret" format:"password"`
@@ -115,10 +116,10 @@ func (r newVersionJSON) RawJSON() string {
 }
 
 type NewVersionColumn struct {
-	EntryID      string                        `json:"entry_id,required" format:"uuid"`
-	HeaderName   string                        `json:"header_name,required"`
-	NumCells     int64                         `json:"num_cells,required"`
-	UploadStatus NewVersionColumnsUploadStatus `json:"upload_status,required"`
+	EntryID      string                        `json:"entry_id" api:"required" format:"uuid"`
+	HeaderName   string                        `json:"header_name" api:"required"`
+	NumCells     int64                         `json:"num_cells" api:"required"`
+	UploadStatus NewVersionColumnsUploadStatus `json:"upload_status" api:"required"`
 	JSON         newVersionColumnJSON          `json:"-"`
 }
 
@@ -161,14 +162,14 @@ func (r NewVersionColumnsUploadStatus) IsKnown() bool {
 }
 
 type DLPDatasetUploadNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPDatasetUploadNewResponseEnvelope struct {
-	Errors   []DLPDatasetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPDatasetUploadNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPDatasetUploadNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPDatasetUploadNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPDatasetUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPDatasetUploadNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  NewVersion                                 `json:"result"`
 	JSON    dlpDatasetUploadNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -193,8 +194,8 @@ func (r dlpDatasetUploadNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPDatasetUploadNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           DLPDatasetUploadNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpDatasetUploadNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -241,8 +242,8 @@ func (r dlpDatasetUploadNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPDatasetUploadNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           DLPDatasetUploadNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpDatasetUploadNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -304,7 +305,7 @@ func (r DLPDatasetUploadNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPDatasetUploadEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 func (r DLPDatasetUploadEditParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -323,10 +324,10 @@ func (r DLPDatasetUploadEditParams) MarshalMultipart() (data []byte, contentType
 }
 
 type DLPDatasetUploadEditResponseEnvelope struct {
-	Errors   []DLPDatasetUploadEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPDatasetUploadEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPDatasetUploadEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPDatasetUploadEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPDatasetUploadEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPDatasetUploadEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Dataset                                     `json:"result"`
 	JSON    dlpDatasetUploadEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -351,8 +352,8 @@ func (r dlpDatasetUploadEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPDatasetUploadEditResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           DLPDatasetUploadEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpDatasetUploadEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -399,8 +400,8 @@ func (r dlpDatasetUploadEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPDatasetUploadEditResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           DLPDatasetUploadEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpDatasetUploadEditResponseEnvelopeMessagesJSON   `json:"-"`

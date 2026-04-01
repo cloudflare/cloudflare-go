@@ -46,15 +46,15 @@ func (r *HistoryService) Update(ctx context.Context, params HistoryUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/history", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists a history of published Zaraz configuration records for a zone.
@@ -64,7 +64,7 @@ func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/history", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -85,16 +85,16 @@ func (r *HistoryService) ListAutoPaging(ctx context.Context, params HistoryListP
 }
 
 type HistoryListResponse struct {
-	// ID of the configuration
-	ID int64 `json:"id,required"`
-	// Date and time the configuration was created
-	CreatedAt time.Time `json:"createdAt,required" format:"date-time"`
-	// Configuration description provided by the user who published this configuration
-	Description string `json:"description,required"`
-	// Date and time the configuration was last updated
-	UpdatedAt time.Time `json:"updatedAt,required" format:"date-time"`
-	// Alpha-numeric ID of the account user who published the configuration
-	UserID string                  `json:"userId,required"`
+	// ID of the configuration.
+	ID int64 `json:"id" api:"required"`
+	// Date and time the configuration was created.
+	CreatedAt time.Time `json:"createdAt" api:"required" format:"date-time"`
+	// Configuration description provided by the user who published this configuration.
+	Description string `json:"description" api:"required"`
+	// Date and time the configuration was last updated.
+	UpdatedAt time.Time `json:"updatedAt" api:"required" format:"date-time"`
+	// Alpha-numeric ID of the account user who published the configuration.
+	UserID string                  `json:"userId" api:"required"`
 	JSON   historyListResponseJSON `json:"-"`
 }
 
@@ -120,9 +120,9 @@ func (r historyListResponseJSON) RawJSON() string {
 
 type HistoryUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// ID of the Zaraz configuration to restore.
-	Body int64 `json:"body,required"`
+	Body int64 `json:"body" api:"required"`
 }
 
 func (r HistoryUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -130,12 +130,12 @@ func (r HistoryUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HistoryUpdateResponseEnvelope struct {
-	Errors   []HistoryUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HistoryUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz configuration
-	Result Configuration `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                              `json:"success,required"`
+	Errors   []HistoryUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []HistoryUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Zaraz configuration.
+	Result Configuration `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success bool                              `json:"success" api:"required"`
 	JSON    historyUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -159,8 +159,8 @@ func (r historyUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type HistoryUpdateResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           HistoryUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             historyUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -207,8 +207,8 @@ func (r historyUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type HistoryUpdateResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           HistoryUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             historyUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -256,7 +256,7 @@ func (r historyUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 
 type HistoryListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Maximum amount of results to list. Default value is 10.
 	Limit param.Field[int64] `query:"limit"`
 	// Ordinal number to start listing the results with. Default value is 0.

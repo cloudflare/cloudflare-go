@@ -24,6 +24,7 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -41,6 +42,12 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),
 						Destinations:     cloudflare.F([]string{"cloudflare"}),
+						HeadSamplingRate: cloudflare.F(0.100000),
+						Persist:          cloudflare.F(true),
+					}),
+					Traces: cloudflare.F(workers.ScriptSettingObservabilityTracesParam{
+						Destinations:     cloudflare.F([]string{"cloudflare"}),
+						Enabled:          cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(0.100000),
 						Persist:          cloudflare.F(true),
 					}),
@@ -73,6 +80,7 @@ func TestScriptSettingGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

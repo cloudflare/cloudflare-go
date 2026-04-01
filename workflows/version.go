@@ -45,11 +45,11 @@ func (r *VersionService) List(ctx context.Context, workflowName string, params V
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/versions", params.AccountID, workflowName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -75,32 +75,32 @@ func (r *VersionService) Get(ctx context.Context, workflowName string, versionID
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	if versionID == "" {
 		err = errors.New("missing required version_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/versions/%s", query.AccountID, workflowName, versionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type VersionListResponse struct {
-	ID         string                    `json:"id,required" format:"uuid"`
-	ClassName  string                    `json:"class_name,required"`
-	CreatedOn  time.Time                 `json:"created_on,required" format:"date-time"`
-	HasDag     bool                      `json:"has_dag,required"`
-	ModifiedOn time.Time                 `json:"modified_on,required" format:"date-time"`
-	WorkflowID string                    `json:"workflow_id,required" format:"uuid"`
+	ID         string                    `json:"id" api:"required" format:"uuid"`
+	ClassName  string                    `json:"class_name" api:"required"`
+	CreatedOn  time.Time                 `json:"created_on" api:"required" format:"date-time"`
+	HasDag     bool                      `json:"has_dag" api:"required"`
+	ModifiedOn time.Time                 `json:"modified_on" api:"required" format:"date-time"`
+	WorkflowID string                    `json:"workflow_id" api:"required" format:"uuid"`
 	Limits     VersionListResponseLimits `json:"limits"`
 	JSON       versionListResponseJSON   `json:"-"`
 }
@@ -149,12 +149,12 @@ func (r versionListResponseLimitsJSON) RawJSON() string {
 }
 
 type VersionGetResponse struct {
-	ID         string                   `json:"id,required" format:"uuid"`
-	ClassName  string                   `json:"class_name,required"`
-	CreatedOn  time.Time                `json:"created_on,required" format:"date-time"`
-	HasDag     bool                     `json:"has_dag,required"`
-	ModifiedOn time.Time                `json:"modified_on,required" format:"date-time"`
-	WorkflowID string                   `json:"workflow_id,required" format:"uuid"`
+	ID         string                   `json:"id" api:"required" format:"uuid"`
+	ClassName  string                   `json:"class_name" api:"required"`
+	CreatedOn  time.Time                `json:"created_on" api:"required" format:"date-time"`
+	HasDag     bool                     `json:"has_dag" api:"required"`
+	ModifiedOn time.Time                `json:"modified_on" api:"required" format:"date-time"`
+	WorkflowID string                   `json:"workflow_id" api:"required" format:"uuid"`
 	Limits     VersionGetResponseLimits `json:"limits"`
 	JSON       versionGetResponseJSON   `json:"-"`
 }
@@ -203,7 +203,7 @@ func (r versionGetResponseLimitsJSON) RawJSON() string {
 }
 
 type VersionListParams struct {
-	AccountID param.Field[string]  `path:"account_id,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
 }
@@ -217,14 +217,14 @@ func (r VersionListParams) URLQuery() (v url.Values) {
 }
 
 type VersionGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type VersionGetResponseEnvelope struct {
-	Errors     []VersionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []VersionGetResponseEnvelopeMessages `json:"messages,required"`
-	Result     VersionGetResponse                   `json:"result,required"`
-	Success    VersionGetResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []VersionGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []VersionGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     VersionGetResponse                   `json:"result" api:"required"`
+	Success    VersionGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo VersionGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       versionGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -250,8 +250,8 @@ func (r versionGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type VersionGetResponseEnvelopeErrors struct {
-	Code    float64                              `json:"code,required"`
-	Message string                               `json:"message,required"`
+	Code    float64                              `json:"code" api:"required"`
+	Message string                               `json:"message" api:"required"`
 	JSON    versionGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -273,8 +273,8 @@ func (r versionGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type VersionGetResponseEnvelopeMessages struct {
-	Code    float64                                `json:"code,required"`
-	Message string                                 `json:"message,required"`
+	Code    float64                                `json:"code" api:"required"`
+	Message string                                 `json:"message" api:"required"`
 	JSON    versionGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -310,9 +310,9 @@ func (r VersionGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type VersionGetResponseEnvelopeResultInfo struct {
-	Count      float64                                  `json:"count,required"`
-	PerPage    float64                                  `json:"per_page,required"`
-	TotalCount float64                                  `json:"total_count,required"`
+	Count      float64                                  `json:"count" api:"required"`
+	PerPage    float64                                  `json:"per_page" api:"required"`
+	TotalCount float64                                  `json:"total_count" api:"required"`
 	Cursor     string                                   `json:"cursor"`
 	Page       float64                                  `json:"page"`
 	JSON       versionGetResponseEnvelopeResultInfoJSON `json:"-"`

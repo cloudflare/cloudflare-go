@@ -27,6 +27,7 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -78,6 +79,7 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -117,6 +119,7 @@ func TestThreatEventBulkNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -172,6 +175,7 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -180,11 +184,11 @@ func TestThreatEventEditWithOptionalParams(t *testing.T) {
 		"event_id",
 		cloudforce_one.ThreatEventEditParams{
 			AccountID:       cloudflare.F("account_id"),
+			DatasetID:       cloudflare.F("9b769969-a211-466c-8ac3-cb91266a066a"),
 			Attacker:        cloudflare.F("Flying Yeti"),
 			AttackerCountry: cloudflare.F("CN"),
 			Category:        cloudflare.F("Domain Resolution"),
 			CreatedAt:       cloudflare.F(time.Now()),
-			DatasetID:       cloudflare.F("9b769969-a211-466c-8ac3-cb91266a066a"),
 			Date:            cloudflare.F(time.Now()),
 			Event:           cloudflare.F("An attacker registered the domain domain.com"),
 			Indicator:       cloudflare.F("domain2.com"),
@@ -222,6 +226,7 @@ func TestThreatEventGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

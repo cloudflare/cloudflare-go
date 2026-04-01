@@ -41,15 +41,15 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/workers/routes", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates the URL pattern or Worker associated with a route.
@@ -58,19 +58,19 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", params.ZoneID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns routes for a zone.
@@ -80,7 +80,7 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/workers/routes", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,19 +106,19 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", body.ZoneID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns information about a route, including URL pattern and Worker.
@@ -127,27 +127,27 @@ func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if routeID == "" {
 		err = errors.New("missing required route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", query.ZoneID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RouteNewResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
+	Pattern string `json:"pattern" api:"required"`
 	// Name of the script to run if the route matches.
 	Script string               `json:"script"`
 	JSON   routeNewResponseJSON `json:"-"`
@@ -173,10 +173,10 @@ func (r routeNewResponseJSON) RawJSON() string {
 
 type RouteUpdateResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
+	Pattern string `json:"pattern" api:"required"`
 	// Name of the script to run if the route matches.
 	Script string                  `json:"script"`
 	JSON   routeUpdateResponseJSON `json:"-"`
@@ -202,10 +202,10 @@ func (r routeUpdateResponseJSON) RawJSON() string {
 
 type RouteListResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
+	Pattern string `json:"pattern" api:"required"`
 	// Name of the script to run if the route matches.
 	Script string                `json:"script"`
 	JSON   routeListResponseJSON `json:"-"`
@@ -253,10 +253,10 @@ func (r routeDeleteResponseJSON) RawJSON() string {
 
 type RouteGetResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern string `json:"pattern,required"`
+	Pattern string `json:"pattern" api:"required"`
 	// Name of the script to run if the route matches.
 	Script string               `json:"script"`
 	JSON   routeGetResponseJSON `json:"-"`
@@ -282,10 +282,10 @@ func (r routeGetResponseJSON) RawJSON() string {
 
 type RouteNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern param.Field[string] `json:"pattern,required"`
+	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Name of the script to run if the route matches.
 	Script param.Field[string] `json:"script"`
 }
@@ -295,11 +295,11 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteNewResponseEnvelope struct {
-	Errors   []RouteNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RouteNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   RouteNewResponse                   `json:"result,required"`
+	Errors   []RouteNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RouteNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   RouteNewResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -323,8 +323,8 @@ func (r routeNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RouteNewResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           RouteNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             routeNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -371,8 +371,8 @@ func (r routeNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RouteNewResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RouteNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             routeNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -435,12 +435,12 @@ func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifier.
 	ID param.Field[string] `json:"id,required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-	Pattern param.Field[string] `json:"pattern,required"`
+	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Name of the script to run if the route matches.
 	Script param.Field[string] `json:"script"`
 }
@@ -450,11 +450,11 @@ func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteUpdateResponseEnvelope struct {
-	Errors   []RouteUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RouteUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   RouteUpdateResponse                   `json:"result,required"`
+	Errors   []RouteUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RouteUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   RouteUpdateResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -478,8 +478,8 @@ func (r routeUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RouteUpdateResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           RouteUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             routeUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -526,8 +526,8 @@ func (r routeUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RouteUpdateResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           RouteUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             routeUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -590,20 +590,20 @@ func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RouteDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RouteDeleteResponseEnvelope struct {
-	Errors   []RouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RouteDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   RouteDeleteResponse                   `json:"result,required"`
+	Errors   []RouteDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RouteDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   RouteDeleteResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -627,8 +627,8 @@ func (r routeDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RouteDeleteResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           RouteDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             routeDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -675,8 +675,8 @@ func (r routeDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RouteDeleteResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           RouteDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             routeDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -739,15 +739,15 @@ func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RouteGetResponseEnvelope struct {
-	Errors   []RouteGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RouteGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   RouteGetResponse                   `json:"result,required"`
+	Errors   []RouteGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RouteGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   RouteGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RouteGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -771,8 +771,8 @@ func (r routeGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RouteGetResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           RouteGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             routeGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -819,8 +819,8 @@ func (r routeGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RouteGetResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RouteGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             routeGetResponseEnvelopeMessagesJSON   `json:"-"`

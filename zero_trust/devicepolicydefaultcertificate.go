@@ -43,15 +43,15 @@ func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/devices/policy/certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches device certificate provisioning.
@@ -60,20 +60,20 @@ func (r *DevicePolicyDefaultCertificateService) Get(ctx context.Context, query D
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/devices/policy/certificates", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DevicePolicyDefaultCertificateEditParams struct {
-	ZoneID                   param.Field[string]           `path:"zone_id,required"`
-	DevicePolicyCertificates DevicePolicyCertificatesParam `json:"device_policy_certificates,required"`
+	ZoneID                   param.Field[string]           `path:"zone_id" api:"required"`
+	DevicePolicyCertificates DevicePolicyCertificatesParam `json:"device_policy_certificates" api:"required"`
 }
 
 func (r DevicePolicyDefaultCertificateEditParams) MarshalJSON() (data []byte, err error) {
@@ -81,11 +81,11 @@ func (r DevicePolicyDefaultCertificateEditParams) MarshalJSON() (data []byte, er
 }
 
 type DevicePolicyDefaultCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DevicePolicyCertificates `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo    `json:"messages" api:"required"`
+	Result   DevicePolicyCertificates `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePolicyDefaultCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -124,15 +124,15 @@ func (r DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess) IsKnown() boo
 }
 
 type DevicePolicyDefaultCertificateGetParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DevicePolicyDefaultCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DevicePolicyCertificates `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo    `json:"messages" api:"required"`
+	Result   DevicePolicyCertificates `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePolicyDefaultCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePolicyDefaultCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePolicyDefaultCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 

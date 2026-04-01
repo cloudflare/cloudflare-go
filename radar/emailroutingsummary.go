@@ -47,10 +47,10 @@ func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRouting
 	path := "radar/email/routing/summary/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of emails by DKIM (DomainKeys Identified Mail)
@@ -65,10 +65,10 @@ func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutin
 	path := "radar/email/routing/summary/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of emails by DMARC (Domain-based Message
@@ -83,10 +83,10 @@ func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRouti
 	path := "radar/email/routing/summary/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of emails by encryption status (encrypted vs.
@@ -101,10 +101,10 @@ func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailR
 	path := "radar/email/routing/summary/encrypted"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of emails by IP version.
@@ -118,10 +118,10 @@ func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailR
 	path := "radar/email/routing/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of emails by SPF (Sender Policy Framework)
@@ -136,16 +136,16 @@ func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRouting
 	path := "radar/email/routing/summary/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EmailRoutingSummaryARCResponse struct {
 	// Metadata for the results.
-	Meta     EmailRoutingSummaryARCResponseMeta `json:"meta,required"`
-	Summary0 RadarEmailSummary                  `json:"summary_0,required"`
+	Meta     EmailRoutingSummaryARCResponseMeta `json:"meta" api:"required"`
+	Summary0 RadarEmailSummary                  `json:"summary_0" api:"required"`
 	JSON     emailRoutingSummaryARCResponseJSON `json:"-"`
 }
 
@@ -168,15 +168,15 @@ func (r emailRoutingSummaryARCResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailRoutingSummaryARCResponseMeta struct {
-	ConfidenceInfo EmailRoutingSummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []EmailRoutingSummaryARCResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo EmailRoutingSummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []EmailRoutingSummaryARCResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailRoutingSummaryARCResponseMetaNormalization `json:"normalization,required"`
+	Normalization EmailRoutingSummaryARCResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailRoutingSummaryARCResponseMetaUnit `json:"units,required"`
+	Units []EmailRoutingSummaryARCResponseMetaUnit `json:"units" api:"required"`
 	JSON  emailRoutingSummaryARCResponseMetaJSON   `json:"-"`
 }
 
@@ -201,9 +201,9 @@ func (r emailRoutingSummaryARCResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryARCResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                `json:"level,required"`
+	Level int64                                                `json:"level" api:"required"`
 	JSON  emailRoutingSummaryARCResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -227,15 +227,15 @@ func (r emailRoutingSummaryARCResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                `json:"description,required"`
-	EndDate     time.Time                                                             `json:"endDate,required" format:"date-time"`
+	DataSource  EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                `json:"description" api:"required"`
+	EndDate     time.Time                                                             `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
-	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                         `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                      `json:"startDate" api:"required" format:"date-time"`
 	JSON            emailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -323,9 +323,9 @@ func (r EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationsEventType) Is
 
 type EmailRoutingSummaryARCResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                       `json:"startTime" api:"required" format:"date-time"`
 	JSON      emailRoutingSummaryARCResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -370,8 +370,8 @@ func (r EmailRoutingSummaryARCResponseMetaNormalization) IsKnown() bool {
 }
 
 type EmailRoutingSummaryARCResponseMetaUnit struct {
-	Name  string                                     `json:"name,required"`
-	Value string                                     `json:"value,required"`
+	Name  string                                     `json:"name" api:"required"`
+	Value string                                     `json:"value" api:"required"`
 	JSON  emailRoutingSummaryARCResponseMetaUnitJSON `json:"-"`
 }
 
@@ -394,8 +394,8 @@ func (r emailRoutingSummaryARCResponseMetaUnitJSON) RawJSON() string {
 
 type EmailRoutingSummaryDKIMResponse struct {
 	// Metadata for the results.
-	Meta     EmailRoutingSummaryDKIMResponseMeta `json:"meta,required"`
-	Summary0 RadarEmailSummary                   `json:"summary_0,required"`
+	Meta     EmailRoutingSummaryDKIMResponseMeta `json:"meta" api:"required"`
+	Summary0 RadarEmailSummary                   `json:"summary_0" api:"required"`
 	JSON     emailRoutingSummaryDKIMResponseJSON `json:"-"`
 }
 
@@ -418,15 +418,15 @@ func (r emailRoutingSummaryDKIMResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailRoutingSummaryDKIMResponseMeta struct {
-	ConfidenceInfo EmailRoutingSummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []EmailRoutingSummaryDKIMResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo EmailRoutingSummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []EmailRoutingSummaryDKIMResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailRoutingSummaryDKIMResponseMetaNormalization `json:"normalization,required"`
+	Normalization EmailRoutingSummaryDKIMResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailRoutingSummaryDKIMResponseMetaUnit `json:"units,required"`
+	Units []EmailRoutingSummaryDKIMResponseMetaUnit `json:"units" api:"required"`
 	JSON  emailRoutingSummaryDKIMResponseMetaJSON   `json:"-"`
 }
 
@@ -451,9 +451,9 @@ func (r emailRoutingSummaryDKIMResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDKIMResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                 `json:"level,required"`
+	Level int64                                                 `json:"level" api:"required"`
 	JSON  emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -477,15 +477,15 @@ func (r emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON) RawJSON() string 
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                 `json:"description,required"`
-	EndDate     time.Time                                                              `json:"endDate,required" format:"date-time"`
+	DataSource  EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                 `json:"description" api:"required"`
+	EndDate     time.Time                                                              `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
-	LinkedURL       string                                                          `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                       `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                          `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                       `json:"startDate" api:"required" format:"date-time"`
 	JSON            emailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -573,9 +573,9 @@ func (r EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationsEventType) I
 
 type EmailRoutingSummaryDKIMResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                        `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                        `json:"startTime" api:"required" format:"date-time"`
 	JSON      emailRoutingSummaryDKIMResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -620,8 +620,8 @@ func (r EmailRoutingSummaryDKIMResponseMetaNormalization) IsKnown() bool {
 }
 
 type EmailRoutingSummaryDKIMResponseMetaUnit struct {
-	Name  string                                      `json:"name,required"`
-	Value string                                      `json:"value,required"`
+	Name  string                                      `json:"name" api:"required"`
+	Value string                                      `json:"value" api:"required"`
 	JSON  emailRoutingSummaryDKIMResponseMetaUnitJSON `json:"-"`
 }
 
@@ -644,8 +644,8 @@ func (r emailRoutingSummaryDKIMResponseMetaUnitJSON) RawJSON() string {
 
 type EmailRoutingSummaryDMARCResponse struct {
 	// Metadata for the results.
-	Meta     EmailRoutingSummaryDMARCResponseMeta `json:"meta,required"`
-	Summary0 RadarEmailSummary                    `json:"summary_0,required"`
+	Meta     EmailRoutingSummaryDMARCResponseMeta `json:"meta" api:"required"`
+	Summary0 RadarEmailSummary                    `json:"summary_0" api:"required"`
 	JSON     emailRoutingSummaryDMARCResponseJSON `json:"-"`
 }
 
@@ -668,15 +668,15 @@ func (r emailRoutingSummaryDMARCResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailRoutingSummaryDMARCResponseMeta struct {
-	ConfidenceInfo EmailRoutingSummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []EmailRoutingSummaryDMARCResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo EmailRoutingSummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []EmailRoutingSummaryDMARCResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailRoutingSummaryDMARCResponseMetaNormalization `json:"normalization,required"`
+	Normalization EmailRoutingSummaryDMARCResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailRoutingSummaryDMARCResponseMetaUnit `json:"units,required"`
+	Units []EmailRoutingSummaryDMARCResponseMetaUnit `json:"units" api:"required"`
 	JSON  emailRoutingSummaryDMARCResponseMetaJSON   `json:"-"`
 }
 
@@ -701,9 +701,9 @@ func (r emailRoutingSummaryDMARCResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDMARCResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                  `json:"level,required"`
+	Level int64                                                  `json:"level" api:"required"`
 	JSON  emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -727,15 +727,15 @@ func (r emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON) RawJSON() string
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                  `json:"description,required"`
-	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	DataSource  EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                  `json:"description" api:"required"`
+	EndDate     time.Time                                                               `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
 	JSON            emailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -823,9 +823,9 @@ func (r EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationsEventType) 
 
 type EmailRoutingSummaryDMARCResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                         `json:"startTime" api:"required" format:"date-time"`
 	JSON      emailRoutingSummaryDMARCResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -870,8 +870,8 @@ func (r EmailRoutingSummaryDMARCResponseMetaNormalization) IsKnown() bool {
 }
 
 type EmailRoutingSummaryDMARCResponseMetaUnit struct {
-	Name  string                                       `json:"name,required"`
-	Value string                                       `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  emailRoutingSummaryDMARCResponseMetaUnitJSON `json:"-"`
 }
 
@@ -894,8 +894,8 @@ func (r emailRoutingSummaryDMARCResponseMetaUnitJSON) RawJSON() string {
 
 type EmailRoutingSummaryEncryptedResponse struct {
 	// Metadata for the results.
-	Meta     EmailRoutingSummaryEncryptedResponseMeta     `json:"meta,required"`
-	Summary0 EmailRoutingSummaryEncryptedResponseSummary0 `json:"summary_0,required"`
+	Meta     EmailRoutingSummaryEncryptedResponseMeta     `json:"meta" api:"required"`
+	Summary0 EmailRoutingSummaryEncryptedResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     emailRoutingSummaryEncryptedResponseJSON     `json:"-"`
 }
 
@@ -918,15 +918,15 @@ func (r emailRoutingSummaryEncryptedResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailRoutingSummaryEncryptedResponseMeta struct {
-	ConfidenceInfo EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []EmailRoutingSummaryEncryptedResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []EmailRoutingSummaryEncryptedResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailRoutingSummaryEncryptedResponseMetaNormalization `json:"normalization,required"`
+	Normalization EmailRoutingSummaryEncryptedResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailRoutingSummaryEncryptedResponseMetaUnit `json:"units,required"`
+	Units []EmailRoutingSummaryEncryptedResponseMetaUnit `json:"units" api:"required"`
 	JSON  emailRoutingSummaryEncryptedResponseMetaJSON   `json:"-"`
 }
 
@@ -951,9 +951,9 @@ func (r emailRoutingSummaryEncryptedResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                      `json:"level,required"`
+	Level int64                                                      `json:"level" api:"required"`
 	JSON  emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -977,15 +977,15 @@ func (r emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON) RawJSON() st
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                      `json:"description,required"`
-	EndDate     time.Time                                                                   `json:"endDate,required" format:"date-time"`
+	DataSource  EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                      `json:"description" api:"required"`
+	EndDate     time.Time                                                                   `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                            `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                               `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                            `json:"startDate" api:"required" format:"date-time"`
 	JSON            emailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1073,9 +1073,9 @@ func (r EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationsEventTy
 
 type EmailRoutingSummaryEncryptedResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                             `json:"startTime" api:"required" format:"date-time"`
 	JSON      emailRoutingSummaryEncryptedResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1120,8 +1120,8 @@ func (r EmailRoutingSummaryEncryptedResponseMetaNormalization) IsKnown() bool {
 }
 
 type EmailRoutingSummaryEncryptedResponseMetaUnit struct {
-	Name  string                                           `json:"name,required"`
-	Value string                                           `json:"value,required"`
+	Name  string                                           `json:"name" api:"required"`
+	Value string                                           `json:"value" api:"required"`
 	JSON  emailRoutingSummaryEncryptedResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1144,9 +1144,9 @@ func (r emailRoutingSummaryEncryptedResponseMetaUnitJSON) RawJSON() string {
 
 type EmailRoutingSummaryEncryptedResponseSummary0 struct {
 	// A numeric string.
-	Encrypted string `json:"ENCRYPTED,required"`
+	Encrypted string `json:"ENCRYPTED" api:"required"`
 	// A numeric string.
-	NotEncrypted string                                           `json:"NOT_ENCRYPTED,required"`
+	NotEncrypted string                                           `json:"NOT_ENCRYPTED" api:"required"`
 	JSON         emailRoutingSummaryEncryptedResponseSummary0JSON `json:"-"`
 }
 
@@ -1169,8 +1169,8 @@ func (r emailRoutingSummaryEncryptedResponseSummary0JSON) RawJSON() string {
 
 type EmailRoutingSummaryIPVersionResponse struct {
 	// Metadata for the results.
-	Meta     EmailRoutingSummaryIPVersionResponseMeta     `json:"meta,required"`
-	Summary0 EmailRoutingSummaryIPVersionResponseSummary0 `json:"summary_0,required"`
+	Meta     EmailRoutingSummaryIPVersionResponseMeta     `json:"meta" api:"required"`
+	Summary0 EmailRoutingSummaryIPVersionResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     emailRoutingSummaryIPVersionResponseJSON     `json:"-"`
 }
 
@@ -1193,15 +1193,15 @@ func (r emailRoutingSummaryIPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailRoutingSummaryIPVersionResponseMeta struct {
-	ConfidenceInfo EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []EmailRoutingSummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []EmailRoutingSummaryIPVersionResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailRoutingSummaryIPVersionResponseMetaNormalization `json:"normalization,required"`
+	Normalization EmailRoutingSummaryIPVersionResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailRoutingSummaryIPVersionResponseMetaUnit `json:"units,required"`
+	Units []EmailRoutingSummaryIPVersionResponseMetaUnit `json:"units" api:"required"`
 	JSON  emailRoutingSummaryIPVersionResponseMetaJSON   `json:"-"`
 }
 
@@ -1226,9 +1226,9 @@ func (r emailRoutingSummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                      `json:"level,required"`
+	Level int64                                                      `json:"level" api:"required"`
 	JSON  emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1252,15 +1252,15 @@ func (r emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() st
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                      `json:"description,required"`
-	EndDate     time.Time                                                                   `json:"endDate,required" format:"date-time"`
+	DataSource  EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                      `json:"description" api:"required"`
+	EndDate     time.Time                                                                   `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                            `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                               `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                            `json:"startDate" api:"required" format:"date-time"`
 	JSON            emailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1348,9 +1348,9 @@ func (r EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventTy
 
 type EmailRoutingSummaryIPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                             `json:"startTime" api:"required" format:"date-time"`
 	JSON      emailRoutingSummaryIPVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1395,8 +1395,8 @@ func (r EmailRoutingSummaryIPVersionResponseMetaNormalization) IsKnown() bool {
 }
 
 type EmailRoutingSummaryIPVersionResponseMetaUnit struct {
-	Name  string                                           `json:"name,required"`
-	Value string                                           `json:"value,required"`
+	Name  string                                           `json:"name" api:"required"`
+	Value string                                           `json:"value" api:"required"`
 	JSON  emailRoutingSummaryIPVersionResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1419,9 +1419,9 @@ func (r emailRoutingSummaryIPVersionResponseMetaUnitJSON) RawJSON() string {
 
 type EmailRoutingSummaryIPVersionResponseSummary0 struct {
 	// A numeric string.
-	IPv4 string `json:"IPv4,required"`
+	IPv4 string `json:"IPv4" api:"required"`
 	// A numeric string.
-	IPv6 string                                           `json:"IPv6,required"`
+	IPv6 string                                           `json:"IPv6" api:"required"`
 	JSON emailRoutingSummaryIPVersionResponseSummary0JSON `json:"-"`
 }
 
@@ -1444,8 +1444,8 @@ func (r emailRoutingSummaryIPVersionResponseSummary0JSON) RawJSON() string {
 
 type EmailRoutingSummarySPFResponse struct {
 	// Metadata for the results.
-	Meta     EmailRoutingSummarySPFResponseMeta `json:"meta,required"`
-	Summary0 RadarEmailSummary                  `json:"summary_0,required"`
+	Meta     EmailRoutingSummarySPFResponseMeta `json:"meta" api:"required"`
+	Summary0 RadarEmailSummary                  `json:"summary_0" api:"required"`
 	JSON     emailRoutingSummarySPFResponseJSON `json:"-"`
 }
 
@@ -1468,15 +1468,15 @@ func (r emailRoutingSummarySPFResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailRoutingSummarySPFResponseMeta struct {
-	ConfidenceInfo EmailRoutingSummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []EmailRoutingSummarySPFResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo EmailRoutingSummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []EmailRoutingSummarySPFResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailRoutingSummarySPFResponseMetaNormalization `json:"normalization,required"`
+	Normalization EmailRoutingSummarySPFResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailRoutingSummarySPFResponseMetaUnit `json:"units,required"`
+	Units []EmailRoutingSummarySPFResponseMetaUnit `json:"units" api:"required"`
 	JSON  emailRoutingSummarySPFResponseMetaJSON   `json:"-"`
 }
 
@@ -1501,9 +1501,9 @@ func (r emailRoutingSummarySPFResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummarySPFResponseMetaConfidenceInfo struct {
-	Annotations []EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                `json:"level,required"`
+	Level int64                                                `json:"level" api:"required"`
 	JSON  emailRoutingSummarySPFResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1527,15 +1527,15 @@ func (r emailRoutingSummarySPFResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                `json:"description,required"`
-	EndDate     time.Time                                                             `json:"endDate,required" format:"date-time"`
+	DataSource  EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                `json:"description" api:"required"`
+	EndDate     time.Time                                                             `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
-	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                         `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                      `json:"startDate" api:"required" format:"date-time"`
 	JSON            emailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1623,9 +1623,9 @@ func (r EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationsEventType) Is
 
 type EmailRoutingSummarySPFResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                       `json:"startTime" api:"required" format:"date-time"`
 	JSON      emailRoutingSummarySPFResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1670,8 +1670,8 @@ func (r EmailRoutingSummarySPFResponseMetaNormalization) IsKnown() bool {
 }
 
 type EmailRoutingSummarySPFResponseMetaUnit struct {
-	Name  string                                     `json:"name,required"`
-	Value string                                     `json:"value,required"`
+	Name  string                                     `json:"name" api:"required"`
+	Value string                                     `json:"value" api:"required"`
 	JSON  emailRoutingSummarySPFResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1822,8 +1822,8 @@ func (r EmailRoutingSummaryARCParamsSPF) IsKnown() bool {
 }
 
 type EmailRoutingSummaryARCResponseEnvelope struct {
-	Result  EmailRoutingSummaryARCResponse             `json:"result,required"`
-	Success bool                                       `json:"success,required"`
+	Result  EmailRoutingSummaryARCResponse             `json:"result" api:"required"`
+	Success bool                                       `json:"success" api:"required"`
 	JSON    emailRoutingSummaryARCResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1974,8 +1974,8 @@ func (r EmailRoutingSummaryDKIMParamsSPF) IsKnown() bool {
 }
 
 type EmailRoutingSummaryDKIMResponseEnvelope struct {
-	Result  EmailRoutingSummaryDKIMResponse             `json:"result,required"`
-	Success bool                                        `json:"success,required"`
+	Result  EmailRoutingSummaryDKIMResponse             `json:"result" api:"required"`
+	Success bool                                        `json:"success" api:"required"`
 	JSON    emailRoutingSummaryDKIMResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2125,8 +2125,8 @@ func (r EmailRoutingSummaryDMARCParamsSPF) IsKnown() bool {
 }
 
 type EmailRoutingSummaryDMARCResponseEnvelope struct {
-	Result  EmailRoutingSummaryDMARCResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  EmailRoutingSummaryDMARCResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    emailRoutingSummaryDMARCResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2278,8 +2278,8 @@ func (r EmailRoutingSummaryEncryptedParamsSPF) IsKnown() bool {
 }
 
 type EmailRoutingSummaryEncryptedResponseEnvelope struct {
-	Result  EmailRoutingSummaryEncryptedResponse             `json:"result,required"`
-	Success bool                                             `json:"success,required"`
+	Result  EmailRoutingSummaryEncryptedResponse             `json:"result" api:"required"`
+	Success bool                                             `json:"success" api:"required"`
 	JSON    emailRoutingSummaryEncryptedResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2431,8 +2431,8 @@ func (r EmailRoutingSummaryIPVersionParamsSPF) IsKnown() bool {
 }
 
 type EmailRoutingSummaryIPVersionResponseEnvelope struct {
-	Result  EmailRoutingSummaryIPVersionResponse             `json:"result,required"`
-	Success bool                                             `json:"success,required"`
+	Result  EmailRoutingSummaryIPVersionResponse             `json:"result" api:"required"`
+	Success bool                                             `json:"success" api:"required"`
 	JSON    emailRoutingSummaryIPVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2583,8 +2583,8 @@ func (r EmailRoutingSummarySPFParamsIPVersion) IsKnown() bool {
 }
 
 type EmailRoutingSummarySPFResponseEnvelope struct {
-	Result  EmailRoutingSummarySPFResponse             `json:"result,required"`
-	Success bool                                       `json:"success,required"`
+	Result  EmailRoutingSummarySPFResponse             `json:"result" api:"required"`
+	Success bool                                       `json:"success" api:"required"`
 	JSON    emailRoutingSummarySPFResponseEnvelopeJSON `json:"-"`
 }
 

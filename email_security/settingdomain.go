@@ -46,7 +46,7 @@ func (r *SettingDomainService) List(ctx context.Context, params SettingDomainLis
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -72,15 +72,15 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID int64, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains/%v", body.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Bulk removes multiple domains from email security configuration in a single
@@ -91,7 +91,7 @@ func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomai
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains", body.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -118,15 +118,15 @@ func (r *SettingDomainService) Edit(ctx context.Context, domainID int64, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains/%v", params.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets configuration details for a specific domain in email security.
@@ -135,39 +135,39 @@ func (r *SettingDomainService) Get(ctx context.Context, domainID int64, query Se
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains/%v", query.AccountID, domainID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingDomainListResponse struct {
 	// The unique identifier for the domain.
-	ID                   int64                                          `json:"id,required"`
-	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
-	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
-	Domain               string                                         `json:"domain,required"`
-	DropDispositions     []SettingDomainListResponseDropDisposition     `json:"drop_dispositions,required"`
-	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
-	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
-	LookbackHops         int64                                          `json:"lookback_hops,required"`
-	Regions              []SettingDomainListResponseRegion              `json:"regions,required"`
-	Transport            string                                         `json:"transport,required"`
-	Authorization        SettingDomainListResponseAuthorization         `json:"authorization,nullable"`
-	DMARCStatus          SettingDomainListResponseDMARCStatus           `json:"dmarc_status,nullable"`
-	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed,nullable"`
-	Folder               SettingDomainListResponseFolder                `json:"folder,nullable"`
-	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider,nullable"`
-	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
-	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
-	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
-	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
-	SPFStatus            SettingDomainListResponseSPFStatus             `json:"spf_status,nullable"`
+	ID                   int64                                          `json:"id" api:"required"`
+	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes" api:"required"`
+	CreatedAt            time.Time                                      `json:"created_at" api:"required" format:"date-time"`
+	Domain               string                                         `json:"domain" api:"required"`
+	DropDispositions     []SettingDomainListResponseDropDisposition     `json:"drop_dispositions" api:"required"`
+	IPRestrictions       []string                                       `json:"ip_restrictions" api:"required"`
+	LastModified         time.Time                                      `json:"last_modified" api:"required" format:"date-time"`
+	LookbackHops         int64                                          `json:"lookback_hops" api:"required"`
+	Regions              []SettingDomainListResponseRegion              `json:"regions" api:"required"`
+	Transport            string                                         `json:"transport" api:"required"`
+	Authorization        SettingDomainListResponseAuthorization         `json:"authorization" api:"nullable"`
+	DMARCStatus          SettingDomainListResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
+	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
+	Folder               SettingDomainListResponseFolder                `json:"folder" api:"nullable"`
+	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
+	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
+	O365TenantID         string                                         `json:"o365_tenant_id" api:"nullable"`
+	RequireTLSInbound    bool                                           `json:"require_tls_inbound" api:"nullable"`
+	RequireTLSOutbound   bool                                           `json:"require_tls_outbound" api:"nullable"`
+	SPFStatus            SettingDomainListResponseSPFStatus             `json:"spf_status" api:"nullable"`
 	JSON                 settingDomainListResponseJSON                  `json:"-"`
 }
 
@@ -266,9 +266,9 @@ func (r SettingDomainListResponseRegion) IsKnown() bool {
 }
 
 type SettingDomainListResponseAuthorization struct {
-	Authorized    bool                                       `json:"authorized,required"`
-	Timestamp     time.Time                                  `json:"timestamp,required" format:"date-time"`
-	StatusMessage string                                     `json:"status_message,nullable"`
+	Authorized    bool                                       `json:"authorized" api:"required"`
+	Timestamp     time.Time                                  `json:"timestamp" api:"required" format:"date-time"`
+	StatusMessage string                                     `json:"status_message" api:"nullable"`
 	JSON          settingDomainListResponseAuthorizationJSON `json:"-"`
 }
 
@@ -307,9 +307,9 @@ func (r SettingDomainListResponseDMARCStatus) IsKnown() bool {
 }
 
 type SettingDomainListResponseEmailsProcessed struct {
-	Timestamp                    time.Time                                    `json:"timestamp,required" format:"date-time"`
-	TotalEmailsProcessed         int64                                        `json:"total_emails_processed,required"`
-	TotalEmailsProcessedPrevious int64                                        `json:"total_emails_processed_previous,required"`
+	Timestamp                    time.Time                                    `json:"timestamp" api:"required" format:"date-time"`
+	TotalEmailsProcessed         int64                                        `json:"total_emails_processed" api:"required"`
+	TotalEmailsProcessedPrevious int64                                        `json:"total_emails_processed_previous" api:"required"`
 	JSON                         settingDomainListResponseEmailsProcessedJSON `json:"-"`
 }
 
@@ -381,7 +381,7 @@ func (r SettingDomainListResponseSPFStatus) IsKnown() bool {
 
 type SettingDomainDeleteResponse struct {
 	// The unique identifier for the domain.
-	ID   int64                           `json:"id,required"`
+	ID   int64                           `json:"id" api:"required"`
 	JSON settingDomainDeleteResponseJSON `json:"-"`
 }
 
@@ -403,7 +403,7 @@ func (r settingDomainDeleteResponseJSON) RawJSON() string {
 
 type SettingDomainBulkDeleteResponse struct {
 	// The unique identifier for the domain.
-	ID   int64                               `json:"id,required"`
+	ID   int64                               `json:"id" api:"required"`
 	JSON settingDomainBulkDeleteResponseJSON `json:"-"`
 }
 
@@ -425,26 +425,26 @@ func (r settingDomainBulkDeleteResponseJSON) RawJSON() string {
 
 type SettingDomainEditResponse struct {
 	// The unique identifier for the domain.
-	ID                   int64                                          `json:"id,required"`
-	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
-	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
-	Domain               string                                         `json:"domain,required"`
-	DropDispositions     []SettingDomainEditResponseDropDisposition     `json:"drop_dispositions,required"`
-	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
-	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
-	LookbackHops         int64                                          `json:"lookback_hops,required"`
-	Regions              []SettingDomainEditResponseRegion              `json:"regions,required"`
-	Transport            string                                         `json:"transport,required"`
-	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization,nullable"`
-	DMARCStatus          SettingDomainEditResponseDMARCStatus           `json:"dmarc_status,nullable"`
-	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed,nullable"`
-	Folder               SettingDomainEditResponseFolder                `json:"folder,nullable"`
-	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider,nullable"`
-	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
-	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
-	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
-	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
-	SPFStatus            SettingDomainEditResponseSPFStatus             `json:"spf_status,nullable"`
+	ID                   int64                                          `json:"id" api:"required"`
+	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes" api:"required"`
+	CreatedAt            time.Time                                      `json:"created_at" api:"required" format:"date-time"`
+	Domain               string                                         `json:"domain" api:"required"`
+	DropDispositions     []SettingDomainEditResponseDropDisposition     `json:"drop_dispositions" api:"required"`
+	IPRestrictions       []string                                       `json:"ip_restrictions" api:"required"`
+	LastModified         time.Time                                      `json:"last_modified" api:"required" format:"date-time"`
+	LookbackHops         int64                                          `json:"lookback_hops" api:"required"`
+	Regions              []SettingDomainEditResponseRegion              `json:"regions" api:"required"`
+	Transport            string                                         `json:"transport" api:"required"`
+	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization" api:"nullable"`
+	DMARCStatus          SettingDomainEditResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
+	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
+	Folder               SettingDomainEditResponseFolder                `json:"folder" api:"nullable"`
+	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
+	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
+	O365TenantID         string                                         `json:"o365_tenant_id" api:"nullable"`
+	RequireTLSInbound    bool                                           `json:"require_tls_inbound" api:"nullable"`
+	RequireTLSOutbound   bool                                           `json:"require_tls_outbound" api:"nullable"`
+	SPFStatus            SettingDomainEditResponseSPFStatus             `json:"spf_status" api:"nullable"`
 	JSON                 settingDomainEditResponseJSON                  `json:"-"`
 }
 
@@ -543,9 +543,9 @@ func (r SettingDomainEditResponseRegion) IsKnown() bool {
 }
 
 type SettingDomainEditResponseAuthorization struct {
-	Authorized    bool                                       `json:"authorized,required"`
-	Timestamp     time.Time                                  `json:"timestamp,required" format:"date-time"`
-	StatusMessage string                                     `json:"status_message,nullable"`
+	Authorized    bool                                       `json:"authorized" api:"required"`
+	Timestamp     time.Time                                  `json:"timestamp" api:"required" format:"date-time"`
+	StatusMessage string                                     `json:"status_message" api:"nullable"`
 	JSON          settingDomainEditResponseAuthorizationJSON `json:"-"`
 }
 
@@ -584,9 +584,9 @@ func (r SettingDomainEditResponseDMARCStatus) IsKnown() bool {
 }
 
 type SettingDomainEditResponseEmailsProcessed struct {
-	Timestamp                    time.Time                                    `json:"timestamp,required" format:"date-time"`
-	TotalEmailsProcessed         int64                                        `json:"total_emails_processed,required"`
-	TotalEmailsProcessedPrevious int64                                        `json:"total_emails_processed_previous,required"`
+	Timestamp                    time.Time                                    `json:"timestamp" api:"required" format:"date-time"`
+	TotalEmailsProcessed         int64                                        `json:"total_emails_processed" api:"required"`
+	TotalEmailsProcessedPrevious int64                                        `json:"total_emails_processed_previous" api:"required"`
 	JSON                         settingDomainEditResponseEmailsProcessedJSON `json:"-"`
 }
 
@@ -658,26 +658,26 @@ func (r SettingDomainEditResponseSPFStatus) IsKnown() bool {
 
 type SettingDomainGetResponse struct {
 	// The unique identifier for the domain.
-	ID                   int64                                         `json:"id,required"`
-	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
-	CreatedAt            time.Time                                     `json:"created_at,required" format:"date-time"`
-	Domain               string                                        `json:"domain,required"`
-	DropDispositions     []SettingDomainGetResponseDropDisposition     `json:"drop_dispositions,required"`
-	IPRestrictions       []string                                      `json:"ip_restrictions,required"`
-	LastModified         time.Time                                     `json:"last_modified,required" format:"date-time"`
-	LookbackHops         int64                                         `json:"lookback_hops,required"`
-	Regions              []SettingDomainGetResponseRegion              `json:"regions,required"`
-	Transport            string                                        `json:"transport,required"`
-	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization,nullable"`
-	DMARCStatus          SettingDomainGetResponseDMARCStatus           `json:"dmarc_status,nullable"`
-	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed,nullable"`
-	Folder               SettingDomainGetResponseFolder                `json:"folder,nullable"`
-	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider,nullable"`
-	IntegrationID        string                                        `json:"integration_id,nullable" format:"uuid"`
-	O365TenantID         string                                        `json:"o365_tenant_id,nullable"`
-	RequireTLSInbound    bool                                          `json:"require_tls_inbound,nullable"`
-	RequireTLSOutbound   bool                                          `json:"require_tls_outbound,nullable"`
-	SPFStatus            SettingDomainGetResponseSPFStatus             `json:"spf_status,nullable"`
+	ID                   int64                                         `json:"id" api:"required"`
+	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes" api:"required"`
+	CreatedAt            time.Time                                     `json:"created_at" api:"required" format:"date-time"`
+	Domain               string                                        `json:"domain" api:"required"`
+	DropDispositions     []SettingDomainGetResponseDropDisposition     `json:"drop_dispositions" api:"required"`
+	IPRestrictions       []string                                      `json:"ip_restrictions" api:"required"`
+	LastModified         time.Time                                     `json:"last_modified" api:"required" format:"date-time"`
+	LookbackHops         int64                                         `json:"lookback_hops" api:"required"`
+	Regions              []SettingDomainGetResponseRegion              `json:"regions" api:"required"`
+	Transport            string                                        `json:"transport" api:"required"`
+	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization" api:"nullable"`
+	DMARCStatus          SettingDomainGetResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
+	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
+	Folder               SettingDomainGetResponseFolder                `json:"folder" api:"nullable"`
+	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
+	IntegrationID        string                                        `json:"integration_id" api:"nullable" format:"uuid"`
+	O365TenantID         string                                        `json:"o365_tenant_id" api:"nullable"`
+	RequireTLSInbound    bool                                          `json:"require_tls_inbound" api:"nullable"`
+	RequireTLSOutbound   bool                                          `json:"require_tls_outbound" api:"nullable"`
+	SPFStatus            SettingDomainGetResponseSPFStatus             `json:"spf_status" api:"nullable"`
 	JSON                 settingDomainGetResponseJSON                  `json:"-"`
 }
 
@@ -776,9 +776,9 @@ func (r SettingDomainGetResponseRegion) IsKnown() bool {
 }
 
 type SettingDomainGetResponseAuthorization struct {
-	Authorized    bool                                      `json:"authorized,required"`
-	Timestamp     time.Time                                 `json:"timestamp,required" format:"date-time"`
-	StatusMessage string                                    `json:"status_message,nullable"`
+	Authorized    bool                                      `json:"authorized" api:"required"`
+	Timestamp     time.Time                                 `json:"timestamp" api:"required" format:"date-time"`
+	StatusMessage string                                    `json:"status_message" api:"nullable"`
 	JSON          settingDomainGetResponseAuthorizationJSON `json:"-"`
 }
 
@@ -817,9 +817,9 @@ func (r SettingDomainGetResponseDMARCStatus) IsKnown() bool {
 }
 
 type SettingDomainGetResponseEmailsProcessed struct {
-	Timestamp                    time.Time                                   `json:"timestamp,required" format:"date-time"`
-	TotalEmailsProcessed         int64                                       `json:"total_emails_processed,required"`
-	TotalEmailsProcessedPrevious int64                                       `json:"total_emails_processed_previous,required"`
+	Timestamp                    time.Time                                   `json:"timestamp" api:"required" format:"date-time"`
+	TotalEmailsProcessed         int64                                       `json:"total_emails_processed" api:"required"`
+	TotalEmailsProcessedPrevious int64                                       `json:"total_emails_processed_previous" api:"required"`
 	JSON                         settingDomainGetResponseEmailsProcessedJSON `json:"-"`
 }
 
@@ -891,7 +891,7 @@ func (r SettingDomainGetResponseSPFStatus) IsKnown() bool {
 
 type SettingDomainListParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filters response to domains with the currently active delivery mode.
 	ActiveDeliveryMode param.Field[SettingDomainListParamsActiveDeliveryMode] `query:"active_delivery_mode"`
 	// Filters response to domains with the provided delivery mode.
@@ -995,14 +995,14 @@ func (r SettingDomainListParamsOrder) IsKnown() bool {
 
 type SettingDomainDeleteParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingDomainDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   SettingDomainDeleteResponse             `json:"result,required"`
-	Success  bool                                    `json:"success,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                   `json:"messages" api:"required"`
+	Result   SettingDomainDeleteResponse             `json:"result" api:"required"`
+	Success  bool                                    `json:"success" api:"required"`
 	JSON     settingDomainDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1027,13 +1027,13 @@ func (r settingDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingDomainBulkDeleteParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingDomainEditParams struct {
 	// Account Identifier
-	AccountID            param.Field[string]                                       `path:"account_id,required"`
-	IPRestrictions       param.Field[[]string]                                     `json:"ip_restrictions,required"`
+	AccountID            param.Field[string]                                       `path:"account_id" api:"required"`
+	IPRestrictions       param.Field[[]string]                                     `json:"ip_restrictions" api:"required"`
 	AllowedDeliveryModes param.Field[[]SettingDomainEditParamsAllowedDeliveryMode] `json:"allowed_delivery_modes"`
 	Domain               param.Field[string]                                       `json:"domain"`
 	DropDispositions     param.Field[[]SettingDomainEditParamsDropDisposition]     `json:"drop_dispositions"`
@@ -1125,10 +1125,10 @@ func (r SettingDomainEditParamsRegion) IsKnown() bool {
 }
 
 type SettingDomainEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   SettingDomainEditResponse             `json:"result,required"`
-	Success  bool                                  `json:"success,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                 `json:"messages" api:"required"`
+	Result   SettingDomainEditResponse             `json:"result" api:"required"`
+	Success  bool                                  `json:"success" api:"required"`
 	JSON     settingDomainEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1153,14 +1153,14 @@ func (r settingDomainEditResponseEnvelopeJSON) RawJSON() string {
 
 type SettingDomainGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingDomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
-	Result   SettingDomainGetResponse             `json:"result,required"`
-	Success  bool                                 `json:"success,required"`
+	Errors   []shared.ResponseInfo                `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                `json:"messages" api:"required"`
+	Result   SettingDomainGetResponse             `json:"result" api:"required"`
+	Success  bool                                 `json:"success" api:"required"`
 	JSON     settingDomainGetResponseEnvelopeJSON `json:"-"`
 }
 

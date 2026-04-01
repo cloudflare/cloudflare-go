@@ -42,23 +42,23 @@ func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audio
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	if audioIdentifier == "" {
 		err = errors.New("missing required audio_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", body.AccountID, identifier, audioIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Adds an additional audio track to a video using the provided audio track URL.
@@ -67,19 +67,19 @@ func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/copy", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Edits additional audio tracks on a video. Editing the default status of an audio
@@ -90,23 +90,23 @@ func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioId
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	if audioIdentifier == "" {
 		err = errors.New("missing required audio_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", params.AccountID, identifier, audioIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists additional audio tracks on a video. Note this API will not return
@@ -117,11 +117,11 @@ func (r *AudioTrackService) Get(ctx context.Context, identifier string, query Au
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio", query.AccountID, identifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -192,14 +192,14 @@ func (r AudioStatus) IsKnown() bool {
 
 type AudioTrackDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AudioTrackDeleteResponseEnvelope struct {
-	Errors   []AudioTrackDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AudioTrackDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AudioTrackDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AudioTrackDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AudioTrackDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AudioTrackDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  string                                  `json:"result"`
 	JSON    audioTrackDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -224,8 +224,8 @@ func (r audioTrackDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AudioTrackDeleteResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AudioTrackDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             audioTrackDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -272,8 +272,8 @@ func (r audioTrackDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AudioTrackDeleteResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AudioTrackDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             audioTrackDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -336,10 +336,10 @@ func (r AudioTrackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AudioTrackCopyParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A string to uniquely identify the track amongst other audio track labels for the
 	// specified video.
-	Label param.Field[string] `json:"label,required"`
+	Label param.Field[string] `json:"label" api:"required"`
 	// An audio track URL. The server must be publicly routable and support `HTTP HEAD`
 	// requests and `HTTP GET` range requests. The server should respond to `HTTP HEAD`
 	// requests with a `content-range` header that includes the size of the file.
@@ -351,10 +351,10 @@ func (r AudioTrackCopyParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AudioTrackCopyResponseEnvelope struct {
-	Errors   []AudioTrackCopyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AudioTrackCopyResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AudioTrackCopyResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AudioTrackCopyResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AudioTrackCopyResponseEnvelopeSuccess `json:"success,required"`
+	Success AudioTrackCopyResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Audio                                 `json:"result"`
 	JSON    audioTrackCopyResponseEnvelopeJSON    `json:"-"`
 }
@@ -379,8 +379,8 @@ func (r audioTrackCopyResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AudioTrackCopyResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AudioTrackCopyResponseEnvelopeErrorsSource `json:"source"`
 	JSON             audioTrackCopyResponseEnvelopeErrorsJSON   `json:"-"`
@@ -427,8 +427,8 @@ func (r audioTrackCopyResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AudioTrackCopyResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AudioTrackCopyResponseEnvelopeMessagesSource `json:"source"`
 	JSON             audioTrackCopyResponseEnvelopeMessagesJSON   `json:"-"`
@@ -491,7 +491,7 @@ func (r AudioTrackCopyResponseEnvelopeSuccess) IsKnown() bool {
 
 type AudioTrackEditParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Denotes whether the audio track will be played by default in a player.
 	Default param.Field[bool] `json:"default"`
 	// A string to uniquely identify the track amongst other audio track labels for the
@@ -504,10 +504,10 @@ func (r AudioTrackEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AudioTrackEditResponseEnvelope struct {
-	Errors   []AudioTrackEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AudioTrackEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AudioTrackEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AudioTrackEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AudioTrackEditResponseEnvelopeSuccess `json:"success,required"`
+	Success AudioTrackEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Audio                                 `json:"result"`
 	JSON    audioTrackEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -532,8 +532,8 @@ func (r audioTrackEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AudioTrackEditResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           AudioTrackEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             audioTrackEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -580,8 +580,8 @@ func (r audioTrackEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AudioTrackEditResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           AudioTrackEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             audioTrackEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -644,5 +644,5 @@ func (r AudioTrackEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type AudioTrackGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

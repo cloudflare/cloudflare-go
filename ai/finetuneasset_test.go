@@ -26,6 +26,7 @@ func TestFinetuneAssetNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -34,7 +35,7 @@ func TestFinetuneAssetNewWithOptionalParams(t *testing.T) {
 		"bc451aef-f723-4b26-a6b2-901afd2e7a8a",
 		ai.FinetuneAssetNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			File:      cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+			File:      cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
 			FileName:  cloudflare.F("file_name"),
 		},
 	)

@@ -47,15 +47,15 @@ func (r *PageRuleService) New(ctx context.Context, params PageRuleNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/pagerules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Replaces the configuration of an existing Page Rule. The configuration of the
@@ -65,19 +65,19 @@ func (r *PageRuleService) Update(ctx context.Context, pageruleID string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if pageruleID == "" {
 		err = errors.New("missing required pagerule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches Page Rules in a zone.
@@ -86,15 +86,15 @@ func (r *PageRuleService) List(ctx context.Context, params PageRuleListParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/pagerules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes an existing Page Rule.
@@ -103,19 +103,19 @@ func (r *PageRuleService) Delete(ctx context.Context, pageruleID string, body Pa
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if pageruleID == "" {
 		err = errors.New("missing required pagerule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", body.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates one or more fields of an existing Page Rule.
@@ -124,19 +124,19 @@ func (r *PageRuleService) Edit(ctx context.Context, pageruleID string, params Pa
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if pageruleID == "" {
 		err = errors.New("missing required pagerule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the details of a Page Rule.
@@ -145,41 +145,41 @@ func (r *PageRuleService) Get(ctx context.Context, pageruleID string, query Page
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if pageruleID == "" {
 		err = errors.New("missing required pagerule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/pagerules/%s", query.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PageRule struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
-	Actions []PageRuleAction `json:"actions,required"`
+	Actions []PageRuleAction `json:"actions" api:"required"`
 	// The timestamp of when the Page Rule was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// The timestamp of when the Page Rule was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// The priority of the rule, used to define which Page Rule is processed over
 	// another. A higher number indicates a higher priority. For example, if you have a
 	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
 	// take precedence (rule B: `/images/special/*`), specify a higher priority for
 	// rule B so it overrides rule A.
-	Priority int64 `json:"priority,required"`
+	Priority int64 `json:"priority" api:"required"`
 	// The status of the Page Rule.
-	Status PageRuleStatus `json:"status,required"`
+	Status PageRuleStatus `json:"status" api:"required"`
 	// The rule targets to evaluate on each request.
-	Targets []Target     `json:"targets,required"`
+	Targets []Target     `json:"targets" api:"required"`
 	JSON    pageRuleJSON `json:"-"`
 }
 
@@ -1702,10 +1702,10 @@ func (r targetJSON) RawJSON() string {
 // String constraint.
 type TargetConstraint struct {
 	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
-	Operator TargetConstraintOperator `json:"operator,required"`
+	Operator TargetConstraintOperator `json:"operator" api:"required"`
 	// The URL pattern to match against the current request. The pattern may contain up
 	// to four asterisks ('\*') as placeholders.
-	Value string               `json:"value,required"`
+	Value string               `json:"value" api:"required"`
 	JSON  targetConstraintJSON `json:"-"`
 }
 
@@ -1775,10 +1775,10 @@ func (r TargetParam) MarshalJSON() (data []byte, err error) {
 // String constraint.
 type TargetConstraintParam struct {
 	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
-	Operator param.Field[TargetConstraintOperator] `json:"operator,required"`
+	Operator param.Field[TargetConstraintOperator] `json:"operator" api:"required"`
 	// The URL pattern to match against the current request. The pattern may contain up
 	// to four asterisks ('\*') as placeholders.
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r TargetConstraintParam) MarshalJSON() (data []byte, err error) {
@@ -1787,7 +1787,7 @@ func (r TargetConstraintParam) MarshalJSON() (data []byte, err error) {
 
 type PageRuleDeleteResponse struct {
 	// Identifier.
-	ID   string                     `json:"id,required"`
+	ID   string                     `json:"id" api:"required"`
 	JSON pageRuleDeleteResponseJSON `json:"-"`
 }
 
@@ -1809,12 +1809,12 @@ func (r pageRuleDeleteResponseJSON) RawJSON() string {
 
 type PageRuleNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
-	Actions param.Field[[]PageRuleNewParamsActionUnion] `json:"actions,required"`
+	Actions param.Field[[]PageRuleNewParamsActionUnion] `json:"actions" api:"required"`
 	// The rule targets to evaluate on each request.
-	Targets param.Field[[]TargetParam] `json:"targets,required"`
+	Targets param.Field[[]TargetParam] `json:"targets" api:"required"`
 	// The priority of the rule, used to define which Page Rule is processed over
 	// another. A higher number indicates a higher priority. For example, if you have a
 	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
@@ -2714,10 +2714,10 @@ func (r PageRuleNewParamsStatus) IsKnown() bool {
 }
 
 type PageRuleNewResponseEnvelope struct {
-	Errors   []PageRuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageRuleNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PageRuleNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PageRuleNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PageRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PageRule                           `json:"result"`
 	JSON    pageRuleNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -2742,8 +2742,8 @@ func (r pageRuleNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageRuleNewResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           PageRuleNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             pageRuleNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -2790,8 +2790,8 @@ func (r pageRuleNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PageRuleNewResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           PageRuleNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             pageRuleNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -2854,12 +2854,12 @@ func (r PageRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
-	Actions param.Field[[]PageRuleUpdateParamsActionUnion] `json:"actions,required"`
+	Actions param.Field[[]PageRuleUpdateParamsActionUnion] `json:"actions" api:"required"`
 	// The rule targets to evaluate on each request.
-	Targets param.Field[[]TargetParam] `json:"targets,required"`
+	Targets param.Field[[]TargetParam] `json:"targets" api:"required"`
 	// The priority of the rule, used to define which Page Rule is processed over
 	// another. A higher number indicates a higher priority. For example, if you have a
 	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
@@ -3761,10 +3761,10 @@ func (r PageRuleUpdateParamsStatus) IsKnown() bool {
 }
 
 type PageRuleUpdateResponseEnvelope struct {
-	Errors   []PageRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PageRuleUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PageRuleUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PageRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PageRule                              `json:"result"`
 	JSON    pageRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -3789,8 +3789,8 @@ func (r pageRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageRuleUpdateResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           PageRuleUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             pageRuleUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3837,8 +3837,8 @@ func (r pageRuleUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PageRuleUpdateResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           PageRuleUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             pageRuleUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3901,7 +3901,7 @@ func (r PageRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned Page Rules.
 	Direction param.Field[PageRuleListParamsDirection] `query:"direction"`
 	// When set to `all`, all the search requirements must match. When set to `any`,
@@ -3987,10 +3987,10 @@ func (r PageRuleListParamsStatus) IsKnown() bool {
 }
 
 type PageRuleListResponseEnvelope struct {
-	Errors   []PageRuleListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageRuleListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PageRuleListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PageRuleListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PageRuleListResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  []PageRule                          `json:"result"`
 	JSON    pageRuleListResponseEnvelopeJSON    `json:"-"`
 }
@@ -4015,8 +4015,8 @@ func (r pageRuleListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageRuleListResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           PageRuleListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             pageRuleListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4063,8 +4063,8 @@ func (r pageRuleListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PageRuleListResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           PageRuleListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             pageRuleListResponseEnvelopeMessagesJSON   `json:"-"`
@@ -4127,15 +4127,15 @@ func (r PageRuleListResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PageRuleDeleteResponseEnvelope struct {
-	Errors   []PageRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PageRuleDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PageRuleDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PageRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  PageRuleDeleteResponse                `json:"result,nullable"`
+	Success PageRuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  PageRuleDeleteResponse                `json:"result" api:"nullable"`
 	JSON    pageRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4159,8 +4159,8 @@ func (r pageRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageRuleDeleteResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           PageRuleDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             pageRuleDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -4207,8 +4207,8 @@ func (r pageRuleDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PageRuleDeleteResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           PageRuleDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             pageRuleDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -4271,7 +4271,7 @@ func (r PageRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
 	Actions param.Field[[]PageRuleEditParamsActionUnion] `json:"actions"`
@@ -5176,10 +5176,10 @@ func (r PageRuleEditParamsStatus) IsKnown() bool {
 }
 
 type PageRuleEditResponseEnvelope struct {
-	Errors   []PageRuleEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageRuleEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PageRuleEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PageRuleEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PageRuleEditResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PageRule                            `json:"result"`
 	JSON    pageRuleEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -5204,8 +5204,8 @@ func (r pageRuleEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageRuleEditResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           PageRuleEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             pageRuleEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -5252,8 +5252,8 @@ func (r pageRuleEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PageRuleEditResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           PageRuleEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             pageRuleEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -5316,14 +5316,14 @@ func (r PageRuleEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PageRuleGetResponseEnvelope struct {
-	Errors   []PageRuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageRuleGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PageRuleGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PageRuleGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PageRuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PageRule                           `json:"result"`
 	JSON    pageRuleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -5348,8 +5348,8 @@ func (r pageRuleGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PageRuleGetResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           PageRuleGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             pageRuleGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -5396,8 +5396,8 @@ func (r pageRuleGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PageRuleGetResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           PageRuleGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             pageRuleGetResponseEnvelopeMessagesJSON   `json:"-"`

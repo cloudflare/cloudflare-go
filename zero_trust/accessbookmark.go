@@ -43,19 +43,19 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bookmarkID == "" {
 		err = errors.New("missing required bookmark_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", params.AccountID, bookmarkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured Bookmark application.
@@ -66,19 +66,19 @@ func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bookmarkID == "" {
 		err = errors.New("missing required bookmark_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", params.AccountID, bookmarkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists Bookmark applications.
@@ -90,7 +90,7 @@ func (r *AccessBookmarkService) List(ctx context.Context, query AccessBookmarkLi
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -120,19 +120,19 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, b
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bookmarkID == "" {
 		err = errors.New("missing required bookmark_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", body.AccountID, bookmarkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single Bookmark application.
@@ -143,19 +143,19 @@ func (r *AccessBookmarkService) Get(ctx context.Context, bookmarkID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bookmarkID == "" {
 		err = errors.New("missing required bookmark_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", query.AccountID, bookmarkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Bookmark struct {
@@ -214,8 +214,8 @@ func (r accessBookmarkDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessBookmarkNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
@@ -223,10 +223,10 @@ func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessBookmarkNewResponseEnvelope struct {
-	Errors   []AccessBookmarkNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessBookmarkNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessBookmarkNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessBookmarkNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Bookmark                                 `json:"result"`
 	JSON    accessBookmarkNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -251,8 +251,8 @@ func (r accessBookmarkNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessBookmarkNewResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessBookmarkNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessBookmarkNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -299,8 +299,8 @@ func (r accessBookmarkNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessBookmarkNewResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           AccessBookmarkNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessBookmarkNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -362,8 +362,8 @@ func (r AccessBookmarkNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -371,10 +371,10 @@ func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessBookmarkUpdateResponseEnvelope struct {
-	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Bookmark                                    `json:"result"`
 	JSON    accessBookmarkUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -399,8 +399,8 @@ func (r accessBookmarkUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessBookmarkUpdateResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessBookmarkUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessBookmarkUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -447,8 +447,8 @@ func (r accessBookmarkUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessBookmarkUpdateResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessBookmarkUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessBookmarkUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -510,18 +510,18 @@ func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessBookmarkDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessBookmarkDeleteResponseEnvelope struct {
-	Errors   []AccessBookmarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessBookmarkDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessBookmarkDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessBookmarkDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessBookmarkDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessBookmarkDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessBookmarkDeleteResponse                `json:"result"`
 	JSON    accessBookmarkDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -546,8 +546,8 @@ func (r accessBookmarkDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessBookmarkDeleteResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessBookmarkDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessBookmarkDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -594,8 +594,8 @@ func (r accessBookmarkDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessBookmarkDeleteResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessBookmarkDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessBookmarkDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -657,14 +657,14 @@ func (r AccessBookmarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessBookmarkGetResponseEnvelope struct {
-	Errors   []AccessBookmarkGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessBookmarkGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessBookmarkGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessBookmarkGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Bookmark                                 `json:"result"`
 	JSON    accessBookmarkGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -689,8 +689,8 @@ func (r accessBookmarkGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessBookmarkGetResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessBookmarkGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessBookmarkGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -737,8 +737,8 @@ func (r accessBookmarkGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessBookmarkGetResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           AccessBookmarkGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessBookmarkGetResponseEnvelopeMessagesJSON   `json:"-"`

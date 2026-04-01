@@ -39,21 +39,21 @@ func (r *DEXCommandDownloadService) Get(ctx context.Context, commandID string, f
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/zip")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if commandID == "" {
 		err = errors.New("missing required command_id parameter")
-		return
+		return nil, err
 	}
 	if filename == "" {
 		err = errors.New("missing required filename parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/commands/%s/downloads/%s", query.AccountID, commandID, filename)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type DEXCommandDownloadGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

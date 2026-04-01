@@ -42,19 +42,19 @@ func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLN
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a specific Site ACL.
@@ -63,23 +63,23 @@ func (r *SiteACLService) Update(ctx context.Context, siteID string, aclID string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if aclID == "" {
 		err = errors.New("missing required acl_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists Site ACLs associated with an account.
@@ -89,11 +89,11 @@ func (r *SiteACLService) List(ctx context.Context, siteID string, query SiteACLL
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", query.AccountID, siteID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -119,23 +119,23 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclID string
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if aclID == "" {
 		err = errors.New("missing required acl_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", body.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patch a specific Site ACL.
@@ -144,23 +144,23 @@ func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if aclID == "" {
 		err = errors.New("missing required acl_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a specific Site ACL.
@@ -169,23 +169,23 @@ func (r *SiteACLService) Get(ctx context.Context, siteID string, aclID string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if aclID == "" {
 		err = errors.New("missing required acl_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", query.AccountID, siteID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Bidirectional ACL policy for network traffic within a site.
@@ -235,7 +235,7 @@ func (r aclJSON) RawJSON() string {
 
 type ACLConfiguration struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LANID string `json:"lan_id,required"`
+	LANID string `json:"lan_id" api:"required"`
 	// The name of the LAN based on the provided lan_id.
 	LANName string `json:"lan_name"`
 	// Array of port ranges on the provided LAN that will be included in the ACL. If no
@@ -273,7 +273,7 @@ func (r aclConfigurationJSON) RawJSON() string {
 
 type ACLConfigurationParam struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LANID param.Field[string] `json:"lan_id,required"`
+	LANID param.Field[string] `json:"lan_id" api:"required"`
 	// The name of the LAN based on the provided lan_id.
 	LANName param.Field[string] `json:"lan_name"`
 	// Array of port ranges on the provided LAN that will be included in the ACL. If no
@@ -316,11 +316,11 @@ type SubnetParam = string
 
 type SiteACLNewParams struct {
 	// Identifier
-	AccountID param.Field[string]                `path:"account_id,required"`
-	LAN1      param.Field[ACLConfigurationParam] `json:"lan_1,required"`
-	LAN2      param.Field[ACLConfigurationParam] `json:"lan_2,required"`
+	AccountID param.Field[string]                `path:"account_id" api:"required"`
+	LAN1      param.Field[ACLConfigurationParam] `json:"lan_1" api:"required"`
+	LAN2      param.Field[ACLConfigurationParam] `json:"lan_2" api:"required"`
 	// The name of the ACL.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Description for the ACL.
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
@@ -340,12 +340,12 @@ func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Bidirectional ACL policy for network traffic within a site.
-	Result ACL `json:"result,required"`
+	Result ACL `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteACLNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteACLNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteACLNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -385,7 +385,7 @@ func (r SiteACLNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Description for the ACL.
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
@@ -409,12 +409,12 @@ func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Bidirectional ACL policy for network traffic within a site.
-	Result ACL `json:"result,required"`
+	Result ACL `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteACLUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteACLUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteACLUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -454,21 +454,21 @@ func (r SiteACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteACLDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteACLDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Bidirectional ACL policy for network traffic within a site.
-	Result ACL `json:"result,required"`
+	Result ACL `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteACLDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteACLDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteACLDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -508,7 +508,7 @@ func (r SiteACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLEditParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Description for the ACL.
 	Description param.Field[string] `json:"description"`
 	// The desired forwarding action for this ACL policy. If set to "false", the policy
@@ -532,12 +532,12 @@ func (r SiteACLEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Bidirectional ACL policy for network traffic within a site.
-	Result ACL `json:"result,required"`
+	Result ACL `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteACLEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteACLEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteACLEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -577,16 +577,16 @@ func (r SiteACLEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteACLGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Bidirectional ACL policy for network traffic within a site.
-	Result ACL `json:"result,required"`
+	Result ACL `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteACLGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteACLGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteACLGetResponseEnvelopeJSON    `json:"-"`
 }
 

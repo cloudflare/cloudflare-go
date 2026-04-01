@@ -38,21 +38,22 @@ func NewRiskScoringIntegrationService(opts ...option.RequestOption) (r *RiskScor
 	return
 }
 
-// Create new risk score integration.
+// Creates a new Zero Trust risk score integration, connecting external risk
+// signals to Cloudflare's risk scoring system.
 func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScoringIntegrationNewParams, opts ...option.RequestOption) (res *RiskScoringIntegrationNewResponse, err error) {
 	var env RiskScoringIntegrationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Overwrite the reference_id, tenant_url, and active values with the ones
@@ -62,29 +63,29 @@ func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if integrationID == "" {
 		err = errors.New("missing required integration_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/%s", params.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
-// List all risk score integrations for the account.
+// Lists all configured Zero Trust risk score integrations for the account.
 func (r *RiskScoringIntegrationService) List(ctx context.Context, query RiskScoringIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RiskScoringIntegrationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -99,30 +100,31 @@ func (r *RiskScoringIntegrationService) List(ctx context.Context, query RiskScor
 	return res, nil
 }
 
-// List all risk score integrations for the account.
+// Lists all configured Zero Trust risk score integrations for the account.
 func (r *RiskScoringIntegrationService) ListAutoPaging(ctx context.Context, query RiskScoringIntegrationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RiskScoringIntegrationListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a risk score integration.
+// Removes a Zero Trust risk score integration, disconnecting the external risk
+// signal source.
 func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationID string, body RiskScoringIntegrationDeleteParams, opts ...option.RequestOption) (res *RiskScoringIntegrationDeleteResponse, err error) {
 	var env RiskScoringIntegrationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if integrationID == "" {
 		err = errors.New("missing required integration_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/%s", body.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get risk score integration by id.
@@ -131,41 +133,41 @@ func (r *RiskScoringIntegrationService) Get(ctx context.Context, integrationID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if integrationID == "" {
 		err = errors.New("missing required integration_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/%s", query.AccountID, integrationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RiskScoringIntegrationNewResponse struct {
 	// The id of the integration, a UUIDv4.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The Cloudflare account tag.
-	AccountTag string `json:"account_tag,required"`
+	AccountTag string `json:"account_tag" api:"required"`
 	// Whether this integration is enabled and should export changes in risk score.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// When the integration was created in RFC3339 format.
-	CreatedAt       time.Time                                        `json:"created_at,required" format:"date-time"`
-	IntegrationType RiskScoringIntegrationNewResponseIntegrationType `json:"integration_type,required"`
+	CreatedAt       time.Time                                        `json:"created_at" api:"required" format:"date-time"`
+	IntegrationType RiskScoringIntegrationNewResponseIntegrationType `json:"integration_type" api:"required"`
 	// A reference ID defined by the client. Should be set to the Access-Okta IDP
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
-	ReferenceID string `json:"reference_id,required"`
+	ReferenceID string `json:"reference_id" api:"required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com".
-	TenantURL string `json:"tenant_url,required"`
+	TenantURL string `json:"tenant_url" api:"required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
 	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
-	WellKnownURL string                                `json:"well_known_url,required"`
+	WellKnownURL string                                `json:"well_known_url" api:"required"`
 	JSON         riskScoringIntegrationNewResponseJSON `json:"-"`
 }
 
@@ -208,24 +210,24 @@ func (r RiskScoringIntegrationNewResponseIntegrationType) IsKnown() bool {
 
 type RiskScoringIntegrationUpdateResponse struct {
 	// The id of the integration, a UUIDv4.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The Cloudflare account tag.
-	AccountTag string `json:"account_tag,required"`
+	AccountTag string `json:"account_tag" api:"required"`
 	// Whether this integration is enabled and should export changes in risk score.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// When the integration was created in RFC3339 format.
-	CreatedAt       time.Time                                           `json:"created_at,required" format:"date-time"`
-	IntegrationType RiskScoringIntegrationUpdateResponseIntegrationType `json:"integration_type,required"`
+	CreatedAt       time.Time                                           `json:"created_at" api:"required" format:"date-time"`
+	IntegrationType RiskScoringIntegrationUpdateResponseIntegrationType `json:"integration_type" api:"required"`
 	// A reference ID defined by the client. Should be set to the Access-Okta IDP
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
-	ReferenceID string `json:"reference_id,required"`
+	ReferenceID string `json:"reference_id" api:"required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com".
-	TenantURL string `json:"tenant_url,required"`
+	TenantURL string `json:"tenant_url" api:"required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
 	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
-	WellKnownURL string                                   `json:"well_known_url,required"`
+	WellKnownURL string                                   `json:"well_known_url" api:"required"`
 	JSON         riskScoringIntegrationUpdateResponseJSON `json:"-"`
 }
 
@@ -268,24 +270,24 @@ func (r RiskScoringIntegrationUpdateResponseIntegrationType) IsKnown() bool {
 
 type RiskScoringIntegrationListResponse struct {
 	// The id of the integration, a UUIDv4.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The Cloudflare account tag.
-	AccountTag string `json:"account_tag,required"`
+	AccountTag string `json:"account_tag" api:"required"`
 	// Whether this integration is enabled and should export changes in risk score.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// When the integration was created in RFC3339 format.
-	CreatedAt       time.Time                                         `json:"created_at,required" format:"date-time"`
-	IntegrationType RiskScoringIntegrationListResponseIntegrationType `json:"integration_type,required"`
+	CreatedAt       time.Time                                         `json:"created_at" api:"required" format:"date-time"`
+	IntegrationType RiskScoringIntegrationListResponseIntegrationType `json:"integration_type" api:"required"`
 	// A reference ID defined by the client. Should be set to the Access-Okta IDP
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
-	ReferenceID string `json:"reference_id,required"`
+	ReferenceID string `json:"reference_id" api:"required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com".
-	TenantURL string `json:"tenant_url,required"`
+	TenantURL string `json:"tenant_url" api:"required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
 	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
-	WellKnownURL string                                 `json:"well_known_url,required"`
+	WellKnownURL string                                 `json:"well_known_url" api:"required"`
 	JSON         riskScoringIntegrationListResponseJSON `json:"-"`
 }
 
@@ -330,24 +332,24 @@ type RiskScoringIntegrationDeleteResponse = interface{}
 
 type RiskScoringIntegrationGetResponse struct {
 	// The id of the integration, a UUIDv4.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The Cloudflare account tag.
-	AccountTag string `json:"account_tag,required"`
+	AccountTag string `json:"account_tag" api:"required"`
 	// Whether this integration is enabled and should export changes in risk score.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// When the integration was created in RFC3339 format.
-	CreatedAt       time.Time                                        `json:"created_at,required" format:"date-time"`
-	IntegrationType RiskScoringIntegrationGetResponseIntegrationType `json:"integration_type,required"`
+	CreatedAt       time.Time                                        `json:"created_at" api:"required" format:"date-time"`
+	IntegrationType RiskScoringIntegrationGetResponseIntegrationType `json:"integration_type" api:"required"`
 	// A reference ID defined by the client. Should be set to the Access-Okta IDP
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
-	ReferenceID string `json:"reference_id,required"`
+	ReferenceID string `json:"reference_id" api:"required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com".
-	TenantURL string `json:"tenant_url,required"`
+	TenantURL string `json:"tenant_url" api:"required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
 	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
-	WellKnownURL string                                `json:"well_known_url,required"`
+	WellKnownURL string                                `json:"well_known_url" api:"required"`
 	JSON         riskScoringIntegrationGetResponseJSON `json:"-"`
 }
 
@@ -389,10 +391,10 @@ func (r RiskScoringIntegrationGetResponseIntegrationType) IsKnown() bool {
 }
 
 type RiskScoringIntegrationNewParams struct {
-	AccountID       param.Field[string]                                         `path:"account_id,required"`
-	IntegrationType param.Field[RiskScoringIntegrationNewParamsIntegrationType] `json:"integration_type,required"`
+	AccountID       param.Field[string]                                         `path:"account_id" api:"required"`
+	IntegrationType param.Field[RiskScoringIntegrationNewParamsIntegrationType] `json:"integration_type" api:"required"`
 	// The base url of the tenant, e.g. "https://tenant.okta.com".
-	TenantURL param.Field[string] `json:"tenant_url,required" format:"uri"`
+	TenantURL param.Field[string] `json:"tenant_url" api:"required" format:"uri"`
 	// A reference id that can be supplied by the client. Currently this should be set
 	// to the Access-Okta IDP ID (a UUIDv4).
 	// https://developers.cloudflare.com/api/operations/access-identity-providers-get-an-access-identity-provider
@@ -418,10 +420,10 @@ func (r RiskScoringIntegrationNewParamsIntegrationType) IsKnown() bool {
 }
 
 type RiskScoringIntegrationNewResponseEnvelope struct {
-	Errors   []RiskScoringIntegrationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringIntegrationNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringIntegrationNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringIntegrationNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringIntegrationNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RiskScoringIntegrationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RiskScoringIntegrationNewResponse                `json:"result"`
 	JSON    riskScoringIntegrationNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -446,8 +448,8 @@ func (r riskScoringIntegrationNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringIntegrationNewResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           RiskScoringIntegrationNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringIntegrationNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -494,8 +496,8 @@ func (r riskScoringIntegrationNewResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type RiskScoringIntegrationNewResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           RiskScoringIntegrationNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringIntegrationNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -558,12 +560,12 @@ func (r RiskScoringIntegrationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringIntegrationUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether this integration is enabled. If disabled, no risk changes will be
 	// exported to the third-party.
-	Active param.Field[bool] `json:"active,required"`
+	Active param.Field[bool] `json:"active" api:"required"`
 	// The base url of the tenant, e.g. "https://tenant.okta.com".
-	TenantURL param.Field[string] `json:"tenant_url,required" format:"uri"`
+	TenantURL param.Field[string] `json:"tenant_url" api:"required" format:"uri"`
 	// A reference id that can be supplied by the client. Currently this should be set
 	// to the Access-Okta IDP ID (a UUIDv4).
 	// https://developers.cloudflare.com/api/operations/access-identity-providers-get-an-access-identity-provider
@@ -575,10 +577,10 @@ func (r RiskScoringIntegrationUpdateParams) MarshalJSON() (data []byte, err erro
 }
 
 type RiskScoringIntegrationUpdateResponseEnvelope struct {
-	Errors   []RiskScoringIntegrationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringIntegrationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringIntegrationUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringIntegrationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringIntegrationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RiskScoringIntegrationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RiskScoringIntegrationUpdateResponse                `json:"result"`
 	JSON    riskScoringIntegrationUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -603,8 +605,8 @@ func (r riskScoringIntegrationUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringIntegrationUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           RiskScoringIntegrationUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringIntegrationUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -652,8 +654,8 @@ func (r riskScoringIntegrationUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type RiskScoringIntegrationUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           RiskScoringIntegrationUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringIntegrationUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -716,19 +718,19 @@ func (r RiskScoringIntegrationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringIntegrationListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringIntegrationDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringIntegrationDeleteResponseEnvelope struct {
-	Errors   []RiskScoringIntegrationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringIntegrationDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringIntegrationDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringIntegrationDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  RiskScoringIntegrationDeleteResponse                `json:"result,nullable"`
+	Success RiskScoringIntegrationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  RiskScoringIntegrationDeleteResponse                `json:"result" api:"nullable"`
 	JSON    riskScoringIntegrationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -752,8 +754,8 @@ func (r riskScoringIntegrationDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringIntegrationDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           RiskScoringIntegrationDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringIntegrationDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -801,8 +803,8 @@ func (r riskScoringIntegrationDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type RiskScoringIntegrationDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           RiskScoringIntegrationDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringIntegrationDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -865,14 +867,14 @@ func (r RiskScoringIntegrationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringIntegrationGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringIntegrationGetResponseEnvelope struct {
-	Errors   []RiskScoringIntegrationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringIntegrationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringIntegrationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringIntegrationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringIntegrationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RiskScoringIntegrationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RiskScoringIntegrationGetResponse                `json:"result"`
 	JSON    riskScoringIntegrationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -897,8 +899,8 @@ func (r riskScoringIntegrationGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringIntegrationGetResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           RiskScoringIntegrationGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringIntegrationGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -945,8 +947,8 @@ func (r riskScoringIntegrationGetResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type RiskScoringIntegrationGetResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           RiskScoringIntegrationGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringIntegrationGetResponseEnvelopeMessagesJSON   `json:"-"`

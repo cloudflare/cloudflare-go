@@ -40,15 +40,15 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches all snippet rules belonging to the zone.
@@ -57,15 +57,15 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes all snippet rules belonging to the zone.
@@ -74,15 +74,15 @@ func (r *RuleService) Delete(ctx context.Context, body RuleDeleteParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RuleUpdateResponse = interface{}
@@ -93,9 +93,9 @@ type RuleDeleteResponse = interface{}
 
 type RuleUpdateParams struct {
 	// Use this field to specify the unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Lists snippet rules.
-	Rules param.Field[[]RuleUpdateParamsRule] `json:"rules,required"`
+	Rules param.Field[[]RuleUpdateParamsRule] `json:"rules" api:"required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -105,9 +105,9 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 // Define a snippet rule.
 type RuleUpdateParamsRule struct {
 	// Define the expression that determines which traffic matches the rule.
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// Identify the snippet.
-	SnippetName param.Field[string] `json:"snippet_name,required"`
+	SnippetName param.Field[string] `json:"snippet_name" api:"required"`
 	// Provide an informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Indicate whether to execute the rule.
@@ -121,13 +121,13 @@ func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 // Return all API responses using this object.
 type RuleUpdateResponseEnvelope struct {
 	// Lists error messages.
-	Errors []RuleUpdateResponseEnvelopeErrors `json:"errors,required"`
+	Errors []RuleUpdateResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contain warning messages.
-	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Contain the response result.
-	Result RuleUpdateResponse `json:"result,required"`
+	Result RuleUpdateResponse `json:"result" api:"required"`
 	// Indicate whether the API call was successful.
-	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -153,7 +153,7 @@ func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
 // Describes an API message.
 type RuleUpdateResponseEnvelopeErrors struct {
 	// Describes the message text.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// Identify the message code.
 	Code int64                                `json:"code"`
 	JSON ruleUpdateResponseEnvelopeErrorsJSON `json:"-"`
@@ -179,7 +179,7 @@ func (r ruleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 // Describes an API message.
 type RuleUpdateResponseEnvelopeMessages struct {
 	// Describes the message text.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// Identify the message code.
 	Code int64                                  `json:"code"`
 	JSON ruleUpdateResponseEnvelopeMessagesJSON `json:"-"`
@@ -219,19 +219,19 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleListParams struct {
 	// Use this field to specify the unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 // Return all API responses using this object.
 type RuleListResponseEnvelope struct {
 	// Lists error messages.
-	Errors []RuleListResponseEnvelopeErrors `json:"errors,required"`
+	Errors []RuleListResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contain warning messages.
-	Messages []RuleListResponseEnvelopeMessages `json:"messages,required"`
+	Messages []RuleListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Contain the response result.
-	Result RuleListResponse `json:"result,required"`
+	Result RuleListResponse `json:"result" api:"required"`
 	// Indicate whether the API call was successful.
-	Success RuleListResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -257,7 +257,7 @@ func (r ruleListResponseEnvelopeJSON) RawJSON() string {
 // Describes an API message.
 type RuleListResponseEnvelopeErrors struct {
 	// Describes the message text.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// Identify the message code.
 	Code int64                              `json:"code"`
 	JSON ruleListResponseEnvelopeErrorsJSON `json:"-"`
@@ -283,7 +283,7 @@ func (r ruleListResponseEnvelopeErrorsJSON) RawJSON() string {
 // Describes an API message.
 type RuleListResponseEnvelopeMessages struct {
 	// Describes the message text.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// Identify the message code.
 	Code int64                                `json:"code"`
 	JSON ruleListResponseEnvelopeMessagesJSON `json:"-"`
@@ -323,19 +323,19 @@ func (r RuleListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleDeleteParams struct {
 	// Use this field to specify the unique ID of the zone.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 // Return all API responses using this object.
 type RuleDeleteResponseEnvelope struct {
 	// Lists error messages.
-	Errors []RuleDeleteResponseEnvelopeErrors `json:"errors,required"`
+	Errors []RuleDeleteResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contain warning messages.
-	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Contain the response result.
-	Result RuleDeleteResponse `json:"result,required"`
+	Result RuleDeleteResponse `json:"result" api:"required"`
 	// Indicate whether the API call was successful.
-	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -361,7 +361,7 @@ func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
 // Describes an API message.
 type RuleDeleteResponseEnvelopeErrors struct {
 	// Describes the message text.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// Identify the message code.
 	Code int64                                `json:"code"`
 	JSON ruleDeleteResponseEnvelopeErrorsJSON `json:"-"`
@@ -387,7 +387,7 @@ func (r ruleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 // Describes an API message.
 type RuleDeleteResponseEnvelopeMessages struct {
 	// Describes the message text.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// Identify the message code.
 	Code int64                                  `json:"code"`
 	JSON ruleDeleteResponseEnvelopeMessagesJSON `json:"-"`

@@ -42,16 +42,16 @@ func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, query Threat
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/indicatorTypes", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventIndicatorTypeListResponse struct {
-	Items ThreatEventIndicatorTypeListResponseItems `json:"items,required"`
-	Type  string                                    `json:"type,required"`
+	Items ThreatEventIndicatorTypeListResponseItems `json:"items" api:"required"`
+	Type  string                                    `json:"type" api:"required"`
 	JSON  threatEventIndicatorTypeListResponseJSON  `json:"-"`
 }
 
@@ -73,7 +73,7 @@ func (r threatEventIndicatorTypeListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventIndicatorTypeListResponseItems struct {
-	Type string                                        `json:"type,required"`
+	Type string                                        `json:"type" api:"required"`
 	JSON threatEventIndicatorTypeListResponseItemsJSON `json:"-"`
 }
 
@@ -95,5 +95,5 @@ func (r threatEventIndicatorTypeListResponseItemsJSON) RawJSON() string {
 
 type ThreatEventIndicatorTypeListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

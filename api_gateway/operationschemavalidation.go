@@ -47,15 +47,15 @@ func (r *OperationSchemaValidationService) Update(ctx context.Context, operation
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/%s/schema_validation", params.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates multiple operation-level schema validation settings on the zone
@@ -68,15 +68,15 @@ func (r *OperationSchemaValidationService) Edit(ctx context.Context, params Oper
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/schema_validation", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves operation-level schema validation settings on the zone
@@ -88,15 +88,15 @@ func (r *OperationSchemaValidationService) Get(ctx context.Context, operationID 
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/%s/schema_validation", query.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type SettingsMultipleRequest map[string]SettingsMultipleRequestItem
@@ -111,7 +111,7 @@ type SettingsMultipleRequestItem struct {
 	//   - `none` will skip mitigation for this operation
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
-	MitigationAction SettingsMultipleRequestItemMitigationAction `json:"mitigation_action,nullable"`
+	MitigationAction SettingsMultipleRequestItemMitigationAction `json:"mitigation_action" api:"nullable"`
 	JSON             settingsMultipleRequestItemJSON             `json:"-"`
 }
 
@@ -183,7 +183,7 @@ type OperationSchemaValidationUpdateResponse struct {
 	//   - `none` will skip mitigation for this operation
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
-	MitigationAction OperationSchemaValidationUpdateResponseMitigationAction `json:"mitigation_action,nullable"`
+	MitigationAction OperationSchemaValidationUpdateResponseMitigationAction `json:"mitigation_action" api:"nullable"`
 	// UUID.
 	OperationID string                                      `json:"operation_id"`
 	JSON        operationSchemaValidationUpdateResponseJSON `json:"-"`
@@ -239,7 +239,7 @@ type OperationSchemaValidationGetResponse struct {
 	//   - `none` will skip mitigation for this operation
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
-	MitigationAction OperationSchemaValidationGetResponseMitigationAction `json:"mitigation_action,nullable"`
+	MitigationAction OperationSchemaValidationGetResponseMitigationAction `json:"mitigation_action" api:"nullable"`
 	// UUID.
 	OperationID string                                   `json:"operation_id"`
 	JSON        operationSchemaValidationGetResponseJSON `json:"-"`
@@ -288,7 +288,7 @@ func (r OperationSchemaValidationGetResponseMitigationAction) IsKnown() bool {
 
 type OperationSchemaValidationUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When set, this applies a mitigation action to this operation
 	//
 	//   - `log` log request when request does not conform to schema for this operation
@@ -330,8 +330,8 @@ func (r OperationSchemaValidationUpdateParamsMitigationAction) IsKnown() bool {
 
 type OperationSchemaValidationEditParams struct {
 	// Identifier.
-	ZoneID                  param.Field[string]          `path:"zone_id,required"`
-	SettingsMultipleRequest SettingsMultipleRequestParam `json:"settings_multiple_request,required"`
+	ZoneID                  param.Field[string]          `path:"zone_id" api:"required"`
+	SettingsMultipleRequest SettingsMultipleRequestParam `json:"settings_multiple_request" api:"required"`
 }
 
 func (r OperationSchemaValidationEditParams) MarshalJSON() (data []byte, err error) {
@@ -339,11 +339,11 @@ func (r OperationSchemaValidationEditParams) MarshalJSON() (data []byte, err err
 }
 
 type OperationSchemaValidationEditResponseEnvelope struct {
-	Errors   Message                 `json:"errors,required"`
-	Messages Message                 `json:"messages,required"`
-	Result   SettingsMultipleRequest `json:"result,required"`
+	Errors   Message                 `json:"errors" api:"required"`
+	Messages Message                 `json:"messages" api:"required"`
+	Result   SettingsMultipleRequest `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success OperationSchemaValidationEditResponseEnvelopeSuccess `json:"success,required"`
+	Success OperationSchemaValidationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    operationSchemaValidationEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -383,5 +383,5 @@ func (r OperationSchemaValidationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationSchemaValidationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

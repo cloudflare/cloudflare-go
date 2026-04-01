@@ -41,11 +41,11 @@ func (r *CNIService) New(ctx context.Context, params CNINewParams, opts ...optio
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cni/cnis", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Modify stored information about a CNI object
@@ -53,15 +53,15 @@ func (r *CNIService) Update(ctx context.Context, cni string, params CNIUpdatePar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if cni == "" {
 		err = errors.New("missing required cni parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cni/cnis/%s", params.AccountID, cni)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // List existing CNI objects
@@ -69,11 +69,11 @@ func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cni/cnis", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete a specified CNI object
@@ -82,15 +82,15 @@ func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParam
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if cni == "" {
 		err = errors.New("missing required cni parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/cni/cnis/%s", body.AccountID, cni)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Get information about a CNI object
@@ -98,30 +98,30 @@ func (r *CNIService) Get(ctx context.Context, cni string, query CNIGetParams, op
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if cni == "" {
 		err = errors.New("missing required cni parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cni/cnis/%s", query.AccountID, cni)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type CNINewResponse struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
-	Account string `json:"account,required"`
+	Account string `json:"account" api:"required"`
 	// Customer end of the point-to-point link
 	//
 	// This should always be inside the same prefix as `p2p_ip`.
-	CustIP string `json:"cust_ip,required" format:"A.B.C.D/N"`
+	CustIP string `json:"cust_ip" api:"required" format:"A.B.C.D/N"`
 	// Interconnect identifier hosting this CNI
-	Interconnect string              `json:"interconnect,required"`
-	Magic        CNINewResponseMagic `json:"magic,required"`
+	Interconnect string              `json:"interconnect" api:"required"`
+	Magic        CNINewResponseMagic `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP string             `json:"p2p_ip,required" format:"A.B.C.D/N"`
+	P2pIP string             `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNINewResponseBGP  `json:"bgp"`
 	JSON  cniNewResponseJSON `json:"-"`
 }
@@ -148,9 +148,9 @@ func (r cniNewResponseJSON) RawJSON() string {
 }
 
 type CNINewResponseMagic struct {
-	ConduitName string                  `json:"conduit_name,required"`
-	Description string                  `json:"description,required"`
-	Mtu         int64                   `json:"mtu,required"`
+	ConduitName string                  `json:"conduit_name" api:"required"`
+	Description string                  `json:"description" api:"required"`
+	Mtu         int64                   `json:"mtu" api:"required"`
 	JSON        cniNewResponseMagicJSON `json:"-"`
 }
 
@@ -174,9 +174,9 @@ func (r cniNewResponseMagicJSON) RawJSON() string {
 
 type CNINewResponseBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
-	ExtraPrefixes []string `json:"extra_prefixes,required" format:"A.B.C.D/N"`
+	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -195,7 +195,7 @@ type CNINewResponseBGP struct {
 	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
 	// specifying an MD5 key with one or more of these disallowed characters will be
 	// rejected.
-	Md5Key string                `json:"md5_key,nullable"`
+	Md5Key string                `json:"md5_key" api:"nullable"`
 	JSON   cniNewResponseBGPJSON `json:"-"`
 }
 
@@ -218,18 +218,18 @@ func (r cniNewResponseBGPJSON) RawJSON() string {
 }
 
 type CNIUpdateResponse struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
-	Account string `json:"account,required"`
+	Account string `json:"account" api:"required"`
 	// Customer end of the point-to-point link
 	//
 	// This should always be inside the same prefix as `p2p_ip`.
-	CustIP string `json:"cust_ip,required" format:"A.B.C.D/N"`
+	CustIP string `json:"cust_ip" api:"required" format:"A.B.C.D/N"`
 	// Interconnect identifier hosting this CNI
-	Interconnect string                 `json:"interconnect,required"`
-	Magic        CNIUpdateResponseMagic `json:"magic,required"`
+	Interconnect string                 `json:"interconnect" api:"required"`
+	Magic        CNIUpdateResponseMagic `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP string                `json:"p2p_ip,required" format:"A.B.C.D/N"`
+	P2pIP string                `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNIUpdateResponseBGP  `json:"bgp"`
 	JSON  cniUpdateResponseJSON `json:"-"`
 }
@@ -257,9 +257,9 @@ func (r cniUpdateResponseJSON) RawJSON() string {
 }
 
 type CNIUpdateResponseMagic struct {
-	ConduitName string                     `json:"conduit_name,required"`
-	Description string                     `json:"description,required"`
-	Mtu         int64                      `json:"mtu,required"`
+	ConduitName string                     `json:"conduit_name" api:"required"`
+	Description string                     `json:"description" api:"required"`
+	Mtu         int64                      `json:"mtu" api:"required"`
 	JSON        cniUpdateResponseMagicJSON `json:"-"`
 }
 
@@ -283,9 +283,9 @@ func (r cniUpdateResponseMagicJSON) RawJSON() string {
 
 type CNIUpdateResponseBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
-	ExtraPrefixes []string `json:"extra_prefixes,required" format:"A.B.C.D/N"`
+	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -304,7 +304,7 @@ type CNIUpdateResponseBGP struct {
 	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
 	// specifying an MD5 key with one or more of these disallowed characters will be
 	// rejected.
-	Md5Key string                   `json:"md5_key,nullable"`
+	Md5Key string                   `json:"md5_key" api:"nullable"`
 	JSON   cniUpdateResponseBGPJSON `json:"-"`
 }
 
@@ -327,8 +327,8 @@ func (r cniUpdateResponseBGPJSON) RawJSON() string {
 }
 
 type CNIListResponse struct {
-	Items []CNIListResponseItem `json:"items,required"`
-	Next  int64                 `json:"next,nullable"`
+	Items []CNIListResponseItem `json:"items" api:"required"`
+	Next  int64                 `json:"next" api:"nullable"`
 	JSON  cniListResponseJSON   `json:"-"`
 }
 
@@ -349,18 +349,18 @@ func (r cniListResponseJSON) RawJSON() string {
 }
 
 type CNIListResponseItem struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
-	Account string `json:"account,required"`
+	Account string `json:"account" api:"required"`
 	// Customer end of the point-to-point link
 	//
 	// This should always be inside the same prefix as `p2p_ip`.
-	CustIP string `json:"cust_ip,required" format:"A.B.C.D/N"`
+	CustIP string `json:"cust_ip" api:"required" format:"A.B.C.D/N"`
 	// Interconnect identifier hosting this CNI
-	Interconnect string                    `json:"interconnect,required"`
-	Magic        CNIListResponseItemsMagic `json:"magic,required"`
+	Interconnect string                    `json:"interconnect" api:"required"`
+	Magic        CNIListResponseItemsMagic `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP string                  `json:"p2p_ip,required" format:"A.B.C.D/N"`
+	P2pIP string                  `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNIListResponseItemsBGP `json:"bgp"`
 	JSON  cniListResponseItemJSON `json:"-"`
 }
@@ -388,9 +388,9 @@ func (r cniListResponseItemJSON) RawJSON() string {
 }
 
 type CNIListResponseItemsMagic struct {
-	ConduitName string                        `json:"conduit_name,required"`
-	Description string                        `json:"description,required"`
-	Mtu         int64                         `json:"mtu,required"`
+	ConduitName string                        `json:"conduit_name" api:"required"`
+	Description string                        `json:"description" api:"required"`
+	Mtu         int64                         `json:"mtu" api:"required"`
 	JSON        cniListResponseItemsMagicJSON `json:"-"`
 }
 
@@ -414,9 +414,9 @@ func (r cniListResponseItemsMagicJSON) RawJSON() string {
 
 type CNIListResponseItemsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
-	ExtraPrefixes []string `json:"extra_prefixes,required" format:"A.B.C.D/N"`
+	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -435,7 +435,7 @@ type CNIListResponseItemsBGP struct {
 	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
 	// specifying an MD5 key with one or more of these disallowed characters will be
 	// rejected.
-	Md5Key string                      `json:"md5_key,nullable"`
+	Md5Key string                      `json:"md5_key" api:"nullable"`
 	JSON   cniListResponseItemsBGPJSON `json:"-"`
 }
 
@@ -458,18 +458,18 @@ func (r cniListResponseItemsBGPJSON) RawJSON() string {
 }
 
 type CNIGetResponse struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
-	Account string `json:"account,required"`
+	Account string `json:"account" api:"required"`
 	// Customer end of the point-to-point link
 	//
 	// This should always be inside the same prefix as `p2p_ip`.
-	CustIP string `json:"cust_ip,required" format:"A.B.C.D/N"`
+	CustIP string `json:"cust_ip" api:"required" format:"A.B.C.D/N"`
 	// Interconnect identifier hosting this CNI
-	Interconnect string              `json:"interconnect,required"`
-	Magic        CNIGetResponseMagic `json:"magic,required"`
+	Interconnect string              `json:"interconnect" api:"required"`
+	Magic        CNIGetResponseMagic `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP string             `json:"p2p_ip,required" format:"A.B.C.D/N"`
+	P2pIP string             `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNIGetResponseBGP  `json:"bgp"`
 	JSON  cniGetResponseJSON `json:"-"`
 }
@@ -496,9 +496,9 @@ func (r cniGetResponseJSON) RawJSON() string {
 }
 
 type CNIGetResponseMagic struct {
-	ConduitName string                  `json:"conduit_name,required"`
-	Description string                  `json:"description,required"`
-	Mtu         int64                   `json:"mtu,required"`
+	ConduitName string                  `json:"conduit_name" api:"required"`
+	Description string                  `json:"description" api:"required"`
+	Mtu         int64                   `json:"mtu" api:"required"`
 	JSON        cniGetResponseMagicJSON `json:"-"`
 }
 
@@ -522,9 +522,9 @@ func (r cniGetResponseMagicJSON) RawJSON() string {
 
 type CNIGetResponseBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
-	ExtraPrefixes []string `json:"extra_prefixes,required" format:"A.B.C.D/N"`
+	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -543,7 +543,7 @@ type CNIGetResponseBGP struct {
 	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
 	// specifying an MD5 key with one or more of these disallowed characters will be
 	// rejected.
-	Md5Key string                `json:"md5_key,nullable"`
+	Md5Key string                `json:"md5_key" api:"nullable"`
 	JSON   cniGetResponseBGPJSON `json:"-"`
 }
 
@@ -567,11 +567,11 @@ func (r cniGetResponseBGPJSON) RawJSON() string {
 
 type CNINewParams struct {
 	// Customer account tag
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Customer account tag
-	Account      param.Field[string]            `json:"account,required"`
-	Interconnect param.Field[string]            `json:"interconnect,required"`
-	Magic        param.Field[CNINewParamsMagic] `json:"magic,required"`
+	Account      param.Field[string]            `json:"account" api:"required"`
+	Interconnect param.Field[string]            `json:"interconnect" api:"required"`
+	Magic        param.Field[CNINewParamsMagic] `json:"magic" api:"required"`
 	BGP          param.Field[CNINewParamsBGP]   `json:"bgp"`
 }
 
@@ -580,9 +580,9 @@ func (r CNINewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CNINewParamsMagic struct {
-	ConduitName param.Field[string] `json:"conduit_name,required"`
-	Description param.Field[string] `json:"description,required"`
-	Mtu         param.Field[int64]  `json:"mtu,required"`
+	ConduitName param.Field[string] `json:"conduit_name" api:"required"`
+	Description param.Field[string] `json:"description" api:"required"`
+	Mtu         param.Field[int64]  `json:"mtu" api:"required"`
 }
 
 func (r CNINewParamsMagic) MarshalJSON() (data []byte, err error) {
@@ -591,9 +591,9 @@ func (r CNINewParamsMagic) MarshalJSON() (data []byte, err error) {
 
 type CNINewParamsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
-	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes,required" format:"A.B.C.D/N"`
+	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -621,19 +621,19 @@ func (r CNINewParamsBGP) MarshalJSON() (data []byte, err error) {
 
 type CNIUpdateParams struct {
 	// Customer account tag
-	AccountID param.Field[string] `path:"account_id,required"`
-	ID        param.Field[string] `json:"id,required" format:"uuid"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	ID        param.Field[string] `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
-	Account param.Field[string] `json:"account,required"`
+	Account param.Field[string] `json:"account" api:"required"`
 	// Customer end of the point-to-point link
 	//
 	// This should always be inside the same prefix as `p2p_ip`.
-	CustIP param.Field[string] `json:"cust_ip,required" format:"A.B.C.D/N"`
+	CustIP param.Field[string] `json:"cust_ip" api:"required" format:"A.B.C.D/N"`
 	// Interconnect identifier hosting this CNI
-	Interconnect param.Field[string]               `json:"interconnect,required"`
-	Magic        param.Field[CNIUpdateParamsMagic] `json:"magic,required"`
+	Interconnect param.Field[string]               `json:"interconnect" api:"required"`
+	Magic        param.Field[CNIUpdateParamsMagic] `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP param.Field[string]             `json:"p2p_ip,required" format:"A.B.C.D/N"`
+	P2pIP param.Field[string]             `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   param.Field[CNIUpdateParamsBGP] `json:"bgp"`
 }
 
@@ -642,9 +642,9 @@ func (r CNIUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CNIUpdateParamsMagic struct {
-	ConduitName param.Field[string] `json:"conduit_name,required"`
-	Description param.Field[string] `json:"description,required"`
-	Mtu         param.Field[int64]  `json:"mtu,required"`
+	ConduitName param.Field[string] `json:"conduit_name" api:"required"`
+	Description param.Field[string] `json:"description" api:"required"`
+	Mtu         param.Field[int64]  `json:"mtu" api:"required"`
 }
 
 func (r CNIUpdateParamsMagic) MarshalJSON() (data []byte, err error) {
@@ -653,9 +653,9 @@ func (r CNIUpdateParamsMagic) MarshalJSON() (data []byte, err error) {
 
 type CNIUpdateParamsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
-	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes,required" format:"A.B.C.D/N"`
+	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -683,7 +683,7 @@ func (r CNIUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 
 type CNIListParams struct {
 	// Customer account tag
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Cursor    param.Field[int64]  `query:"cursor"`
 	Limit     param.Field[int64]  `query:"limit"`
 	// If specified, only show CNIs associated with the specified slot
@@ -702,10 +702,10 @@ func (r CNIListParams) URLQuery() (v url.Values) {
 
 type CNIDeleteParams struct {
 	// Customer account tag
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CNIGetParams struct {
 	// Customer account tag
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

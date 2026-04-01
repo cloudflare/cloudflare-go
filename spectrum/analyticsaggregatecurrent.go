@@ -43,28 +43,28 @@ func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, params Analy
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/aggregate/current", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AnalyticsAggregateCurrentGetResponse struct {
 	// Application identifier.
-	AppID string `json:"appID,required"`
+	AppID string `json:"appID" api:"required"`
 	// Number of bytes sent
-	BytesEgress float64 `json:"bytesEgress,required"`
+	BytesEgress float64 `json:"bytesEgress" api:"required"`
 	// Number of bytes received
-	BytesIngress float64 `json:"bytesIngress,required"`
+	BytesIngress float64 `json:"bytesIngress" api:"required"`
 	// Number of connections
-	Connections float64 `json:"connections,required"`
+	Connections float64 `json:"connections" api:"required"`
 	// Average duration of connections
-	DurationAvg float64                                  `json:"durationAvg,required"`
+	DurationAvg float64                                  `json:"durationAvg" api:"required"`
 	JSON        analyticsAggregateCurrentGetResponseJSON `json:"-"`
 }
 
@@ -90,7 +90,7 @@ func (r analyticsAggregateCurrentGetResponseJSON) RawJSON() string {
 
 type AnalyticsAggregateCurrentGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Comma-delimited list of Spectrum Application Id(s). If provided, the response
 	// will be limited to Spectrum Application Id(s) that match.
 	AppID param.Field[string] `query:"appID"`
@@ -108,10 +108,10 @@ func (r AnalyticsAggregateCurrentGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsAggregateCurrentGetResponseEnvelope struct {
-	Errors   []AnalyticsAggregateCurrentGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsAggregateCurrentGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AnalyticsAggregateCurrentGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AnalyticsAggregateCurrentGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AnalyticsAggregateCurrentGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AnalyticsAggregateCurrentGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  []AnalyticsAggregateCurrentGetResponse              `json:"result"`
 	JSON    analyticsAggregateCurrentGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -136,8 +136,8 @@ func (r analyticsAggregateCurrentGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AnalyticsAggregateCurrentGetResponseEnvelopeErrors struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           AnalyticsAggregateCurrentGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             analyticsAggregateCurrentGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -185,8 +185,8 @@ func (r analyticsAggregateCurrentGetResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type AnalyticsAggregateCurrentGetResponseEnvelopeMessages struct {
-	Code             int64                                                      `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             int64                                                      `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Source           AnalyticsAggregateCurrentGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             analyticsAggregateCurrentGetResponseEnvelopeMessagesJSON   `json:"-"`

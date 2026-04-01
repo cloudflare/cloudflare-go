@@ -39,19 +39,19 @@ func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	if rawID == "" {
 		err = errors.New("missing required raw_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s/raw/%s", params.AccountID, eventID, rawID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Reads data for a raw event
@@ -59,24 +59,24 @@ func (r *ThreatEventRawService) Get(ctx context.Context, eventID string, rawID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	if rawID == "" {
 		err = errors.New("missing required raw_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s/raw/%s", query.AccountID, eventID, rawID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventRawEditResponse struct {
-	ID   string                         `json:"id,required"`
-	Data interface{}                    `json:"data,required"`
+	ID   string                         `json:"id" api:"required"`
+	Data interface{}                    `json:"data" api:"required"`
 	JSON threatEventRawEditResponseJSON `json:"-"`
 }
 
@@ -98,12 +98,12 @@ func (r threatEventRawEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventRawGetResponse struct {
-	ID        string                        `json:"id,required"`
-	AccountID float64                       `json:"accountId,required"`
-	Created   string                        `json:"created,required"`
-	Data      interface{}                   `json:"data,required"`
-	Source    string                        `json:"source,required"`
-	TLP       string                        `json:"tlp,required"`
+	ID        string                        `json:"id" api:"required"`
+	AccountID float64                       `json:"accountId" api:"required"`
+	Created   string                        `json:"created" api:"required"`
+	Data      interface{}                   `json:"data" api:"required"`
+	Source    string                        `json:"source" api:"required"`
+	TLP       string                        `json:"tlp" api:"required"`
 	JSON      threatEventRawGetResponseJSON `json:"-"`
 }
 
@@ -130,7 +130,7 @@ func (r threatEventRawGetResponseJSON) RawJSON() string {
 
 type ThreatEventRawEditParams struct {
 	// Account ID.
-	AccountID param.Field[string]      `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id" api:"required"`
 	Data      param.Field[interface{}] `json:"data"`
 	Source    param.Field[string]      `json:"source"`
 	TLP       param.Field[string]      `json:"tlp"`
@@ -142,5 +142,5 @@ func (r ThreatEventRawEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventRawGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

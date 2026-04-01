@@ -110,15 +110,15 @@ func (r *BotManagementService) Update(ctx context.Context, params BotManagementU
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/bot_management", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve a zone's Bot Management Config
@@ -127,15 +127,15 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/bot_management", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BotFightModeConfiguration struct {
@@ -1450,8 +1450,8 @@ func (r BotManagementGetResponseSBFMVerifiedBots) IsKnown() bool {
 
 type BotManagementUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string]                `path:"zone_id,required"`
-	Body   BotManagementUpdateParamsBodyUnion `json:"body,required"`
+	ZoneID param.Field[string]                `path:"zone_id" api:"required"`
+	Body   BotManagementUpdateParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r BotManagementUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1615,10 +1615,10 @@ func (r BotManagementUpdateParamsBodySBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementUpdateResponseEnvelope struct {
-	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BotManagementUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BotManagementUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  BotManagementUpdateResponse                `json:"result"`
 	JSON    botManagementUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1643,8 +1643,8 @@ func (r botManagementUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BotManagementUpdateResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           BotManagementUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             botManagementUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1691,8 +1691,8 @@ func (r botManagementUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BotManagementUpdateResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           BotManagementUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             botManagementUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1755,14 +1755,14 @@ func (r BotManagementUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BotManagementGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type BotManagementGetResponseEnvelope struct {
-	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BotManagementGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []BotManagementGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success BotManagementGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BotManagementGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  BotManagementGetResponse                `json:"result"`
 	JSON    botManagementGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1787,8 +1787,8 @@ func (r botManagementGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BotManagementGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           BotManagementGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             botManagementGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1835,8 +1835,8 @@ func (r botManagementGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type BotManagementGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           BotManagementGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             botManagementGetResponseEnvelopeMessagesJSON   `json:"-"`

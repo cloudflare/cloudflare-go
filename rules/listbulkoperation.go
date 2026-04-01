@@ -47,26 +47,26 @@ func (r *ListBulkOperationService) Get(ctx context.Context, operationID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/bulk_operations/%s", query.AccountID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ListBulkOperationGetResponse struct {
 	// The unique operation ID of the asynchronous action.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The current status of the asynchronous operation.
-	Status ListBulkOperationGetResponseStatus `json:"status,required"`
+	Status ListBulkOperationGetResponseStatus `json:"status" api:"required"`
 	// The RFC 3339 timestamp of when the operation was completed.
 	Completed string `json:"completed"`
 	// A message describing the error when the status is `failed`.
@@ -139,9 +139,9 @@ func init() {
 
 type ListBulkOperationGetResponseListsBulkOperationPendingOrRunning struct {
 	// The unique operation ID of the asynchronous action.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The current status of the asynchronous operation.
-	Status ListBulkOperationGetResponseListsBulkOperationPendingOrRunningStatus `json:"status,required"`
+	Status ListBulkOperationGetResponseListsBulkOperationPendingOrRunningStatus `json:"status" api:"required"`
 	JSON   listBulkOperationGetResponseListsBulkOperationPendingOrRunningJSON   `json:"-"`
 }
 
@@ -184,11 +184,11 @@ func (r ListBulkOperationGetResponseListsBulkOperationPendingOrRunningStatus) Is
 
 type ListBulkOperationGetResponseListsBulkOperationCompleted struct {
 	// The unique operation ID of the asynchronous action.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the operation was completed.
-	Completed string `json:"completed,required"`
+	Completed string `json:"completed" api:"required"`
 	// The current status of the asynchronous operation.
-	Status ListBulkOperationGetResponseListsBulkOperationCompletedStatus `json:"status,required"`
+	Status ListBulkOperationGetResponseListsBulkOperationCompletedStatus `json:"status" api:"required"`
 	JSON   listBulkOperationGetResponseListsBulkOperationCompletedJSON   `json:"-"`
 }
 
@@ -231,13 +231,13 @@ func (r ListBulkOperationGetResponseListsBulkOperationCompletedStatus) IsKnown()
 
 type ListBulkOperationGetResponseListsBulkOperationFailed struct {
 	// The unique operation ID of the asynchronous action.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the operation was completed.
-	Completed string `json:"completed,required"`
+	Completed string `json:"completed" api:"required"`
 	// A message describing the error when the status is `failed`.
-	Error string `json:"error,required"`
+	Error string `json:"error" api:"required"`
 	// The current status of the asynchronous operation.
-	Status ListBulkOperationGetResponseListsBulkOperationFailedStatus `json:"status,required"`
+	Status ListBulkOperationGetResponseListsBulkOperationFailedStatus `json:"status" api:"required"`
 	JSON   listBulkOperationGetResponseListsBulkOperationFailedJSON   `json:"-"`
 }
 
@@ -298,15 +298,15 @@ func (r ListBulkOperationGetResponseStatus) IsKnown() bool {
 
 type ListBulkOperationGetParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ListBulkOperationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   ListBulkOperationGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo        `json:"messages" api:"required"`
+	Result   ListBulkOperationGetResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListBulkOperationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ListBulkOperationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listBulkOperationGetResponseEnvelopeJSON    `json:"-"`
 }
 

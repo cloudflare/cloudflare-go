@@ -44,11 +44,11 @@ func (r *RuleService) New(ctx context.Context, waitingRoomID string, params Rule
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -77,11 +77,11 @@ func (r *RuleService) Update(ctx context.Context, waitingRoomID string, params R
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", params.ZoneID, waitingRoomID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -109,15 +109,15 @@ func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID s
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", body.ZoneID, waitingRoomID, ruleID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -144,15 +144,15 @@ func (r *RuleService) Edit(ctx context.Context, waitingRoomID string, ruleID str
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", params.ZoneID, waitingRoomID, ruleID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
@@ -179,11 +179,11 @@ func (r *RuleService) Get(ctx context.Context, waitingRoomID string, query RuleG
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", query.ZoneID, waitingRoomID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -258,8 +258,8 @@ func (r WaitingRoomRuleAction) IsKnown() bool {
 
 type RuleNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Rules  RuleNewParamsRules  `json:"rules,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Rules  RuleNewParamsRules  `json:"rules" api:"required"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
@@ -268,9 +268,9 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 
 type RuleNewParamsRules struct {
 	// The action to take when the expression matches.
-	Action param.Field[RuleNewParamsRulesAction] `json:"action,required"`
+	Action param.Field[RuleNewParamsRulesAction] `json:"action" api:"required"`
 	// Criteria defining when there is a match for the current rule.
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// The description of the rule.
 	Description param.Field[string] `json:"description"`
 	// When set to true, the rule is enabled.
@@ -298,8 +298,8 @@ func (r RuleNewParamsRulesAction) IsKnown() bool {
 
 type RuleUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string]    `path:"zone_id,required"`
-	Rules  []RuleUpdateParamsRule `json:"rules,required"`
+	ZoneID param.Field[string]    `path:"zone_id" api:"required"`
+	Rules  []RuleUpdateParamsRule `json:"rules" api:"required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -308,9 +308,9 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type RuleUpdateParamsRule struct {
 	// The action to take when the expression matches.
-	Action param.Field[RuleUpdateParamsRulesAction] `json:"action,required"`
+	Action param.Field[RuleUpdateParamsRulesAction] `json:"action" api:"required"`
 	// Criteria defining when there is a match for the current rule.
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// The description of the rule.
 	Description param.Field[string] `json:"description"`
 	// When set to true, the rule is enabled.
@@ -338,16 +338,16 @@ func (r RuleUpdateParamsRulesAction) IsKnown() bool {
 
 type RuleDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to take when the expression matches.
-	Action param.Field[RuleEditParamsAction] `json:"action,required"`
+	Action param.Field[RuleEditParamsAction] `json:"action" api:"required"`
 	// Criteria defining when there is a match for the current rule.
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// The description of the rule.
 	Description param.Field[string] `json:"description"`
 	// When set to true, the rule is enabled.
@@ -445,5 +445,5 @@ func (r RuleEditParamsPositionAfter) implementsRuleEditParamsPositionUnion() {}
 
 type RuleGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

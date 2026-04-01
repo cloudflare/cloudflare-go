@@ -50,19 +50,19 @@ func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a list of project deployments.
@@ -72,11 +72,11 @@ func (r *ProjectDeploymentService) List(ctx context.Context, projectName string,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -102,23 +102,23 @@ func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if deploymentID == "" {
 		err = errors.New("missing required deployment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", body.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch information about a deployment.
@@ -127,23 +127,23 @@ func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if deploymentID == "" {
 		err = errors.New("missing required deployment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", query.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retry a previous deployment.
@@ -152,23 +152,23 @@ func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if deploymentID == "" {
 		err = errors.New("missing required deployment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", body.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Rollback the production deployment to a previous deployment. You can only
@@ -178,30 +178,30 @@ func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName str
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if deploymentID == "" {
 		err = errors.New("missing required deployment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", body.AccountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ProjectDeploymentDeleteResponse = interface{}
 
 type ProjectDeploymentNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Headers configuration file for the deployment.
 	Headers param.Field[io.Reader] `json:"_headers" format:"binary"`
 	// Redirects configuration file for the deployment.
@@ -267,11 +267,11 @@ func (r ProjectDeploymentNewParamsCommitDirty) IsKnown() bool {
 }
 
 type ProjectDeploymentNewResponseEnvelope struct {
-	Errors   []ProjectDeploymentNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                     `json:"result,required"`
+	Errors   []ProjectDeploymentNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDeploymentNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Deployment                                     `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDeploymentNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDeploymentNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -295,8 +295,8 @@ func (r projectDeploymentNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDeploymentNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ProjectDeploymentNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDeploymentNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -343,8 +343,8 @@ func (r projectDeploymentNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectDeploymentNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ProjectDeploymentNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDeploymentNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -407,7 +407,7 @@ func (r ProjectDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// What type of deployments to fetch.
 	Env param.Field[ProjectDeploymentListParamsEnv] `query:"env"`
 	// Which page of deployments to fetch.
@@ -443,15 +443,15 @@ func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
 
 type ProjectDeploymentDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDeploymentDeleteResponseEnvelope struct {
-	Errors   []ProjectDeploymentDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDeploymentDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []ProjectDeploymentDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDeploymentDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectDeploymentDeleteResponse                   `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDeploymentDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -475,8 +475,8 @@ func (r projectDeploymentDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDeploymentDeleteResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           ProjectDeploymentDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDeploymentDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -523,8 +523,8 @@ func (r projectDeploymentDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type ProjectDeploymentDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           ProjectDeploymentDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDeploymentDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -587,15 +587,15 @@ func (r ProjectDeploymentDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDeploymentGetResponseEnvelope struct {
-	Errors   []ProjectDeploymentGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                     `json:"result,required"`
+	Errors   []ProjectDeploymentGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDeploymentGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Deployment                                     `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDeploymentGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDeploymentGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -619,8 +619,8 @@ func (r projectDeploymentGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDeploymentGetResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ProjectDeploymentGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDeploymentGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -667,8 +667,8 @@ func (r projectDeploymentGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectDeploymentGetResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ProjectDeploymentGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDeploymentGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -731,15 +731,15 @@ func (r ProjectDeploymentGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentRetryParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDeploymentRetryResponseEnvelope struct {
-	Errors   []ProjectDeploymentRetryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentRetryResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                       `json:"result,required"`
+	Errors   []ProjectDeploymentRetryResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDeploymentRetryResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Deployment                                       `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDeploymentRetryResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDeploymentRetryResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDeploymentRetryResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -763,8 +763,8 @@ func (r projectDeploymentRetryResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDeploymentRetryResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ProjectDeploymentRetryResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDeploymentRetryResponseEnvelopeErrorsJSON   `json:"-"`
@@ -811,8 +811,8 @@ func (r projectDeploymentRetryResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ProjectDeploymentRetryResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ProjectDeploymentRetryResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDeploymentRetryResponseEnvelopeMessagesJSON   `json:"-"`
@@ -875,15 +875,15 @@ func (r ProjectDeploymentRetryResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentRollbackParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDeploymentRollbackResponseEnvelope struct {
-	Errors   []ProjectDeploymentRollbackResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentRollbackResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                          `json:"result,required"`
+	Errors   []ProjectDeploymentRollbackResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDeploymentRollbackResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Deployment                                          `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDeploymentRollbackResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -907,8 +907,8 @@ func (r projectDeploymentRollbackResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDeploymentRollbackResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           ProjectDeploymentRollbackResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDeploymentRollbackResponseEnvelopeErrorsJSON   `json:"-"`
@@ -955,8 +955,8 @@ func (r projectDeploymentRollbackResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type ProjectDeploymentRollbackResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           ProjectDeploymentRollbackResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDeploymentRollbackResponseEnvelopeMessagesJSON   `json:"-"`

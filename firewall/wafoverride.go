@@ -49,15 +49,15 @@ func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing URI-based WAF override.
@@ -71,19 +71,19 @@ func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if overridesID == "" {
 		err = errors.New("missing required overrides_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", params.ZoneID, overridesID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the URI-based WAF overrides in a zone.
@@ -98,7 +98,7 @@ func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListPar
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -134,19 +134,19 @@ func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, bod
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if overridesID == "" {
 		err = errors.New("missing required overrides_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", body.ZoneID, overridesID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the details of a URI-based WAF override.
@@ -160,26 +160,26 @@ func (r *WAFOverrideService) Get(ctx context.Context, overridesID string, query 
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if overridesID == "" {
 		err = errors.New("missing required overrides_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", query.ZoneID, overridesID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Override struct {
 	// The unique identifier of the WAF override.
 	ID string `json:"id"`
 	// An informative summary of the current URI-based WAF override.
-	Description string `json:"description,nullable"`
+	Description string `json:"description" api:"nullable"`
 	// An object that allows you to enable or disable WAF rule groups for the current
 	// WAF override. Each key of this object must be the ID of a WAF rule group, and
 	// each value must be a valid WAF action (usually `default` or `disable`). When
@@ -430,11 +430,11 @@ func (r wafOverrideDeleteResponseJSON) RawJSON() string {
 
 type WAFOverrideNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
+	URLs param.Field[[]OverrideURLParam] `json:"urls" api:"required"`
 }
 
 func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
@@ -442,11 +442,11 @@ func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Override              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Override              `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success,required"`
+	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -486,22 +486,22 @@ func (r WAFOverrideNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type WAFOverrideUpdateParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines an identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Specifies that, when a WAF rule matches, its configured action will be replaced
 	// by the action configured in this object.
-	RewriteAction param.Field[RewriteActionParam] `json:"rewrite_action,required"`
+	RewriteAction param.Field[RewriteActionParam] `json:"rewrite_action" api:"required"`
 	// An object that allows you to override the action of specific WAF rules. Each key
 	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
 	// action. Unless you are disabling a rule, ensure that you also enable the rule
 	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
 	// you must provide a `groups` object or a `rules` object.
-	Rules param.Field[WAFRuleParam] `json:"rules,required"`
+	Rules param.Field[WAFRuleParam] `json:"rules" api:"required"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
+	URLs param.Field[[]OverrideURLParam] `json:"urls" api:"required"`
 }
 
 func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -509,11 +509,11 @@ func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Override              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Override              `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -553,7 +553,7 @@ func (r WAFOverrideUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type WAFOverrideListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// The number of WAF overrides per page.
@@ -570,7 +570,7 @@ func (r WAFOverrideListParams) URLQuery() (v url.Values) {
 
 type WAFOverrideDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type WAFOverrideDeleteResponseEnvelope struct {
@@ -596,15 +596,15 @@ func (r wafOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type WAFOverrideGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type WAFOverrideGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Override              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Override              `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success,required"`
+	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`
 }
 

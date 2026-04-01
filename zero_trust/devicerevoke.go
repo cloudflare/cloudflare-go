@@ -48,21 +48,21 @@ func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/revoke", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DeviceRevokeNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of Registration IDs to revoke.
-	Body []string `json:"body,required"`
+	Body []string `json:"body" api:"required"`
 }
 
 func (r DeviceRevokeNewParams) MarshalJSON() (data []byte, err error) {
@@ -70,11 +70,11 @@ func (r DeviceRevokeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceRevokeNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceRevokeNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceRevokeNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceRevokeNewResponseEnvelopeJSON    `json:"-"`
 }
 

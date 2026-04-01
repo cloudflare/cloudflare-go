@@ -41,15 +41,15 @@ func (r *RuleCatchAllService) Update(ctx context.Context, params RuleCatchAllUpd
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information on the default catch-all routing rule.
@@ -58,21 +58,21 @@ func (r *RuleCatchAllService) Get(ctx context.Context, query RuleCatchAllGetPara
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Action for the catch-all routing rule.
 type CatchAllAction struct {
 	// Type of action for catch-all rule.
-	Type  CatchAllActionType `json:"type,required"`
+	Type  CatchAllActionType `json:"type" api:"required"`
 	Value []string           `json:"value"`
 	JSON  catchAllActionJSON `json:"-"`
 }
@@ -113,7 +113,7 @@ func (r CatchAllActionType) IsKnown() bool {
 // Action for the catch-all routing rule.
 type CatchAllActionParam struct {
 	// Type of action for catch-all rule.
-	Type  param.Field[CatchAllActionType] `json:"type,required"`
+	Type  param.Field[CatchAllActionType] `json:"type" api:"required"`
 	Value param.Field[[]string]           `json:"value"`
 }
 
@@ -124,7 +124,7 @@ func (r CatchAllActionParam) MarshalJSON() (data []byte, err error) {
 // Matcher for catch-all routing rule.
 type CatchAllMatcher struct {
 	// Type of matcher. Default is 'all'.
-	Type CatchAllMatcherType `json:"type,required"`
+	Type CatchAllMatcherType `json:"type" api:"required"`
 	JSON catchAllMatcherJSON `json:"-"`
 }
 
@@ -161,7 +161,7 @@ func (r CatchAllMatcherType) IsKnown() bool {
 // Matcher for catch-all routing rule.
 type CatchAllMatcherParam struct {
 	// Type of matcher. Default is 'all'.
-	Type param.Field[CatchAllMatcherType] `json:"type,required"`
+	Type param.Field[CatchAllMatcherType] `json:"type" api:"required"`
 }
 
 func (r CatchAllMatcherParam) MarshalJSON() (data []byte, err error) {
@@ -280,11 +280,11 @@ func (r RuleCatchAllGetResponseEnabled) IsKnown() bool {
 
 type RuleCatchAllUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List actions for the catch-all routing rule.
-	Actions param.Field[[]CatchAllActionParam] `json:"actions,required"`
+	Actions param.Field[[]CatchAllActionParam] `json:"actions" api:"required"`
 	// List of matchers for the catch-all routing rule.
-	Matchers param.Field[[]CatchAllMatcherParam] `json:"matchers,required"`
+	Matchers param.Field[[]CatchAllMatcherParam] `json:"matchers" api:"required"`
 	// Routing rule status.
 	Enabled param.Field[RuleCatchAllUpdateParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -312,10 +312,10 @@ func (r RuleCatchAllUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateResponseEnvelope struct {
-	Errors   []RuleCatchAllUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleCatchAllUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RuleCatchAllUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RuleCatchAllUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RuleCatchAllUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleCatchAllUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RuleCatchAllUpdateResponse                `json:"result"`
 	JSON    ruleCatchAllUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -340,8 +340,8 @@ func (r ruleCatchAllUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleCatchAllUpdateResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           RuleCatchAllUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ruleCatchAllUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -388,8 +388,8 @@ func (r ruleCatchAllUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RuleCatchAllUpdateResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           RuleCatchAllUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ruleCatchAllUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -452,14 +452,14 @@ func (r RuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleCatchAllGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleCatchAllGetResponseEnvelope struct {
-	Errors   []RuleCatchAllGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleCatchAllGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RuleCatchAllGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RuleCatchAllGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RuleCatchAllGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleCatchAllGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RuleCatchAllGetResponse                `json:"result"`
 	JSON    ruleCatchAllGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -484,8 +484,8 @@ func (r ruleCatchAllGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RuleCatchAllGetResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           RuleCatchAllGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             ruleCatchAllGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -532,8 +532,8 @@ func (r ruleCatchAllGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RuleCatchAllGetResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           RuleCatchAllGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             ruleCatchAllGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -63,15 +63,15 @@ func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve information about the current Zero Trust account.
@@ -80,15 +80,15 @@ func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GatewayNewResponse struct {
@@ -148,14 +148,14 @@ func (r gatewayListResponseJSON) RawJSON() string {
 }
 
 type GatewayNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayNewResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayNewResponse                `json:"result"`
 	JSON    gatewayNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -195,14 +195,14 @@ func (r GatewayNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayListResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayListResponse                `json:"result"`
 	JSON    gatewayListResponseEnvelopeJSON    `json:"-"`
 }

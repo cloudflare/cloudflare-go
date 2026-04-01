@@ -49,15 +49,15 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update instances.
@@ -66,19 +66,19 @@ func (r *InstanceService) Update(ctx context.Context, id string, params Instance
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List instances.
@@ -88,7 +88,7 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -114,19 +114,19 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s", body.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Performs a chat completion request against an AI Search instance, using indexed
@@ -135,15 +135,15 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/chat/completions", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Read instances.
@@ -152,19 +152,19 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Executes a semantic search query against an AI Search instance to find relevant
@@ -174,19 +174,19 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/search", params.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves usage statistics for AI Search instances.
@@ -195,56 +195,65 @@ func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceSt
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-search/instances/%s/stats", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InstanceNewResponse struct {
-	// Use your AI Search ID.
-	ID                   string                                  `json:"id,required"`
-	CreatedAt            time.Time                               `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                               `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                  `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceNewResponseAISearchModel        `json:"ai_search_model"`
-	Cache                bool                                    `json:"cache"`
-	CacheThreshold       InstanceNewResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                   `json:"chunk_overlap"`
-	ChunkSize            int64                                   `json:"chunk_size"`
-	CreatedBy            string                                  `json:"created_by,nullable"`
-	CustomMetadata       []InstanceNewResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceNewResponseEmbeddingModel       `json:"embedding_model"`
-	Enable               bool                                    `json:"enable"`
-	FusionMethod         InstanceNewResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                    `json:"hybrid_search_enabled"`
-	LastActivity         time.Time                               `json:"last_activity,nullable" format:"date-time"`
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
+	ID             string                              `json:"id" api:"required"`
+	CreatedAt      time.Time                           `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                           `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                              `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceNewResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                `json:"cache"`
+	CacheThreshold InstanceNewResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                               `json:"chunk_overlap"`
+	ChunkSize      int64                               `json:"chunk_size"`
+	CreatedBy      string                              `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceNewResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceNewResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                `json:"enable"`
+	EngineVersion  float64                             `json:"engine_version"`
+	FusionMethod   InstanceNewResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceNewResponseIndexMethod          `json:"index_method"`
+	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                               `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                   `json:"max_num_results"`
 	Metadata             InstanceNewResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                  `json:"modified_by,nullable"`
+	ModifiedBy           string                                  `json:"modified_by" api:"nullable"`
+	Namespace            string                                  `json:"namespace" api:"nullable"`
 	Paused               bool                                    `json:"paused"`
-	PublicEndpointID     string                                  `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                  `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceNewResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                    `json:"reranking"`
-	RerankingModel       InstanceNewResponseRerankingModel       `json:"reranking_model"`
-	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model"`
+	RerankingModel       InstanceNewResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceNewResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                    `json:"rewrite_query"`
 	ScoreThreshold       float64                                 `json:"score_threshold"`
-	Source               string                                  `json:"source"`
-	SourceParams         InstanceNewResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                  `json:"source" api:"nullable"`
+	SourceParams         InstanceNewResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                  `json:"status"`
 	TokenID              string                                  `json:"token_id" format:"uuid"`
-	Type                 InstanceNewResponseType                 `json:"type"`
+	Type                 InstanceNewResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceNewResponseJSON                 `json:"-"`
 }
 
@@ -264,12 +273,16 @@ type instanceNewResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -355,8 +368,8 @@ func (r InstanceNewResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceNewResponseCustomMetadata struct {
-	DataType  InstanceNewResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                    `json:"field_name,required"`
+	DataType  InstanceNewResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                    `json:"field_name" api:"required"`
 	JSON      instanceNewResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -426,6 +439,77 @@ const (
 func (r InstanceNewResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceNewResponseFusionMethodMax, InstanceNewResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceNewResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                               `json:"vector" api:"required"`
+	JSON   instanceNewResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceNewResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceNewResponseIndexMethod]
+type instanceNewResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceNewResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceNewResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceNewResponseIndexingOptionsJSON contains the JSON metadata for the struct
+// [InstanceNewResponseIndexingOptions]
+type instanceNewResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceNewResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceNewResponseIndexingOptionsKeywordTokenizerPorter  InstanceNewResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceNewResponseIndexingOptionsKeywordTokenizerTrigram InstanceNewResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceNewResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseIndexingOptionsKeywordTokenizerPorter, InstanceNewResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -615,9 +699,11 @@ type InstanceNewResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceNewResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceNewResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -643,7 +729,7 @@ type InstanceNewResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -690,19 +776,21 @@ func (r InstanceNewResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceNewResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceNewResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceNewResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceNewResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceNewResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceNewResponseRetrievalOptionsKeywordMatchModeAnd InstanceNewResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceNewResponseRetrievalOptionsKeywordMatchModeOr  InstanceNewResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceNewResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceNewResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceNewResponseRetrievalOptionsKeywordMatchModeAnd, InstanceNewResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -893,10 +981,10 @@ func (r instanceNewResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() str
 type InstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                   `json:"selector,required"`
+	Selector string                                                                   `json:"selector" api:"required"`
 	JSON     instanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -935,7 +1023,7 @@ func (r InstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceNewResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                    `json:"storage_id,required"`
+	StorageID      string                                                    `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                    `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                               `json:"storage_type"`
 	JSON           instanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -975,40 +1063,49 @@ func (r InstanceNewResponseType) IsKnown() bool {
 }
 
 type InstanceUpdateResponse struct {
-	// Use your AI Search ID.
-	ID                   string                                     `json:"id,required"`
-	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceUpdateResponseAISearchModel        `json:"ai_search_model"`
-	Cache                bool                                       `json:"cache"`
-	CacheThreshold       InstanceUpdateResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                      `json:"chunk_overlap"`
-	ChunkSize            int64                                      `json:"chunk_size"`
-	CreatedBy            string                                     `json:"created_by,nullable"`
-	CustomMetadata       []InstanceUpdateResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceUpdateResponseEmbeddingModel       `json:"embedding_model"`
-	Enable               bool                                       `json:"enable"`
-	FusionMethod         InstanceUpdateResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
-	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
+	ID             string                                 `json:"id" api:"required"`
+	CreatedAt      time.Time                              `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                              `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                                 `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceUpdateResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                   `json:"cache"`
+	CacheThreshold InstanceUpdateResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                  `json:"chunk_overlap"`
+	ChunkSize      int64                                  `json:"chunk_size"`
+	CreatedBy      string                                 `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceUpdateResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceUpdateResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                   `json:"enable"`
+	EngineVersion  float64                                `json:"engine_version"`
+	FusionMethod   InstanceUpdateResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceUpdateResponseIndexMethod          `json:"index_method"`
+	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
 	Metadata             InstanceUpdateResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                     `json:"modified_by,nullable"`
+	ModifiedBy           string                                     `json:"modified_by" api:"nullable"`
+	Namespace            string                                     `json:"namespace" api:"nullable"`
 	Paused               bool                                       `json:"paused"`
-	PublicEndpointID     string                                     `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                     `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceUpdateResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
-	RerankingModel       InstanceUpdateResponseRerankingModel       `json:"reranking_model"`
-	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model"`
+	RerankingModel       InstanceUpdateResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceUpdateResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source"`
-	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                     `json:"source" api:"nullable"`
+	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceUpdateResponseType                 `json:"type"`
+	Type                 InstanceUpdateResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceUpdateResponseJSON                 `json:"-"`
 }
 
@@ -1028,12 +1125,16 @@ type instanceUpdateResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -1119,8 +1220,8 @@ func (r InstanceUpdateResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceUpdateResponseCustomMetadata struct {
-	DataType  InstanceUpdateResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                       `json:"field_name,required"`
+	DataType  InstanceUpdateResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                       `json:"field_name" api:"required"`
 	JSON      instanceUpdateResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -1190,6 +1291,77 @@ const (
 func (r InstanceUpdateResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceUpdateResponseFusionMethodMax, InstanceUpdateResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceUpdateResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                  `json:"vector" api:"required"`
+	JSON   instanceUpdateResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceUpdateResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceUpdateResponseIndexMethod]
+type instanceUpdateResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceUpdateResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceUpdateResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceUpdateResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceUpdateResponseIndexingOptions]
+type instanceUpdateResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceUpdateResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceUpdateResponseIndexingOptionsKeywordTokenizerPorter  InstanceUpdateResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceUpdateResponseIndexingOptionsKeywordTokenizerTrigram InstanceUpdateResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceUpdateResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseIndexingOptionsKeywordTokenizerPorter, InstanceUpdateResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -1380,9 +1552,11 @@ type InstanceUpdateResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceUpdateResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -1408,7 +1582,7 @@ type InstanceUpdateResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -1455,19 +1629,21 @@ func (r InstanceUpdateResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeAnd InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceUpdateResponseRetrievalOptionsKeywordMatchModeOr  InstanceUpdateResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceUpdateResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceUpdateResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceUpdateResponseRetrievalOptionsKeywordMatchModeAnd, InstanceUpdateResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -1660,10 +1836,10 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() 
 type InstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                      `json:"selector,required"`
+	Selector string                                                                      `json:"selector" api:"required"`
 	JSON     instanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -1702,7 +1878,7 @@ func (r InstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                       `json:"storage_id,required"`
+	StorageID      string                                                       `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                       `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                  `json:"storage_type"`
 	JSON           instanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -1743,40 +1919,49 @@ func (r InstanceUpdateResponseType) IsKnown() bool {
 }
 
 type InstanceListResponse struct {
-	// Use your AI Search ID.
-	ID                   string                                   `json:"id,required"`
-	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceListResponseAISearchModel        `json:"ai_search_model"`
-	Cache                bool                                     `json:"cache"`
-	CacheThreshold       InstanceListResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                    `json:"chunk_overlap"`
-	ChunkSize            int64                                    `json:"chunk_size"`
-	CreatedBy            string                                   `json:"created_by,nullable"`
-	CustomMetadata       []InstanceListResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceListResponseEmbeddingModel       `json:"embedding_model"`
-	Enable               bool                                     `json:"enable"`
-	FusionMethod         InstanceListResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
-	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
+	ID             string                               `json:"id" api:"required"`
+	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceListResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                 `json:"cache"`
+	CacheThreshold InstanceListResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                `json:"chunk_overlap"`
+	ChunkSize      int64                                `json:"chunk_size"`
+	CreatedBy      string                               `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceListResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceListResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                 `json:"enable"`
+	EngineVersion  float64                              `json:"engine_version"`
+	FusionMethod   InstanceListResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceListResponseIndexMethod          `json:"index_method"`
+	IndexingOptions      InstanceListResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
 	Metadata             InstanceListResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                   `json:"modified_by,nullable"`
+	ModifiedBy           string                                   `json:"modified_by" api:"nullable"`
+	Namespace            string                                   `json:"namespace" api:"nullable"`
 	Paused               bool                                     `json:"paused"`
-	PublicEndpointID     string                                   `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                   `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceListResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
-	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model"`
-	RetrievalOptions     InstanceListResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model"`
+	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceListResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source"`
-	SourceParams         InstanceListResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                   `json:"source" api:"nullable"`
+	SourceParams         InstanceListResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceListResponseType                 `json:"type"`
+	Type                 InstanceListResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceListResponseJSON                 `json:"-"`
 }
 
@@ -1796,12 +1981,16 @@ type instanceListResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -1887,8 +2076,8 @@ func (r InstanceListResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceListResponseCustomMetadata struct {
-	DataType  InstanceListResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                     `json:"field_name,required"`
+	DataType  InstanceListResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                     `json:"field_name" api:"required"`
 	JSON      instanceListResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -1958,6 +2147,77 @@ const (
 func (r InstanceListResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceListResponseFusionMethodMax, InstanceListResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceListResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                `json:"vector" api:"required"`
+	JSON   instanceListResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceListResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceListResponseIndexMethod]
+type instanceListResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceListResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceListResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceListResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceListResponseIndexingOptions]
+type instanceListResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceListResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceListResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceListResponseIndexingOptionsKeywordTokenizerPorter  InstanceListResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceListResponseIndexingOptionsKeywordTokenizerTrigram InstanceListResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceListResponseIndexingOptionsKeywordTokenizerPorter, InstanceListResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -2147,9 +2407,11 @@ type InstanceListResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceListResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceListResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -2175,7 +2437,7 @@ type InstanceListResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -2222,19 +2484,21 @@ func (r InstanceListResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceListResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceListResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceListResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceListResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceListResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceListResponseRetrievalOptionsKeywordMatchModeAnd InstanceListResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceListResponseRetrievalOptionsKeywordMatchModeOr  InstanceListResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceListResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceListResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceListResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceListResponseRetrievalOptionsKeywordMatchModeAnd, InstanceListResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -2425,10 +2689,10 @@ func (r instanceListResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() st
 type InstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                    `json:"selector,required"`
+	Selector string                                                                    `json:"selector" api:"required"`
 	JSON     instanceListResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -2467,7 +2731,7 @@ func (r InstanceListResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceListResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                     `json:"storage_id,required"`
+	StorageID      string                                                     `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                     `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                `json:"storage_type"`
 	JSON           instanceListResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -2507,40 +2771,49 @@ func (r InstanceListResponseType) IsKnown() bool {
 }
 
 type InstanceDeleteResponse struct {
-	// Use your AI Search ID.
-	ID                   string                                     `json:"id,required"`
-	CreatedAt            time.Time                                  `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                  `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                     `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceDeleteResponseAISearchModel        `json:"ai_search_model"`
-	Cache                bool                                       `json:"cache"`
-	CacheThreshold       InstanceDeleteResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                      `json:"chunk_overlap"`
-	ChunkSize            int64                                      `json:"chunk_size"`
-	CreatedBy            string                                     `json:"created_by,nullable"`
-	CustomMetadata       []InstanceDeleteResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceDeleteResponseEmbeddingModel       `json:"embedding_model"`
-	Enable               bool                                       `json:"enable"`
-	FusionMethod         InstanceDeleteResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                       `json:"hybrid_search_enabled"`
-	LastActivity         time.Time                                  `json:"last_activity,nullable" format:"date-time"`
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
+	ID             string                                 `json:"id" api:"required"`
+	CreatedAt      time.Time                              `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                              `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                                 `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceDeleteResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                   `json:"cache"`
+	CacheThreshold InstanceDeleteResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                  `json:"chunk_overlap"`
+	ChunkSize      int64                                  `json:"chunk_size"`
+	CreatedBy      string                                 `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceDeleteResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceDeleteResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                   `json:"enable"`
+	EngineVersion  float64                                `json:"engine_version"`
+	FusionMethod   InstanceDeleteResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceDeleteResponseIndexMethod          `json:"index_method"`
+	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                      `json:"max_num_results"`
 	Metadata             InstanceDeleteResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                     `json:"modified_by,nullable"`
+	ModifiedBy           string                                     `json:"modified_by" api:"nullable"`
+	Namespace            string                                     `json:"namespace" api:"nullable"`
 	Paused               bool                                       `json:"paused"`
-	PublicEndpointID     string                                     `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                     `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceDeleteResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                       `json:"reranking"`
-	RerankingModel       InstanceDeleteResponseRerankingModel       `json:"reranking_model"`
-	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model"`
+	RerankingModel       InstanceDeleteResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceDeleteResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                       `json:"rewrite_query"`
 	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source"`
-	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                     `json:"source" api:"nullable"`
+	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
 	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceDeleteResponseType                 `json:"type"`
+	Type                 InstanceDeleteResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceDeleteResponseJSON                 `json:"-"`
 }
 
@@ -2560,12 +2833,16 @@ type instanceDeleteResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -2651,8 +2928,8 @@ func (r InstanceDeleteResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceDeleteResponseCustomMetadata struct {
-	DataType  InstanceDeleteResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                       `json:"field_name,required"`
+	DataType  InstanceDeleteResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                       `json:"field_name" api:"required"`
 	JSON      instanceDeleteResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -2722,6 +2999,77 @@ const (
 func (r InstanceDeleteResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceDeleteResponseFusionMethodMax, InstanceDeleteResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceDeleteResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                  `json:"vector" api:"required"`
+	JSON   instanceDeleteResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceDeleteResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceDeleteResponseIndexMethod]
+type instanceDeleteResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceDeleteResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceDeleteResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceDeleteResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceDeleteResponseIndexingOptions]
+type instanceDeleteResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceDeleteResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceDeleteResponseIndexingOptionsKeywordTokenizerPorter  InstanceDeleteResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceDeleteResponseIndexingOptionsKeywordTokenizerTrigram InstanceDeleteResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceDeleteResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseIndexingOptionsKeywordTokenizerPorter, InstanceDeleteResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -2912,9 +3260,11 @@ type InstanceDeleteResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceDeleteResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -2940,7 +3290,7 @@ type InstanceDeleteResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -2987,19 +3337,21 @@ func (r InstanceDeleteResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeAnd InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceDeleteResponseRetrievalOptionsKeywordMatchModeOr  InstanceDeleteResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceDeleteResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceDeleteResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceDeleteResponseRetrievalOptionsKeywordMatchModeAnd, InstanceDeleteResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -3192,10 +3544,10 @@ func (r instanceDeleteResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() 
 type InstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                      `json:"selector,required"`
+	Selector string                                                                      `json:"selector" api:"required"`
 	JSON     instanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -3234,7 +3586,7 @@ func (r InstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                       `json:"storage_id,required"`
+	StorageID      string                                                       `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                       `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                  `json:"storage_type"`
 	JSON           instanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -3275,12 +3627,12 @@ func (r InstanceDeleteResponseType) IsKnown() bool {
 }
 
 type InstanceChatCompletionsResponse struct {
-	Choices     []InstanceChatCompletionsResponseChoice `json:"choices,required"`
-	Chunks      []InstanceChatCompletionsResponseChunk  `json:"chunks,required"`
+	Choices     []InstanceChatCompletionsResponseChoice `json:"choices" api:"required"`
+	Chunks      []InstanceChatCompletionsResponseChunk  `json:"chunks" api:"required"`
 	ID          string                                  `json:"id"`
 	Model       string                                  `json:"model"`
 	Object      string                                  `json:"object"`
-	ExtraFields map[string]interface{}                  `json:"-,extras"`
+	ExtraFields map[string]interface{}                  `json:"-" api:"extrafields"`
 	JSON        instanceChatCompletionsResponseJSON     `json:"-"`
 }
 
@@ -3305,7 +3657,7 @@ func (r instanceChatCompletionsResponseJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChoice struct {
-	Message InstanceChatCompletionsResponseChoicesMessage `json:"message,required"`
+	Message InstanceChatCompletionsResponseChoicesMessage `json:"message" api:"required"`
 	Index   int64                                         `json:"index"`
 	JSON    instanceChatCompletionsResponseChoiceJSON     `json:"-"`
 }
@@ -3328,9 +3680,9 @@ func (r instanceChatCompletionsResponseChoiceJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChoicesMessage struct {
-	Content     string                                            `json:"content,required,nullable"`
-	Role        InstanceChatCompletionsResponseChoicesMessageRole `json:"role,required"`
-	ExtraFields map[string]interface{}                            `json:"-,extras"`
+	Content     string                                            `json:"content" api:"required,nullable"`
+	Role        InstanceChatCompletionsResponseChoicesMessageRole `json:"role" api:"required"`
+	ExtraFields map[string]interface{}                            `json:"-" api:"extrafields"`
 	JSON        instanceChatCompletionsResponseChoicesMessageJSON `json:"-"`
 }
 
@@ -3370,10 +3722,10 @@ func (r InstanceChatCompletionsResponseChoicesMessageRole) IsKnown() bool {
 }
 
 type InstanceChatCompletionsResponseChunk struct {
-	ID             string                                              `json:"id,required"`
-	Score          float64                                             `json:"score,required"`
-	Text           string                                              `json:"text,required"`
-	Type           string                                              `json:"type,required"`
+	ID             string                                              `json:"id" api:"required"`
+	Score          float64                                             `json:"score" api:"required"`
+	Text           string                                              `json:"text" api:"required"`
+	Type           string                                              `json:"type" api:"required"`
 	Item           InstanceChatCompletionsResponseChunksItem           `json:"item"`
 	ScoringDetails InstanceChatCompletionsResponseChunksScoringDetails `json:"scoring_details"`
 	JSON           instanceChatCompletionsResponseChunkJSON            `json:"-"`
@@ -3401,7 +3753,7 @@ func (r instanceChatCompletionsResponseChunkJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChunksItem struct {
-	Key       string                                        `json:"key,required"`
+	Key       string                                        `json:"key" api:"required"`
 	Metadata  map[string]interface{}                        `json:"metadata"`
 	Timestamp float64                                       `json:"timestamp"`
 	JSON      instanceChatCompletionsResponseChunksItemJSON `json:"-"`
@@ -3426,17 +3778,19 @@ func (r instanceChatCompletionsResponseChunksItemJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChunksScoringDetails struct {
-	KeywordRank    float64                                                 `json:"keyword_rank"`
-	KeywordScore   float64                                                 `json:"keyword_score"`
-	RerankingScore float64                                                 `json:"reranking_score"`
-	VectorRank     float64                                                 `json:"vector_rank"`
-	VectorScore    float64                                                 `json:"vector_score"`
-	JSON           instanceChatCompletionsResponseChunksScoringDetailsJSON `json:"-"`
+	FusionMethod   InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod `json:"fusion_method"`
+	KeywordRank    float64                                                         `json:"keyword_rank"`
+	KeywordScore   float64                                                         `json:"keyword_score"`
+	RerankingScore float64                                                         `json:"reranking_score"`
+	VectorRank     float64                                                         `json:"vector_rank"`
+	VectorScore    float64                                                         `json:"vector_score"`
+	JSON           instanceChatCompletionsResponseChunksScoringDetailsJSON         `json:"-"`
 }
 
 // instanceChatCompletionsResponseChunksScoringDetailsJSON contains the JSON
 // metadata for the struct [InstanceChatCompletionsResponseChunksScoringDetails]
 type instanceChatCompletionsResponseChunksScoringDetailsJSON struct {
+	FusionMethod   apijson.Field
 	KeywordRank    apijson.Field
 	KeywordScore   apijson.Field
 	RerankingScore apijson.Field
@@ -3454,41 +3808,65 @@ func (r instanceChatCompletionsResponseChunksScoringDetailsJSON) RawJSON() strin
 	return r.raw
 }
 
+type InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod string
+
+const (
+	InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodRrf InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod = "rrf"
+	InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodMax InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod = "max"
+)
+
+func (r InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodRrf, InstanceChatCompletionsResponseChunksScoringDetailsFusionMethodMax:
+		return true
+	}
+	return false
+}
+
 type InstanceReadResponse struct {
-	// Use your AI Search ID.
-	ID                   string                                   `json:"id,required"`
-	CreatedAt            time.Time                                `json:"created_at,required" format:"date-time"`
-	ModifiedAt           time.Time                                `json:"modified_at,required" format:"date-time"`
-	AIGatewayID          string                                   `json:"ai_gateway_id,nullable"`
-	AISearchModel        InstanceReadResponseAISearchModel        `json:"ai_search_model"`
-	Cache                bool                                     `json:"cache"`
-	CacheThreshold       InstanceReadResponseCacheThreshold       `json:"cache_threshold"`
-	ChunkOverlap         int64                                    `json:"chunk_overlap"`
-	ChunkSize            int64                                    `json:"chunk_size"`
-	CreatedBy            string                                   `json:"created_by,nullable"`
-	CustomMetadata       []InstanceReadResponseCustomMetadata     `json:"custom_metadata"`
-	EmbeddingModel       InstanceReadResponseEmbeddingModel       `json:"embedding_model"`
-	Enable               bool                                     `json:"enable"`
-	FusionMethod         InstanceReadResponseFusionMethod         `json:"fusion_method"`
-	HybridSearchEnabled  bool                                     `json:"hybrid_search_enabled"`
-	LastActivity         time.Time                                `json:"last_activity,nullable" format:"date-time"`
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
+	ID             string                               `json:"id" api:"required"`
+	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceReadResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                 `json:"cache"`
+	CacheThreshold InstanceReadResponseCacheThreshold   `json:"cache_threshold"`
+	ChunkOverlap   int64                                `json:"chunk_overlap"`
+	ChunkSize      int64                                `json:"chunk_size"`
+	CreatedBy      string                               `json:"created_by" api:"nullable"`
+	CustomMetadata []InstanceReadResponseCustomMetadata `json:"custom_metadata"`
+	EmbeddingModel InstanceReadResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	Enable         bool                                 `json:"enable"`
+	EngineVersion  float64                              `json:"engine_version"`
+	FusionMethod   InstanceReadResponseFusionMethod     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	//
+	// Deprecated: deprecated
+	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          InstanceReadResponseIndexMethod          `json:"index_method"`
+	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
+	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
 	MaxNumResults        int64                                    `json:"max_num_results"`
 	Metadata             InstanceReadResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                   `json:"modified_by,nullable"`
+	ModifiedBy           string                                   `json:"modified_by" api:"nullable"`
+	Namespace            string                                   `json:"namespace" api:"nullable"`
 	Paused               bool                                     `json:"paused"`
-	PublicEndpointID     string                                   `json:"public_endpoint_id,nullable"`
+	PublicEndpointID     string                                   `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams InstanceReadResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                     `json:"reranking"`
-	RerankingModel       InstanceReadResponseRerankingModel       `json:"reranking_model"`
-	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options,nullable"`
-	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model"`
+	RerankingModel       InstanceReadResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
+	RewriteModel         InstanceReadResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
 	RewriteQuery         bool                                     `json:"rewrite_query"`
 	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source"`
-	SourceParams         InstanceReadResponseSourceParams         `json:"source_params,nullable"`
+	Source               string                                   `json:"source" api:"nullable"`
+	SourceParams         InstanceReadResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
 	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceReadResponseType                 `json:"type"`
+	Type                 InstanceReadResponseType                 `json:"type" api:"nullable"`
 	JSON                 instanceReadResponseJSON                 `json:"-"`
 }
 
@@ -3508,12 +3886,16 @@ type instanceReadResponseJSON struct {
 	CustomMetadata       apijson.Field
 	EmbeddingModel       apijson.Field
 	Enable               apijson.Field
+	EngineVersion        apijson.Field
 	FusionMethod         apijson.Field
 	HybridSearchEnabled  apijson.Field
+	IndexMethod          apijson.Field
+	IndexingOptions      apijson.Field
 	LastActivity         apijson.Field
 	MaxNumResults        apijson.Field
 	Metadata             apijson.Field
 	ModifiedBy           apijson.Field
+	Namespace            apijson.Field
 	Paused               apijson.Field
 	PublicEndpointID     apijson.Field
 	PublicEndpointParams apijson.Field
@@ -3599,8 +3981,8 @@ func (r InstanceReadResponseCacheThreshold) IsKnown() bool {
 }
 
 type InstanceReadResponseCustomMetadata struct {
-	DataType  InstanceReadResponseCustomMetadataDataType `json:"data_type,required"`
-	FieldName string                                     `json:"field_name,required"`
+	DataType  InstanceReadResponseCustomMetadataDataType `json:"data_type" api:"required"`
+	FieldName string                                     `json:"field_name" api:"required"`
 	JSON      instanceReadResponseCustomMetadataJSON     `json:"-"`
 }
 
@@ -3670,6 +4052,77 @@ const (
 func (r InstanceReadResponseFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceReadResponseFusionMethodMax, InstanceReadResponseFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceReadResponseIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword bool `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector bool                                `json:"vector" api:"required"`
+	JSON   instanceReadResponseIndexMethodJSON `json:"-"`
+}
+
+// instanceReadResponseIndexMethodJSON contains the JSON metadata for the struct
+// [InstanceReadResponseIndexMethod]
+type instanceReadResponseIndexMethodJSON struct {
+	Keyword     apijson.Field
+	Vector      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseIndexMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseIndexMethodJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponseIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer InstanceReadResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	JSON             instanceReadResponseIndexingOptionsJSON             `json:"-"`
+}
+
+// instanceReadResponseIndexingOptionsJSON contains the JSON metadata for the
+// struct [InstanceReadResponseIndexingOptions]
+type instanceReadResponseIndexingOptionsJSON struct {
+	KeywordTokenizer apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseIndexingOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseIndexingOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceReadResponseIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceReadResponseIndexingOptionsKeywordTokenizerPorter  InstanceReadResponseIndexingOptionsKeywordTokenizer = "porter"
+	InstanceReadResponseIndexingOptionsKeywordTokenizerTrigram InstanceReadResponseIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceReadResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseIndexingOptionsKeywordTokenizerPorter, InstanceReadResponseIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -3859,9 +4312,11 @@ type InstanceReadResponseRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy []InstanceReadResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode InstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceReadResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -3887,7 +4342,7 @@ type InstanceReadResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field string `json:"field,required"`
+	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -3934,19 +4389,21 @@ func (r InstanceReadResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceReadResponseRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceReadResponseRetrievalOptionsKeywordMatchModeExactMatch InstanceReadResponseRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceReadResponseRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceReadResponseRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceReadResponseRetrievalOptionsKeywordMatchModeAnd InstanceReadResponseRetrievalOptionsKeywordMatchMode = "and"
+	InstanceReadResponseRetrievalOptionsKeywordMatchModeOr  InstanceReadResponseRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceReadResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseRetrievalOptionsKeywordMatchModeExactMatch, InstanceReadResponseRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceReadResponseRetrievalOptionsKeywordMatchModeAnd, InstanceReadResponseRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -4137,10 +4594,10 @@ func (r instanceReadResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() st
 type InstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector string                                                                    `json:"selector,required"`
+	Selector string                                                                    `json:"selector" api:"required"`
 	JSON     instanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
@@ -4179,7 +4636,7 @@ func (r InstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceReadResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                     `json:"storage_id,required"`
+	StorageID      string                                                     `json:"storage_id" api:"required"`
 	R2Jurisdiction string                                                     `json:"r2_jurisdiction"`
 	StorageType    r2.Provider                                                `json:"storage_type"`
 	JSON           instanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
@@ -4219,8 +4676,8 @@ func (r InstanceReadResponseType) IsKnown() bool {
 }
 
 type InstanceSearchResponse struct {
-	Chunks      []InstanceSearchResponseChunk `json:"chunks,required"`
-	SearchQuery string                        `json:"search_query,required"`
+	Chunks      []InstanceSearchResponseChunk `json:"chunks" api:"required"`
+	SearchQuery string                        `json:"search_query" api:"required"`
 	JSON        instanceSearchResponseJSON    `json:"-"`
 }
 
@@ -4242,10 +4699,10 @@ func (r instanceSearchResponseJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunk struct {
-	ID             string                                     `json:"id,required"`
-	Score          float64                                    `json:"score,required"`
-	Text           string                                     `json:"text,required"`
-	Type           string                                     `json:"type,required"`
+	ID             string                                     `json:"id" api:"required"`
+	Score          float64                                    `json:"score" api:"required"`
+	Text           string                                     `json:"text" api:"required"`
+	Type           string                                     `json:"type" api:"required"`
 	Item           InstanceSearchResponseChunksItem           `json:"item"`
 	ScoringDetails InstanceSearchResponseChunksScoringDetails `json:"scoring_details"`
 	JSON           instanceSearchResponseChunkJSON            `json:"-"`
@@ -4273,7 +4730,7 @@ func (r instanceSearchResponseChunkJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunksItem struct {
-	Key       string                               `json:"key,required"`
+	Key       string                               `json:"key" api:"required"`
 	Metadata  map[string]interface{}               `json:"metadata"`
 	Timestamp float64                              `json:"timestamp"`
 	JSON      instanceSearchResponseChunksItemJSON `json:"-"`
@@ -4298,17 +4755,19 @@ func (r instanceSearchResponseChunksItemJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunksScoringDetails struct {
-	KeywordRank    float64                                        `json:"keyword_rank"`
-	KeywordScore   float64                                        `json:"keyword_score"`
-	RerankingScore float64                                        `json:"reranking_score"`
-	VectorRank     float64                                        `json:"vector_rank"`
-	VectorScore    float64                                        `json:"vector_score"`
-	JSON           instanceSearchResponseChunksScoringDetailsJSON `json:"-"`
+	FusionMethod   InstanceSearchResponseChunksScoringDetailsFusionMethod `json:"fusion_method"`
+	KeywordRank    float64                                                `json:"keyword_rank"`
+	KeywordScore   float64                                                `json:"keyword_score"`
+	RerankingScore float64                                                `json:"reranking_score"`
+	VectorRank     float64                                                `json:"vector_rank"`
+	VectorScore    float64                                                `json:"vector_score"`
+	JSON           instanceSearchResponseChunksScoringDetailsJSON         `json:"-"`
 }
 
 // instanceSearchResponseChunksScoringDetailsJSON contains the JSON metadata for
 // the struct [InstanceSearchResponseChunksScoringDetails]
 type instanceSearchResponseChunksScoringDetailsJSON struct {
+	FusionMethod   apijson.Field
 	KeywordRank    apijson.Field
 	KeywordScore   apijson.Field
 	RerankingScore apijson.Field
@@ -4326,12 +4785,28 @@ func (r instanceSearchResponseChunksScoringDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
+type InstanceSearchResponseChunksScoringDetailsFusionMethod string
+
+const (
+	InstanceSearchResponseChunksScoringDetailsFusionMethodRrf InstanceSearchResponseChunksScoringDetailsFusionMethod = "rrf"
+	InstanceSearchResponseChunksScoringDetailsFusionMethodMax InstanceSearchResponseChunksScoringDetailsFusionMethod = "max"
+)
+
+func (r InstanceSearchResponseChunksScoringDetailsFusionMethod) IsKnown() bool {
+	switch r {
+	case InstanceSearchResponseChunksScoringDetailsFusionMethodRrf, InstanceSearchResponseChunksScoringDetailsFusionMethodMax:
+		return true
+	}
+	return false
+}
+
 type InstanceStatsResponse struct {
 	Completed         int64                     `json:"completed"`
 	Error             int64                     `json:"error"`
 	FileEmbedErrors   map[string]interface{}    `json:"file_embed_errors"`
 	IndexSourceErrors map[string]interface{}    `json:"index_source_errors"`
 	LastActivity      time.Time                 `json:"last_activity" format:"date-time"`
+	Outdated          int64                     `json:"outdated"`
 	Queued            int64                     `json:"queued"`
 	Running           int64                     `json:"running"`
 	Skipped           int64                     `json:"skipped"`
@@ -4346,6 +4821,7 @@ type instanceStatsResponseJSON struct {
 	FileEmbedErrors   apijson.Field
 	IndexSourceErrors apijson.Field
 	LastActivity      apijson.Field
+	Outdated          apijson.Field
 	Queued            apijson.Field
 	Running           apijson.Field
 	Skipped           apijson.Field
@@ -4362,20 +4838,23 @@ func (r instanceStatsResponseJSON) RawJSON() string {
 }
 
 type InstanceNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	// Use your AI Search ID.
-	ID                   param.Field[string]                                `json:"id,required"`
-	AIGatewayID          param.Field[string]                                `json:"ai_gateway_id"`
-	AISearchModel        param.Field[InstanceNewParamsAISearchModel]        `json:"ai_search_model"`
-	Cache                param.Field[bool]                                  `json:"cache"`
-	CacheThreshold       param.Field[InstanceNewParamsCacheThreshold]       `json:"cache_threshold"`
-	Chunk                param.Field[bool]                                  `json:"chunk"`
-	ChunkOverlap         param.Field[int64]                                 `json:"chunk_overlap"`
-	ChunkSize            param.Field[int64]                                 `json:"chunk_size"`
-	CustomMetadata       param.Field[[]InstanceNewParamsCustomMetadata]     `json:"custom_metadata"`
-	EmbeddingModel       param.Field[InstanceNewParamsEmbeddingModel]       `json:"embedding_model"`
-	FusionMethod         param.Field[InstanceNewParamsFusionMethod]         `json:"fusion_method"`
-	HybridSearchEnabled  param.Field[bool]                                  `json:"hybrid_search_enabled"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
+	ID             param.Field[string]                            `json:"id" api:"required"`
+	AIGatewayID    param.Field[string]                            `json:"ai_gateway_id"`
+	AISearchModel  param.Field[InstanceNewParamsAISearchModel]    `json:"ai_search_model"`
+	Cache          param.Field[bool]                              `json:"cache"`
+	CacheThreshold param.Field[InstanceNewParamsCacheThreshold]   `json:"cache_threshold"`
+	Chunk          param.Field[bool]                              `json:"chunk"`
+	ChunkOverlap   param.Field[int64]                             `json:"chunk_overlap"`
+	ChunkSize      param.Field[int64]                             `json:"chunk_size"`
+	CustomMetadata param.Field[[]InstanceNewParamsCustomMetadata] `json:"custom_metadata"`
+	EmbeddingModel param.Field[InstanceNewParamsEmbeddingModel]   `json:"embedding_model"`
+	FusionMethod   param.Field[InstanceNewParamsFusionMethod]     `json:"fusion_method"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod          param.Field[InstanceNewParamsIndexMethod]          `json:"index_method"`
+	IndexingOptions      param.Field[InstanceNewParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
 	Metadata             param.Field[InstanceNewParamsMetadata]             `json:"metadata"`
 	PublicEndpointParams param.Field[InstanceNewParamsPublicEndpointParams] `json:"public_endpoint_params"`
@@ -4454,8 +4933,8 @@ func (r InstanceNewParamsCacheThreshold) IsKnown() bool {
 }
 
 type InstanceNewParamsCustomMetadata struct {
-	DataType  param.Field[InstanceNewParamsCustomMetadataDataType] `json:"data_type,required"`
-	FieldName param.Field[string]                                  `json:"field_name,required"`
+	DataType  param.Field[InstanceNewParamsCustomMetadataDataType] `json:"data_type" api:"required"`
+	FieldName param.Field[string]                                  `json:"field_name" api:"required"`
 }
 
 func (r InstanceNewParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
@@ -4511,6 +4990,50 @@ const (
 func (r InstanceNewParamsFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceNewParamsFusionMethodMax, InstanceNewParamsFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceNewParamsIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword param.Field[bool] `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector param.Field[bool] `json:"vector" api:"required"`
+}
+
+func (r InstanceNewParamsIndexMethod) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer param.Field[InstanceNewParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+}
+
+func (r InstanceNewParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceNewParamsIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceNewParamsIndexingOptionsKeywordTokenizerPorter  InstanceNewParamsIndexingOptionsKeywordTokenizer = "porter"
+	InstanceNewParamsIndexingOptionsKeywordTokenizerTrigram InstanceNewParamsIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceNewParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsIndexingOptionsKeywordTokenizerPorter, InstanceNewParamsIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -4612,9 +5135,11 @@ type InstanceNewParamsRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy param.Field[[]InstanceNewParamsRetrievalOptionsBoostBy] `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -4626,7 +5151,7 @@ type InstanceNewParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -4659,19 +5184,21 @@ func (r InstanceNewParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceNewParamsRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceNewParamsRetrievalOptionsKeywordMatchModeExactMatch InstanceNewParamsRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceNewParamsRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceNewParamsRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceNewParamsRetrievalOptionsKeywordMatchModeAnd InstanceNewParamsRetrievalOptionsKeywordMatchMode = "and"
+	InstanceNewParamsRetrievalOptionsKeywordMatchModeOr  InstanceNewParamsRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceNewParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsRetrievalOptionsKeywordMatchModeExactMatch, InstanceNewParamsRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceNewParamsRetrievalOptionsKeywordMatchModeAnd, InstanceNewParamsRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -4795,10 +5322,10 @@ func (r InstanceNewParamsSourceParamsWebCrawlerParseOptions) MarshalJSON() (data
 type InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector param.Field[string] `json:"selector,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
 func (r InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector) MarshalJSON() (data []byte, err error) {
@@ -4822,7 +5349,7 @@ func (r InstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceNewParamsSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      param.Field[string]      `json:"storage_id,required"`
+	StorageID      param.Field[string]      `json:"storage_id" api:"required"`
 	R2Jurisdiction param.Field[string]      `json:"r2_jurisdiction"`
 	StorageType    param.Field[r2.Provider] `json:"storage_type"`
 }
@@ -4847,8 +5374,8 @@ func (r InstanceNewParamsType) IsKnown() bool {
 }
 
 type InstanceNewResponseEnvelope struct {
-	Result  InstanceNewResponse             `json:"result,required"`
-	Success bool                            `json:"success,required"`
+	Result  InstanceNewResponse             `json:"result" api:"required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    instanceNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4870,18 +5397,21 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
-	AccountID                      param.Field[string]                                   `path:"account_id,required"`
-	AIGatewayID                    param.Field[string]                                   `json:"ai_gateway_id"`
-	AISearchModel                  param.Field[InstanceUpdateParamsAISearchModel]        `json:"ai_search_model"`
-	Cache                          param.Field[bool]                                     `json:"cache"`
-	CacheThreshold                 param.Field[InstanceUpdateParamsCacheThreshold]       `json:"cache_threshold"`
-	Chunk                          param.Field[bool]                                     `json:"chunk"`
-	ChunkOverlap                   param.Field[int64]                                    `json:"chunk_overlap"`
-	ChunkSize                      param.Field[int64]                                    `json:"chunk_size"`
-	CustomMetadata                 param.Field[[]InstanceUpdateParamsCustomMetadata]     `json:"custom_metadata"`
-	EmbeddingModel                 param.Field[InstanceUpdateParamsEmbeddingModel]       `json:"embedding_model"`
-	FusionMethod                   param.Field[InstanceUpdateParamsFusionMethod]         `json:"fusion_method"`
-	HybridSearchEnabled            param.Field[bool]                                     `json:"hybrid_search_enabled"`
+	AccountID      param.Field[string]                               `path:"account_id" api:"required"`
+	AIGatewayID    param.Field[string]                               `json:"ai_gateway_id"`
+	AISearchModel  param.Field[InstanceUpdateParamsAISearchModel]    `json:"ai_search_model"`
+	Cache          param.Field[bool]                                 `json:"cache"`
+	CacheThreshold param.Field[InstanceUpdateParamsCacheThreshold]   `json:"cache_threshold"`
+	Chunk          param.Field[bool]                                 `json:"chunk"`
+	ChunkOverlap   param.Field[int64]                                `json:"chunk_overlap"`
+	ChunkSize      param.Field[int64]                                `json:"chunk_size"`
+	CustomMetadata param.Field[[]InstanceUpdateParamsCustomMetadata] `json:"custom_metadata"`
+	EmbeddingModel param.Field[InstanceUpdateParamsEmbeddingModel]   `json:"embedding_model"`
+	FusionMethod   param.Field[InstanceUpdateParamsFusionMethod]     `json:"fusion_method"`
+	// Controls which storage backends are used during indexing. Defaults to
+	// vector-only.
+	IndexMethod                    param.Field[InstanceUpdateParamsIndexMethod]          `json:"index_method"`
+	IndexingOptions                param.Field[InstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
 	Metadata                       param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
 	Paused                         param.Field[bool]                                     `json:"paused"`
@@ -4964,8 +5494,8 @@ func (r InstanceUpdateParamsCacheThreshold) IsKnown() bool {
 }
 
 type InstanceUpdateParamsCustomMetadata struct {
-	DataType  param.Field[InstanceUpdateParamsCustomMetadataDataType] `json:"data_type,required"`
-	FieldName param.Field[string]                                     `json:"field_name,required"`
+	DataType  param.Field[InstanceUpdateParamsCustomMetadataDataType] `json:"data_type" api:"required"`
+	FieldName param.Field[string]                                     `json:"field_name" api:"required"`
 }
 
 func (r InstanceUpdateParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
@@ -5021,6 +5551,50 @@ const (
 func (r InstanceUpdateParamsFusionMethod) IsKnown() bool {
 	switch r {
 	case InstanceUpdateParamsFusionMethodMax, InstanceUpdateParamsFusionMethodRrf:
+		return true
+	}
+	return false
+}
+
+// Controls which storage backends are used during indexing. Defaults to
+// vector-only.
+type InstanceUpdateParamsIndexMethod struct {
+	// Enable keyword (BM25) storage backend.
+	Keyword param.Field[bool] `json:"keyword" api:"required"`
+	// Enable vector (embedding) storage backend.
+	Vector param.Field[bool] `json:"vector" api:"required"`
+}
+
+func (r InstanceUpdateParamsIndexMethod) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsIndexingOptions struct {
+	// Tokenizer used for keyword search indexing. porter provides word-level
+	// tokenization with Porter stemming (good for natural language queries). trigram
+	// enables character-level substring matching (good for partial matches, code,
+	// identifiers). Changing this triggers a full re-index. Defaults to porter.
+	KeywordTokenizer param.Field[InstanceUpdateParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+}
+
+func (r InstanceUpdateParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Tokenizer used for keyword search indexing. porter provides word-level
+// tokenization with Porter stemming (good for natural language queries). trigram
+// enables character-level substring matching (good for partial matches, code,
+// identifiers). Changing this triggers a full re-index. Defaults to porter.
+type InstanceUpdateParamsIndexingOptionsKeywordTokenizer string
+
+const (
+	InstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter  InstanceUpdateParamsIndexingOptionsKeywordTokenizer = "porter"
+	InstanceUpdateParamsIndexingOptionsKeywordTokenizerTrigram InstanceUpdateParamsIndexingOptionsKeywordTokenizer = "trigram"
+)
+
+func (r InstanceUpdateParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter, InstanceUpdateParamsIndexingOptionsKeywordTokenizerTrigram:
 		return true
 	}
 	return false
@@ -5122,9 +5696,11 @@ type InstanceUpdateParamsRetrievalOptions struct {
 	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
 	// custom_metadata field.
 	BoostBy param.Field[[]InstanceUpdateParamsRetrievalOptionsBoostBy] `json:"boost_by"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5136,7 +5712,7 @@ type InstanceUpdateParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -5169,19 +5745,21 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
 
 const (
-	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeExactMatch InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "exact_match"
-	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeFuzzyMatch InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "fuzzy_match"
+	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeAnd InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "and"
+	InstanceUpdateParamsRetrievalOptionsKeywordMatchModeOr  InstanceUpdateParamsRetrievalOptionsKeywordMatchMode = "or"
 )
 
 func (r InstanceUpdateParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsRetrievalOptionsKeywordMatchModeExactMatch, InstanceUpdateParamsRetrievalOptionsKeywordMatchModeFuzzyMatch:
+	case InstanceUpdateParamsRetrievalOptionsKeywordMatchModeAnd, InstanceUpdateParamsRetrievalOptionsKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -5305,10 +5883,10 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerParseOptions) MarshalJSON() (d
 type InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// CSS selector to extract content from pages matching the path pattern. Supports
 	// standard CSS selectors including class, ID, element, and attribute selectors.
-	Selector param.Field[string] `json:"selector,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
 func (r InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector) MarshalJSON() (data []byte, err error) {
@@ -5332,7 +5910,7 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      param.Field[string]      `json:"storage_id,required"`
+	StorageID      param.Field[string]      `json:"storage_id" api:"required"`
 	R2Jurisdiction param.Field[string]      `json:"r2_jurisdiction"`
 	StorageType    param.Field[r2.Provider] `json:"storage_type"`
 }
@@ -5383,8 +5961,8 @@ func (r InstanceUpdateParamsSummarizationModel) IsKnown() bool {
 }
 
 type InstanceUpdateResponseEnvelope struct {
-	Result  InstanceUpdateResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  InstanceUpdateResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    instanceUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5406,7 +5984,8 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Namespace param.Field[string] `query:"namespace"`
 	// Order By Column Name
 	OrderBy param.Field[InstanceListParamsOrderBy] `query:"order_by"`
 	// Order By Direction
@@ -5457,12 +6036,12 @@ func (r InstanceListParamsOrderByDirection) IsKnown() bool {
 }
 
 type InstanceDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InstanceDeleteResponseEnvelope struct {
-	Result  InstanceDeleteResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  InstanceDeleteResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    instanceDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5484,8 +6063,8 @@ func (r instanceDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsParams struct {
-	AccountID       param.Field[string]                                       `path:"account_id,required"`
-	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages,required"`
+	AccountID       param.Field[string]                                       `path:"account_id" api:"required"`
+	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceChatCompletionsParamsAISearchOptions] `json:"ai_search_options"`
 	Model           param.Field[InstanceChatCompletionsParamsModel]           `json:"model"`
 	Stream          param.Field[bool]                                         `json:"stream"`
@@ -5496,8 +6075,8 @@ func (r InstanceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceChatCompletionsParamsMessage struct {
-	Content     param.Field[string]                                    `json:"content,required"`
-	Role        param.Field[InstanceChatCompletionsParamsMessagesRole] `json:"role,required"`
+	Content     param.Field[string]                                    `json:"content" api:"required"`
+	Role        param.Field[InstanceChatCompletionsParamsMessagesRole] `json:"role" api:"required"`
 	ExtraFields map[string]interface{}                                 `json:"-,extras"`
 }
 
@@ -5645,9 +6224,11 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                             `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                            `json:"filters"`
 	FusionMethod     param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
@@ -5663,7 +6244,7 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -5711,19 +6292,21 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKno
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
-	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "exact_match"
-	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "fuzzy_match"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeAnd InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "and"
+	InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeOr  InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode = "or"
 )
 
 func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch, InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch:
+	case InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeAnd, InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -5787,12 +6370,12 @@ func (r InstanceChatCompletionsParamsModel) IsKnown() bool {
 }
 
 type InstanceReadParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InstanceReadResponseEnvelope struct {
-	Result  InstanceReadResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  InstanceReadResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    instanceReadResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5814,8 +6397,8 @@ func (r instanceReadResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceSearchParams struct {
-	AccountID       param.Field[string]                              `path:"account_id,required"`
-	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages,required"`
+	AccountID       param.Field[string]                              `path:"account_id" api:"required"`
+	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceSearchParamsAISearchOptions] `json:"ai_search_options"`
 }
 
@@ -5824,8 +6407,8 @@ func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceSearchParamsMessage struct {
-	Content     param.Field[string]                           `json:"content,required"`
-	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role,required"`
+	Content     param.Field[string]                           `json:"content" api:"required"`
+	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role" api:"required"`
 	ExtraFields map[string]interface{}                        `json:"-,extras"`
 }
 
@@ -5973,9 +6556,11 @@ type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                    `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                   `json:"filters"`
 	FusionMethod     param.Field[InstanceSearchParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls how keyword search terms are matched. exact_match requires all terms to
-	// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-	// exact_match.
+	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// candidates to documents containing all query terms; 'or' includes any document
+	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                      `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                        `json:"max_num_results"`
@@ -5991,7 +6576,7 @@ type InstanceSearchParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
 	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
 	// text/boolean fields support exists/not_exists.
-	Field param.Field[string] `json:"field,required"`
+	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
 	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
@@ -6039,19 +6624,21 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool
 	return false
 }
 
-// Controls how keyword search terms are matched. exact_match requires all terms to
-// appear (AND); fuzzy_match returns results containing any term (OR). Defaults to
-// exact_match.
+// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// candidates to documents containing all query terms; 'or' includes any document
+// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
+// 'or' respectively.
 type InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
-	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "exact_match"
-	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "fuzzy_match"
+	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeAnd InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "and"
+	InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeOr  InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode = "or"
 )
 
 func (r InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode) IsKnown() bool {
 	switch r {
-	case InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeExactMatch, InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeFuzzyMatch:
+	case InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeAnd, InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchModeOr:
 		return true
 	}
 	return false
@@ -6074,8 +6661,8 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalRetrievalType) IsKnown() boo
 }
 
 type InstanceSearchResponseEnvelope struct {
-	Result  InstanceSearchResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  InstanceSearchResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    instanceSearchResponseEnvelopeJSON `json:"-"`
 }
 
@@ -6097,12 +6684,12 @@ func (r instanceSearchResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceStatsParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InstanceStatsResponseEnvelope struct {
-	Result  InstanceStatsResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  InstanceStatsResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    instanceStatsResponseEnvelopeJSON `json:"-"`
 }
 

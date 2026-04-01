@@ -42,19 +42,19 @@ func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", params.AccountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all delegations for a given account IP prefix.
@@ -64,11 +64,11 @@ func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, que
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", query.AccountID, prefixID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -94,23 +94,23 @@ func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, d
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if prefixID == "" {
 		err = errors.New("missing required prefix_id parameter")
-		return
+		return nil, err
 	}
 	if delegationID == "" {
 		err = errors.New("missing required delegation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", body.AccountID, prefixID, delegationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Delegations struct {
@@ -171,11 +171,11 @@ func (r prefixDelegationDeleteResponseJSON) RawJSON() string {
 
 type PrefixDelegationNewParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	CIDR param.Field[string] `json:"cidr,required"`
+	CIDR param.Field[string] `json:"cidr" api:"required"`
 	// Account identifier for the account to which prefix is being delegated.
-	DelegatedAccountID param.Field[string] `json:"delegated_account_id,required"`
+	DelegatedAccountID param.Field[string] `json:"delegated_account_id" api:"required"`
 }
 
 func (r PrefixDelegationNewParams) MarshalJSON() (data []byte, err error) {
@@ -183,10 +183,10 @@ func (r PrefixDelegationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDelegationNewResponseEnvelope struct {
-	Errors   []PrefixDelegationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDelegationNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixDelegationNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixDelegationNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixDelegationNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixDelegationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Delegations                                `json:"result"`
 	JSON    prefixDelegationNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -211,8 +211,8 @@ func (r prefixDelegationNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixDelegationNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           PrefixDelegationNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixDelegationNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -259,8 +259,8 @@ func (r prefixDelegationNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PrefixDelegationNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           PrefixDelegationNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixDelegationNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -323,19 +323,19 @@ func (r PrefixDelegationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixDelegationListParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixDelegationDeleteParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixDelegationDeleteResponseEnvelope struct {
-	Errors   []PrefixDelegationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDelegationDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PrefixDelegationDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixDelegationDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success PrefixDelegationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success PrefixDelegationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PrefixDelegationDeleteResponse                `json:"result"`
 	JSON    prefixDelegationDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -360,8 +360,8 @@ func (r prefixDelegationDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PrefixDelegationDeleteResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           PrefixDelegationDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             prefixDelegationDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -408,8 +408,8 @@ func (r prefixDelegationDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type PrefixDelegationDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           PrefixDelegationDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             prefixDelegationDeleteResponseEnvelopeMessagesJSON   `json:"-"`

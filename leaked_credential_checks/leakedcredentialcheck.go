@@ -43,15 +43,15 @@ func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCre
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the current status of Leaked Credential Checks.
@@ -60,15 +60,15 @@ func (r *LeakedCredentialCheckService) Get(ctx context.Context, query LeakedCred
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Defines the overall status for Leaked Credential Checks.
@@ -119,7 +119,7 @@ func (r leakedCredentialCheckGetResponseJSON) RawJSON() string {
 
 type LeakedCredentialCheckNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Determines whether or not Leaked Credential Checks are enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 }
@@ -129,12 +129,12 @@ func (r LeakedCredentialCheckNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LeakedCredentialCheckNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines the overall status for Leaked Credential Checks.
-	Result LeakedCredentialCheckNewResponse `json:"result,required"`
+	Result LeakedCredentialCheckNewResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success LeakedCredentialCheckNewResponseEnvelopeSuccess `json:"success,required"`
+	Success LeakedCredentialCheckNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    leakedCredentialCheckNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -174,16 +174,16 @@ func (r LeakedCredentialCheckNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type LeakedCredentialCheckGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LeakedCredentialCheckGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines the overall status for Leaked Credential Checks.
-	Result LeakedCredentialCheckGetResponse `json:"result,required"`
+	Result LeakedCredentialCheckGetResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success LeakedCredentialCheckGetResponseEnvelopeSuccess `json:"success,required"`
+	Success LeakedCredentialCheckGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    leakedCredentialCheckGetResponseEnvelopeJSON    `json:"-"`
 }
 

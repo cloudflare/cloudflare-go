@@ -43,7 +43,7 @@ func (r *PlanService) List(ctx context.Context, query PlanListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/available_plans", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -69,19 +69,19 @@ func (r *PlanService) Get(ctx context.Context, planIdentifier string, query Plan
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if planIdentifier == "" {
 		err = errors.New("missing required plan_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/available_plans/%s", query.ZoneID, planIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AvailableRatePlan struct {
@@ -153,20 +153,20 @@ func (r AvailableRatePlanFrequency) IsKnown() bool {
 
 type PlanListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PlanGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PlanGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AvailableRatePlan     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   AvailableRatePlan     `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success PlanGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PlanGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    planGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -52,15 +52,15 @@ func (r *NetworkSubnetWARPService) New(ctx context.Context, params NetworkSubnet
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/subnets/warp", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete a WARP IP assignment subnet. This operation is idempotent - deleting an
@@ -70,19 +70,19 @@ func (r *NetworkSubnetWARPService) Delete(ctx context.Context, subnetID string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subnetID == "" {
 		err = errors.New("missing required subnet_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/subnets/warp/%s", body.AccountID, subnetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a WARP IP assignment subnet.
@@ -97,19 +97,19 @@ func (r *NetworkSubnetWARPService) Edit(ctx context.Context, subnetID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subnetID == "" {
 		err = errors.New("missing required subnet_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/subnets/warp/%s", params.AccountID, subnetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a WARP IP assignment subnet.
@@ -118,19 +118,19 @@ func (r *NetworkSubnetWARPService) Get(ctx context.Context, subnetID string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subnetID == "" {
 		err = errors.New("missing required subnet_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/subnets/warp/%s", query.AccountID, subnetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Subnet struct {
@@ -256,11 +256,11 @@ func (r NetworkSubnetWARPDeleteResponseSubnetType) IsKnown() bool {
 
 type NetworkSubnetWARPNewParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for the subnet.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The private IPv4 or IPv6 range defining the subnet, in CIDR notation.
-	Network param.Field[string] `json:"network,required"`
+	Network param.Field[string] `json:"network" api:"required"`
 	// An optional description of the subnet.
 	Comment param.Field[string] `json:"comment"`
 	// If `true`, this is the default subnet for the account. There can only be one
@@ -273,11 +273,11 @@ func (r NetworkSubnetWARPNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkSubnetWARPNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Subnet                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Subnet                `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkSubnetWARPNewResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkSubnetWARPNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -317,15 +317,15 @@ func (r NetworkSubnetWARPNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkSubnetWARPDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkSubnetWARPDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   NetworkSubnetWARPDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo           `json:"messages" api:"required"`
+	Result   NetworkSubnetWARPDeleteResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success NetworkSubnetWARPDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkSubnetWARPDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -365,7 +365,7 @@ func (r NetworkSubnetWARPDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkSubnetWARPEditParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the subnet.
 	Comment param.Field[string] `json:"comment"`
 	// If `true`, this is the default subnet for the account. There can only be one
@@ -382,11 +382,11 @@ func (r NetworkSubnetWARPEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkSubnetWARPEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Subnet                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Subnet                `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkSubnetWARPEditResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkSubnetWARPEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -426,15 +426,15 @@ func (r NetworkSubnetWARPEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkSubnetWARPGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkSubnetWARPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Subnet                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Subnet                `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkSubnetWARPGetResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkSubnetWARPGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPGetResponseEnvelopeJSON    `json:"-"`
 }
 

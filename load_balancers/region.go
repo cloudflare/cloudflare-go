@@ -43,15 +43,15 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a single region mapping.
@@ -60,20 +60,20 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions/%v", query.AccountID, regionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RegionListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Two-letter alpha-2 country code followed in ISO 3166-1.
 	CountryCodeA2 param.Field[string] `query:"country_code_a2"`
 	// Two-letter subdivision code followed in ISO 3166-2.
@@ -91,11 +91,11 @@ func (r RegionListParams) URLQuery() (v url.Values) {
 }
 
 type RegionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RegionListResponseEnvelopeSuccess `json:"success,required"`
+	Success RegionListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    regionListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -135,7 +135,7 @@ func (r RegionListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 // A list of Cloudflare regions. WNAM: Western North America, ENAM: Eastern North
@@ -170,12 +170,12 @@ func (r RegionGetParamsRegionID) IsKnown() bool {
 }
 
 type RegionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A list of countries and subdivisions mapped to a region.
-	Result interface{} `json:"result,required"`
+	Result interface{} `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RegionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RegionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    regionGetResponseEnvelopeJSON    `json:"-"`
 }
 

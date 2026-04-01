@@ -41,15 +41,15 @@ func (r *AccessGatewayCAService) New(ctx context.Context, body AccessGatewayCANe
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/gateway_ca", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists SSH Certificate Authorities (CA).
@@ -59,7 +59,7 @@ func (r *AccessGatewayCAService) List(ctx context.Context, query AccessGatewayCA
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/gateway_ca", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -85,19 +85,19 @@ func (r *AccessGatewayCAService) Delete(ctx context.Context, certificateID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/gateway_ca/%s", body.AccountID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessGatewayCANewResponse struct {
@@ -174,14 +174,14 @@ func (r accessGatewayCADeleteResponseJSON) RawJSON() string {
 
 type AccessGatewayCANewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessGatewayCANewResponseEnvelope struct {
-	Errors   []AccessGatewayCANewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessGatewayCANewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessGatewayCANewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessGatewayCANewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessGatewayCANewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessGatewayCANewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessGatewayCANewResponse                `json:"result"`
 	JSON    accessGatewayCANewResponseEnvelopeJSON    `json:"-"`
 }
@@ -206,8 +206,8 @@ func (r accessGatewayCANewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessGatewayCANewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AccessGatewayCANewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessGatewayCANewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -254,8 +254,8 @@ func (r accessGatewayCANewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessGatewayCANewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessGatewayCANewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessGatewayCANewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -318,19 +318,19 @@ func (r AccessGatewayCANewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessGatewayCAListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessGatewayCADeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessGatewayCADeleteResponseEnvelope struct {
-	Errors   []AccessGatewayCADeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessGatewayCADeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessGatewayCADeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessGatewayCADeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessGatewayCADeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessGatewayCADeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessGatewayCADeleteResponse                `json:"result"`
 	JSON    accessGatewayCADeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -355,8 +355,8 @@ func (r accessGatewayCADeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessGatewayCADeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           AccessGatewayCADeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessGatewayCADeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -403,8 +403,8 @@ func (r accessGatewayCADeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type AccessGatewayCADeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AccessGatewayCADeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessGatewayCADeleteResponseEnvelopeMessagesJSON   `json:"-"`

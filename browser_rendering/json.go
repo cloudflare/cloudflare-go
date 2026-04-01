@@ -43,23 +43,23 @@ func (r *JsonService) New(ctx context.Context, params JsonNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/browser-rendering/json", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type JsonNewResponse map[string]interface{}
 
 type JsonNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]    `path:"account_id,required"`
-	Body      JsonNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]    `path:"account_id" api:"required"`
+	Body      JsonNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -125,7 +125,7 @@ type JsonNewParamsBodyUnion interface {
 type JsonNewParamsBodyObject struct {
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
 	// `url` must be set.
-	HTML param.Field[string] `json:"html,required"`
+	HTML param.Field[string] `json:"html" api:"required"`
 	// The maximum duration allowed for the browser action to complete after the page
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
@@ -232,8 +232,8 @@ func (r JsonNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 
 // Provide credentials for HTTP authentication.
 type JsonNewParamsBodyObjectAuthenticate struct {
-	Password param.Field[string] `json:"password,required"`
-	Username param.Field[string] `json:"username,required"`
+	Password param.Field[string] `json:"password" api:"required"`
+	Username param.Field[string] `json:"username" api:"required"`
 }
 
 func (r JsonNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
@@ -241,8 +241,9 @@ func (r JsonNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err err
 }
 
 type JsonNewParamsBodyObjectCookie struct {
-	Name         param.Field[string]                                     `json:"name,required"`
-	Value        param.Field[string]                                     `json:"value,required"`
+	// Cookie name.
+	Name         param.Field[string]                                     `json:"name" api:"required"`
+	Value        param.Field[string]                                     `json:"value" api:"required"`
 	Domain       param.Field[string]                                     `json:"domain"`
 	Expires      param.Field[float64]                                    `json:"expires"`
 	HTTPOnly     param.Field[bool]                                       `json:"httpOnly"`
@@ -311,10 +312,10 @@ func (r JsonNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 
 type JsonNewParamsBodyObjectCustomAI struct {
 	// Authorization token for the AI model: `Bearer <token>`.
-	Authorization param.Field[string] `json:"authorization,required"`
+	Authorization param.Field[string] `json:"authorization" api:"required"`
 	// AI model to use for the request. Must be formed as `<provider>/<model_name>`,
-	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`
-	Model param.Field[string] `json:"model,required"`
+	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`.
+	Model param.Field[string] `json:"model" api:"required"`
 }
 
 func (r JsonNewParamsBodyObjectCustomAI) MarshalJSON() (data []byte, err error) {
@@ -414,9 +415,9 @@ func (r JsonNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 }
 
 type JsonNewParamsBodyObjectResponseFormat struct {
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[string] `json:"type" api:"required"`
 	// Schema for the response format. More information here:
-	// https://developers.cloudflare.com/workers-ai/json-mode/
+	// https://developers.cloudflare.com/workers-ai/json-mode/.
 	JsonSchema param.Field[map[string]JsonNewParamsBodyObjectResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
@@ -439,8 +440,8 @@ func (r JsonNewParamsBodyObjectResponseFormatJsonSchemaArray) ImplementsJsonNewP
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
 type JsonNewParamsBodyObjectViewport struct {
-	Height            param.Field[float64] `json:"height,required"`
-	Width             param.Field[float64] `json:"width,required"`
+	Height            param.Field[float64] `json:"height" api:"required"`
+	Width             param.Field[float64] `json:"width" api:"required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
 	HasTouch          param.Field[bool]    `json:"hasTouch"`
 	IsLandscape       param.Field[bool]    `json:"isLandscape"`
@@ -454,7 +455,7 @@ func (r JsonNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error) 
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
 type JsonNewParamsBodyObjectWaitForSelector struct {
-	Selector param.Field[string]                                        `json:"selector,required"`
+	Selector param.Field[string]                                        `json:"selector" api:"required"`
 	Hidden   param.Field[JsonNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
 	Timeout  param.Field[float64]                                       `json:"timeout"`
 	Visible  param.Field[JsonNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
@@ -493,9 +494,9 @@ func (r JsonNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 }
 
 type JsonNewResponseEnvelope struct {
-	Result JsonNewResponse `json:"result,required"`
-	// Response status
-	Success bool                            `json:"success,required"`
+	Result JsonNewResponse `json:"result" api:"required"`
+	// Response status.
+	Success bool                            `json:"success" api:"required"`
 	Errors  []JsonNewResponseEnvelopeErrors `json:"errors"`
 	JSON    jsonNewResponseEnvelopeJSON     `json:"-"`
 }
@@ -519,10 +520,10 @@ func (r jsonNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type JsonNewResponseEnvelopeErrors struct {
-	// Error code
-	Code float64 `json:"code,required"`
-	// Error Message
-	Message string                            `json:"message,required"`
+	// Error code.
+	Code float64 `json:"code" api:"required"`
+	// Error message.
+	Message string                            `json:"message" api:"required"`
 	JSON    jsonNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 

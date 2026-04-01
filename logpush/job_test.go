@@ -25,6 +25,7 @@ func TestJobNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -42,18 +43,19 @@ func TestJobNewWithOptionalParams(t *testing.T) {
 		MaxUploadRecords:         cloudflare.F(logpush.JobNewParamsMaxUploadRecords0),
 		Name:                     cloudflare.F("example.com"),
 		OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
-			BatchPrefix:     cloudflare.F(""),
-			BatchSuffix:     cloudflare.F(""),
-			Cve2021_44228:   cloudflare.F(false),
-			FieldDelimiter:  cloudflare.F(","),
-			FieldNames:      cloudflare.F([]string{"Datetime", "DstIP", "SrcIP"}),
-			OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
-			RecordDelimiter: cloudflare.F(""),
-			RecordPrefix:    cloudflare.F("{"),
-			RecordSuffix:    cloudflare.F("}\n"),
-			RecordTemplate:  cloudflare.F("record_template"),
-			SampleRate:      cloudflare.F(1.000000),
-			TimestampFormat: cloudflare.F(logpush.OutputOptionsTimestampFormatUnixnano),
+			BatchPrefix:      cloudflare.F(""),
+			BatchSuffix:      cloudflare.F(""),
+			Cve2021_44228:    cloudflare.F(false),
+			FieldDelimiter:   cloudflare.F(","),
+			FieldNames:       cloudflare.F([]string{"Datetime", "DstIP", "SrcIP"}),
+			MergeSubrequests: cloudflare.F(true),
+			OutputType:       cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
+			RecordDelimiter:  cloudflare.F(""),
+			RecordPrefix:     cloudflare.F("{"),
+			RecordSuffix:     cloudflare.F("}\n"),
+			RecordTemplate:   cloudflare.F("record_template"),
+			SampleRate:       cloudflare.F(1.000000),
+			TimestampFormat:  cloudflare.F(logpush.OutputOptionsTimestampFormatUnixnano),
 		}),
 		OwnershipChallenge: cloudflare.F("00000000000000000000"),
 	})
@@ -77,6 +79,7 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -96,18 +99,19 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 			MaxUploadRecords:         cloudflare.F(logpush.JobUpdateParamsMaxUploadRecords0),
 			Name:                     cloudflare.F("example.com"),
 			OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
-				BatchPrefix:     cloudflare.F(""),
-				BatchSuffix:     cloudflare.F(""),
-				Cve2021_44228:   cloudflare.F(false),
-				FieldDelimiter:  cloudflare.F(","),
-				FieldNames:      cloudflare.F([]string{"Datetime", "DstIP", "SrcIP"}),
-				OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
-				RecordDelimiter: cloudflare.F(""),
-				RecordPrefix:    cloudflare.F("{"),
-				RecordSuffix:    cloudflare.F("}\n"),
-				RecordTemplate:  cloudflare.F("record_template"),
-				SampleRate:      cloudflare.F(1.000000),
-				TimestampFormat: cloudflare.F(logpush.OutputOptionsTimestampFormatUnixnano),
+				BatchPrefix:      cloudflare.F(""),
+				BatchSuffix:      cloudflare.F(""),
+				Cve2021_44228:    cloudflare.F(false),
+				FieldDelimiter:   cloudflare.F(","),
+				FieldNames:       cloudflare.F([]string{"Datetime", "DstIP", "SrcIP"}),
+				MergeSubrequests: cloudflare.F(true),
+				OutputType:       cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
+				RecordDelimiter:  cloudflare.F(""),
+				RecordPrefix:     cloudflare.F("{"),
+				RecordSuffix:     cloudflare.F("}\n"),
+				RecordTemplate:   cloudflare.F("record_template"),
+				SampleRate:       cloudflare.F(1.000000),
+				TimestampFormat:  cloudflare.F(logpush.OutputOptionsTimestampFormatUnixnano),
 			}),
 			OwnershipChallenge: cloudflare.F("00000000000000000000"),
 		},
@@ -132,6 +136,7 @@ func TestJobListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -158,6 +163,7 @@ func TestJobDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -188,6 +194,7 @@ func TestJobGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

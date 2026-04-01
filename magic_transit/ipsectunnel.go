@@ -44,20 +44,20 @@ func NewIPSECTunnelService(opts ...option.RequestOption) (r *IPSECTunnelService)
 func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParams, opts ...option.RequestOption) (res *IPSECTunnelNewResponse, err error) {
 	var env IPSECTunnelNewResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a specific IPsec tunnel associated with an account. Use
@@ -66,44 +66,44 @@ func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParam
 func (r *IPSECTunnelService) Update(ctx context.Context, ipsecTunnelID string, params IPSECTunnelUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelUpdateResponse, err error) {
 	var env IPSECTunnelUpdateResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ipsecTunnelID == "" {
 		err = errors.New("missing required ipsec_tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists IPsec tunnels associated with an account.
 func (r *IPSECTunnelService) List(ctx context.Context, params IPSECTunnelListParams, opts ...option.RequestOption) (res *IPSECTunnelListResponse, err error) {
 	var env IPSECTunnelListResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disables and removes a specific static IPsec Tunnel associated with an account.
@@ -112,24 +112,24 @@ func (r *IPSECTunnelService) List(ctx context.Context, params IPSECTunnelListPar
 func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, params IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	var env IPSECTunnelDeleteResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ipsecTunnelID == "" {
 		err = errors.New("missing required ipsec_tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update multiple IPsec tunnels associated with an account. Use
@@ -138,44 +138,44 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, p
 func (r *IPSECTunnelService) BulkUpdate(ctx context.Context, params IPSECTunnelBulkUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelBulkUpdateResponse, err error) {
 	var env IPSECTunnelBulkUpdateResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists details for a specific IPsec tunnel.
 func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, params IPSECTunnelGetParams, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
 	var env IPSECTunnelGetResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ipsecTunnelID == "" {
 		err = errors.New("missing required ipsec_tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Generates a Pre Shared Key for a specific IPsec tunnel used in the IKE session.
@@ -188,19 +188,19 @@ func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID stri
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ipsecTunnelID == "" {
 		err = errors.New("missing required ipsec_tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // The PSK metadata that includes when the PSK was generated.
@@ -227,15 +227,15 @@ func (r pskMetadataJSON) RawJSON() string {
 
 type IPSECTunnelNewResponse struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint string `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -302,7 +302,7 @@ func (r ipsecTunnelNewResponseJSON) RawJSON() string {
 
 type IPSECTunnelNewResponseBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -347,9 +347,9 @@ func (r ipsecTunnelNewResponseBGPJSON) RawJSON() string {
 }
 
 type IPSECTunnelNewResponseBGPStatus struct {
-	State               IPSECTunnelNewResponseBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                 `json:"tcp_established,required"`
-	UpdatedAt           time.Time                            `json:"updated_at,required" format:"date-time"`
+	State               IPSECTunnelNewResponseBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                 `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                            `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                               `json:"bgp_state"`
 	CfSpeakerIP         string                               `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                `json:"cf_speaker_port"`
@@ -580,15 +580,15 @@ func (r ipsecTunnelUpdateResponseJSON) RawJSON() string {
 
 type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint string `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -655,7 +655,7 @@ func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON) RawJSON() string {
 
 type IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -700,9 +700,9 @@ func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPJSON) RawJSON() string {
 }
 
 type IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus struct {
-	State               IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                                       `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                                  `json:"updated_at,required" format:"date-time"`
+	State               IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                                       `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                                  `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                                     `json:"bgp_state"`
 	CfSpeakerIP         string                                                     `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                                      `json:"cf_speaker_port"`
@@ -933,15 +933,15 @@ func (r ipsecTunnelListResponseJSON) RawJSON() string {
 
 type IPSECTunnelListResponseIPSECTunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint string `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -1008,7 +1008,7 @@ func (r ipsecTunnelListResponseIPSECTunnelJSON) RawJSON() string {
 
 type IPSECTunnelListResponseIPSECTunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -1053,9 +1053,9 @@ func (r ipsecTunnelListResponseIPSECTunnelsBGPJSON) RawJSON() string {
 }
 
 type IPSECTunnelListResponseIPSECTunnelsBGPStatus struct {
-	State               IPSECTunnelListResponseIPSECTunnelsBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                              `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                         `json:"updated_at,required" format:"date-time"`
+	State               IPSECTunnelListResponseIPSECTunnelsBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                              `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                         `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                            `json:"bgp_state"`
 	CfSpeakerIP         string                                            `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                             `json:"cf_speaker_port"`
@@ -1287,15 +1287,15 @@ func (r ipsecTunnelDeleteResponseJSON) RawJSON() string {
 
 type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint string `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -1362,7 +1362,7 @@ func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON) RawJSON() string {
 
 type IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -1407,9 +1407,9 @@ func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPJSON) RawJSON() string {
 }
 
 type IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus struct {
-	State               IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                                      `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                                 `json:"updated_at,required" format:"date-time"`
+	State               IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                                      `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                                 `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                                    `json:"bgp_state"`
 	CfSpeakerIP         string                                                    `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                                     `json:"cf_speaker_port"`
@@ -1641,15 +1641,15 @@ func (r ipsecTunnelBulkUpdateResponseJSON) RawJSON() string {
 
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint string `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -1716,7 +1716,7 @@ func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON) RawJSON() string {
 
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -1761,9 +1761,9 @@ func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPJSON) RawJSON() stri
 }
 
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus struct {
-	State               IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                                            `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                                       `json:"updated_at,required" format:"date-time"`
+	State               IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                                            `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                                       `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                                          `json:"bgp_state"`
 	CfSpeakerIP         string                                                          `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                                           `json:"cf_speaker_port"`
@@ -1995,15 +1995,15 @@ func (r ipsecTunnelGetResponseJSON) RawJSON() string {
 
 type IPSECTunnelGetResponseIPSECTunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint string `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
@@ -2070,7 +2070,7 @@ func (r ipsecTunnelGetResponseIPSECTunnelJSON) RawJSON() string {
 
 type IPSECTunnelGetResponseIPSECTunnelBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -2115,9 +2115,9 @@ func (r ipsecTunnelGetResponseIPSECTunnelBGPJSON) RawJSON() string {
 }
 
 type IPSECTunnelGetResponseIPSECTunnelBGPStatus struct {
-	State               IPSECTunnelGetResponseIPSECTunnelBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                            `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                       `json:"updated_at,required" format:"date-time"`
+	State               IPSECTunnelGetResponseIPSECTunnelBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                            `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                       `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                          `json:"bgp_state"`
 	CfSpeakerIP         string                                          `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                           `json:"cf_speaker_port"`
@@ -2354,15 +2354,15 @@ func (r ipsecTunnelPSKGenerateResponseJSON) RawJSON() string {
 
 type IPSECTunnelNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress param.Field[string] `json:"interface_address,required"`
+	InterfaceAddress param.Field[string] `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting param.Field[bool]                                       `json:"automatic_return_routing"`
@@ -2393,7 +2393,7 @@ func (r IPSECTunnelNewParams) MarshalJSON() (data []byte, err error) {
 
 type IPSECTunnelNewParamsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
@@ -2517,11 +2517,11 @@ func (r IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsI
 }
 
 type IPSECTunnelNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IPSECTunnelNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   IPSECTunnelNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success IPSECTunnelNewResponseEnvelopeSuccess `json:"success,required"`
+	Success IPSECTunnelNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ipsecTunnelNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2561,15 +2561,15 @@ func (r IPSECTunnelNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
+	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress param.Field[string] `json:"interface_address,required"`
+	InterfaceAddress param.Field[string] `json:"interface_address" api:"required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting param.Field[bool]                                          `json:"automatic_return_routing"`
@@ -2600,7 +2600,7 @@ func (r IPSECTunnelUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type IPSECTunnelUpdateParamsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
@@ -2724,11 +2724,11 @@ func (r IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) Implemen
 }
 
 type IPSECTunnelUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   IPSECTunnelUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   IPSECTunnelUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success IPSECTunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success IPSECTunnelUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ipsecTunnelUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2768,16 +2768,16 @@ func (r IPSECTunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelListParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type IPSECTunnelListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   IPSECTunnelListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   IPSECTunnelListResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success IPSECTunnelListResponseEnvelopeSuccess `json:"success,required"`
+	Success IPSECTunnelListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ipsecTunnelListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2817,16 +2817,16 @@ func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelDeleteParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type IPSECTunnelDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   IPSECTunnelDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   IPSECTunnelDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success IPSECTunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success IPSECTunnelDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ipsecTunnelDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2866,8 +2866,8 @@ func (r IPSECTunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelBulkUpdateParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
-	Body              interface{}         `json:"body,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
+	Body              interface{}         `json:"body" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
@@ -2876,11 +2876,11 @@ func (r IPSECTunnelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   IPSECTunnelBulkUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo         `json:"messages" api:"required"`
+	Result   IPSECTunnelBulkUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success IPSECTunnelBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success IPSECTunnelBulkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ipsecTunnelBulkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2920,16 +2920,16 @@ func (r IPSECTunnelBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelGetParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type IPSECTunnelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IPSECTunnelGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   IPSECTunnelGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success IPSECTunnelGetResponseEnvelopeSuccess `json:"success,required"`
+	Success IPSECTunnelGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ipsecTunnelGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2969,8 +2969,8 @@ func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelPSKGenerateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
@@ -2978,11 +2978,11 @@ func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelPSKGenerateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   IPSECTunnelPSKGenerateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo          `json:"messages" api:"required"`
+	Result   IPSECTunnelPSKGenerateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success IPSECTunnelPSKGenerateResponseEnvelopeSuccess `json:"success,required"`
+	Success IPSECTunnelPSKGenerateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ipsecTunnelPSKGenerateResponseEnvelopeJSON    `json:"-"`
 }
 

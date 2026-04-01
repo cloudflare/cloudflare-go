@@ -44,11 +44,11 @@ func (r *DevicePolicyCustomFallbackDomainService) Update(ctx context.Context, po
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", params.AccountID, policyID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -79,11 +79,11 @@ func (r *DevicePolicyCustomFallbackDomainService) Get(ctx context.Context, polic
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", query.AccountID, policyID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,8 +106,8 @@ func (r *DevicePolicyCustomFallbackDomainService) GetAutoPaging(ctx context.Cont
 }
 
 type DevicePolicyCustomFallbackDomainUpdateParams struct {
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Domains   []FallbackDomainParam `json:"domains,required"`
+	AccountID param.Field[string]   `path:"account_id" api:"required"`
+	Domains   []FallbackDomainParam `json:"domains" api:"required"`
 }
 
 func (r DevicePolicyCustomFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -115,5 +115,5 @@ func (r DevicePolicyCustomFallbackDomainUpdateParams) MarshalJSON() (data []byte
 }
 
 type DevicePolicyCustomFallbackDomainGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

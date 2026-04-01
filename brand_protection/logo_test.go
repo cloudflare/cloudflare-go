@@ -27,6 +27,7 @@ func TestLogoNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -35,7 +36,7 @@ func TestLogoNewWithOptionalParams(t *testing.T) {
 		MatchType: cloudflare.F("match_type"),
 		Tag:       cloudflare.F("tag"),
 		Threshold: cloudflare.F(0.000000),
-		Image:     cloudflare.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+		Image:     cloudflare.F(io.Reader(bytes.NewBuffer([]byte("Example data")))),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -57,6 +58,7 @@ func TestLogoDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

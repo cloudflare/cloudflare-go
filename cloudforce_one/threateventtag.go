@@ -39,16 +39,16 @@ func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNe
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/tags/create", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventTagNewResponse struct {
-	UUID                    string                        `json:"uuid,required"`
-	Value                   string                        `json:"value,required"`
+	UUID                    string                        `json:"uuid" api:"required"`
+	Value                   string                        `json:"value" api:"required"`
 	ActiveDuration          string                        `json:"activeDuration"`
 	ActorCategory           string                        `json:"actorCategory"`
 	AliasGroupNames         []string                      `json:"aliasGroupNames"`
@@ -103,8 +103,8 @@ func (r threatEventTagNewResponseJSON) RawJSON() string {
 
 type ThreatEventTagNewParams struct {
 	// Account ID.
-	AccountID               param.Field[string]   `path:"account_id,required"`
-	Value                   param.Field[string]   `json:"value,required"`
+	AccountID               param.Field[string]   `path:"account_id" api:"required"`
+	Value                   param.Field[string]   `json:"value" api:"required"`
 	ActiveDuration          param.Field[string]   `json:"activeDuration"`
 	ActorCategory           param.Field[string]   `json:"actorCategory"`
 	AliasGroupNames         param.Field[[]string] `json:"aliasGroupNames"`

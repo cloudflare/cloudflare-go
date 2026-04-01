@@ -52,15 +52,15 @@ func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // [DEPRECATED] Update an existing pipeline. Use the new /pipelines/v1/pipelines
@@ -73,19 +73,19 @@ func (r *PipelineService) Update(ctx context.Context, pipelineName string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if pipelineName == "" {
 		err = errors.New("missing required pipeline_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/%s", params.AccountID, pipelineName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // [DEPRECATED] List, filter, and paginate pipelines in an account. Use the new
@@ -96,11 +96,11 @@ func (r *PipelineService) List(ctx context.Context, params PipelineListParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // [DEPRECATED] Delete a pipeline. Use the new /pipelines/v1/pipelines endpoint
@@ -112,15 +112,15 @@ func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body 
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if pipelineName == "" {
 		err = errors.New("missing required pipeline_name parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/%s", body.AccountID, pipelineName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Create a new Pipeline.
@@ -129,15 +129,15 @@ func (r *PipelineService) NewV1(ctx context.Context, params PipelineNewV1Params,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete Pipeline in Account.
@@ -146,15 +146,15 @@ func (r *PipelineService) DeleteV1(ctx context.Context, pipelineID string, body 
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if pipelineID == "" {
 		err = errors.New("missing required pipeline_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines/%s", body.AccountID, pipelineID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // [DEPRECATED] Get configuration of a pipeline. Use the new
@@ -166,19 +166,19 @@ func (r *PipelineService) Get(ctx context.Context, pipelineName string, query Pi
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if pipelineName == "" {
 		err = errors.New("missing required pipeline_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/%s", query.AccountID, pipelineName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Pipelines Details.
@@ -187,19 +187,19 @@ func (r *PipelineService) GetV1(ctx context.Context, pipelineID string, query Pi
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if pipelineID == "" {
 		err = errors.New("missing required pipeline_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines/%s", query.AccountID, pipelineID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List/Filter Pipelines in Account.
@@ -209,7 +209,7 @@ func (r *PipelineService) ListV1(ctx context.Context, params PipelineListV1Param
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -235,15 +235,15 @@ func (r *PipelineService) ValidateSql(ctx context.Context, params PipelineValida
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/validate_sql", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // [DEPRECATED] Describes the configuration of a pipeline. Use the new
@@ -252,15 +252,15 @@ func (r *PipelineService) ValidateSql(ctx context.Context, params PipelineValida
 // Deprecated: deprecated
 type PipelineNewResponse struct {
 	// Specifies the pipeline identifier.
-	ID          string                         `json:"id,required"`
-	Destination PipelineNewResponseDestination `json:"destination,required"`
+	ID          string                         `json:"id" api:"required"`
+	Destination PipelineNewResponseDestination `json:"destination" api:"required"`
 	// Indicates the endpoint URL to send traffic.
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// Defines the name of the pipeline.
-	Name   string                      `json:"name,required"`
-	Source []PipelineNewResponseSource `json:"source,required"`
+	Name   string                      `json:"name" api:"required"`
+	Source []PipelineNewResponseSource `json:"source" api:"required"`
 	// Indicates the version number of last saved configuration.
-	Version float64                 `json:"version,required"`
+	Version float64                 `json:"version" api:"required"`
 	JSON    pipelineNewResponseJSON `json:"-"`
 }
 
@@ -286,13 +286,13 @@ func (r pipelineNewResponseJSON) RawJSON() string {
 }
 
 type PipelineNewResponseDestination struct {
-	Batch       PipelineNewResponseDestinationBatch       `json:"batch,required"`
-	Compression PipelineNewResponseDestinationCompression `json:"compression,required"`
+	Batch       PipelineNewResponseDestinationBatch       `json:"batch" api:"required"`
+	Compression PipelineNewResponseDestinationCompression `json:"compression" api:"required"`
 	// Specifies the format of data to deliver.
-	Format PipelineNewResponseDestinationFormat `json:"format,required"`
-	Path   PipelineNewResponseDestinationPath   `json:"path,required"`
+	Format PipelineNewResponseDestinationFormat `json:"format" api:"required"`
+	Path   PipelineNewResponseDestinationPath   `json:"path" api:"required"`
 	// Specifies the type of destination.
-	Type PipelineNewResponseDestinationType `json:"type,required"`
+	Type PipelineNewResponseDestinationType `json:"type" api:"required"`
 	JSON pipelineNewResponseDestinationJSON `json:"-"`
 }
 
@@ -318,11 +318,11 @@ func (r pipelineNewResponseDestinationJSON) RawJSON() string {
 
 type PipelineNewResponseDestinationBatch struct {
 	// Specifies rough maximum size of files.
-	MaxBytes int64 `json:"max_bytes,required"`
+	MaxBytes int64 `json:"max_bytes" api:"required"`
 	// Specifies duration to wait to aggregate batches files.
-	MaxDurationS float64 `json:"max_duration_s,required"`
+	MaxDurationS float64 `json:"max_duration_s" api:"required"`
 	// Specifies rough maximum number of rows per file.
-	MaxRows int64                                   `json:"max_rows,required"`
+	MaxRows int64                                   `json:"max_rows" api:"required"`
 	JSON    pipelineNewResponseDestinationBatchJSON `json:"-"`
 }
 
@@ -346,7 +346,7 @@ func (r pipelineNewResponseDestinationBatchJSON) RawJSON() string {
 
 type PipelineNewResponseDestinationCompression struct {
 	// Specifies the desired compression algorithm and format.
-	Type PipelineNewResponseDestinationCompressionType `json:"type,required"`
+	Type PipelineNewResponseDestinationCompressionType `json:"type" api:"required"`
 	JSON pipelineNewResponseDestinationCompressionJSON `json:"-"`
 }
 
@@ -400,7 +400,7 @@ func (r PipelineNewResponseDestinationFormat) IsKnown() bool {
 
 type PipelineNewResponseDestinationPath struct {
 	// Specifies the R2 Bucket to store files.
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Specifies the name pattern to for individual data files.
 	Filename string `json:"filename"`
 	// Specifies the name pattern for directory.
@@ -447,8 +447,8 @@ func (r PipelineNewResponseDestinationType) IsKnown() bool {
 // [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineNewResponseSource struct {
 	// Specifies the format of source data.
-	Format PipelineNewResponseSourceFormat `json:"format,required"`
-	Type   string                          `json:"type,required"`
+	Format PipelineNewResponseSourceFormat `json:"format" api:"required"`
+	Type   string                          `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
@@ -521,8 +521,8 @@ func init() {
 // Deprecated: deprecated
 type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                       `json:"type,required"`
+	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format" api:"required"`
+	Type   string                                                                       `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool                                                                       `json:"authentication"`
 	CORS           PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
@@ -596,8 +596,8 @@ func (r pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCO
 // Deprecated: deprecated
 type PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                          `json:"type,required"`
+	Format PipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format" api:"required"`
+	Type   string                                                                          `json:"type" api:"required"`
 	JSON   pipelineNewResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
@@ -658,15 +658,15 @@ func (r PipelineNewResponseSourceFormat) IsKnown() bool {
 // Deprecated: deprecated
 type PipelineUpdateResponse struct {
 	// Specifies the pipeline identifier.
-	ID          string                            `json:"id,required"`
-	Destination PipelineUpdateResponseDestination `json:"destination,required"`
+	ID          string                            `json:"id" api:"required"`
+	Destination PipelineUpdateResponseDestination `json:"destination" api:"required"`
 	// Indicates the endpoint URL to send traffic.
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// Defines the name of the pipeline.
-	Name   string                         `json:"name,required"`
-	Source []PipelineUpdateResponseSource `json:"source,required"`
+	Name   string                         `json:"name" api:"required"`
+	Source []PipelineUpdateResponseSource `json:"source" api:"required"`
 	// Indicates the version number of last saved configuration.
-	Version float64                    `json:"version,required"`
+	Version float64                    `json:"version" api:"required"`
 	JSON    pipelineUpdateResponseJSON `json:"-"`
 }
 
@@ -692,13 +692,13 @@ func (r pipelineUpdateResponseJSON) RawJSON() string {
 }
 
 type PipelineUpdateResponseDestination struct {
-	Batch       PipelineUpdateResponseDestinationBatch       `json:"batch,required"`
-	Compression PipelineUpdateResponseDestinationCompression `json:"compression,required"`
+	Batch       PipelineUpdateResponseDestinationBatch       `json:"batch" api:"required"`
+	Compression PipelineUpdateResponseDestinationCompression `json:"compression" api:"required"`
 	// Specifies the format of data to deliver.
-	Format PipelineUpdateResponseDestinationFormat `json:"format,required"`
-	Path   PipelineUpdateResponseDestinationPath   `json:"path,required"`
+	Format PipelineUpdateResponseDestinationFormat `json:"format" api:"required"`
+	Path   PipelineUpdateResponseDestinationPath   `json:"path" api:"required"`
 	// Specifies the type of destination.
-	Type PipelineUpdateResponseDestinationType `json:"type,required"`
+	Type PipelineUpdateResponseDestinationType `json:"type" api:"required"`
 	JSON pipelineUpdateResponseDestinationJSON `json:"-"`
 }
 
@@ -724,11 +724,11 @@ func (r pipelineUpdateResponseDestinationJSON) RawJSON() string {
 
 type PipelineUpdateResponseDestinationBatch struct {
 	// Specifies rough maximum size of files.
-	MaxBytes int64 `json:"max_bytes,required"`
+	MaxBytes int64 `json:"max_bytes" api:"required"`
 	// Specifies duration to wait to aggregate batches files.
-	MaxDurationS float64 `json:"max_duration_s,required"`
+	MaxDurationS float64 `json:"max_duration_s" api:"required"`
 	// Specifies rough maximum number of rows per file.
-	MaxRows int64                                      `json:"max_rows,required"`
+	MaxRows int64                                      `json:"max_rows" api:"required"`
 	JSON    pipelineUpdateResponseDestinationBatchJSON `json:"-"`
 }
 
@@ -752,7 +752,7 @@ func (r pipelineUpdateResponseDestinationBatchJSON) RawJSON() string {
 
 type PipelineUpdateResponseDestinationCompression struct {
 	// Specifies the desired compression algorithm and format.
-	Type PipelineUpdateResponseDestinationCompressionType `json:"type,required"`
+	Type PipelineUpdateResponseDestinationCompressionType `json:"type" api:"required"`
 	JSON pipelineUpdateResponseDestinationCompressionJSON `json:"-"`
 }
 
@@ -806,7 +806,7 @@ func (r PipelineUpdateResponseDestinationFormat) IsKnown() bool {
 
 type PipelineUpdateResponseDestinationPath struct {
 	// Specifies the R2 Bucket to store files.
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Specifies the name pattern to for individual data files.
 	Filename string `json:"filename"`
 	// Specifies the name pattern for directory.
@@ -853,8 +853,8 @@ func (r PipelineUpdateResponseDestinationType) IsKnown() bool {
 // [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineUpdateResponseSource struct {
 	// Specifies the format of source data.
-	Format PipelineUpdateResponseSourceFormat `json:"format,required"`
-	Type   string                             `json:"type,required"`
+	Format PipelineUpdateResponseSourceFormat `json:"format" api:"required"`
+	Type   string                             `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
@@ -927,8 +927,8 @@ func init() {
 // Deprecated: deprecated
 type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                          `json:"type,required"`
+	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format" api:"required"`
+	Type   string                                                                          `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool                                                                          `json:"authentication"`
 	CORS           PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
@@ -1002,8 +1002,8 @@ func (r pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourc
 // Deprecated: deprecated
 type PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                             `json:"type,required"`
+	Format PipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format" api:"required"`
+	Type   string                                                                             `json:"type" api:"required"`
 	JSON   pipelineUpdateResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
@@ -1059,10 +1059,10 @@ func (r PipelineUpdateResponseSourceFormat) IsKnown() bool {
 }
 
 type PipelineListResponse struct {
-	ResultInfo PipelineListResponseResultInfo `json:"result_info,required"`
-	Results    []PipelineListResponseResult   `json:"results,required"`
+	ResultInfo PipelineListResponseResultInfo `json:"result_info" api:"required"`
+	Results    []PipelineListResponseResult   `json:"results" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                     `json:"success,required"`
+	Success bool                     `json:"success" api:"required"`
 	JSON    pipelineListResponseJSON `json:"-"`
 }
 
@@ -1086,13 +1086,13 @@ func (r pipelineListResponseJSON) RawJSON() string {
 
 type PipelineListResponseResultInfo struct {
 	// Indicates the number of items on current page.
-	Count float64 `json:"count,required"`
+	Count float64 `json:"count" api:"required"`
 	// Indicates the current page number.
-	Page float64 `json:"page,required"`
+	Page float64 `json:"page" api:"required"`
 	// Indicates the number of items per page.
-	PerPage float64 `json:"per_page,required"`
+	PerPage float64 `json:"per_page" api:"required"`
 	// Indicates the total number of items.
-	TotalCount float64                            `json:"total_count,required"`
+	TotalCount float64                            `json:"total_count" api:"required"`
 	JSON       pipelineListResponseResultInfoJSON `json:"-"`
 }
 
@@ -1121,15 +1121,15 @@ func (r pipelineListResponseResultInfoJSON) RawJSON() string {
 // Deprecated: deprecated
 type PipelineListResponseResult struct {
 	// Specifies the pipeline identifier.
-	ID          string                                 `json:"id,required"`
-	Destination PipelineListResponseResultsDestination `json:"destination,required"`
+	ID          string                                 `json:"id" api:"required"`
+	Destination PipelineListResponseResultsDestination `json:"destination" api:"required"`
 	// Indicates the endpoint URL to send traffic.
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// Defines the name of the pipeline.
-	Name   string                              `json:"name,required"`
-	Source []PipelineListResponseResultsSource `json:"source,required"`
+	Name   string                              `json:"name" api:"required"`
+	Source []PipelineListResponseResultsSource `json:"source" api:"required"`
 	// Indicates the version number of last saved configuration.
-	Version float64                        `json:"version,required"`
+	Version float64                        `json:"version" api:"required"`
 	JSON    pipelineListResponseResultJSON `json:"-"`
 }
 
@@ -1155,13 +1155,13 @@ func (r pipelineListResponseResultJSON) RawJSON() string {
 }
 
 type PipelineListResponseResultsDestination struct {
-	Batch       PipelineListResponseResultsDestinationBatch       `json:"batch,required"`
-	Compression PipelineListResponseResultsDestinationCompression `json:"compression,required"`
+	Batch       PipelineListResponseResultsDestinationBatch       `json:"batch" api:"required"`
+	Compression PipelineListResponseResultsDestinationCompression `json:"compression" api:"required"`
 	// Specifies the format of data to deliver.
-	Format PipelineListResponseResultsDestinationFormat `json:"format,required"`
-	Path   PipelineListResponseResultsDestinationPath   `json:"path,required"`
+	Format PipelineListResponseResultsDestinationFormat `json:"format" api:"required"`
+	Path   PipelineListResponseResultsDestinationPath   `json:"path" api:"required"`
 	// Specifies the type of destination.
-	Type PipelineListResponseResultsDestinationType `json:"type,required"`
+	Type PipelineListResponseResultsDestinationType `json:"type" api:"required"`
 	JSON pipelineListResponseResultsDestinationJSON `json:"-"`
 }
 
@@ -1187,11 +1187,11 @@ func (r pipelineListResponseResultsDestinationJSON) RawJSON() string {
 
 type PipelineListResponseResultsDestinationBatch struct {
 	// Specifies rough maximum size of files.
-	MaxBytes int64 `json:"max_bytes,required"`
+	MaxBytes int64 `json:"max_bytes" api:"required"`
 	// Specifies duration to wait to aggregate batches files.
-	MaxDurationS float64 `json:"max_duration_s,required"`
+	MaxDurationS float64 `json:"max_duration_s" api:"required"`
 	// Specifies rough maximum number of rows per file.
-	MaxRows int64                                           `json:"max_rows,required"`
+	MaxRows int64                                           `json:"max_rows" api:"required"`
 	JSON    pipelineListResponseResultsDestinationBatchJSON `json:"-"`
 }
 
@@ -1215,7 +1215,7 @@ func (r pipelineListResponseResultsDestinationBatchJSON) RawJSON() string {
 
 type PipelineListResponseResultsDestinationCompression struct {
 	// Specifies the desired compression algorithm and format.
-	Type PipelineListResponseResultsDestinationCompressionType `json:"type,required"`
+	Type PipelineListResponseResultsDestinationCompressionType `json:"type" api:"required"`
 	JSON pipelineListResponseResultsDestinationCompressionJSON `json:"-"`
 }
 
@@ -1269,7 +1269,7 @@ func (r PipelineListResponseResultsDestinationFormat) IsKnown() bool {
 
 type PipelineListResponseResultsDestinationPath struct {
 	// Specifies the R2 Bucket to store files.
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Specifies the name pattern to for individual data files.
 	Filename string `json:"filename"`
 	// Specifies the name pattern for directory.
@@ -1316,8 +1316,8 @@ func (r PipelineListResponseResultsDestinationType) IsKnown() bool {
 // [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineListResponseResultsSource struct {
 	// Specifies the format of source data.
-	Format PipelineListResponseResultsSourceFormat `json:"format,required"`
-	Type   string                                  `json:"type,required"`
+	Format PipelineListResponseResultsSourceFormat `json:"format" api:"required"`
+	Type   string                                  `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
@@ -1391,8 +1391,8 @@ func init() {
 // Deprecated: deprecated
 type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                               `json:"type,required"`
+	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format" api:"required"`
+	Type   string                                                                               `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool                                                                               `json:"authentication"`
 	CORS           PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
@@ -1466,8 +1466,8 @@ func (r pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesHTTP
 // Deprecated: deprecated
 type PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                                  `json:"type,required"`
+	Format PipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format" api:"required"`
+	Type   string                                                                                  `json:"type" api:"required"`
 	JSON   pipelineListResponseResultsSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
@@ -1524,15 +1524,15 @@ func (r PipelineListResponseResultsSourceFormat) IsKnown() bool {
 
 type PipelineNewV1Response struct {
 	// Indicates a unique identifier for this pipeline.
-	ID         string `json:"id,required"`
-	CreatedAt  string `json:"created_at,required"`
-	ModifiedAt string `json:"modified_at,required"`
+	ID         string `json:"id" api:"required"`
+	CreatedAt  string `json:"created_at" api:"required"`
+	ModifiedAt string `json:"modified_at" api:"required"`
 	// Indicates the name of the Pipeline.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies SQL for the Pipeline processing flow.
-	Sql string `json:"sql,required"`
+	Sql string `json:"sql" api:"required"`
 	// Indicates the current status of the Pipeline.
-	Status string                    `json:"status,required"`
+	Status string                    `json:"status" api:"required"`
 	JSON   pipelineNewV1ResponseJSON `json:"-"`
 }
 
@@ -1563,15 +1563,15 @@ func (r pipelineNewV1ResponseJSON) RawJSON() string {
 // Deprecated: deprecated
 type PipelineGetResponse struct {
 	// Specifies the pipeline identifier.
-	ID          string                         `json:"id,required"`
-	Destination PipelineGetResponseDestination `json:"destination,required"`
+	ID          string                         `json:"id" api:"required"`
+	Destination PipelineGetResponseDestination `json:"destination" api:"required"`
 	// Indicates the endpoint URL to send traffic.
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// Defines the name of the pipeline.
-	Name   string                      `json:"name,required"`
-	Source []PipelineGetResponseSource `json:"source,required"`
+	Name   string                      `json:"name" api:"required"`
+	Source []PipelineGetResponseSource `json:"source" api:"required"`
 	// Indicates the version number of last saved configuration.
-	Version float64                 `json:"version,required"`
+	Version float64                 `json:"version" api:"required"`
 	JSON    pipelineGetResponseJSON `json:"-"`
 }
 
@@ -1597,13 +1597,13 @@ func (r pipelineGetResponseJSON) RawJSON() string {
 }
 
 type PipelineGetResponseDestination struct {
-	Batch       PipelineGetResponseDestinationBatch       `json:"batch,required"`
-	Compression PipelineGetResponseDestinationCompression `json:"compression,required"`
+	Batch       PipelineGetResponseDestinationBatch       `json:"batch" api:"required"`
+	Compression PipelineGetResponseDestinationCompression `json:"compression" api:"required"`
 	// Specifies the format of data to deliver.
-	Format PipelineGetResponseDestinationFormat `json:"format,required"`
-	Path   PipelineGetResponseDestinationPath   `json:"path,required"`
+	Format PipelineGetResponseDestinationFormat `json:"format" api:"required"`
+	Path   PipelineGetResponseDestinationPath   `json:"path" api:"required"`
 	// Specifies the type of destination.
-	Type PipelineGetResponseDestinationType `json:"type,required"`
+	Type PipelineGetResponseDestinationType `json:"type" api:"required"`
 	JSON pipelineGetResponseDestinationJSON `json:"-"`
 }
 
@@ -1629,11 +1629,11 @@ func (r pipelineGetResponseDestinationJSON) RawJSON() string {
 
 type PipelineGetResponseDestinationBatch struct {
 	// Specifies rough maximum size of files.
-	MaxBytes int64 `json:"max_bytes,required"`
+	MaxBytes int64 `json:"max_bytes" api:"required"`
 	// Specifies duration to wait to aggregate batches files.
-	MaxDurationS float64 `json:"max_duration_s,required"`
+	MaxDurationS float64 `json:"max_duration_s" api:"required"`
 	// Specifies rough maximum number of rows per file.
-	MaxRows int64                                   `json:"max_rows,required"`
+	MaxRows int64                                   `json:"max_rows" api:"required"`
 	JSON    pipelineGetResponseDestinationBatchJSON `json:"-"`
 }
 
@@ -1657,7 +1657,7 @@ func (r pipelineGetResponseDestinationBatchJSON) RawJSON() string {
 
 type PipelineGetResponseDestinationCompression struct {
 	// Specifies the desired compression algorithm and format.
-	Type PipelineGetResponseDestinationCompressionType `json:"type,required"`
+	Type PipelineGetResponseDestinationCompressionType `json:"type" api:"required"`
 	JSON pipelineGetResponseDestinationCompressionJSON `json:"-"`
 }
 
@@ -1711,7 +1711,7 @@ func (r PipelineGetResponseDestinationFormat) IsKnown() bool {
 
 type PipelineGetResponseDestinationPath struct {
 	// Specifies the R2 Bucket to store files.
-	Bucket string `json:"bucket,required"`
+	Bucket string `json:"bucket" api:"required"`
 	// Specifies the name pattern to for individual data files.
 	Filename string `json:"filename"`
 	// Specifies the name pattern for directory.
@@ -1758,8 +1758,8 @@ func (r PipelineGetResponseDestinationType) IsKnown() bool {
 // [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineGetResponseSource struct {
 	// Specifies the format of source data.
-	Format PipelineGetResponseSourceFormat `json:"format,required"`
-	Type   string                          `json:"type,required"`
+	Format PipelineGetResponseSourceFormat `json:"format" api:"required"`
+	Type   string                          `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool `json:"authentication"`
 	// This field can have the runtime type of
@@ -1832,8 +1832,8 @@ func init() {
 // Deprecated: deprecated
 type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format,required"`
-	Type   string                                                                       `json:"type,required"`
+	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat `json:"format" api:"required"`
+	Type   string                                                                       `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication bool                                                                       `json:"authentication"`
 	CORS           PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS `json:"cors"`
@@ -1907,8 +1907,8 @@ func (r pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCO
 // Deprecated: deprecated
 type PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format,required"`
-	Type   string                                                                          `json:"type,required"`
+	Format PipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat `json:"format" api:"required"`
+	Type   string                                                                          `json:"type" api:"required"`
 	JSON   pipelineGetResponseSourceCloudflarePipelinesWorkersPipelinesBindingSourceJSON   `json:"-"`
 }
 
@@ -1965,17 +1965,17 @@ func (r PipelineGetResponseSourceFormat) IsKnown() bool {
 
 type PipelineGetV1Response struct {
 	// Indicates a unique identifier for this pipeline.
-	ID         string `json:"id,required"`
-	CreatedAt  string `json:"created_at,required"`
-	ModifiedAt string `json:"modified_at,required"`
+	ID         string `json:"id" api:"required"`
+	CreatedAt  string `json:"created_at" api:"required"`
+	ModifiedAt string `json:"modified_at" api:"required"`
 	// Indicates the name of the Pipeline.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies SQL for the Pipeline processing flow.
-	Sql string `json:"sql,required"`
+	Sql string `json:"sql" api:"required"`
 	// Indicates the current status of the Pipeline.
-	Status string `json:"status,required"`
+	Status string `json:"status" api:"required"`
 	// List of streams and sinks used by this pipeline.
-	Tables []PipelineGetV1ResponseTable `json:"tables,required"`
+	Tables []PipelineGetV1ResponseTable `json:"tables" api:"required"`
 	// Indicates the reason for the failure of the Pipeline.
 	FailureReason string                    `json:"failure_reason"`
 	JSON          pipelineGetV1ResponseJSON `json:"-"`
@@ -2006,15 +2006,15 @@ func (r pipelineGetV1ResponseJSON) RawJSON() string {
 
 type PipelineGetV1ResponseTable struct {
 	// Unique identifier for the connection (stream or sink).
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Latest available version of the connection.
-	Latest int64 `json:"latest,required"`
+	Latest int64 `json:"latest" api:"required"`
 	// Name of the connection.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Type of the connection.
-	Type PipelineGetV1ResponseTablesType `json:"type,required"`
+	Type PipelineGetV1ResponseTablesType `json:"type" api:"required"`
 	// Current version of the connection used by this pipeline.
-	Version int64                          `json:"version,required"`
+	Version int64                          `json:"version" api:"required"`
 	JSON    pipelineGetV1ResponseTableJSON `json:"-"`
 }
 
@@ -2056,15 +2056,15 @@ func (r PipelineGetV1ResponseTablesType) IsKnown() bool {
 
 type PipelineListV1Response struct {
 	// Indicates a unique identifier for this pipeline.
-	ID         string `json:"id,required"`
-	CreatedAt  string `json:"created_at,required"`
-	ModifiedAt string `json:"modified_at,required"`
+	ID         string `json:"id" api:"required"`
+	CreatedAt  string `json:"created_at" api:"required"`
+	ModifiedAt string `json:"modified_at" api:"required"`
 	// Indicates the name of the Pipeline.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Specifies SQL for the Pipeline processing flow.
-	Sql string `json:"sql,required"`
+	Sql string `json:"sql" api:"required"`
 	// Indicates the current status of the Pipeline.
-	Status string                     `json:"status,required"`
+	Status string                     `json:"status" api:"required"`
 	JSON   pipelineListV1ResponseJSON `json:"-"`
 }
 
@@ -2091,7 +2091,7 @@ func (r pipelineListV1ResponseJSON) RawJSON() string {
 
 type PipelineValidateSqlResponse struct {
 	// Indicates tables involved in the processing.
-	Tables map[string]PipelineValidateSqlResponseTable `json:"tables,required"`
+	Tables map[string]PipelineValidateSqlResponseTable `json:"tables" api:"required"`
 	Graph  PipelineValidateSqlResponseGraph            `json:"graph"`
 	JSON   pipelineValidateSqlResponseJSON             `json:"-"`
 }
@@ -2114,10 +2114,10 @@ func (r pipelineValidateSqlResponseJSON) RawJSON() string {
 }
 
 type PipelineValidateSqlResponseTable struct {
-	ID      string                               `json:"id,required"`
-	Name    string                               `json:"name,required"`
-	Type    string                               `json:"type,required"`
-	Version float64                              `json:"version,required"`
+	ID      string                               `json:"id" api:"required"`
+	Name    string                               `json:"name" api:"required"`
+	Type    string                               `json:"type" api:"required"`
+	Version float64                              `json:"version" api:"required"`
 	JSON    pipelineValidateSqlResponseTableJSON `json:"-"`
 }
 
@@ -2141,8 +2141,8 @@ func (r pipelineValidateSqlResponseTableJSON) RawJSON() string {
 }
 
 type PipelineValidateSqlResponseGraph struct {
-	Edges []PipelineValidateSqlResponseGraphEdge `json:"edges,required"`
-	Nodes []PipelineValidateSqlResponseGraphNode `json:"nodes,required"`
+	Edges []PipelineValidateSqlResponseGraphEdge `json:"edges" api:"required"`
+	Nodes []PipelineValidateSqlResponseGraphNode `json:"nodes" api:"required"`
 	JSON  pipelineValidateSqlResponseGraphJSON   `json:"-"`
 }
 
@@ -2164,11 +2164,11 @@ func (r pipelineValidateSqlResponseGraphJSON) RawJSON() string {
 }
 
 type PipelineValidateSqlResponseGraphEdge struct {
-	DestID    int64                                    `json:"dest_id,required"`
-	EdgeType  string                                   `json:"edge_type,required"`
-	KeyType   string                                   `json:"key_type,required"`
-	SrcID     int64                                    `json:"src_id,required"`
-	ValueType string                                   `json:"value_type,required"`
+	DestID    int64                                    `json:"dest_id" api:"required"`
+	EdgeType  string                                   `json:"edge_type" api:"required"`
+	KeyType   string                                   `json:"key_type" api:"required"`
+	SrcID     int64                                    `json:"src_id" api:"required"`
+	ValueType string                                   `json:"value_type" api:"required"`
 	JSON      pipelineValidateSqlResponseGraphEdgeJSON `json:"-"`
 }
 
@@ -2193,10 +2193,10 @@ func (r pipelineValidateSqlResponseGraphEdgeJSON) RawJSON() string {
 }
 
 type PipelineValidateSqlResponseGraphNode struct {
-	Description string                                   `json:"description,required"`
-	NodeID      int64                                    `json:"node_id,required"`
-	Operator    string                                   `json:"operator,required"`
-	Parallelism int64                                    `json:"parallelism,required"`
+	Description string                                   `json:"description" api:"required"`
+	NodeID      int64                                    `json:"node_id" api:"required"`
+	Operator    string                                   `json:"operator" api:"required"`
+	Parallelism int64                                    `json:"parallelism" api:"required"`
 	JSON        pipelineValidateSqlResponseGraphNodeJSON `json:"-"`
 }
 
@@ -2221,11 +2221,11 @@ func (r pipelineValidateSqlResponseGraphNodeJSON) RawJSON() string {
 
 type PipelineNewParams struct {
 	// Specifies the public ID of the account.
-	AccountID   param.Field[string]                       `path:"account_id,required"`
-	Destination param.Field[PipelineNewParamsDestination] `json:"destination,required"`
+	AccountID   param.Field[string]                       `path:"account_id" api:"required"`
+	Destination param.Field[PipelineNewParamsDestination] `json:"destination" api:"required"`
 	// Defines the name of the pipeline.
-	Name   param.Field[string]                         `json:"name,required"`
-	Source param.Field[[]PipelineNewParamsSourceUnion] `json:"source,required"`
+	Name   param.Field[string]                         `json:"name" api:"required"`
+	Source param.Field[[]PipelineNewParamsSourceUnion] `json:"source" api:"required"`
 }
 
 func (r PipelineNewParams) MarshalJSON() (data []byte, err error) {
@@ -2233,14 +2233,14 @@ func (r PipelineNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PipelineNewParamsDestination struct {
-	Batch       param.Field[PipelineNewParamsDestinationBatch]       `json:"batch,required"`
-	Compression param.Field[PipelineNewParamsDestinationCompression] `json:"compression,required"`
-	Credentials param.Field[PipelineNewParamsDestinationCredentials] `json:"credentials,required"`
+	Batch       param.Field[PipelineNewParamsDestinationBatch]       `json:"batch" api:"required"`
+	Compression param.Field[PipelineNewParamsDestinationCompression] `json:"compression" api:"required"`
+	Credentials param.Field[PipelineNewParamsDestinationCredentials] `json:"credentials" api:"required"`
 	// Specifies the format of data to deliver.
-	Format param.Field[PipelineNewParamsDestinationFormat] `json:"format,required"`
-	Path   param.Field[PipelineNewParamsDestinationPath]   `json:"path,required"`
+	Format param.Field[PipelineNewParamsDestinationFormat] `json:"format" api:"required"`
+	Path   param.Field[PipelineNewParamsDestinationPath]   `json:"path" api:"required"`
 	// Specifies the type of destination.
-	Type param.Field[PipelineNewParamsDestinationType] `json:"type,required"`
+	Type param.Field[PipelineNewParamsDestinationType] `json:"type" api:"required"`
 }
 
 func (r PipelineNewParamsDestination) MarshalJSON() (data []byte, err error) {
@@ -2288,11 +2288,11 @@ func (r PipelineNewParamsDestinationCompressionType) IsKnown() bool {
 
 type PipelineNewParamsDestinationCredentials struct {
 	// Specifies the R2 Bucket Access Key Id.
-	AccessKeyID param.Field[string] `json:"access_key_id,required"`
+	AccessKeyID param.Field[string] `json:"access_key_id" api:"required"`
 	// Specifies the R2 Endpoint.
-	Endpoint param.Field[string] `json:"endpoint,required"`
+	Endpoint param.Field[string] `json:"endpoint" api:"required"`
 	// Specifies the R2 Bucket Secret Access Key.
-	SecretAccessKey param.Field[string] `json:"secret_access_key,required"`
+	SecretAccessKey param.Field[string] `json:"secret_access_key" api:"required"`
 }
 
 func (r PipelineNewParamsDestinationCredentials) MarshalJSON() (data []byte, err error) {
@@ -2316,7 +2316,7 @@ func (r PipelineNewParamsDestinationFormat) IsKnown() bool {
 
 type PipelineNewParamsDestinationPath struct {
 	// Specifies the R2 Bucket to store files.
-	Bucket param.Field[string] `json:"bucket,required"`
+	Bucket param.Field[string] `json:"bucket" api:"required"`
 	// Specifies the name pattern to for individual data files.
 	Filename param.Field[string] `json:"filename"`
 	// Specifies the name pattern for directory.
@@ -2347,8 +2347,8 @@ func (r PipelineNewParamsDestinationType) IsKnown() bool {
 // [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineNewParamsSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineNewParamsSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                        `json:"type,required"`
+	Format param.Field[PipelineNewParamsSourceFormat] `json:"format" api:"required"`
+	Type   param.Field[string]                        `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication param.Field[bool]        `json:"authentication"`
 	CORS           param.Field[interface{}] `json:"cors"`
@@ -2375,8 +2375,8 @@ type PipelineNewParamsSourceUnion interface {
 // Deprecated: deprecated
 type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                     `json:"type,required"`
+	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format" api:"required"`
+	Type   param.Field[string]                                                                     `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication param.Field[bool]                                                                     `json:"authentication"`
 	CORS           param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS] `json:"cors"`
@@ -2419,8 +2419,8 @@ func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS
 // Deprecated: deprecated
 type PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                        `json:"type,required"`
+	Format param.Field[PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format" api:"required"`
+	Type   param.Field[string]                                                                        `json:"type" api:"required"`
 }
 
 func (r PipelineNewParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource) MarshalJSON() (data []byte, err error) {
@@ -2465,9 +2465,9 @@ type PipelineNewResponseEnvelope struct {
 	// streams/sinks/pipelines API instead.
 	//
 	// Deprecated: deprecated
-	Result PipelineNewResponse `json:"result,required"`
+	Result PipelineNewResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    pipelineNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2490,11 +2490,11 @@ func (r pipelineNewResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineUpdateParams struct {
 	// Specifies the public ID of the account.
-	AccountID   param.Field[string]                          `path:"account_id,required"`
-	Destination param.Field[PipelineUpdateParamsDestination] `json:"destination,required"`
+	AccountID   param.Field[string]                          `path:"account_id" api:"required"`
+	Destination param.Field[PipelineUpdateParamsDestination] `json:"destination" api:"required"`
 	// Defines the name of the pipeline.
-	Name   param.Field[string]                            `json:"name,required"`
-	Source param.Field[[]PipelineUpdateParamsSourceUnion] `json:"source,required"`
+	Name   param.Field[string]                            `json:"name" api:"required"`
+	Source param.Field[[]PipelineUpdateParamsSourceUnion] `json:"source" api:"required"`
 }
 
 func (r PipelineUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -2502,13 +2502,13 @@ func (r PipelineUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PipelineUpdateParamsDestination struct {
-	Batch       param.Field[PipelineUpdateParamsDestinationBatch]       `json:"batch,required"`
-	Compression param.Field[PipelineUpdateParamsDestinationCompression] `json:"compression,required"`
+	Batch       param.Field[PipelineUpdateParamsDestinationBatch]       `json:"batch" api:"required"`
+	Compression param.Field[PipelineUpdateParamsDestinationCompression] `json:"compression" api:"required"`
 	// Specifies the format of data to deliver.
-	Format param.Field[PipelineUpdateParamsDestinationFormat] `json:"format,required"`
-	Path   param.Field[PipelineUpdateParamsDestinationPath]   `json:"path,required"`
+	Format param.Field[PipelineUpdateParamsDestinationFormat] `json:"format" api:"required"`
+	Path   param.Field[PipelineUpdateParamsDestinationPath]   `json:"path" api:"required"`
 	// Specifies the type of destination.
-	Type        param.Field[PipelineUpdateParamsDestinationType]        `json:"type,required"`
+	Type        param.Field[PipelineUpdateParamsDestinationType]        `json:"type" api:"required"`
 	Credentials param.Field[PipelineUpdateParamsDestinationCredentials] `json:"credentials"`
 }
 
@@ -2572,7 +2572,7 @@ func (r PipelineUpdateParamsDestinationFormat) IsKnown() bool {
 
 type PipelineUpdateParamsDestinationPath struct {
 	// Specifies the R2 Bucket to store files.
-	Bucket param.Field[string] `json:"bucket,required"`
+	Bucket param.Field[string] `json:"bucket" api:"required"`
 	// Specifies the name pattern to for individual data files.
 	Filename param.Field[string] `json:"filename"`
 	// Specifies the name pattern for directory.
@@ -2602,11 +2602,11 @@ func (r PipelineUpdateParamsDestinationType) IsKnown() bool {
 
 type PipelineUpdateParamsDestinationCredentials struct {
 	// Specifies the R2 Bucket Access Key Id.
-	AccessKeyID param.Field[string] `json:"access_key_id,required"`
+	AccessKeyID param.Field[string] `json:"access_key_id" api:"required"`
 	// Specifies the R2 Endpoint.
-	Endpoint param.Field[string] `json:"endpoint,required"`
+	Endpoint param.Field[string] `json:"endpoint" api:"required"`
 	// Specifies the R2 Bucket Secret Access Key.
-	SecretAccessKey param.Field[string] `json:"secret_access_key,required"`
+	SecretAccessKey param.Field[string] `json:"secret_access_key" api:"required"`
 }
 
 func (r PipelineUpdateParamsDestinationCredentials) MarshalJSON() (data []byte, err error) {
@@ -2616,8 +2616,8 @@ func (r PipelineUpdateParamsDestinationCredentials) MarshalJSON() (data []byte, 
 // [DEPRECATED] HTTP source configuration. Use the new streams API instead.
 type PipelineUpdateParamsSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineUpdateParamsSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                           `json:"type,required"`
+	Format param.Field[PipelineUpdateParamsSourceFormat] `json:"format" api:"required"`
+	Type   param.Field[string]                           `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication param.Field[bool]        `json:"authentication"`
 	CORS           param.Field[interface{}] `json:"cors"`
@@ -2644,8 +2644,8 @@ type PipelineUpdateParamsSourceUnion interface {
 // Deprecated: deprecated
 type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                        `json:"type,required"`
+	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceFormat] `json:"format" api:"required"`
+	Type   param.Field[string]                                                                        `json:"type" api:"required"`
 	// Specifies whether authentication is required to send to this pipeline via HTTP.
 	Authentication param.Field[bool]                                                                        `json:"authentication"`
 	CORS           param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceCORS] `json:"cors"`
@@ -2688,8 +2688,8 @@ func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesHTTPSourceC
 // Deprecated: deprecated
 type PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource struct {
 	// Specifies the format of source data.
-	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format,required"`
-	Type   param.Field[string]                                                                           `json:"type,required"`
+	Format param.Field[PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSourceFormat] `json:"format" api:"required"`
+	Type   param.Field[string]                                                                           `json:"type" api:"required"`
 }
 
 func (r PipelineUpdateParamsSourceCloudflarePipelinesWorkersPipelinesBindingSource) MarshalJSON() (data []byte, err error) {
@@ -2734,9 +2734,9 @@ type PipelineUpdateResponseEnvelope struct {
 	// streams/sinks/pipelines API instead.
 	//
 	// Deprecated: deprecated
-	Result PipelineUpdateResponse `json:"result,required"`
+	Result PipelineUpdateResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                               `json:"success,required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    pipelineUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2759,7 +2759,7 @@ func (r pipelineUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineListParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies which page to retrieve.
 	Page param.Field[string] `query:"page"`
 	// Specifies the number of pipelines per page.
@@ -2778,16 +2778,16 @@ func (r PipelineListParams) URLQuery() (v url.Values) {
 
 type PipelineDeleteParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PipelineNewV1Params struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the name of the Pipeline.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Specifies SQL for the Pipeline processing flow.
-	Sql param.Field[string] `json:"sql,required"`
+	Sql param.Field[string] `json:"sql" api:"required"`
 }
 
 func (r PipelineNewV1Params) MarshalJSON() (data []byte, err error) {
@@ -2795,9 +2795,9 @@ func (r PipelineNewV1Params) MarshalJSON() (data []byte, err error) {
 }
 
 type PipelineNewV1ResponseEnvelope struct {
-	Result PipelineNewV1Response `json:"result,required"`
+	Result PipelineNewV1Response `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                              `json:"success,required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    pipelineNewV1ResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2820,12 +2820,12 @@ func (r pipelineNewV1ResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineDeleteV1Params struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PipelineGetParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PipelineGetResponseEnvelope struct {
@@ -2833,9 +2833,9 @@ type PipelineGetResponseEnvelope struct {
 	// streams/sinks/pipelines API instead.
 	//
 	// Deprecated: deprecated
-	Result PipelineGetResponse `json:"result,required"`
+	Result PipelineGetResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    pipelineGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2858,13 +2858,13 @@ func (r pipelineGetResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineGetV1Params struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PipelineGetV1ResponseEnvelope struct {
-	Result PipelineGetV1Response `json:"result,required"`
+	Result PipelineGetV1Response `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                              `json:"success,required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    pipelineGetV1ResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2887,7 +2887,7 @@ func (r pipelineGetV1ResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineListV1Params struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string]  `path:"account_id,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
 }
@@ -2902,9 +2902,9 @@ func (r PipelineListV1Params) URLQuery() (v url.Values) {
 
 type PipelineValidateSqlParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies SQL to validate.
-	Sql param.Field[string] `json:"sql,required"`
+	Sql param.Field[string] `json:"sql" api:"required"`
 }
 
 func (r PipelineValidateSqlParams) MarshalJSON() (data []byte, err error) {
@@ -2912,9 +2912,9 @@ func (r PipelineValidateSqlParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PipelineValidateSqlResponseEnvelope struct {
-	Result PipelineValidateSqlResponse `json:"result,required"`
+	Result PipelineValidateSqlResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                                    `json:"success,required"`
+	Success bool                                    `json:"success" api:"required"`
 	JSON    pipelineValidateSqlResponseEnvelopeJSON `json:"-"`
 }
 

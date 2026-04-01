@@ -60,9 +60,9 @@ func (r *BGPHijackEventService) ListAutoPaging(ctx context.Context, query BGPHij
 }
 
 type BGPHijackEventListResponse struct {
-	ASNInfo       []BGPHijackEventListResponseASNInfo `json:"asn_info,required"`
-	Events        []BGPHijackEventListResponseEvent   `json:"events,required"`
-	TotalMonitors int64                               `json:"total_monitors,required"`
+	ASNInfo       []BGPHijackEventListResponseASNInfo `json:"asn_info" api:"required"`
+	Events        []BGPHijackEventListResponseEvent   `json:"events" api:"required"`
+	TotalMonitors int64                               `json:"total_monitors" api:"required"`
 	JSON          bgpHijackEventListResponseJSON      `json:"-"`
 }
 
@@ -85,9 +85,9 @@ func (r bgpHijackEventListResponseJSON) RawJSON() string {
 }
 
 type BGPHijackEventListResponseASNInfo struct {
-	ASN         int64                                 `json:"asn,required"`
-	CountryCode string                                `json:"country_code,required"`
-	OrgName     string                                `json:"org_name,required"`
+	ASN         int64                                 `json:"asn" api:"required"`
+	CountryCode string                                `json:"country_code" api:"required"`
+	OrgName     string                                `json:"org_name" api:"required"`
 	JSON        bgpHijackEventListResponseASNInfoJSON `json:"-"`
 }
 
@@ -110,24 +110,24 @@ func (r bgpHijackEventListResponseASNInfoJSON) RawJSON() string {
 }
 
 type BGPHijackEventListResponseEvent struct {
-	ID              int64                                 `json:"id,required"`
-	ConfidenceScore int64                                 `json:"confidence_score,required"`
-	Duration        int64                                 `json:"duration,required"`
-	EventType       int64                                 `json:"event_type,required"`
-	HijackMsgsCount int64                                 `json:"hijack_msgs_count,required"`
-	HijackerASN     int64                                 `json:"hijacker_asn,required"`
-	HijackerCountry string                                `json:"hijacker_country,required"`
-	IsStale         bool                                  `json:"is_stale,required"`
-	MaxHijackTs     string                                `json:"max_hijack_ts,required"`
-	MaxMsgTs        string                                `json:"max_msg_ts,required"`
-	MinHijackTs     string                                `json:"min_hijack_ts,required"`
-	OnGoingCount    int64                                 `json:"on_going_count,required"`
-	PeerASNs        []int64                               `json:"peer_asns,required"`
-	PeerIPCount     int64                                 `json:"peer_ip_count,required"`
-	Prefixes        []string                              `json:"prefixes,required"`
-	Tags            []BGPHijackEventListResponseEventsTag `json:"tags,required"`
-	VictimASNs      []int64                               `json:"victim_asns,required"`
-	VictimCountries []string                              `json:"victim_countries,required"`
+	ID              int64                                 `json:"id" api:"required"`
+	ConfidenceScore int64                                 `json:"confidence_score" api:"required"`
+	Duration        int64                                 `json:"duration" api:"required"`
+	EventType       int64                                 `json:"event_type" api:"required"`
+	HijackMsgsCount int64                                 `json:"hijack_msgs_count" api:"required"`
+	HijackerASN     int64                                 `json:"hijacker_asn" api:"required"`
+	HijackerCountry string                                `json:"hijacker_country" api:"required"`
+	IsStale         bool                                  `json:"is_stale" api:"required"`
+	MaxHijackTs     string                                `json:"max_hijack_ts" api:"required"`
+	MaxMsgTs        string                                `json:"max_msg_ts" api:"required"`
+	MinHijackTs     string                                `json:"min_hijack_ts" api:"required"`
+	OnGoingCount    int64                                 `json:"on_going_count" api:"required"`
+	PeerASNs        []int64                               `json:"peer_asns" api:"required"`
+	PeerIPCount     int64                                 `json:"peer_ip_count" api:"required"`
+	Prefixes        []string                              `json:"prefixes" api:"required"`
+	Tags            []BGPHijackEventListResponseEventsTag `json:"tags" api:"required"`
+	VictimASNs      []int64                               `json:"victim_asns" api:"required"`
+	VictimCountries []string                              `json:"victim_countries" api:"required"`
 	JSON            bgpHijackEventListResponseEventJSON   `json:"-"`
 }
 
@@ -165,8 +165,8 @@ func (r bgpHijackEventListResponseEventJSON) RawJSON() string {
 }
 
 type BGPHijackEventListResponseEventsTag struct {
-	Name  string                                  `json:"name,required"`
-	Score int64                                   `json:"score,required"`
+	Name  string                                  `json:"name" api:"required"`
+	Score int64                                   `json:"score" api:"required"`
 	JSON  bgpHijackEventListResponseEventsTagJSON `json:"-"`
 }
 

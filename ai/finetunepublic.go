@@ -38,14 +38,14 @@ func NewFinetunePublicService(opts ...option.RequestOption) (r *FinetunePublicSe
 	return
 }
 
-// List Public Finetunes
+// Lists publicly available fine-tuned models that can be used with Workers AI.
 func (r *FinetunePublicService) List(ctx context.Context, params FinetunePublicListParams, opts ...option.RequestOption) (res *pagination.SinglePage[FinetunePublicListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai/finetunes/public", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -60,18 +60,18 @@ func (r *FinetunePublicService) List(ctx context.Context, params FinetunePublicL
 	return res, nil
 }
 
-// List Public Finetunes
+// Lists publicly available fine-tuned models that can be used with Workers AI.
 func (r *FinetunePublicService) ListAutoPaging(ctx context.Context, params FinetunePublicListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[FinetunePublicListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 type FinetunePublicListResponse struct {
-	ID          string                         `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time                      `json:"created_at,required" format:"date-time"`
-	Model       string                         `json:"model,required"`
-	ModifiedAt  time.Time                      `json:"modified_at,required" format:"date-time"`
-	Name        string                         `json:"name,required"`
-	Public      bool                           `json:"public,required"`
+	ID          string                         `json:"id" api:"required" format:"uuid"`
+	CreatedAt   time.Time                      `json:"created_at" api:"required" format:"date-time"`
+	Model       string                         `json:"model" api:"required"`
+	ModifiedAt  time.Time                      `json:"modified_at" api:"required" format:"date-time"`
+	Name        string                         `json:"name" api:"required"`
+	Public      bool                           `json:"public" api:"required"`
 	Description string                         `json:"description"`
 	JSON        finetunePublicListResponseJSON `json:"-"`
 }
@@ -99,7 +99,7 @@ func (r finetunePublicListResponseJSON) RawJSON() string {
 }
 
 type FinetunePublicListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Pagination Limit
 	Limit param.Field[float64] `query:"limit"`
 	// Pagination Offset

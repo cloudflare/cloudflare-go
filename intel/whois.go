@@ -37,32 +37,33 @@ func NewWhoisService(opts ...option.RequestOption) (r *WhoisService) {
 	return
 }
 
-// Get WHOIS Record
+// Retrieves WHOIS registration data for a domain, including registrant and
+// nameserver information.
 func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *WhoisGetResponse, err error) {
 	var env WhoisGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/whois", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type WhoisGetResponse struct {
-	DNSSEC                    bool                 `json:"dnssec,required"`
-	Domain                    string               `json:"domain,required"`
-	Extension                 string               `json:"extension,required"`
-	Found                     bool                 `json:"found,required"`
-	Nameservers               []string             `json:"nameservers,required"`
-	Punycode                  string               `json:"punycode,required"`
-	Registrant                string               `json:"registrant,required"`
-	Registrar                 string               `json:"registrar,required"`
+	DNSSEC                    bool                 `json:"dnssec" api:"required"`
+	Domain                    string               `json:"domain" api:"required"`
+	Extension                 string               `json:"extension" api:"required"`
+	Found                     bool                 `json:"found" api:"required"`
+	Nameservers               []string             `json:"nameservers" api:"required"`
+	Punycode                  string               `json:"punycode" api:"required"`
+	Registrant                string               `json:"registrant" api:"required"`
+	Registrar                 string               `json:"registrar" api:"required"`
 	ID                        string               `json:"id"`
 	AdministrativeCity        string               `json:"administrative_city"`
 	AdministrativeCountry     string               `json:"administrative_country"`
@@ -249,7 +250,7 @@ func (r whoisGetResponseJSON) RawJSON() string {
 
 type WhoisGetParams struct {
 	// Use to uniquely identify or reference the resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Domain    param.Field[string] `query:"domain"`
 }
 
@@ -262,10 +263,10 @@ func (r WhoisGetParams) URLQuery() (v url.Values) {
 }
 
 type WhoisGetResponseEnvelope struct {
-	Errors   []WhoisGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WhoisGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []WhoisGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WhoisGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Returns a boolean for the success/failure of the API call.
-	Success WhoisGetResponseEnvelopeSuccess `json:"success,required"`
+	Success WhoisGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  WhoisGetResponse                `json:"result"`
 	JSON    whoisGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -290,8 +291,8 @@ func (r whoisGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WhoisGetResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           WhoisGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             whoisGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -338,8 +339,8 @@ func (r whoisGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WhoisGetResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           WhoisGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             whoisGetResponseEnvelopeMessagesJSON   `json:"-"`

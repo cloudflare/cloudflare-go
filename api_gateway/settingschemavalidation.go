@@ -43,11 +43,11 @@ func (r *SettingSchemaValidationService) Update(ctx context.Context, params Sett
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/settings/schema_validation", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates zone level schema validation settings on the zone
@@ -59,11 +59,11 @@ func (r *SettingSchemaValidationService) Edit(ctx context.Context, params Settin
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/settings/schema_validation", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieves zone level schema validation settings currently set on the zone
@@ -75,16 +75,16 @@ func (r *SettingSchemaValidationService) Get(ctx context.Context, query SettingS
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/settings/schema_validation", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type SettingSchemaValidationUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation
 	//
@@ -95,7 +95,7 @@ type SettingSchemaValidationUpdateParams struct {
 	//
 	// A special value of of `none` will skip running schema validation entirely for
 	// the request when there is no mitigation action defined on the operation
-	ValidationDefaultMitigationAction param.Field[SettingSchemaValidationUpdateParamsValidationDefaultMitigationAction] `json:"validation_default_mitigation_action,required"`
+	ValidationDefaultMitigationAction param.Field[SettingSchemaValidationUpdateParamsValidationDefaultMitigationAction] `json:"validation_default_mitigation_action" api:"required"`
 	// When set, this overrides both zone level and operation level mitigation actions.
 	//
 	// - `none` will skip running schema validation entirely for the request
@@ -158,7 +158,7 @@ func (r SettingSchemaValidationUpdateParamsValidationOverrideMitigationAction) I
 
 type SettingSchemaValidationEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation Mitigation actions are as follows:
 	//
@@ -234,5 +234,5 @@ func (r SettingSchemaValidationEditParamsValidationOverrideMitigationAction) IsK
 
 type SettingSchemaValidationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

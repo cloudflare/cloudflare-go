@@ -30,6 +30,7 @@ type ZoneService struct {
 	Options         []option.RequestOption
 	ActivationCheck *ActivationCheckService
 	Settings        *SettingService
+	Environments    *EnvironmentService
 	// Deprecated: Use DNS settings API instead.
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
@@ -46,6 +47,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Options = opts
 	r.ActivationCheck = NewActivationCheckService(opts...)
 	r.Settings = NewSettingService(opts...)
+	r.Environments = NewEnvironmentService(opts...)
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.Holds = NewHoldService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
@@ -61,10 +63,10 @@ func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...optio
 	path := "zones"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists, searches, sorts, and filters your zones. Listing zones across more than
@@ -98,15 +100,15 @@ func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Edits a zone. Only one zone property can be changed at a time.
@@ -115,15 +117,15 @@ func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Zone Details
@@ -132,15 +134,15 @@ func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...opti
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A full zone implies that DNS is hosted with Cloudflare. A partial zone is
@@ -164,43 +166,43 @@ func (r Type) IsKnown() bool {
 
 type Zone struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The account the zone belongs to.
-	Account ZoneAccount `json:"account,required"`
+	Account ZoneAccount `json:"account" api:"required"`
 	// The last time proof of ownership was detected and the zone was made active.
-	ActivatedOn time.Time `json:"activated_on,required,nullable" format:"date-time"`
+	ActivatedOn time.Time `json:"activated_on" api:"required,nullable" format:"date-time"`
 	// When the zone was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// The interval (in seconds) from when development mode expires (positive integer)
 	// or last expired (negative integer) for the domain. If development mode has never
 	// been enabled, this value is 0.
-	DevelopmentMode float64 `json:"development_mode,required"`
+	DevelopmentMode float64 `json:"development_mode" api:"required"`
 	// Metadata about the zone.
-	Meta ZoneMeta `json:"meta,required"`
+	Meta ZoneMeta `json:"meta" api:"required"`
 	// When the zone was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// The domain name. Per
 	// [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the
 	// overall zone name can be up to 253 characters, with each segment ("label") not
 	// exceeding 63 characters.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name servers Cloudflare assigns to a zone.
-	NameServers []string `json:"name_servers,required" format:"hostname"`
+	NameServers []string `json:"name_servers" api:"required" format:"hostname"`
 	// DNS host at the time of switching to Cloudflare.
-	OriginalDnshost string `json:"original_dnshost,required,nullable"`
+	OriginalDnshost string `json:"original_dnshost" api:"required,nullable"`
 	// Original name servers before moving to Cloudflare.
-	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
+	OriginalNameServers []string `json:"original_name_servers" api:"required,nullable" format:"hostname"`
 	// Registrar for the domain at the time of switching to Cloudflare.
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
+	OriginalRegistrar string `json:"original_registrar" api:"required,nullable"`
 	// The owner of the zone.
-	Owner ZoneOwner `json:"owner,required"`
+	Owner ZoneOwner `json:"owner" api:"required"`
 	// A Zones subscription information.
 	//
 	// Deprecated: Please use the `/zones/{zone_id}/subscription` API to update a
 	// zone's plan. Changing this value will create/cancel associated subscriptions. To
 	// view available plans for this zone, see
 	// [Zone Plans](https://developers.cloudflare.com/api/resources/zones/subresources/plans/).
-	Plan ZonePlan `json:"plan,required"`
+	Plan ZonePlan `json:"plan" api:"required"`
 	// Allows the customer to use a custom apex. _Tenants Only Configuration_.
 	CNAMESuffix string `json:"cname_suffix"`
 	// Indicates whether the zone is only using Cloudflare DNS services. A true value
@@ -481,7 +483,7 @@ func (r zoneTenantUnitJSON) RawJSON() string {
 
 type ZoneDeleteResponse struct {
 	// Identifier
-	ID   string                 `json:"id,required"`
+	ID   string                 `json:"id" api:"required"`
 	JSON zoneDeleteResponseJSON `json:"-"`
 }
 
@@ -502,12 +504,12 @@ func (r zoneDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneNewParams struct {
-	Account param.Field[ZoneNewParamsAccount] `json:"account,required"`
+	Account param.Field[ZoneNewParamsAccount] `json:"account" api:"required"`
 	// The domain name. Per
 	// [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the
 	// overall zone name can be up to 253 characters, with each segment ("label") not
 	// exceeding 63 characters.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup.
 	Type param.Field[Type] `json:"type"`
@@ -527,10 +529,10 @@ func (r ZoneNewParamsAccount) MarshalJSON() (data []byte, err error) {
 }
 
 type ZoneNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                        `json:"success,required"`
+	Success bool                        `json:"success" api:"required"`
 	Result  Zone                        `json:"result"`
 	JSON    zoneNewResponseEnvelopeJSON `json:"-"`
 }
@@ -686,15 +688,15 @@ func (r ZoneListParamsStatus) IsKnown() bool {
 
 type ZoneDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ZoneDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                           `json:"success,required"`
-	Result  ZoneDeleteResponse             `json:"result,nullable"`
+	Success bool                           `json:"success" api:"required"`
+	Result  ZoneDeleteResponse             `json:"result" api:"nullable"`
 	JSON    zoneDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -719,7 +721,7 @@ func (r zoneDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type ZoneEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Indicates whether the zone is only using Cloudflare DNS services. A true value
 	// means the zone will not receive security or performance benefits.
 	Paused param.Field[bool] `json:"paused"`
@@ -759,10 +761,10 @@ func (r ZoneEditParamsType) IsKnown() bool {
 }
 
 type ZoneEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                         `json:"success,required"`
+	Success bool                         `json:"success" api:"required"`
 	Result  Zone                         `json:"result"`
 	JSON    zoneEditResponseEnvelopeJSON `json:"-"`
 }
@@ -788,14 +790,14 @@ func (r zoneEditResponseEnvelopeJSON) RawJSON() string {
 
 type ZoneGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ZoneGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                        `json:"success,required"`
+	Success bool                        `json:"success" api:"required"`
 	Result  Zone                        `json:"result"`
 	JSON    zoneGetResponseEnvelopeJSON `json:"-"`
 }

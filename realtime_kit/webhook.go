@@ -40,15 +40,15 @@ func (r *WebhookService) NewWebhook(ctx context.Context, appID string, params We
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/webhooks", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Removes a webhook for the given webhook ID.
@@ -56,19 +56,19 @@ func (r *WebhookService) DeleteWebhook(ctx context.Context, appID string, webhoo
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/webhooks/%s", body.AccountID, appID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Edits the webhook details for the given webhook ID.
@@ -76,19 +76,19 @@ func (r *WebhookService) EditWebhook(ctx context.Context, appID string, webhookI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/webhooks/%s", params.AccountID, appID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns webhook details for the given webhook ID.
@@ -96,19 +96,19 @@ func (r *WebhookService) GetWebhookByID(ctx context.Context, appID string, webho
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/webhooks/%s", query.AccountID, appID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of all webhooks for an App.
@@ -116,15 +116,15 @@ func (r *WebhookService) GetWebhooks(ctx context.Context, appID string, query We
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/webhooks", query.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Replace all details for the given webhook ID.
@@ -132,24 +132,24 @@ func (r *WebhookService) ReplaceWebhook(ctx context.Context, appID string, webho
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/webhooks/%s", params.AccountID, appID, webhookID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type WebhookNewWebhookResponse struct {
-	Data    WebhookNewWebhookResponseData `json:"data,required"`
-	Success bool                          `json:"success,required"`
+	Data    WebhookNewWebhookResponseData `json:"data" api:"required"`
+	Success bool                          `json:"success" api:"required"`
 	JSON    webhookNewWebhookResponseJSON `json:"-"`
 }
 
@@ -172,19 +172,19 @@ func (r webhookNewWebhookResponseJSON) RawJSON() string {
 
 type WebhookNewWebhookResponseData struct {
 	// ID of the webhook
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp when this webhook was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Set to true if the webhook is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Events this webhook will send updates for
-	Events []WebhookNewWebhookResponseDataEvent `json:"events,required"`
+	Events []WebhookNewWebhookResponseDataEvent `json:"events" api:"required"`
 	// Name of the webhook
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Timestamp when this webhook was updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// URL the webhook will send events to
-	URL  string                            `json:"url,required" format:"uri"`
+	URL  string                            `json:"url" api:"required" format:"uri"`
 	JSON webhookNewWebhookResponseDataJSON `json:"-"`
 }
 
@@ -233,8 +233,8 @@ func (r WebhookNewWebhookResponseDataEvent) IsKnown() bool {
 }
 
 type WebhookDeleteWebhookResponse struct {
-	Data    WebhookDeleteWebhookResponseData `json:"data,required"`
-	Success bool                             `json:"success,required"`
+	Data    WebhookDeleteWebhookResponseData `json:"data" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    webhookDeleteWebhookResponseJSON `json:"-"`
 }
 
@@ -257,19 +257,19 @@ func (r webhookDeleteWebhookResponseJSON) RawJSON() string {
 
 type WebhookDeleteWebhookResponseData struct {
 	// ID of the webhook
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp when this webhook was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Set to true if the webhook is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Events this webhook will send updates for
-	Events []WebhookDeleteWebhookResponseDataEvent `json:"events,required"`
+	Events []WebhookDeleteWebhookResponseDataEvent `json:"events" api:"required"`
 	// Name of the webhook
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Timestamp when this webhook was updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// URL the webhook will send events to
-	URL  string                               `json:"url,required" format:"uri"`
+	URL  string                               `json:"url" api:"required" format:"uri"`
 	JSON webhookDeleteWebhookResponseDataJSON `json:"-"`
 }
 
@@ -318,8 +318,8 @@ func (r WebhookDeleteWebhookResponseDataEvent) IsKnown() bool {
 }
 
 type WebhookEditWebhookResponse struct {
-	Data    WebhookEditWebhookResponseData `json:"data,required"`
-	Success bool                           `json:"success,required"`
+	Data    WebhookEditWebhookResponseData `json:"data" api:"required"`
+	Success bool                           `json:"success" api:"required"`
 	JSON    webhookEditWebhookResponseJSON `json:"-"`
 }
 
@@ -342,19 +342,19 @@ func (r webhookEditWebhookResponseJSON) RawJSON() string {
 
 type WebhookEditWebhookResponseData struct {
 	// ID of the webhook
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp when this webhook was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Set to true if the webhook is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Events this webhook will send updates for
-	Events []WebhookEditWebhookResponseDataEvent `json:"events,required"`
+	Events []WebhookEditWebhookResponseDataEvent `json:"events" api:"required"`
 	// Name of the webhook
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Timestamp when this webhook was updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// URL the webhook will send events to
-	URL  string                             `json:"url,required" format:"uri"`
+	URL  string                             `json:"url" api:"required" format:"uri"`
 	JSON webhookEditWebhookResponseDataJSON `json:"-"`
 }
 
@@ -403,8 +403,8 @@ func (r WebhookEditWebhookResponseDataEvent) IsKnown() bool {
 }
 
 type WebhookGetWebhookByIDResponse struct {
-	Data    WebhookGetWebhookByIDResponseData `json:"data,required"`
-	Success bool                              `json:"success,required"`
+	Data    WebhookGetWebhookByIDResponseData `json:"data" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    webhookGetWebhookByIDResponseJSON `json:"-"`
 }
 
@@ -427,19 +427,19 @@ func (r webhookGetWebhookByIDResponseJSON) RawJSON() string {
 
 type WebhookGetWebhookByIDResponseData struct {
 	// ID of the webhook
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp when this webhook was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Set to true if the webhook is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Events this webhook will send updates for
-	Events []WebhookGetWebhookByIDResponseDataEvent `json:"events,required"`
+	Events []WebhookGetWebhookByIDResponseDataEvent `json:"events" api:"required"`
 	// Name of the webhook
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Timestamp when this webhook was updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// URL the webhook will send events to
-	URL  string                                `json:"url,required" format:"uri"`
+	URL  string                                `json:"url" api:"required" format:"uri"`
 	JSON webhookGetWebhookByIDResponseDataJSON `json:"-"`
 }
 
@@ -488,8 +488,8 @@ func (r WebhookGetWebhookByIDResponseDataEvent) IsKnown() bool {
 }
 
 type WebhookGetWebhooksResponse struct {
-	Data    []WebhookGetWebhooksResponseData `json:"data,required"`
-	Success bool                             `json:"success,required"`
+	Data    []WebhookGetWebhooksResponseData `json:"data" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    webhookGetWebhooksResponseJSON   `json:"-"`
 }
 
@@ -512,19 +512,19 @@ func (r webhookGetWebhooksResponseJSON) RawJSON() string {
 
 type WebhookGetWebhooksResponseData struct {
 	// ID of the webhook
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp when this webhook was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Set to true if the webhook is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Events this webhook will send updates for
-	Events []WebhookGetWebhooksResponseDataEvent `json:"events,required"`
+	Events []WebhookGetWebhooksResponseDataEvent `json:"events" api:"required"`
 	// Name of the webhook
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Timestamp when this webhook was updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// URL the webhook will send events to
-	URL  string                             `json:"url,required" format:"uri"`
+	URL  string                             `json:"url" api:"required" format:"uri"`
 	JSON webhookGetWebhooksResponseDataJSON `json:"-"`
 }
 
@@ -573,8 +573,8 @@ func (r WebhookGetWebhooksResponseDataEvent) IsKnown() bool {
 }
 
 type WebhookReplaceWebhookResponse struct {
-	Data    WebhookReplaceWebhookResponseData `json:"data,required"`
-	Success bool                              `json:"success,required"`
+	Data    WebhookReplaceWebhookResponseData `json:"data" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    webhookReplaceWebhookResponseJSON `json:"-"`
 }
 
@@ -597,19 +597,19 @@ func (r webhookReplaceWebhookResponseJSON) RawJSON() string {
 
 type WebhookReplaceWebhookResponseData struct {
 	// ID of the webhook
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp when this webhook was created
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Set to true if the webhook is active
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Events this webhook will send updates for
-	Events []WebhookReplaceWebhookResponseDataEvent `json:"events,required"`
+	Events []WebhookReplaceWebhookResponseDataEvent `json:"events" api:"required"`
 	// Name of the webhook
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Timestamp when this webhook was updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// URL the webhook will send events to
-	URL  string                                `json:"url,required" format:"uri"`
+	URL  string                                `json:"url" api:"required" format:"uri"`
 	JSON webhookReplaceWebhookResponseDataJSON `json:"-"`
 }
 
@@ -659,13 +659,13 @@ func (r WebhookReplaceWebhookResponseDataEvent) IsKnown() bool {
 
 type WebhookNewWebhookParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Events that this webhook will get triggered by
-	Events param.Field[[]WebhookNewWebhookParamsEvent] `json:"events,required"`
+	Events param.Field[[]WebhookNewWebhookParamsEvent] `json:"events" api:"required"`
 	// Name of the webhook
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// URL this webhook will send events to
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// Set whether or not the webhook should be active when created
 	Enabled param.Field[bool] `json:"enabled"`
 }
@@ -698,12 +698,12 @@ func (r WebhookNewWebhookParamsEvent) IsKnown() bool {
 
 type WebhookDeleteWebhookParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookEditWebhookParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Enabled   param.Field[bool]   `json:"enabled"`
 	// Events that the webhook will get triggered by
 	Events param.Field[[]WebhookEditWebhookParamsEvent] `json:"events"`
@@ -741,23 +741,23 @@ func (r WebhookEditWebhookParamsEvent) IsKnown() bool {
 
 type WebhookGetWebhookByIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookGetWebhooksParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookReplaceWebhookParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Events that this webhook will get triggered by
-	Events param.Field[[]WebhookReplaceWebhookParamsEvent] `json:"events,required"`
+	Events param.Field[[]WebhookReplaceWebhookParamsEvent] `json:"events" api:"required"`
 	// Name of the webhook
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// URL this webhook will send events to
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// Set whether or not the webhook should be active when created
 	Enabled param.Field[bool] `json:"enabled"`
 }

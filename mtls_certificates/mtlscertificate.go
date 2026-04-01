@@ -47,15 +47,15 @@ func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificate
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all mTLS certificates uploaded to your account, such as Bring Your Own CA
@@ -68,7 +68,7 @@ func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificate
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -98,19 +98,19 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if mtlsCertificateID == "" {
 		err = errors.New("missing required mtls_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", body.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single mTLS certificate uploaded to your account. To get a certificate
@@ -121,19 +121,19 @@ func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if mtlsCertificateID == "" {
 		err = errors.New("missing required mtls_certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", query.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type MTLSCertificate struct {
@@ -232,11 +232,11 @@ func (r mtlsCertificateNewResponseJSON) RawJSON() string {
 
 type MTLSCertificateNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Indicates whether the certificate is a CA or leaf certificate.
-	CA param.Field[bool] `json:"ca,required"`
+	CA param.Field[bool] `json:"ca" api:"required"`
 	// The uploaded root CA certificate.
-	Certificates param.Field[string] `json:"certificates,required"`
+	Certificates param.Field[string] `json:"certificates" api:"required"`
 	// Optional unique name for the certificate. Only used for human readability.
 	Name param.Field[string] `json:"name"`
 	// The private key for the certificate. This field is only needed for specific use
@@ -249,10 +249,10 @@ func (r MTLSCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MTLSCertificateNewResponseEnvelope struct {
-	Errors   []MTLSCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MTLSCertificateNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MTLSCertificateNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MTLSCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success MTLSCertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  MTLSCertificateNewResponse                `json:"result"`
 	JSON    mtlsCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -277,8 +277,8 @@ func (r mtlsCertificateNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MTLSCertificateNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           MTLSCertificateNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             mtlsCertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -325,8 +325,8 @@ func (r mtlsCertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MTLSCertificateNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           MTLSCertificateNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             mtlsCertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -389,19 +389,19 @@ func (r MTLSCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MTLSCertificateListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MTLSCertificateDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MTLSCertificateDeleteResponseEnvelope struct {
-	Errors   []MTLSCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MTLSCertificateDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MTLSCertificateDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MTLSCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success MTLSCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  MTLSCertificate                              `json:"result"`
 	JSON    mtlsCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -426,8 +426,8 @@ func (r mtlsCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MTLSCertificateDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           MTLSCertificateDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             mtlsCertificateDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -474,8 +474,8 @@ func (r mtlsCertificateDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type MTLSCertificateDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           MTLSCertificateDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             mtlsCertificateDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -538,14 +538,14 @@ func (r MTLSCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MTLSCertificateGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MTLSCertificateGetResponseEnvelope struct {
-	Errors   []MTLSCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MTLSCertificateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MTLSCertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MTLSCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success MTLSCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  MTLSCertificate                           `json:"result"`
 	JSON    mtlsCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -570,8 +570,8 @@ func (r mtlsCertificateGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MTLSCertificateGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           MTLSCertificateGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             mtlsCertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -618,8 +618,8 @@ func (r mtlsCertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MTLSCertificateGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           MTLSCertificateGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             mtlsCertificateGetResponseEnvelopeMessagesJSON   `json:"-"`

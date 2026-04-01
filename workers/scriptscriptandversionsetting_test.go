@@ -25,6 +25,7 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -75,6 +76,12 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 						HeadSamplingRate: cloudflare.F(0.100000),
 						Persist:          cloudflare.F(true),
 					}),
+					Traces: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces{
+						Destinations:     cloudflare.F([]string{"cloudflare"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
+						Persist:          cloudflare.F(true),
+					}),
 				}),
 				Placement: cloudflare.F[workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementUnion](workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementMode{
 					Mode: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsPlacementModeModeSmart),
@@ -108,6 +115,7 @@ func TestScriptScriptAndVersionSettingGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

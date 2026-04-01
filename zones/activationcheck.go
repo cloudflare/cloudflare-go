@@ -41,15 +41,15 @@ func (r *ActivationCheckService) Trigger(ctx context.Context, body ActivationChe
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/activation_check", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ActivationCheckTriggerResponse struct {
@@ -76,14 +76,14 @@ func (r activationCheckTriggerResponseJSON) RawJSON() string {
 
 type ActivationCheckTriggerParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ActivationCheckTriggerResponseEnvelope struct {
-	Errors   []ActivationCheckTriggerResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ActivationCheckTriggerResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ActivationCheckTriggerResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ActivationCheckTriggerResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ActivationCheckTriggerResponseEnvelopeSuccess `json:"success,required"`
+	Success ActivationCheckTriggerResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  ActivationCheckTriggerResponse                `json:"result"`
 	JSON    activationCheckTriggerResponseEnvelopeJSON    `json:"-"`
 }
@@ -108,8 +108,8 @@ func (r activationCheckTriggerResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ActivationCheckTriggerResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ActivationCheckTriggerResponseEnvelopeErrorsSource `json:"source"`
 	JSON             activationCheckTriggerResponseEnvelopeErrorsJSON   `json:"-"`
@@ -156,8 +156,8 @@ func (r activationCheckTriggerResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type ActivationCheckTriggerResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           ActivationCheckTriggerResponseEnvelopeMessagesSource `json:"source"`
 	JSON             activationCheckTriggerResponseEnvelopeMessagesJSON   `json:"-"`

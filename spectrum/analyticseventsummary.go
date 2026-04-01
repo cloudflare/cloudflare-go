@@ -45,32 +45,32 @@ func (r *AnalyticsEventSummaryService) Get(ctx context.Context, params Analytics
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/summary", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AnalyticsEventSummaryGetResponse struct {
 	// List of columns returned by the analytics query.
-	Data []AnalyticsEventSummaryGetResponseData `json:"data,required"`
+	Data []AnalyticsEventSummaryGetResponseData `json:"data" api:"required"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
-	DataLag float64 `json:"data_lag,required"`
+	DataLag float64 `json:"data_lag" api:"required"`
 	// Maximum result for each selected metrics across all data.
-	Max map[string]float64 `json:"max,required"`
+	Max map[string]float64 `json:"max" api:"required"`
 	// Minimum result for each selected metrics across all data.
-	Min   map[string]float64                    `json:"min,required"`
-	Query AnalyticsEventSummaryGetResponseQuery `json:"query,required"`
+	Min   map[string]float64                    `json:"min" api:"required"`
+	Query AnalyticsEventSummaryGetResponseQuery `json:"query" api:"required"`
 	// Total number of rows in the result.
-	Rows float64 `json:"rows,required"`
+	Rows float64 `json:"rows" api:"required"`
 	// Total result for each selected metrics across all data.
-	Totals map[string]float64 `json:"totals,required"`
+	Totals map[string]float64 `json:"totals" api:"required"`
 	// List of time interval buckets: [start, end]
 	TimeIntervals [][]time.Time                        `json:"time_intervals" format:"date-time"`
 	JSON          analyticsEventSummaryGetResponseJSON `json:"-"`
@@ -244,7 +244,7 @@ func (r AnalyticsEventSummaryGetResponseQueryMetric) IsKnown() bool {
 
 type AnalyticsEventSummaryGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Can be used to break down the data by given attributes. Options are:
 	//
 	// | Dimension | Name                          | Example                                                    |
@@ -323,10 +323,10 @@ func (r AnalyticsEventSummaryGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventSummaryGetResponseEnvelope struct {
-	Errors   []AnalyticsEventSummaryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsEventSummaryGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AnalyticsEventSummaryGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AnalyticsEventSummaryGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AnalyticsEventSummaryGetResponse                `json:"result"`
 	JSON    analyticsEventSummaryGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -351,8 +351,8 @@ func (r analyticsEventSummaryGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AnalyticsEventSummaryGetResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AnalyticsEventSummaryGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             analyticsEventSummaryGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -399,8 +399,8 @@ func (r analyticsEventSummaryGetResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type AnalyticsEventSummaryGetResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AnalyticsEventSummaryGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             analyticsEventSummaryGetResponseEnvelopeMessagesJSON   `json:"-"`

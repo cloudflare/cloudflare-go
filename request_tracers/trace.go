@@ -40,15 +40,15 @@ func (r *TraceService) New(ctx context.Context, params TraceNewParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/request-tracer/trace", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Trace []TraceItem
@@ -128,11 +128,11 @@ func (r traceNewResponseJSON) RawJSON() string {
 
 type TraceNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// HTTP Method of tracing request
-	Method param.Field[string] `json:"method,required"`
+	Method param.Field[string] `json:"method" api:"required"`
 	// URL to which perform tracing request
-	URL  param.Field[string]             `json:"url,required"`
+	URL  param.Field[string]             `json:"url" api:"required"`
 	Body param.Field[TraceNewParamsBody] `json:"body"`
 	// Additional request parameters
 	Context param.Field[TraceNewParamsContext] `json:"context"`
@@ -198,10 +198,10 @@ func (r TraceNewParamsContextGeoloc) MarshalJSON() (data []byte, err error) {
 }
 
 type TraceNewResponseEnvelope struct {
-	Errors   []TraceNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TraceNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TraceNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TraceNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TraceNewResponseEnvelopeSuccess `json:"success,required"`
+	Success TraceNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Trace result with an origin status code
 	Result TraceNewResponse             `json:"result"`
 	JSON   traceNewResponseEnvelopeJSON `json:"-"`
@@ -227,8 +227,8 @@ func (r traceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TraceNewResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           TraceNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             traceNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -275,8 +275,8 @@ func (r traceNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TraceNewResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           TraceNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             traceNewResponseEnvelopeMessagesJSON   `json:"-"`

@@ -43,20 +43,20 @@ func NewCloudIntegrationService(opts ...option.RequestOption) (r *CloudIntegrati
 func (r *CloudIntegrationService) New(ctx context.Context, params CloudIntegrationNewParams, opts ...option.RequestOption) (res *CloudIntegrationNewResponse, err error) {
 	var env CloudIntegrationNewResponseEnvelope
 	if params.Forwarded.Present {
-		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%s", params.Forwarded)))
+		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%v", params.Forwarded)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Cloud Integration (Closed Beta).
@@ -65,19 +65,19 @@ func (r *CloudIntegrationService) Update(ctx context.Context, providerID string,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if providerID == "" {
 		err = errors.New("missing required provider_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers/%s", params.AccountID, providerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Cloud Integrations (Closed Beta).
@@ -87,7 +87,7 @@ func (r *CloudIntegrationService) List(ctx context.Context, params CloudIntegrat
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -113,19 +113,19 @@ func (r *CloudIntegrationService) Delete(ctx context.Context, providerID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if providerID == "" {
 		err = errors.New("missing required provider_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers/%s", body.AccountID, providerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Run discovery for a Cloud Integration (Closed Beta).
@@ -133,15 +133,15 @@ func (r *CloudIntegrationService) Discover(ctx context.Context, providerID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if providerID == "" {
 		err = errors.New("missing required provider_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers/%s/discover", params.AccountID, providerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Run discovery for all Cloud Integrations in an account (Closed Beta).
@@ -149,11 +149,11 @@ func (r *CloudIntegrationService) DiscoverAll(ctx context.Context, body CloudInt
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers/discover", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Update a Cloud Integration (Closed Beta).
@@ -162,19 +162,19 @@ func (r *CloudIntegrationService) Edit(ctx context.Context, providerID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if providerID == "" {
 		err = errors.New("missing required provider_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers/%s", params.AccountID, providerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Read a Cloud Integration (Closed Beta).
@@ -183,19 +183,19 @@ func (r *CloudIntegrationService) Get(ctx context.Context, providerID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if providerID == "" {
 		err = errors.New("missing required provider_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers/%s", params.AccountID, providerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get initial configuration to complete Cloud Integration setup (Closed Beta).
@@ -204,29 +204,29 @@ func (r *CloudIntegrationService) InitialSetup(ctx context.Context, providerID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if providerID == "" {
 		err = errors.New("missing required provider_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/cloud/providers/%s/initial_setup", query.AccountID, providerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CloudIntegrationNewResponse struct {
-	ID                     string                                    `json:"id,required" format:"uuid"`
-	CloudType              CloudIntegrationNewResponseCloudType      `json:"cloud_type,required"`
-	FriendlyName           string                                    `json:"friendly_name,required"`
-	LastUpdated            string                                    `json:"last_updated,required"`
-	LifecycleState         CloudIntegrationNewResponseLifecycleState `json:"lifecycle_state,required"`
-	State                  CloudIntegrationNewResponseState          `json:"state,required"`
-	StateV2                CloudIntegrationNewResponseStateV2        `json:"state_v2,required"`
+	ID                     string                                    `json:"id" api:"required" format:"uuid"`
+	CloudType              CloudIntegrationNewResponseCloudType      `json:"cloud_type" api:"required"`
+	FriendlyName           string                                    `json:"friendly_name" api:"required"`
+	LastUpdated            string                                    `json:"last_updated" api:"required"`
+	LifecycleState         CloudIntegrationNewResponseLifecycleState `json:"lifecycle_state" api:"required"`
+	State                  CloudIntegrationNewResponseState          `json:"state" api:"required"`
+	StateV2                CloudIntegrationNewResponseStateV2        `json:"state_v2" api:"required"`
 	AwsArn                 string                                    `json:"aws_arn"`
 	AzureSubscriptionID    string                                    `json:"azure_subscription_id"`
 	AzureTenantID          string                                    `json:"azure_tenant_id"`
@@ -336,11 +336,11 @@ func (r CloudIntegrationNewResponseStateV2) IsKnown() bool {
 }
 
 type CloudIntegrationNewResponseStatus struct {
-	DiscoveryProgress          CloudIntegrationNewResponseStatusDiscoveryProgress     `json:"discovery_progress,required"`
-	DiscoveryProgressV2        CloudIntegrationNewResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2,required"`
-	LastDiscoveryStatus        CloudIntegrationNewResponseStatusLastDiscoveryStatus   `json:"last_discovery_status,required"`
-	LastDiscoveryStatusV2      CloudIntegrationNewResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2,required"`
-	Regions                    []string                                               `json:"regions,required"`
+	DiscoveryProgress          CloudIntegrationNewResponseStatusDiscoveryProgress     `json:"discovery_progress" api:"required"`
+	DiscoveryProgressV2        CloudIntegrationNewResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2" api:"required"`
+	LastDiscoveryStatus        CloudIntegrationNewResponseStatusLastDiscoveryStatus   `json:"last_discovery_status" api:"required"`
+	LastDiscoveryStatusV2      CloudIntegrationNewResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2" api:"required"`
+	Regions                    []string                                               `json:"regions" api:"required"`
 	CredentialsGoodSince       string                                                 `json:"credentials_good_since"`
 	CredentialsMissingSince    string                                                 `json:"credentials_missing_since"`
 	CredentialsRejectedSince   string                                                 `json:"credentials_rejected_since"`
@@ -387,9 +387,9 @@ func (r cloudIntegrationNewResponseStatusJSON) RawJSON() string {
 }
 
 type CloudIntegrationNewResponseStatusDiscoveryProgress struct {
-	Done  int64                                                  `json:"done,required"`
-	Total int64                                                  `json:"total,required"`
-	Unit  string                                                 `json:"unit,required"`
+	Done  int64                                                  `json:"done" api:"required"`
+	Total int64                                                  `json:"total" api:"required"`
+	Unit  string                                                 `json:"unit" api:"required"`
 	JSON  cloudIntegrationNewResponseStatusDiscoveryProgressJSON `json:"-"`
 }
 
@@ -412,9 +412,9 @@ func (r cloudIntegrationNewResponseStatusDiscoveryProgressJSON) RawJSON() string
 }
 
 type CloudIntegrationNewResponseStatusDiscoveryProgressV2 struct {
-	Done  int64                                                    `json:"done,required"`
-	Total int64                                                    `json:"total,required"`
-	Unit  string                                                   `json:"unit,required"`
+	Done  int64                                                    `json:"done" api:"required"`
+	Total int64                                                    `json:"total" api:"required"`
+	Unit  string                                                   `json:"unit" api:"required"`
 	JSON  cloudIntegrationNewResponseStatusDiscoveryProgressV2JSON `json:"-"`
 }
 
@@ -473,9 +473,9 @@ func (r CloudIntegrationNewResponseStatusLastDiscoveryStatusV2) IsKnown() bool {
 }
 
 type CloudIntegrationNewResponseStatusInUseBy struct {
-	ID         string                                             `json:"id,required" format:"uuid"`
-	ClientType CloudIntegrationNewResponseStatusInUseByClientType `json:"client_type,required"`
-	Name       string                                             `json:"name,required"`
+	ID         string                                             `json:"id" api:"required" format:"uuid"`
+	ClientType CloudIntegrationNewResponseStatusInUseByClientType `json:"client_type" api:"required"`
+	Name       string                                             `json:"name" api:"required"`
 	JSON       cloudIntegrationNewResponseStatusInUseByJSON       `json:"-"`
 }
 
@@ -512,13 +512,13 @@ func (r CloudIntegrationNewResponseStatusInUseByClientType) IsKnown() bool {
 }
 
 type CloudIntegrationUpdateResponse struct {
-	ID                     string                                       `json:"id,required" format:"uuid"`
-	CloudType              CloudIntegrationUpdateResponseCloudType      `json:"cloud_type,required"`
-	FriendlyName           string                                       `json:"friendly_name,required"`
-	LastUpdated            string                                       `json:"last_updated,required"`
-	LifecycleState         CloudIntegrationUpdateResponseLifecycleState `json:"lifecycle_state,required"`
-	State                  CloudIntegrationUpdateResponseState          `json:"state,required"`
-	StateV2                CloudIntegrationUpdateResponseStateV2        `json:"state_v2,required"`
+	ID                     string                                       `json:"id" api:"required" format:"uuid"`
+	CloudType              CloudIntegrationUpdateResponseCloudType      `json:"cloud_type" api:"required"`
+	FriendlyName           string                                       `json:"friendly_name" api:"required"`
+	LastUpdated            string                                       `json:"last_updated" api:"required"`
+	LifecycleState         CloudIntegrationUpdateResponseLifecycleState `json:"lifecycle_state" api:"required"`
+	State                  CloudIntegrationUpdateResponseState          `json:"state" api:"required"`
+	StateV2                CloudIntegrationUpdateResponseStateV2        `json:"state_v2" api:"required"`
 	AwsArn                 string                                       `json:"aws_arn"`
 	AzureSubscriptionID    string                                       `json:"azure_subscription_id"`
 	AzureTenantID          string                                       `json:"azure_tenant_id"`
@@ -628,11 +628,11 @@ func (r CloudIntegrationUpdateResponseStateV2) IsKnown() bool {
 }
 
 type CloudIntegrationUpdateResponseStatus struct {
-	DiscoveryProgress          CloudIntegrationUpdateResponseStatusDiscoveryProgress     `json:"discovery_progress,required"`
-	DiscoveryProgressV2        CloudIntegrationUpdateResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2,required"`
-	LastDiscoveryStatus        CloudIntegrationUpdateResponseStatusLastDiscoveryStatus   `json:"last_discovery_status,required"`
-	LastDiscoveryStatusV2      CloudIntegrationUpdateResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2,required"`
-	Regions                    []string                                                  `json:"regions,required"`
+	DiscoveryProgress          CloudIntegrationUpdateResponseStatusDiscoveryProgress     `json:"discovery_progress" api:"required"`
+	DiscoveryProgressV2        CloudIntegrationUpdateResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2" api:"required"`
+	LastDiscoveryStatus        CloudIntegrationUpdateResponseStatusLastDiscoveryStatus   `json:"last_discovery_status" api:"required"`
+	LastDiscoveryStatusV2      CloudIntegrationUpdateResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2" api:"required"`
+	Regions                    []string                                                  `json:"regions" api:"required"`
 	CredentialsGoodSince       string                                                    `json:"credentials_good_since"`
 	CredentialsMissingSince    string                                                    `json:"credentials_missing_since"`
 	CredentialsRejectedSince   string                                                    `json:"credentials_rejected_since"`
@@ -679,9 +679,9 @@ func (r cloudIntegrationUpdateResponseStatusJSON) RawJSON() string {
 }
 
 type CloudIntegrationUpdateResponseStatusDiscoveryProgress struct {
-	Done  int64                                                     `json:"done,required"`
-	Total int64                                                     `json:"total,required"`
-	Unit  string                                                    `json:"unit,required"`
+	Done  int64                                                     `json:"done" api:"required"`
+	Total int64                                                     `json:"total" api:"required"`
+	Unit  string                                                    `json:"unit" api:"required"`
 	JSON  cloudIntegrationUpdateResponseStatusDiscoveryProgressJSON `json:"-"`
 }
 
@@ -704,9 +704,9 @@ func (r cloudIntegrationUpdateResponseStatusDiscoveryProgressJSON) RawJSON() str
 }
 
 type CloudIntegrationUpdateResponseStatusDiscoveryProgressV2 struct {
-	Done  int64                                                       `json:"done,required"`
-	Total int64                                                       `json:"total,required"`
-	Unit  string                                                      `json:"unit,required"`
+	Done  int64                                                       `json:"done" api:"required"`
+	Total int64                                                       `json:"total" api:"required"`
+	Unit  string                                                      `json:"unit" api:"required"`
 	JSON  cloudIntegrationUpdateResponseStatusDiscoveryProgressV2JSON `json:"-"`
 }
 
@@ -766,9 +766,9 @@ func (r CloudIntegrationUpdateResponseStatusLastDiscoveryStatusV2) IsKnown() boo
 }
 
 type CloudIntegrationUpdateResponseStatusInUseBy struct {
-	ID         string                                                `json:"id,required" format:"uuid"`
-	ClientType CloudIntegrationUpdateResponseStatusInUseByClientType `json:"client_type,required"`
-	Name       string                                                `json:"name,required"`
+	ID         string                                                `json:"id" api:"required" format:"uuid"`
+	ClientType CloudIntegrationUpdateResponseStatusInUseByClientType `json:"client_type" api:"required"`
+	Name       string                                                `json:"name" api:"required"`
 	JSON       cloudIntegrationUpdateResponseStatusInUseByJSON       `json:"-"`
 }
 
@@ -805,13 +805,13 @@ func (r CloudIntegrationUpdateResponseStatusInUseByClientType) IsKnown() bool {
 }
 
 type CloudIntegrationListResponse struct {
-	ID                     string                                     `json:"id,required" format:"uuid"`
-	CloudType              CloudIntegrationListResponseCloudType      `json:"cloud_type,required"`
-	FriendlyName           string                                     `json:"friendly_name,required"`
-	LastUpdated            string                                     `json:"last_updated,required"`
-	LifecycleState         CloudIntegrationListResponseLifecycleState `json:"lifecycle_state,required"`
-	State                  CloudIntegrationListResponseState          `json:"state,required"`
-	StateV2                CloudIntegrationListResponseStateV2        `json:"state_v2,required"`
+	ID                     string                                     `json:"id" api:"required" format:"uuid"`
+	CloudType              CloudIntegrationListResponseCloudType      `json:"cloud_type" api:"required"`
+	FriendlyName           string                                     `json:"friendly_name" api:"required"`
+	LastUpdated            string                                     `json:"last_updated" api:"required"`
+	LifecycleState         CloudIntegrationListResponseLifecycleState `json:"lifecycle_state" api:"required"`
+	State                  CloudIntegrationListResponseState          `json:"state" api:"required"`
+	StateV2                CloudIntegrationListResponseStateV2        `json:"state_v2" api:"required"`
 	AwsArn                 string                                     `json:"aws_arn"`
 	AzureSubscriptionID    string                                     `json:"azure_subscription_id"`
 	AzureTenantID          string                                     `json:"azure_tenant_id"`
@@ -921,11 +921,11 @@ func (r CloudIntegrationListResponseStateV2) IsKnown() bool {
 }
 
 type CloudIntegrationListResponseStatus struct {
-	DiscoveryProgress          CloudIntegrationListResponseStatusDiscoveryProgress     `json:"discovery_progress,required"`
-	DiscoveryProgressV2        CloudIntegrationListResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2,required"`
-	LastDiscoveryStatus        CloudIntegrationListResponseStatusLastDiscoveryStatus   `json:"last_discovery_status,required"`
-	LastDiscoveryStatusV2      CloudIntegrationListResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2,required"`
-	Regions                    []string                                                `json:"regions,required"`
+	DiscoveryProgress          CloudIntegrationListResponseStatusDiscoveryProgress     `json:"discovery_progress" api:"required"`
+	DiscoveryProgressV2        CloudIntegrationListResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2" api:"required"`
+	LastDiscoveryStatus        CloudIntegrationListResponseStatusLastDiscoveryStatus   `json:"last_discovery_status" api:"required"`
+	LastDiscoveryStatusV2      CloudIntegrationListResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2" api:"required"`
+	Regions                    []string                                                `json:"regions" api:"required"`
 	CredentialsGoodSince       string                                                  `json:"credentials_good_since"`
 	CredentialsMissingSince    string                                                  `json:"credentials_missing_since"`
 	CredentialsRejectedSince   string                                                  `json:"credentials_rejected_since"`
@@ -972,9 +972,9 @@ func (r cloudIntegrationListResponseStatusJSON) RawJSON() string {
 }
 
 type CloudIntegrationListResponseStatusDiscoveryProgress struct {
-	Done  int64                                                   `json:"done,required"`
-	Total int64                                                   `json:"total,required"`
-	Unit  string                                                  `json:"unit,required"`
+	Done  int64                                                   `json:"done" api:"required"`
+	Total int64                                                   `json:"total" api:"required"`
+	Unit  string                                                  `json:"unit" api:"required"`
 	JSON  cloudIntegrationListResponseStatusDiscoveryProgressJSON `json:"-"`
 }
 
@@ -997,9 +997,9 @@ func (r cloudIntegrationListResponseStatusDiscoveryProgressJSON) RawJSON() strin
 }
 
 type CloudIntegrationListResponseStatusDiscoveryProgressV2 struct {
-	Done  int64                                                     `json:"done,required"`
-	Total int64                                                     `json:"total,required"`
-	Unit  string                                                    `json:"unit,required"`
+	Done  int64                                                     `json:"done" api:"required"`
+	Total int64                                                     `json:"total" api:"required"`
+	Unit  string                                                    `json:"unit" api:"required"`
 	JSON  cloudIntegrationListResponseStatusDiscoveryProgressV2JSON `json:"-"`
 }
 
@@ -1058,9 +1058,9 @@ func (r CloudIntegrationListResponseStatusLastDiscoveryStatusV2) IsKnown() bool 
 }
 
 type CloudIntegrationListResponseStatusInUseBy struct {
-	ID         string                                              `json:"id,required" format:"uuid"`
-	ClientType CloudIntegrationListResponseStatusInUseByClientType `json:"client_type,required"`
-	Name       string                                              `json:"name,required"`
+	ID         string                                              `json:"id" api:"required" format:"uuid"`
+	ClientType CloudIntegrationListResponseStatusInUseByClientType `json:"client_type" api:"required"`
+	Name       string                                              `json:"name" api:"required"`
 	JSON       cloudIntegrationListResponseStatusInUseByJSON       `json:"-"`
 }
 
@@ -1097,7 +1097,7 @@ func (r CloudIntegrationListResponseStatusInUseByClientType) IsKnown() bool {
 }
 
 type CloudIntegrationDeleteResponse struct {
-	ID   string                             `json:"id,required" format:"uuid"`
+	ID   string                             `json:"id" api:"required" format:"uuid"`
 	JSON cloudIntegrationDeleteResponseJSON `json:"-"`
 }
 
@@ -1118,9 +1118,9 @@ func (r cloudIntegrationDeleteResponseJSON) RawJSON() string {
 }
 
 type CloudIntegrationDiscoverResponse struct {
-	Errors   []CloudIntegrationDiscoverResponseError   `json:"errors,required"`
-	Messages []CloudIntegrationDiscoverResponseMessage `json:"messages,required"`
-	Success  bool                                      `json:"success,required"`
+	Errors   []CloudIntegrationDiscoverResponseError   `json:"errors" api:"required"`
+	Messages []CloudIntegrationDiscoverResponseMessage `json:"messages" api:"required"`
+	Success  bool                                      `json:"success" api:"required"`
 	JSON     cloudIntegrationDiscoverResponseJSON      `json:"-"`
 }
 
@@ -1143,8 +1143,8 @@ func (r cloudIntegrationDiscoverResponseJSON) RawJSON() string {
 }
 
 type CloudIntegrationDiscoverResponseError struct {
-	Code             CloudIntegrationDiscoverResponseErrorsCode   `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             CloudIntegrationDiscoverResponseErrorsCode   `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Meta             CloudIntegrationDiscoverResponseErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationDiscoverResponseErrorsSource `json:"source"`
@@ -1392,8 +1392,8 @@ func (r cloudIntegrationDiscoverResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CloudIntegrationDiscoverResponseMessage struct {
-	Code             CloudIntegrationDiscoverResponseMessagesCode   `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             CloudIntegrationDiscoverResponseMessagesCode   `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Meta             CloudIntegrationDiscoverResponseMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationDiscoverResponseMessagesSource `json:"source"`
@@ -1641,9 +1641,9 @@ func (r cloudIntegrationDiscoverResponseMessagesSourceJSON) RawJSON() string {
 }
 
 type CloudIntegrationDiscoverAllResponse struct {
-	Errors   []CloudIntegrationDiscoverAllResponseError   `json:"errors,required"`
-	Messages []CloudIntegrationDiscoverAllResponseMessage `json:"messages,required"`
-	Success  bool                                         `json:"success,required"`
+	Errors   []CloudIntegrationDiscoverAllResponseError   `json:"errors" api:"required"`
+	Messages []CloudIntegrationDiscoverAllResponseMessage `json:"messages" api:"required"`
+	Success  bool                                         `json:"success" api:"required"`
 	JSON     cloudIntegrationDiscoverAllResponseJSON      `json:"-"`
 }
 
@@ -1666,8 +1666,8 @@ func (r cloudIntegrationDiscoverAllResponseJSON) RawJSON() string {
 }
 
 type CloudIntegrationDiscoverAllResponseError struct {
-	Code             CloudIntegrationDiscoverAllResponseErrorsCode   `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             CloudIntegrationDiscoverAllResponseErrorsCode   `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Meta             CloudIntegrationDiscoverAllResponseErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationDiscoverAllResponseErrorsSource `json:"source"`
@@ -1915,8 +1915,8 @@ func (r cloudIntegrationDiscoverAllResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type CloudIntegrationDiscoverAllResponseMessage struct {
-	Code             CloudIntegrationDiscoverAllResponseMessagesCode   `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             CloudIntegrationDiscoverAllResponseMessagesCode   `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Meta             CloudIntegrationDiscoverAllResponseMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationDiscoverAllResponseMessagesSource `json:"source"`
@@ -2164,13 +2164,13 @@ func (r cloudIntegrationDiscoverAllResponseMessagesSourceJSON) RawJSON() string 
 }
 
 type CloudIntegrationEditResponse struct {
-	ID                     string                                     `json:"id,required" format:"uuid"`
-	CloudType              CloudIntegrationEditResponseCloudType      `json:"cloud_type,required"`
-	FriendlyName           string                                     `json:"friendly_name,required"`
-	LastUpdated            string                                     `json:"last_updated,required"`
-	LifecycleState         CloudIntegrationEditResponseLifecycleState `json:"lifecycle_state,required"`
-	State                  CloudIntegrationEditResponseState          `json:"state,required"`
-	StateV2                CloudIntegrationEditResponseStateV2        `json:"state_v2,required"`
+	ID                     string                                     `json:"id" api:"required" format:"uuid"`
+	CloudType              CloudIntegrationEditResponseCloudType      `json:"cloud_type" api:"required"`
+	FriendlyName           string                                     `json:"friendly_name" api:"required"`
+	LastUpdated            string                                     `json:"last_updated" api:"required"`
+	LifecycleState         CloudIntegrationEditResponseLifecycleState `json:"lifecycle_state" api:"required"`
+	State                  CloudIntegrationEditResponseState          `json:"state" api:"required"`
+	StateV2                CloudIntegrationEditResponseStateV2        `json:"state_v2" api:"required"`
 	AwsArn                 string                                     `json:"aws_arn"`
 	AzureSubscriptionID    string                                     `json:"azure_subscription_id"`
 	AzureTenantID          string                                     `json:"azure_tenant_id"`
@@ -2280,11 +2280,11 @@ func (r CloudIntegrationEditResponseStateV2) IsKnown() bool {
 }
 
 type CloudIntegrationEditResponseStatus struct {
-	DiscoveryProgress          CloudIntegrationEditResponseStatusDiscoveryProgress     `json:"discovery_progress,required"`
-	DiscoveryProgressV2        CloudIntegrationEditResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2,required"`
-	LastDiscoveryStatus        CloudIntegrationEditResponseStatusLastDiscoveryStatus   `json:"last_discovery_status,required"`
-	LastDiscoveryStatusV2      CloudIntegrationEditResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2,required"`
-	Regions                    []string                                                `json:"regions,required"`
+	DiscoveryProgress          CloudIntegrationEditResponseStatusDiscoveryProgress     `json:"discovery_progress" api:"required"`
+	DiscoveryProgressV2        CloudIntegrationEditResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2" api:"required"`
+	LastDiscoveryStatus        CloudIntegrationEditResponseStatusLastDiscoveryStatus   `json:"last_discovery_status" api:"required"`
+	LastDiscoveryStatusV2      CloudIntegrationEditResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2" api:"required"`
+	Regions                    []string                                                `json:"regions" api:"required"`
 	CredentialsGoodSince       string                                                  `json:"credentials_good_since"`
 	CredentialsMissingSince    string                                                  `json:"credentials_missing_since"`
 	CredentialsRejectedSince   string                                                  `json:"credentials_rejected_since"`
@@ -2331,9 +2331,9 @@ func (r cloudIntegrationEditResponseStatusJSON) RawJSON() string {
 }
 
 type CloudIntegrationEditResponseStatusDiscoveryProgress struct {
-	Done  int64                                                   `json:"done,required"`
-	Total int64                                                   `json:"total,required"`
-	Unit  string                                                  `json:"unit,required"`
+	Done  int64                                                   `json:"done" api:"required"`
+	Total int64                                                   `json:"total" api:"required"`
+	Unit  string                                                  `json:"unit" api:"required"`
 	JSON  cloudIntegrationEditResponseStatusDiscoveryProgressJSON `json:"-"`
 }
 
@@ -2356,9 +2356,9 @@ func (r cloudIntegrationEditResponseStatusDiscoveryProgressJSON) RawJSON() strin
 }
 
 type CloudIntegrationEditResponseStatusDiscoveryProgressV2 struct {
-	Done  int64                                                     `json:"done,required"`
-	Total int64                                                     `json:"total,required"`
-	Unit  string                                                    `json:"unit,required"`
+	Done  int64                                                     `json:"done" api:"required"`
+	Total int64                                                     `json:"total" api:"required"`
+	Unit  string                                                    `json:"unit" api:"required"`
 	JSON  cloudIntegrationEditResponseStatusDiscoveryProgressV2JSON `json:"-"`
 }
 
@@ -2417,9 +2417,9 @@ func (r CloudIntegrationEditResponseStatusLastDiscoveryStatusV2) IsKnown() bool 
 }
 
 type CloudIntegrationEditResponseStatusInUseBy struct {
-	ID         string                                              `json:"id,required" format:"uuid"`
-	ClientType CloudIntegrationEditResponseStatusInUseByClientType `json:"client_type,required"`
-	Name       string                                              `json:"name,required"`
+	ID         string                                              `json:"id" api:"required" format:"uuid"`
+	ClientType CloudIntegrationEditResponseStatusInUseByClientType `json:"client_type" api:"required"`
+	Name       string                                              `json:"name" api:"required"`
 	JSON       cloudIntegrationEditResponseStatusInUseByJSON       `json:"-"`
 }
 
@@ -2456,13 +2456,13 @@ func (r CloudIntegrationEditResponseStatusInUseByClientType) IsKnown() bool {
 }
 
 type CloudIntegrationGetResponse struct {
-	ID                     string                                    `json:"id,required" format:"uuid"`
-	CloudType              CloudIntegrationGetResponseCloudType      `json:"cloud_type,required"`
-	FriendlyName           string                                    `json:"friendly_name,required"`
-	LastUpdated            string                                    `json:"last_updated,required"`
-	LifecycleState         CloudIntegrationGetResponseLifecycleState `json:"lifecycle_state,required"`
-	State                  CloudIntegrationGetResponseState          `json:"state,required"`
-	StateV2                CloudIntegrationGetResponseStateV2        `json:"state_v2,required"`
+	ID                     string                                    `json:"id" api:"required" format:"uuid"`
+	CloudType              CloudIntegrationGetResponseCloudType      `json:"cloud_type" api:"required"`
+	FriendlyName           string                                    `json:"friendly_name" api:"required"`
+	LastUpdated            string                                    `json:"last_updated" api:"required"`
+	LifecycleState         CloudIntegrationGetResponseLifecycleState `json:"lifecycle_state" api:"required"`
+	State                  CloudIntegrationGetResponseState          `json:"state" api:"required"`
+	StateV2                CloudIntegrationGetResponseStateV2        `json:"state_v2" api:"required"`
 	AwsArn                 string                                    `json:"aws_arn"`
 	AzureSubscriptionID    string                                    `json:"azure_subscription_id"`
 	AzureTenantID          string                                    `json:"azure_tenant_id"`
@@ -2572,11 +2572,11 @@ func (r CloudIntegrationGetResponseStateV2) IsKnown() bool {
 }
 
 type CloudIntegrationGetResponseStatus struct {
-	DiscoveryProgress          CloudIntegrationGetResponseStatusDiscoveryProgress     `json:"discovery_progress,required"`
-	DiscoveryProgressV2        CloudIntegrationGetResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2,required"`
-	LastDiscoveryStatus        CloudIntegrationGetResponseStatusLastDiscoveryStatus   `json:"last_discovery_status,required"`
-	LastDiscoveryStatusV2      CloudIntegrationGetResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2,required"`
-	Regions                    []string                                               `json:"regions,required"`
+	DiscoveryProgress          CloudIntegrationGetResponseStatusDiscoveryProgress     `json:"discovery_progress" api:"required"`
+	DiscoveryProgressV2        CloudIntegrationGetResponseStatusDiscoveryProgressV2   `json:"discovery_progress_v2" api:"required"`
+	LastDiscoveryStatus        CloudIntegrationGetResponseStatusLastDiscoveryStatus   `json:"last_discovery_status" api:"required"`
+	LastDiscoveryStatusV2      CloudIntegrationGetResponseStatusLastDiscoveryStatusV2 `json:"last_discovery_status_v2" api:"required"`
+	Regions                    []string                                               `json:"regions" api:"required"`
 	CredentialsGoodSince       string                                                 `json:"credentials_good_since"`
 	CredentialsMissingSince    string                                                 `json:"credentials_missing_since"`
 	CredentialsRejectedSince   string                                                 `json:"credentials_rejected_since"`
@@ -2623,9 +2623,9 @@ func (r cloudIntegrationGetResponseStatusJSON) RawJSON() string {
 }
 
 type CloudIntegrationGetResponseStatusDiscoveryProgress struct {
-	Done  int64                                                  `json:"done,required"`
-	Total int64                                                  `json:"total,required"`
-	Unit  string                                                 `json:"unit,required"`
+	Done  int64                                                  `json:"done" api:"required"`
+	Total int64                                                  `json:"total" api:"required"`
+	Unit  string                                                 `json:"unit" api:"required"`
 	JSON  cloudIntegrationGetResponseStatusDiscoveryProgressJSON `json:"-"`
 }
 
@@ -2648,9 +2648,9 @@ func (r cloudIntegrationGetResponseStatusDiscoveryProgressJSON) RawJSON() string
 }
 
 type CloudIntegrationGetResponseStatusDiscoveryProgressV2 struct {
-	Done  int64                                                    `json:"done,required"`
-	Total int64                                                    `json:"total,required"`
-	Unit  string                                                   `json:"unit,required"`
+	Done  int64                                                    `json:"done" api:"required"`
+	Total int64                                                    `json:"total" api:"required"`
+	Unit  string                                                   `json:"unit" api:"required"`
 	JSON  cloudIntegrationGetResponseStatusDiscoveryProgressV2JSON `json:"-"`
 }
 
@@ -2709,9 +2709,9 @@ func (r CloudIntegrationGetResponseStatusLastDiscoveryStatusV2) IsKnown() bool {
 }
 
 type CloudIntegrationGetResponseStatusInUseBy struct {
-	ID         string                                             `json:"id,required" format:"uuid"`
-	ClientType CloudIntegrationGetResponseStatusInUseByClientType `json:"client_type,required"`
-	Name       string                                             `json:"name,required"`
+	ID         string                                             `json:"id" api:"required" format:"uuid"`
+	ClientType CloudIntegrationGetResponseStatusInUseByClientType `json:"client_type" api:"required"`
+	Name       string                                             `json:"name" api:"required"`
 	JSON       cloudIntegrationGetResponseStatusInUseByJSON       `json:"-"`
 }
 
@@ -2748,7 +2748,7 @@ func (r CloudIntegrationGetResponseStatusInUseByClientType) IsKnown() bool {
 }
 
 type CloudIntegrationInitialSetupResponse struct {
-	ItemType               string                                   `json:"item_type,required"`
+	ItemType               string                                   `json:"item_type" api:"required"`
 	AwsTrustPolicy         string                                   `json:"aws_trust_policy"`
 	AzureConsentURL        string                                   `json:"azure_consent_url"`
 	IntegrationIdentityTag string                                   `json:"integration_identity_tag"`
@@ -2820,8 +2820,8 @@ func init() {
 }
 
 type CloudIntegrationInitialSetupResponseMcnAwsTrustPolicy struct {
-	AwsTrustPolicy string                                                    `json:"aws_trust_policy,required"`
-	ItemType       string                                                    `json:"item_type,required"`
+	AwsTrustPolicy string                                                    `json:"aws_trust_policy" api:"required"`
+	ItemType       string                                                    `json:"item_type" api:"required"`
 	JSON           cloudIntegrationInitialSetupResponseMcnAwsTrustPolicyJSON `json:"-"`
 }
 
@@ -2846,10 +2846,10 @@ func (r CloudIntegrationInitialSetupResponseMcnAwsTrustPolicy) implementsCloudIn
 }
 
 type CloudIntegrationInitialSetupResponseMcnAzureSetup struct {
-	AzureConsentURL        string                                                `json:"azure_consent_url,required"`
-	IntegrationIdentityTag string                                                `json:"integration_identity_tag,required"`
-	ItemType               string                                                `json:"item_type,required"`
-	TagCliCommand          string                                                `json:"tag_cli_command,required"`
+	AzureConsentURL        string                                                `json:"azure_consent_url" api:"required"`
+	IntegrationIdentityTag string                                                `json:"integration_identity_tag" api:"required"`
+	ItemType               string                                                `json:"item_type" api:"required"`
+	TagCliCommand          string                                                `json:"tag_cli_command" api:"required"`
 	JSON                   cloudIntegrationInitialSetupResponseMcnAzureSetupJSON `json:"-"`
 }
 
@@ -2876,9 +2876,9 @@ func (r CloudIntegrationInitialSetupResponseMcnAzureSetup) implementsCloudIntegr
 }
 
 type CloudIntegrationInitialSetupResponseMcnGcpSetup struct {
-	IntegrationIdentityTag string                                              `json:"integration_identity_tag,required"`
-	ItemType               string                                              `json:"item_type,required"`
-	TagCliCommand          string                                              `json:"tag_cli_command,required"`
+	IntegrationIdentityTag string                                              `json:"integration_identity_tag" api:"required"`
+	ItemType               string                                              `json:"item_type" api:"required"`
+	TagCliCommand          string                                              `json:"tag_cli_command" api:"required"`
 	JSON                   cloudIntegrationInitialSetupResponseMcnGcpSetupJSON `json:"-"`
 }
 
@@ -2904,9 +2904,9 @@ func (r CloudIntegrationInitialSetupResponseMcnGcpSetup) implementsCloudIntegrat
 }
 
 type CloudIntegrationNewParams struct {
-	AccountID    param.Field[string]                             `path:"account_id,required"`
-	CloudType    param.Field[CloudIntegrationNewParamsCloudType] `json:"cloud_type,required"`
-	FriendlyName param.Field[string]                             `json:"friendly_name,required"`
+	AccountID    param.Field[string]                             `path:"account_id" api:"required"`
+	CloudType    param.Field[CloudIntegrationNewParamsCloudType] `json:"cloud_type" api:"required"`
+	FriendlyName param.Field[string]                             `json:"friendly_name" api:"required"`
 	Description  param.Field[string]                             `json:"description"`
 	Forwarded    param.Field[string]                             `header:"forwarded"`
 }
@@ -2933,10 +2933,10 @@ func (r CloudIntegrationNewParamsCloudType) IsKnown() bool {
 }
 
 type CloudIntegrationNewResponseEnvelope struct {
-	Errors   []CloudIntegrationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CloudIntegrationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudIntegrationNewResponse                   `json:"result,required"`
-	Success  bool                                          `json:"success,required"`
+	Errors   []CloudIntegrationNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CloudIntegrationNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CloudIntegrationNewResponse                   `json:"result" api:"required"`
+	Success  bool                                          `json:"success" api:"required"`
 	JSON     cloudIntegrationNewResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -2960,8 +2960,8 @@ func (r cloudIntegrationNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CloudIntegrationNewResponseEnvelopeErrors struct {
-	Code             CloudIntegrationNewResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             CloudIntegrationNewResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Meta             CloudIntegrationNewResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationNewResponseEnvelopeErrorsSource `json:"source"`
@@ -3209,8 +3209,8 @@ func (r cloudIntegrationNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CloudIntegrationNewResponseEnvelopeMessages struct {
-	Code             CloudIntegrationNewResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             CloudIntegrationNewResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Meta             CloudIntegrationNewResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationNewResponseEnvelopeMessagesSource `json:"source"`
@@ -3458,7 +3458,7 @@ func (r cloudIntegrationNewResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 }
 
 type CloudIntegrationUpdateParams struct {
-	AccountID              param.Field[string] `path:"account_id,required"`
+	AccountID              param.Field[string] `path:"account_id" api:"required"`
 	AwsArn                 param.Field[string] `json:"aws_arn"`
 	AzureSubscriptionID    param.Field[string] `json:"azure_subscription_id"`
 	AzureTenantID          param.Field[string] `json:"azure_tenant_id"`
@@ -3473,10 +3473,10 @@ func (r CloudIntegrationUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CloudIntegrationUpdateResponseEnvelope struct {
-	Errors   []CloudIntegrationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CloudIntegrationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudIntegrationUpdateResponse                   `json:"result,required"`
-	Success  bool                                             `json:"success,required"`
+	Errors   []CloudIntegrationUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CloudIntegrationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CloudIntegrationUpdateResponse                   `json:"result" api:"required"`
+	Success  bool                                             `json:"success" api:"required"`
 	JSON     cloudIntegrationUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -3500,8 +3500,8 @@ func (r cloudIntegrationUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CloudIntegrationUpdateResponseEnvelopeErrors struct {
-	Code             CloudIntegrationUpdateResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             CloudIntegrationUpdateResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Meta             CloudIntegrationUpdateResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationUpdateResponseEnvelopeErrorsSource `json:"source"`
@@ -3749,8 +3749,8 @@ func (r cloudIntegrationUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type CloudIntegrationUpdateResponseEnvelopeMessages struct {
-	Code             CloudIntegrationUpdateResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             CloudIntegrationUpdateResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Meta             CloudIntegrationUpdateResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationUpdateResponseEnvelopeMessagesSource `json:"source"`
@@ -3998,7 +3998,7 @@ func (r cloudIntegrationUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 }
 
 type CloudIntegrationListParams struct {
-	AccountID  param.Field[string] `path:"account_id,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	Cloudflare param.Field[bool]   `query:"cloudflare"`
 	Desc       param.Field[bool]   `query:"desc"`
 	// One of ["updated_at", "id", "cloud_type", "name"].
@@ -4016,14 +4016,14 @@ func (r CloudIntegrationListParams) URLQuery() (v url.Values) {
 }
 
 type CloudIntegrationDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CloudIntegrationDeleteResponseEnvelope struct {
-	Errors   []CloudIntegrationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CloudIntegrationDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudIntegrationDeleteResponse                   `json:"result,required"`
-	Success  bool                                             `json:"success,required"`
+	Errors   []CloudIntegrationDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CloudIntegrationDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CloudIntegrationDeleteResponse                   `json:"result" api:"required"`
+	Success  bool                                             `json:"success" api:"required"`
 	JSON     cloudIntegrationDeleteResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -4047,8 +4047,8 @@ func (r cloudIntegrationDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CloudIntegrationDeleteResponseEnvelopeErrors struct {
-	Code             CloudIntegrationDeleteResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             CloudIntegrationDeleteResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Meta             CloudIntegrationDeleteResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationDeleteResponseEnvelopeErrorsSource `json:"source"`
@@ -4296,8 +4296,8 @@ func (r cloudIntegrationDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type CloudIntegrationDeleteResponseEnvelopeMessages struct {
-	Code             CloudIntegrationDeleteResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             CloudIntegrationDeleteResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Meta             CloudIntegrationDeleteResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationDeleteResponseEnvelopeMessagesSource `json:"source"`
@@ -4545,7 +4545,7 @@ func (r cloudIntegrationDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 }
 
 type CloudIntegrationDiscoverParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	V2        param.Field[bool]   `query:"v2"`
 }
 
@@ -4559,11 +4559,11 @@ func (r CloudIntegrationDiscoverParams) URLQuery() (v url.Values) {
 }
 
 type CloudIntegrationDiscoverAllParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CloudIntegrationEditParams struct {
-	AccountID              param.Field[string] `path:"account_id,required"`
+	AccountID              param.Field[string] `path:"account_id" api:"required"`
 	AwsArn                 param.Field[string] `json:"aws_arn"`
 	AzureSubscriptionID    param.Field[string] `json:"azure_subscription_id"`
 	AzureTenantID          param.Field[string] `json:"azure_tenant_id"`
@@ -4578,10 +4578,10 @@ func (r CloudIntegrationEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CloudIntegrationEditResponseEnvelope struct {
-	Errors   []CloudIntegrationEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CloudIntegrationEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudIntegrationEditResponse                   `json:"result,required"`
-	Success  bool                                           `json:"success,required"`
+	Errors   []CloudIntegrationEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CloudIntegrationEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CloudIntegrationEditResponse                   `json:"result" api:"required"`
+	Success  bool                                           `json:"success" api:"required"`
 	JSON     cloudIntegrationEditResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -4605,8 +4605,8 @@ func (r cloudIntegrationEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CloudIntegrationEditResponseEnvelopeErrors struct {
-	Code             CloudIntegrationEditResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             CloudIntegrationEditResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Meta             CloudIntegrationEditResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationEditResponseEnvelopeErrorsSource `json:"source"`
@@ -4854,8 +4854,8 @@ func (r cloudIntegrationEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CloudIntegrationEditResponseEnvelopeMessages struct {
-	Code             CloudIntegrationEditResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             CloudIntegrationEditResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Meta             CloudIntegrationEditResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationEditResponseEnvelopeMessagesSource `json:"source"`
@@ -5103,7 +5103,7 @@ func (r cloudIntegrationEditResponseEnvelopeMessagesSourceJSON) RawJSON() string
 }
 
 type CloudIntegrationGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Status    param.Field[bool]   `query:"status"`
 }
 
@@ -5117,10 +5117,10 @@ func (r CloudIntegrationGetParams) URLQuery() (v url.Values) {
 }
 
 type CloudIntegrationGetResponseEnvelope struct {
-	Errors   []CloudIntegrationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CloudIntegrationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudIntegrationGetResponse                   `json:"result,required"`
-	Success  bool                                          `json:"success,required"`
+	Errors   []CloudIntegrationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CloudIntegrationGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CloudIntegrationGetResponse                   `json:"result" api:"required"`
+	Success  bool                                          `json:"success" api:"required"`
 	JSON     cloudIntegrationGetResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -5144,8 +5144,8 @@ func (r cloudIntegrationGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CloudIntegrationGetResponseEnvelopeErrors struct {
-	Code             CloudIntegrationGetResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             CloudIntegrationGetResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Meta             CloudIntegrationGetResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationGetResponseEnvelopeErrorsSource `json:"source"`
@@ -5393,8 +5393,8 @@ func (r cloudIntegrationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CloudIntegrationGetResponseEnvelopeMessages struct {
-	Code             CloudIntegrationGetResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             CloudIntegrationGetResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Meta             CloudIntegrationGetResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationGetResponseEnvelopeMessagesSource `json:"source"`
@@ -5642,14 +5642,14 @@ func (r cloudIntegrationGetResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 }
 
 type CloudIntegrationInitialSetupParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CloudIntegrationInitialSetupResponseEnvelope struct {
-	Errors   []CloudIntegrationInitialSetupResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CloudIntegrationInitialSetupResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudIntegrationInitialSetupResponse                   `json:"result,required"`
-	Success  bool                                                   `json:"success,required"`
+	Errors   []CloudIntegrationInitialSetupResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CloudIntegrationInitialSetupResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   CloudIntegrationInitialSetupResponse                   `json:"result" api:"required"`
+	Success  bool                                                   `json:"success" api:"required"`
 	JSON     cloudIntegrationInitialSetupResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -5673,8 +5673,8 @@ func (r cloudIntegrationInitialSetupResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CloudIntegrationInitialSetupResponseEnvelopeErrors struct {
-	Code             CloudIntegrationInitialSetupResponseEnvelopeErrorsCode   `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             CloudIntegrationInitialSetupResponseEnvelopeErrorsCode   `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Meta             CloudIntegrationInitialSetupResponseEnvelopeErrorsMeta   `json:"meta"`
 	Source           CloudIntegrationInitialSetupResponseEnvelopeErrorsSource `json:"source"`
@@ -5923,8 +5923,8 @@ func (r cloudIntegrationInitialSetupResponseEnvelopeErrorsSourceJSON) RawJSON() 
 }
 
 type CloudIntegrationInitialSetupResponseEnvelopeMessages struct {
-	Code             CloudIntegrationInitialSetupResponseEnvelopeMessagesCode   `json:"code,required"`
-	Message          string                                                     `json:"message,required"`
+	Code             CloudIntegrationInitialSetupResponseEnvelopeMessagesCode   `json:"code" api:"required"`
+	Message          string                                                     `json:"message" api:"required"`
 	DocumentationURL string                                                     `json:"documentation_url"`
 	Meta             CloudIntegrationInitialSetupResponseEnvelopeMessagesMeta   `json:"meta"`
 	Source           CloudIntegrationInitialSetupResponseEnvelopeMessagesSource `json:"source"`

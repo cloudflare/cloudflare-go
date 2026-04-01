@@ -44,22 +44,22 @@ func (r *SnapshotService) New(ctx context.Context, params SnapshotNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/browser-rendering/snapshot", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SnapshotNewResponse struct {
-	// HTML content
-	Content string `json:"content,required"`
-	// Base64 encoded image
-	Screenshot string                  `json:"screenshot,required"`
+	// HTML content.
+	Content string `json:"content" api:"required"`
+	// Base64 encoded image.
+	Screenshot string                  `json:"screenshot" api:"required"`
 	JSON       snapshotNewResponseJSON `json:"-"`
 }
 
@@ -82,8 +82,8 @@ func (r snapshotNewResponseJSON) RawJSON() string {
 
 type SnapshotNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]        `path:"account_id,required"`
-	Body      SnapshotNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]        `path:"account_id" api:"required"`
+	Body      SnapshotNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -147,7 +147,7 @@ type SnapshotNewParamsBodyUnion interface {
 type SnapshotNewParamsBodyObject struct {
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
 	// `url` must be set.
-	HTML param.Field[string] `json:"html,required"`
+	HTML param.Field[string] `json:"html" api:"required"`
 	// The maximum duration allowed for the browser action to complete after the page
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
@@ -249,8 +249,8 @@ func (r SnapshotNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 
 // Provide credentials for HTTP authentication.
 type SnapshotNewParamsBodyObjectAuthenticate struct {
-	Password param.Field[string] `json:"password,required"`
-	Username param.Field[string] `json:"username,required"`
+	Password param.Field[string] `json:"password" api:"required"`
+	Username param.Field[string] `json:"username" api:"required"`
 }
 
 func (r SnapshotNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
@@ -258,8 +258,9 @@ func (r SnapshotNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err
 }
 
 type SnapshotNewParamsBodyObjectCookie struct {
-	Name         param.Field[string]                                         `json:"name,required"`
-	Value        param.Field[string]                                         `json:"value,required"`
+	// Cookie name.
+	Name         param.Field[string]                                         `json:"name" api:"required"`
+	Value        param.Field[string]                                         `json:"value" api:"required"`
 	Domain       param.Field[string]                                         `json:"domain"`
 	Expires      param.Field[float64]                                        `json:"expires"`
 	HTTPOnly     param.Field[bool]                                           `json:"httpOnly"`
@@ -434,10 +435,10 @@ func (r SnapshotNewParamsBodyObjectScreenshotOptions) MarshalJSON() (data []byte
 }
 
 type SnapshotNewParamsBodyObjectScreenshotOptionsClip struct {
-	Height param.Field[float64] `json:"height,required"`
-	Width  param.Field[float64] `json:"width,required"`
-	X      param.Field[float64] `json:"x,required"`
-	Y      param.Field[float64] `json:"y,required"`
+	Height param.Field[float64] `json:"height" api:"required"`
+	Width  param.Field[float64] `json:"width" api:"required"`
+	X      param.Field[float64] `json:"x" api:"required"`
+	Y      param.Field[float64] `json:"y" api:"required"`
 	Scale  param.Field[float64] `json:"scale"`
 }
 
@@ -463,8 +464,8 @@ func (r SnapshotNewParamsBodyObjectScreenshotOptionsType) IsKnown() bool {
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
 type SnapshotNewParamsBodyObjectViewport struct {
-	Height            param.Field[float64] `json:"height,required"`
-	Width             param.Field[float64] `json:"width,required"`
+	Height            param.Field[float64] `json:"height" api:"required"`
+	Width             param.Field[float64] `json:"width" api:"required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
 	HasTouch          param.Field[bool]    `json:"hasTouch"`
 	IsLandscape       param.Field[bool]    `json:"isLandscape"`
@@ -478,7 +479,7 @@ func (r SnapshotNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err err
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
 type SnapshotNewParamsBodyObjectWaitForSelector struct {
-	Selector param.Field[string]                                            `json:"selector,required"`
+	Selector param.Field[string]                                            `json:"selector" api:"required"`
 	Hidden   param.Field[SnapshotNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
 	Timeout  param.Field[float64]                                           `json:"timeout"`
 	Visible  param.Field[SnapshotNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
@@ -517,9 +518,9 @@ func (r SnapshotNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 }
 
 type SnapshotNewResponseEnvelope struct {
-	Meta SnapshotNewResponseEnvelopeMeta `json:"meta,required"`
-	// Response status
-	Success bool                                `json:"success,required"`
+	Meta SnapshotNewResponseEnvelopeMeta `json:"meta" api:"required"`
+	// Response status.
+	Success bool                                `json:"success" api:"required"`
 	Errors  []SnapshotNewResponseEnvelopeErrors `json:"errors"`
 	Result  SnapshotNewResponse                 `json:"result"`
 	JSON    snapshotNewResponseEnvelopeJSON     `json:"-"`
@@ -568,10 +569,10 @@ func (r snapshotNewResponseEnvelopeMetaJSON) RawJSON() string {
 }
 
 type SnapshotNewResponseEnvelopeErrors struct {
-	// Error code
-	Code float64 `json:"code,required"`
-	// Error Message
-	Message string                                `json:"message,required"`
+	// Error code.
+	Code float64 `json:"code" api:"required"`
+	// Error message.
+	Message string                                `json:"message" api:"required"`
 	JSON    snapshotNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 

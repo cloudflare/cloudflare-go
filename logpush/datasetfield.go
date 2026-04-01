@@ -60,10 +60,10 @@ func (r *DatasetFieldService) Get(ctx context.Context, datasetID DatasetFieldGet
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%v/fields", accountOrZone, accountOrZoneID, datasetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DatasetFieldGetResponse = interface{}
@@ -99,6 +99,7 @@ const (
 	DatasetFieldGetParamsDatasetIDHTTPRequests             DatasetFieldGetParamsDatasetID = "http_requests"
 	DatasetFieldGetParamsDatasetIDIPSECLogs                DatasetFieldGetParamsDatasetID = "ipsec_logs"
 	DatasetFieldGetParamsDatasetIDMagicIDsDetections       DatasetFieldGetParamsDatasetID = "magic_ids_detections"
+	DatasetFieldGetParamsDatasetIDMcpPortalLogs            DatasetFieldGetParamsDatasetID = "mcp_portal_logs"
 	DatasetFieldGetParamsDatasetIDNELReports               DatasetFieldGetParamsDatasetID = "nel_reports"
 	DatasetFieldGetParamsDatasetIDNetworkAnalyticsLogs     DatasetFieldGetParamsDatasetID = "network_analytics_logs"
 	DatasetFieldGetParamsDatasetIDPageShieldEvents         DatasetFieldGetParamsDatasetID = "page_shield_events"
@@ -114,17 +115,17 @@ const (
 
 func (r DatasetFieldGetParamsDatasetID) IsKnown() bool {
 	switch r {
-	case DatasetFieldGetParamsDatasetIDAccessRequests, DatasetFieldGetParamsDatasetIDAuditLogs, DatasetFieldGetParamsDatasetIDAuditLogsV2, DatasetFieldGetParamsDatasetIDBISOUserActions, DatasetFieldGetParamsDatasetIDCasbFindings, DatasetFieldGetParamsDatasetIDDevicePostureResults, DatasetFieldGetParamsDatasetIDDEXApplicationTests, DatasetFieldGetParamsDatasetIDDEXDeviceStateEvents, DatasetFieldGetParamsDatasetIDDLPForensicCopies, DatasetFieldGetParamsDatasetIDDNSFirewallLogs, DatasetFieldGetParamsDatasetIDDNSLogs, DatasetFieldGetParamsDatasetIDEmailSecurityAlerts, DatasetFieldGetParamsDatasetIDFirewallEvents, DatasetFieldGetParamsDatasetIDGatewayDNS, DatasetFieldGetParamsDatasetIDGatewayHTTP, DatasetFieldGetParamsDatasetIDGatewayNetwork, DatasetFieldGetParamsDatasetIDHTTPRequests, DatasetFieldGetParamsDatasetIDIPSECLogs, DatasetFieldGetParamsDatasetIDMagicIDsDetections, DatasetFieldGetParamsDatasetIDNELReports, DatasetFieldGetParamsDatasetIDNetworkAnalyticsLogs, DatasetFieldGetParamsDatasetIDPageShieldEvents, DatasetFieldGetParamsDatasetIDSinkholeHTTPLogs, DatasetFieldGetParamsDatasetIDSpectrumEvents, DatasetFieldGetParamsDatasetIDSSHLogs, DatasetFieldGetParamsDatasetIDWARPConfigChanges, DatasetFieldGetParamsDatasetIDWARPToggleChanges, DatasetFieldGetParamsDatasetIDWorkersTraceEvents, DatasetFieldGetParamsDatasetIDZarazEvents, DatasetFieldGetParamsDatasetIDZeroTrustNetworkSessions:
+	case DatasetFieldGetParamsDatasetIDAccessRequests, DatasetFieldGetParamsDatasetIDAuditLogs, DatasetFieldGetParamsDatasetIDAuditLogsV2, DatasetFieldGetParamsDatasetIDBISOUserActions, DatasetFieldGetParamsDatasetIDCasbFindings, DatasetFieldGetParamsDatasetIDDevicePostureResults, DatasetFieldGetParamsDatasetIDDEXApplicationTests, DatasetFieldGetParamsDatasetIDDEXDeviceStateEvents, DatasetFieldGetParamsDatasetIDDLPForensicCopies, DatasetFieldGetParamsDatasetIDDNSFirewallLogs, DatasetFieldGetParamsDatasetIDDNSLogs, DatasetFieldGetParamsDatasetIDEmailSecurityAlerts, DatasetFieldGetParamsDatasetIDFirewallEvents, DatasetFieldGetParamsDatasetIDGatewayDNS, DatasetFieldGetParamsDatasetIDGatewayHTTP, DatasetFieldGetParamsDatasetIDGatewayNetwork, DatasetFieldGetParamsDatasetIDHTTPRequests, DatasetFieldGetParamsDatasetIDIPSECLogs, DatasetFieldGetParamsDatasetIDMagicIDsDetections, DatasetFieldGetParamsDatasetIDMcpPortalLogs, DatasetFieldGetParamsDatasetIDNELReports, DatasetFieldGetParamsDatasetIDNetworkAnalyticsLogs, DatasetFieldGetParamsDatasetIDPageShieldEvents, DatasetFieldGetParamsDatasetIDSinkholeHTTPLogs, DatasetFieldGetParamsDatasetIDSpectrumEvents, DatasetFieldGetParamsDatasetIDSSHLogs, DatasetFieldGetParamsDatasetIDWARPConfigChanges, DatasetFieldGetParamsDatasetIDWARPToggleChanges, DatasetFieldGetParamsDatasetIDWorkersTraceEvents, DatasetFieldGetParamsDatasetIDZarazEvents, DatasetFieldGetParamsDatasetIDZeroTrustNetworkSessions:
 		return true
 	}
 	return false
 }
 
 type DatasetFieldGetResponseEnvelope struct {
-	Errors   []DatasetFieldGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DatasetFieldGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DatasetFieldGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DatasetFieldGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DatasetFieldGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DatasetFieldGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DatasetFieldGetResponse                `json:"result"`
 	JSON    datasetFieldGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -149,8 +150,8 @@ func (r datasetFieldGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetFieldGetResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           DatasetFieldGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             datasetFieldGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -197,8 +198,8 @@ func (r datasetFieldGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DatasetFieldGetResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           DatasetFieldGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             datasetFieldGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -45,7 +45,7 @@ func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/dns", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -125,7 +125,7 @@ func (r dnsReverseRecordJSON) RawJSON() string {
 
 type DNSListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	IPV4      param.Field[string] `query:"ipv4"`
 	// Requested page within paginated list of results.
 	Page param.Field[float64] `query:"page"`

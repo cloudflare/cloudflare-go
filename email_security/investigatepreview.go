@@ -42,15 +42,15 @@ func (r *InvestigatePreviewService) New(ctx context.Context, params InvestigateP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/preview", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns a preview of the message body as a base64 encoded PNG image for
@@ -60,24 +60,24 @@ func (r *InvestigatePreviewService) Get(ctx context.Context, postfixID string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if postfixID == "" {
 		err = errors.New("missing required postfix_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/preview", query.AccountID, postfixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InvestigatePreviewNewResponse struct {
 	// A base64 encoded PNG image of the email.
-	Screenshot string                            `json:"screenshot,required"`
+	Screenshot string                            `json:"screenshot" api:"required"`
 	JSON       investigatePreviewNewResponseJSON `json:"-"`
 }
 
@@ -99,7 +99,7 @@ func (r investigatePreviewNewResponseJSON) RawJSON() string {
 
 type InvestigatePreviewGetResponse struct {
 	// A base64 encoded PNG image of the email.
-	Screenshot string                            `json:"screenshot,required"`
+	Screenshot string                            `json:"screenshot" api:"required"`
 	JSON       investigatePreviewGetResponseJSON `json:"-"`
 }
 
@@ -121,9 +121,9 @@ func (r investigatePreviewGetResponseJSON) RawJSON() string {
 
 type InvestigatePreviewNewParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The identifier of the message.
-	PostfixID param.Field[string] `json:"postfix_id,required"`
+	PostfixID param.Field[string] `json:"postfix_id" api:"required"`
 }
 
 func (r InvestigatePreviewNewParams) MarshalJSON() (data []byte, err error) {
@@ -131,10 +131,10 @@ func (r InvestigatePreviewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InvestigatePreviewNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   InvestigatePreviewNewResponse             `json:"result,required"`
-	Success  bool                                      `json:"success,required"`
+	Errors   []shared.ResponseInfo                     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                     `json:"messages" api:"required"`
+	Result   InvestigatePreviewNewResponse             `json:"result" api:"required"`
+	Success  bool                                      `json:"success" api:"required"`
 	JSON     investigatePreviewNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -159,14 +159,14 @@ func (r investigatePreviewNewResponseEnvelopeJSON) RawJSON() string {
 
 type InvestigatePreviewGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InvestigatePreviewGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   InvestigatePreviewGetResponse             `json:"result,required"`
-	Success  bool                                      `json:"success,required"`
+	Errors   []shared.ResponseInfo                     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                     `json:"messages" api:"required"`
+	Result   InvestigatePreviewGetResponse             `json:"result" api:"required"`
+	Success  bool                                      `json:"success" api:"required"`
 	JSON     investigatePreviewGetResponseEnvelopeJSON `json:"-"`
 }
 

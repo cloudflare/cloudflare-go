@@ -53,23 +53,23 @@ func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	if keyName == "" {
 		err = errors.New("missing required key_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", params.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Remove a KV pair from the namespace. Use URL-encoding to use special characters
@@ -79,23 +79,23 @@ func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	if keyName == "" {
 		err = errors.New("missing required key_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", body.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the value associated with the given key in the given namespace. Use
@@ -108,19 +108,19 @@ func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, key
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if namespaceID == "" {
 		err = errors.New("missing required namespace_id parameter")
-		return
+		return nil, err
 	}
 	if keyName == "" {
 		err = errors.New("missing required key_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", query.AccountID, namespaceID, keyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type NamespaceValueUpdateResponse struct {
@@ -163,9 +163,9 @@ func (r namespaceValueDeleteResponseJSON) RawJSON() string {
 
 type NamespaceValueUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
-	Value param.Field[NamespaceValueUpdateParamsValueUnion] `json:"value,required" format:"binary"`
+	Value param.Field[NamespaceValueUpdateParamsValueUnion] `json:"value" api:"required" format:"binary"`
 	// Expires the key at a certain time, measured in number of seconds since the UNIX
 	// epoch.
 	Expiration param.Field[float64] `query:"expiration"`
@@ -207,11 +207,11 @@ type NamespaceValueUpdateParamsValueUnion interface {
 }
 
 type NamespaceValueUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success NamespaceValueUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceValueUpdateResponse                `json:"result,nullable"`
+	Success NamespaceValueUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  NamespaceValueUpdateResponse                `json:"result" api:"nullable"`
 	JSON    namespaceValueUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -251,15 +251,15 @@ func (r NamespaceValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceValueDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NamespaceValueDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success NamespaceValueDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceValueDeleteResponse                `json:"result,nullable"`
+	Success NamespaceValueDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  NamespaceValueDeleteResponse                `json:"result" api:"nullable"`
 	JSON    namespaceValueDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -299,5 +299,5 @@ func (r NamespaceValueDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceValueGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

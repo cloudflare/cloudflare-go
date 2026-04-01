@@ -79,7 +79,7 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -123,19 +123,19 @@ func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if deviceID == "" {
 		err = errors.New("missing required device_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/%s", query.AccountID, deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Device struct {
@@ -394,19 +394,19 @@ func (r deviceGetResponseUserJSON) RawJSON() string {
 }
 
 type DeviceListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DeviceGetResponse     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DeviceGetResponse     `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DeviceGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    deviceGetResponseEnvelopeJSON    `json:"-"`
 }
 

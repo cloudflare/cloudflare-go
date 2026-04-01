@@ -42,15 +42,15 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get whether zone-level authenticated origin pulls is enabled or not. It is false
@@ -60,15 +60,15 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingUpdateResponse struct {
@@ -117,9 +117,9 @@ func (r settingGetResponseJSON) RawJSON() string {
 
 type SettingUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Indicates whether zone-level authenticated origin pulls is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -127,10 +127,10 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Errors   []SettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingUpdateResponse                `json:"result"`
 	JSON    settingUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -155,8 +155,8 @@ func (r settingUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingUpdateResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           SettingUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -203,8 +203,8 @@ func (r settingUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingUpdateResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           SettingUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -267,14 +267,14 @@ func (r SettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SettingGetResponseEnvelope struct {
-	Errors   []SettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingGetResponse                `json:"result"`
 	JSON    settingGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -299,8 +299,8 @@ func (r settingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           SettingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -347,8 +347,8 @@ func (r settingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           SettingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -43,15 +43,15 @@ func (r *ResourceGroupService) New(ctx context.Context, params ResourceGroupNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify an existing resource group.
@@ -60,19 +60,19 @@ func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if resourceGroupID == "" {
 		err = errors.New("missing required resource_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups/%s", params.AccountID, resourceGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all the resource groups for an account.
@@ -82,7 +82,7 @@ func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupLis
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -108,19 +108,19 @@ func (r *ResourceGroupService) Delete(ctx context.Context, resourceGroupID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if resourceGroupID == "" {
 		err = errors.New("missing required resource_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups/%s", body.AccountID, resourceGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information about a specific resource group in an account.
@@ -129,27 +129,27 @@ func (r *ResourceGroupService) Get(ctx context.Context, resourceGroupID string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if resourceGroupID == "" {
 		err = errors.New("missing required resource_group_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/resource_groups/%s", query.AccountID, resourceGroupID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A group of scoped resources.
 type ResourceGroupNewResponse struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []ResourceGroupNewResponseScope `json:"scope,required"`
+	Scope []ResourceGroupNewResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupNewResponseMeta `json:"meta"`
 	// Name of the resource group.
@@ -180,9 +180,9 @@ func (r resourceGroupNewResponseJSON) RawJSON() string {
 type ResourceGroupNewResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []ResourceGroupNewResponseScopeObject `json:"objects,required"`
+	Objects []ResourceGroupNewResponseScopeObject `json:"objects" api:"required"`
 	JSON    resourceGroupNewResponseScopeJSON     `json:"-"`
 }
 
@@ -208,7 +208,7 @@ func (r resourceGroupNewResponseScopeJSON) RawJSON() string {
 type ResourceGroupNewResponseScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                  `json:"key,required"`
+	Key  string                                  `json:"key" api:"required"`
 	JSON resourceGroupNewResponseScopeObjectJSON `json:"-"`
 }
 
@@ -255,9 +255,9 @@ func (r resourceGroupNewResponseMetaJSON) RawJSON() string {
 // A group of scoped resources.
 type ResourceGroupUpdateResponse struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []ResourceGroupUpdateResponseScope `json:"scope,required"`
+	Scope []ResourceGroupUpdateResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupUpdateResponseMeta `json:"meta"`
 	// Name of the resource group.
@@ -288,9 +288,9 @@ func (r resourceGroupUpdateResponseJSON) RawJSON() string {
 type ResourceGroupUpdateResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []ResourceGroupUpdateResponseScopeObject `json:"objects,required"`
+	Objects []ResourceGroupUpdateResponseScopeObject `json:"objects" api:"required"`
 	JSON    resourceGroupUpdateResponseScopeJSON     `json:"-"`
 }
 
@@ -316,7 +316,7 @@ func (r resourceGroupUpdateResponseScopeJSON) RawJSON() string {
 type ResourceGroupUpdateResponseScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                     `json:"key,required"`
+	Key  string                                     `json:"key" api:"required"`
 	JSON resourceGroupUpdateResponseScopeObjectJSON `json:"-"`
 }
 
@@ -363,9 +363,9 @@ func (r resourceGroupUpdateResponseMetaJSON) RawJSON() string {
 // A group of scoped resources.
 type ResourceGroupListResponse struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []ResourceGroupListResponseScope `json:"scope,required"`
+	Scope []ResourceGroupListResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupListResponseMeta `json:"meta"`
 	// Name of the resource group.
@@ -396,9 +396,9 @@ func (r resourceGroupListResponseJSON) RawJSON() string {
 type ResourceGroupListResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []ResourceGroupListResponseScopeObject `json:"objects,required"`
+	Objects []ResourceGroupListResponseScopeObject `json:"objects" api:"required"`
 	JSON    resourceGroupListResponseScopeJSON     `json:"-"`
 }
 
@@ -424,7 +424,7 @@ func (r resourceGroupListResponseScopeJSON) RawJSON() string {
 type ResourceGroupListResponseScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                   `json:"key,required"`
+	Key  string                                   `json:"key" api:"required"`
 	JSON resourceGroupListResponseScopeObjectJSON `json:"-"`
 }
 
@@ -470,7 +470,7 @@ func (r resourceGroupListResponseMetaJSON) RawJSON() string {
 
 type ResourceGroupDeleteResponse struct {
 	// Identifier
-	ID   string                          `json:"id,required"`
+	ID   string                          `json:"id" api:"required"`
 	JSON resourceGroupDeleteResponseJSON `json:"-"`
 }
 
@@ -493,9 +493,9 @@ func (r resourceGroupDeleteResponseJSON) RawJSON() string {
 // A group of scoped resources.
 type ResourceGroupGetResponse struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []ResourceGroupGetResponseScope `json:"scope,required"`
+	Scope []ResourceGroupGetResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupGetResponseMeta `json:"meta"`
 	// Name of the resource group.
@@ -526,9 +526,9 @@ func (r resourceGroupGetResponseJSON) RawJSON() string {
 type ResourceGroupGetResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []ResourceGroupGetResponseScopeObject `json:"objects,required"`
+	Objects []ResourceGroupGetResponseScopeObject `json:"objects" api:"required"`
 	JSON    resourceGroupGetResponseScopeJSON     `json:"-"`
 }
 
@@ -554,7 +554,7 @@ func (r resourceGroupGetResponseScopeJSON) RawJSON() string {
 type ResourceGroupGetResponseScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                  `json:"key,required"`
+	Key  string                                  `json:"key" api:"required"`
 	JSON resourceGroupGetResponseScopeObjectJSON `json:"-"`
 }
 
@@ -600,11 +600,11 @@ func (r resourceGroupGetResponseMetaJSON) RawJSON() string {
 
 type ResourceGroupNewParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the resource group
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// A scope is a combination of scope objects which provides additional context.
-	Scope param.Field[ResourceGroupNewParamsScope] `json:"scope,required"`
+	Scope param.Field[ResourceGroupNewParamsScope] `json:"scope" api:"required"`
 }
 
 func (r ResourceGroupNewParams) MarshalJSON() (data []byte, err error) {
@@ -615,10 +615,10 @@ func (r ResourceGroupNewParams) MarshalJSON() (data []byte, err error) {
 type ResourceGroupNewParamsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key param.Field[string] `json:"key,required"`
+	Key param.Field[string] `json:"key" api:"required"`
 	// A list of scope objects for additional context. The number of Scope objects
 	// should not be zero.
-	Objects param.Field[[]ResourceGroupNewParamsScopeObject] `json:"objects,required"`
+	Objects param.Field[[]ResourceGroupNewParamsScopeObject] `json:"objects" api:"required"`
 }
 
 func (r ResourceGroupNewParamsScope) MarshalJSON() (data []byte, err error) {
@@ -630,7 +630,7 @@ func (r ResourceGroupNewParamsScope) MarshalJSON() (data []byte, err error) {
 type ResourceGroupNewParamsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key param.Field[string] `json:"key,required"`
+	Key param.Field[string] `json:"key" api:"required"`
 }
 
 func (r ResourceGroupNewParamsScopeObject) MarshalJSON() (data []byte, err error) {
@@ -638,10 +638,10 @@ func (r ResourceGroupNewParamsScopeObject) MarshalJSON() (data []byte, err error
 }
 
 type ResourceGroupNewResponseEnvelope struct {
-	Errors   []ResourceGroupNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ResourceGroupNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ResourceGroupNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ResourceGroupNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ResourceGroupNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ResourceGroupNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A group of scoped resources.
 	Result ResourceGroupNewResponse             `json:"result"`
 	JSON   resourceGroupNewResponseEnvelopeJSON `json:"-"`
@@ -667,8 +667,8 @@ func (r resourceGroupNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ResourceGroupNewResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ResourceGroupNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             resourceGroupNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -715,8 +715,8 @@ func (r resourceGroupNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ResourceGroupNewResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ResourceGroupNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             resourceGroupNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -779,7 +779,7 @@ func (r ResourceGroupNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ResourceGroupUpdateParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the resource group
 	Name param.Field[string] `json:"name"`
 	// A scope is a combination of scope objects which provides additional context.
@@ -794,10 +794,10 @@ func (r ResourceGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 type ResourceGroupUpdateParamsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key param.Field[string] `json:"key,required"`
+	Key param.Field[string] `json:"key" api:"required"`
 	// A list of scope objects for additional context. The number of Scope objects
 	// should not be zero.
-	Objects param.Field[[]ResourceGroupUpdateParamsScopeObject] `json:"objects,required"`
+	Objects param.Field[[]ResourceGroupUpdateParamsScopeObject] `json:"objects" api:"required"`
 }
 
 func (r ResourceGroupUpdateParamsScope) MarshalJSON() (data []byte, err error) {
@@ -809,7 +809,7 @@ func (r ResourceGroupUpdateParamsScope) MarshalJSON() (data []byte, err error) {
 type ResourceGroupUpdateParamsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key param.Field[string] `json:"key,required"`
+	Key param.Field[string] `json:"key" api:"required"`
 }
 
 func (r ResourceGroupUpdateParamsScopeObject) MarshalJSON() (data []byte, err error) {
@@ -817,10 +817,10 @@ func (r ResourceGroupUpdateParamsScopeObject) MarshalJSON() (data []byte, err er
 }
 
 type ResourceGroupUpdateResponseEnvelope struct {
-	Errors   []ResourceGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ResourceGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ResourceGroupUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ResourceGroupUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ResourceGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ResourceGroupUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A group of scoped resources.
 	Result ResourceGroupUpdateResponse             `json:"result"`
 	JSON   resourceGroupUpdateResponseEnvelopeJSON `json:"-"`
@@ -846,8 +846,8 @@ func (r resourceGroupUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ResourceGroupUpdateResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ResourceGroupUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             resourceGroupUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -894,8 +894,8 @@ func (r resourceGroupUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ResourceGroupUpdateResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ResourceGroupUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             resourceGroupUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -958,7 +958,7 @@ func (r ResourceGroupUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ResourceGroupListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the resource group to be fetched.
 	ID param.Field[string] `query:"id"`
 	// Name of the resource group to be fetched.
@@ -976,15 +976,15 @@ func (r ResourceGroupListParams) URLQuery() (v url.Values) {
 
 type ResourceGroupDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ResourceGroupDeleteResponseEnvelope struct {
-	Errors   []ResourceGroupDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ResourceGroupDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ResourceGroupDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ResourceGroupDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ResourceGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  ResourceGroupDeleteResponse                `json:"result,nullable"`
+	Success ResourceGroupDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ResourceGroupDeleteResponse                `json:"result" api:"nullable"`
 	JSON    resourceGroupDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1008,8 +1008,8 @@ func (r resourceGroupDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ResourceGroupDeleteResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ResourceGroupDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             resourceGroupDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1056,8 +1056,8 @@ func (r resourceGroupDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ResourceGroupDeleteResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ResourceGroupDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             resourceGroupDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1120,14 +1120,14 @@ func (r ResourceGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ResourceGroupGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ResourceGroupGetResponseEnvelope struct {
-	Errors   []ResourceGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ResourceGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ResourceGroupGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ResourceGroupGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ResourceGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ResourceGroupGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A group of scoped resources.
 	Result ResourceGroupGetResponse             `json:"result"`
 	JSON   resourceGroupGetResponseEnvelopeJSON `json:"-"`
@@ -1153,8 +1153,8 @@ func (r resourceGroupGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ResourceGroupGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ResourceGroupGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             resourceGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1201,8 +1201,8 @@ func (r resourceGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ResourceGroupGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ResourceGroupGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             resourceGroupGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -42,24 +42,24 @@ func (r *ConnectorEventLatestService) List(ctx context.Context, connectorID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/events/latest", query.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConnectorEventLatestListResponse struct {
-	Count float64                                `json:"count,required"`
-	Items []ConnectorEventLatestListResponseItem `json:"items,required"`
+	Count float64                                `json:"count" api:"required"`
+	Items []ConnectorEventLatestListResponseItem `json:"items" api:"required"`
 	JSON  connectorEventLatestListResponseJSON   `json:"-"`
 }
 
@@ -82,11 +82,13 @@ func (r connectorEventLatestListResponseJSON) RawJSON() string {
 
 // Recorded Event
 type ConnectorEventLatestListResponseItem struct {
-	E ConnectorEventLatestListResponseItemsE `json:"e,required"`
+	E ConnectorEventLatestListResponseItemsE `json:"e" api:"required"`
 	// Sequence number, used to order events with the same timestamp
-	N float64 `json:"n,required"`
+	N float64 `json:"n" api:"required"`
 	// Time the Event was recorded (seconds since the Unix epoch)
-	T    float64                                  `json:"t,required"`
+	T float64 `json:"t" api:"required"`
+	// Version
+	V    string                                   `json:"v"`
 	JSON connectorEventLatestListResponseItemJSON `json:"-"`
 }
 
@@ -96,6 +98,7 @@ type connectorEventLatestListResponseItemJSON struct {
 	E           apijson.Field
 	N           apijson.Field
 	T           apijson.Field
+	V           apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -110,7 +113,7 @@ func (r connectorEventLatestListResponseItemJSON) RawJSON() string {
 
 type ConnectorEventLatestListResponseItemsE struct {
 	// Initialized process
-	K ConnectorEventLatestListResponseItemsEK `json:"k,required"`
+	K ConnectorEventLatestListResponseItemsEK `json:"k" api:"required"`
 	// Location of upgrade bundle
 	URL   string                                     `json:"url"`
 	JSON  connectorEventLatestListResponseItemsEJSON `json:"-"`
@@ -272,7 +275,7 @@ func init() {
 
 type ConnectorEventLatestListResponseItemsEInit struct {
 	// Initialized process
-	K    ConnectorEventLatestListResponseItemsEInitK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEInitK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEInitJSON `json:"-"`
 }
 
@@ -312,7 +315,7 @@ func (r ConnectorEventLatestListResponseItemsEInitK) IsKnown() bool {
 
 type ConnectorEventLatestListResponseItemsELeave struct {
 	// Stopped process
-	K    ConnectorEventLatestListResponseItemsELeaveK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsELeaveK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsELeaveJSON `json:"-"`
 }
 
@@ -352,7 +355,7 @@ func (r ConnectorEventLatestListResponseItemsELeaveK) IsKnown() bool {
 
 type ConnectorEventLatestListResponseItemsEStartAttestation struct {
 	// Started attestation
-	K    ConnectorEventLatestListResponseItemsEStartAttestationK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEStartAttestationK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEStartAttestationJSON `json:"-"`
 }
 
@@ -392,7 +395,7 @@ func (r ConnectorEventLatestListResponseItemsEStartAttestationK) IsKnown() bool 
 
 type ConnectorEventLatestListResponseItemsEFinishAttestationSuccess struct {
 	// Finished attestation
-	K    ConnectorEventLatestListResponseItemsEFinishAttestationSuccessK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishAttestationSuccessK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishAttestationSuccessJSON `json:"-"`
 }
 
@@ -433,7 +436,7 @@ func (r ConnectorEventLatestListResponseItemsEFinishAttestationSuccessK) IsKnown
 
 type ConnectorEventLatestListResponseItemsEFinishAttestationFailure struct {
 	// Failed attestation
-	K    ConnectorEventLatestListResponseItemsEFinishAttestationFailureK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishAttestationFailureK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishAttestationFailureJSON `json:"-"`
 }
 
@@ -474,7 +477,7 @@ func (r ConnectorEventLatestListResponseItemsEFinishAttestationFailureK) IsKnown
 
 type ConnectorEventLatestListResponseItemsEStartRotateCryptKey struct {
 	// Started crypt key rotation
-	K    ConnectorEventLatestListResponseItemsEStartRotateCryptKeyK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEStartRotateCryptKeyK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEStartRotateCryptKeyJSON `json:"-"`
 }
 
@@ -515,7 +518,7 @@ func (r ConnectorEventLatestListResponseItemsEStartRotateCryptKeyK) IsKnown() bo
 
 type ConnectorEventLatestListResponseItemsEFinishRotateCryptKeySuccess struct {
 	// Finished crypt key rotation
-	K    ConnectorEventLatestListResponseItemsEFinishRotateCryptKeySuccessK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishRotateCryptKeySuccessK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishRotateCryptKeySuccessJSON `json:"-"`
 }
 
@@ -556,7 +559,7 @@ func (r ConnectorEventLatestListResponseItemsEFinishRotateCryptKeySuccessK) IsKn
 
 type ConnectorEventLatestListResponseItemsEFinishRotateCryptKeyFailure struct {
 	// Failed crypt key rotation
-	K    ConnectorEventLatestListResponseItemsEFinishRotateCryptKeyFailureK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishRotateCryptKeyFailureK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishRotateCryptKeyFailureJSON `json:"-"`
 }
 
@@ -597,7 +600,7 @@ func (r ConnectorEventLatestListResponseItemsEFinishRotateCryptKeyFailureK) IsKn
 
 type ConnectorEventLatestListResponseItemsEStartRotatePki struct {
 	// Started PKI rotation
-	K    ConnectorEventLatestListResponseItemsEStartRotatePkiK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEStartRotatePkiK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEStartRotatePkiJSON `json:"-"`
 }
 
@@ -637,7 +640,7 @@ func (r ConnectorEventLatestListResponseItemsEStartRotatePkiK) IsKnown() bool {
 
 type ConnectorEventLatestListResponseItemsEFinishRotatePkiSuccess struct {
 	// Finished PKI rotation
-	K    ConnectorEventLatestListResponseItemsEFinishRotatePkiSuccessK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishRotatePkiSuccessK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishRotatePkiSuccessJSON `json:"-"`
 }
 
@@ -678,7 +681,7 @@ func (r ConnectorEventLatestListResponseItemsEFinishRotatePkiSuccessK) IsKnown()
 
 type ConnectorEventLatestListResponseItemsEFinishRotatePkiFailure struct {
 	// Failed PKI rotation
-	K    ConnectorEventLatestListResponseItemsEFinishRotatePkiFailureK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishRotatePkiFailureK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishRotatePkiFailureJSON `json:"-"`
 }
 
@@ -719,9 +722,9 @@ func (r ConnectorEventLatestListResponseItemsEFinishRotatePkiFailureK) IsKnown()
 
 type ConnectorEventLatestListResponseItemsEStartUpgrade struct {
 	// Started upgrade
-	K ConnectorEventLatestListResponseItemsEStartUpgradeK `json:"k,required"`
+	K ConnectorEventLatestListResponseItemsEStartUpgradeK `json:"k" api:"required"`
 	// Location of upgrade bundle
-	URL  string                                                 `json:"url,required"`
+	URL  string                                                 `json:"url" api:"required"`
 	JSON connectorEventLatestListResponseItemsEStartUpgradeJSON `json:"-"`
 }
 
@@ -762,7 +765,7 @@ func (r ConnectorEventLatestListResponseItemsEStartUpgradeK) IsKnown() bool {
 
 type ConnectorEventLatestListResponseItemsEFinishUpgradeSuccess struct {
 	// Finished upgrade
-	K    ConnectorEventLatestListResponseItemsEFinishUpgradeSuccessK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishUpgradeSuccessK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishUpgradeSuccessJSON `json:"-"`
 }
 
@@ -803,7 +806,7 @@ func (r ConnectorEventLatestListResponseItemsEFinishUpgradeSuccessK) IsKnown() b
 
 type ConnectorEventLatestListResponseItemsEFinishUpgradeFailure struct {
 	// Failed upgrade
-	K    ConnectorEventLatestListResponseItemsEFinishUpgradeFailureK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEFinishUpgradeFailureK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEFinishUpgradeFailureJSON `json:"-"`
 }
 
@@ -844,7 +847,7 @@ func (r ConnectorEventLatestListResponseItemsEFinishUpgradeFailureK) IsKnown() b
 
 type ConnectorEventLatestListResponseItemsEReconcile struct {
 	// Reconciled
-	K    ConnectorEventLatestListResponseItemsEReconcileK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEReconcileK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEReconcileJSON `json:"-"`
 }
 
@@ -884,7 +887,7 @@ func (r ConnectorEventLatestListResponseItemsEReconcileK) IsKnown() bool {
 
 type ConnectorEventLatestListResponseItemsEConfigureCloudflaredTunnel struct {
 	// Configured Cloudflared tunnel
-	K    ConnectorEventLatestListResponseItemsEConfigureCloudflaredTunnelK    `json:"k,required"`
+	K    ConnectorEventLatestListResponseItemsEConfigureCloudflaredTunnelK    `json:"k" api:"required"`
 	JSON connectorEventLatestListResponseItemsEConfigureCloudflaredTunnelJSON `json:"-"`
 }
 
@@ -955,12 +958,12 @@ func (r ConnectorEventLatestListResponseItemsEK) IsKnown() bool {
 
 type ConnectorEventLatestListParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConnectorEventLatestListResponseEnvelope struct {
-	Result   ConnectorEventLatestListResponse                   `json:"result,required"`
-	Success  bool                                               `json:"success,required"`
+	Result   ConnectorEventLatestListResponse                   `json:"result" api:"required"`
+	Success  bool                                               `json:"success" api:"required"`
 	Errors   []ConnectorEventLatestListResponseEnvelopeErrors   `json:"errors"`
 	Messages []ConnectorEventLatestListResponseEnvelopeMessages `json:"messages"`
 	JSON     connectorEventLatestListResponseEnvelopeJSON       `json:"-"`
@@ -986,8 +989,8 @@ func (r connectorEventLatestListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorEventLatestListResponseEnvelopeErrors struct {
-	Code    float64                                            `json:"code,required"`
-	Message string                                             `json:"message,required"`
+	Code    float64                                            `json:"code" api:"required"`
+	Message string                                             `json:"message" api:"required"`
 	JSON    connectorEventLatestListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -1009,8 +1012,8 @@ func (r connectorEventLatestListResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ConnectorEventLatestListResponseEnvelopeMessages struct {
-	Code    float64                                              `json:"code,required"`
-	Message string                                               `json:"message,required"`
+	Code    float64                                              `json:"code" api:"required"`
+	Message string                                               `json:"message" api:"required"`
 	JSON    connectorEventLatestListResponseEnvelopeMessagesJSON `json:"-"`
 }
 

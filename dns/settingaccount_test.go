@@ -25,12 +25,12 @@ func TestSettingAccountEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Settings.Account.Edit(context.TODO(), dns.SettingAccountEditParams{
-		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		EnforceDNSOnly: cloudflare.F(false),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ZoneDefaults: cloudflare.F(dns.SettingAccountEditParamsZoneDefaults{
 			FlattenAllCNAMEs: cloudflare.F(false),
 			FoundationDNS:    cloudflare.F(false),
@@ -75,6 +75,7 @@ func TestSettingAccountGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

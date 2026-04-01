@@ -35,11 +35,11 @@ func NewHyperdriveService(opts ...option.RequestOption) (r *HyperdriveService) {
 
 type Hyperdrive struct {
 	// Define configurations using a unique string identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The name of the Hyperdrive configuration. Used to identify the configuration in
 	// the Cloudflare dashboard and API.
-	Name    string            `json:"name,required"`
-	Origin  HyperdriveOrigin  `json:"origin,required"`
+	Name    string            `json:"name" api:"required"`
+	Origin  HyperdriveOrigin  `json:"origin" api:"required"`
 	Caching HyperdriveCaching `json:"caching"`
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
@@ -48,6 +48,10 @@ type Hyperdrive struct {
 	MTLS       HyperdriveMTLS `json:"mtls"`
 	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
 	// the origin database.
+	//
+	// Maximum allowed: 20 for free tier accounts, 100 for paid tier accounts. If not
+	// specified, defaults to 20 for free tier and 60 for paid tier. Contact Cloudflare
+	// if you need a higher limit.
 	OriginConnectionLimit int64          `json:"origin_connection_limit"`
 	JSON                  hyperdriveJSON `json:"-"`
 }
@@ -76,13 +80,13 @@ func (r hyperdriveJSON) RawJSON() string {
 
 type HyperdriveOrigin struct {
 	// Set the name of your origin database.
-	Database string `json:"database,required"`
+	Database string `json:"database" api:"required"`
 	// Defines the host (hostname or IP) of your origin database.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme HyperdriveOriginScheme `json:"scheme,required"`
+	Scheme HyperdriveOriginScheme `json:"scheme" api:"required"`
 	// Set the user of your origin database.
-	User string `json:"user,required"`
+	User string `json:"user" api:"required"`
 	// Defines the Client ID of the Access token to use when connecting to the origin
 	// database.
 	AccessClientID string `json:"access_client_id"`
@@ -151,16 +155,16 @@ func init() {
 
 type HyperdriveOriginPublicDatabase struct {
 	// Set the name of your origin database.
-	Database string `json:"database,required"`
+	Database string `json:"database" api:"required"`
 	// Defines the host (hostname or IP) of your origin database.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
 	// 3306 for MySQL if not specified.
-	Port int64 `json:"port,required"`
+	Port int64 `json:"port" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme HyperdriveOriginPublicDatabaseScheme `json:"scheme,required"`
+	Scheme HyperdriveOriginPublicDatabaseScheme `json:"scheme" api:"required"`
 	// Set the user of your origin database.
-	User string                             `json:"user,required"`
+	User string                             `json:"user" api:"required"`
 	JSON hyperdriveOriginPublicDatabaseJSON `json:"-"`
 }
 
@@ -206,15 +210,15 @@ func (r HyperdriveOriginPublicDatabaseScheme) IsKnown() bool {
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel struct {
 	// Defines the Client ID of the Access token to use when connecting to the origin
 	// database.
-	AccessClientID string `json:"access_client_id,required"`
+	AccessClientID string `json:"access_client_id" api:"required"`
 	// Set the name of your origin database.
-	Database string `json:"database,required"`
+	Database string `json:"database" api:"required"`
 	// Defines the host (hostname or IP) of your origin database.
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme `json:"scheme,required"`
+	Scheme HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme `json:"scheme" api:"required"`
 	// Set the user of your origin database.
-	User string                                                            `json:"user,required"`
+	User string                                                            `json:"user" api:"required"`
 	JSON hyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelJSON `json:"-"`
 }
 
@@ -428,12 +432,16 @@ func (r hyperdriveMTLSJSON) RawJSON() string {
 type HyperdriveParam struct {
 	// The name of the Hyperdrive configuration. Used to identify the configuration in
 	// the Cloudflare dashboard and API.
-	Name    param.Field[string]                      `json:"name,required"`
-	Origin  param.Field[HyperdriveOriginUnionParam]  `json:"origin,required"`
+	Name    param.Field[string]                      `json:"name" api:"required"`
+	Origin  param.Field[HyperdriveOriginUnionParam]  `json:"origin" api:"required"`
 	Caching param.Field[HyperdriveCachingUnionParam] `json:"caching"`
 	MTLS    param.Field[HyperdriveMTLSParam]         `json:"mtls"`
 	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
 	// the origin database.
+	//
+	// Maximum allowed: 20 for free tier accounts, 100 for paid tier accounts. If not
+	// specified, defaults to 20 for free tier and 60 for paid tier. Contact Cloudflare
+	// if you need a higher limit.
 	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
 }
 
@@ -443,16 +451,16 @@ func (r HyperdriveParam) MarshalJSON() (data []byte, err error) {
 
 type HyperdriveOriginParam struct {
 	// Set the name of your origin database.
-	Database param.Field[string] `json:"database,required"`
+	Database param.Field[string] `json:"database" api:"required"`
 	// Defines the host (hostname or IP) of your origin database.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// Set the password needed to access your origin database. The API never returns
 	// this write-only value.
-	Password param.Field[string] `json:"password,required"`
+	Password param.Field[string] `json:"password" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme param.Field[HyperdriveOriginScheme] `json:"scheme,required"`
+	Scheme param.Field[HyperdriveOriginScheme] `json:"scheme" api:"required"`
 	// Set the user of your origin database.
-	User param.Field[string] `json:"user,required"`
+	User param.Field[string] `json:"user" api:"required"`
 	// Defines the Client ID of the Access token to use when connecting to the origin
 	// database.
 	AccessClientID param.Field[string] `json:"access_client_id"`
@@ -479,19 +487,19 @@ type HyperdriveOriginUnionParam interface {
 
 type HyperdriveOriginPublicDatabaseParam struct {
 	// Set the name of your origin database.
-	Database param.Field[string] `json:"database,required"`
+	Database param.Field[string] `json:"database" api:"required"`
 	// Defines the host (hostname or IP) of your origin database.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// Set the password needed to access your origin database. The API never returns
 	// this write-only value.
-	Password param.Field[string] `json:"password,required"`
+	Password param.Field[string] `json:"password" api:"required"`
 	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
 	// 3306 for MySQL if not specified.
-	Port param.Field[int64] `json:"port,required"`
+	Port param.Field[int64] `json:"port" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme param.Field[HyperdriveOriginPublicDatabaseScheme] `json:"scheme,required"`
+	Scheme param.Field[HyperdriveOriginPublicDatabaseScheme] `json:"scheme" api:"required"`
 	// Set the user of your origin database.
-	User param.Field[string] `json:"user,required"`
+	User param.Field[string] `json:"user" api:"required"`
 }
 
 func (r HyperdriveOriginPublicDatabaseParam) MarshalJSON() (data []byte, err error) {
@@ -503,21 +511,21 @@ func (r HyperdriveOriginPublicDatabaseParam) implementsHyperdriveOriginUnionPara
 type HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam struct {
 	// Defines the Client ID of the Access token to use when connecting to the origin
 	// database.
-	AccessClientID param.Field[string] `json:"access_client_id,required"`
+	AccessClientID param.Field[string] `json:"access_client_id" api:"required"`
 	// Defines the Client Secret of the Access Token to use when connecting to the
 	// origin database. The API never returns this write-only value.
-	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
+	AccessClientSecret param.Field[string] `json:"access_client_secret" api:"required"`
 	// Set the name of your origin database.
-	Database param.Field[string] `json:"database,required"`
+	Database param.Field[string] `json:"database" api:"required"`
 	// Defines the host (hostname or IP) of your origin database.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// Set the password needed to access your origin database. The API never returns
 	// this write-only value.
-	Password param.Field[string] `json:"password,required"`
+	Password param.Field[string] `json:"password" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme param.Field[HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme] `json:"scheme,required"`
+	Scheme param.Field[HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme] `json:"scheme" api:"required"`
 	// Set the user of your origin database.
-	User param.Field[string] `json:"user,required"`
+	User param.Field[string] `json:"user" api:"required"`
 }
 
 func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam) MarshalJSON() (data []byte, err error) {

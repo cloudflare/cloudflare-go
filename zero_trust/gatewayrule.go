@@ -43,15 +43,15 @@ func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a configured Zero Trust Gateway rule.
@@ -60,19 +60,19 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Zero Trust Gateway rules for an account.
@@ -82,7 +82,7 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -108,19 +108,19 @@ func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body Gat
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a single Zero Trust Gateway rule.
@@ -129,19 +129,19 @@ func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query Gatew
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Zero Trust Gateway rules for the parent account of an account in the MSP
@@ -152,7 +152,7 @@ func (r *GatewayRuleService) ListTenant(ctx context.Context, query GatewayRuleLi
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules/tenant", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -181,24 +181,24 @@ func (r *GatewayRuleService) ResetExpiration(ctx context.Context, ruleID string,
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s/reset_expiration", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DNSResolverSettingsV4 struct {
 	// Specify the IPv4 address of the upstream resolver.
-	IP string `json:"ip,required"`
+	IP string `json:"ip" api:"required"`
 	// Specify a port number to use for the upstream resolver. Defaults to 53 if
 	// unspecified.
 	Port int64 `json:"port"`
@@ -232,7 +232,7 @@ func (r dnsResolverSettingsV4JSON) RawJSON() string {
 
 type DNSResolverSettingsV4Param struct {
 	// Specify the IPv4 address of the upstream resolver.
-	IP param.Field[string] `json:"ip,required"`
+	IP param.Field[string] `json:"ip" api:"required"`
 	// Specify a port number to use for the upstream resolver. Defaults to 53 if
 	// unspecified.
 	Port param.Field[int64] `json:"port"`
@@ -250,7 +250,7 @@ func (r DNSResolverSettingsV4Param) MarshalJSON() (data []byte, err error) {
 
 type DNSResolverSettingsV6 struct {
 	// Specify the IPv6 address of the upstream resolver.
-	IP string `json:"ip,required"`
+	IP string `json:"ip" api:"required"`
 	// Specify a port number to use for the upstream resolver. Defaults to 53 if
 	// unspecified.
 	Port int64 `json:"port"`
@@ -284,7 +284,7 @@ func (r dnsResolverSettingsV6JSON) RawJSON() string {
 
 type DNSResolverSettingsV6Param struct {
 	// Specify the IPv6 address of the upstream resolver.
-	IP param.Field[string] `json:"ip,required"`
+	IP param.Field[string] `json:"ip" api:"required"`
 	// Specify a port number to use for the upstream resolver. Defaults to 53 if
 	// unspecified.
 	Port param.Field[int64] `json:"port"`
@@ -322,30 +322,30 @@ func (r GatewayFilter) IsKnown() bool {
 type GatewayRule struct {
 	// Specify the action to perform when the associated traffic, identity, and device
 	// posture expressions either absent or evaluate to `true`.
-	Action GatewayRuleAction `json:"action,required"`
+	Action GatewayRuleAction `json:"action" api:"required"`
 	// Specify whether the rule is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Specify the protocol or layer to evaluate the traffic, identity, and device
 	// posture expressions. Can only contain a single value.
-	Filters []GatewayFilter `json:"filters,required"`
+	Filters []GatewayFilter `json:"filters" api:"required"`
 	// Specify the rule name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Set the order of your rules. Lower values indicate higher precedence. At each
 	// processing phase, evaluate applicable rules in ascending order of this value.
 	// Refer to
 	// [Order of enforcement](http://developers.cloudflare.com/learning-paths/secure-internet-traffic/understand-policies/order-of-enforcement/#manage-precedence-with-terraform)
 	// to manage precedence via Terraform.
-	Precedence int64 `json:"precedence,required"`
+	Precedence int64 `json:"precedence" api:"required"`
 	// Specify the wirefilter expression used for traffic matching. The API
 	// automatically formats and sanitizes expressions before storing them. To prevent
 	// Terraform state drift, use the formatted expression returned in the API
 	// response.
-	Traffic string `json:"traffic,required"`
+	Traffic string `json:"traffic" api:"required"`
 	// Identify the API resource with a UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Indicate the date of deletion, if any.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	DeletedAt time.Time `json:"deleted_at" api:"nullable" format:"date-time"`
 	// Specify the rule description.
 	Description string `json:"description"`
 	// Specify the wirefilter expression used for device posture check. The API
@@ -356,7 +356,7 @@ type GatewayRule struct {
 	// Defines the expiration time stamp and default duration of a DNS policy. Takes
 	// precedence over the policy's `schedule` configuration, if any. This does not
 	// apply to HTTP or network policies. Settable only for `dns` rules.
-	Expiration GatewayRuleExpiration `json:"expiration,nullable"`
+	Expiration GatewayRuleExpiration `json:"expiration" api:"nullable"`
 	// Specify the wirefilter expression used for identity matching. The API
 	// automatically formats and sanitizes expressions before storing them. To prevent
 	// Terraform state drift, use the formatted expression returned in the API
@@ -371,7 +371,7 @@ type GatewayRule struct {
 	RuleSettings RuleSetting `json:"rule_settings"`
 	// Defines the schedule for activating DNS policies. Settable only for `dns` and
 	// `dns_resolver` rules.
-	Schedule Schedule `json:"schedule,nullable"`
+	Schedule Schedule `json:"schedule" api:"nullable"`
 	// Indicate that this rule is sharable via the Orgs API.
 	Sharable bool `json:"sharable"`
 	// Provide the account tag of the account that created the rule.
@@ -380,7 +380,7 @@ type GatewayRule struct {
 	// Indicate the version number of the rule(read-only).
 	Version int64 `json:"version"`
 	// Indicate a warning for a misconfigured rule, if any.
-	WarningStatus string          `json:"warning_status,nullable"`
+	WarningStatus string          `json:"warning_status" api:"nullable"`
 	JSON          gatewayRuleJSON `json:"-"`
 }
 
@@ -459,7 +459,7 @@ type GatewayRuleExpiration struct {
 	// but converts them to the equivalent UTC+00:00 value and returns timestamps with
 	// a trailing Z. Expiration policies ignore client timezones and expire globally at
 	// the specified expires_at time.
-	ExpiresAt time.Time `json:"expires_at,required" format:"date-time"`
+	ExpiresAt time.Time `json:"expires_at" api:"required" format:"date-time"`
 	// Defines the default duration a policy active in minutes. Must set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration int64 `json:"duration"`
@@ -494,44 +494,44 @@ type RuleSetting struct {
 	// Add custom headers to allowed requests as key-value pairs. Use header names as
 	// keys that map to arrays of header values. Settable only for `http` rules with
 	// the action set to `allow`.
-	AddHeaders map[string][]string `json:"add_headers,nullable"`
+	AddHeaders map[string][]string `json:"add_headers" api:"nullable"`
 	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
 	// this. this rule. Settable for all types of rules.
-	AllowChildBypass bool `json:"allow_child_bypass,nullable"`
+	AllowChildBypass bool `json:"allow_child_bypass" api:"nullable"`
 	// Define the settings for the Audit SSH action. Settable only for `l4` rules with
 	// `audit_ssh` action.
-	AuditSSH RuleSettingAuditSSH `json:"audit_ssh,nullable"`
+	AuditSSH RuleSettingAuditSSH `json:"audit_ssh" api:"nullable"`
 	// Configure browser isolation behavior. Settable only for `http` rules with the
 	// action set to `isolate`.
 	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
 	// Configure custom block page settings. If missing or null, use the account
 	// settings. Settable only for `http` rules with the action set to `block`.
-	BlockPage RuleSettingBlockPage `json:"block_page,nullable"`
+	BlockPage RuleSettingBlockPage `json:"block_page" api:"nullable"`
 	// Enable the custom block page. Settable only for `dns` rules with action `block`.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// Explain why the rule blocks the request. The custom block page shows this text
 	// (if enabled). Settable only for `dns`, `l4`, and `http` rules when the action
 	// set to `block`.
-	BlockReason string `json:"block_reason,nullable"`
+	BlockReason string `json:"block_reason" api:"nullable"`
 	// Set to enable MSP accounts to bypass their parent's rules. Only MSP child
 	// accounts can set this. Settable for all types of rules.
-	BypassParentRule bool `json:"bypass_parent_rule,nullable"`
+	BypassParentRule bool `json:"bypass_parent_rule" api:"nullable"`
 	// Configure session check behavior. Settable only for `l4` and `http` rules with
 	// the action set to `allow`.
-	CheckSession RuleSettingCheckSession `json:"check_session,nullable"`
+	CheckSession RuleSettingCheckSession `json:"check_session" api:"nullable"`
 	// Configure custom resolvers to route queries that match the resolver policy.
 	// Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
 	// settings. DNS queries get routed to the address closest to their origin. Only
 	// valid when a rule's action set to 'resolve'. Settable only for `dns_resolver`
 	// rules.
-	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers,nullable"`
+	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers" api:"nullable"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs. Settable only for `egress` rules.
-	Egress RuleSettingEgress `json:"egress,nullable"`
+	Egress RuleSettingEgress `json:"egress" api:"nullable"`
 	// Configure whether a copy of the HTTP request will be sent to storage when the
 	// rule matches.
-	ForensicCopy RuleSettingForensicCopy `json:"forensic_copy,nullable"`
+	ForensicCopy RuleSettingForensicCopy `json:"forensic_copy" api:"nullable"`
 	// Ignore category matches at CNAME domains in a response. When off, evaluate
 	// categories in this rule against all CNAME domain categories in the response.
 	// Settable only for `dns` and `dns_resolver` rules.
@@ -549,37 +549,37 @@ type RuleSetting struct {
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port. Settable
 	// only for `l4` rules with the action set to `l4_override`.
-	L4override RuleSettingL4override `json:"l4override,nullable"`
+	L4override RuleSettingL4override `json:"l4override" api:"nullable"`
 	// Configure a notification to display on the user's device when this rule matched.
 	// Settable for all types of rules with the action set to `block`.
-	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings,nullable"`
+	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings" api:"nullable"`
 	// Defines a hostname for override, for the matching DNS queries. Settable only for
 	// `dns` rules with the action set to `override`.
 	OverrideHost string `json:"override_host"`
 	// Defines a an IP or set of IPs for overriding matched DNS queries. Settable only
 	// for `dns` rules with the action set to `override`.
-	OverrideIPs []string `json:"override_ips,nullable"`
+	OverrideIPs []string `json:"override_ips" api:"nullable"`
 	// Configure DLP payload logging. Settable only for `http` rules.
-	PayloadLog RuleSettingPayloadLog `json:"payload_log,nullable"`
+	PayloadLog RuleSettingPayloadLog `json:"payload_log" api:"nullable"`
 	// Configure settings that apply to quarantine rules. Settable only for `http`
 	// rules.
-	Quarantine RuleSettingQuarantine `json:"quarantine,nullable"`
+	Quarantine RuleSettingQuarantine `json:"quarantine" api:"nullable"`
 	// Apply settings to redirect rules. Settable only for `http` rules with the action
 	// set to `redirect`.
-	Redirect RuleSettingRedirect `json:"redirect,nullable"`
+	Redirect RuleSettingRedirect `json:"redirect" api:"nullable"`
 	// Configure to forward the query to the internal DNS service, passing the
 	// specified 'view_id' as input. Not used when 'dns_resolvers' is specified or
 	// 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action set to
 	// 'resolve'. Settable only for `dns_resolver` rules.
-	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally,nullable"`
+	ResolveDNSInternally RuleSettingResolveDNSInternally `json:"resolve_dns_internally" api:"nullable"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot set when 'dns_resolvers' specified or 'resolve_dns_internally'
 	// is set. Only valid when a rule's action set to 'resolve'. Settable only for
 	// `dns_resolver` rules.
-	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare,nullable"`
+	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare" api:"nullable"`
 	// Configure behavior when an upstream certificate is invalid or an SSL error
 	// occurs. Settable only for `http` rules with the action set to `allow`.
-	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert,nullable"`
+	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert" api:"nullable"`
 	JSON          ruleSettingJSON          `json:"-"`
 }
 
@@ -839,7 +839,7 @@ func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
 // settings. Settable only for `http` rules with the action set to `block`.
 type RuleSettingBlockPage struct {
 	// Specify the URI to which the user is redirected.
-	TargetURI string `json:"target_uri,required" format:"uri"`
+	TargetURI string `json:"target_uri" api:"required" format:"uri"`
 	// Specify whether to pass the context information as query parameters.
 	IncludeContext bool                     `json:"include_context"`
 	JSON           ruleSettingBlockPageJSON `json:"-"`
@@ -1112,7 +1112,7 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 // set to `redirect`.
 type RuleSettingRedirect struct {
 	// Specify the URI to which the user is redirected.
-	TargetURI string `json:"target_uri,required" format:"uri"`
+	TargetURI string `json:"target_uri" api:"required" format:"uri"`
 	// Specify whether to pass the context information as query parameters.
 	IncludeContext bool `json:"include_context"`
 	// Specify whether to append the path and query parameters from the original
@@ -1387,7 +1387,7 @@ func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error
 // settings. Settable only for `http` rules with the action set to `block`.
 type RuleSettingBlockPageParam struct {
 	// Specify the URI to which the user is redirected.
-	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
+	TargetURI param.Field[string] `json:"target_uri" api:"required" format:"uri"`
 	// Specify whether to pass the context information as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 }
@@ -1508,7 +1508,7 @@ func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
 // set to `redirect`.
 type RuleSettingRedirectParam struct {
 	// Specify the URI to which the user is redirected.
-	TargetURI param.Field[string] `json:"target_uri,required" format:"uri"`
+	TargetURI param.Field[string] `json:"target_uri" api:"required" format:"uri"`
 	// Specify whether to pass the context information as query parameters.
 	IncludeContext param.Field[bool] `json:"include_context"`
 	// Specify whether to append the path and query parameters from the original
@@ -1673,12 +1673,12 @@ func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
 type GatewayRuleDeleteResponse = interface{}
 
 type GatewayRuleNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the action to perform when the associated traffic, identity, and device
 	// posture expressions either absent or evaluate to `true`.
-	Action param.Field[GatewayRuleNewParamsAction] `json:"action,required"`
+	Action param.Field[GatewayRuleNewParamsAction] `json:"action" api:"required"`
 	// Specify the rule name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Specify the rule description.
 	Description param.Field[string] `json:"description"`
 	// Specify the wirefilter expression used for device posture check. The API
@@ -1765,7 +1765,7 @@ type GatewayRuleNewParamsExpiration struct {
 	// but converts them to the equivalent UTC+00:00 value and returns timestamps with
 	// a trailing Z. Expiration policies ignore client timezones and expire globally at
 	// the specified expires_at time.
-	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
+	ExpiresAt param.Field[time.Time] `json:"expires_at" api:"required" format:"date-time"`
 	// Defines the default duration a policy active in minutes. Must set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
@@ -1776,10 +1776,10 @@ func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1819,12 +1819,12 @@ func (r GatewayRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the action to perform when the associated traffic, identity, and device
 	// posture expressions either absent or evaluate to `true`.
-	Action param.Field[GatewayRuleUpdateParamsAction] `json:"action,required"`
+	Action param.Field[GatewayRuleUpdateParamsAction] `json:"action" api:"required"`
 	// Specify the rule name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Specify the rule description.
 	Description param.Field[string] `json:"description"`
 	// Specify the wirefilter expression used for device posture check. The API
@@ -1911,7 +1911,7 @@ type GatewayRuleUpdateParamsExpiration struct {
 	// but converts them to the equivalent UTC+00:00 value and returns timestamps with
 	// a trailing Z. Expiration policies ignore client timezones and expire globally at
 	// the specified expires_at time.
-	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
+	ExpiresAt param.Field[time.Time] `json:"expires_at" api:"required" format:"date-time"`
 	// Defines the default duration a policy active in minutes. Must set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
@@ -1922,10 +1922,10 @@ func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error
 }
 
 type GatewayRuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayRule                              `json:"result"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1965,18 +1965,18 @@ func (r GatewayRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayRuleDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayRuleDeleteResponse                `json:"result"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -2016,14 +2016,14 @@ func (r GatewayRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayRule                           `json:"result"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -2063,18 +2063,18 @@ func (r GatewayRuleGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleListTenantParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayRuleResetExpirationParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayRuleResetExpirationResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Indicate whether the API call was successful.
-	Success GatewayRuleResetExpirationResponseEnvelopeSuccess `json:"success,required"`
+	Success GatewayRuleResetExpirationResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  GatewayRule                                       `json:"result"`
 	JSON    gatewayRuleResetExpirationResponseEnvelopeJSON    `json:"-"`
 }

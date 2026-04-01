@@ -55,115 +55,115 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketNewResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all R2 buckets on your account.
 func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *BucketListResponse, err error) {
 	var env BucketListResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes an existing R2 bucket.
 func (r *BucketService) Delete(ctx context.Context, bucketName string, params BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
 	var env BucketDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates properties of an existing R2 bucket.
 func (r *BucketService) Edit(ctx context.Context, bucketName string, params BucketEditParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketEditResponseEnvelope
 	if params.StorageClass.Present {
-		opts = append(opts, option.WithHeader("cf-r2-storage-class", fmt.Sprintf("%s", params.StorageClass)))
+		opts = append(opts, option.WithHeader("cf-r2-storage-class", fmt.Sprintf("%v", params.StorageClass)))
 	}
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets properties of an existing R2 bucket.
 func (r *BucketService) Get(ctx context.Context, bucketName string, params BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketGetResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A single R2 bucket.
@@ -278,9 +278,9 @@ type BucketDeleteResponse = interface{}
 
 type BucketNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the bucket.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Location of the bucket.
 	LocationHint param.Field[BucketNewParamsLocationHint] `json:"locationHint"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
@@ -347,12 +347,12 @@ func (r BucketNewParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
 	// A single R2 bucket.
-	Result Bucket `json:"result,required"`
+	Result Bucket `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketNewResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -392,7 +392,7 @@ func (r BucketNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Pagination cursor received during the last List Buckets call. R2 buckets are
 	// paginated using cursors instead of page numbers.
 	Cursor param.Field[string] `query:"cursor"`
@@ -468,11 +468,11 @@ func (r BucketListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   BucketListResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
+	Result   BucketListResponse    `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success    BucketListResponseEnvelopeSuccess    `json:"success,required"`
+	Success    BucketListResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo BucketListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       bucketListResponseEnvelopeJSON       `json:"-"`
 }
@@ -539,7 +539,7 @@ func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type BucketDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -562,11 +562,11 @@ func (r BucketDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   BucketDeleteResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
+	Result   BucketDeleteResponse  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -606,9 +606,9 @@ func (r BucketDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEditParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
-	StorageClass param.Field[BucketEditParamsCfR2StorageClass] `header:"cf-r2-storage-class,required"`
+	StorageClass param.Field[BucketEditParamsCfR2StorageClass] `header:"cf-r2-storage-class" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEditParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -647,12 +647,12 @@ func (r BucketEditParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
 	// A single R2 bucket.
-	Result Bucket `json:"result,required"`
+	Result Bucket `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketEditResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -692,7 +692,7 @@ func (r BucketEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -715,12 +715,12 @@ func (r BucketGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
 	// A single R2 bucket.
-	Result Bucket `json:"result,required"`
+	Result Bucket `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketGetResponseEnvelopeJSON    `json:"-"`
 }
 

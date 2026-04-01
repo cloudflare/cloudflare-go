@@ -42,15 +42,15 @@ func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Edit details for a single TURN key.
@@ -59,19 +59,19 @@ func (r *TURNService) Update(ctx context.Context, keyID string, params TURNUpdat
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if keyID == "" {
 		err = errors.New("missing required key_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", params.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all TURN keys in the Cloudflare account
@@ -81,7 +81,7 @@ func (r *TURNService) List(ctx context.Context, query TURNListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -107,19 +107,19 @@ func (r *TURNService) Delete(ctx context.Context, keyID string, body TURNDeleteP
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if keyID == "" {
 		err = errors.New("missing required key_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", body.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches details for a single TURN key.
@@ -128,19 +128,19 @@ func (r *TURNService) Get(ctx context.Context, keyID string, query TURNGetParams
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if keyID == "" {
 		err = errors.New("missing required key_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/calls/turn_keys/%s", query.AccountID, keyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TURNNewResponse struct {
@@ -301,7 +301,7 @@ func (r turnGetResponseJSON) RawJSON() string {
 
 type TURNNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short description of a TURN key, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
@@ -311,10 +311,10 @@ func (r TURNNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TURNNewResponseEnvelope struct {
-	Errors   []TURNNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TURNNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TURNNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TURNNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TURNNewResponseEnvelopeSuccess `json:"success,required"`
+	Success TURNNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TURNNewResponse                `json:"result"`
 	JSON    turnNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -339,8 +339,8 @@ func (r turnNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TURNNewResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           TURNNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             turnNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -387,8 +387,8 @@ func (r turnNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TURNNewResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           TURNNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             turnNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -451,7 +451,7 @@ func (r TURNNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TURNUpdateParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short description of a TURN key, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
@@ -461,10 +461,10 @@ func (r TURNUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TURNUpdateResponseEnvelope struct {
-	Errors   []TURNUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TURNUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TURNUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TURNUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TURNUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success TURNUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TURNUpdateResponse                `json:"result"`
 	JSON    turnUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -489,8 +489,8 @@ func (r turnUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TURNUpdateResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           TURNUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             turnUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -537,8 +537,8 @@ func (r turnUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TURNUpdateResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           TURNUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             turnUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -601,19 +601,19 @@ func (r TURNUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type TURNListParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TURNDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TURNDeleteResponseEnvelope struct {
-	Errors   []TURNDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TURNDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TURNDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TURNDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TURNDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success TURNDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TURNDeleteResponse                `json:"result"`
 	JSON    turnDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -638,8 +638,8 @@ func (r turnDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TURNDeleteResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           TURNDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             turnDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -686,8 +686,8 @@ func (r turnDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TURNDeleteResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           TURNDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             turnDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -750,14 +750,14 @@ func (r TURNDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type TURNGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TURNGetResponseEnvelope struct {
-	Errors   []TURNGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TURNGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TURNGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TURNGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TURNGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TURNGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TURNGetResponse                `json:"result"`
 	JSON    turnGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -782,8 +782,8 @@ func (r turnGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TURNGetResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           TURNGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             turnGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -830,8 +830,8 @@ func (r turnGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type TURNGetResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           TURNGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             turnGetResponseEnvelopeMessagesJSON   `json:"-"`

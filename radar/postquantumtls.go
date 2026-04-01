@@ -43,21 +43,21 @@ func (r *PostQuantumTLSService) Support(ctx context.Context, query PostQuantumTL
 	path := "radar/post_quantum/tls/support"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PostQuantumTLSSupportResponse struct {
 	// The host that was tested
-	Host string `json:"host,required"`
+	Host string `json:"host" api:"required"`
 	// TLS CurveID of the negotiated key exchange
-	Kex float64 `json:"kex,required"`
+	Kex float64 `json:"kex" api:"required"`
 	// Human-readable name of the key exchange algorithm
-	KexName string `json:"kexName,required"`
+	KexName string `json:"kexName" api:"required"`
 	// Whether the negotiated key exchange uses Post-Quantum cryptography
-	Pq   bool                              `json:"pq,required"`
+	Pq   bool                              `json:"pq" api:"required"`
 	JSON postQuantumTLSSupportResponseJSON `json:"-"`
 }
 
@@ -83,7 +83,7 @@ func (r postQuantumTLSSupportResponseJSON) RawJSON() string {
 type PostQuantumTLSSupportParams struct {
 	// Hostname or IP address to test for Post-Quantum TLS support, optionally with
 	// port (defaults to 443).
-	Host param.Field[string] `query:"host,required"`
+	Host param.Field[string] `query:"host" api:"required"`
 }
 
 // URLQuery serializes [PostQuantumTLSSupportParams]'s query parameters as
@@ -96,8 +96,8 @@ func (r PostQuantumTLSSupportParams) URLQuery() (v url.Values) {
 }
 
 type PostQuantumTLSSupportResponseEnvelope struct {
-	Result  PostQuantumTLSSupportResponse             `json:"result,required"`
-	Success bool                                      `json:"success,required"`
+	Result  PostQuantumTLSSupportResponse             `json:"result" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    postQuantumTLSSupportResponseEnvelopeJSON `json:"-"`
 }
 

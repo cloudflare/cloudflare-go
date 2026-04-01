@@ -44,11 +44,11 @@ func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANN
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", params.AccountID, siteID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -75,23 +75,23 @@ func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if lanID == "" {
 		err = errors.New("missing required lan_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists Site LANs associated with an account.
@@ -101,11 +101,11 @@ func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANL
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", query.AccountID, siteID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -131,23 +131,23 @@ func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if lanID == "" {
 		err = errors.New("missing required lan_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", body.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patch a specific Site LAN.
@@ -156,23 +156,23 @@ func (r *SiteLANService) Edit(ctx context.Context, siteID string, lanID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if lanID == "" {
 		err = errors.New("missing required lan_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a specific Site LAN.
@@ -181,23 +181,23 @@ func (r *SiteLANService) Get(ctx context.Context, siteID string, lanID string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	if lanID == "" {
 		err = errors.New("missing required lan_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", query.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DHCPRelay struct {
@@ -335,7 +335,7 @@ func (r lanJSON) RawJSON() string {
 // static_address is required along with secondary and virtual address.
 type LANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
-	Address    string     `json:"address,required"`
+	Address    string     `json:"address" api:"required"`
 	DHCPRelay  DHCPRelay  `json:"dhcp_relay"`
 	DHCPServer DHCPServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
@@ -370,7 +370,7 @@ func (r lanStaticAddressingJSON) RawJSON() string {
 // static_address is required along with secondary and virtual address.
 type LANStaticAddressingParam struct {
 	// A valid CIDR notation representing an IP range.
-	Address    param.Field[string]          `json:"address,required"`
+	Address    param.Field[string]          `json:"address" api:"required"`
 	DHCPRelay  param.Field[DHCPRelayParam]  `json:"dhcp_relay"`
 	DHCPServer param.Field[DHCPServerParam] `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
@@ -415,9 +415,9 @@ func (r NatParam) MarshalJSON() (data []byte, err error) {
 
 type RoutedSubnet struct {
 	// A valid IPv4 address.
-	NextHop string `json:"next_hop,required"`
+	NextHop string `json:"next_hop" api:"required"`
 	// A valid CIDR notation representing an IP range.
-	Prefix string           `json:"prefix,required"`
+	Prefix string           `json:"prefix" api:"required"`
 	Nat    Nat              `json:"nat"`
 	JSON   routedSubnetJSON `json:"-"`
 }
@@ -441,9 +441,9 @@ func (r routedSubnetJSON) RawJSON() string {
 
 type RoutedSubnetParam struct {
 	// A valid IPv4 address.
-	NextHop param.Field[string] `json:"next_hop,required"`
+	NextHop param.Field[string] `json:"next_hop" api:"required"`
 	// A valid CIDR notation representing an IP range.
-	Prefix param.Field[string]   `json:"prefix,required"`
+	Prefix param.Field[string]   `json:"prefix" api:"required"`
 	Nat    param.Field[NatParam] `json:"nat"`
 }
 
@@ -453,7 +453,7 @@ func (r RoutedSubnetParam) MarshalJSON() (data []byte, err error) {
 
 type SiteLANNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	BondID    param.Field[int64]  `json:"bond_id"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
@@ -480,7 +480,7 @@ func (r SiteLANNewParams) MarshalJSON() (data []byte, err error) {
 
 type SiteLANUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	BondID    param.Field[int64]  `json:"bond_id"`
 	// mark true to use this LAN for source-based breakout traffic
 	IsBreakout param.Field[bool] `json:"is_breakout"`
@@ -503,11 +503,11 @@ func (r SiteLANUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteLANUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LAN                   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteLANUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteLANUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteLANUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -547,20 +547,20 @@ func (r SiteLANUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteLANListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteLANDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteLANDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LAN                   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteLANDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteLANDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteLANDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -600,7 +600,7 @@ func (r SiteLANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteLANEditParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	BondID    param.Field[int64]  `json:"bond_id"`
 	// mark true to use this LAN for source-based breakout traffic
 	IsBreakout param.Field[bool] `json:"is_breakout"`
@@ -623,11 +623,11 @@ func (r SiteLANEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteLANEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LAN                   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteLANEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteLANEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteLANEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -667,15 +667,15 @@ func (r SiteLANEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteLANGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteLANGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LAN                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   LAN                   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SiteLANGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SiteLANGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    siteLANGetResponseEnvelopeJSON    `json:"-"`
 }
 

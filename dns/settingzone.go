@@ -40,15 +40,15 @@ func (r *SettingZoneService) Edit(ctx context.Context, params SettingZoneEditPar
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_settings", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Show DNS settings for a zone
@@ -57,40 +57,40 @@ func (r *SettingZoneService) Get(ctx context.Context, query SettingZoneGetParams
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_settings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingZoneEditResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs bool `json:"flatten_all_cnames,required"`
+	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
-	FoundationDNS bool `json:"foundation_dns,required"`
+	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
-	InternalDNS SettingZoneEditResponseInternalDNS `json:"internal_dns,required"`
+	InternalDNS SettingZoneEditResponseInternalDNS `json:"internal_dns" api:"required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
-	MultiProvider bool `json:"multi_provider,required"`
+	MultiProvider bool `json:"multi_provider" api:"required"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers SettingZoneEditResponseNameservers `json:"nameservers,required"`
+	Nameservers SettingZoneEditResponseNameservers `json:"nameservers" api:"required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
-	NSTTL float64 `json:"ns_ttl,required"`
+	NSTTL float64 `json:"ns_ttl" api:"required"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
-	SecondaryOverrides bool `json:"secondary_overrides,required"`
+	SecondaryOverrides bool `json:"secondary_overrides" api:"required"`
 	// Components of the zone's SOA record.
-	SOA SettingZoneEditResponseSOA `json:"soa,required"`
+	SOA SettingZoneEditResponseSOA `json:"soa" api:"required"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode SettingZoneEditResponseZoneMode `json:"zone_mode,required"`
+	ZoneMode SettingZoneEditResponseZoneMode `json:"zone_mode" api:"required"`
 	JSON     settingZoneEditResponseJSON     `json:"-"`
 }
 
@@ -144,7 +144,7 @@ func (r settingZoneEditResponseInternalDNSJSON) RawJSON() string {
 // Settings determining the nameservers through which the zone should be available.
 type SettingZoneEditResponseNameservers struct {
 	// Nameserver type
-	Type SettingZoneEditResponseNameserversType `json:"type,required"`
+	Type SettingZoneEditResponseNameserversType `json:"type" api:"required"`
 	// Configured nameserver set to be used for this zone
 	NSSet int64                                  `json:"ns_set"`
 	JSON  settingZoneEditResponseNameserversJSON `json:"-"`
@@ -194,7 +194,7 @@ type SettingZoneEditResponseSOA struct {
 	MinTTL float64 `json:"min_ttl"`
 	// The primary nameserver, which may be used for outbound zone transfers. If null,
 	// a Cloudflare-assigned value will be used.
-	MNAME string `json:"mname,nullable"`
+	MNAME string `json:"mname" api:"nullable"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
 	Refresh float64 `json:"refresh"`
@@ -251,26 +251,26 @@ func (r SettingZoneEditResponseZoneMode) IsKnown() bool {
 type SettingZoneGetResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs bool `json:"flatten_all_cnames,required"`
+	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
-	FoundationDNS bool `json:"foundation_dns,required"`
+	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
-	InternalDNS SettingZoneGetResponseInternalDNS `json:"internal_dns,required"`
+	InternalDNS SettingZoneGetResponseInternalDNS `json:"internal_dns" api:"required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
-	MultiProvider bool `json:"multi_provider,required"`
+	MultiProvider bool `json:"multi_provider" api:"required"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers SettingZoneGetResponseNameservers `json:"nameservers,required"`
+	Nameservers SettingZoneGetResponseNameservers `json:"nameservers" api:"required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
-	NSTTL float64 `json:"ns_ttl,required"`
+	NSTTL float64 `json:"ns_ttl" api:"required"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
-	SecondaryOverrides bool `json:"secondary_overrides,required"`
+	SecondaryOverrides bool `json:"secondary_overrides" api:"required"`
 	// Components of the zone's SOA record.
-	SOA SettingZoneGetResponseSOA `json:"soa,required"`
+	SOA SettingZoneGetResponseSOA `json:"soa" api:"required"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode SettingZoneGetResponseZoneMode `json:"zone_mode,required"`
+	ZoneMode SettingZoneGetResponseZoneMode `json:"zone_mode" api:"required"`
 	JSON     settingZoneGetResponseJSON     `json:"-"`
 }
 
@@ -324,7 +324,7 @@ func (r settingZoneGetResponseInternalDNSJSON) RawJSON() string {
 // Settings determining the nameservers through which the zone should be available.
 type SettingZoneGetResponseNameservers struct {
 	// Nameserver type
-	Type SettingZoneGetResponseNameserversType `json:"type,required"`
+	Type SettingZoneGetResponseNameserversType `json:"type" api:"required"`
 	// Configured nameserver set to be used for this zone
 	NSSet int64                                 `json:"ns_set"`
 	JSON  settingZoneGetResponseNameserversJSON `json:"-"`
@@ -374,7 +374,7 @@ type SettingZoneGetResponseSOA struct {
 	MinTTL float64 `json:"min_ttl"`
 	// The primary nameserver, which may be used for outbound zone transfers. If null,
 	// a Cloudflare-assigned value will be used.
-	MNAME string `json:"mname,nullable"`
+	MNAME string `json:"mname" api:"nullable"`
 	// Time in seconds after which secondary servers should re-check the SOA record to
 	// see if the zone has been updated.
 	Refresh float64 `json:"refresh"`
@@ -430,7 +430,7 @@ func (r SettingZoneGetResponseZoneMode) IsKnown() bool {
 
 type SettingZoneEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs param.Field[bool] `json:"flatten_all_cnames"`
@@ -544,10 +544,10 @@ func (r SettingZoneEditParamsZoneMode) IsKnown() bool {
 }
 
 type SettingZoneEditResponseEnvelope struct {
-	Errors   []SettingZoneEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingZoneEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingZoneEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingZoneEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingZoneEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingZoneEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingZoneEditResponse                `json:"result"`
 	JSON    settingZoneEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -572,8 +572,8 @@ func (r settingZoneEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingZoneEditResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           SettingZoneEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingZoneEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -620,8 +620,8 @@ func (r settingZoneEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingZoneEditResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           SettingZoneEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingZoneEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -684,14 +684,14 @@ func (r SettingZoneEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingZoneGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SettingZoneGetResponseEnvelope struct {
-	Errors   []SettingZoneGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingZoneGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingZoneGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingZoneGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingZoneGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingZoneGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingZoneGetResponse                `json:"result"`
 	JSON    settingZoneGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -716,8 +716,8 @@ func (r settingZoneGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingZoneGetResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           SettingZoneGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingZoneGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -764,8 +764,8 @@ func (r settingZoneGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type SettingZoneGetResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           SettingZoneGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingZoneGetResponseEnvelopeMessagesJSON   `json:"-"`

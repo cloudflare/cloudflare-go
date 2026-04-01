@@ -54,10 +54,10 @@ func (r *OrganizationService) New(ctx context.Context, body OrganizationNewParam
 	path := "organizations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify organization. (Currently in Closed Beta - see
@@ -67,15 +67,15 @@ func (r *OrganizationService) Update(ctx context.Context, organizationID string,
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve a list of organizations a particular user has access to. (Currently in
@@ -111,15 +111,15 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve the details of a certain organization. (Currently in Closed Beta - see
@@ -129,23 +129,23 @@ func (r *OrganizationService) Get(ctx context.Context, organizationID string, op
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // References an Organization in the Cloudflare data model.
 type Organization struct {
-	ID         string                  `json:"id,required"`
-	CreateTime time.Time               `json:"create_time,required" format:"date-time"`
-	Meta       OrganizationMeta        `json:"meta,required"`
-	Name       string                  `json:"name,required"`
+	ID         string                  `json:"id" api:"required"`
+	CreateTime time.Time               `json:"create_time" api:"required" format:"date-time"`
+	Meta       OrganizationMeta        `json:"meta" api:"required"`
+	Name       string                  `json:"name" api:"required"`
 	Parent     OrganizationParent      `json:"parent"`
 	Profile    accounts.AccountProfile `json:"profile"`
 	JSON       organizationJSON        `json:"-"`
@@ -175,7 +175,7 @@ type OrganizationMeta struct {
 	// Enable features for Organizations.
 	Flags       OrganizationMetaFlags  `json:"flags"`
 	ManagedBy   string                 `json:"managed_by"`
-	ExtraFields map[string]interface{} `json:"-,extras"`
+	ExtraFields map[string]interface{} `json:"-" api:"extrafields"`
 	JSON        organizationMetaJSON   `json:"-"`
 }
 
@@ -198,11 +198,11 @@ func (r organizationMetaJSON) RawJSON() string {
 
 // Enable features for Organizations.
 type OrganizationMetaFlags struct {
-	AccountCreation  string                    `json:"account_creation,required"`
-	AccountDeletion  string                    `json:"account_deletion,required"`
-	AccountMigration string                    `json:"account_migration,required"`
-	AccountMobility  string                    `json:"account_mobility,required"`
-	SubOrgCreation   string                    `json:"sub_org_creation,required"`
+	AccountCreation  string                    `json:"account_creation" api:"required"`
+	AccountDeletion  string                    `json:"account_deletion" api:"required"`
+	AccountMigration string                    `json:"account_migration" api:"required"`
+	AccountMobility  string                    `json:"account_mobility" api:"required"`
+	SubOrgCreation   string                    `json:"sub_org_creation" api:"required"`
 	JSON             organizationMetaFlagsJSON `json:"-"`
 }
 
@@ -227,8 +227,8 @@ func (r organizationMetaFlagsJSON) RawJSON() string {
 }
 
 type OrganizationParent struct {
-	ID   string                 `json:"id,required"`
-	Name string                 `json:"name,required"`
+	ID   string                 `json:"id" api:"required"`
+	Name string                 `json:"name" api:"required"`
 	JSON organizationParentJSON `json:"-"`
 }
 
@@ -251,7 +251,7 @@ func (r organizationParentJSON) RawJSON() string {
 
 // References an Organization in the Cloudflare data model.
 type OrganizationParam struct {
-	Name    param.Field[string]                       `json:"name,required"`
+	Name    param.Field[string]                       `json:"name" api:"required"`
 	Parent  param.Field[OrganizationParentParam]      `json:"parent"`
 	Profile param.Field[accounts.AccountProfileParam] `json:"profile"`
 }
@@ -273,11 +273,11 @@ func (r OrganizationMetaParam) MarshalJSON() (data []byte, err error) {
 
 // Enable features for Organizations.
 type OrganizationMetaFlagsParam struct {
-	AccountCreation  param.Field[string] `json:"account_creation,required"`
-	AccountDeletion  param.Field[string] `json:"account_deletion,required"`
-	AccountMigration param.Field[string] `json:"account_migration,required"`
-	AccountMobility  param.Field[string] `json:"account_mobility,required"`
-	SubOrgCreation   param.Field[string] `json:"sub_org_creation,required"`
+	AccountCreation  param.Field[string] `json:"account_creation" api:"required"`
+	AccountDeletion  param.Field[string] `json:"account_deletion" api:"required"`
+	AccountMigration param.Field[string] `json:"account_migration" api:"required"`
+	AccountMobility  param.Field[string] `json:"account_mobility" api:"required"`
+	SubOrgCreation   param.Field[string] `json:"sub_org_creation" api:"required"`
 }
 
 func (r OrganizationMetaFlagsParam) MarshalJSON() (data []byte, err error) {
@@ -285,7 +285,7 @@ func (r OrganizationMetaFlagsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationParentParam struct {
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r OrganizationParentParam) MarshalJSON() (data []byte, err error) {
@@ -293,7 +293,7 @@ func (r OrganizationParentParam) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationDeleteResponse struct {
-	ID   string                         `json:"id,required"`
+	ID   string                         `json:"id" api:"required"`
 	JSON organizationDeleteResponseJSON `json:"-"`
 }
 
@@ -315,7 +315,7 @@ func (r organizationDeleteResponseJSON) RawJSON() string {
 
 type OrganizationNewParams struct {
 	// References an Organization in the Cloudflare data model.
-	Organization OrganizationParam `json:"organization,required"`
+	Organization OrganizationParam `json:"organization" api:"required"`
 }
 
 func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
@@ -323,11 +323,11 @@ func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationNewResponseEnvelope struct {
-	Errors   []interface{}         `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{}         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// References an Organization in the Cloudflare data model.
-	Result  Organization                           `json:"result,required"`
-	Success OrganizationNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Organization                           `json:"result" api:"required"`
+	Success OrganizationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    organizationNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -366,7 +366,7 @@ func (r OrganizationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OrganizationUpdateParams struct {
 	// References an Organization in the Cloudflare data model.
-	Organization OrganizationParam `json:"organization,required"`
+	Organization OrganizationParam `json:"organization" api:"required"`
 }
 
 func (r OrganizationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -374,11 +374,11 @@ func (r OrganizationUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationUpdateResponseEnvelope struct {
-	Errors   []interface{}         `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{}         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// References an Organization in the Cloudflare data model.
-	Result  Organization                              `json:"result,required"`
-	Success OrganizationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Organization                              `json:"result" api:"required"`
+	Success OrganizationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    organizationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -524,10 +524,10 @@ func (r OrganizationListParamsParentID) IsKnown() bool {
 }
 
 type OrganizationDeleteResponseEnvelope struct {
-	Errors   []interface{}                             `json:"errors,required"`
-	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   OrganizationDeleteResponse                `json:"result,required"`
-	Success  OrganizationDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []interface{}                             `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                     `json:"messages" api:"required"`
+	Result   OrganizationDeleteResponse                `json:"result" api:"required"`
+	Success  OrganizationDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON     organizationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -565,11 +565,11 @@ func (r OrganizationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OrganizationGetResponseEnvelope struct {
-	Errors   []interface{}         `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []interface{}         `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// References an Organization in the Cloudflare data model.
-	Result  Organization                           `json:"result,required"`
-	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Organization                           `json:"result" api:"required"`
+	Success OrganizationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    organizationGetResponseEnvelopeJSON    `json:"-"`
 }
 

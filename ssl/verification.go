@@ -45,19 +45,19 @@ func (r *VerificationService) Edit(ctx context.Context, certificatePackID string
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificatePackID == "" {
 		err = errors.New("missing required certificate_pack_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/verification/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get SSL Verification Info for a Zone.
@@ -66,20 +66,20 @@ func (r *VerificationService) Get(ctx context.Context, params VerificationGetPar
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/verification", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Verification struct {
 	// Current status of certificate.
-	CertificateStatus VerificationCertificateStatus `json:"certificate_status,required"`
+	CertificateStatus VerificationCertificateStatus `json:"certificate_status" api:"required"`
 	// Certificate Authority is manually reviewing the order.
 	BrandCheck bool `json:"brand_check"`
 	// Certificate Pack UUID.
@@ -281,9 +281,9 @@ func (r VerificationEditResponseValidationMethod) IsKnown() bool {
 
 type VerificationEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Desired validation method.
-	ValidationMethod param.Field[VerificationEditParamsValidationMethod] `json:"validation_method,required"`
+	ValidationMethod param.Field[VerificationEditParamsValidationMethod] `json:"validation_method" api:"required"`
 }
 
 func (r VerificationEditParams) MarshalJSON() (data []byte, err error) {
@@ -309,10 +309,10 @@ func (r VerificationEditParamsValidationMethod) IsKnown() bool {
 }
 
 type VerificationEditResponseEnvelope struct {
-	Errors   []VerificationEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []VerificationEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []VerificationEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []VerificationEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success VerificationEditResponseEnvelopeSuccess `json:"success,required"`
+	Success VerificationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  VerificationEditResponse                `json:"result"`
 	JSON    verificationEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -337,8 +337,8 @@ func (r verificationEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type VerificationEditResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           VerificationEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             verificationEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -385,8 +385,8 @@ func (r verificationEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type VerificationEditResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           VerificationEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             verificationEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -449,7 +449,7 @@ func (r VerificationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type VerificationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Immediately retry SSL Verification.
 	Retry param.Field[VerificationGetParamsRetry] `query:"retry"`
 }

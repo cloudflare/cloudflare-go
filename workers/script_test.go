@@ -27,6 +27,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -92,6 +93,12 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						HeadSamplingRate: cloudflare.F(0.100000),
 						Persist:          cloudflare.F(true),
 					}),
+					Traces: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityTraces{
+						Destinations:     cloudflare.F([]string{"cloudflare"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
+						Persist:          cloudflare.F(true),
+					}),
 				}),
 				Placement: cloudflare.F[workers.ScriptUpdateParamsMetadataPlacementUnion](workers.ScriptUpdateParamsMetadataPlacementObject{
 					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementObjectModeSmart),
@@ -105,7 +112,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				UsageModel: cloudflare.F(workers.ScriptUpdateParamsMetadataUsageModelStandard),
 			}),
 			BindingsInherit: cloudflare.F(workers.ScriptUpdateParamsBindingsInheritStrict),
-			Files:           cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			Files:           cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("Example data")))}),
 		},
 	)
 	if err != nil {
@@ -127,6 +134,7 @@ func TestScriptListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -153,6 +161,7 @@ func TestScriptDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -183,6 +192,7 @@ func TestScriptGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -212,6 +222,7 @@ func TestScriptSearchWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

@@ -43,21 +43,21 @@ func (r *ContentService) New(ctx context.Context, params ContentNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/browser-rendering/content", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ContentNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]       `path:"account_id,required"`
-	Body      ContentNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]       `path:"account_id" api:"required"`
+	Body      ContentNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -119,7 +119,7 @@ type ContentNewParamsBodyUnion interface {
 
 type ContentNewParamsBodyObject struct {
 	// URL to navigate to, eg. `https://example.com`.
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// The maximum duration allowed for the browser action to complete after the page
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
@@ -220,8 +220,8 @@ func (r ContentNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 
 // Provide credentials for HTTP authentication.
 type ContentNewParamsBodyObjectAuthenticate struct {
-	Password param.Field[string] `json:"password,required"`
-	Username param.Field[string] `json:"username,required"`
+	Password param.Field[string] `json:"password" api:"required"`
+	Username param.Field[string] `json:"username" api:"required"`
 }
 
 func (r ContentNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
@@ -229,8 +229,9 @@ func (r ContentNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err 
 }
 
 type ContentNewParamsBodyObjectCookie struct {
-	Name         param.Field[string]                                        `json:"name,required"`
-	Value        param.Field[string]                                        `json:"value,required"`
+	// Cookie name.
+	Name         param.Field[string]                                        `json:"name" api:"required"`
+	Value        param.Field[string]                                        `json:"value" api:"required"`
 	Domain       param.Field[string]                                        `json:"domain"`
 	Expires      param.Field[float64]                                       `json:"expires"`
 	HTTPOnly     param.Field[bool]                                          `json:"httpOnly"`
@@ -391,8 +392,8 @@ func (r ContentNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
 type ContentNewParamsBodyObjectViewport struct {
-	Height            param.Field[float64] `json:"height,required"`
-	Width             param.Field[float64] `json:"width,required"`
+	Height            param.Field[float64] `json:"height" api:"required"`
+	Width             param.Field[float64] `json:"width" api:"required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
 	HasTouch          param.Field[bool]    `json:"hasTouch"`
 	IsLandscape       param.Field[bool]    `json:"isLandscape"`
@@ -406,7 +407,7 @@ func (r ContentNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err erro
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
 type ContentNewParamsBodyObjectWaitForSelector struct {
-	Selector param.Field[string]                                           `json:"selector,required"`
+	Selector param.Field[string]                                           `json:"selector" api:"required"`
 	Hidden   param.Field[ContentNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
 	Timeout  param.Field[float64]                                          `json:"timeout"`
 	Visible  param.Field[ContentNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
@@ -445,11 +446,11 @@ func (r ContentNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 }
 
 type ContentNewResponseEnvelope struct {
-	Meta ContentNewResponseEnvelopeMeta `json:"meta,required"`
-	// Response status
-	Success bool                               `json:"success,required"`
+	Meta ContentNewResponseEnvelopeMeta `json:"meta" api:"required"`
+	// Response status.
+	Success bool                               `json:"success" api:"required"`
 	Errors  []ContentNewResponseEnvelopeErrors `json:"errors"`
-	// HTML content
+	// HTML content.
 	Result string                         `json:"result"`
 	JSON   contentNewResponseEnvelopeJSON `json:"-"`
 }
@@ -497,10 +498,10 @@ func (r contentNewResponseEnvelopeMetaJSON) RawJSON() string {
 }
 
 type ContentNewResponseEnvelopeErrors struct {
-	// Error code
-	Code float64 `json:"code,required"`
-	// Error Message
-	Message string                               `json:"message,required"`
+	// Error code.
+	Code float64 `json:"code" api:"required"`
+	// Error message.
+	Message string                               `json:"message" api:"required"`
 	JSON    contentNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 

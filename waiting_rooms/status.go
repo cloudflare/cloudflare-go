@@ -58,19 +58,19 @@ func (r *StatusService) Get(ctx context.Context, waitingRoomID string, query Sta
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if waitingRoomID == "" {
 		err = errors.New("missing required waiting_room_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/status", query.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type StatusGetResponse struct {
@@ -121,11 +121,11 @@ func (r StatusGetResponseStatus) IsKnown() bool {
 
 type StatusGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type StatusGetResponseEnvelope struct {
-	Result StatusGetResponse             `json:"result,required"`
+	Result StatusGetResponse             `json:"result" api:"required"`
 	JSON   statusGetResponseEnvelopeJSON `json:"-"`
 }
 

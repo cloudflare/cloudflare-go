@@ -34,42 +34,44 @@ func NewRiskScoringBehaviourService(opts ...option.RequestOption) (r *RiskScorin
 	return
 }
 
-// Update configuration for risk behaviors
+// Updates risk score behavior configurations, defining weights and thresholds for
+// risk calculation.
 func (r *RiskScoringBehaviourService) Update(ctx context.Context, params RiskScoringBehaviourUpdateParams, opts ...option.RequestOption) (res *RiskScoringBehaviourUpdateResponse, err error) {
 	var env RiskScoringBehaviourUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/behaviors", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
-// Get all behaviors and associated configuration
+// Retrieves configured risk score behaviors that define how user actions affect
+// their overall risk score.
 func (r *RiskScoringBehaviourService) Get(ctx context.Context, query RiskScoringBehaviourGetParams, opts ...option.RequestOption) (res *RiskScoringBehaviourGetResponse, err error) {
 	var env RiskScoringBehaviourGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/behaviors", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RiskScoringBehaviourUpdateResponse struct {
-	Behaviors map[string]RiskScoringBehaviourUpdateResponseBehavior `json:"behaviors,required"`
+	Behaviors map[string]RiskScoringBehaviourUpdateResponseBehavior `json:"behaviors" api:"required"`
 	JSON      riskScoringBehaviourUpdateResponseJSON                `json:"-"`
 }
 
@@ -90,8 +92,8 @@ func (r riskScoringBehaviourUpdateResponseJSON) RawJSON() string {
 }
 
 type RiskScoringBehaviourUpdateResponseBehavior struct {
-	Enabled   bool                                                 `json:"enabled,required"`
-	RiskLevel RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel `json:"risk_level,required"`
+	Enabled   bool                                                 `json:"enabled" api:"required"`
+	RiskLevel RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel `json:"risk_level" api:"required"`
 	JSON      riskScoringBehaviourUpdateResponseBehaviorJSON       `json:"-"`
 }
 
@@ -129,7 +131,7 @@ func (r RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel) IsKnown() bool {
 }
 
 type RiskScoringBehaviourGetResponse struct {
-	Behaviors map[string]RiskScoringBehaviourGetResponseBehavior `json:"behaviors,required"`
+	Behaviors map[string]RiskScoringBehaviourGetResponseBehavior `json:"behaviors" api:"required"`
 	JSON      riskScoringBehaviourGetResponseJSON                `json:"-"`
 }
 
@@ -150,10 +152,10 @@ func (r riskScoringBehaviourGetResponseJSON) RawJSON() string {
 }
 
 type RiskScoringBehaviourGetResponseBehavior struct {
-	Description string                                            `json:"description,required"`
-	Enabled     bool                                              `json:"enabled,required"`
-	Name        string                                            `json:"name,required"`
-	RiskLevel   RiskScoringBehaviourGetResponseBehaviorsRiskLevel `json:"risk_level,required"`
+	Description string                                            `json:"description" api:"required"`
+	Enabled     bool                                              `json:"enabled" api:"required"`
+	Name        string                                            `json:"name" api:"required"`
+	RiskLevel   RiskScoringBehaviourGetResponseBehaviorsRiskLevel `json:"risk_level" api:"required"`
 	JSON        riskScoringBehaviourGetResponseBehaviorJSON       `json:"-"`
 }
 
@@ -193,8 +195,8 @@ func (r RiskScoringBehaviourGetResponseBehaviorsRiskLevel) IsKnown() bool {
 }
 
 type RiskScoringBehaviourUpdateParams struct {
-	AccountID param.Field[string]                                               `path:"account_id,required"`
-	Behaviors param.Field[map[string]RiskScoringBehaviourUpdateParamsBehaviors] `json:"behaviors,required"`
+	AccountID param.Field[string]                                               `path:"account_id" api:"required"`
+	Behaviors param.Field[map[string]RiskScoringBehaviourUpdateParamsBehaviors] `json:"behaviors" api:"required"`
 }
 
 func (r RiskScoringBehaviourUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -202,8 +204,8 @@ func (r RiskScoringBehaviourUpdateParams) MarshalJSON() (data []byte, err error)
 }
 
 type RiskScoringBehaviourUpdateParamsBehaviors struct {
-	Enabled   param.Field[bool]                                               `json:"enabled,required"`
-	RiskLevel param.Field[RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel] `json:"risk_level,required"`
+	Enabled   param.Field[bool]                                               `json:"enabled" api:"required"`
+	RiskLevel param.Field[RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel] `json:"risk_level" api:"required"`
 }
 
 func (r RiskScoringBehaviourUpdateParamsBehaviors) MarshalJSON() (data []byte, err error) {
@@ -227,10 +229,10 @@ func (r RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel) IsKnown() bool {
 }
 
 type RiskScoringBehaviourUpdateResponseEnvelope struct {
-	Errors   []RiskScoringBehaviourUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringBehaviourUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringBehaviourUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringBehaviourUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringBehaviourUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RiskScoringBehaviourUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RiskScoringBehaviourUpdateResponse                `json:"result"`
 	JSON    riskScoringBehaviourUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -255,8 +257,8 @@ func (r riskScoringBehaviourUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringBehaviourUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           RiskScoringBehaviourUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringBehaviourUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -303,8 +305,8 @@ func (r riskScoringBehaviourUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type RiskScoringBehaviourUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           RiskScoringBehaviourUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringBehaviourUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -367,14 +369,14 @@ func (r RiskScoringBehaviourUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringBehaviourGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringBehaviourGetResponseEnvelope struct {
-	Errors   []RiskScoringBehaviourGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringBehaviourGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringBehaviourGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringBehaviourGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringBehaviourGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RiskScoringBehaviourGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RiskScoringBehaviourGetResponse                `json:"result"`
 	JSON    riskScoringBehaviourGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -399,8 +401,8 @@ func (r riskScoringBehaviourGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringBehaviourGetResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           RiskScoringBehaviourGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringBehaviourGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -447,8 +449,8 @@ func (r riskScoringBehaviourGetResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type RiskScoringBehaviourGetResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           RiskScoringBehaviourGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringBehaviourGetResponseEnvelopeMessagesJSON   `json:"-"`

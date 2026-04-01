@@ -44,7 +44,7 @@ func (r *SeatService) Edit(ctx context.Context, params SeatEditParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/seats", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
@@ -98,8 +98,8 @@ func (r seatJSON) RawJSON() string {
 
 type SeatEditParams struct {
 	// Identifier.
-	AccountID param.Field[string]  `path:"account_id,required"`
-	Body      []SeatEditParamsBody `json:"body,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
+	Body      []SeatEditParamsBody `json:"body" api:"required"`
 }
 
 func (r SeatEditParams) MarshalJSON() (data []byte, err error) {
@@ -108,11 +108,11 @@ func (r SeatEditParams) MarshalJSON() (data []byte, err error) {
 
 type SeatEditParamsBody struct {
 	// True if the seat is part of Access.
-	AccessSeat param.Field[bool] `json:"access_seat,required"`
+	AccessSeat param.Field[bool] `json:"access_seat" api:"required"`
 	// True if the seat is part of Gateway.
-	GatewaySeat param.Field[bool] `json:"gateway_seat,required"`
+	GatewaySeat param.Field[bool] `json:"gateway_seat" api:"required"`
 	// The unique API identifier for the Zero Trust seat.
-	SeatUID param.Field[string] `json:"seat_uid,required"`
+	SeatUID param.Field[string] `json:"seat_uid" api:"required"`
 }
 
 func (r SeatEditParamsBody) MarshalJSON() (data []byte, err error) {

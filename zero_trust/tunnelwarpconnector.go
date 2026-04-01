@@ -27,8 +27,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewTunnelWARPConnectorService] method instead.
 type TunnelWARPConnectorService struct {
-	Options []option.RequestOption
-	Token   *TunnelWARPConnectorTokenService
+	Options     []option.RequestOption
+	Token       *TunnelWARPConnectorTokenService
+	Connections *TunnelWARPConnectorConnectionService
+	Connectors  *TunnelWARPConnectorConnectorService
+	Failover    *TunnelWARPConnectorFailoverService
 }
 
 // NewTunnelWARPConnectorService generates a new service that applies the given
@@ -38,6 +41,9 @@ func NewTunnelWARPConnectorService(opts ...option.RequestOption) (r *TunnelWARPC
 	r = &TunnelWARPConnectorService{}
 	r.Options = opts
 	r.Token = NewTunnelWARPConnectorTokenService(opts...)
+	r.Connections = NewTunnelWARPConnectorConnectionService(opts...)
+	r.Connectors = NewTunnelWARPConnectorConnectorService(opts...)
+	r.Failover = NewTunnelWARPConnectorFailoverService(opts...)
 	return
 }
 
@@ -47,15 +53,15 @@ func (r *TunnelWARPConnectorService) New(ctx context.Context, params TunnelWARPC
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
@@ -65,7 +71,7 @@ func (r *TunnelWARPConnectorService) List(ctx context.Context, params TunnelWARP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -91,19 +97,19 @@ func (r *TunnelWARPConnectorService) Delete(ctx context.Context, tunnelID string
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", body.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing Warp Connector Tunnel.
@@ -112,19 +118,19 @@ func (r *TunnelWARPConnectorService) Edit(ctx context.Context, tunnelID string, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single Warp Connector Tunnel.
@@ -133,19 +139,19 @@ func (r *TunnelWARPConnectorService) Get(ctx context.Context, tunnelID string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
@@ -905,9 +911,9 @@ func (r TunnelWARPConnectorGetResponseTunType) IsKnown() bool {
 
 type TunnelWARPConnectorNewParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Indicates that the tunnel will be created to be highly available. If omitted,
 	// defaults to false.
 	Ha param.Field[bool] `json:"ha"`
@@ -918,12 +924,12 @@ func (r TunnelWARPConnectorNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelWARPConnectorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-	Result TunnelWARPConnectorNewResponse `json:"result,required"`
+	Result TunnelWARPConnectorNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelWARPConnectorNewResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelWARPConnectorNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelWARPConnectorNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -963,7 +969,7 @@ func (r TunnelWARPConnectorNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelWARPConnectorListParams struct {
 	// Cloudflare account ID
-	AccountID     param.Field[string] `path:"account_id,required"`
+	AccountID     param.Field[string] `path:"account_id" api:"required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only resources that were created (and not deleted) before
 	// this time. URL encoded.
@@ -1021,16 +1027,16 @@ func (r TunnelWARPConnectorListParamsStatus) IsKnown() bool {
 
 type TunnelWARPConnectorDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelWARPConnectorDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-	Result TunnelWARPConnectorDeleteResponse `json:"result,required"`
+	Result TunnelWARPConnectorDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelWARPConnectorDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelWARPConnectorDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelWARPConnectorDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1070,7 +1076,7 @@ func (r TunnelWARPConnectorDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelWARPConnectorEditParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name"`
 	// Sets the password required to run a locally-managed tunnel. Must be at least 32
@@ -1083,12 +1089,12 @@ func (r TunnelWARPConnectorEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelWARPConnectorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-	Result TunnelWARPConnectorEditResponse `json:"result,required"`
+	Result TunnelWARPConnectorEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelWARPConnectorEditResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelWARPConnectorEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelWARPConnectorEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1128,16 +1134,16 @@ func (r TunnelWARPConnectorEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelWARPConnectorGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelWARPConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-	Result TunnelWARPConnectorGetResponse `json:"result,required"`
+	Result TunnelWARPConnectorGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelWARPConnectorGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelWARPConnectorGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelWARPConnectorGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -41,19 +41,19 @@ func (r *ProjectDomainService) New(ctx context.Context, projectName string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", params.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a list of all domains associated with a Pages project.
@@ -63,11 +63,11 @@ func (r *ProjectDomainService) List(ctx context.Context, projectName string, que
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", query.AccountID, projectName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -93,23 +93,23 @@ func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, d
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if domainName == "" {
 		err = errors.New("missing required domain_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retry the validation status of a single domain.
@@ -118,23 +118,23 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if domainName == "" {
 		err = errors.New("missing required domain_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single domain.
@@ -143,36 +143,36 @@ func (r *ProjectDomainService) Get(ctx context.Context, projectName string, doma
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if projectName == "" {
 		err = errors.New("missing required project_name parameter")
-		return
+		return nil, err
 	}
 	if domainName == "" {
 		err = errors.New("missing required domain_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", query.AccountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ProjectDomainNewResponse struct {
-	ID                   string                                       `json:"id,required"`
-	CertificateAuthority ProjectDomainNewResponseCertificateAuthority `json:"certificate_authority,required"`
-	CreatedOn            string                                       `json:"created_on,required"`
-	DomainID             string                                       `json:"domain_id,required"`
+	ID                   string                                       `json:"id" api:"required"`
+	CertificateAuthority ProjectDomainNewResponseCertificateAuthority `json:"certificate_authority" api:"required"`
+	CreatedOn            string                                       `json:"created_on" api:"required"`
+	DomainID             string                                       `json:"domain_id" api:"required"`
 	// The domain name.
-	Name             string                                   `json:"name,required"`
-	Status           ProjectDomainNewResponseStatus           `json:"status,required"`
-	ValidationData   ProjectDomainNewResponseValidationData   `json:"validation_data,required"`
-	VerificationData ProjectDomainNewResponseVerificationData `json:"verification_data,required"`
-	ZoneTag          string                                   `json:"zone_tag,required"`
+	Name             string                                   `json:"name" api:"required"`
+	Status           ProjectDomainNewResponseStatus           `json:"status" api:"required"`
+	ValidationData   ProjectDomainNewResponseValidationData   `json:"validation_data" api:"required"`
+	VerificationData ProjectDomainNewResponseVerificationData `json:"verification_data" api:"required"`
+	ZoneTag          string                                   `json:"zone_tag" api:"required"`
 	JSON             projectDomainNewResponseJSON             `json:"-"`
 }
 
@@ -235,8 +235,8 @@ func (r ProjectDomainNewResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainNewResponseValidationData struct {
-	Method       ProjectDomainNewResponseValidationDataMethod `json:"method,required"`
-	Status       ProjectDomainNewResponseValidationDataStatus `json:"status,required"`
+	Method       ProjectDomainNewResponseValidationDataMethod `json:"method" api:"required"`
+	Status       ProjectDomainNewResponseValidationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                       `json:"error_message"`
 	TXTName      string                                       `json:"txt_name"`
 	TXTValue     string                                       `json:"txt_value"`
@@ -297,7 +297,7 @@ func (r ProjectDomainNewResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainNewResponseVerificationData struct {
-	Status       ProjectDomainNewResponseVerificationDataStatus `json:"status,required"`
+	Status       ProjectDomainNewResponseVerificationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                         `json:"error_message"`
 	JSON         projectDomainNewResponseVerificationDataJSON   `json:"-"`
 }
@@ -338,16 +338,16 @@ func (r ProjectDomainNewResponseVerificationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainListResponse struct {
-	ID                   string                                        `json:"id,required"`
-	CertificateAuthority ProjectDomainListResponseCertificateAuthority `json:"certificate_authority,required"`
-	CreatedOn            string                                        `json:"created_on,required"`
-	DomainID             string                                        `json:"domain_id,required"`
+	ID                   string                                        `json:"id" api:"required"`
+	CertificateAuthority ProjectDomainListResponseCertificateAuthority `json:"certificate_authority" api:"required"`
+	CreatedOn            string                                        `json:"created_on" api:"required"`
+	DomainID             string                                        `json:"domain_id" api:"required"`
 	// The domain name.
-	Name             string                                    `json:"name,required"`
-	Status           ProjectDomainListResponseStatus           `json:"status,required"`
-	ValidationData   ProjectDomainListResponseValidationData   `json:"validation_data,required"`
-	VerificationData ProjectDomainListResponseVerificationData `json:"verification_data,required"`
-	ZoneTag          string                                    `json:"zone_tag,required"`
+	Name             string                                    `json:"name" api:"required"`
+	Status           ProjectDomainListResponseStatus           `json:"status" api:"required"`
+	ValidationData   ProjectDomainListResponseValidationData   `json:"validation_data" api:"required"`
+	VerificationData ProjectDomainListResponseVerificationData `json:"verification_data" api:"required"`
+	ZoneTag          string                                    `json:"zone_tag" api:"required"`
 	JSON             projectDomainListResponseJSON             `json:"-"`
 }
 
@@ -410,8 +410,8 @@ func (r ProjectDomainListResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainListResponseValidationData struct {
-	Method       ProjectDomainListResponseValidationDataMethod `json:"method,required"`
-	Status       ProjectDomainListResponseValidationDataStatus `json:"status,required"`
+	Method       ProjectDomainListResponseValidationDataMethod `json:"method" api:"required"`
+	Status       ProjectDomainListResponseValidationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                        `json:"error_message"`
 	TXTName      string                                        `json:"txt_name"`
 	TXTValue     string                                        `json:"txt_value"`
@@ -472,7 +472,7 @@ func (r ProjectDomainListResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainListResponseVerificationData struct {
-	Status       ProjectDomainListResponseVerificationDataStatus `json:"status,required"`
+	Status       ProjectDomainListResponseVerificationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                          `json:"error_message"`
 	JSON         projectDomainListResponseVerificationDataJSON   `json:"-"`
 }
@@ -515,16 +515,16 @@ func (r ProjectDomainListResponseVerificationDataStatus) IsKnown() bool {
 type ProjectDomainDeleteResponse = interface{}
 
 type ProjectDomainEditResponse struct {
-	ID                   string                                        `json:"id,required"`
-	CertificateAuthority ProjectDomainEditResponseCertificateAuthority `json:"certificate_authority,required"`
-	CreatedOn            string                                        `json:"created_on,required"`
-	DomainID             string                                        `json:"domain_id,required"`
+	ID                   string                                        `json:"id" api:"required"`
+	CertificateAuthority ProjectDomainEditResponseCertificateAuthority `json:"certificate_authority" api:"required"`
+	CreatedOn            string                                        `json:"created_on" api:"required"`
+	DomainID             string                                        `json:"domain_id" api:"required"`
 	// The domain name.
-	Name             string                                    `json:"name,required"`
-	Status           ProjectDomainEditResponseStatus           `json:"status,required"`
-	ValidationData   ProjectDomainEditResponseValidationData   `json:"validation_data,required"`
-	VerificationData ProjectDomainEditResponseVerificationData `json:"verification_data,required"`
-	ZoneTag          string                                    `json:"zone_tag,required"`
+	Name             string                                    `json:"name" api:"required"`
+	Status           ProjectDomainEditResponseStatus           `json:"status" api:"required"`
+	ValidationData   ProjectDomainEditResponseValidationData   `json:"validation_data" api:"required"`
+	VerificationData ProjectDomainEditResponseVerificationData `json:"verification_data" api:"required"`
+	ZoneTag          string                                    `json:"zone_tag" api:"required"`
 	JSON             projectDomainEditResponseJSON             `json:"-"`
 }
 
@@ -587,8 +587,8 @@ func (r ProjectDomainEditResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainEditResponseValidationData struct {
-	Method       ProjectDomainEditResponseValidationDataMethod `json:"method,required"`
-	Status       ProjectDomainEditResponseValidationDataStatus `json:"status,required"`
+	Method       ProjectDomainEditResponseValidationDataMethod `json:"method" api:"required"`
+	Status       ProjectDomainEditResponseValidationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                        `json:"error_message"`
 	TXTName      string                                        `json:"txt_name"`
 	TXTValue     string                                        `json:"txt_value"`
@@ -649,7 +649,7 @@ func (r ProjectDomainEditResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainEditResponseVerificationData struct {
-	Status       ProjectDomainEditResponseVerificationDataStatus `json:"status,required"`
+	Status       ProjectDomainEditResponseVerificationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                          `json:"error_message"`
 	JSON         projectDomainEditResponseVerificationDataJSON   `json:"-"`
 }
@@ -690,16 +690,16 @@ func (r ProjectDomainEditResponseVerificationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainGetResponse struct {
-	ID                   string                                       `json:"id,required"`
-	CertificateAuthority ProjectDomainGetResponseCertificateAuthority `json:"certificate_authority,required"`
-	CreatedOn            string                                       `json:"created_on,required"`
-	DomainID             string                                       `json:"domain_id,required"`
+	ID                   string                                       `json:"id" api:"required"`
+	CertificateAuthority ProjectDomainGetResponseCertificateAuthority `json:"certificate_authority" api:"required"`
+	CreatedOn            string                                       `json:"created_on" api:"required"`
+	DomainID             string                                       `json:"domain_id" api:"required"`
 	// The domain name.
-	Name             string                                   `json:"name,required"`
-	Status           ProjectDomainGetResponseStatus           `json:"status,required"`
-	ValidationData   ProjectDomainGetResponseValidationData   `json:"validation_data,required"`
-	VerificationData ProjectDomainGetResponseVerificationData `json:"verification_data,required"`
-	ZoneTag          string                                   `json:"zone_tag,required"`
+	Name             string                                   `json:"name" api:"required"`
+	Status           ProjectDomainGetResponseStatus           `json:"status" api:"required"`
+	ValidationData   ProjectDomainGetResponseValidationData   `json:"validation_data" api:"required"`
+	VerificationData ProjectDomainGetResponseVerificationData `json:"verification_data" api:"required"`
+	ZoneTag          string                                   `json:"zone_tag" api:"required"`
 	JSON             projectDomainGetResponseJSON             `json:"-"`
 }
 
@@ -762,8 +762,8 @@ func (r ProjectDomainGetResponseStatus) IsKnown() bool {
 }
 
 type ProjectDomainGetResponseValidationData struct {
-	Method       ProjectDomainGetResponseValidationDataMethod `json:"method,required"`
-	Status       ProjectDomainGetResponseValidationDataStatus `json:"status,required"`
+	Method       ProjectDomainGetResponseValidationDataMethod `json:"method" api:"required"`
+	Status       ProjectDomainGetResponseValidationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                       `json:"error_message"`
 	TXTName      string                                       `json:"txt_name"`
 	TXTValue     string                                       `json:"txt_value"`
@@ -824,7 +824,7 @@ func (r ProjectDomainGetResponseValidationDataStatus) IsKnown() bool {
 }
 
 type ProjectDomainGetResponseVerificationData struct {
-	Status       ProjectDomainGetResponseVerificationDataStatus `json:"status,required"`
+	Status       ProjectDomainGetResponseVerificationDataStatus `json:"status" api:"required"`
 	ErrorMessage string                                         `json:"error_message"`
 	JSON         projectDomainGetResponseVerificationDataJSON   `json:"-"`
 }
@@ -866,9 +866,9 @@ func (r ProjectDomainGetResponseVerificationDataStatus) IsKnown() bool {
 
 type ProjectDomainNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The domain name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -876,11 +876,11 @@ func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainNewResponseEnvelope struct {
-	Errors   []ProjectDomainNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDomainNewResponse                   `json:"result,required"`
+	Errors   []ProjectDomainNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDomainNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectDomainNewResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDomainNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDomainNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDomainNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -904,8 +904,8 @@ func (r projectDomainNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDomainNewResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ProjectDomainNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDomainNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -952,8 +952,8 @@ func (r projectDomainNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectDomainNewResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ProjectDomainNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDomainNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1016,20 +1016,20 @@ func (r ProjectDomainNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDomainListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDomainDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDomainDeleteResponseEnvelope struct {
-	Errors   []ProjectDomainDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDomainDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []ProjectDomainDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDomainDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectDomainDeleteResponse                   `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success ProjectDomainDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDomainDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDomainDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1053,8 +1053,8 @@ func (r projectDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDomainDeleteResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ProjectDomainDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDomainDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1101,8 +1101,8 @@ func (r projectDomainDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectDomainDeleteResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ProjectDomainDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDomainDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1165,15 +1165,15 @@ func (r ProjectDomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDomainEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDomainEditResponseEnvelope struct {
-	Errors   []ProjectDomainEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDomainEditResponse                   `json:"result,required"`
+	Errors   []ProjectDomainEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDomainEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectDomainEditResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDomainEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDomainEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDomainEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1197,8 +1197,8 @@ func (r projectDomainEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDomainEditResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           ProjectDomainEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDomainEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1245,8 +1245,8 @@ func (r projectDomainEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectDomainEditResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ProjectDomainEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDomainEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1309,15 +1309,15 @@ func (r ProjectDomainEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDomainGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProjectDomainGetResponseEnvelope struct {
-	Errors   []ProjectDomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDomainGetResponse                   `json:"result,required"`
+	Errors   []ProjectDomainGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ProjectDomainGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ProjectDomainGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ProjectDomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ProjectDomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    projectDomainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1341,8 +1341,8 @@ func (r projectDomainGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProjectDomainGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ProjectDomainGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             projectDomainGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1389,8 +1389,8 @@ func (r projectDomainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ProjectDomainGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ProjectDomainGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             projectDomainGetResponseEnvelopeMessagesJSON   `json:"-"`

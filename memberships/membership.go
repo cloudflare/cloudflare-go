@@ -45,15 +45,15 @@ func (r *MembershipService) Update(ctx context.Context, membershipID string, bod
 	opts = slices.Concat(r.Options, opts)
 	if membershipID == "" {
 		err = errors.New("missing required membership_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("memberships/%s", membershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List memberships of accounts the user can access.
@@ -85,15 +85,15 @@ func (r *MembershipService) Delete(ctx context.Context, membershipID string, opt
 	opts = slices.Concat(r.Options, opts)
 	if membershipID == "" {
 		err = errors.New("missing required membership_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("memberships/%s", membershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a specific membership.
@@ -102,15 +102,15 @@ func (r *MembershipService) Get(ctx context.Context, membershipID string, opts .
 	opts = slices.Concat(r.Options, opts)
 	if membershipID == "" {
 		err = errors.New("missing required membership_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("memberships/%s", membershipID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Membership struct {
@@ -119,7 +119,7 @@ type Membership struct {
 	Account accounts.Account `json:"account"`
 	// Enterprise only. Indicates whether or not API access is enabled specifically for
 	// this user on a given account.
-	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
+	APIAccessEnabled bool `json:"api_access_enabled" api:"nullable"`
 	// All access permissions for the user at the account.
 	Permissions MembershipPermissions `json:"permissions"`
 	// List of role names the membership has for this account.
@@ -216,7 +216,7 @@ type MembershipUpdateResponse struct {
 	Account accounts.Account `json:"account"`
 	// Enterprise only. Indicates whether or not API access is enabled specifically for
 	// this user on a given account.
-	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
+	APIAccessEnabled bool `json:"api_access_enabled" api:"nullable"`
 	// All access permissions for the user at the account.
 	Permissions MembershipUpdateResponsePermissions `json:"permissions"`
 	// Access policy for the membership
@@ -345,7 +345,7 @@ func (r MembershipUpdateResponsePoliciesAccess) IsKnown() bool {
 // resources.
 type MembershipUpdateResponsePoliciesPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta MembershipUpdateResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -398,9 +398,9 @@ func (r membershipUpdateResponsePoliciesPermissionGroupsMetaJSON) RawJSON() stri
 // A group of scoped resources.
 type MembershipUpdateResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []MembershipUpdateResponsePoliciesResourceGroupsScope `json:"scope,required"`
+	Scope []MembershipUpdateResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MembershipUpdateResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -431,9 +431,9 @@ func (r membershipUpdateResponsePoliciesResourceGroupJSON) RawJSON() string {
 type MembershipUpdateResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []MembershipUpdateResponsePoliciesResourceGroupsScopeObject `json:"objects,required"`
+	Objects []MembershipUpdateResponsePoliciesResourceGroupsScopeObject `json:"objects" api:"required"`
 	JSON    membershipUpdateResponsePoliciesResourceGroupsScopeJSON     `json:"-"`
 }
 
@@ -459,7 +459,7 @@ func (r membershipUpdateResponsePoliciesResourceGroupsScopeJSON) RawJSON() strin
 type MembershipUpdateResponsePoliciesResourceGroupsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                                        `json:"key,required"`
+	Key  string                                                        `json:"key" api:"required"`
 	JSON membershipUpdateResponsePoliciesResourceGroupsScopeObjectJSON `json:"-"`
 }
 
@@ -549,7 +549,7 @@ type MembershipGetResponse struct {
 	Account accounts.Account `json:"account"`
 	// Enterprise only. Indicates whether or not API access is enabled specifically for
 	// this user on a given account.
-	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
+	APIAccessEnabled bool `json:"api_access_enabled" api:"nullable"`
 	// All access permissions for the user at the account.
 	Permissions MembershipGetResponsePermissions `json:"permissions"`
 	// Access policy for the membership
@@ -678,7 +678,7 @@ func (r MembershipGetResponsePoliciesAccess) IsKnown() bool {
 // resources.
 type MembershipGetResponsePoliciesPermissionGroup struct {
 	// Identifier of the permission group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Attributes associated to the permission group.
 	Meta MembershipGetResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the permission group.
@@ -731,9 +731,9 @@ func (r membershipGetResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string 
 // A group of scoped resources.
 type MembershipGetResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The scope associated to the resource group
-	Scope []MembershipGetResponsePoliciesResourceGroupsScope `json:"scope,required"`
+	Scope []MembershipGetResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MembershipGetResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -764,9 +764,9 @@ func (r membershipGetResponsePoliciesResourceGroupJSON) RawJSON() string {
 type MembershipGetResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
-	Key string `json:"key,required"`
+	Key string `json:"key" api:"required"`
 	// A list of scope objects for additional context.
-	Objects []MembershipGetResponsePoliciesResourceGroupsScopeObject `json:"objects,required"`
+	Objects []MembershipGetResponsePoliciesResourceGroupsScopeObject `json:"objects" api:"required"`
 	JSON    membershipGetResponsePoliciesResourceGroupsScopeJSON     `json:"-"`
 }
 
@@ -792,7 +792,7 @@ func (r membershipGetResponsePoliciesResourceGroupsScopeJSON) RawJSON() string {
 type MembershipGetResponsePoliciesResourceGroupsScopeObject struct {
 	// This is a combination of pre-defined resource name and identifier (like Zone ID
 	// etc.)
-	Key  string                                                     `json:"key,required"`
+	Key  string                                                     `json:"key" api:"required"`
 	JSON membershipGetResponsePoliciesResourceGroupsScopeObjectJSON `json:"-"`
 }
 
@@ -855,7 +855,7 @@ func (r MembershipGetResponseStatus) IsKnown() bool {
 
 type MembershipUpdateParams struct {
 	// Whether to accept or reject this account invitation.
-	Status param.Field[MembershipUpdateParamsStatus] `json:"status,required"`
+	Status param.Field[MembershipUpdateParamsStatus] `json:"status" api:"required"`
 }
 
 func (r MembershipUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -879,10 +879,10 @@ func (r MembershipUpdateParamsStatus) IsKnown() bool {
 }
 
 type MembershipUpdateResponseEnvelope struct {
-	Errors   []MembershipUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MembershipUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MembershipUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MembershipUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MembershipUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success MembershipUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  MembershipUpdateResponse                `json:"result"`
 	JSON    membershipUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -907,8 +907,8 @@ func (r membershipUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MembershipUpdateResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           MembershipUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             membershipUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -955,8 +955,8 @@ func (r membershipUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MembershipUpdateResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           MembershipUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             membershipUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1106,10 +1106,10 @@ func (r MembershipListParamsStatus) IsKnown() bool {
 }
 
 type MembershipDeleteResponseEnvelope struct {
-	Errors   []MembershipDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MembershipDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MembershipDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MembershipDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MembershipDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success MembershipDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  MembershipDeleteResponse                `json:"result"`
 	JSON    membershipDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -1134,8 +1134,8 @@ func (r membershipDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MembershipDeleteResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           MembershipDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             membershipDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1182,8 +1182,8 @@ func (r membershipDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MembershipDeleteResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           MembershipDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             membershipDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1245,10 +1245,10 @@ func (r MembershipDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MembershipGetResponseEnvelope struct {
-	Errors   []MembershipGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MembershipGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []MembershipGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []MembershipGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success MembershipGetResponseEnvelopeSuccess `json:"success,required"`
+	Success MembershipGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  MembershipGetResponse                `json:"result"`
 	JSON    membershipGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1273,8 +1273,8 @@ func (r membershipGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MembershipGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           MembershipGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             membershipGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1321,8 +1321,8 @@ func (r membershipGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type MembershipGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           MembershipGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             membershipGetResponseEnvelopeMessagesJSON   `json:"-"`

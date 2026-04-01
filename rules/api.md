@@ -37,6 +37,10 @@ Methods:
 
 ### Items
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/rules#ListCursorParam">ListCursorParam</a>
+
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/rules#ListCursor">ListCursor</a>

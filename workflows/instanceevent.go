@@ -40,33 +40,33 @@ func (r *InstanceEventService) New(ctx context.Context, workflowName string, ins
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if workflowName == "" {
 		err = errors.New("missing required workflow_name parameter")
-		return
+		return nil, err
 	}
 	if instanceID == "" {
 		err = errors.New("missing required instance_id parameter")
-		return
+		return nil, err
 	}
 	if eventType == "" {
 		err = errors.New("missing required event_type parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/%s/events/%s", params.AccountID, workflowName, instanceID, eventType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InstanceEventNewResponse = interface{}
 
 type InstanceEventNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      interface{}         `json:"body"`
 }
 
@@ -75,9 +75,9 @@ func (r InstanceEventNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceEventNewResponseEnvelope struct {
-	Errors     []InstanceEventNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []InstanceEventNewResponseEnvelopeMessages `json:"messages,required"`
-	Success    InstanceEventNewResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []InstanceEventNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []InstanceEventNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Success    InstanceEventNewResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     InstanceEventNewResponse                   `json:"result"`
 	ResultInfo InstanceEventNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       instanceEventNewResponseEnvelopeJSON       `json:"-"`
@@ -104,8 +104,8 @@ func (r instanceEventNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceEventNewResponseEnvelopeErrors struct {
-	Code    float64                                    `json:"code,required"`
-	Message string                                     `json:"message,required"`
+	Code    float64                                    `json:"code" api:"required"`
+	Message string                                     `json:"message" api:"required"`
 	JSON    instanceEventNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -127,8 +127,8 @@ func (r instanceEventNewResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type InstanceEventNewResponseEnvelopeMessages struct {
-	Code    float64                                      `json:"code,required"`
-	Message string                                       `json:"message,required"`
+	Code    float64                                      `json:"code" api:"required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    instanceEventNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -164,9 +164,9 @@ func (r InstanceEventNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InstanceEventNewResponseEnvelopeResultInfo struct {
-	Count      float64                                        `json:"count,required"`
-	PerPage    float64                                        `json:"per_page,required"`
-	TotalCount float64                                        `json:"total_count,required"`
+	Count      float64                                        `json:"count" api:"required"`
+	PerPage    float64                                        `json:"per_page" api:"required"`
+	TotalCount float64                                        `json:"total_count" api:"required"`
 	Cursor     string                                         `json:"cursor"`
 	Page       float64                                        `json:"page"`
 	JSON       instanceEventNewResponseEnvelopeResultInfoJSON `json:"-"`

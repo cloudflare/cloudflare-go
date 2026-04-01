@@ -44,15 +44,15 @@ func (r *AccessPolicyService) New(ctx context.Context, params AccessPolicyNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policies", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a Access reusable policy.
@@ -61,19 +61,19 @@ func (r *AccessPolicyService) Update(ctx context.Context, policyID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policies/%s", params.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists Access reusable policies.
@@ -83,7 +83,7 @@ func (r *AccessPolicyService) List(ctx context.Context, params AccessPolicyListP
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policies", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -109,19 +109,19 @@ func (r *AccessPolicyService) Delete(ctx context.Context, policyID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policies/%s", body.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single Access reusable policy.
@@ -130,25 +130,25 @@ func (r *AccessPolicyService) Get(ctx context.Context, policyID string, query Ac
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policies/%s", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A group of email addresses that can approve a temporary authentication request.
 type ApprovalGroup struct {
 	// The number of approvals needed to obtain access.
-	ApprovalsNeeded float64 `json:"approvals_needed,required"`
+	ApprovalsNeeded float64 `json:"approvals_needed" api:"required"`
 	// A list of emails that can approve the access request.
 	EmailAddresses []string `json:"email_addresses"`
 	// The UUID of an re-usable email list.
@@ -176,7 +176,7 @@ func (r approvalGroupJSON) RawJSON() string {
 // A group of email addresses that can approve a temporary authentication request.
 type ApprovalGroupParam struct {
 	// The number of approvals needed to obtain access.
-	ApprovalsNeeded param.Field[float64] `json:"approvals_needed,required"`
+	ApprovalsNeeded param.Field[float64] `json:"approvals_needed" api:"required"`
 	// A list of emails that can approve the access request.
 	EmailAddresses param.Field[[]string] `json:"email_addresses"`
 	// The UUID of an re-usable email list.
@@ -1095,15 +1095,15 @@ func (r AccessPolicyGetResponseReusable) IsKnown() bool {
 
 type AccessPolicyNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
-	Decision param.Field[Decision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision" api:"required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
 	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -1224,10 +1224,10 @@ func (r AccessPolicyNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 }
 
 type AccessPolicyNewResponseEnvelope struct {
-	Errors   []AccessPolicyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessPolicyNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessPolicyNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessPolicyNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessPolicyNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessPolicyNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessPolicyNewResponse                `json:"result"`
 	JSON    accessPolicyNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1252,8 +1252,8 @@ func (r accessPolicyNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessPolicyNewResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessPolicyNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessPolicyNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1300,8 +1300,8 @@ func (r accessPolicyNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessPolicyNewResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessPolicyNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessPolicyNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1364,15 +1364,15 @@ func (r AccessPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessPolicyUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
-	Decision param.Field[Decision] `json:"decision,required"`
+	Decision param.Field[Decision] `json:"decision" api:"required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
 	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -1493,10 +1493,10 @@ func (r AccessPolicyUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 }
 
 type AccessPolicyUpdateResponseEnvelope struct {
-	Errors   []AccessPolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessPolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessPolicyUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessPolicyUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessPolicyUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessPolicyUpdateResponse                `json:"result"`
 	JSON    accessPolicyUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1521,8 +1521,8 @@ func (r accessPolicyUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessPolicyUpdateResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AccessPolicyUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessPolicyUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1569,8 +1569,8 @@ func (r accessPolicyUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessPolicyUpdateResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessPolicyUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessPolicyUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1633,7 +1633,7 @@ func (r AccessPolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessPolicyListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page param.Field[int64] `query:"page"`
 	// Number of results per page.
@@ -1650,14 +1650,14 @@ func (r AccessPolicyListParams) URLQuery() (v url.Values) {
 
 type AccessPolicyDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessPolicyDeleteResponseEnvelope struct {
-	Errors   []AccessPolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessPolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessPolicyDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessPolicyDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessPolicyDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessPolicyDeleteResponse                `json:"result"`
 	JSON    accessPolicyDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -1682,8 +1682,8 @@ func (r accessPolicyDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessPolicyDeleteResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           AccessPolicyDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessPolicyDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1730,8 +1730,8 @@ func (r accessPolicyDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessPolicyDeleteResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessPolicyDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessPolicyDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1794,14 +1794,14 @@ func (r AccessPolicyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessPolicyGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessPolicyGetResponseEnvelope struct {
-	Errors   []AccessPolicyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessPolicyGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessPolicyGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessPolicyGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessPolicyGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessPolicyGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessPolicyGetResponse                `json:"result"`
 	JSON    accessPolicyGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1826,8 +1826,8 @@ func (r accessPolicyGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessPolicyGetResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AccessPolicyGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessPolicyGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1874,8 +1874,8 @@ func (r accessPolicyGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessPolicyGetResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccessPolicyGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessPolicyGetResponseEnvelopeMessagesJSON   `json:"-"`

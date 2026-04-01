@@ -44,15 +44,15 @@ func (r *BGPTopService) Prefixes(ctx context.Context, query BGPTopPrefixesParams
 	path := "radar/bgp/top/prefixes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BGPTopPrefixesResponse struct {
-	Meta BGPTopPrefixesResponseMeta   `json:"meta,required"`
-	Top0 []BGPTopPrefixesResponseTop0 `json:"top_0,required"`
+	Meta BGPTopPrefixesResponseMeta   `json:"meta" api:"required"`
+	Top0 []BGPTopPrefixesResponseTop0 `json:"top_0" api:"required"`
 	JSON bgpTopPrefixesResponseJSON   `json:"-"`
 }
 
@@ -74,7 +74,7 @@ func (r bgpTopPrefixesResponseJSON) RawJSON() string {
 }
 
 type BGPTopPrefixesResponseMeta struct {
-	DateRange []BGPTopPrefixesResponseMetaDateRange `json:"dateRange,required"`
+	DateRange []BGPTopPrefixesResponseMetaDateRange `json:"dateRange" api:"required"`
 	JSON      bgpTopPrefixesResponseMetaJSON        `json:"-"`
 }
 
@@ -96,9 +96,9 @@ func (r bgpTopPrefixesResponseMetaJSON) RawJSON() string {
 
 type BGPTopPrefixesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                               `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                               `json:"startTime" api:"required" format:"date-time"`
 	JSON      bgpTopPrefixesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -120,9 +120,9 @@ func (r bgpTopPrefixesResponseMetaDateRangeJSON) RawJSON() string {
 }
 
 type BGPTopPrefixesResponseTop0 struct {
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// A numeric string.
-	Value string                         `json:"value,required"`
+	Value string                         `json:"value" api:"required"`
 	JSON  bgpTopPrefixesResponseTop0JSON `json:"-"`
 }
 
@@ -207,8 +207,8 @@ func (r BGPTopPrefixesParamsUpdateType) IsKnown() bool {
 }
 
 type BGPTopPrefixesResponseEnvelope struct {
-	Result  BGPTopPrefixesResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  BGPTopPrefixesResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    bgpTopPrefixesResponseEnvelopeJSON `json:"-"`
 }
 

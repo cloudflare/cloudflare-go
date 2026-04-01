@@ -40,15 +40,15 @@ func (r *AccountSettingService) Update(ctx context.Context, params AccountSettin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/account-settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches Worker account settings for an account.
@@ -57,15 +57,15 @@ func (r *AccountSettingService) Get(ctx context.Context, query AccountSettingGet
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/account-settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccountSettingUpdateResponse struct {
@@ -116,7 +116,7 @@ func (r accountSettingGetResponseJSON) RawJSON() string {
 
 type AccountSettingUpdateParams struct {
 	// Identifier.
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	DefaultUsageModel param.Field[string] `json:"default_usage_model"`
 	GreenCompute      param.Field[bool]   `json:"green_compute"`
 }
@@ -126,11 +126,11 @@ func (r AccountSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountSettingUpdateResponseEnvelope struct {
-	Errors   []AccountSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccountSettingUpdateResponse                   `json:"result,required"`
+	Errors   []AccountSettingUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountSettingUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   AccountSettingUpdateResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success AccountSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccountSettingUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    accountSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -154,8 +154,8 @@ func (r accountSettingUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountSettingUpdateResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccountSettingUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountSettingUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -202,8 +202,8 @@ func (r accountSettingUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountSettingUpdateResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccountSettingUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountSettingUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -266,15 +266,15 @@ func (r AccountSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountSettingGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccountSettingGetResponseEnvelope struct {
-	Errors   []AccountSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccountSettingGetResponse                   `json:"result,required"`
+	Errors   []AccountSettingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccountSettingGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   AccountSettingGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success AccountSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccountSettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    accountSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -298,8 +298,8 @@ func (r accountSettingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccountSettingGetResponseEnvelopeErrors struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           AccountSettingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accountSettingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -346,8 +346,8 @@ func (r accountSettingGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccountSettingGetResponseEnvelopeMessages struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           AccountSettingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accountSettingGetResponseEnvelopeMessagesJSON   `json:"-"`

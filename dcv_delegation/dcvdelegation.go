@@ -41,15 +41,15 @@ func (r *DCVDelegationService) Get(ctx context.Context, query DCVDelegationGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DCVDelegationUUID struct {
@@ -76,14 +76,14 @@ func (r dcvDelegationUUIDJSON) RawJSON() string {
 
 type DCVDelegationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DCVDelegationGetResponseEnvelope struct {
-	Errors   []DCVDelegationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DCVDelegationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DCVDelegationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DCVDelegationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DCVDelegationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DCVDelegationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DCVDelegationUUID                       `json:"result"`
 	JSON    dcvDelegationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -108,8 +108,8 @@ func (r dcvDelegationGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DCVDelegationGetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DCVDelegationGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dcvDelegationGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -156,8 +156,8 @@ func (r dcvDelegationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DCVDelegationGetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           DCVDelegationGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dcvDelegationGetResponseEnvelopeMessagesJSON   `json:"-"`

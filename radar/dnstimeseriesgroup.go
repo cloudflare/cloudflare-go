@@ -46,10 +46,10 @@ func (r *DNSTimeseriesGroupService) CacheHit(ctx context.Context, query DNSTimes
 	path := "radar/dns/timeseries_groups/cache_hit"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS responses by DNSSEC (DNS Security Extensions)
@@ -64,10 +64,10 @@ func (r *DNSTimeseriesGroupService) DNSSEC(ctx context.Context, query DNSTimeser
 	path := "radar/dns/timeseries_groups/dnssec"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by DNSSEC (DNS Security Extensions)
@@ -82,10 +82,10 @@ func (r *DNSTimeseriesGroupService) DNSSECAware(ctx context.Context, query DNSTi
 	path := "radar/dns/timeseries_groups/dnssec_aware"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNSSEC-validated answers by end-to-end security
@@ -100,10 +100,10 @@ func (r *DNSTimeseriesGroupService) DNSSECE2E(ctx context.Context, query DNSTime
 	path := "radar/dns/timeseries_groups/dnssec_e2e"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by IP version over time.
@@ -117,10 +117,10 @@ func (r *DNSTimeseriesGroupService) IPVersion(ctx context.Context, query DNSTime
 	path := "radar/dns/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by matching answers over time.
@@ -134,10 +134,10 @@ func (r *DNSTimeseriesGroupService) MatchingAnswer(ctx context.Context, query DN
 	path := "radar/dns/timeseries_groups/matching_answer"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by DNS transport protocol over time.
@@ -151,10 +151,10 @@ func (r *DNSTimeseriesGroupService) Protocol(ctx context.Context, query DNSTimes
 	path := "radar/dns/timeseries_groups/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by type over time.
@@ -168,10 +168,10 @@ func (r *DNSTimeseriesGroupService) QueryType(ctx context.Context, query DNSTime
 	path := "radar/dns/timeseries_groups/query_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by response code over time.
@@ -185,10 +185,10 @@ func (r *DNSTimeseriesGroupService) ResponseCode(ctx context.Context, query DNST
 	path := "radar/dns/timeseries_groups/response_code"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by minimum answer TTL over time.
@@ -202,16 +202,16 @@ func (r *DNSTimeseriesGroupService) ResponseTTL(ctx context.Context, query DNSTi
 	path := "radar/dns/timeseries_groups/response_ttl"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DNSTimeseriesGroupCacheHitResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupCacheHitResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupCacheHitResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupCacheHitResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupCacheHitResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupCacheHitResponseJSON   `json:"-"`
 }
 
@@ -237,16 +237,16 @@ type DNSTimeseriesGroupCacheHitResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupCacheHitResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupCacheHitResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupCacheHitResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupCacheHitResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupCacheHitResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupCacheHitResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupCacheHitResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupCacheHitResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupCacheHitResponseMetaJSON   `json:"-"`
 }
 
@@ -293,9 +293,9 @@ func (r DNSTimeseriesGroupCacheHitResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                    `json:"level,required"`
+	Level int64                                                    `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupCacheHitResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -319,15 +319,15 @@ func (r dnsTimeseriesGroupCacheHitResponseMetaConfidenceInfoJSON) RawJSON() stri
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                    `json:"description,required"`
-	EndDate     time.Time                                                                 `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                    `json:"description" api:"required"`
+	EndDate     time.Time                                                                 `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
-	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                          `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                               `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                             `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                          `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -415,9 +415,9 @@ func (r DNSTimeseriesGroupCacheHitResponseMetaConfidenceInfoAnnotationsEventType
 
 type DNSTimeseriesGroupCacheHitResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                           `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupCacheHitResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -462,8 +462,8 @@ func (r DNSTimeseriesGroupCacheHitResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupCacheHitResponseMetaUnit struct {
-	Name  string                                         `json:"name,required"`
-	Value string                                         `json:"value,required"`
+	Name  string                                         `json:"name" api:"required"`
+	Value string                                         `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupCacheHitResponseMetaUnitJSON `json:"-"`
 }
 
@@ -485,8 +485,8 @@ func (r dnsTimeseriesGroupCacheHitResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupCacheHitResponseSerie0 struct {
-	Negative []string                                     `json:"NEGATIVE,required"`
-	Positive []string                                     `json:"POSITIVE,required"`
+	Negative []string                                     `json:"NEGATIVE" api:"required"`
+	Positive []string                                     `json:"POSITIVE" api:"required"`
 	JSON     dnsTimeseriesGroupCacheHitResponseSerie0JSON `json:"-"`
 }
 
@@ -509,8 +509,8 @@ func (r dnsTimeseriesGroupCacheHitResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupDNSSECResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupDNSSECResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupDNSSECResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupDNSSECResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupDNSSECResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupDNSSECResponseJSON   `json:"-"`
 }
 
@@ -536,16 +536,16 @@ type DNSTimeseriesGroupDNSSECResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupDNSSECResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupDNSSECResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupDNSSECResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupDNSSECResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupDNSSECResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupDNSSECResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupDNSSECResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupDNSSECResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupDNSSECResponseMetaJSON   `json:"-"`
 }
 
@@ -592,9 +592,9 @@ func (r DNSTimeseriesGroupDNSSECResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                  `json:"level,required"`
+	Level int64                                                  `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupDNSSECResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -618,15 +618,15 @@ func (r dnsTimeseriesGroupDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                  `json:"description,required"`
-	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                  `json:"description" api:"required"`
+	EndDate     time.Time                                                               `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -714,9 +714,9 @@ func (r DNSTimeseriesGroupDNSSECResponseMetaConfidenceInfoAnnotationsEventType) 
 
 type DNSTimeseriesGroupDNSSECResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                         `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupDNSSECResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -761,8 +761,8 @@ func (r DNSTimeseriesGroupDNSSECResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDNSSECResponseMetaUnit struct {
-	Name  string                                       `json:"name,required"`
-	Value string                                       `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupDNSSECResponseMetaUnitJSON `json:"-"`
 }
 
@@ -784,10 +784,10 @@ func (r dnsTimeseriesGroupDNSSECResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupDNSSECResponseSerie0 struct {
-	Insecure []string                                   `json:"INSECURE,required"`
-	Invalid  []string                                   `json:"INVALID,required"`
-	Other    []string                                   `json:"OTHER,required"`
-	Secure   []string                                   `json:"SECURE,required"`
+	Insecure []string                                   `json:"INSECURE" api:"required"`
+	Invalid  []string                                   `json:"INVALID" api:"required"`
+	Other    []string                                   `json:"OTHER" api:"required"`
+	Secure   []string                                   `json:"SECURE" api:"required"`
 	JSON     dnsTimeseriesGroupDNSSECResponseSerie0JSON `json:"-"`
 }
 
@@ -812,8 +812,8 @@ func (r dnsTimeseriesGroupDNSSECResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupDNSSECAwareResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupDNSSECAwareResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupDNSSECAwareResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupDNSSECAwareResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupDNSSECAwareResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupDNSSECAwareResponseJSON   `json:"-"`
 }
 
@@ -839,16 +839,16 @@ type DNSTimeseriesGroupDNSSECAwareResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupDNSSECAwareResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupDNSSECAwareResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupDNSSECAwareResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupDNSSECAwareResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupDNSSECAwareResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupDNSSECAwareResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupDNSSECAwareResponseMetaJSON   `json:"-"`
 }
 
@@ -895,9 +895,9 @@ func (r DNSTimeseriesGroupDNSSECAwareResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                       `json:"level,required"`
+	Level int64                                                       `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -922,15 +922,15 @@ func (r dnsTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoJSON) RawJSON() s
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1018,9 +1018,9 @@ func (r DNSTimeseriesGroupDNSSECAwareResponseMetaConfidenceInfoAnnotationsEventT
 
 type DNSTimeseriesGroupDNSSECAwareResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupDNSSECAwareResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1065,8 +1065,8 @@ func (r DNSTimeseriesGroupDNSSECAwareResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDNSSECAwareResponseMetaUnit struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
+	Name  string                                            `json:"name" api:"required"`
+	Value string                                            `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupDNSSECAwareResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1088,8 +1088,8 @@ func (r dnsTimeseriesGroupDNSSECAwareResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupDNSSECAwareResponseSerie0 struct {
-	NotSupported []string                                        `json:"NOT_SUPPORTED,required"`
-	Supported    []string                                        `json:"SUPPORTED,required"`
+	NotSupported []string                                        `json:"NOT_SUPPORTED" api:"required"`
+	Supported    []string                                        `json:"SUPPORTED" api:"required"`
 	JSON         dnsTimeseriesGroupDNSSECAwareResponseSerie0JSON `json:"-"`
 }
 
@@ -1112,8 +1112,8 @@ func (r dnsTimeseriesGroupDNSSECAwareResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupDnssece2EResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupDnssece2EResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupDnssece2EResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupDnssece2EResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupDnssece2EResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupDnssece2EResponseJSON   `json:"-"`
 }
 
@@ -1139,16 +1139,16 @@ type DNSTimeseriesGroupDnssece2EResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupDnssece2EResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupDnssece2EResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupDnssece2EResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupDnssece2EResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupDnssece2EResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupDnssece2EResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupDnssece2EResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupDnssece2EResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupDnssece2EResponseMetaJSON   `json:"-"`
 }
 
@@ -1195,9 +1195,9 @@ func (r DNSTimeseriesGroupDnssece2EResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                     `json:"level,required"`
+	Level int64                                                     `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupDnssece2EResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1221,15 +1221,15 @@ func (r dnsTimeseriesGroupDnssece2EResponseMetaConfidenceInfoJSON) RawJSON() str
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                     `json:"description,required"`
-	EndDate     time.Time                                                                  `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                     `json:"description" api:"required"`
+	EndDate     time.Time                                                                  `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
-	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1317,9 +1317,9 @@ func (r DNSTimeseriesGroupDnssece2EResponseMetaConfidenceInfoAnnotationsEventTyp
 
 type DNSTimeseriesGroupDnssece2EResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                            `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupDnssece2EResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1364,8 +1364,8 @@ func (r DNSTimeseriesGroupDnssece2EResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDnssece2EResponseMetaUnit struct {
-	Name  string                                          `json:"name,required"`
-	Value string                                          `json:"value,required"`
+	Name  string                                          `json:"name" api:"required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupDnssece2EResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1387,8 +1387,8 @@ func (r dnsTimeseriesGroupDnssece2EResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupDnssece2EResponseSerie0 struct {
-	Negative []string                                      `json:"NEGATIVE,required"`
-	Positive []string                                      `json:"POSITIVE,required"`
+	Negative []string                                      `json:"NEGATIVE" api:"required"`
+	Positive []string                                      `json:"POSITIVE" api:"required"`
 	JSON     dnsTimeseriesGroupDnssece2EResponseSerie0JSON `json:"-"`
 }
 
@@ -1411,8 +1411,8 @@ func (r dnsTimeseriesGroupDnssece2EResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupIPVersionResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupIPVersionResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupIPVersionResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupIPVersionResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupIPVersionResponseJSON   `json:"-"`
 }
 
@@ -1438,16 +1438,16 @@ type DNSTimeseriesGroupIPVersionResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupIPVersionResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupIPVersionResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupIPVersionResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupIPVersionResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupIPVersionResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupIPVersionResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupIPVersionResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupIPVersionResponseMetaJSON   `json:"-"`
 }
 
@@ -1494,9 +1494,9 @@ func (r DNSTimeseriesGroupIPVersionResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                     `json:"level,required"`
+	Level int64                                                     `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1520,15 +1520,15 @@ func (r dnsTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON) RawJSON() str
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                     `json:"description,required"`
-	EndDate     time.Time                                                                  `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                     `json:"description" api:"required"`
+	EndDate     time.Time                                                                  `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
-	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1616,9 +1616,9 @@ func (r DNSTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsEventTyp
 
 type DNSTimeseriesGroupIPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                            `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupIPVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1663,8 +1663,8 @@ func (r DNSTimeseriesGroupIPVersionResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupIPVersionResponseMetaUnit struct {
-	Name  string                                          `json:"name,required"`
-	Value string                                          `json:"value,required"`
+	Name  string                                          `json:"name" api:"required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupIPVersionResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1686,8 +1686,8 @@ func (r dnsTimeseriesGroupIPVersionResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupIPVersionResponseSerie0 struct {
-	IPv4 []string                                      `json:"IPv4,required"`
-	IPv6 []string                                      `json:"IPv6,required"`
+	IPv4 []string                                      `json:"IPv4" api:"required"`
+	IPv6 []string                                      `json:"IPv6" api:"required"`
 	JSON dnsTimeseriesGroupIPVersionResponseSerie0JSON `json:"-"`
 }
 
@@ -1710,8 +1710,8 @@ func (r dnsTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupMatchingAnswerResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupMatchingAnswerResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupMatchingAnswerResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupMatchingAnswerResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupMatchingAnswerResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupMatchingAnswerResponseJSON   `json:"-"`
 }
 
@@ -1737,16 +1737,16 @@ type DNSTimeseriesGroupMatchingAnswerResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupMatchingAnswerResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupMatchingAnswerResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupMatchingAnswerResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupMatchingAnswerResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupMatchingAnswerResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupMatchingAnswerResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupMatchingAnswerResponseMetaJSON   `json:"-"`
 }
 
@@ -1793,9 +1793,9 @@ func (r DNSTimeseriesGroupMatchingAnswerResponseMetaAggInterval) IsKnown() bool 
 }
 
 type DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                          `json:"level,required"`
+	Level int64                                                          `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1820,15 +1820,15 @@ func (r dnsTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoJSON) RawJSON(
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                          `json:"description,required"`
-	EndDate     time.Time                                                                       `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                          `json:"description" api:"required"`
+	EndDate     time.Time                                                                       `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                                `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                     `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                   `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                                `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1916,9 +1916,9 @@ func (r DNSTimeseriesGroupMatchingAnswerResponseMetaConfidenceInfoAnnotationsEve
 
 type DNSTimeseriesGroupMatchingAnswerResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                                 `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupMatchingAnswerResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1963,8 +1963,8 @@ func (r DNSTimeseriesGroupMatchingAnswerResponseMetaNormalization) IsKnown() boo
 }
 
 type DNSTimeseriesGroupMatchingAnswerResponseMetaUnit struct {
-	Name  string                                               `json:"name,required"`
-	Value string                                               `json:"value,required"`
+	Name  string                                               `json:"name" api:"required"`
+	Value string                                               `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupMatchingAnswerResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1986,8 +1986,8 @@ func (r dnsTimeseriesGroupMatchingAnswerResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupMatchingAnswerResponseSerie0 struct {
-	Negative []string                                           `json:"NEGATIVE,required"`
-	Positive []string                                           `json:"POSITIVE,required"`
+	Negative []string                                           `json:"NEGATIVE" api:"required"`
+	Positive []string                                           `json:"POSITIVE" api:"required"`
 	JSON     dnsTimeseriesGroupMatchingAnswerResponseSerie0JSON `json:"-"`
 }
 
@@ -2010,8 +2010,8 @@ func (r dnsTimeseriesGroupMatchingAnswerResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupProtocolResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupProtocolResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupProtocolResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupProtocolResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupProtocolResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupProtocolResponseJSON   `json:"-"`
 }
 
@@ -2037,16 +2037,16 @@ type DNSTimeseriesGroupProtocolResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupProtocolResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupProtocolResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupProtocolResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupProtocolResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupProtocolResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupProtocolResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupProtocolResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupProtocolResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupProtocolResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupProtocolResponseMetaJSON   `json:"-"`
 }
 
@@ -2093,9 +2093,9 @@ func (r DNSTimeseriesGroupProtocolResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupProtocolResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                    `json:"level,required"`
+	Level int64                                                    `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2119,15 +2119,15 @@ func (r dnsTimeseriesGroupProtocolResponseMetaConfidenceInfoJSON) RawJSON() stri
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                    `json:"description,required"`
-	EndDate     time.Time                                                                 `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                    `json:"description" api:"required"`
+	EndDate     time.Time                                                                 `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
-	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                          `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                               `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                             `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                          `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2215,9 +2215,9 @@ func (r DNSTimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationsEventType
 
 type DNSTimeseriesGroupProtocolResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                           `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupProtocolResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2262,8 +2262,8 @@ func (r DNSTimeseriesGroupProtocolResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupProtocolResponseMetaUnit struct {
-	Name  string                                         `json:"name,required"`
-	Value string                                         `json:"value,required"`
+	Name  string                                         `json:"name" api:"required"`
+	Value string                                         `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupProtocolResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2285,10 +2285,10 @@ func (r dnsTimeseriesGroupProtocolResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupProtocolResponseSerie0 struct {
-	HTTPS []string                                     `json:"HTTPS,required"`
-	TCP   []string                                     `json:"TCP,required"`
-	TLS   []string                                     `json:"TLS,required"`
-	Udp   []string                                     `json:"UDP,required"`
+	HTTPS []string                                     `json:"HTTPS" api:"required"`
+	TCP   []string                                     `json:"TCP" api:"required"`
+	TLS   []string                                     `json:"TLS" api:"required"`
+	Udp   []string                                     `json:"UDP" api:"required"`
 	JSON  dnsTimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
 }
 
@@ -2313,8 +2313,8 @@ func (r dnsTimeseriesGroupProtocolResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupQueryTypeResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupQueryTypeResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupQueryTypeResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupQueryTypeResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupQueryTypeResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupQueryTypeResponseJSON   `json:"-"`
 }
 
@@ -2340,16 +2340,16 @@ type DNSTimeseriesGroupQueryTypeResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupQueryTypeResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupQueryTypeResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupQueryTypeResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupQueryTypeResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupQueryTypeResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupQueryTypeResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupQueryTypeResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupQueryTypeResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupQueryTypeResponseMetaJSON   `json:"-"`
 }
 
@@ -2396,9 +2396,9 @@ func (r DNSTimeseriesGroupQueryTypeResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                     `json:"level,required"`
+	Level int64                                                     `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupQueryTypeResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2422,15 +2422,15 @@ func (r dnsTimeseriesGroupQueryTypeResponseMetaConfidenceInfoJSON) RawJSON() str
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                     `json:"description,required"`
-	EndDate     time.Time                                                                  `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                     `json:"description" api:"required"`
+	EndDate     time.Time                                                                  `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
-	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2518,9 +2518,9 @@ func (r DNSTimeseriesGroupQueryTypeResponseMetaConfidenceInfoAnnotationsEventTyp
 
 type DNSTimeseriesGroupQueryTypeResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                            `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupQueryTypeResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2565,8 +2565,8 @@ func (r DNSTimeseriesGroupQueryTypeResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupQueryTypeResponseMetaUnit struct {
-	Name  string                                          `json:"name,required"`
-	Value string                                          `json:"value,required"`
+	Name  string                                          `json:"name" api:"required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupQueryTypeResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2588,8 +2588,8 @@ func (r dnsTimeseriesGroupQueryTypeResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupQueryTypeResponseSerie0 struct {
-	Timestamps  []time.Time                                   `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                           `json:"-,extras"`
+	Timestamps  []time.Time                                   `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                           `json:"-" api:"extrafields"`
 	JSON        dnsTimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
 }
 
@@ -2611,8 +2611,8 @@ func (r dnsTimeseriesGroupQueryTypeResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupResponseCodeResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupResponseCodeResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupResponseCodeResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupResponseCodeResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupResponseCodeResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupResponseCodeResponseJSON   `json:"-"`
 }
 
@@ -2638,16 +2638,16 @@ type DNSTimeseriesGroupResponseCodeResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupResponseCodeResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupResponseCodeResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupResponseCodeResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupResponseCodeResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupResponseCodeResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupResponseCodeResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupResponseCodeResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupResponseCodeResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupResponseCodeResponseMetaJSON   `json:"-"`
 }
 
@@ -2694,9 +2694,9 @@ func (r DNSTimeseriesGroupResponseCodeResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                        `json:"level,required"`
+	Level int64                                                        `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupResponseCodeResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2721,15 +2721,15 @@ func (r dnsTimeseriesGroupResponseCodeResponseMetaConfidenceInfoJSON) RawJSON() 
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                        `json:"description,required"`
-	EndDate     time.Time                                                                     `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                        `json:"description" api:"required"`
+	EndDate     time.Time                                                                     `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                              `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                 `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                              `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2817,9 +2817,9 @@ func (r DNSTimeseriesGroupResponseCodeResponseMetaConfidenceInfoAnnotationsEvent
 
 type DNSTimeseriesGroupResponseCodeResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                               `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupResponseCodeResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2864,8 +2864,8 @@ func (r DNSTimeseriesGroupResponseCodeResponseMetaNormalization) IsKnown() bool 
 }
 
 type DNSTimeseriesGroupResponseCodeResponseMetaUnit struct {
-	Name  string                                             `json:"name,required"`
-	Value string                                             `json:"value,required"`
+	Name  string                                             `json:"name" api:"required"`
+	Value string                                             `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupResponseCodeResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2887,8 +2887,8 @@ func (r dnsTimeseriesGroupResponseCodeResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupResponseCodeResponseSerie0 struct {
-	Timestamps  []time.Time                                      `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                              `json:"-,extras"`
+	Timestamps  []time.Time                                      `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                              `json:"-" api:"extrafields"`
 	JSON        dnsTimeseriesGroupResponseCodeResponseSerie0JSON `json:"-"`
 }
 
@@ -2910,8 +2910,8 @@ func (r dnsTimeseriesGroupResponseCodeResponseSerie0JSON) RawJSON() string {
 
 type DNSTimeseriesGroupResponseTTLResponse struct {
 	// Metadata for the results.
-	Meta   DNSTimeseriesGroupResponseTTLResponseMeta   `json:"meta,required"`
-	Serie0 DNSTimeseriesGroupResponseTTLResponseSerie0 `json:"serie_0,required"`
+	Meta   DNSTimeseriesGroupResponseTTLResponseMeta   `json:"meta" api:"required"`
+	Serie0 DNSTimeseriesGroupResponseTTLResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   dnsTimeseriesGroupResponseTTLResponseJSON   `json:"-"`
 }
 
@@ -2937,16 +2937,16 @@ type DNSTimeseriesGroupResponseTTLResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    DNSTimeseriesGroupResponseTTLResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSTimeseriesGroupResponseTTLResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    DNSTimeseriesGroupResponseTTLResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSTimeseriesGroupResponseTTLResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSTimeseriesGroupResponseTTLResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSTimeseriesGroupResponseTTLResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSTimeseriesGroupResponseTTLResponseMetaUnit `json:"units,required"`
+	Units []DNSTimeseriesGroupResponseTTLResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsTimeseriesGroupResponseTTLResponseMetaJSON   `json:"-"`
 }
 
@@ -2993,9 +2993,9 @@ func (r DNSTimeseriesGroupResponseTTLResponseMetaAggInterval) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfo struct {
-	Annotations []DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                       `json:"level,required"`
+	Level int64                                                       `json:"level" api:"required"`
 	JSON  dnsTimeseriesGroupResponseTTLResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -3020,15 +3020,15 @@ func (r dnsTimeseriesGroupResponseTTLResponseMetaConfidenceInfoJSON) RawJSON() s
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -3116,9 +3116,9 @@ func (r DNSTimeseriesGroupResponseTTLResponseMetaConfidenceInfoAnnotationsEventT
 
 type DNSTimeseriesGroupResponseTTLResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsTimeseriesGroupResponseTTLResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -3163,8 +3163,8 @@ func (r DNSTimeseriesGroupResponseTTLResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupResponseTTLResponseMetaUnit struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
+	Name  string                                            `json:"name" api:"required"`
+	Value string                                            `json:"value" api:"required"`
 	JSON  dnsTimeseriesGroupResponseTTLResponseMetaUnitJSON `json:"-"`
 }
 
@@ -3186,13 +3186,13 @@ func (r dnsTimeseriesGroupResponseTTLResponseMetaUnitJSON) RawJSON() string {
 }
 
 type DNSTimeseriesGroupResponseTTLResponseSerie0 struct {
-	Gt15mLte1h []string                                        `json:"gt_15m_lte_1h,required"`
-	Gt1dLte1w  []string                                        `json:"gt_1d_lte_1w,required"`
-	Gt1hLte1d  []string                                        `json:"gt_1h_lte_1d,required"`
-	Gt1mLte5m  []string                                        `json:"gt_1m_lte_5m,required"`
-	Gt1w       []string                                        `json:"gt_1w,required"`
-	Gt5mLte15m []string                                        `json:"gt_5m_lte_15m,required"`
-	Lte1m      []string                                        `json:"lte_1m,required"`
+	Gt15mLte1h []string                                        `json:"gt_15m_lte_1h" api:"required"`
+	Gt1dLte1w  []string                                        `json:"gt_1d_lte_1w" api:"required"`
+	Gt1hLte1d  []string                                        `json:"gt_1h_lte_1d" api:"required"`
+	Gt1mLte5m  []string                                        `json:"gt_1m_lte_5m" api:"required"`
+	Gt1w       []string                                        `json:"gt_1w" api:"required"`
+	Gt5mLte15m []string                                        `json:"gt_5m_lte_15m" api:"required"`
+	Lte1m      []string                                        `json:"lte_1m" api:"required"`
 	JSON       dnsTimeseriesGroupResponseTTLResponseSerie0JSON `json:"-"`
 }
 
@@ -3456,8 +3456,8 @@ func (r DNSTimeseriesGroupCacheHitParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupCacheHitResponseEnvelope struct {
-	Result  DNSTimeseriesGroupCacheHitResponse             `json:"result,required"`
-	Success bool                                           `json:"success,required"`
+	Result  DNSTimeseriesGroupCacheHitResponse             `json:"result" api:"required"`
+	Success bool                                           `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupCacheHitResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3716,8 +3716,8 @@ func (r DNSTimeseriesGroupDNSSECParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDNSSECResponseEnvelope struct {
-	Result  DNSTimeseriesGroupDNSSECResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  DNSTimeseriesGroupDNSSECResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupDNSSECResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3976,8 +3976,8 @@ func (r DNSTimeseriesGroupDNSSECAwareParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDNSSECAwareResponseEnvelope struct {
-	Result  DNSTimeseriesGroupDNSSECAwareResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
+	Result  DNSTimeseriesGroupDNSSECAwareResponse             `json:"result" api:"required"`
+	Success bool                                              `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupDNSSECAwareResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4236,8 +4236,8 @@ func (r DNSTimeseriesGroupDnssece2EParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupDnssece2EResponseEnvelope struct {
-	Result  DNSTimeseriesGroupDnssece2EResponse             `json:"result,required"`
-	Success bool                                            `json:"success,required"`
+	Result  DNSTimeseriesGroupDnssece2EResponse             `json:"result" api:"required"`
+	Success bool                                            `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupDnssece2EResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4496,8 +4496,8 @@ func (r DNSTimeseriesGroupIPVersionParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupIPVersionResponseEnvelope struct {
-	Result  DNSTimeseriesGroupIPVersionResponse             `json:"result,required"`
-	Success bool                                            `json:"success,required"`
+	Result  DNSTimeseriesGroupIPVersionResponse             `json:"result" api:"required"`
+	Success bool                                            `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupIPVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4756,8 +4756,8 @@ func (r DNSTimeseriesGroupMatchingAnswerParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupMatchingAnswerResponseEnvelope struct {
-	Result  DNSTimeseriesGroupMatchingAnswerResponse             `json:"result,required"`
-	Success bool                                                 `json:"success,required"`
+	Result  DNSTimeseriesGroupMatchingAnswerResponse             `json:"result" api:"required"`
+	Success bool                                                 `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupMatchingAnswerResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4997,8 +4997,8 @@ func (r DNSTimeseriesGroupProtocolParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupProtocolResponseEnvelope struct {
-	Result  DNSTimeseriesGroupProtocolResponse             `json:"result,required"`
-	Success bool                                           `json:"success,required"`
+	Result  DNSTimeseriesGroupProtocolResponse             `json:"result" api:"required"`
+	Success bool                                           `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupProtocolResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5158,8 +5158,8 @@ func (r DNSTimeseriesGroupQueryTypeParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupQueryTypeResponseEnvelope struct {
-	Result  DNSTimeseriesGroupQueryTypeResponse             `json:"result,required"`
-	Success bool                                            `json:"success,required"`
+	Result  DNSTimeseriesGroupQueryTypeResponse             `json:"result" api:"required"`
+	Success bool                                            `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupQueryTypeResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5388,8 +5388,8 @@ func (r DNSTimeseriesGroupResponseCodeParamsQueryType) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupResponseCodeResponseEnvelope struct {
-	Result  DNSTimeseriesGroupResponseCodeResponse             `json:"result,required"`
-	Success bool                                               `json:"success,required"`
+	Result  DNSTimeseriesGroupResponseCodeResponse             `json:"result" api:"required"`
+	Success bool                                               `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupResponseCodeResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5648,8 +5648,8 @@ func (r DNSTimeseriesGroupResponseTTLParamsResponseCode) IsKnown() bool {
 }
 
 type DNSTimeseriesGroupResponseTTLResponseEnvelope struct {
-	Result  DNSTimeseriesGroupResponseTTLResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
+	Result  DNSTimeseriesGroupResponseTTLResponse             `json:"result" api:"required"`
+	Success bool                                              `json:"success" api:"required"`
 	JSON    dnsTimeseriesGroupResponseTTLResponseEnvelopeJSON `json:"-"`
 }
 

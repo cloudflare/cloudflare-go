@@ -40,29 +40,29 @@ func (r *DefaultService) Get(ctx context.Context, query DefaultGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/default", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DefaultGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DefaultGetResponseEnvelope struct {
-	Errors   []DefaultGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DefaultGetResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz configuration
-	Result Configuration `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                           `json:"success,required"`
+	Errors   []DefaultGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DefaultGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Zaraz configuration.
+	Result Configuration `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success bool                           `json:"success" api:"required"`
 	JSON    defaultGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -86,8 +86,8 @@ func (r defaultGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DefaultGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           DefaultGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             defaultGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -134,8 +134,8 @@ func (r defaultGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DefaultGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           DefaultGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             defaultGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -42,15 +42,15 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Page Shield policy by ID.
@@ -59,19 +59,19 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", params.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all Page Shield policies.
@@ -81,7 +81,7 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -107,15 +107,15 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", body.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Fetches a Page Shield policy by ID.
@@ -124,33 +124,33 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", query.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PolicyParam struct {
 	// The action to take if the expression matches
-	Action param.Field[PolicyAction] `json:"action,required"`
+	Action param.Field[PolicyAction] `json:"action" api:"required"`
 	// A description for the policy
-	Description param.Field[string] `json:"description,required"`
+	Description param.Field[string] `json:"description" api:"required"`
 	// Whether the policy is enabled
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The expression which must match for the policy to be applied, using the
 	// Cloudflare Firewall rule expression syntax
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// The policy which will be applied
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r PolicyParam) MarshalJSON() (data []byte, err error) {
@@ -176,18 +176,18 @@ func (r PolicyAction) IsKnown() bool {
 
 type PolicyNewResponse struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The action to take if the expression matches
-	Action PolicyNewResponseAction `json:"action,required"`
+	Action PolicyNewResponseAction `json:"action" api:"required"`
 	// A description for the policy
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// Whether the policy is enabled
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The expression which must match for the policy to be applied, using the
 	// Cloudflare Firewall rule expression syntax
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The policy which will be applied
-	Value string                `json:"value,required"`
+	Value string                `json:"value" api:"required"`
 	JSON  policyNewResponseJSON `json:"-"`
 }
 
@@ -231,18 +231,18 @@ func (r PolicyNewResponseAction) IsKnown() bool {
 
 type PolicyUpdateResponse struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The action to take if the expression matches
-	Action PolicyUpdateResponseAction `json:"action,required"`
+	Action PolicyUpdateResponseAction `json:"action" api:"required"`
 	// A description for the policy
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// Whether the policy is enabled
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The expression which must match for the policy to be applied, using the
 	// Cloudflare Firewall rule expression syntax
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The policy which will be applied
-	Value string                   `json:"value,required"`
+	Value string                   `json:"value" api:"required"`
 	JSON  policyUpdateResponseJSON `json:"-"`
 }
 
@@ -286,18 +286,18 @@ func (r PolicyUpdateResponseAction) IsKnown() bool {
 
 type PolicyListResponse struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The action to take if the expression matches
-	Action PolicyListResponseAction `json:"action,required"`
+	Action PolicyListResponseAction `json:"action" api:"required"`
 	// A description for the policy
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// Whether the policy is enabled
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The expression which must match for the policy to be applied, using the
 	// Cloudflare Firewall rule expression syntax
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The policy which will be applied
-	Value string                 `json:"value,required"`
+	Value string                 `json:"value" api:"required"`
 	JSON  policyListResponseJSON `json:"-"`
 }
 
@@ -341,18 +341,18 @@ func (r PolicyListResponseAction) IsKnown() bool {
 
 type PolicyGetResponse struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The action to take if the expression matches
-	Action PolicyGetResponseAction `json:"action,required"`
+	Action PolicyGetResponseAction `json:"action" api:"required"`
 	// A description for the policy
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// Whether the policy is enabled
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The expression which must match for the policy to be applied, using the
 	// Cloudflare Firewall rule expression syntax
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The policy which will be applied
-	Value string                `json:"value,required"`
+	Value string                `json:"value" api:"required"`
 	JSON  policyGetResponseJSON `json:"-"`
 }
 
@@ -396,8 +396,8 @@ func (r PolicyGetResponseAction) IsKnown() bool {
 
 type PolicyNewParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Policy PolicyParam         `json:"policy,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Policy PolicyParam         `json:"policy" api:"required"`
 }
 
 func (r PolicyNewParams) MarshalJSON() (data []byte, err error) {
@@ -405,9 +405,9 @@ func (r PolicyNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PolicyNewResponseEnvelope struct {
-	Result PolicyNewResponse `json:"result,required,nullable"`
+	Result PolicyNewResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success  PolicyNewResponseEnvelopeSuccess `json:"success,required"`
+	Success  PolicyNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo            `json:"errors"`
 	Messages []shared.ResponseInfo            `json:"messages"`
 	JSON     policyNewResponseEnvelopeJSON    `json:"-"`
@@ -449,7 +449,7 @@ func (r PolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PolicyUpdateParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to take if the expression matches
 	Action param.Field[PolicyUpdateParamsAction] `json:"action"`
 	// A description for the policy
@@ -485,9 +485,9 @@ func (r PolicyUpdateParamsAction) IsKnown() bool {
 }
 
 type PolicyUpdateResponseEnvelope struct {
-	Result PolicyUpdateResponse `json:"result,required,nullable"`
+	Result PolicyUpdateResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success  PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success  PolicyUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo               `json:"errors"`
 	Messages []shared.ResponseInfo               `json:"messages"`
 	JSON     policyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -529,23 +529,23 @@ func (r PolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PolicyListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PolicyDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PolicyGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PolicyGetResponseEnvelope struct {
-	Result PolicyGetResponse `json:"result,required,nullable"`
+	Result PolicyGetResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success  PolicyGetResponseEnvelopeSuccess `json:"success,required"`
+	Success  PolicyGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo            `json:"errors"`
 	Messages []shared.ResponseInfo            `json:"messages"`
 	JSON     policyGetResponseEnvelopeJSON    `json:"-"`

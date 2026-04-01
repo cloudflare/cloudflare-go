@@ -41,15 +41,15 @@ func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks/preview", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete a health check.
@@ -58,19 +58,19 @@ func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if healthcheckID == "" {
 		err = errors.New("missing required healthcheck_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", body.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single configured health check preview.
@@ -79,19 +79,19 @@ func (r *PreviewService) Get(ctx context.Context, healthcheckID string, query Pr
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if healthcheckID == "" {
 		err = errors.New("missing required healthcheck_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", query.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PreviewDeleteResponse struct {
@@ -118,8 +118,8 @@ func (r previewDeleteResponseJSON) RawJSON() string {
 
 type PreviewNewParams struct {
 	// Identifier
-	ZoneID           param.Field[string]   `path:"zone_id,required"`
-	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck,required"`
+	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
+	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
 
 func (r PreviewNewParams) MarshalJSON() (data []byte, err error) {
@@ -127,11 +127,11 @@ func (r PreviewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PreviewNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Healthcheck           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Healthcheck           `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PreviewNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PreviewNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    previewNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -171,15 +171,15 @@ func (r PreviewNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PreviewDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PreviewDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PreviewDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   PreviewDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PreviewDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success PreviewDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    previewDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -219,15 +219,15 @@ func (r PreviewDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type PreviewGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PreviewGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Healthcheck           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Healthcheck           `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PreviewGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`
 }
 

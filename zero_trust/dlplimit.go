@@ -34,25 +34,26 @@ func NewDLPLimitService(opts ...option.RequestOption) (r *DLPLimitService) {
 	return
 }
 
-// Fetch limits associated with DLP for account
+// Retrieves current DLP usage limits and quotas for the account, including dataset
+// limits and scan quotas.
 func (r *DLPLimitService) List(ctx context.Context, query DLPLimitListParams, opts ...option.RequestOption) (res *DLPLimitListResponse, err error) {
 	var env DLPLimitListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/limits", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DLPLimitListResponse struct {
-	MaxDatasetCells int64                    `json:"max_dataset_cells,required"`
+	MaxDatasetCells int64                    `json:"max_dataset_cells" api:"required"`
 	JSON            dlpLimitListResponseJSON `json:"-"`
 }
 
@@ -73,14 +74,14 @@ func (r dlpLimitListResponseJSON) RawJSON() string {
 }
 
 type DLPLimitListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPLimitListResponseEnvelope struct {
-	Errors   []DLPLimitListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPLimitListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPLimitListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPLimitListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPLimitListResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPLimitListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DLPLimitListResponse                `json:"result"`
 	JSON    dlpLimitListResponseEnvelopeJSON    `json:"-"`
 }
@@ -105,8 +106,8 @@ func (r dlpLimitListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPLimitListResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           DLPLimitListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpLimitListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -153,8 +154,8 @@ func (r dlpLimitListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DLPLimitListResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DLPLimitListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpLimitListResponseEnvelopeMessagesJSON   `json:"-"`

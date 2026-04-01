@@ -69,11 +69,11 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	opts = slices.Concat(r.Options, opts)
 	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/create", params.PathAccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // When `datasetId` is unspecified, events will be listed from the
@@ -85,11 +85,11 @@ func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // The `datasetId` parameter must be defined. To list existing datasets (and their
@@ -100,11 +100,11 @@ func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulk
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/create/bulk", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Updates an event
@@ -112,15 +112,15 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s", params.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // This Method is deprecated. Please use
@@ -131,42 +131,43 @@ func (r *ThreatEventService) Get(ctx context.Context, eventID string, query Thre
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if eventID == "" {
 		err = errors.New("missing required event_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/%s", query.AccountID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventNewResponse struct {
-	Attacker        string                     `json:"attacker,required"`
-	AttackerCountry string                     `json:"attackerCountry,required"`
-	Category        string                     `json:"category,required"`
-	DatasetID       string                     `json:"datasetId,required"`
-	Date            string                     `json:"date,required"`
-	Event           string                     `json:"event,required"`
-	HasChildren     bool                       `json:"hasChildren,required"`
-	Indicator       string                     `json:"indicator,required"`
-	IndicatorType   string                     `json:"indicatorType,required"`
-	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
-	KillChain       float64                    `json:"killChain,required"`
-	MitreAttack     []string                   `json:"mitreAttack,required"`
-	NumReferenced   float64                    `json:"numReferenced,required"`
-	NumReferences   float64                    `json:"numReferences,required"`
-	RawID           string                     `json:"rawId,required"`
-	Referenced      []string                   `json:"referenced,required"`
-	ReferencedIDs   []float64                  `json:"referencedIds,required"`
-	References      []string                   `json:"references,required"`
-	ReferencesIDs   []float64                  `json:"referencesIds,required"`
-	Tags            []string                   `json:"tags,required"`
-	TargetCountry   string                     `json:"targetCountry,required"`
-	TargetIndustry  string                     `json:"targetIndustry,required"`
-	TLP             string                     `json:"tlp,required"`
-	UUID            string                     `json:"uuid,required"`
+	Attacker        string                     `json:"attacker" api:"required"`
+	AttackerCountry string                     `json:"attackerCountry" api:"required"`
+	Category        string                     `json:"category" api:"required"`
+	DatasetID       string                     `json:"datasetId" api:"required"`
+	Date            string                     `json:"date" api:"required"`
+	Event           string                     `json:"event" api:"required"`
+	HasChildren     bool                       `json:"hasChildren" api:"required"`
+	Indicator       string                     `json:"indicator" api:"required"`
+	IndicatorType   string                     `json:"indicatorType" api:"required"`
+	IndicatorTypeID float64                    `json:"indicatorTypeId" api:"required"`
+	KillChain       float64                    `json:"killChain" api:"required"`
+	MitreAttack     []string                   `json:"mitreAttack" api:"required"`
+	MitreCapec      []string                   `json:"mitreCapec" api:"required"`
+	NumReferenced   float64                    `json:"numReferenced" api:"required"`
+	NumReferences   float64                    `json:"numReferences" api:"required"`
+	RawID           string                     `json:"rawId" api:"required"`
+	Referenced      []string                   `json:"referenced" api:"required"`
+	ReferencedIDs   []float64                  `json:"referencedIds" api:"required"`
+	References      []string                   `json:"references" api:"required"`
+	ReferencesIDs   []float64                  `json:"referencesIds" api:"required"`
+	Tags            []string                   `json:"tags" api:"required"`
+	TargetCountry   string                     `json:"targetCountry" api:"required"`
+	TargetIndustry  string                     `json:"targetIndustry" api:"required"`
+	TLP             string                     `json:"tlp" api:"required"`
+	UUID            string                     `json:"uuid" api:"required"`
 	Insight         string                     `json:"insight"`
 	ReleasabilityID string                     `json:"releasabilityId"`
 	JSON            threatEventNewResponseJSON `json:"-"`
@@ -187,6 +188,7 @@ type threatEventNewResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -214,30 +216,31 @@ func (r threatEventNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventListResponse struct {
-	Attacker        string                      `json:"attacker,required"`
-	AttackerCountry string                      `json:"attackerCountry,required"`
-	Category        string                      `json:"category,required"`
-	DatasetID       string                      `json:"datasetId,required"`
-	Date            string                      `json:"date,required"`
-	Event           string                      `json:"event,required"`
-	HasChildren     bool                        `json:"hasChildren,required"`
-	Indicator       string                      `json:"indicator,required"`
-	IndicatorType   string                      `json:"indicatorType,required"`
-	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
-	KillChain       float64                     `json:"killChain,required"`
-	MitreAttack     []string                    `json:"mitreAttack,required"`
-	NumReferenced   float64                     `json:"numReferenced,required"`
-	NumReferences   float64                     `json:"numReferences,required"`
-	RawID           string                      `json:"rawId,required"`
-	Referenced      []string                    `json:"referenced,required"`
-	ReferencedIDs   []float64                   `json:"referencedIds,required"`
-	References      []string                    `json:"references,required"`
-	ReferencesIDs   []float64                   `json:"referencesIds,required"`
-	Tags            []string                    `json:"tags,required"`
-	TargetCountry   string                      `json:"targetCountry,required"`
-	TargetIndustry  string                      `json:"targetIndustry,required"`
-	TLP             string                      `json:"tlp,required"`
-	UUID            string                      `json:"uuid,required"`
+	Attacker        string                      `json:"attacker" api:"required"`
+	AttackerCountry string                      `json:"attackerCountry" api:"required"`
+	Category        string                      `json:"category" api:"required"`
+	DatasetID       string                      `json:"datasetId" api:"required"`
+	Date            string                      `json:"date" api:"required"`
+	Event           string                      `json:"event" api:"required"`
+	HasChildren     bool                        `json:"hasChildren" api:"required"`
+	Indicator       string                      `json:"indicator" api:"required"`
+	IndicatorType   string                      `json:"indicatorType" api:"required"`
+	IndicatorTypeID float64                     `json:"indicatorTypeId" api:"required"`
+	KillChain       float64                     `json:"killChain" api:"required"`
+	MitreAttack     []string                    `json:"mitreAttack" api:"required"`
+	MitreCapec      []string                    `json:"mitreCapec" api:"required"`
+	NumReferenced   float64                     `json:"numReferenced" api:"required"`
+	NumReferences   float64                     `json:"numReferences" api:"required"`
+	RawID           string                      `json:"rawId" api:"required"`
+	Referenced      []string                    `json:"referenced" api:"required"`
+	ReferencedIDs   []float64                   `json:"referencedIds" api:"required"`
+	References      []string                    `json:"references" api:"required"`
+	ReferencesIDs   []float64                   `json:"referencesIds" api:"required"`
+	Tags            []string                    `json:"tags" api:"required"`
+	TargetCountry   string                      `json:"targetCountry" api:"required"`
+	TargetIndustry  string                      `json:"targetIndustry" api:"required"`
+	TLP             string                      `json:"tlp" api:"required"`
+	UUID            string                      `json:"uuid" api:"required"`
 	Insight         string                      `json:"insight"`
 	ReleasabilityID string                      `json:"releasabilityId"`
 	JSON            threatEventListResponseJSON `json:"-"`
@@ -258,6 +261,7 @@ type threatEventListResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -287,13 +291,13 @@ func (r threatEventListResponseJSON) RawJSON() string {
 // Detailed result of bulk event creation with auto-tag management
 type ThreatEventBulkNewResponse struct {
 	// Number of events created
-	CreatedEventsCount float64 `json:"createdEventsCount,required"`
+	CreatedEventsCount float64 `json:"createdEventsCount" api:"required"`
 	// Number of new tags created in SoT
-	CreatedTagsCount float64 `json:"createdTagsCount,required"`
+	CreatedTagsCount float64 `json:"createdTagsCount" api:"required"`
 	// Number of errors encountered
-	ErrorCount float64 `json:"errorCount,required"`
+	ErrorCount float64 `json:"errorCount" api:"required"`
 	// Number of indicators queued for async processing
-	QueuedIndicatorsCount float64 `json:"queuedIndicatorsCount,required"`
+	QueuedIndicatorsCount float64 `json:"queuedIndicatorsCount" api:"required"`
 	// Correlation ID for async indicator processing
 	CreateBulkEventsRequestID string `json:"createBulkEventsRequestId" format:"uuid"`
 	// Array of created events with UUIDs and shard locations. Only present when
@@ -328,11 +332,11 @@ func (r threatEventBulkNewResponseJSON) RawJSON() string {
 
 type ThreatEventBulkNewResponseCreatedEvent struct {
 	// Original index in the input data array
-	EventIndex float64 `json:"eventIndex,required"`
+	EventIndex float64 `json:"eventIndex" api:"required"`
 	// Dataset ID of the shard where the event was created
-	ShardID string `json:"shardId,required"`
+	ShardID string `json:"shardId" api:"required"`
 	// UUID of the created event
-	UUID string                                     `json:"uuid,required" format:"uuid"`
+	UUID string                                     `json:"uuid" api:"required" format:"uuid"`
 	JSON threatEventBulkNewResponseCreatedEventJSON `json:"-"`
 }
 
@@ -356,9 +360,9 @@ func (r threatEventBulkNewResponseCreatedEventJSON) RawJSON() string {
 
 type ThreatEventBulkNewResponseError struct {
 	// Error message
-	Error string `json:"error,required"`
+	Error string `json:"error" api:"required"`
 	// Index of the event that caused the error
-	EventIndex float64                             `json:"eventIndex,required"`
+	EventIndex float64                             `json:"eventIndex" api:"required"`
 	JSON       threatEventBulkNewResponseErrorJSON `json:"-"`
 }
 
@@ -380,30 +384,31 @@ func (r threatEventBulkNewResponseErrorJSON) RawJSON() string {
 }
 
 type ThreatEventEditResponse struct {
-	Attacker        string                      `json:"attacker,required"`
-	AttackerCountry string                      `json:"attackerCountry,required"`
-	Category        string                      `json:"category,required"`
-	DatasetID       string                      `json:"datasetId,required"`
-	Date            string                      `json:"date,required"`
-	Event           string                      `json:"event,required"`
-	HasChildren     bool                        `json:"hasChildren,required"`
-	Indicator       string                      `json:"indicator,required"`
-	IndicatorType   string                      `json:"indicatorType,required"`
-	IndicatorTypeID float64                     `json:"indicatorTypeId,required"`
-	KillChain       float64                     `json:"killChain,required"`
-	MitreAttack     []string                    `json:"mitreAttack,required"`
-	NumReferenced   float64                     `json:"numReferenced,required"`
-	NumReferences   float64                     `json:"numReferences,required"`
-	RawID           string                      `json:"rawId,required"`
-	Referenced      []string                    `json:"referenced,required"`
-	ReferencedIDs   []float64                   `json:"referencedIds,required"`
-	References      []string                    `json:"references,required"`
-	ReferencesIDs   []float64                   `json:"referencesIds,required"`
-	Tags            []string                    `json:"tags,required"`
-	TargetCountry   string                      `json:"targetCountry,required"`
-	TargetIndustry  string                      `json:"targetIndustry,required"`
-	TLP             string                      `json:"tlp,required"`
-	UUID            string                      `json:"uuid,required"`
+	Attacker        string                      `json:"attacker" api:"required"`
+	AttackerCountry string                      `json:"attackerCountry" api:"required"`
+	Category        string                      `json:"category" api:"required"`
+	DatasetID       string                      `json:"datasetId" api:"required"`
+	Date            string                      `json:"date" api:"required"`
+	Event           string                      `json:"event" api:"required"`
+	HasChildren     bool                        `json:"hasChildren" api:"required"`
+	Indicator       string                      `json:"indicator" api:"required"`
+	IndicatorType   string                      `json:"indicatorType" api:"required"`
+	IndicatorTypeID float64                     `json:"indicatorTypeId" api:"required"`
+	KillChain       float64                     `json:"killChain" api:"required"`
+	MitreAttack     []string                    `json:"mitreAttack" api:"required"`
+	MitreCapec      []string                    `json:"mitreCapec" api:"required"`
+	NumReferenced   float64                     `json:"numReferenced" api:"required"`
+	NumReferences   float64                     `json:"numReferences" api:"required"`
+	RawID           string                      `json:"rawId" api:"required"`
+	Referenced      []string                    `json:"referenced" api:"required"`
+	ReferencedIDs   []float64                   `json:"referencedIds" api:"required"`
+	References      []string                    `json:"references" api:"required"`
+	ReferencesIDs   []float64                   `json:"referencesIds" api:"required"`
+	Tags            []string                    `json:"tags" api:"required"`
+	TargetCountry   string                      `json:"targetCountry" api:"required"`
+	TargetIndustry  string                      `json:"targetIndustry" api:"required"`
+	TLP             string                      `json:"tlp" api:"required"`
+	UUID            string                      `json:"uuid" api:"required"`
 	Insight         string                      `json:"insight"`
 	ReleasabilityID string                      `json:"releasabilityId"`
 	JSON            threatEventEditResponseJSON `json:"-"`
@@ -424,6 +429,7 @@ type threatEventEditResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -451,30 +457,31 @@ func (r threatEventEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventGetResponse struct {
-	Attacker        string                     `json:"attacker,required"`
-	AttackerCountry string                     `json:"attackerCountry,required"`
-	Category        string                     `json:"category,required"`
-	DatasetID       string                     `json:"datasetId,required"`
-	Date            string                     `json:"date,required"`
-	Event           string                     `json:"event,required"`
-	HasChildren     bool                       `json:"hasChildren,required"`
-	Indicator       string                     `json:"indicator,required"`
-	IndicatorType   string                     `json:"indicatorType,required"`
-	IndicatorTypeID float64                    `json:"indicatorTypeId,required"`
-	KillChain       float64                    `json:"killChain,required"`
-	MitreAttack     []string                   `json:"mitreAttack,required"`
-	NumReferenced   float64                    `json:"numReferenced,required"`
-	NumReferences   float64                    `json:"numReferences,required"`
-	RawID           string                     `json:"rawId,required"`
-	Referenced      []string                   `json:"referenced,required"`
-	ReferencedIDs   []float64                  `json:"referencedIds,required"`
-	References      []string                   `json:"references,required"`
-	ReferencesIDs   []float64                  `json:"referencesIds,required"`
-	Tags            []string                   `json:"tags,required"`
-	TargetCountry   string                     `json:"targetCountry,required"`
-	TargetIndustry  string                     `json:"targetIndustry,required"`
-	TLP             string                     `json:"tlp,required"`
-	UUID            string                     `json:"uuid,required"`
+	Attacker        string                     `json:"attacker" api:"required"`
+	AttackerCountry string                     `json:"attackerCountry" api:"required"`
+	Category        string                     `json:"category" api:"required"`
+	DatasetID       string                     `json:"datasetId" api:"required"`
+	Date            string                     `json:"date" api:"required"`
+	Event           string                     `json:"event" api:"required"`
+	HasChildren     bool                       `json:"hasChildren" api:"required"`
+	Indicator       string                     `json:"indicator" api:"required"`
+	IndicatorType   string                     `json:"indicatorType" api:"required"`
+	IndicatorTypeID float64                    `json:"indicatorTypeId" api:"required"`
+	KillChain       float64                    `json:"killChain" api:"required"`
+	MitreAttack     []string                   `json:"mitreAttack" api:"required"`
+	MitreCapec      []string                   `json:"mitreCapec" api:"required"`
+	NumReferenced   float64                    `json:"numReferenced" api:"required"`
+	NumReferences   float64                    `json:"numReferences" api:"required"`
+	RawID           string                     `json:"rawId" api:"required"`
+	Referenced      []string                   `json:"referenced" api:"required"`
+	ReferencedIDs   []float64                  `json:"referencedIds" api:"required"`
+	References      []string                   `json:"references" api:"required"`
+	ReferencesIDs   []float64                  `json:"referencesIds" api:"required"`
+	Tags            []string                   `json:"tags" api:"required"`
+	TargetCountry   string                     `json:"targetCountry" api:"required"`
+	TargetIndustry  string                     `json:"targetIndustry" api:"required"`
+	TLP             string                     `json:"tlp" api:"required"`
+	UUID            string                     `json:"uuid" api:"required"`
 	Insight         string                     `json:"insight"`
 	ReleasabilityID string                     `json:"releasabilityId"`
 	JSON            threatEventGetResponseJSON `json:"-"`
@@ -495,6 +502,7 @@ type threatEventGetResponseJSON struct {
 	IndicatorTypeID apijson.Field
 	KillChain       apijson.Field
 	MitreAttack     apijson.Field
+	MitreCapec      apijson.Field
 	NumReferenced   apijson.Field
 	NumReferences   apijson.Field
 	RawID           apijson.Field
@@ -523,12 +531,12 @@ func (r threatEventGetResponseJSON) RawJSON() string {
 
 type ThreatEventNewParams struct {
 	// Account ID.
-	PathAccountID   param.Field[string]                  `path:"account_id,required"`
-	Category        param.Field[string]                  `json:"category,required"`
-	Date            param.Field[time.Time]               `json:"date,required" format:"date-time"`
-	Event           param.Field[string]                  `json:"event,required"`
-	Raw             param.Field[ThreatEventNewParamsRaw] `json:"raw,required"`
-	TLP             param.Field[string]                  `json:"tlp,required"`
+	PathAccountID   param.Field[string]                  `path:"account_id" api:"required"`
+	Category        param.Field[string]                  `json:"category" api:"required"`
+	Date            param.Field[time.Time]               `json:"date" api:"required" format:"date-time"`
+	Event           param.Field[string]                  `json:"event" api:"required"`
+	Raw             param.Field[ThreatEventNewParamsRaw] `json:"raw" api:"required"`
+	TLP             param.Field[string]                  `json:"tlp" api:"required"`
 	BodyAccountID   param.Field[float64]                 `json:"accountId"`
 	Attacker        param.Field[string]                  `json:"attacker"`
 	AttackerCountry param.Field[string]                  `json:"attackerCountry"`
@@ -549,7 +557,7 @@ func (r ThreatEventNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventNewParamsRaw struct {
-	Data   param.Field[map[string]interface{}] `json:"data,required"`
+	Data   param.Field[map[string]interface{}] `json:"data" api:"required"`
 	Source param.Field[string]                 `json:"source"`
 	TLP    param.Field[string]                 `json:"tlp"`
 }
@@ -560,9 +568,9 @@ func (r ThreatEventNewParamsRaw) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventNewParamsIndicator struct {
 	// The type of indicator (e.g., DOMAIN, IP, JA3, HASH)
-	IndicatorType param.Field[string] `json:"indicatorType,required"`
+	IndicatorType param.Field[string] `json:"indicatorType" api:"required"`
 	// The indicator value (e.g., domain name, IP address, hash)
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
@@ -571,7 +579,7 @@ func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cursor for pagination. When provided, filters are embedded in the cursor so you
 	// only need to pass cursor and pageSize. Returned in the previous response's
 	// result_info.cursor field. Use cursor-based pagination for deep pagination
@@ -629,8 +637,15 @@ func (r ThreatEventListParamsOrder) IsKnown() bool {
 }
 
 type ThreatEventListParamsSearch struct {
-	Field param.Field[string]                                `query:"field"`
-	Op    param.Field[ThreatEventListParamsSearchOp]         `query:"op"`
+	// Event field to search on. Allowed: attacker, attackerCountry, category,
+	// createdAt, date, event, indicator, indicatorType, killChain, mitreAttack, tags,
+	// targetCountry, targetIndustry, tlp, uuid.
+	Field param.Field[string] `query:"field"`
+	// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
+	// {field:'tags', op:'in', value:['malware','apt']}.
+	Op param.Field[ThreatEventListParamsSearchOp] `query:"op"`
+	// Search value. String or number for most operators. Array for 'in' operator (max
+	// 100 items).
 	Value param.Field[ThreatEventListParamsSearchValueUnion] `query:"value"`
 }
 
@@ -643,6 +658,8 @@ func (r ThreatEventListParamsSearch) URLQuery() (v url.Values) {
 	})
 }
 
+// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
+// {field:'tags', op:'in', value:['malware','apt']}.
 type ThreatEventListParamsSearchOp string
 
 const (
@@ -668,6 +685,9 @@ func (r ThreatEventListParamsSearchOp) IsKnown() bool {
 	return false
 }
 
+// Search value. String or number for most operators. Array for 'in' operator (max
+// 100 items).
+//
 // Satisfied by [shared.UnionString], [shared.UnionFloat],
 // [cloudforce_one.ThreatEventListParamsSearchValueArray].
 type ThreatEventListParamsSearchValueUnion interface {
@@ -685,9 +705,9 @@ type ThreatEventListParamsSearchValueArrayItemUnion interface {
 
 type ThreatEventBulkNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]                         `path:"account_id,required"`
-	Data      param.Field[[]ThreatEventBulkNewParamsData] `json:"data,required"`
-	DatasetID param.Field[string]                         `json:"datasetId,required"`
+	AccountID param.Field[string]                         `path:"account_id" api:"required"`
+	Data      param.Field[[]ThreatEventBulkNewParamsData] `json:"data" api:"required"`
+	DatasetID param.Field[string]                         `json:"datasetId" api:"required"`
 	// When true, response includes array of created event UUIDs and shard IDs. Useful
 	// for tracking which events were created and where.
 	IncludeCreatedEvents param.Field[bool] `json:"includeCreatedEvents"`
@@ -698,11 +718,11 @@ func (r ThreatEventBulkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventBulkNewParamsData struct {
-	Category        param.Field[string]                          `json:"category,required"`
-	Date            param.Field[time.Time]                       `json:"date,required" format:"date-time"`
-	Event           param.Field[string]                          `json:"event,required"`
-	Raw             param.Field[ThreatEventBulkNewParamsDataRaw] `json:"raw,required"`
-	TLP             param.Field[string]                          `json:"tlp,required"`
+	Category        param.Field[string]                          `json:"category" api:"required"`
+	Date            param.Field[time.Time]                       `json:"date" api:"required" format:"date-time"`
+	Event           param.Field[string]                          `json:"event" api:"required"`
+	Raw             param.Field[ThreatEventBulkNewParamsDataRaw] `json:"raw" api:"required"`
+	TLP             param.Field[string]                          `json:"tlp" api:"required"`
 	AccountID       param.Field[float64]                         `json:"accountId"`
 	Attacker        param.Field[string]                          `json:"attacker"`
 	AttackerCountry param.Field[string]                          `json:"attackerCountry"`
@@ -723,7 +743,7 @@ func (r ThreatEventBulkNewParamsData) MarshalJSON() (data []byte, err error) {
 }
 
 type ThreatEventBulkNewParamsDataRaw struct {
-	Data   param.Field[map[string]interface{}] `json:"data,required"`
+	Data   param.Field[map[string]interface{}] `json:"data" api:"required"`
 	Source param.Field[string]                 `json:"source"`
 	TLP    param.Field[string]                 `json:"tlp"`
 }
@@ -734,9 +754,9 @@ func (r ThreatEventBulkNewParamsDataRaw) MarshalJSON() (data []byte, err error) 
 
 type ThreatEventBulkNewParamsDataIndicator struct {
 	// The type of indicator (e.g., DOMAIN, IP, JA3, HASH)
-	IndicatorType param.Field[string] `json:"indicatorType,required"`
+	IndicatorType param.Field[string] `json:"indicatorType" api:"required"`
 	// The indicator value (e.g., domain name, IP address, hash)
-	Value param.Field[string] `json:"value,required"`
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ThreatEventBulkNewParamsDataIndicator) MarshalJSON() (data []byte, err error) {
@@ -745,12 +765,13 @@ func (r ThreatEventBulkNewParamsDataIndicator) MarshalJSON() (data []byte, err e
 
 type ThreatEventEditParams struct {
 	// Account ID.
-	AccountID       param.Field[string]                   `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Dataset ID containing the event to update.
+	DatasetID       param.Field[string]                   `json:"datasetId" api:"required"`
 	Attacker        param.Field[string]                   `json:"attacker"`
 	AttackerCountry param.Field[string]                   `json:"attackerCountry"`
 	Category        param.Field[string]                   `json:"category"`
 	CreatedAt       param.Field[time.Time]                `json:"createdAt" format:"date-time"`
-	DatasetID       param.Field[string]                   `json:"datasetId"`
 	Date            param.Field[time.Time]                `json:"date" format:"date-time"`
 	Event           param.Field[string]                   `json:"event"`
 	Indicator       param.Field[string]                   `json:"indicator"`
@@ -778,5 +799,5 @@ func (r ThreatEventEditParamsRaw) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

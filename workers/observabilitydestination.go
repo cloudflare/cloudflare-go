@@ -43,15 +43,15 @@ func (r *ObservabilityDestinationService) New(ctx context.Context, params Observ
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/observability/destinations", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update an existing Workers Observability Telemetry Destination.
@@ -60,19 +60,19 @@ func (r *ObservabilityDestinationService) Update(ctx context.Context, slug strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if slug == "" {
 		err = errors.New("missing required slug parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/observability/destinations/%s", params.AccountID, slug)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List your Workers Observability Telemetry Destinations.
@@ -82,7 +82,7 @@ func (r *ObservabilityDestinationService) List(ctx context.Context, params Obser
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/observability/destinations", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -108,27 +108,27 @@ func (r *ObservabilityDestinationService) Delete(ctx context.Context, slug strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if slug == "" {
 		err = errors.New("missing required slug parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/observability/destinations/%s", body.AccountID, slug)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ObservabilityDestinationNewResponse struct {
-	Configuration ObservabilityDestinationNewResponseConfiguration `json:"configuration,required"`
-	Enabled       bool                                             `json:"enabled,required"`
-	Name          string                                           `json:"name,required"`
-	Scripts       []string                                         `json:"scripts,required"`
-	Slug          string                                           `json:"slug,required"`
+	Configuration ObservabilityDestinationNewResponseConfiguration `json:"configuration" api:"required"`
+	Enabled       bool                                             `json:"enabled" api:"required"`
+	Name          string                                           `json:"name" api:"required"`
+	Scripts       []string                                         `json:"scripts" api:"required"`
+	Slug          string                                           `json:"slug" api:"required"`
 	JSON          observabilityDestinationNewResponseJSON          `json:"-"`
 }
 
@@ -153,11 +153,11 @@ func (r observabilityDestinationNewResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationNewResponseConfiguration struct {
-	DestinationConf string                                                         `json:"destination_conf,required"`
-	LogpushDataset  ObservabilityDestinationNewResponseConfigurationLogpushDataset `json:"logpushDataset,required"`
-	LogpushJob      float64                                                        `json:"logpushJob,required"`
-	Type            ObservabilityDestinationNewResponseConfigurationType           `json:"type,required"`
-	URL             string                                                         `json:"url,required"`
+	DestinationConf string                                                         `json:"destination_conf" api:"required"`
+	LogpushDataset  ObservabilityDestinationNewResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	LogpushJob      float64                                                        `json:"logpushJob" api:"required"`
+	Type            ObservabilityDestinationNewResponseConfigurationType           `json:"type" api:"required"`
+	URL             string                                                         `json:"url" api:"required"`
 	JSON            observabilityDestinationNewResponseConfigurationJSON           `json:"-"`
 }
 
@@ -211,11 +211,11 @@ func (r ObservabilityDestinationNewResponseConfigurationType) IsKnown() bool {
 }
 
 type ObservabilityDestinationUpdateResponse struct {
-	Configuration ObservabilityDestinationUpdateResponseConfiguration `json:"configuration,required"`
-	Enabled       bool                                                `json:"enabled,required"`
-	Name          string                                              `json:"name,required"`
-	Scripts       []string                                            `json:"scripts,required"`
-	Slug          string                                              `json:"slug,required"`
+	Configuration ObservabilityDestinationUpdateResponseConfiguration `json:"configuration" api:"required"`
+	Enabled       bool                                                `json:"enabled" api:"required"`
+	Name          string                                              `json:"name" api:"required"`
+	Scripts       []string                                            `json:"scripts" api:"required"`
+	Slug          string                                              `json:"slug" api:"required"`
 	JSON          observabilityDestinationUpdateResponseJSON          `json:"-"`
 }
 
@@ -240,11 +240,11 @@ func (r observabilityDestinationUpdateResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationUpdateResponseConfiguration struct {
-	DestinationConf string                                                            `json:"destination_conf,required"`
-	LogpushDataset  ObservabilityDestinationUpdateResponseConfigurationLogpushDataset `json:"logpushDataset,required"`
-	LogpushJob      float64                                                           `json:"logpushJob,required"`
-	Type            ObservabilityDestinationUpdateResponseConfigurationType           `json:"type,required"`
-	URL             string                                                            `json:"url,required"`
+	DestinationConf string                                                            `json:"destination_conf" api:"required"`
+	LogpushDataset  ObservabilityDestinationUpdateResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	LogpushJob      float64                                                           `json:"logpushJob" api:"required"`
+	Type            ObservabilityDestinationUpdateResponseConfigurationType           `json:"type" api:"required"`
+	URL             string                                                            `json:"url" api:"required"`
 	JSON            observabilityDestinationUpdateResponseConfigurationJSON           `json:"-"`
 }
 
@@ -298,11 +298,11 @@ func (r ObservabilityDestinationUpdateResponseConfigurationType) IsKnown() bool 
 }
 
 type ObservabilityDestinationListResponse struct {
-	Configuration ObservabilityDestinationListResponseConfiguration `json:"configuration,required"`
-	Enabled       bool                                              `json:"enabled,required"`
-	Name          string                                            `json:"name,required"`
-	Scripts       []string                                          `json:"scripts,required"`
-	Slug          string                                            `json:"slug,required"`
+	Configuration ObservabilityDestinationListResponseConfiguration `json:"configuration" api:"required"`
+	Enabled       bool                                              `json:"enabled" api:"required"`
+	Name          string                                            `json:"name" api:"required"`
+	Scripts       []string                                          `json:"scripts" api:"required"`
+	Slug          string                                            `json:"slug" api:"required"`
 	JSON          observabilityDestinationListResponseJSON          `json:"-"`
 }
 
@@ -327,12 +327,12 @@ func (r observabilityDestinationListResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationListResponseConfiguration struct {
-	DestinationConf string                                                          `json:"destination_conf,required"`
-	Headers         map[string]string                                               `json:"headers,required"`
-	JobStatus       ObservabilityDestinationListResponseConfigurationJobStatus      `json:"jobStatus,required"`
-	LogpushDataset  ObservabilityDestinationListResponseConfigurationLogpushDataset `json:"logpushDataset,required"`
-	Type            ObservabilityDestinationListResponseConfigurationType           `json:"type,required"`
-	URL             string                                                          `json:"url,required"`
+	DestinationConf string                                                          `json:"destination_conf" api:"required"`
+	Headers         map[string]string                                               `json:"headers" api:"required"`
+	JobStatus       ObservabilityDestinationListResponseConfigurationJobStatus      `json:"jobStatus" api:"required"`
+	LogpushDataset  ObservabilityDestinationListResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	Type            ObservabilityDestinationListResponseConfigurationType           `json:"type" api:"required"`
+	URL             string                                                          `json:"url" api:"required"`
 	JSON            observabilityDestinationListResponseConfigurationJSON           `json:"-"`
 }
 
@@ -358,9 +358,9 @@ func (r observabilityDestinationListResponseConfigurationJSON) RawJSON() string 
 }
 
 type ObservabilityDestinationListResponseConfigurationJobStatus struct {
-	ErrorMessage string                                                         `json:"error_message,required"`
-	LastComplete string                                                         `json:"last_complete,required"`
-	LastError    string                                                         `json:"last_error,required"`
+	ErrorMessage string                                                         `json:"error_message" api:"required"`
+	LastComplete string                                                         `json:"last_complete" api:"required"`
+	LastError    string                                                         `json:"last_error" api:"required"`
 	JSON         observabilityDestinationListResponseConfigurationJobStatusJSON `json:"-"`
 }
 
@@ -413,11 +413,11 @@ func (r ObservabilityDestinationListResponseConfigurationType) IsKnown() bool {
 }
 
 type ObservabilityDestinationDeleteResponse struct {
-	Configuration ObservabilityDestinationDeleteResponseConfiguration `json:"configuration,required"`
-	Enabled       bool                                                `json:"enabled,required"`
-	Name          string                                              `json:"name,required"`
-	Scripts       []string                                            `json:"scripts,required"`
-	Slug          string                                              `json:"slug,required"`
+	Configuration ObservabilityDestinationDeleteResponseConfiguration `json:"configuration" api:"required"`
+	Enabled       bool                                                `json:"enabled" api:"required"`
+	Name          string                                              `json:"name" api:"required"`
+	Scripts       []string                                            `json:"scripts" api:"required"`
+	Slug          string                                              `json:"slug" api:"required"`
 	JSON          observabilityDestinationDeleteResponseJSON          `json:"-"`
 }
 
@@ -442,11 +442,11 @@ func (r observabilityDestinationDeleteResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationDeleteResponseConfiguration struct {
-	DestinationConf string                                                            `json:"destination_conf,required"`
-	LogpushDataset  ObservabilityDestinationDeleteResponseConfigurationLogpushDataset `json:"logpushDataset,required"`
-	LogpushJob      float64                                                           `json:"logpushJob,required"`
-	Type            ObservabilityDestinationDeleteResponseConfigurationType           `json:"type,required"`
-	URL             string                                                            `json:"url,required"`
+	DestinationConf string                                                            `json:"destination_conf" api:"required"`
+	LogpushDataset  ObservabilityDestinationDeleteResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	LogpushJob      float64                                                           `json:"logpushJob" api:"required"`
+	Type            ObservabilityDestinationDeleteResponseConfigurationType           `json:"type" api:"required"`
+	URL             string                                                            `json:"url" api:"required"`
 	JSON            observabilityDestinationDeleteResponseConfigurationJSON           `json:"-"`
 }
 
@@ -500,10 +500,10 @@ func (r ObservabilityDestinationDeleteResponseConfigurationType) IsKnown() bool 
 }
 
 type ObservabilityDestinationNewParams struct {
-	AccountID          param.Field[string]                                         `path:"account_id,required"`
-	Configuration      param.Field[ObservabilityDestinationNewParamsConfiguration] `json:"configuration,required"`
-	Enabled            param.Field[bool]                                           `json:"enabled,required"`
-	Name               param.Field[string]                                         `json:"name,required"`
+	AccountID          param.Field[string]                                         `path:"account_id" api:"required"`
+	Configuration      param.Field[ObservabilityDestinationNewParamsConfiguration] `json:"configuration" api:"required"`
+	Enabled            param.Field[bool]                                           `json:"enabled" api:"required"`
+	Name               param.Field[string]                                         `json:"name" api:"required"`
 	SkipPreflightCheck param.Field[bool]                                           `json:"skipPreflightCheck"`
 }
 
@@ -512,10 +512,10 @@ func (r ObservabilityDestinationNewParams) MarshalJSON() (data []byte, err error
 }
 
 type ObservabilityDestinationNewParamsConfiguration struct {
-	Headers        param.Field[map[string]string]                                            `json:"headers,required"`
-	LogpushDataset param.Field[ObservabilityDestinationNewParamsConfigurationLogpushDataset] `json:"logpushDataset,required"`
-	Type           param.Field[ObservabilityDestinationNewParamsConfigurationType]           `json:"type,required"`
-	URL            param.Field[string]                                                       `json:"url,required"`
+	Headers        param.Field[map[string]string]                                            `json:"headers" api:"required"`
+	LogpushDataset param.Field[ObservabilityDestinationNewParamsConfigurationLogpushDataset] `json:"logpushDataset" api:"required"`
+	Type           param.Field[ObservabilityDestinationNewParamsConfigurationType]           `json:"type" api:"required"`
+	URL            param.Field[string]                                                       `json:"url" api:"required"`
 }
 
 func (r ObservabilityDestinationNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
@@ -552,10 +552,10 @@ func (r ObservabilityDestinationNewParamsConfigurationType) IsKnown() bool {
 }
 
 type ObservabilityDestinationNewResponseEnvelope struct {
-	Errors   []ObservabilityDestinationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ObservabilityDestinationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ObservabilityDestinationNewResponse                   `json:"result,required"`
-	Success  ObservabilityDestinationNewResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []ObservabilityDestinationNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ObservabilityDestinationNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ObservabilityDestinationNewResponse                   `json:"result" api:"required"`
+	Success  ObservabilityDestinationNewResponseEnvelopeSuccess    `json:"success" api:"required"`
 	JSON     observabilityDestinationNewResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -579,7 +579,7 @@ func (r observabilityDestinationNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationNewResponseEnvelopeErrors struct {
-	Message string                                                `json:"message,required"`
+	Message string                                                `json:"message" api:"required"`
 	JSON    observabilityDestinationNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -600,7 +600,7 @@ func (r observabilityDestinationNewResponseEnvelopeErrorsJSON) RawJSON() string 
 }
 
 type ObservabilityDestinationNewResponseEnvelopeMessages struct {
-	Message ObservabilityDestinationNewResponseEnvelopeMessagesMessage `json:"message,required"`
+	Message ObservabilityDestinationNewResponseEnvelopeMessagesMessage `json:"message" api:"required"`
 	JSON    observabilityDestinationNewResponseEnvelopeMessagesJSON    `json:"-"`
 }
 
@@ -649,9 +649,9 @@ func (r ObservabilityDestinationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ObservabilityDestinationUpdateParams struct {
-	AccountID     param.Field[string]                                            `path:"account_id,required"`
-	Configuration param.Field[ObservabilityDestinationUpdateParamsConfiguration] `json:"configuration,required"`
-	Enabled       param.Field[bool]                                              `json:"enabled,required"`
+	AccountID     param.Field[string]                                            `path:"account_id" api:"required"`
+	Configuration param.Field[ObservabilityDestinationUpdateParamsConfiguration] `json:"configuration" api:"required"`
+	Enabled       param.Field[bool]                                              `json:"enabled" api:"required"`
 }
 
 func (r ObservabilityDestinationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -659,9 +659,9 @@ func (r ObservabilityDestinationUpdateParams) MarshalJSON() (data []byte, err er
 }
 
 type ObservabilityDestinationUpdateParamsConfiguration struct {
-	Headers param.Field[map[string]string]                                     `json:"headers,required"`
-	Type    param.Field[ObservabilityDestinationUpdateParamsConfigurationType] `json:"type,required"`
-	URL     param.Field[string]                                                `json:"url,required"`
+	Headers param.Field[map[string]string]                                     `json:"headers" api:"required"`
+	Type    param.Field[ObservabilityDestinationUpdateParamsConfigurationType] `json:"type" api:"required"`
+	URL     param.Field[string]                                                `json:"url" api:"required"`
 }
 
 func (r ObservabilityDestinationUpdateParamsConfiguration) MarshalJSON() (data []byte, err error) {
@@ -683,10 +683,10 @@ func (r ObservabilityDestinationUpdateParamsConfigurationType) IsKnown() bool {
 }
 
 type ObservabilityDestinationUpdateResponseEnvelope struct {
-	Errors   []ObservabilityDestinationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ObservabilityDestinationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ObservabilityDestinationUpdateResponse                   `json:"result,required"`
-	Success  ObservabilityDestinationUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []ObservabilityDestinationUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ObservabilityDestinationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ObservabilityDestinationUpdateResponse                   `json:"result" api:"required"`
+	Success  ObservabilityDestinationUpdateResponseEnvelopeSuccess    `json:"success" api:"required"`
 	JSON     observabilityDestinationUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -710,7 +710,7 @@ func (r observabilityDestinationUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationUpdateResponseEnvelopeErrors struct {
-	Message string                                                   `json:"message,required"`
+	Message string                                                   `json:"message" api:"required"`
 	JSON    observabilityDestinationUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -731,7 +731,7 @@ func (r observabilityDestinationUpdateResponseEnvelopeErrorsJSON) RawJSON() stri
 }
 
 type ObservabilityDestinationUpdateResponseEnvelopeMessages struct {
-	Message ObservabilityDestinationUpdateResponseEnvelopeMessagesMessage `json:"message,required"`
+	Message ObservabilityDestinationUpdateResponseEnvelopeMessagesMessage `json:"message" api:"required"`
 	JSON    observabilityDestinationUpdateResponseEnvelopeMessagesJSON    `json:"-"`
 }
 
@@ -780,7 +780,7 @@ func (r ObservabilityDestinationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ObservabilityDestinationListParams struct {
-	AccountID param.Field[string]                                    `path:"account_id,required"`
+	AccountID param.Field[string]                                    `path:"account_id" api:"required"`
 	Order     param.Field[ObservabilityDestinationListParamsOrder]   `query:"order"`
 	OrderBy   param.Field[ObservabilityDestinationListParamsOrderBy] `query:"orderBy"`
 	Page      param.Field[float64]                                   `query:"page"`
@@ -827,13 +827,13 @@ func (r ObservabilityDestinationListParamsOrderBy) IsKnown() bool {
 }
 
 type ObservabilityDestinationDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ObservabilityDestinationDeleteResponseEnvelope struct {
-	Errors   []ObservabilityDestinationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ObservabilityDestinationDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Success  ObservabilityDestinationDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	Errors   []ObservabilityDestinationDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ObservabilityDestinationDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Success  ObservabilityDestinationDeleteResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result   ObservabilityDestinationDeleteResponse                   `json:"result"`
 	JSON     observabilityDestinationDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -858,7 +858,7 @@ func (r observabilityDestinationDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationDeleteResponseEnvelopeErrors struct {
-	Message string                                                   `json:"message,required"`
+	Message string                                                   `json:"message" api:"required"`
 	JSON    observabilityDestinationDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -879,7 +879,7 @@ func (r observabilityDestinationDeleteResponseEnvelopeErrorsJSON) RawJSON() stri
 }
 
 type ObservabilityDestinationDeleteResponseEnvelopeMessages struct {
-	Message ObservabilityDestinationDeleteResponseEnvelopeMessagesMessage `json:"message,required"`
+	Message ObservabilityDestinationDeleteResponseEnvelopeMessagesMessage `json:"message" api:"required"`
 	JSON    observabilityDestinationDeleteResponseEnvelopeMessagesJSON    `json:"-"`
 }
 

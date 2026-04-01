@@ -41,53 +41,54 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 	return
 }
 
-// Get risk event/score information for a specific user
+// Retrieves the detailed risk score breakdown for a specific user, including
+// contributing factors.
 func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
 	var env RiskScoringGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s", query.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
-// Clear the risk score for a particular user
+// Resets risk scores for specified users, clearing their accumulated risk history.
 func (r *RiskScoringService) Reset(ctx context.Context, userID string, body RiskScoringResetParams, opts ...option.RequestOption) (res *RiskScoringResetResponse, err error) {
 	var env RiskScoringResetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s/reset", body.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RiskScoringGetResponse struct {
-	Email         string                          `json:"email,required"`
-	Events        []RiskScoringGetResponseEvent   `json:"events,required"`
-	Name          string                          `json:"name,required"`
-	LastResetTime time.Time                       `json:"last_reset_time,nullable" format:"date-time"`
+	Email         string                          `json:"email" api:"required"`
+	Events        []RiskScoringGetResponseEvent   `json:"events" api:"required"`
+	Name          string                          `json:"name" api:"required"`
+	LastResetTime time.Time                       `json:"last_reset_time" api:"nullable" format:"date-time"`
 	RiskLevel     RiskScoringGetResponseRiskLevel `json:"risk_level"`
 	JSON          riskScoringGetResponseJSON      `json:"-"`
 }
@@ -113,10 +114,10 @@ func (r riskScoringGetResponseJSON) RawJSON() string {
 }
 
 type RiskScoringGetResponseEvent struct {
-	ID           string                                `json:"id,required"`
-	Name         string                                `json:"name,required"`
-	RiskLevel    RiskScoringGetResponseEventsRiskLevel `json:"risk_level,required"`
-	Timestamp    time.Time                             `json:"timestamp,required" format:"date-time"`
+	ID           string                                `json:"id" api:"required"`
+	Name         string                                `json:"name" api:"required"`
+	RiskLevel    RiskScoringGetResponseEventsRiskLevel `json:"risk_level" api:"required"`
+	Timestamp    time.Time                             `json:"timestamp" api:"required" format:"date-time"`
 	EventDetails interface{}                           `json:"event_details"`
 	JSON         riskScoringGetResponseEventJSON       `json:"-"`
 }
@@ -176,14 +177,14 @@ func (r RiskScoringGetResponseRiskLevel) IsKnown() bool {
 type RiskScoringResetResponse = interface{}
 
 type RiskScoringGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringGetResponseEnvelope struct {
-	Errors   []RiskScoringGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    RiskScoringGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    RiskScoringGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     RiskScoringGetResponse                   `json:"result"`
 	ResultInfo RiskScoringGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       riskScoringGetResponseEnvelopeJSON       `json:"-"`
@@ -210,8 +211,8 @@ func (r riskScoringGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringGetResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           RiskScoringGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -258,8 +259,8 @@ func (r riskScoringGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RiskScoringGetResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           RiskScoringGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -328,7 +329,9 @@ type RiskScoringGetResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                      `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                      `json:"total_pages"`
 	JSON       riskScoringGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -339,6 +342,7 @@ type riskScoringGetResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -352,15 +356,15 @@ func (r riskScoringGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RiskScoringResetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringResetResponseEnvelope struct {
-	Errors   []RiskScoringResetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringResetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringResetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringResetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringResetResponseEnvelopeSuccess `json:"success,required"`
-	Result  RiskScoringResetResponse                `json:"result,nullable"`
+	Success RiskScoringResetResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  RiskScoringResetResponse                `json:"result" api:"nullable"`
 	JSON    riskScoringResetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -384,8 +388,8 @@ func (r riskScoringResetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringResetResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           RiskScoringResetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringResetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -432,8 +436,8 @@ func (r riskScoringResetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RiskScoringResetResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           RiskScoringResetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringResetResponseEnvelopeMessagesJSON   `json:"-"`

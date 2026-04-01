@@ -25,6 +25,7 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -66,6 +67,7 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 				SourceScheme: cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectCookiesSourceSchemeUnset),
 				URL:          cloudflare.F("url"),
 			}}),
+			CrawlPurposes:    cloudflare.F([]browser_rendering.CrawlNewParamsBodyObjectCrawlPurpose{browser_rendering.CrawlNewParamsBodyObjectCrawlPurposeSearch}),
 			Depth:            cloudflare.F(1.000000),
 			EmulateMediaType: cloudflare.F("emulateMediaType"),
 			Formats:          cloudflare.F([]browser_rendering.CrawlNewParamsBodyObjectFormat{browser_rendering.CrawlNewParamsBodyObjectFormatHTML}),
@@ -142,6 +144,7 @@ func TestCrawlDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -171,6 +174,7 @@ func TestCrawlGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

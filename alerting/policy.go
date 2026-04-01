@@ -42,15 +42,15 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Notification policy.
@@ -59,19 +59,19 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", params.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a list of all Notification policies.
@@ -81,7 +81,7 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -106,15 +106,15 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", body.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get details for a single policy.
@@ -123,19 +123,19 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List of IDs that will be used when dispatching a notification. IDs for email
@@ -342,6 +342,7 @@ const (
 	PolicyAlertTypeClickhouseAlertFwAnomaly                      PolicyAlertType = "clickhouse_alert_fw_anomaly"
 	PolicyAlertTypeClickhouseAlertFwEntAnomaly                   PolicyAlertType = "clickhouse_alert_fw_ent_anomaly"
 	PolicyAlertTypeCloudforceOneRequestNotification              PolicyAlertType = "cloudforce_one_request_notification"
+	PolicyAlertTypeCNIMaintenanceNotification                    PolicyAlertType = "cni_maintenance_notification"
 	PolicyAlertTypeCustomAnalytics                               PolicyAlertType = "custom_analytics"
 	PolicyAlertTypeCustomBotDetectionAlert                       PolicyAlertType = "custom_bot_detection_alert"
 	PolicyAlertTypeCustomSSLCertificateEventType                 PolicyAlertType = "custom_ssl_certificate_event_type"
@@ -398,7 +399,7 @@ const (
 
 func (r PolicyAlertType) IsKnown() bool {
 	switch r {
-	case PolicyAlertTypeAbuseReportAlert, PolicyAlertTypeAccessCustomCertificateExpirationType, PolicyAlertTypeAdvancedDDoSAttackL4Alert, PolicyAlertTypeAdvancedDDoSAttackL7Alert, PolicyAlertTypeAdvancedHTTPAlertError, PolicyAlertTypeBGPHijackNotification, PolicyAlertTypeBillingUsageAlert, PolicyAlertTypeBlockNotificationBlockRemoved, PolicyAlertTypeBlockNotificationNewBlock, PolicyAlertTypeBlockNotificationReviewRejected, PolicyAlertTypeBotTrafficBasicAlert, PolicyAlertTypeBrandProtectionAlert, PolicyAlertTypeBrandProtectionDigest, PolicyAlertTypeClickhouseAlertFwAnomaly, PolicyAlertTypeClickhouseAlertFwEntAnomaly, PolicyAlertTypeCloudforceOneRequestNotification, PolicyAlertTypeCustomAnalytics, PolicyAlertTypeCustomBotDetectionAlert, PolicyAlertTypeCustomSSLCertificateEventType, PolicyAlertTypeDedicatedSSLCertificateEventType, PolicyAlertTypeDeviceConnectivityAnomalyAlert, PolicyAlertTypeDosAttackL4, PolicyAlertTypeDosAttackL7, PolicyAlertTypeExpiringServiceTokenAlert, PolicyAlertTypeFailingLogpushJobDisabledAlert, PolicyAlertTypeFbmAutoAdvertisement, PolicyAlertTypeFbmDosdAttack, PolicyAlertTypeFbmVolumetricAttack, PolicyAlertTypeHealthCheckStatusNotification, PolicyAlertTypeHostnameAopCustomCertificateExpirationType, PolicyAlertTypeHTTPAlertEdgeError, PolicyAlertTypeHTTPAlertOriginError, PolicyAlertTypeImageNotification, PolicyAlertTypeImageResizingNotification, PolicyAlertTypeIncidentAlert, PolicyAlertTypeLoadBalancingHealthAlert, PolicyAlertTypeLoadBalancingPoolEnablementAlert, PolicyAlertTypeLogoMatchAlert, PolicyAlertTypeMagicTunnelHealthCheckEvent, PolicyAlertTypeMagicWANTunnelHealth, PolicyAlertTypeMaintenanceEventNotification, PolicyAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyAlertTypePagesEventAlert, PolicyAlertTypeRadarNotification, PolicyAlertTypeRealOriginMonitoring, PolicyAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyAlertTypeScriptmonitorAlertNewHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyAlertTypeScriptmonitorAlertNewResources, PolicyAlertTypeSecondaryDNSAllPrimariesFailing, PolicyAlertTypeSecondaryDNSPrimariesFailing, PolicyAlertTypeSecondaryDNSWarning, PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyAlertTypeSecondaryDNSZoneValidationWarning, PolicyAlertTypeSecurityInsightsAlert, PolicyAlertTypeSentinelAlert, PolicyAlertTypeStreamLiveNotifications, PolicyAlertTypeSyntheticTestLatencyAlert, PolicyAlertTypeSyntheticTestLowAvailabilityAlert, PolicyAlertTypeTrafficAnomaliesAlert, PolicyAlertTypeTunnelHealthEvent, PolicyAlertTypeTunnelUpdateEvent, PolicyAlertTypeUniversalSSLEventType, PolicyAlertTypeWebAnalyticsMetricsUpdate, PolicyAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyAlertTypeAbuseReportAlert, PolicyAlertTypeAccessCustomCertificateExpirationType, PolicyAlertTypeAdvancedDDoSAttackL4Alert, PolicyAlertTypeAdvancedDDoSAttackL7Alert, PolicyAlertTypeAdvancedHTTPAlertError, PolicyAlertTypeBGPHijackNotification, PolicyAlertTypeBillingUsageAlert, PolicyAlertTypeBlockNotificationBlockRemoved, PolicyAlertTypeBlockNotificationNewBlock, PolicyAlertTypeBlockNotificationReviewRejected, PolicyAlertTypeBotTrafficBasicAlert, PolicyAlertTypeBrandProtectionAlert, PolicyAlertTypeBrandProtectionDigest, PolicyAlertTypeClickhouseAlertFwAnomaly, PolicyAlertTypeClickhouseAlertFwEntAnomaly, PolicyAlertTypeCloudforceOneRequestNotification, PolicyAlertTypeCNIMaintenanceNotification, PolicyAlertTypeCustomAnalytics, PolicyAlertTypeCustomBotDetectionAlert, PolicyAlertTypeCustomSSLCertificateEventType, PolicyAlertTypeDedicatedSSLCertificateEventType, PolicyAlertTypeDeviceConnectivityAnomalyAlert, PolicyAlertTypeDosAttackL4, PolicyAlertTypeDosAttackL7, PolicyAlertTypeExpiringServiceTokenAlert, PolicyAlertTypeFailingLogpushJobDisabledAlert, PolicyAlertTypeFbmAutoAdvertisement, PolicyAlertTypeFbmDosdAttack, PolicyAlertTypeFbmVolumetricAttack, PolicyAlertTypeHealthCheckStatusNotification, PolicyAlertTypeHostnameAopCustomCertificateExpirationType, PolicyAlertTypeHTTPAlertEdgeError, PolicyAlertTypeHTTPAlertOriginError, PolicyAlertTypeImageNotification, PolicyAlertTypeImageResizingNotification, PolicyAlertTypeIncidentAlert, PolicyAlertTypeLoadBalancingHealthAlert, PolicyAlertTypeLoadBalancingPoolEnablementAlert, PolicyAlertTypeLogoMatchAlert, PolicyAlertTypeMagicTunnelHealthCheckEvent, PolicyAlertTypeMagicWANTunnelHealth, PolicyAlertTypeMaintenanceEventNotification, PolicyAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyAlertTypePagesEventAlert, PolicyAlertTypeRadarNotification, PolicyAlertTypeRealOriginMonitoring, PolicyAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyAlertTypeScriptmonitorAlertNewHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyAlertTypeScriptmonitorAlertNewResources, PolicyAlertTypeSecondaryDNSAllPrimariesFailing, PolicyAlertTypeSecondaryDNSPrimariesFailing, PolicyAlertTypeSecondaryDNSWarning, PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyAlertTypeSecondaryDNSZoneValidationWarning, PolicyAlertTypeSecurityInsightsAlert, PolicyAlertTypeSentinelAlert, PolicyAlertTypeStreamLiveNotifications, PolicyAlertTypeSyntheticTestLatencyAlert, PolicyAlertTypeSyntheticTestLowAvailabilityAlert, PolicyAlertTypeTrafficAnomaliesAlert, PolicyAlertTypeTunnelHealthEvent, PolicyAlertTypeTunnelUpdateEvent, PolicyAlertTypeUniversalSSLEventType, PolicyAlertTypeWebAnalyticsMetricsUpdate, PolicyAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
@@ -726,10 +727,10 @@ func (r policyUpdateResponseJSON) RawJSON() string {
 }
 
 type PolicyDeleteResponse struct {
-	Errors   []PolicyDeleteResponseError   `json:"errors,required"`
-	Messages []PolicyDeleteResponseMessage `json:"messages,required"`
+	Errors   []PolicyDeleteResponseError   `json:"errors" api:"required"`
+	Messages []PolicyDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success    PolicyDeleteResponseSuccess    `json:"success,required"`
+	Success    PolicyDeleteResponseSuccess    `json:"success" api:"required"`
 	ResultInfo PolicyDeleteResponseResultInfo `json:"result_info"`
 	JSON       policyDeleteResponseJSON       `json:"-"`
 }
@@ -754,7 +755,7 @@ func (r policyDeleteResponseJSON) RawJSON() string {
 }
 
 type PolicyDeleteResponseError struct {
-	Message string                        `json:"message,required"`
+	Message string                        `json:"message" api:"required"`
 	Code    int64                         `json:"code"`
 	JSON    policyDeleteResponseErrorJSON `json:"-"`
 }
@@ -777,7 +778,7 @@ func (r policyDeleteResponseErrorJSON) RawJSON() string {
 }
 
 type PolicyDeleteResponseMessage struct {
-	Message string                          `json:"message,required"`
+	Message string                          `json:"message" api:"required"`
 	Code    int64                           `json:"code"`
 	JSON    policyDeleteResponseMessageJSON `json:"-"`
 }
@@ -847,18 +848,18 @@ func (r policyDeleteResponseResultInfoJSON) RawJSON() string {
 
 type PolicyNewParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Refers to which event will trigger a Notification dispatch. You can use the
 	// endpoint to get available alert types which then will give you a list of
 	// possible values.
-	AlertType param.Field[PolicyNewParamsAlertType] `json:"alert_type,required"`
+	AlertType param.Field[PolicyNewParamsAlertType] `json:"alert_type" api:"required"`
 	// Whether or not the Notification policy is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms param.Field[MechanismParam] `json:"mechanisms,required"`
+	Mechanisms param.Field[MechanismParam] `json:"mechanisms" api:"required"`
 	// Name of the policy.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Optional specification of how often to re-alert from the same incident, not
 	// support on all alert types.
 	AlertInterval param.Field[string] `json:"alert_interval"`
@@ -896,6 +897,7 @@ const (
 	PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly                      PolicyNewParamsAlertType = "clickhouse_alert_fw_anomaly"
 	PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly                   PolicyNewParamsAlertType = "clickhouse_alert_fw_ent_anomaly"
 	PolicyNewParamsAlertTypeCloudforceOneRequestNotification              PolicyNewParamsAlertType = "cloudforce_one_request_notification"
+	PolicyNewParamsAlertTypeCNIMaintenanceNotification                    PolicyNewParamsAlertType = "cni_maintenance_notification"
 	PolicyNewParamsAlertTypeCustomAnalytics                               PolicyNewParamsAlertType = "custom_analytics"
 	PolicyNewParamsAlertTypeCustomBotDetectionAlert                       PolicyNewParamsAlertType = "custom_bot_detection_alert"
 	PolicyNewParamsAlertTypeCustomSSLCertificateEventType                 PolicyNewParamsAlertType = "custom_ssl_certificate_event_type"
@@ -952,17 +954,17 @@ const (
 
 func (r PolicyNewParamsAlertType) IsKnown() bool {
 	switch r {
-	case PolicyNewParamsAlertTypeAbuseReportAlert, PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType, PolicyNewParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyNewParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyNewParamsAlertTypeAdvancedHTTPAlertError, PolicyNewParamsAlertTypeBGPHijackNotification, PolicyNewParamsAlertTypeBillingUsageAlert, PolicyNewParamsAlertTypeBlockNotificationBlockRemoved, PolicyNewParamsAlertTypeBlockNotificationNewBlock, PolicyNewParamsAlertTypeBlockNotificationReviewRejected, PolicyNewParamsAlertTypeBotTrafficBasicAlert, PolicyNewParamsAlertTypeBrandProtectionAlert, PolicyNewParamsAlertTypeBrandProtectionDigest, PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly, PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyNewParamsAlertTypeCloudforceOneRequestNotification, PolicyNewParamsAlertTypeCustomAnalytics, PolicyNewParamsAlertTypeCustomBotDetectionAlert, PolicyNewParamsAlertTypeCustomSSLCertificateEventType, PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType, PolicyNewParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyNewParamsAlertTypeDosAttackL4, PolicyNewParamsAlertTypeDosAttackL7, PolicyNewParamsAlertTypeExpiringServiceTokenAlert, PolicyNewParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyNewParamsAlertTypeFbmAutoAdvertisement, PolicyNewParamsAlertTypeFbmDosdAttack, PolicyNewParamsAlertTypeFbmVolumetricAttack, PolicyNewParamsAlertTypeHealthCheckStatusNotification, PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyNewParamsAlertTypeHTTPAlertEdgeError, PolicyNewParamsAlertTypeHTTPAlertOriginError, PolicyNewParamsAlertTypeImageNotification, PolicyNewParamsAlertTypeImageResizingNotification, PolicyNewParamsAlertTypeIncidentAlert, PolicyNewParamsAlertTypeLoadBalancingHealthAlert, PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyNewParamsAlertTypeLogoMatchAlert, PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyNewParamsAlertTypeMagicWANTunnelHealth, PolicyNewParamsAlertTypeMaintenanceEventNotification, PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyNewParamsAlertTypePagesEventAlert, PolicyNewParamsAlertTypeRadarNotification, PolicyNewParamsAlertTypeRealOriginMonitoring, PolicyNewParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyNewParamsAlertTypeScriptmonitorAlertNewHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewResources, PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSWarning, PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyNewParamsAlertTypeSecurityInsightsAlert, PolicyNewParamsAlertTypeSentinelAlert, PolicyNewParamsAlertTypeStreamLiveNotifications, PolicyNewParamsAlertTypeSyntheticTestLatencyAlert, PolicyNewParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyNewParamsAlertTypeTrafficAnomaliesAlert, PolicyNewParamsAlertTypeTunnelHealthEvent, PolicyNewParamsAlertTypeTunnelUpdateEvent, PolicyNewParamsAlertTypeUniversalSSLEventType, PolicyNewParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyNewParamsAlertTypeAbuseReportAlert, PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType, PolicyNewParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyNewParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyNewParamsAlertTypeAdvancedHTTPAlertError, PolicyNewParamsAlertTypeBGPHijackNotification, PolicyNewParamsAlertTypeBillingUsageAlert, PolicyNewParamsAlertTypeBlockNotificationBlockRemoved, PolicyNewParamsAlertTypeBlockNotificationNewBlock, PolicyNewParamsAlertTypeBlockNotificationReviewRejected, PolicyNewParamsAlertTypeBotTrafficBasicAlert, PolicyNewParamsAlertTypeBrandProtectionAlert, PolicyNewParamsAlertTypeBrandProtectionDigest, PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly, PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyNewParamsAlertTypeCloudforceOneRequestNotification, PolicyNewParamsAlertTypeCNIMaintenanceNotification, PolicyNewParamsAlertTypeCustomAnalytics, PolicyNewParamsAlertTypeCustomBotDetectionAlert, PolicyNewParamsAlertTypeCustomSSLCertificateEventType, PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType, PolicyNewParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyNewParamsAlertTypeDosAttackL4, PolicyNewParamsAlertTypeDosAttackL7, PolicyNewParamsAlertTypeExpiringServiceTokenAlert, PolicyNewParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyNewParamsAlertTypeFbmAutoAdvertisement, PolicyNewParamsAlertTypeFbmDosdAttack, PolicyNewParamsAlertTypeFbmVolumetricAttack, PolicyNewParamsAlertTypeHealthCheckStatusNotification, PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyNewParamsAlertTypeHTTPAlertEdgeError, PolicyNewParamsAlertTypeHTTPAlertOriginError, PolicyNewParamsAlertTypeImageNotification, PolicyNewParamsAlertTypeImageResizingNotification, PolicyNewParamsAlertTypeIncidentAlert, PolicyNewParamsAlertTypeLoadBalancingHealthAlert, PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyNewParamsAlertTypeLogoMatchAlert, PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyNewParamsAlertTypeMagicWANTunnelHealth, PolicyNewParamsAlertTypeMaintenanceEventNotification, PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyNewParamsAlertTypePagesEventAlert, PolicyNewParamsAlertTypeRadarNotification, PolicyNewParamsAlertTypeRealOriginMonitoring, PolicyNewParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyNewParamsAlertTypeScriptmonitorAlertNewHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewResources, PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSWarning, PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyNewParamsAlertTypeSecurityInsightsAlert, PolicyNewParamsAlertTypeSentinelAlert, PolicyNewParamsAlertTypeStreamLiveNotifications, PolicyNewParamsAlertTypeSyntheticTestLatencyAlert, PolicyNewParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyNewParamsAlertTypeTrafficAnomaliesAlert, PolicyNewParamsAlertTypeTunnelHealthEvent, PolicyNewParamsAlertTypeTunnelUpdateEvent, PolicyNewParamsAlertTypeUniversalSSLEventType, PolicyNewParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
 }
 
 type PolicyNewResponseEnvelope struct {
-	Errors   []PolicyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PolicyNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PolicyNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PolicyNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success PolicyNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PolicyNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PolicyNewResponse                `json:"result"`
 	JSON    policyNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -987,7 +989,7 @@ func (r policyNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PolicyNewResponseEnvelopeErrors struct {
-	Message string                              `json:"message,required"`
+	Message string                              `json:"message" api:"required"`
 	Code    int64                               `json:"code"`
 	JSON    policyNewResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -1010,7 +1012,7 @@ func (r policyNewResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type PolicyNewResponseEnvelopeMessages struct {
-	Message string                                `json:"message,required"`
+	Message string                                `json:"message" api:"required"`
 	Code    int64                                 `json:"code"`
 	JSON    policyNewResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -1049,7 +1051,7 @@ func (r PolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PolicyUpdateParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional specification of how often to re-alert from the same incident, not
 	// support on all alert types.
 	AlertInterval param.Field[string] `json:"alert_interval"`
@@ -1098,6 +1100,7 @@ const (
 	PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly                      PolicyUpdateParamsAlertType = "clickhouse_alert_fw_anomaly"
 	PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly                   PolicyUpdateParamsAlertType = "clickhouse_alert_fw_ent_anomaly"
 	PolicyUpdateParamsAlertTypeCloudforceOneRequestNotification              PolicyUpdateParamsAlertType = "cloudforce_one_request_notification"
+	PolicyUpdateParamsAlertTypeCNIMaintenanceNotification                    PolicyUpdateParamsAlertType = "cni_maintenance_notification"
 	PolicyUpdateParamsAlertTypeCustomAnalytics                               PolicyUpdateParamsAlertType = "custom_analytics"
 	PolicyUpdateParamsAlertTypeCustomBotDetectionAlert                       PolicyUpdateParamsAlertType = "custom_bot_detection_alert"
 	PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType                 PolicyUpdateParamsAlertType = "custom_ssl_certificate_event_type"
@@ -1154,17 +1157,17 @@ const (
 
 func (r PolicyUpdateParamsAlertType) IsKnown() bool {
 	switch r {
-	case PolicyUpdateParamsAlertTypeAbuseReportAlert, PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError, PolicyUpdateParamsAlertTypeBGPHijackNotification, PolicyUpdateParamsAlertTypeBillingUsageAlert, PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved, PolicyUpdateParamsAlertTypeBlockNotificationNewBlock, PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected, PolicyUpdateParamsAlertTypeBotTrafficBasicAlert, PolicyUpdateParamsAlertTypeBrandProtectionAlert, PolicyUpdateParamsAlertTypeBrandProtectionDigest, PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly, PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyUpdateParamsAlertTypeCloudforceOneRequestNotification, PolicyUpdateParamsAlertTypeCustomAnalytics, PolicyUpdateParamsAlertTypeCustomBotDetectionAlert, PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType, PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType, PolicyUpdateParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyUpdateParamsAlertTypeDosAttackL4, PolicyUpdateParamsAlertTypeDosAttackL7, PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert, PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyUpdateParamsAlertTypeFbmAutoAdvertisement, PolicyUpdateParamsAlertTypeFbmDosdAttack, PolicyUpdateParamsAlertTypeFbmVolumetricAttack, PolicyUpdateParamsAlertTypeHealthCheckStatusNotification, PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeHTTPAlertEdgeError, PolicyUpdateParamsAlertTypeHTTPAlertOriginError, PolicyUpdateParamsAlertTypeImageNotification, PolicyUpdateParamsAlertTypeImageResizingNotification, PolicyUpdateParamsAlertTypeIncidentAlert, PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert, PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyUpdateParamsAlertTypeLogoMatchAlert, PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyUpdateParamsAlertTypeMagicWANTunnelHealth, PolicyUpdateParamsAlertTypeMaintenanceEventNotification, PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyUpdateParamsAlertTypePagesEventAlert, PolicyUpdateParamsAlertTypeRadarNotification, PolicyUpdateParamsAlertTypeRealOriginMonitoring, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources, PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSWarning, PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyUpdateParamsAlertTypeSecurityInsightsAlert, PolicyUpdateParamsAlertTypeSentinelAlert, PolicyUpdateParamsAlertTypeStreamLiveNotifications, PolicyUpdateParamsAlertTypeSyntheticTestLatencyAlert, PolicyUpdateParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert, PolicyUpdateParamsAlertTypeTunnelHealthEvent, PolicyUpdateParamsAlertTypeTunnelUpdateEvent, PolicyUpdateParamsAlertTypeUniversalSSLEventType, PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyUpdateParamsAlertTypeAbuseReportAlert, PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError, PolicyUpdateParamsAlertTypeBGPHijackNotification, PolicyUpdateParamsAlertTypeBillingUsageAlert, PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved, PolicyUpdateParamsAlertTypeBlockNotificationNewBlock, PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected, PolicyUpdateParamsAlertTypeBotTrafficBasicAlert, PolicyUpdateParamsAlertTypeBrandProtectionAlert, PolicyUpdateParamsAlertTypeBrandProtectionDigest, PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly, PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyUpdateParamsAlertTypeCloudforceOneRequestNotification, PolicyUpdateParamsAlertTypeCNIMaintenanceNotification, PolicyUpdateParamsAlertTypeCustomAnalytics, PolicyUpdateParamsAlertTypeCustomBotDetectionAlert, PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType, PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType, PolicyUpdateParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyUpdateParamsAlertTypeDosAttackL4, PolicyUpdateParamsAlertTypeDosAttackL7, PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert, PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyUpdateParamsAlertTypeFbmAutoAdvertisement, PolicyUpdateParamsAlertTypeFbmDosdAttack, PolicyUpdateParamsAlertTypeFbmVolumetricAttack, PolicyUpdateParamsAlertTypeHealthCheckStatusNotification, PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeHTTPAlertEdgeError, PolicyUpdateParamsAlertTypeHTTPAlertOriginError, PolicyUpdateParamsAlertTypeImageNotification, PolicyUpdateParamsAlertTypeImageResizingNotification, PolicyUpdateParamsAlertTypeIncidentAlert, PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert, PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyUpdateParamsAlertTypeLogoMatchAlert, PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyUpdateParamsAlertTypeMagicWANTunnelHealth, PolicyUpdateParamsAlertTypeMaintenanceEventNotification, PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyUpdateParamsAlertTypePagesEventAlert, PolicyUpdateParamsAlertTypeRadarNotification, PolicyUpdateParamsAlertTypeRealOriginMonitoring, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources, PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSWarning, PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyUpdateParamsAlertTypeSecurityInsightsAlert, PolicyUpdateParamsAlertTypeSentinelAlert, PolicyUpdateParamsAlertTypeStreamLiveNotifications, PolicyUpdateParamsAlertTypeSyntheticTestLatencyAlert, PolicyUpdateParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert, PolicyUpdateParamsAlertTypeTunnelHealthEvent, PolicyUpdateParamsAlertTypeTunnelUpdateEvent, PolicyUpdateParamsAlertTypeUniversalSSLEventType, PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
 }
 
 type PolicyUpdateResponseEnvelope struct {
-	Errors   []PolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PolicyUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PolicyUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success PolicyUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  PolicyUpdateResponse                `json:"result"`
 	JSON    policyUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -1189,7 +1192,7 @@ func (r policyUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PolicyUpdateResponseEnvelopeErrors struct {
-	Message string                                 `json:"message,required"`
+	Message string                                 `json:"message" api:"required"`
 	Code    int64                                  `json:"code"`
 	JSON    policyUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -1212,7 +1215,7 @@ func (r policyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type PolicyUpdateResponseEnvelopeMessages struct {
-	Message string                                   `json:"message,required"`
+	Message string                                   `json:"message" api:"required"`
 	Code    int64                                    `json:"code"`
 	JSON    policyUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
@@ -1251,24 +1254,24 @@ func (r PolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PolicyListParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PolicyDeleteParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PolicyGetParams struct {
 	// The account id
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PolicyGetResponseEnvelope struct {
-	Errors   []PolicyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PolicyGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []PolicyGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PolicyGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful
-	Success PolicyGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PolicyGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Policy                           `json:"result"`
 	JSON    policyGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1293,7 +1296,7 @@ func (r policyGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PolicyGetResponseEnvelopeErrors struct {
-	Message string                              `json:"message,required"`
+	Message string                              `json:"message" api:"required"`
 	Code    int64                               `json:"code"`
 	JSON    policyGetResponseEnvelopeErrorsJSON `json:"-"`
 }
@@ -1316,7 +1319,7 @@ func (r policyGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type PolicyGetResponseEnvelopeMessages struct {
-	Message string                                `json:"message,required"`
+	Message string                                `json:"message" api:"required"`
 	Code    int64                                 `json:"code"`
 	JSON    policyGetResponseEnvelopeMessagesJSON `json:"-"`
 }

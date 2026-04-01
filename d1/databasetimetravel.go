@@ -46,19 +46,19 @@ func (r *DatabaseTimeTravelService) GetBookmark(ctx context.Context, databaseID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/time_travel/bookmark", params.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Restores a D1 database to a previous point in time either via a bookmark or a
@@ -68,19 +68,19 @@ func (r *DatabaseTimeTravelService) Restore(ctx context.Context, databaseID stri
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if databaseID == "" {
 		err = errors.New("missing required database_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/time_travel/restore", params.AccountID, databaseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DatabaseTimeTravelGetBookmarkResponse struct {
@@ -139,7 +139,7 @@ func (r databaseTimeTravelRestoreResponseJSON) RawJSON() string {
 
 type DatabaseTimeTravelGetBookmarkParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional ISO 8601 timestamp. If provided, returns the nearest available
 	// bookmark at or before this timestamp. If omitted, returns the current bookmark.
 	Timestamp param.Field[time.Time] `query:"timestamp" format:"date-time"`
@@ -155,11 +155,11 @@ func (r DatabaseTimeTravelGetBookmarkParams) URLQuery() (v url.Values) {
 }
 
 type DatabaseTimeTravelGetBookmarkResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   DatabaseTimeTravelGetBookmarkResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                 `json:"messages" api:"required"`
+	Result   DatabaseTimeTravelGetBookmarkResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseTimeTravelGetBookmarkResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseTimeTravelGetBookmarkResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseTimeTravelGetBookmarkResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -199,7 +199,7 @@ func (r DatabaseTimeTravelGetBookmarkResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseTimeTravelRestoreParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A bookmark to restore the database to. Required if `timestamp` is not provided.
 	Bookmark param.Field[string] `query:"bookmark"`
 	// An ISO 8601 timestamp to restore the database to. Required if `bookmark` is not
@@ -217,12 +217,12 @@ func (r DatabaseTimeTravelRestoreParams) URLQuery() (v url.Values) {
 }
 
 type DatabaseTimeTravelRestoreResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Response from a time travel restore operation.
-	Result DatabaseTimeTravelRestoreResponse `json:"result,required"`
+	Result DatabaseTimeTravelRestoreResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success DatabaseTimeTravelRestoreResponseEnvelopeSuccess `json:"success,required"`
+	Success DatabaseTimeTravelRestoreResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    databaseTimeTravelRestoreResponseEnvelopeJSON    `json:"-"`
 }
 

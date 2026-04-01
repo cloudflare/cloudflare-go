@@ -43,15 +43,15 @@ func (r *DomainBulkService) Get(ctx context.Context, params DomainBulkGetParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/intel/domain/bulk", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DomainBulkGetResponse struct {
@@ -251,7 +251,7 @@ func (r domainBulkGetResponseRiskTypeJSON) RawJSON() string {
 
 type DomainBulkGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Accepts multiple values like `?domain=cloudflare.com&domain=example.com`.
 	Domain param.Field[[]string] `query:"domain"`
 }
@@ -265,11 +265,11 @@ func (r DomainBulkGetParams) URLQuery() (v url.Values) {
 }
 
 type DomainBulkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   []DomainBulkGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   []DomainBulkGetResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success    DomainBulkGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    DomainBulkGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	ResultInfo DomainBulkGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       domainBulkGetResponseEnvelopeJSON       `json:"-"`
 }

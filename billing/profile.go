@@ -44,15 +44,15 @@ func (r *ProfileService) Get(ctx context.Context, query ProfileGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/billing/profile", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ProfileGetResponse struct {
@@ -155,15 +155,15 @@ func (r profileGetResponseJSON) RawJSON() string {
 
 type ProfileGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProfileGetResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ProfileGetResponse    `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ProfileGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ProfileGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    profileGetResponseEnvelopeJSON    `json:"-"`
 }
 

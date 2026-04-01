@@ -52,19 +52,19 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Removes all existing items from the list and adds the provided items to the
@@ -80,19 +80,19 @@ func (r *ListItemService) Update(ctx context.Context, listID string, params List
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches all the items in the list.
@@ -102,11 +102,11 @@ func (r *ListItemService) List(ctx context.Context, listID string, params ListIt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -138,19 +138,19 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, params List
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a list item in the list.
@@ -159,23 +159,23 @@ func (r *ListItemService) Get(ctx context.Context, listID string, itemID string,
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if listID == "" {
 		err = errors.New("missing required list_id parameter")
-		return
+		return nil, err
 	}
 	if itemID == "" {
 		err = errors.New("missing required item_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items/%s", query.AccountID, listID, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ListCursor struct {
@@ -200,9 +200,18 @@ func (r listCursorJSON) RawJSON() string {
 	return r.raw
 }
 
+type ListCursorParam struct {
+	After  param.Field[string] `json:"after"`
+	Before param.Field[string] `json:"before"`
+}
+
+func (r ListCursorParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ListItemNewResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                  `json:"operation_id,required"`
+	OperationID string                  `json:"operation_id" api:"required"`
 	JSON        listItemNewResponseJSON `json:"-"`
 }
 
@@ -224,7 +233,7 @@ func (r listItemNewResponseJSON) RawJSON() string {
 
 type ListItemUpdateResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                     `json:"operation_id,required"`
+	OperationID string                     `json:"operation_id" api:"required"`
 	JSON        listItemUpdateResponseJSON `json:"-"`
 }
 
@@ -246,11 +255,11 @@ func (r listItemUpdateResponseJSON) RawJSON() string {
 
 type ListItemListResponse struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines a non-negative 32 bit integer.
 	ASN int64 `json:"asn"`
 	// Defines an informative summary of the list item.
@@ -339,13 +348,13 @@ func init() {
 
 type ListItemListResponseListsListItemIPFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
-	IP string `json:"ip,required"`
+	IP string `json:"ip" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                      `json:"comment"`
 	JSON    listItemListResponseListsListItemIPFullJSON `json:"-"`
@@ -375,14 +384,14 @@ func (r ListItemListResponseListsListItemIPFull) implementsListItemListResponse(
 
 type ListItemListResponseListsListItemHostnameFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname Hostname `json:"hostname,required"`
+	Hostname Hostname `json:"hostname" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                            `json:"comment"`
 	JSON    listItemListResponseListsListItemHostnameFullJSON `json:"-"`
@@ -412,13 +421,13 @@ func (r ListItemListResponseListsListItemHostnameFull) implementsListItemListRes
 
 type ListItemListResponseListsListItemRedirectFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// The definition of the redirect.
-	Redirect Redirect `json:"redirect,required"`
+	Redirect Redirect `json:"redirect" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                            `json:"comment"`
 	JSON    listItemListResponseListsListItemRedirectFullJSON `json:"-"`
@@ -448,13 +457,13 @@ func (r ListItemListResponseListsListItemRedirectFull) implementsListItemListRes
 
 type ListItemListResponseListsListItemASNFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Defines a non-negative 32 bit integer.
-	ASN int64 `json:"asn,required"`
+	ASN int64 `json:"asn" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                       `json:"comment"`
 	JSON    listItemListResponseListsListItemASNFullJSON `json:"-"`
@@ -484,7 +493,7 @@ func (r ListItemListResponseListsListItemASNFull) implementsListItemListResponse
 
 type ListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                     `json:"operation_id,required"`
+	OperationID string                     `json:"operation_id" api:"required"`
 	JSON        listItemDeleteResponseJSON `json:"-"`
 }
 
@@ -506,11 +515,11 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 
 type ListItemGetResponse struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines a non-negative 32 bit integer.
 	ASN int64 `json:"asn"`
 	// Defines an informative summary of the list item.
@@ -599,13 +608,13 @@ func init() {
 
 type ListItemGetResponseListsListItemIPFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
-	IP string `json:"ip,required"`
+	IP string `json:"ip" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                     `json:"comment"`
 	JSON    listItemGetResponseListsListItemIPFullJSON `json:"-"`
@@ -635,14 +644,14 @@ func (r ListItemGetResponseListsListItemIPFull) implementsListItemGetResponse() 
 
 type ListItemGetResponseListsListItemHostnameFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname Hostname `json:"hostname,required"`
+	Hostname Hostname `json:"hostname" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                           `json:"comment"`
 	JSON    listItemGetResponseListsListItemHostnameFullJSON `json:"-"`
@@ -672,13 +681,13 @@ func (r ListItemGetResponseListsListItemHostnameFull) implementsListItemGetRespo
 
 type ListItemGetResponseListsListItemRedirectFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// The definition of the redirect.
-	Redirect Redirect `json:"redirect,required"`
+	Redirect Redirect `json:"redirect" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                           `json:"comment"`
 	JSON    listItemGetResponseListsListItemRedirectFullJSON `json:"-"`
@@ -708,13 +717,13 @@ func (r ListItemGetResponseListsListItemRedirectFull) implementsListItemGetRespo
 
 type ListItemGetResponseListsListItemASNFull struct {
 	// Defines the unique ID of the item in the List.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Defines a non-negative 32 bit integer.
-	ASN int64 `json:"asn,required"`
+	ASN int64 `json:"asn" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+	CreatedOn string `json:"created_on" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	ModifiedOn string `json:"modified_on" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment string                                      `json:"comment"`
 	JSON    listItemGetResponseListsListItemASNFullJSON `json:"-"`
@@ -744,8 +753,8 @@ func (r ListItemGetResponseListsListItemASNFull) implementsListItemGetResponse()
 
 type ListItemNewParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string]          `path:"account_id,required"`
-	Body      []ListItemNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]          `path:"account_id" api:"required"`
+	Body      []ListItemNewParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r ListItemNewParams) MarshalJSON() (data []byte, err error) {
@@ -782,7 +791,7 @@ type ListItemNewParamsBodyUnion interface {
 
 type ListItemNewParamsBodyListsListItemIPComment struct {
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
-	IP param.Field[string] `json:"ip,required"`
+	IP param.Field[string] `json:"ip" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -795,7 +804,7 @@ func (r ListItemNewParamsBodyListsListItemIPComment) implementsListItemNewParams
 
 type ListItemNewParamsBodyListsListItemRedirectComment struct {
 	// The definition of the redirect.
-	Redirect param.Field[RedirectParam] `json:"redirect,required"`
+	Redirect param.Field[RedirectParam] `json:"redirect" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -809,7 +818,7 @@ func (r ListItemNewParamsBodyListsListItemRedirectComment) implementsListItemNew
 type ListItemNewParamsBodyListsListItemHostnameComment struct {
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname param.Field[HostnameParam] `json:"hostname,required"`
+	Hostname param.Field[HostnameParam] `json:"hostname" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -822,7 +831,7 @@ func (r ListItemNewParamsBodyListsListItemHostnameComment) implementsListItemNew
 
 type ListItemNewParamsBodyListsListItemASNComment struct {
 	// Defines a non-negative 32 bit integer.
-	ASN param.Field[int64] `json:"asn,required"`
+	ASN param.Field[int64] `json:"asn" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -834,11 +843,11 @@ func (r ListItemNewParamsBodyListsListItemASNComment) MarshalJSON() (data []byte
 func (r ListItemNewParamsBodyListsListItemASNComment) implementsListItemNewParamsBodyUnion() {}
 
 type ListItemNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListItemNewResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ListItemNewResponse   `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListItemNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ListItemNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listItemNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -878,8 +887,8 @@ func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemUpdateParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string]             `path:"account_id,required"`
-	Body      []ListItemUpdateParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]             `path:"account_id" api:"required"`
+	Body      []ListItemUpdateParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r ListItemUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -917,7 +926,7 @@ type ListItemUpdateParamsBodyUnion interface {
 
 type ListItemUpdateParamsBodyListsListItemIPComment struct {
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
-	IP param.Field[string] `json:"ip,required"`
+	IP param.Field[string] `json:"ip" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -930,7 +939,7 @@ func (r ListItemUpdateParamsBodyListsListItemIPComment) implementsListItemUpdate
 
 type ListItemUpdateParamsBodyListsListItemRedirectComment struct {
 	// The definition of the redirect.
-	Redirect param.Field[RedirectParam] `json:"redirect,required"`
+	Redirect param.Field[RedirectParam] `json:"redirect" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -945,7 +954,7 @@ func (r ListItemUpdateParamsBodyListsListItemRedirectComment) implementsListItem
 type ListItemUpdateParamsBodyListsListItemHostnameComment struct {
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname param.Field[HostnameParam] `json:"hostname,required"`
+	Hostname param.Field[HostnameParam] `json:"hostname" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -959,7 +968,7 @@ func (r ListItemUpdateParamsBodyListsListItemHostnameComment) implementsListItem
 
 type ListItemUpdateParamsBodyListsListItemASNComment struct {
 	// Defines a non-negative 32 bit integer.
-	ASN param.Field[int64] `json:"asn,required"`
+	ASN param.Field[int64] `json:"asn" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 }
@@ -971,11 +980,11 @@ func (r ListItemUpdateParamsBodyListsListItemASNComment) MarshalJSON() (data []b
 func (r ListItemUpdateParamsBodyListsListItemASNComment) implementsListItemUpdateParamsBodyUnion() {}
 
 type ListItemUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   ListItemUpdateResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListItemUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ListItemUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listItemUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1015,7 +1024,7 @@ func (r ListItemUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemListParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The pagination cursor. An opaque string token indicating the position from which
 	// to continue when requesting the next/previous set of records. Cursor values are
 	// provided under `result_info.cursors` in the response. You should make no
@@ -1040,7 +1049,7 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 
 type ListItemDeleteParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string]                     `path:"account_id,required"`
+	AccountID param.Field[string]                     `path:"account_id" api:"required"`
 	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
 }
 
@@ -1050,7 +1059,7 @@ func (r ListItemDeleteParams) MarshalJSON() (data []byte, err error) {
 
 type ListItemDeleteParamsItem struct {
 	// Defines the unique ID of the item in the List.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {
@@ -1058,11 +1067,11 @@ func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {
 }
 
 type ListItemDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   ListItemDeleteResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListItemDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ListItemDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listItemDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1102,15 +1111,15 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemGetParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ListItemGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListItemGetResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ListItemGetResponse   `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success ListItemGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ListItemGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    listItemGetResponseEnvelopeJSON    `json:"-"`
 }
 

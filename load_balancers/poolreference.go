@@ -42,11 +42,11 @@ func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query Poo
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if poolID == "" {
 		err = errors.New("missing required pool_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/references", query.AccountID, poolID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -111,5 +111,5 @@ func (r PoolReferenceGetResponseReferenceType) IsKnown() bool {
 
 type PoolReferenceGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

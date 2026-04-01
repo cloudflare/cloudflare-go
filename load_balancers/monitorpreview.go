@@ -42,19 +42,19 @@ func (r *MonitorPreviewService) New(ctx context.Context, monitorID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorID == "" {
 		err = errors.New("missing required monitor_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/preview", params.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type MonitorPreviewNewResponse struct {
@@ -83,7 +83,7 @@ func (r monitorPreviewNewResponseJSON) RawJSON() string {
 
 type MonitorPreviewNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -161,11 +161,11 @@ func (r MonitorPreviewNewParamsType) IsKnown() bool {
 }
 
 type MonitorPreviewNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   MonitorPreviewNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   MonitorPreviewNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorPreviewNewResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorPreviewNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorPreviewNewResponseEnvelopeJSON    `json:"-"`
 }
 

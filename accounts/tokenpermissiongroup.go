@@ -44,7 +44,7 @@ func (r *TokenPermissionGroupService) List(ctx context.Context, params TokenPerm
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/tokens/permission_groups", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -70,15 +70,15 @@ func (r *TokenPermissionGroupService) Get(ctx context.Context, params TokenPermi
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/tokens/permission_groups", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TokenPermissionGroupListResponse struct {
@@ -173,7 +173,7 @@ func (r TokenPermissionGroupGetResponseScope) IsKnown() bool {
 
 type TokenPermissionGroupListParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter by the name of the permission group. The value must be URL-encoded.
 	Name param.Field[string] `query:"name"`
 	// Filter by the scope of the permission group. The value must be URL-encoded.
@@ -191,7 +191,7 @@ func (r TokenPermissionGroupListParams) URLQuery() (v url.Values) {
 
 type TokenPermissionGroupGetParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter by the name of the permission group. The value must be URL-encoded.
 	Name param.Field[string] `query:"name"`
 	// Filter by the scope of the permission group. The value must be URL-encoded.
@@ -208,10 +208,10 @@ func (r TokenPermissionGroupGetParams) URLQuery() (v url.Values) {
 }
 
 type TokenPermissionGroupGetResponseEnvelope struct {
-	Errors   []TokenPermissionGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TokenPermissionGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TokenPermissionGroupGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TokenPermissionGroupGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    TokenPermissionGroupGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    TokenPermissionGroupGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     []TokenPermissionGroupGetResponse                 `json:"result"`
 	ResultInfo TokenPermissionGroupGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       tokenPermissionGroupGetResponseEnvelopeJSON       `json:"-"`
@@ -238,8 +238,8 @@ func (r tokenPermissionGroupGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type TokenPermissionGroupGetResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           TokenPermissionGroupGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             tokenPermissionGroupGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -286,8 +286,8 @@ func (r tokenPermissionGroupGetResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type TokenPermissionGroupGetResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           TokenPermissionGroupGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             tokenPermissionGroupGetResponseEnvelopeMessagesJSON   `json:"-"`

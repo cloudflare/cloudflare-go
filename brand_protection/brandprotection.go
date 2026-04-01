@@ -50,11 +50,11 @@ func (r *BrandProtectionService) Submit(ctx context.Context, body BrandProtectio
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/submit", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Return submitted URLs based on ID
@@ -64,7 +64,7 @@ func (r *BrandProtectionService) URLInfo(ctx context.Context, query BrandProtect
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/url-info", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -110,9 +110,9 @@ func (r brandProtectionSubmitResponseJSON) RawJSON() string {
 type BrandProtectionURLInfoResponse map[string]interface{}
 
 type BrandProtectionSubmitParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type BrandProtectionURLInfoParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

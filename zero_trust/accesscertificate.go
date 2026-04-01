@@ -65,10 +65,10 @@ func (r *AccessCertificateService) New(ctx context.Context, params AccessCertifi
 	path := fmt.Sprintf("%s/%s/access/certificates", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a configured mTLS certificate.
@@ -95,15 +95,15 @@ func (r *AccessCertificateService) Update(ctx context.Context, certificateID str
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all mTLS root certificates.
@@ -171,15 +171,15 @@ func (r *AccessCertificateService) Delete(ctx context.Context, certificateID str
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single mTLS certificate.
@@ -206,15 +206,15 @@ func (r *AccessCertificateService) Get(ctx context.Context, certificateID string
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AssociatedHostnames = string
@@ -277,9 +277,9 @@ func (r accessCertificateDeleteResponseJSON) RawJSON() string {
 
 type AccessCertificateNewParams struct {
 	// The certificate content.
-	Certificate param.Field[string] `json:"certificate,required"`
+	Certificate param.Field[string] `json:"certificate" api:"required"`
 	// The name of the certificate.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -293,10 +293,10 @@ func (r AccessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateNewResponseEnvelope struct {
-	Errors   []AccessCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCertificateNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCertificateNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Certificate                                 `json:"result"`
 	JSON    accessCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -321,8 +321,8 @@ func (r accessCertificateNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCertificateNewResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessCertificateNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -369,8 +369,8 @@ func (r accessCertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessCertificateNewResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessCertificateNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -433,7 +433,7 @@ func (r AccessCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCertificateUpdateParams struct {
 	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames param.Field[[]AssociatedHostnamesParam] `json:"associated_hostnames,required"`
+	AssociatedHostnames param.Field[[]AssociatedHostnamesParam] `json:"associated_hostnames" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -447,10 +447,10 @@ func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateUpdateResponseEnvelope struct {
-	Errors   []AccessCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCertificateUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCertificateUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Certificate                                    `json:"result"`
 	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -475,8 +475,8 @@ func (r accessCertificateUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCertificateUpdateResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AccessCertificateUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCertificateUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -523,8 +523,8 @@ func (r accessCertificateUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type AccessCertificateUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           AccessCertificateUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCertificateUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -613,10 +613,10 @@ type AccessCertificateDeleteParams struct {
 }
 
 type AccessCertificateDeleteResponseEnvelope struct {
-	Errors   []AccessCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCertificateDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCertificateDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessCertificateDeleteResponse                `json:"result"`
 	JSON    accessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -641,8 +641,8 @@ func (r accessCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCertificateDeleteResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           AccessCertificateDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCertificateDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -689,8 +689,8 @@ func (r accessCertificateDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type AccessCertificateDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           AccessCertificateDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCertificateDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -759,10 +759,10 @@ type AccessCertificateGetParams struct {
 }
 
 type AccessCertificateGetResponseEnvelope struct {
-	Errors   []AccessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessCertificateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessCertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Certificate                                 `json:"result"`
 	JSON    accessCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -787,8 +787,8 @@ func (r accessCertificateGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessCertificateGetResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           AccessCertificateGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessCertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -835,8 +835,8 @@ func (r accessCertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AccessCertificateGetResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           AccessCertificateGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessCertificateGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -45,27 +45,27 @@ func (r *CertificatePackCertificateService) Update(ctx context.Context, customHo
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customHostnameID == "" {
 		err = errors.New("missing required custom_hostname_id parameter")
-		return
+		return nil, err
 	}
 	if certificatePackID == "" {
 		err = errors.New("missing required certificate_pack_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s/certificate_pack/%s/certificates/%s", params.ZoneID, customHostnameID, certificatePackID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete a single custom certificate from a certificate pack that contains two
@@ -76,30 +76,30 @@ func (r *CertificatePackCertificateService) Delete(ctx context.Context, customHo
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if customHostnameID == "" {
 		err = errors.New("missing required custom_hostname_id parameter")
-		return
+		return nil, err
 	}
 	if certificatePackID == "" {
 		err = errors.New("missing required certificate_pack_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s/certificate_pack/%s/certificates/%s", body.ZoneID, customHostnameID, certificatePackID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type CertificatePackCertificateUpdateResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -618,11 +618,11 @@ func (r certificatePackCertificateDeleteResponseJSON) RawJSON() string {
 
 type CertificatePackCertificateUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If a custom uploaded certificate is used.
-	CustomCertificate param.Field[string] `json:"custom_certificate,required"`
+	CustomCertificate param.Field[string] `json:"custom_certificate" api:"required"`
 	// The key for a custom uploaded certificate.
-	CustomKey param.Field[string] `json:"custom_key,required"`
+	CustomKey param.Field[string] `json:"custom_key" api:"required"`
 }
 
 func (r CertificatePackCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -630,10 +630,10 @@ func (r CertificatePackCertificateUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type CertificatePackCertificateUpdateResponseEnvelope struct {
-	Errors   []CertificatePackCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CertificatePackCertificateUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CertificatePackCertificateUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CertificatePackCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success CertificatePackCertificateUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CertificatePackCertificateUpdateResponse                `json:"result"`
 	JSON    certificatePackCertificateUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -658,8 +658,8 @@ func (r certificatePackCertificateUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CertificatePackCertificateUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           CertificatePackCertificateUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             certificatePackCertificateUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -707,8 +707,8 @@ func (r certificatePackCertificateUpdateResponseEnvelopeErrorsSourceJSON) RawJSO
 }
 
 type CertificatePackCertificateUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                          `json:"code,required"`
-	Message          string                                                         `json:"message,required"`
+	Code             int64                                                          `json:"code" api:"required"`
+	Message          string                                                         `json:"message" api:"required"`
 	DocumentationURL string                                                         `json:"documentation_url"`
 	Source           CertificatePackCertificateUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             certificatePackCertificateUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -773,5 +773,5 @@ func (r CertificatePackCertificateUpdateResponseEnvelopeSuccess) IsKnown() bool 
 
 type CertificatePackCertificateDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

@@ -43,15 +43,15 @@ func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCer
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all client certificates configured for per-hostname authenticated origin
@@ -62,7 +62,7 @@ func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCer
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -93,19 +93,19 @@ func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID s
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", body.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get the certificate by ID to be used for client authentication on a hostname.
@@ -114,19 +114,19 @@ func (r *HostnameCertificateService) Get(ctx context.Context, certificateID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", query.ZoneID, certificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HostnameCertificateNewResponse struct {
@@ -387,11 +387,11 @@ func (r HostnameCertificateGetResponseStatus) IsKnown() bool {
 
 type HostnameCertificateNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The hostname certificate.
-	Certificate param.Field[string] `json:"certificate,required"`
+	Certificate param.Field[string] `json:"certificate" api:"required"`
 	// The hostname certificate's private key.
-	PrivateKey param.Field[string] `json:"private_key,required"`
+	PrivateKey param.Field[string] `json:"private_key" api:"required"`
 }
 
 func (r HostnameCertificateNewParams) MarshalJSON() (data []byte, err error) {
@@ -399,10 +399,10 @@ func (r HostnameCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameCertificateNewResponseEnvelope struct {
-	Errors   []HostnameCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []HostnameCertificateNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []HostnameCertificateNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success HostnameCertificateNewResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameCertificateNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  HostnameCertificateNewResponse                `json:"result"`
 	JSON    hostnameCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -427,8 +427,8 @@ func (r hostnameCertificateNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type HostnameCertificateNewResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           HostnameCertificateNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             hostnameCertificateNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -475,8 +475,8 @@ func (r hostnameCertificateNewResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type HostnameCertificateNewResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           HostnameCertificateNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             hostnameCertificateNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -539,19 +539,19 @@ func (r HostnameCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type HostnameCertificateListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameCertificateDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameCertificateDeleteResponseEnvelope struct {
-	Errors   []HostnameCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []HostnameCertificateDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []HostnameCertificateDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success HostnameCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  HostnameCertificateDeleteResponse                `json:"result"`
 	JSON    hostnameCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -576,8 +576,8 @@ func (r hostnameCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type HostnameCertificateDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           HostnameCertificateDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             hostnameCertificateDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -624,8 +624,8 @@ func (r hostnameCertificateDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type HostnameCertificateDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           HostnameCertificateDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             hostnameCertificateDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -689,14 +689,14 @@ func (r HostnameCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type HostnameCertificateGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameCertificateGetResponseEnvelope struct {
-	Errors   []HostnameCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []HostnameCertificateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []HostnameCertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success HostnameCertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  HostnameCertificateGetResponse                `json:"result"`
 	JSON    hostnameCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -721,8 +721,8 @@ func (r hostnameCertificateGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type HostnameCertificateGetResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           HostnameCertificateGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             hostnameCertificateGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -769,8 +769,8 @@ func (r hostnameCertificateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type HostnameCertificateGetResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           HostnameCertificateGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             hostnameCertificateGetResponseEnvelopeMessagesJSON   `json:"-"`

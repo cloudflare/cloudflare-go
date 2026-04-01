@@ -46,19 +46,19 @@ func (r *ConnectorEventService) List(ctx context.Context, connectorID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/events", params.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get Event
@@ -67,24 +67,24 @@ func (r *ConnectorEventService) Get(ctx context.Context, connectorID string, eve
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/events/%v.%v", query.AccountID, connectorID, eventT, eventN)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConnectorEventListResponse struct {
-	Count  float64                          `json:"count,required"`
-	Items  []ConnectorEventListResponseItem `json:"items,required"`
+	Count  float64                          `json:"count" api:"required"`
+	Items  []ConnectorEventListResponseItem `json:"items" api:"required"`
 	Cursor string                           `json:"cursor"`
 	JSON   connectorEventListResponseJSON   `json:"-"`
 }
@@ -109,13 +109,13 @@ func (r connectorEventListResponseJSON) RawJSON() string {
 
 type ConnectorEventListResponseItem struct {
 	// Time the Event was collected (seconds since the Unix epoch)
-	A float64 `json:"a,required"`
+	A float64 `json:"a" api:"required"`
 	// Kind
-	K string `json:"k,required"`
+	K string `json:"k" api:"required"`
 	// Sequence number, used to order events with the same timestamp
-	N float64 `json:"n,required"`
+	N float64 `json:"n" api:"required"`
 	// Time the Event was recorded (seconds since the Unix epoch)
-	T    float64                            `json:"t,required"`
+	T    float64                            `json:"t" api:"required"`
 	JSON connectorEventListResponseItemJSON `json:"-"`
 }
 
@@ -140,11 +140,13 @@ func (r connectorEventListResponseItemJSON) RawJSON() string {
 
 // Recorded Event
 type ConnectorEventGetResponse struct {
-	E ConnectorEventGetResponseE `json:"e,required"`
+	E ConnectorEventGetResponseE `json:"e" api:"required"`
 	// Sequence number, used to order events with the same timestamp
-	N float64 `json:"n,required"`
+	N float64 `json:"n" api:"required"`
 	// Time the Event was recorded (seconds since the Unix epoch)
-	T    float64                       `json:"t,required"`
+	T float64 `json:"t" api:"required"`
+	// Version
+	V    string                        `json:"v"`
 	JSON connectorEventGetResponseJSON `json:"-"`
 }
 
@@ -154,6 +156,7 @@ type connectorEventGetResponseJSON struct {
 	E           apijson.Field
 	N           apijson.Field
 	T           apijson.Field
+	V           apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -168,7 +171,7 @@ func (r connectorEventGetResponseJSON) RawJSON() string {
 
 type ConnectorEventGetResponseE struct {
 	// Initialized process
-	K ConnectorEventGetResponseEK `json:"k,required"`
+	K ConnectorEventGetResponseEK `json:"k" api:"required"`
 	// Location of upgrade bundle
 	URL   string                         `json:"url"`
 	JSON  connectorEventGetResponseEJSON `json:"-"`
@@ -327,7 +330,7 @@ func init() {
 
 type ConnectorEventGetResponseEInit struct {
 	// Initialized process
-	K    ConnectorEventGetResponseEInitK    `json:"k,required"`
+	K    ConnectorEventGetResponseEInitK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEInitJSON `json:"-"`
 }
 
@@ -366,7 +369,7 @@ func (r ConnectorEventGetResponseEInitK) IsKnown() bool {
 
 type ConnectorEventGetResponseELeave struct {
 	// Stopped process
-	K    ConnectorEventGetResponseELeaveK    `json:"k,required"`
+	K    ConnectorEventGetResponseELeaveK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseELeaveJSON `json:"-"`
 }
 
@@ -405,7 +408,7 @@ func (r ConnectorEventGetResponseELeaveK) IsKnown() bool {
 
 type ConnectorEventGetResponseEStartAttestation struct {
 	// Started attestation
-	K    ConnectorEventGetResponseEStartAttestationK    `json:"k,required"`
+	K    ConnectorEventGetResponseEStartAttestationK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEStartAttestationJSON `json:"-"`
 }
 
@@ -444,7 +447,7 @@ func (r ConnectorEventGetResponseEStartAttestationK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishAttestationSuccess struct {
 	// Finished attestation
-	K    ConnectorEventGetResponseEFinishAttestationSuccessK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishAttestationSuccessK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishAttestationSuccessJSON `json:"-"`
 }
 
@@ -483,7 +486,7 @@ func (r ConnectorEventGetResponseEFinishAttestationSuccessK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishAttestationFailure struct {
 	// Failed attestation
-	K    ConnectorEventGetResponseEFinishAttestationFailureK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishAttestationFailureK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishAttestationFailureJSON `json:"-"`
 }
 
@@ -522,7 +525,7 @@ func (r ConnectorEventGetResponseEFinishAttestationFailureK) IsKnown() bool {
 
 type ConnectorEventGetResponseEStartRotateCryptKey struct {
 	// Started crypt key rotation
-	K    ConnectorEventGetResponseEStartRotateCryptKeyK    `json:"k,required"`
+	K    ConnectorEventGetResponseEStartRotateCryptKeyK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEStartRotateCryptKeyJSON `json:"-"`
 }
 
@@ -561,7 +564,7 @@ func (r ConnectorEventGetResponseEStartRotateCryptKeyK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishRotateCryptKeySuccess struct {
 	// Finished crypt key rotation
-	K    ConnectorEventGetResponseEFinishRotateCryptKeySuccessK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishRotateCryptKeySuccessK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishRotateCryptKeySuccessJSON `json:"-"`
 }
 
@@ -601,7 +604,7 @@ func (r ConnectorEventGetResponseEFinishRotateCryptKeySuccessK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishRotateCryptKeyFailure struct {
 	// Failed crypt key rotation
-	K    ConnectorEventGetResponseEFinishRotateCryptKeyFailureK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishRotateCryptKeyFailureK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishRotateCryptKeyFailureJSON `json:"-"`
 }
 
@@ -641,7 +644,7 @@ func (r ConnectorEventGetResponseEFinishRotateCryptKeyFailureK) IsKnown() bool {
 
 type ConnectorEventGetResponseEStartRotatePki struct {
 	// Started PKI rotation
-	K    ConnectorEventGetResponseEStartRotatePkiK    `json:"k,required"`
+	K    ConnectorEventGetResponseEStartRotatePkiK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEStartRotatePkiJSON `json:"-"`
 }
 
@@ -680,7 +683,7 @@ func (r ConnectorEventGetResponseEStartRotatePkiK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishRotatePkiSuccess struct {
 	// Finished PKI rotation
-	K    ConnectorEventGetResponseEFinishRotatePkiSuccessK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishRotatePkiSuccessK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishRotatePkiSuccessJSON `json:"-"`
 }
 
@@ -719,7 +722,7 @@ func (r ConnectorEventGetResponseEFinishRotatePkiSuccessK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishRotatePkiFailure struct {
 	// Failed PKI rotation
-	K    ConnectorEventGetResponseEFinishRotatePkiFailureK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishRotatePkiFailureK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishRotatePkiFailureJSON `json:"-"`
 }
 
@@ -758,9 +761,9 @@ func (r ConnectorEventGetResponseEFinishRotatePkiFailureK) IsKnown() bool {
 
 type ConnectorEventGetResponseEStartUpgrade struct {
 	// Started upgrade
-	K ConnectorEventGetResponseEStartUpgradeK `json:"k,required"`
+	K ConnectorEventGetResponseEStartUpgradeK `json:"k" api:"required"`
 	// Location of upgrade bundle
-	URL  string                                     `json:"url,required"`
+	URL  string                                     `json:"url" api:"required"`
 	JSON connectorEventGetResponseEStartUpgradeJSON `json:"-"`
 }
 
@@ -800,7 +803,7 @@ func (r ConnectorEventGetResponseEStartUpgradeK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishUpgradeSuccess struct {
 	// Finished upgrade
-	K    ConnectorEventGetResponseEFinishUpgradeSuccessK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishUpgradeSuccessK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishUpgradeSuccessJSON `json:"-"`
 }
 
@@ -839,7 +842,7 @@ func (r ConnectorEventGetResponseEFinishUpgradeSuccessK) IsKnown() bool {
 
 type ConnectorEventGetResponseEFinishUpgradeFailure struct {
 	// Failed upgrade
-	K    ConnectorEventGetResponseEFinishUpgradeFailureK    `json:"k,required"`
+	K    ConnectorEventGetResponseEFinishUpgradeFailureK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEFinishUpgradeFailureJSON `json:"-"`
 }
 
@@ -878,7 +881,7 @@ func (r ConnectorEventGetResponseEFinishUpgradeFailureK) IsKnown() bool {
 
 type ConnectorEventGetResponseEReconcile struct {
 	// Reconciled
-	K    ConnectorEventGetResponseEReconcileK    `json:"k,required"`
+	K    ConnectorEventGetResponseEReconcileK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEReconcileJSON `json:"-"`
 }
 
@@ -917,7 +920,7 @@ func (r ConnectorEventGetResponseEReconcileK) IsKnown() bool {
 
 type ConnectorEventGetResponseEConfigureCloudflaredTunnel struct {
 	// Configured Cloudflared tunnel
-	K    ConnectorEventGetResponseEConfigureCloudflaredTunnelK    `json:"k,required"`
+	K    ConnectorEventGetResponseEConfigureCloudflaredTunnelK    `json:"k" api:"required"`
 	JSON connectorEventGetResponseEConfigureCloudflaredTunnelJSON `json:"-"`
 }
 
@@ -987,9 +990,9 @@ func (r ConnectorEventGetResponseEK) IsKnown() bool {
 
 type ConnectorEventListParams struct {
 	// Account identifier
-	AccountID param.Field[string]  `path:"account_id,required"`
-	From      param.Field[float64] `query:"from,required"`
-	To        param.Field[float64] `query:"to,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
+	From      param.Field[float64] `query:"from" api:"required"`
+	To        param.Field[float64] `query:"to" api:"required"`
 	Cursor    param.Field[string]  `query:"cursor"`
 	// Filter by event kind
 	K     param.Field[string]  `query:"k"`
@@ -1006,8 +1009,8 @@ func (r ConnectorEventListParams) URLQuery() (v url.Values) {
 }
 
 type ConnectorEventListResponseEnvelope struct {
-	Result   ConnectorEventListResponse                   `json:"result,required"`
-	Success  bool                                         `json:"success,required"`
+	Result   ConnectorEventListResponse                   `json:"result" api:"required"`
+	Success  bool                                         `json:"success" api:"required"`
 	Errors   []ConnectorEventListResponseEnvelopeErrors   `json:"errors"`
 	Messages []ConnectorEventListResponseEnvelopeMessages `json:"messages"`
 	JSON     connectorEventListResponseEnvelopeJSON       `json:"-"`
@@ -1033,8 +1036,8 @@ func (r connectorEventListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorEventListResponseEnvelopeErrors struct {
-	Code    float64                                      `json:"code,required"`
-	Message string                                       `json:"message,required"`
+	Code    float64                                      `json:"code" api:"required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    connectorEventListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -1056,8 +1059,8 @@ func (r connectorEventListResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ConnectorEventListResponseEnvelopeMessages struct {
-	Code    float64                                        `json:"code,required"`
-	Message string                                         `json:"message,required"`
+	Code    float64                                        `json:"code" api:"required"`
+	Message string                                         `json:"message" api:"required"`
 	JSON    connectorEventListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -1080,13 +1083,13 @@ func (r connectorEventListResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type ConnectorEventGetParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConnectorEventGetResponseEnvelope struct {
 	// Recorded Event
-	Result   ConnectorEventGetResponse                   `json:"result,required"`
-	Success  bool                                        `json:"success,required"`
+	Result   ConnectorEventGetResponse                   `json:"result" api:"required"`
+	Success  bool                                        `json:"success" api:"required"`
 	Errors   []ConnectorEventGetResponseEnvelopeErrors   `json:"errors"`
 	Messages []ConnectorEventGetResponseEnvelopeMessages `json:"messages"`
 	JSON     connectorEventGetResponseEnvelopeJSON       `json:"-"`
@@ -1112,8 +1115,8 @@ func (r connectorEventGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorEventGetResponseEnvelopeErrors struct {
-	Code    float64                                     `json:"code,required"`
-	Message string                                      `json:"message,required"`
+	Code    float64                                     `json:"code" api:"required"`
+	Message string                                      `json:"message" api:"required"`
 	JSON    connectorEventGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -1135,8 +1138,8 @@ func (r connectorEventGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ConnectorEventGetResponseEnvelopeMessages struct {
-	Code    float64                                       `json:"code,required"`
-	Message string                                        `json:"message,required"`
+	Code    float64                                       `json:"code" api:"required"`
+	Message string                                        `json:"message" api:"required"`
 	JSON    connectorEventGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 

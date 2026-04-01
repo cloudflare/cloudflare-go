@@ -42,10 +42,10 @@ func (r *AttackLayer3TopLocationService) Origin(ctx context.Context, query Attac
 	path := "radar/attacks/layer3/top/locations/origin"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the target locations of layer 3 attacks.
@@ -55,16 +55,16 @@ func (r *AttackLayer3TopLocationService) Target(ctx context.Context, query Attac
 	path := "radar/attacks/layer3/top/locations/target"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AttackLayer3TopLocationOriginResponse struct {
 	// Metadata for the results.
-	Meta AttackLayer3TopLocationOriginResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer3TopLocationOriginResponseTop0 `json:"top_0,required"`
+	Meta AttackLayer3TopLocationOriginResponseMeta   `json:"meta" api:"required"`
+	Top0 []AttackLayer3TopLocationOriginResponseTop0 `json:"top_0" api:"required"`
 	JSON attackLayer3TopLocationOriginResponseJSON   `json:"-"`
 }
 
@@ -87,15 +87,15 @@ func (r attackLayer3TopLocationOriginResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer3TopLocationOriginResponseMeta struct {
-	ConfidenceInfo AttackLayer3TopLocationOriginResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []AttackLayer3TopLocationOriginResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AttackLayer3TopLocationOriginResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []AttackLayer3TopLocationOriginResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AttackLayer3TopLocationOriginResponseMetaNormalization `json:"normalization,required"`
+	Normalization AttackLayer3TopLocationOriginResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AttackLayer3TopLocationOriginResponseMetaUnit `json:"units,required"`
+	Units []AttackLayer3TopLocationOriginResponseMetaUnit `json:"units" api:"required"`
 	JSON  attackLayer3TopLocationOriginResponseMetaJSON   `json:"-"`
 }
 
@@ -120,9 +120,9 @@ func (r attackLayer3TopLocationOriginResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationOriginResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                       `json:"level,required"`
+	Level int64                                                       `json:"level" api:"required"`
 	JSON  attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -147,15 +147,15 @@ func (r attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON) RawJSON() s
 // Annotation associated with the result (e.g. outage or other type of event).
 type AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            attackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -243,9 +243,9 @@ func (r AttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationsEventT
 
 type AttackLayer3TopLocationOriginResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      attackLayer3TopLocationOriginResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -290,8 +290,8 @@ func (r AttackLayer3TopLocationOriginResponseMetaNormalization) IsKnown() bool {
 }
 
 type AttackLayer3TopLocationOriginResponseMetaUnit struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
+	Name  string                                            `json:"name" api:"required"`
+	Value string                                            `json:"value" api:"required"`
 	JSON  attackLayer3TopLocationOriginResponseMetaUnitJSON `json:"-"`
 }
 
@@ -313,10 +313,10 @@ func (r attackLayer3TopLocationOriginResponseMetaUnitJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationOriginResponseTop0 struct {
-	OriginCountryAlpha2 string                                        `json:"originCountryAlpha2,required"`
-	OriginCountryName   string                                        `json:"originCountryName,required"`
-	Rank                float64                                       `json:"rank,required"`
-	Value               string                                        `json:"value,required"`
+	OriginCountryAlpha2 string                                        `json:"originCountryAlpha2" api:"required"`
+	OriginCountryName   string                                        `json:"originCountryName" api:"required"`
+	Rank                float64                                       `json:"rank" api:"required"`
+	Value               string                                        `json:"value" api:"required"`
 	JSON                attackLayer3TopLocationOriginResponseTop0JSON `json:"-"`
 }
 
@@ -341,8 +341,8 @@ func (r attackLayer3TopLocationOriginResponseTop0JSON) RawJSON() string {
 
 type AttackLayer3TopLocationTargetResponse struct {
 	// Metadata for the results.
-	Meta AttackLayer3TopLocationTargetResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer3TopLocationTargetResponseTop0 `json:"top_0,required"`
+	Meta AttackLayer3TopLocationTargetResponseMeta   `json:"meta" api:"required"`
+	Top0 []AttackLayer3TopLocationTargetResponseTop0 `json:"top_0" api:"required"`
 	JSON attackLayer3TopLocationTargetResponseJSON   `json:"-"`
 }
 
@@ -365,15 +365,15 @@ func (r attackLayer3TopLocationTargetResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type AttackLayer3TopLocationTargetResponseMeta struct {
-	ConfidenceInfo AttackLayer3TopLocationTargetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []AttackLayer3TopLocationTargetResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo AttackLayer3TopLocationTargetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []AttackLayer3TopLocationTargetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization AttackLayer3TopLocationTargetResponseMetaNormalization `json:"normalization,required"`
+	Normalization AttackLayer3TopLocationTargetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []AttackLayer3TopLocationTargetResponseMetaUnit `json:"units,required"`
+	Units []AttackLayer3TopLocationTargetResponseMetaUnit `json:"units" api:"required"`
 	JSON  attackLayer3TopLocationTargetResponseMetaJSON   `json:"-"`
 }
 
@@ -398,9 +398,9 @@ func (r attackLayer3TopLocationTargetResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationTargetResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                       `json:"level,required"`
+	Level int64                                                       `json:"level" api:"required"`
 	JSON  attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -425,15 +425,15 @@ func (r attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON) RawJSON() s
 // Annotation associated with the result (e.g. outage or other type of event).
 type AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            attackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -521,9 +521,9 @@ func (r AttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationsEventT
 
 type AttackLayer3TopLocationTargetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      attackLayer3TopLocationTargetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -568,8 +568,8 @@ func (r AttackLayer3TopLocationTargetResponseMetaNormalization) IsKnown() bool {
 }
 
 type AttackLayer3TopLocationTargetResponseMetaUnit struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
+	Name  string                                            `json:"name" api:"required"`
+	Value string                                            `json:"value" api:"required"`
 	JSON  attackLayer3TopLocationTargetResponseMetaUnitJSON `json:"-"`
 }
 
@@ -591,10 +591,10 @@ func (r attackLayer3TopLocationTargetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationTargetResponseTop0 struct {
-	Rank                float64                                       `json:"rank,required"`
-	TargetCountryAlpha2 string                                        `json:"targetCountryAlpha2,required"`
-	TargetCountryName   string                                        `json:"targetCountryName,required"`
-	Value               string                                        `json:"value,required"`
+	Rank                float64                                       `json:"rank" api:"required"`
+	TargetCountryAlpha2 string                                        `json:"targetCountryAlpha2" api:"required"`
+	TargetCountryName   string                                        `json:"targetCountryName" api:"required"`
+	Value               string                                        `json:"value" api:"required"`
 	JSON                attackLayer3TopLocationTargetResponseTop0JSON `json:"-"`
 }
 
@@ -704,8 +704,8 @@ func (r AttackLayer3TopLocationOriginParamsProtocol) IsKnown() bool {
 }
 
 type AttackLayer3TopLocationOriginResponseEnvelope struct {
-	Result  AttackLayer3TopLocationOriginResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
+	Result  AttackLayer3TopLocationOriginResponse             `json:"result" api:"required"`
+	Success bool                                              `json:"success" api:"required"`
 	JSON    attackLayer3TopLocationOriginResponseEnvelopeJSON `json:"-"`
 }
 
@@ -813,8 +813,8 @@ func (r AttackLayer3TopLocationTargetParamsProtocol) IsKnown() bool {
 }
 
 type AttackLayer3TopLocationTargetResponseEnvelope struct {
-	Result  AttackLayer3TopLocationTargetResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
+	Result  AttackLayer3TopLocationTargetResponse             `json:"result" api:"required"`
+	Success bool                                              `json:"success" api:"required"`
 	JSON    attackLayer3TopLocationTargetResponseEnvelopeJSON `json:"-"`
 }
 

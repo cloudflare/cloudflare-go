@@ -42,15 +42,15 @@ func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatch
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags", params.AccountID, dispatchNamespace, scriptName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPut, path, params, &res, opts...)
@@ -77,15 +77,15 @@ func (r *DispatchNamespaceScriptTagService) List(ctx context.Context, dispatchNa
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags", query.AccountID, dispatchNamespace, scriptName)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -111,36 +111,36 @@ func (r *DispatchNamespaceScriptTagService) Delete(ctx context.Context, dispatch
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dispatchNamespace == "" {
 		err = errors.New("missing required dispatch_namespace parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	if tag == "" {
 		err = errors.New("missing required tag parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/tags/%s", body.AccountID, dispatchNamespace, scriptName, tag)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DispatchNamespaceScriptTagDeleteResponse = interface{}
 
 type DispatchNamespaceScriptTagUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Tags associated with the Worker.
-	Body []string `json:"body,required"`
+	Body []string `json:"body" api:"required"`
 }
 
 func (r DispatchNamespaceScriptTagUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -149,20 +149,20 @@ func (r DispatchNamespaceScriptTagUpdateParams) MarshalJSON() (data []byte, err 
 
 type DispatchNamespaceScriptTagListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceScriptTagDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceScriptTagDeleteResponseEnvelope struct {
-	Errors   []DispatchNamespaceScriptTagDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceScriptTagDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DispatchNamespaceScriptTagDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DispatchNamespaceScriptTagDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DispatchNamespaceScriptTagDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DispatchNamespaceScriptTagDeleteResponse                `json:"result,nullable"`
+	Success DispatchNamespaceScriptTagDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  DispatchNamespaceScriptTagDeleteResponse                `json:"result" api:"nullable"`
 	JSON    dispatchNamespaceScriptTagDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -186,8 +186,8 @@ func (r dispatchNamespaceScriptTagDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DispatchNamespaceScriptTagDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           DispatchNamespaceScriptTagDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dispatchNamespaceScriptTagDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -235,8 +235,8 @@ func (r dispatchNamespaceScriptTagDeleteResponseEnvelopeErrorsSourceJSON) RawJSO
 }
 
 type DispatchNamespaceScriptTagDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                          `json:"code,required"`
-	Message          string                                                         `json:"message,required"`
+	Code             int64                                                          `json:"code" api:"required"`
+	Message          string                                                         `json:"message" api:"required"`
 	DocumentationURL string                                                         `json:"documentation_url"`
 	Source           DispatchNamespaceScriptTagDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dispatchNamespaceScriptTagDeleteResponseEnvelopeMessagesJSON   `json:"-"`

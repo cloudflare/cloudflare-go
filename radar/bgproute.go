@@ -41,10 +41,10 @@ func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, op
 	path := "radar/bgp/routes/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves all Multi-Origin AS (MOAS) prefixes in the global routing tables.
@@ -54,10 +54,10 @@ func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, op
 	path := "radar/bgp/routes/moas"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the prefix-to-ASN mapping from global routing tables.
@@ -67,10 +67,10 @@ func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams
 	path := "radar/bgp/routes/pfx2as"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves real-time BGP routes for a prefix, using public real-time data
@@ -81,10 +81,10 @@ func (r *BGPRouteService) Realtime(ctx context.Context, query BGPRouteRealtimePa
 	path := "radar/bgp/routes/realtime"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the BGP routing table stats.
@@ -94,15 +94,15 @@ func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, 
 	path := "radar/bgp/routes/stats"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BGPRouteAsesResponse struct {
-	ASNs []BGPRouteAsesResponseASN `json:"asns,required"`
-	Meta BGPRouteAsesResponseMeta  `json:"meta,required"`
+	ASNs []BGPRouteAsesResponseASN `json:"asns" api:"required"`
+	Meta BGPRouteAsesResponseMeta  `json:"meta" api:"required"`
 	JSON bgpRouteAsesResponseJSON  `json:"-"`
 }
 
@@ -124,25 +124,25 @@ func (r bgpRouteAsesResponseJSON) RawJSON() string {
 }
 
 type BGPRouteAsesResponseASN struct {
-	ASN int64 `json:"asn,required"`
+	ASN int64 `json:"asn" api:"required"`
 	// AS's customer cone size.
-	ConeSize int64 `json:"coneSize,required"`
+	ConeSize int64 `json:"coneSize" api:"required"`
 	// Alpha-2 code for the AS's registration country.
-	Country string `json:"country,required"`
+	Country string `json:"country" api:"required"`
 	// Number of IPv4 addresses originated by the AS.
-	IPV4Count int64 `json:"ipv4Count,required"`
+	IPV4Count int64 `json:"ipv4Count" api:"required"`
 	// Number of IPv6 addresses originated by the AS.
-	IPV6Count string `json:"ipv6Count,required"`
+	IPV6Count string `json:"ipv6Count" api:"required"`
 	// Name of the AS.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Number of total IP prefixes originated by the AS.
-	PfxsCount int64 `json:"pfxsCount,required"`
+	PfxsCount int64 `json:"pfxsCount" api:"required"`
 	// Number of RPKI invalid prefixes originated by the AS.
-	RPKIInvalid int64 `json:"rpkiInvalid,required"`
+	RPKIInvalid int64 `json:"rpkiInvalid" api:"required"`
 	// Number of RPKI unknown prefixes originated by the AS.
-	RPKIUnknown int64 `json:"rpkiUnknown,required"`
+	RPKIUnknown int64 `json:"rpkiUnknown" api:"required"`
 	// Number of RPKI valid prefixes originated by the AS.
-	RPKIValid int64                       `json:"rpkiValid,required"`
+	RPKIValid int64                       `json:"rpkiValid" api:"required"`
 	JSON      bgpRouteAsesResponseASNJSON `json:"-"`
 }
 
@@ -173,11 +173,11 @@ func (r bgpRouteAsesResponseASNJSON) RawJSON() string {
 
 type BGPRouteAsesResponseMeta struct {
 	// The timestamp of when the data is generated.
-	DataTime string `json:"dataTime,required"`
+	DataTime string `json:"dataTime" api:"required"`
 	// The timestamp of the query.
-	QueryTime string `json:"queryTime,required"`
+	QueryTime string `json:"queryTime" api:"required"`
 	// Total number of route collector peers used to generate this data.
-	TotalPeers int64                        `json:"totalPeers,required"`
+	TotalPeers int64                        `json:"totalPeers" api:"required"`
 	JSON       bgpRouteAsesResponseMetaJSON `json:"-"`
 }
 
@@ -200,8 +200,8 @@ func (r bgpRouteAsesResponseMetaJSON) RawJSON() string {
 }
 
 type BGPRouteMoasResponse struct {
-	Meta BGPRouteMoasResponseMeta  `json:"meta,required"`
-	Moas []BGPRouteMoasResponseMoa `json:"moas,required"`
+	Meta BGPRouteMoasResponseMeta  `json:"meta" api:"required"`
+	Moas []BGPRouteMoasResponseMoa `json:"moas" api:"required"`
 	JSON bgpRouteMoasResponseJSON  `json:"-"`
 }
 
@@ -223,9 +223,9 @@ func (r bgpRouteMoasResponseJSON) RawJSON() string {
 }
 
 type BGPRouteMoasResponseMeta struct {
-	DataTime   string                       `json:"data_time,required"`
-	QueryTime  string                       `json:"query_time,required"`
-	TotalPeers int64                        `json:"total_peers,required"`
+	DataTime   string                       `json:"data_time" api:"required"`
+	QueryTime  string                       `json:"query_time" api:"required"`
+	TotalPeers int64                        `json:"total_peers" api:"required"`
 	JSON       bgpRouteMoasResponseMetaJSON `json:"-"`
 }
 
@@ -248,8 +248,8 @@ func (r bgpRouteMoasResponseMetaJSON) RawJSON() string {
 }
 
 type BGPRouteMoasResponseMoa struct {
-	Origins []BGPRouteMoasResponseMoasOrigin `json:"origins,required"`
-	Prefix  string                           `json:"prefix,required"`
+	Origins []BGPRouteMoasResponseMoasOrigin `json:"origins" api:"required"`
+	Prefix  string                           `json:"prefix" api:"required"`
 	JSON    bgpRouteMoasResponseMoaJSON      `json:"-"`
 }
 
@@ -271,9 +271,9 @@ func (r bgpRouteMoasResponseMoaJSON) RawJSON() string {
 }
 
 type BGPRouteMoasResponseMoasOrigin struct {
-	Origin         int64                              `json:"origin,required"`
-	PeerCount      int64                              `json:"peer_count,required"`
-	RPKIValidation string                             `json:"rpki_validation,required"`
+	Origin         int64                              `json:"origin" api:"required"`
+	PeerCount      int64                              `json:"peer_count" api:"required"`
+	RPKIValidation string                             `json:"rpki_validation" api:"required"`
 	JSON           bgpRouteMoasResponseMoasOriginJSON `json:"-"`
 }
 
@@ -296,8 +296,8 @@ func (r bgpRouteMoasResponseMoasOriginJSON) RawJSON() string {
 }
 
 type BGPRoutePfx2asResponse struct {
-	Meta          BGPRoutePfx2asResponseMeta           `json:"meta,required"`
-	PrefixOrigins []BGPRoutePfx2asResponsePrefixOrigin `json:"prefix_origins,required"`
+	Meta          BGPRoutePfx2asResponseMeta           `json:"meta" api:"required"`
+	PrefixOrigins []BGPRoutePfx2asResponsePrefixOrigin `json:"prefix_origins" api:"required"`
 	JSON          bgpRoutePfx2asResponseJSON           `json:"-"`
 }
 
@@ -319,9 +319,9 @@ func (r bgpRoutePfx2asResponseJSON) RawJSON() string {
 }
 
 type BGPRoutePfx2asResponseMeta struct {
-	DataTime   string                         `json:"data_time,required"`
-	QueryTime  string                         `json:"query_time,required"`
-	TotalPeers int64                          `json:"total_peers,required"`
+	DataTime   string                         `json:"data_time" api:"required"`
+	QueryTime  string                         `json:"query_time" api:"required"`
+	TotalPeers int64                          `json:"total_peers" api:"required"`
 	JSON       bgpRoutePfx2asResponseMetaJSON `json:"-"`
 }
 
@@ -344,10 +344,10 @@ func (r bgpRoutePfx2asResponseMetaJSON) RawJSON() string {
 }
 
 type BGPRoutePfx2asResponsePrefixOrigin struct {
-	Origin         int64                                  `json:"origin,required"`
-	PeerCount      int64                                  `json:"peer_count,required"`
-	Prefix         string                                 `json:"prefix,required"`
-	RPKIValidation string                                 `json:"rpki_validation,required"`
+	Origin         int64                                  `json:"origin" api:"required"`
+	PeerCount      int64                                  `json:"peer_count" api:"required"`
+	Prefix         string                                 `json:"prefix" api:"required"`
+	RPKIValidation string                                 `json:"rpki_validation" api:"required"`
 	JSON           bgpRoutePfx2asResponsePrefixOriginJSON `json:"-"`
 }
 
@@ -371,8 +371,8 @@ func (r bgpRoutePfx2asResponsePrefixOriginJSON) RawJSON() string {
 }
 
 type BGPRouteRealtimeResponse struct {
-	Meta   BGPRouteRealtimeResponseMeta    `json:"meta,required"`
-	Routes []BGPRouteRealtimeResponseRoute `json:"routes,required"`
+	Meta   BGPRouteRealtimeResponseMeta    `json:"meta" api:"required"`
+	Routes []BGPRouteRealtimeResponseRoute `json:"routes" api:"required"`
 	JSON   bgpRouteRealtimeResponseJSON    `json:"-"`
 }
 
@@ -394,13 +394,13 @@ func (r bgpRouteRealtimeResponseJSON) RawJSON() string {
 }
 
 type BGPRouteRealtimeResponseMeta struct {
-	ASNInfo    []BGPRouteRealtimeResponseMetaASNInfo   `json:"asn_info,required"`
-	Collectors []BGPRouteRealtimeResponseMetaCollector `json:"collectors,required"`
+	ASNInfo    []BGPRouteRealtimeResponseMetaASNInfo   `json:"asn_info" api:"required"`
+	Collectors []BGPRouteRealtimeResponseMetaCollector `json:"collectors" api:"required"`
 	// The most recent data timestamp for from the real-time sources.
-	DataTime      string                                     `json:"data_time,required"`
-	PrefixOrigins []BGPRouteRealtimeResponseMetaPrefixOrigin `json:"prefix_origins,required"`
+	DataTime      string                                     `json:"data_time" api:"required"`
+	PrefixOrigins []BGPRouteRealtimeResponseMetaPrefixOrigin `json:"prefix_origins" api:"required"`
 	// The timestamp of this query.
-	QueryTime string                           `json:"query_time,required"`
+	QueryTime string                           `json:"query_time" api:"required"`
 	JSON      bgpRouteRealtimeResponseMetaJSON `json:"-"`
 }
 
@@ -426,15 +426,15 @@ func (r bgpRouteRealtimeResponseMetaJSON) RawJSON() string {
 
 type BGPRouteRealtimeResponseMetaASNInfo struct {
 	// Name of the autonomous system.
-	AsName string `json:"as_name,required"`
+	AsName string `json:"as_name" api:"required"`
 	// AS number.
-	ASN int64 `json:"asn,required"`
+	ASN int64 `json:"asn" api:"required"`
 	// Alpha-2 code for the AS's registration country.
-	CountryCode string `json:"country_code,required"`
+	CountryCode string `json:"country_code" api:"required"`
 	// Organization ID.
-	OrgID string `json:"org_id,required"`
+	OrgID string `json:"org_id" api:"required"`
 	// Organization name.
-	OrgName string                                  `json:"org_name,required"`
+	OrgName string                                  `json:"org_name" api:"required"`
 	JSON    bgpRouteRealtimeResponseMetaASNInfoJSON `json:"-"`
 }
 
@@ -460,19 +460,19 @@ func (r bgpRouteRealtimeResponseMetaASNInfoJSON) RawJSON() string {
 
 type BGPRouteRealtimeResponseMetaCollector struct {
 	// Public route collector ID.
-	Collector string `json:"collector,required"`
+	Collector string `json:"collector" api:"required"`
 	// Latest real-time stream timestamp for this collector.
-	LatestRealtimeTs string `json:"latest_realtime_ts,required"`
+	LatestRealtimeTs string `json:"latest_realtime_ts" api:"required"`
 	// Latest RIB dump MRT file timestamp for this collector.
-	LatestRibTs string `json:"latest_rib_ts,required"`
+	LatestRibTs string `json:"latest_rib_ts" api:"required"`
 	// Latest BGP updates MRT file timestamp for this collector.
-	LatestUpdatesTs string `json:"latest_updates_ts,required"`
+	LatestUpdatesTs string `json:"latest_updates_ts" api:"required"`
 	// Total number of collector peers used from this collector.
-	PeersCount int64 `json:"peers_count,required"`
+	PeersCount int64 `json:"peers_count" api:"required"`
 	// Total number of collector peers used from this collector for IPv4 prefixes.
-	PeersV4Count int64 `json:"peers_v4_count,required"`
+	PeersV4Count int64 `json:"peers_v4_count" api:"required"`
 	// Total number of collector peers used from this collector for IPv6 prefixes.
-	PeersV6Count int64                                     `json:"peers_v6_count,required"`
+	PeersV6Count int64                                     `json:"peers_v6_count" api:"required"`
 	JSON         bgpRouteRealtimeResponseMetaCollectorJSON `json:"-"`
 }
 
@@ -500,17 +500,17 @@ func (r bgpRouteRealtimeResponseMetaCollectorJSON) RawJSON() string {
 
 type BGPRouteRealtimeResponseMetaPrefixOrigin struct {
 	// Origin ASN.
-	Origin int64 `json:"origin,required"`
+	Origin int64 `json:"origin" api:"required"`
 	// IP prefix of this query.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Prefix-origin RPKI validation: valid, invalid, unknown.
-	RPKIValidation string `json:"rpki_validation,required"`
+	RPKIValidation string `json:"rpki_validation" api:"required"`
 	// Total number of peers.
-	TotalPeers int64 `json:"total_peers,required"`
+	TotalPeers int64 `json:"total_peers" api:"required"`
 	// Total number of peers seeing this prefix.
-	TotalVisible int64 `json:"total_visible,required"`
+	TotalVisible int64 `json:"total_visible" api:"required"`
 	// Ratio of peers seeing this prefix to total number of peers.
-	Visibility float64                                      `json:"visibility,required"`
+	Visibility float64                                      `json:"visibility" api:"required"`
 	JSON       bgpRouteRealtimeResponseMetaPrefixOriginJSON `json:"-"`
 }
 
@@ -537,15 +537,15 @@ func (r bgpRouteRealtimeResponseMetaPrefixOriginJSON) RawJSON() string {
 
 type BGPRouteRealtimeResponseRoute struct {
 	// AS-level path for this route, from collector to origin.
-	AsPath []int64 `json:"as_path,required"`
+	AsPath []int64 `json:"as_path" api:"required"`
 	// Public collector ID for this route.
-	Collector string `json:"collector,required"`
+	Collector string `json:"collector" api:"required"`
 	// BGP community values.
-	Communities []string `json:"communities,required"`
+	Communities []string `json:"communities" api:"required"`
 	// IP prefix of this query.
-	Prefix string `json:"prefix,required"`
+	Prefix string `json:"prefix" api:"required"`
 	// Latest timestamp of change for this route.
-	Timestamp string                            `json:"timestamp,required"`
+	Timestamp string                            `json:"timestamp" api:"required"`
 	JSON      bgpRouteRealtimeResponseRouteJSON `json:"-"`
 }
 
@@ -570,8 +570,8 @@ func (r bgpRouteRealtimeResponseRouteJSON) RawJSON() string {
 }
 
 type BGPRouteStatsResponse struct {
-	Meta  BGPRouteStatsResponseMeta  `json:"meta,required"`
-	Stats BGPRouteStatsResponseStats `json:"stats,required"`
+	Meta  BGPRouteStatsResponseMeta  `json:"meta" api:"required"`
+	Stats BGPRouteStatsResponseStats `json:"stats" api:"required"`
 	JSON  bgpRouteStatsResponseJSON  `json:"-"`
 }
 
@@ -593,9 +593,9 @@ func (r bgpRouteStatsResponseJSON) RawJSON() string {
 }
 
 type BGPRouteStatsResponseMeta struct {
-	DataTime   string                        `json:"data_time,required"`
-	QueryTime  string                        `json:"query_time,required"`
-	TotalPeers int64                         `json:"total_peers,required"`
+	DataTime   string                        `json:"data_time" api:"required"`
+	QueryTime  string                        `json:"query_time" api:"required"`
+	TotalPeers int64                         `json:"total_peers" api:"required"`
 	JSON       bgpRouteStatsResponseMetaJSON `json:"-"`
 }
 
@@ -618,24 +618,24 @@ func (r bgpRouteStatsResponseMetaJSON) RawJSON() string {
 }
 
 type BGPRouteStatsResponseStats struct {
-	DistinctOrigins      int64                          `json:"distinct_origins,required"`
-	DistinctOriginsIPV4  int64                          `json:"distinct_origins_ipv4,required"`
-	DistinctOriginsIPV6  int64                          `json:"distinct_origins_ipv6,required"`
-	DistinctPrefixes     int64                          `json:"distinct_prefixes,required"`
-	DistinctPrefixesIPV4 int64                          `json:"distinct_prefixes_ipv4,required"`
-	DistinctPrefixesIPV6 int64                          `json:"distinct_prefixes_ipv6,required"`
-	RoutesInvalid        int64                          `json:"routes_invalid,required"`
-	RoutesInvalidIPV4    int64                          `json:"routes_invalid_ipv4,required"`
-	RoutesInvalidIPV6    int64                          `json:"routes_invalid_ipv6,required"`
-	RoutesTotal          int64                          `json:"routes_total,required"`
-	RoutesTotalIPV4      int64                          `json:"routes_total_ipv4,required"`
-	RoutesTotalIPV6      int64                          `json:"routes_total_ipv6,required"`
-	RoutesUnknown        int64                          `json:"routes_unknown,required"`
-	RoutesUnknownIPV4    int64                          `json:"routes_unknown_ipv4,required"`
-	RoutesUnknownIPV6    int64                          `json:"routes_unknown_ipv6,required"`
-	RoutesValid          int64                          `json:"routes_valid,required"`
-	RoutesValidIPV4      int64                          `json:"routes_valid_ipv4,required"`
-	RoutesValidIPV6      int64                          `json:"routes_valid_ipv6,required"`
+	DistinctOrigins      int64                          `json:"distinct_origins" api:"required"`
+	DistinctOriginsIPV4  int64                          `json:"distinct_origins_ipv4" api:"required"`
+	DistinctOriginsIPV6  int64                          `json:"distinct_origins_ipv6" api:"required"`
+	DistinctPrefixes     int64                          `json:"distinct_prefixes" api:"required"`
+	DistinctPrefixesIPV4 int64                          `json:"distinct_prefixes_ipv4" api:"required"`
+	DistinctPrefixesIPV6 int64                          `json:"distinct_prefixes_ipv6" api:"required"`
+	RoutesInvalid        int64                          `json:"routes_invalid" api:"required"`
+	RoutesInvalidIPV4    int64                          `json:"routes_invalid_ipv4" api:"required"`
+	RoutesInvalidIPV6    int64                          `json:"routes_invalid_ipv6" api:"required"`
+	RoutesTotal          int64                          `json:"routes_total" api:"required"`
+	RoutesTotalIPV4      int64                          `json:"routes_total_ipv4" api:"required"`
+	RoutesTotalIPV6      int64                          `json:"routes_total_ipv6" api:"required"`
+	RoutesUnknown        int64                          `json:"routes_unknown" api:"required"`
+	RoutesUnknownIPV4    int64                          `json:"routes_unknown_ipv4" api:"required"`
+	RoutesUnknownIPV6    int64                          `json:"routes_unknown_ipv6" api:"required"`
+	RoutesValid          int64                          `json:"routes_valid" api:"required"`
+	RoutesValidIPV4      int64                          `json:"routes_valid_ipv4" api:"required"`
+	RoutesValidIPV6      int64                          `json:"routes_valid_ipv6" api:"required"`
 	JSON                 bgpRouteStatsResponseStatsJSON `json:"-"`
 }
 
@@ -747,8 +747,8 @@ func (r BGPRouteAsesParamsSortOrder) IsKnown() bool {
 }
 
 type BGPRouteAsesResponseEnvelope struct {
-	Result  BGPRouteAsesResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  BGPRouteAsesResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    bgpRouteAsesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -804,8 +804,8 @@ func (r BGPRouteMoasParamsFormat) IsKnown() bool {
 }
 
 type BGPRouteMoasResponseEnvelope struct {
-	Result  BGPRouteMoasResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  BGPRouteMoasResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    bgpRouteMoasResponseEnvelopeJSON `json:"-"`
 }
 
@@ -881,8 +881,8 @@ func (r BGPRoutePfx2asParamsRPKIStatus) IsKnown() bool {
 }
 
 type BGPRoutePfx2asResponseEnvelope struct {
-	Result  BGPRoutePfx2asResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  BGPRoutePfx2asResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    bgpRoutePfx2asResponseEnvelopeJSON `json:"-"`
 }
 
@@ -934,8 +934,8 @@ func (r BGPRouteRealtimeParamsFormat) IsKnown() bool {
 }
 
 type BGPRouteRealtimeResponseEnvelope struct {
-	Result  BGPRouteRealtimeResponse             `json:"result,required"`
-	Success bool                                 `json:"success,required"`
+	Result  BGPRouteRealtimeResponse             `json:"result" api:"required"`
+	Success bool                                 `json:"success" api:"required"`
 	JSON    bgpRouteRealtimeResponseEnvelopeJSON `json:"-"`
 }
 
@@ -991,8 +991,8 @@ func (r BGPRouteStatsParamsFormat) IsKnown() bool {
 }
 
 type BGPRouteStatsResponseEnvelope struct {
-	Result  BGPRouteStatsResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  BGPRouteStatsResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    bgpRouteStatsResponseEnvelopeJSON `json:"-"`
 }
 

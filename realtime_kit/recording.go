@@ -42,19 +42,19 @@ func (r *RecordingService) GetActiveRecordings(ctx context.Context, appID string
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/recordings/active-recording/%s", query.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of a recording for the given recording ID.
@@ -62,19 +62,19 @@ func (r *RecordingService) GetOneRecording(ctx context.Context, appID string, re
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if recordingID == "" {
 		err = errors.New("missing required recording_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/recordings/%s", query.AccountID, appID, recordingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns all recordings for an App. If the `meeting_id` parameter is passed,
@@ -83,15 +83,15 @@ func (r *RecordingService) GetRecordings(ctx context.Context, appID string, para
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/recordings", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Pause/Resume/Stop a given recording ID.
@@ -99,19 +99,19 @@ func (r *RecordingService) PauseResumeStopRecording(ctx context.Context, appID s
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if recordingID == "" {
 		err = errors.New("missing required recording_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/recordings/%s", params.AccountID, appID, recordingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Starts recording a meeting. The meeting can be started by an App admin directly,
@@ -121,15 +121,15 @@ func (r *RecordingService) StartRecordings(ctx context.Context, appID string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/recordings", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Starts a track recording in a meeting. Track recordings consist of "layers".
@@ -141,22 +141,22 @@ func (r *RecordingService) StartTrackRecording(ctx context.Context, appID string
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/recordings/track", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
-	return
+	return err
 }
 
 type RecordingGetActiveRecordingsResponse struct {
 	// Data returned by the operation
-	Data RecordingGetActiveRecordingsResponseData `json:"data,required"`
+	Data RecordingGetActiveRecordingsResponseData `json:"data" api:"required"`
 	// Success status of the operation
-	Success bool                                     `json:"success,required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    recordingGetActiveRecordingsResponseJSON `json:"-"`
 }
 
@@ -180,30 +180,30 @@ func (r recordingGetActiveRecordingsResponseJSON) RawJSON() string {
 // Data returned by the operation
 type RecordingGetActiveRecordingsResponseData struct {
 	// ID of the recording
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// If the audio_config is passed, the URL for downloading the audio recording is
 	// returned.
-	AudioDownloadURL string `json:"audio_download_url,required,nullable" format:"uri"`
+	AudioDownloadURL string `json:"audio_download_url" api:"required,nullable" format:"uri"`
 	// URL where the recording can be downloaded.
-	DownloadURL string `json:"download_url,required,nullable" format:"uri"`
+	DownloadURL string `json:"download_url" api:"required,nullable" format:"uri"`
 	// Timestamp when the download URL expires.
-	DownloadURLExpiry time.Time `json:"download_url_expiry,required,nullable" format:"date-time"`
+	DownloadURLExpiry time.Time `json:"download_url_expiry" api:"required,nullable" format:"date-time"`
 	// File size of the recording, in bytes.
-	FileSize float64 `json:"file_size,required,nullable"`
+	FileSize float64 `json:"file_size" api:"required,nullable"`
 	// Timestamp when this recording was invoked.
-	InvokedTime time.Time `json:"invoked_time,required" format:"date-time"`
+	InvokedTime time.Time `json:"invoked_time" api:"required" format:"date-time"`
 	// File name of the recording.
-	OutputFileName string `json:"output_file_name,required"`
+	OutputFileName string `json:"output_file_name" api:"required"`
 	// ID of the meeting session this recording is for.
-	SessionID string `json:"session_id,required,nullable" format:"uuid"`
+	SessionID string `json:"session_id" api:"required,nullable" format:"uuid"`
 	// Timestamp when this recording actually started after being invoked. Usually a
 	// few seconds after `invoked_time`.
-	StartedTime time.Time `json:"started_time,required,nullable" format:"date-time"`
+	StartedTime time.Time `json:"started_time" api:"required,nullable" format:"date-time"`
 	// Current status of the recording.
-	Status RecordingGetActiveRecordingsResponseDataStatus `json:"status,required"`
+	Status RecordingGetActiveRecordingsResponseDataStatus `json:"status" api:"required"`
 	// Timestamp when this recording was stopped. Optional; is present only when the
 	// recording has actually been stopped.
-	StoppedTime time.Time `json:"stopped_time,required,nullable" format:"date-time"`
+	StoppedTime time.Time `json:"stopped_time" api:"required,nullable" format:"date-time"`
 	// Total recording time in seconds.
 	RecordingDuration int64                                        `json:"recording_duration"`
 	JSON              recordingGetActiveRecordingsResponseDataJSON `json:"-"`
@@ -258,7 +258,7 @@ func (r RecordingGetActiveRecordingsResponseDataStatus) IsKnown() bool {
 
 type RecordingGetOneRecordingResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data RecordingGetOneRecordingResponseData `json:"data"`
 	JSON recordingGetOneRecordingResponseJSON `json:"-"`
@@ -284,35 +284,35 @@ func (r recordingGetOneRecordingResponseJSON) RawJSON() string {
 // Data returned by the operation
 type RecordingGetOneRecordingResponseData struct {
 	// ID of the recording
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// If the audio_config is passed, the URL for downloading the audio recording is
 	// returned.
-	AudioDownloadURL string `json:"audio_download_url,required,nullable" format:"uri"`
+	AudioDownloadURL string `json:"audio_download_url" api:"required,nullable" format:"uri"`
 	// URL where the recording can be downloaded.
-	DownloadURL string `json:"download_url,required,nullable" format:"uri"`
+	DownloadURL string `json:"download_url" api:"required,nullable" format:"uri"`
 	// Timestamp when the download URL expires.
-	DownloadURLExpiry time.Time `json:"download_url_expiry,required,nullable" format:"date-time"`
+	DownloadURLExpiry time.Time `json:"download_url_expiry" api:"required,nullable" format:"date-time"`
 	// File size of the recording, in bytes.
-	FileSize float64 `json:"file_size,required,nullable"`
+	FileSize float64 `json:"file_size" api:"required,nullable"`
 	// Timestamp when this recording was invoked.
-	InvokedTime time.Time `json:"invoked_time,required" format:"date-time"`
+	InvokedTime time.Time `json:"invoked_time" api:"required" format:"date-time"`
 	// File name of the recording.
-	OutputFileName string `json:"output_file_name,required"`
+	OutputFileName string `json:"output_file_name" api:"required"`
 	// ID of the meeting session this recording is for.
-	SessionID string `json:"session_id,required,nullable" format:"uuid"`
+	SessionID string `json:"session_id" api:"required,nullable" format:"uuid"`
 	// Timestamp when this recording actually started after being invoked. Usually a
 	// few seconds after `invoked_time`.
-	StartedTime time.Time `json:"started_time,required,nullable" format:"date-time"`
+	StartedTime time.Time `json:"started_time" api:"required,nullable" format:"date-time"`
 	// Current status of the recording.
-	Status RecordingGetOneRecordingResponseDataStatus `json:"status,required"`
+	Status RecordingGetOneRecordingResponseDataStatus `json:"status" api:"required"`
 	// Timestamp when this recording was stopped. Optional; is present only when the
 	// recording has actually been stopped.
-	StoppedTime time.Time `json:"stopped_time,required,nullable" format:"date-time"`
+	StoppedTime time.Time `json:"stopped_time" api:"required,nullable" format:"date-time"`
 	// Total recording time in seconds.
 	RecordingDuration int64                                             `json:"recording_duration"`
 	StartReason       RecordingGetOneRecordingResponseDataStartReason   `json:"start_reason"`
 	StopReason        RecordingGetOneRecordingResponseDataStopReason    `json:"stop_reason"`
-	StorageConfig     RecordingGetOneRecordingResponseDataStorageConfig `json:"storage_config,nullable"`
+	StorageConfig     RecordingGetOneRecordingResponseDataStorageConfig `json:"storage_config" api:"nullable"`
 	JSON              recordingGetOneRecordingResponseDataJSON          `json:"-"`
 }
 
@@ -549,7 +549,7 @@ func (r RecordingGetOneRecordingResponseDataStopReasonReason) IsKnown() bool {
 
 type RecordingGetOneRecordingResponseDataStorageConfig struct {
 	// Type of storage media.
-	Type RecordingGetOneRecordingResponseDataStorageConfigType `json:"type,required"`
+	Type RecordingGetOneRecordingResponseDataStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingGetOneRecordingResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -639,9 +639,9 @@ func (r RecordingGetOneRecordingResponseDataStorageConfigAuthMethod) IsKnown() b
 }
 
 type RecordingGetRecordingsResponse struct {
-	Data    []RecordingGetRecordingsResponseData `json:"data,required"`
-	Paging  RecordingGetRecordingsResponsePaging `json:"paging,required"`
-	Success bool                                 `json:"success,required"`
+	Data    []RecordingGetRecordingsResponseData `json:"data" api:"required"`
+	Paging  RecordingGetRecordingsResponsePaging `json:"paging" api:"required"`
+	Success bool                                 `json:"success" api:"required"`
 	JSON    recordingGetRecordingsResponseJSON   `json:"-"`
 }
 
@@ -665,34 +665,34 @@ func (r recordingGetRecordingsResponseJSON) RawJSON() string {
 
 type RecordingGetRecordingsResponseData struct {
 	// ID of the recording
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// If the audio_config is passed, the URL for downloading the audio recording is
 	// returned.
-	AudioDownloadURL string `json:"audio_download_url,required,nullable" format:"uri"`
+	AudioDownloadURL string `json:"audio_download_url" api:"required,nullable" format:"uri"`
 	// URL where the recording can be downloaded.
-	DownloadURL string `json:"download_url,required,nullable" format:"uri"`
+	DownloadURL string `json:"download_url" api:"required,nullable" format:"uri"`
 	// Timestamp when the download URL expires.
-	DownloadURLExpiry time.Time `json:"download_url_expiry,required,nullable" format:"date-time"`
+	DownloadURLExpiry time.Time `json:"download_url_expiry" api:"required,nullable" format:"date-time"`
 	// File size of the recording, in bytes.
-	FileSize float64 `json:"file_size,required,nullable"`
+	FileSize float64 `json:"file_size" api:"required,nullable"`
 	// Timestamp when this recording was invoked.
-	InvokedTime time.Time `json:"invoked_time,required" format:"date-time"`
+	InvokedTime time.Time `json:"invoked_time" api:"required" format:"date-time"`
 	// File name of the recording.
-	OutputFileName string `json:"output_file_name,required"`
+	OutputFileName string `json:"output_file_name" api:"required"`
 	// ID of the meeting session this recording is for.
-	SessionID string `json:"session_id,required,nullable" format:"uuid"`
+	SessionID string `json:"session_id" api:"required,nullable" format:"uuid"`
 	// Timestamp when this recording actually started after being invoked. Usually a
 	// few seconds after `invoked_time`.
-	StartedTime time.Time `json:"started_time,required,nullable" format:"date-time"`
+	StartedTime time.Time `json:"started_time" api:"required,nullable" format:"date-time"`
 	// Current status of the recording.
-	Status RecordingGetRecordingsResponseDataStatus `json:"status,required"`
+	Status RecordingGetRecordingsResponseDataStatus `json:"status" api:"required"`
 	// Timestamp when this recording was stopped. Optional; is present only when the
 	// recording has actually been stopped.
-	StoppedTime time.Time                                 `json:"stopped_time,required,nullable" format:"date-time"`
+	StoppedTime time.Time                                 `json:"stopped_time" api:"required,nullable" format:"date-time"`
 	Meeting     RecordingGetRecordingsResponseDataMeeting `json:"meeting"`
 	// Total recording time in seconds.
 	RecordingDuration int64                                           `json:"recording_duration"`
-	StorageConfig     RecordingGetRecordingsResponseDataStorageConfig `json:"storage_config,nullable"`
+	StorageConfig     RecordingGetRecordingsResponseDataStorageConfig `json:"storage_config" api:"nullable"`
 	JSON              recordingGetRecordingsResponseDataJSON          `json:"-"`
 }
 
@@ -747,11 +747,11 @@ func (r RecordingGetRecordingsResponseDataStatus) IsKnown() bool {
 
 type RecordingGetRecordingsResponseDataMeeting struct {
 	// ID of the meeting.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Timestamp the object was created at. The time is returned in ISO format.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Timestamp the object was updated at. The time is returned in ISO format.
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Specifies if the meeting should start getting livestreamed on start.
 	LiveStreamOnStart bool `json:"live_stream_on_start"`
 	// Specifies if Chat within a meeting should persist for a week.
@@ -817,7 +817,7 @@ func (r RecordingGetRecordingsResponseDataMeetingStatus) IsKnown() bool {
 
 type RecordingGetRecordingsResponseDataStorageConfig struct {
 	// Type of storage media.
-	Type RecordingGetRecordingsResponseDataStorageConfigType `json:"type,required"`
+	Type RecordingGetRecordingsResponseDataStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingGetRecordingsResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -907,9 +907,9 @@ func (r RecordingGetRecordingsResponseDataStorageConfigAuthMethod) IsKnown() boo
 }
 
 type RecordingGetRecordingsResponsePaging struct {
-	EndOffset   float64                                  `json:"end_offset,required"`
-	StartOffset float64                                  `json:"start_offset,required"`
-	TotalCount  float64                                  `json:"total_count,required"`
+	EndOffset   float64                                  `json:"end_offset" api:"required"`
+	StartOffset float64                                  `json:"start_offset" api:"required"`
+	TotalCount  float64                                  `json:"total_count" api:"required"`
 	JSON        recordingGetRecordingsResponsePagingJSON `json:"-"`
 }
 
@@ -933,7 +933,7 @@ func (r recordingGetRecordingsResponsePagingJSON) RawJSON() string {
 
 type RecordingPauseResumeStopRecordingResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data RecordingPauseResumeStopRecordingResponseData `json:"data"`
 	JSON recordingPauseResumeStopRecordingResponseJSON `json:"-"`
@@ -959,35 +959,35 @@ func (r recordingPauseResumeStopRecordingResponseJSON) RawJSON() string {
 // Data returned by the operation
 type RecordingPauseResumeStopRecordingResponseData struct {
 	// ID of the recording
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// If the audio_config is passed, the URL for downloading the audio recording is
 	// returned.
-	AudioDownloadURL string `json:"audio_download_url,required,nullable" format:"uri"`
+	AudioDownloadURL string `json:"audio_download_url" api:"required,nullable" format:"uri"`
 	// URL where the recording can be downloaded.
-	DownloadURL string `json:"download_url,required,nullable" format:"uri"`
+	DownloadURL string `json:"download_url" api:"required,nullable" format:"uri"`
 	// Timestamp when the download URL expires.
-	DownloadURLExpiry time.Time `json:"download_url_expiry,required,nullable" format:"date-time"`
+	DownloadURLExpiry time.Time `json:"download_url_expiry" api:"required,nullable" format:"date-time"`
 	// File size of the recording, in bytes.
-	FileSize float64 `json:"file_size,required,nullable"`
+	FileSize float64 `json:"file_size" api:"required,nullable"`
 	// Timestamp when this recording was invoked.
-	InvokedTime time.Time `json:"invoked_time,required" format:"date-time"`
+	InvokedTime time.Time `json:"invoked_time" api:"required" format:"date-time"`
 	// File name of the recording.
-	OutputFileName string `json:"output_file_name,required"`
+	OutputFileName string `json:"output_file_name" api:"required"`
 	// ID of the meeting session this recording is for.
-	SessionID string `json:"session_id,required,nullable" format:"uuid"`
+	SessionID string `json:"session_id" api:"required,nullable" format:"uuid"`
 	// Timestamp when this recording actually started after being invoked. Usually a
 	// few seconds after `invoked_time`.
-	StartedTime time.Time `json:"started_time,required,nullable" format:"date-time"`
+	StartedTime time.Time `json:"started_time" api:"required,nullable" format:"date-time"`
 	// Current status of the recording.
-	Status RecordingPauseResumeStopRecordingResponseDataStatus `json:"status,required"`
+	Status RecordingPauseResumeStopRecordingResponseDataStatus `json:"status" api:"required"`
 	// Timestamp when this recording was stopped. Optional; is present only when the
 	// recording has actually been stopped.
-	StoppedTime time.Time `json:"stopped_time,required,nullable" format:"date-time"`
+	StoppedTime time.Time `json:"stopped_time" api:"required,nullable" format:"date-time"`
 	// Total recording time in seconds.
 	RecordingDuration int64                                                      `json:"recording_duration"`
 	StartReason       RecordingPauseResumeStopRecordingResponseDataStartReason   `json:"start_reason"`
 	StopReason        RecordingPauseResumeStopRecordingResponseDataStopReason    `json:"stop_reason"`
-	StorageConfig     RecordingPauseResumeStopRecordingResponseDataStorageConfig `json:"storage_config,nullable"`
+	StorageConfig     RecordingPauseResumeStopRecordingResponseDataStorageConfig `json:"storage_config" api:"nullable"`
 	JSON              recordingPauseResumeStopRecordingResponseDataJSON          `json:"-"`
 }
 
@@ -1228,7 +1228,7 @@ func (r RecordingPauseResumeStopRecordingResponseDataStopReasonReason) IsKnown()
 
 type RecordingPauseResumeStopRecordingResponseDataStorageConfig struct {
 	// Type of storage media.
-	Type RecordingPauseResumeStopRecordingResponseDataStorageConfigType `json:"type,required"`
+	Type RecordingPauseResumeStopRecordingResponseDataStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingPauseResumeStopRecordingResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -1320,7 +1320,7 @@ func (r RecordingPauseResumeStopRecordingResponseDataStorageConfigAuthMethod) Is
 
 type RecordingStartRecordingsResponse struct {
 	// Success status of the operation
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Data returned by the operation
 	Data RecordingStartRecordingsResponseData `json:"data"`
 	JSON recordingStartRecordingsResponseJSON `json:"-"`
@@ -1346,35 +1346,35 @@ func (r recordingStartRecordingsResponseJSON) RawJSON() string {
 // Data returned by the operation
 type RecordingStartRecordingsResponseData struct {
 	// ID of the recording
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// If the audio_config is passed, the URL for downloading the audio recording is
 	// returned.
-	AudioDownloadURL string `json:"audio_download_url,required,nullable" format:"uri"`
+	AudioDownloadURL string `json:"audio_download_url" api:"required,nullable" format:"uri"`
 	// URL where the recording can be downloaded.
-	DownloadURL string `json:"download_url,required,nullable" format:"uri"`
+	DownloadURL string `json:"download_url" api:"required,nullable" format:"uri"`
 	// Timestamp when the download URL expires.
-	DownloadURLExpiry time.Time `json:"download_url_expiry,required,nullable" format:"date-time"`
+	DownloadURLExpiry time.Time `json:"download_url_expiry" api:"required,nullable" format:"date-time"`
 	// File size of the recording, in bytes.
-	FileSize float64 `json:"file_size,required,nullable"`
+	FileSize float64 `json:"file_size" api:"required,nullable"`
 	// Timestamp when this recording was invoked.
-	InvokedTime time.Time `json:"invoked_time,required" format:"date-time"`
+	InvokedTime time.Time `json:"invoked_time" api:"required" format:"date-time"`
 	// File name of the recording.
-	OutputFileName string `json:"output_file_name,required"`
+	OutputFileName string `json:"output_file_name" api:"required"`
 	// ID of the meeting session this recording is for.
-	SessionID string `json:"session_id,required,nullable" format:"uuid"`
+	SessionID string `json:"session_id" api:"required,nullable" format:"uuid"`
 	// Timestamp when this recording actually started after being invoked. Usually a
 	// few seconds after `invoked_time`.
-	StartedTime time.Time `json:"started_time,required,nullable" format:"date-time"`
+	StartedTime time.Time `json:"started_time" api:"required,nullable" format:"date-time"`
 	// Current status of the recording.
-	Status RecordingStartRecordingsResponseDataStatus `json:"status,required"`
+	Status RecordingStartRecordingsResponseDataStatus `json:"status" api:"required"`
 	// Timestamp when this recording was stopped. Optional; is present only when the
 	// recording has actually been stopped.
-	StoppedTime time.Time `json:"stopped_time,required,nullable" format:"date-time"`
+	StoppedTime time.Time `json:"stopped_time" api:"required,nullable" format:"date-time"`
 	// Total recording time in seconds.
 	RecordingDuration int64                                             `json:"recording_duration"`
 	StartReason       RecordingStartRecordingsResponseDataStartReason   `json:"start_reason"`
 	StopReason        RecordingStartRecordingsResponseDataStopReason    `json:"stop_reason"`
-	StorageConfig     RecordingStartRecordingsResponseDataStorageConfig `json:"storage_config,nullable"`
+	StorageConfig     RecordingStartRecordingsResponseDataStorageConfig `json:"storage_config" api:"nullable"`
 	JSON              recordingStartRecordingsResponseDataJSON          `json:"-"`
 }
 
@@ -1611,7 +1611,7 @@ func (r RecordingStartRecordingsResponseDataStopReasonReason) IsKnown() bool {
 
 type RecordingStartRecordingsResponseDataStorageConfig struct {
 	// Type of storage media.
-	Type RecordingStartRecordingsResponseDataStorageConfigType `json:"type,required"`
+	Type RecordingStartRecordingsResponseDataStorageConfigType `json:"type" api:"required"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingStartRecordingsResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
@@ -1702,17 +1702,17 @@ func (r RecordingStartRecordingsResponseDataStorageConfigAuthMethod) IsKnown() b
 
 type RecordingGetActiveRecordingsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RecordingGetOneRecordingParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RecordingGetRecordingsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The end time range for which you want to retrieve the meetings. The time must be
 	// specified in ISO format.
 	EndTime param.Field[time.Time] `query:"end_time" format:"date-time"`
@@ -1792,8 +1792,8 @@ func (r RecordingGetRecordingsParamsStatus) IsKnown() bool {
 
 type RecordingPauseResumeStopRecordingParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]                                        `path:"account_id,required"`
-	Action    param.Field[RecordingPauseResumeStopRecordingParamsAction] `json:"action,required"`
+	AccountID param.Field[string]                                        `path:"account_id" api:"required"`
+	Action    param.Field[RecordingPauseResumeStopRecordingParamsAction] `json:"action" api:"required"`
 }
 
 func (r RecordingPauseResumeStopRecordingParams) MarshalJSON() (data []byte, err error) {
@@ -1818,7 +1818,7 @@ func (r RecordingPauseResumeStopRecordingParamsAction) IsKnown() bool {
 
 type RecordingStartRecordingsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// By default, a meeting allows only one recording to run at a time. Enabling the
 	// `allow_multiple_recordings` parameter to true allows you to initiate multiple
 	// recordings concurrently in the same meeting. This allows you to record separate
@@ -1935,7 +1935,7 @@ type RecordingStartRecordingsParamsRealtimekitBucketConfig struct {
 	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
 	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
 	// generated for a recording.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r RecordingStartRecordingsParamsRealtimekitBucketConfig) MarshalJSON() (data []byte, err error) {
@@ -1953,7 +1953,7 @@ func (r RecordingStartRecordingsParamsRtmpOutConfig) MarshalJSON() (data []byte,
 
 type RecordingStartRecordingsParamsStorageConfig struct {
 	// Type of storage media.
-	Type param.Field[RecordingStartRecordingsParamsStorageConfigType] `json:"type,required"`
+	Type param.Field[RecordingStartRecordingsParamsStorageConfigType] `json:"type" api:"required"`
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//
@@ -2103,10 +2103,10 @@ func (r RecordingStartRecordingsParamsVideoConfigWatermarkSize) MarshalJSON() (d
 
 type RecordingStartTrackRecordingParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]                                              `path:"account_id,required"`
-	Layers    param.Field[map[string]RecordingStartTrackRecordingParamsLayers] `json:"layers,required"`
+	AccountID param.Field[string]                                              `path:"account_id" api:"required"`
+	Layers    param.Field[map[string]RecordingStartTrackRecordingParamsLayers] `json:"layers" api:"required"`
 	// ID of the meeting to record.
-	MeetingID param.Field[string] `json:"meeting_id,required"`
+	MeetingID param.Field[string] `json:"meeting_id" api:"required"`
 	// Maximum seconds this recording should be active for (beta)
 	MaxSeconds param.Field[float64] `json:"max_seconds"`
 }
@@ -2137,7 +2137,7 @@ func (r RecordingStartTrackRecordingParamsLayersOutput) MarshalJSON() (data []by
 
 type RecordingStartTrackRecordingParamsLayersOutputsStorageConfig struct {
 	// Type of storage media.
-	Type param.Field[RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType] `json:"type,required"`
+	Type param.Field[RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType] `json:"type" api:"required"`
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//

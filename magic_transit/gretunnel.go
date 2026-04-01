@@ -43,20 +43,20 @@ func NewGRETunnelService(opts ...option.RequestOption) (r *GRETunnelService) {
 func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, opts ...option.RequestOption) (res *GRETunnelNewResponse, err error) {
 	var env GRETunnelNewResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a specific GRE tunnel. Use `?validate_only=true` as an optional query
@@ -64,44 +64,44 @@ func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, o
 func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
 	var env GRETunnelUpdateResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if greTunnelID == "" {
 		err = errors.New("missing required gre_tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, greTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists GRE tunnels associated with an account.
 func (r *GRETunnelService) List(ctx context.Context, params GRETunnelListParams, opts ...option.RequestOption) (res *GRETunnelListResponse, err error) {
 	var env GRETunnelListResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disables and removes a specific static GRE tunnel. Use `?validate_only=true` as
@@ -109,24 +109,24 @@ func (r *GRETunnelService) List(ctx context.Context, params GRETunnelListParams,
 func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, params GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
 	var env GRETunnelDeleteResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if greTunnelID == "" {
 		err = errors.New("missing required gre_tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, greTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates multiple GRE tunnels. Use `?validate_only=true` as an optional query
@@ -134,60 +134,60 @@ func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, param
 func (r *GRETunnelService) BulkUpdate(ctx context.Context, params GRETunnelBulkUpdateParams, opts ...option.RequestOption) (res *GRETunnelBulkUpdateResponse, err error) {
 	var env GRETunnelBulkUpdateResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists informtion for a specific GRE tunnel.
 func (r *GRETunnelService) Get(ctx context.Context, greTunnelID string, params GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
 	var env GRETunnelGetResponseEnvelope
 	if params.XMagicNewHcTarget.Present {
-		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if greTunnelID == "" {
 		err = errors.New("missing required gre_tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, greTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type GRETunnelNewResponse struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting bool                          `json:"automatic_return_routing"`
@@ -245,7 +245,7 @@ func (r greTunnelNewResponseJSON) RawJSON() string {
 
 type GRETunnelNewResponseBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -290,9 +290,9 @@ func (r greTunnelNewResponseBGPJSON) RawJSON() string {
 }
 
 type GRETunnelNewResponseBGPStatus struct {
-	State               GRETunnelNewResponseBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                               `json:"tcp_established,required"`
-	UpdatedAt           time.Time                          `json:"updated_at,required" format:"date-time"`
+	State               GRETunnelNewResponseBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                               `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                          `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                             `json:"bgp_state"`
 	CfSpeakerIP         string                             `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                              `json:"cf_speaker_port"`
@@ -493,18 +493,18 @@ func (r greTunnelUpdateResponseJSON) RawJSON() string {
 
 type GRETunnelUpdateResponseModifiedGRETunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting bool                                              `json:"automatic_return_routing"`
@@ -562,7 +562,7 @@ func (r greTunnelUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
 
 type GRETunnelUpdateResponseModifiedGRETunnelBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -607,9 +607,9 @@ func (r greTunnelUpdateResponseModifiedGRETunnelBGPJSON) RawJSON() string {
 }
 
 type GRETunnelUpdateResponseModifiedGRETunnelBGPStatus struct {
-	State               GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                                   `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                              `json:"updated_at,required" format:"date-time"`
+	State               GRETunnelUpdateResponseModifiedGRETunnelBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                                   `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                              `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                                 `json:"bgp_state"`
 	CfSpeakerIP         string                                                 `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                                  `json:"cf_speaker_port"`
@@ -809,18 +809,18 @@ func (r greTunnelListResponseJSON) RawJSON() string {
 
 type GRETunnelListResponseGRETunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting bool                                     `json:"automatic_return_routing"`
@@ -878,7 +878,7 @@ func (r greTunnelListResponseGRETunnelJSON) RawJSON() string {
 
 type GRETunnelListResponseGRETunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -923,9 +923,9 @@ func (r greTunnelListResponseGRETunnelsBGPJSON) RawJSON() string {
 }
 
 type GRETunnelListResponseGRETunnelsBGPStatus struct {
-	State               GRETunnelListResponseGRETunnelsBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                          `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                     `json:"updated_at,required" format:"date-time"`
+	State               GRETunnelListResponseGRETunnelsBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                          `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                     `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                        `json:"bgp_state"`
 	CfSpeakerIP         string                                        `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                         `json:"cf_speaker_port"`
@@ -1127,18 +1127,18 @@ func (r greTunnelDeleteResponseJSON) RawJSON() string {
 
 type GRETunnelDeleteResponseDeletedGRETunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting bool                                             `json:"automatic_return_routing"`
@@ -1196,7 +1196,7 @@ func (r greTunnelDeleteResponseDeletedGRETunnelJSON) RawJSON() string {
 
 type GRETunnelDeleteResponseDeletedGRETunnelBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -1241,9 +1241,9 @@ func (r greTunnelDeleteResponseDeletedGRETunnelBGPJSON) RawJSON() string {
 }
 
 type GRETunnelDeleteResponseDeletedGRETunnelBGPStatus struct {
-	State               GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                                  `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                             `json:"updated_at,required" format:"date-time"`
+	State               GRETunnelDeleteResponseDeletedGRETunnelBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                                  `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                             `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                                `json:"bgp_state"`
 	CfSpeakerIP         string                                                `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                                 `json:"cf_speaker_port"`
@@ -1445,18 +1445,18 @@ func (r greTunnelBulkUpdateResponseJSON) RawJSON() string {
 
 type GRETunnelBulkUpdateResponseModifiedGRETunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting bool                                                   `json:"automatic_return_routing"`
@@ -1514,7 +1514,7 @@ func (r greTunnelBulkUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
 
 type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -1559,9 +1559,9 @@ func (r greTunnelBulkUpdateResponseModifiedGRETunnelsBGPJSON) RawJSON() string {
 }
 
 type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus struct {
-	State               GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                                        `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                                   `json:"updated_at,required" format:"date-time"`
+	State               GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                                        `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                                   `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                                      `json:"bgp_state"`
 	CfSpeakerIP         string                                                      `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                                       `json:"cf_speaker_port"`
@@ -1762,18 +1762,18 @@ func (r greTunnelGetResponseJSON) RawJSON() string {
 
 type GRETunnelGetResponseGRETunnel struct {
 	// Identifier
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address,required"`
+	InterfaceAddress string `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting bool                                   `json:"automatic_return_routing"`
@@ -1831,7 +1831,7 @@ func (r greTunnelGetResponseGRETunnelJSON) RawJSON() string {
 
 type GRETunnelGetResponseGRETunnelBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN int64 `json:"customer_asn,required"`
+	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
@@ -1876,9 +1876,9 @@ func (r greTunnelGetResponseGRETunnelBGPJSON) RawJSON() string {
 }
 
 type GRETunnelGetResponseGRETunnelBGPStatus struct {
-	State               GRETunnelGetResponseGRETunnelBGPStatusState `json:"state,required"`
-	TCPEstablished      bool                                        `json:"tcp_established,required"`
-	UpdatedAt           time.Time                                   `json:"updated_at,required" format:"date-time"`
+	State               GRETunnelGetResponseGRETunnelBGPStatusState `json:"state" api:"required"`
+	TCPEstablished      bool                                        `json:"tcp_established" api:"required"`
+	UpdatedAt           time.Time                                   `json:"updated_at" api:"required" format:"date-time"`
 	BGPState            string                                      `json:"bgp_state"`
 	CfSpeakerIP         string                                      `json:"cf_speaker_ip" format:"ipv4"`
 	CfSpeakerPort       int64                                       `json:"cf_speaker_port"`
@@ -2057,18 +2057,18 @@ func (r GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget) Im
 
 type GRETunnelNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint param.Field[string] `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint param.Field[string] `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress param.Field[string] `json:"interface_address,required"`
+	InterfaceAddress param.Field[string] `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting param.Field[bool]                  `json:"automatic_return_routing"`
@@ -2095,7 +2095,7 @@ func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 
 type GRETunnelNewParamsBGP struct {
 	// ASN used on the customer end of the BGP session
-	CustomerASN param.Field[int64] `json:"customer_asn,required"`
+	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
@@ -2203,11 +2203,11 @@ func (r GRETunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsGRE
 }
 
 type GRETunnelNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelNewResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   GRETunnelNewResponse  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success GRETunnelNewResponseEnvelopeSuccess `json:"success,required"`
+	Success GRETunnelNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    greTunnelNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2247,18 +2247,18 @@ func (r GRETunnelNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint" api:"required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGREEndpoint param.Field[string] `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint param.Field[string] `json:"customer_gre_endpoint" api:"required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress param.Field[string] `json:"interface_address,required"`
+	InterfaceAddress param.Field[string] `json:"interface_address" api:"required"`
 	// The name of the tunnel. The name cannot contain spaces or special characters,
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
 	AutomaticReturnRouting param.Field[bool] `json:"automatic_return_routing"`
@@ -2361,11 +2361,11 @@ func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) Implements
 }
 
 type GRETunnelUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   GRETunnelUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   GRETunnelUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    greTunnelUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2405,16 +2405,16 @@ func (r GRETunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelListParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type GRETunnelListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   GRETunnelListResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success GRETunnelListResponseEnvelopeSuccess `json:"success,required"`
+	Success GRETunnelListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    greTunnelListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2454,16 +2454,16 @@ func (r GRETunnelListResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelDeleteParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type GRETunnelDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   GRETunnelDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   GRETunnelDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    greTunnelDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2503,8 +2503,8 @@ func (r GRETunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelBulkUpdateParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
-	Body              interface{}         `json:"body,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
+	Body              interface{}         `json:"body" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
@@ -2513,11 +2513,11 @@ func (r GRETunnelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   GRETunnelBulkUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo       `json:"messages" api:"required"`
+	Result   GRETunnelBulkUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success GRETunnelBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success GRETunnelBulkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    greTunnelBulkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2557,16 +2557,16 @@ func (r GRETunnelBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelGetParams struct {
 	// Identifier
-	AccountID         param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type GRETunnelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelGetResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   GRETunnelGetResponse  `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success GRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
+	Success GRETunnelGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    greTunnelGetResponseEnvelopeJSON    `json:"-"`
 }
 

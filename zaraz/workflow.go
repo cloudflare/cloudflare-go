@@ -40,18 +40,18 @@ func (r *WorkflowService) Get(ctx context.Context, query WorkflowGetParams, opts
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/workflow", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
-// Zaraz workflow
+// Zaraz workflow.
 type Workflow string
 
 const (
@@ -69,16 +69,16 @@ func (r Workflow) IsKnown() bool {
 
 type WorkflowGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type WorkflowGetResponseEnvelope struct {
-	Errors   []WorkflowGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkflowGetResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz workflow
-	Result Workflow `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                            `json:"success,required"`
+	Errors   []WorkflowGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WorkflowGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Zaraz workflow.
+	Result Workflow `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success bool                            `json:"success" api:"required"`
 	JSON    workflowGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -102,8 +102,8 @@ func (r workflowGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WorkflowGetResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           WorkflowGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             workflowGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -150,8 +150,8 @@ func (r workflowGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WorkflowGetResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           WorkflowGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             workflowGetResponseEnvelopeMessagesJSON   `json:"-"`

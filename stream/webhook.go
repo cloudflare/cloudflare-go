@@ -40,15 +40,15 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/webhook", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes a webhook.
@@ -57,15 +57,15 @@ func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, o
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/webhook", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves a list of webhooks.
@@ -74,15 +74,15 @@ func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/webhook", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type WebhookUpdateResponse = interface{}
@@ -91,9 +91,9 @@ type WebhookGetResponse = interface{}
 
 type WebhookUpdateParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The URL where webhooks will be sent.
-	NotificationURL param.Field[string] `json:"notificationUrl,required" format:"uri"`
+	NotificationURL param.Field[string] `json:"notificationUrl" api:"required" format:"uri"`
 }
 
 func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -101,10 +101,10 @@ func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookUpdateResponseEnvelope struct {
-	Errors   []WebhookUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WebhookUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []WebhookUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WebhookUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success WebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success WebhookUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  WebhookUpdateResponse                `json:"result"`
 	JSON    webhookUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -129,8 +129,8 @@ func (r webhookUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WebhookUpdateResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           WebhookUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             webhookUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -177,8 +177,8 @@ func (r webhookUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WebhookUpdateResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           WebhookUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             webhookUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -241,14 +241,14 @@ func (r WebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type WebhookDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookDeleteResponseEnvelope struct {
-	Errors   []WebhookDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WebhookDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []WebhookDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WebhookDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success WebhookDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success WebhookDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  string                               `json:"result"`
 	JSON    webhookDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -273,8 +273,8 @@ func (r webhookDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WebhookDeleteResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           WebhookDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             webhookDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -321,8 +321,8 @@ func (r webhookDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WebhookDeleteResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           WebhookDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             webhookDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -385,14 +385,14 @@ func (r WebhookDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type WebhookGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookGetResponseEnvelope struct {
-	Errors   []WebhookGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WebhookGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []WebhookGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WebhookGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success WebhookGetResponseEnvelopeSuccess `json:"success,required"`
+	Success WebhookGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  WebhookGetResponse                `json:"result"`
 	JSON    webhookGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -417,8 +417,8 @@ func (r webhookGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WebhookGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           WebhookGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             webhookGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -465,8 +465,8 @@ func (r webhookGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WebhookGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           WebhookGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             webhookGetResponseEnvelopeMessagesJSON   `json:"-"`

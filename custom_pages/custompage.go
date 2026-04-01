@@ -25,6 +25,7 @@ import (
 // the [NewCustomPageService] method instead.
 type CustomPageService struct {
 	Options []option.RequestOption
+	Assets  *AssetService
 }
 
 // NewCustomPageService generates a new service that applies the given options to
@@ -33,6 +34,7 @@ type CustomPageService struct {
 func NewCustomPageService(opts ...option.RequestOption) (r *CustomPageService) {
 	r = &CustomPageService{}
 	r.Options = opts
+	r.Assets = NewAssetService(opts...)
 	return
 }
 
@@ -61,10 +63,10 @@ func (r *CustomPageService) Update(ctx context.Context, identifier CustomPageUpd
 	path := fmt.Sprintf("%s/%s/custom_pages/%v", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches all the custom pages.
@@ -133,10 +135,10 @@ func (r *CustomPageService) Get(ctx context.Context, identifier CustomPageGetPar
 	path := fmt.Sprintf("%s/%s/custom_pages/%v", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CustomPageUpdateResponse struct {
@@ -300,9 +302,9 @@ func (r CustomPageGetResponseState) IsKnown() bool {
 
 type CustomPageUpdateParams struct {
 	// The custom page state.
-	State param.Field[CustomPageUpdateParamsState] `json:"state,required"`
+	State param.Field[CustomPageUpdateParamsState] `json:"state" api:"required"`
 	// The URL associated with the custom page.
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -354,10 +356,10 @@ func (r CustomPageUpdateParamsState) IsKnown() bool {
 }
 
 type CustomPageUpdateResponseEnvelope struct {
-	Errors   []CustomPageUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomPageUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomPageUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomPageUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomPageUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomPageUpdateResponse                `json:"result"`
 	JSON    customPageUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -382,8 +384,8 @@ func (r customPageUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomPageUpdateResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           CustomPageUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customPageUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -430,8 +432,8 @@ func (r customPageUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomPageUpdateResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           CustomPageUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customPageUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -531,10 +533,10 @@ func (r CustomPageGetParamsIdentifier) IsKnown() bool {
 }
 
 type CustomPageGetResponseEnvelope struct {
-	Errors   []CustomPageGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomPageGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CustomPageGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CustomPageGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CustomPageGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CustomPageGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CustomPageGetResponse                `json:"result"`
 	JSON    customPageGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -559,8 +561,8 @@ func (r customPageGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CustomPageGetResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           CustomPageGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             customPageGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -607,8 +609,8 @@ func (r customPageGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CustomPageGetResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           CustomPageGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             customPageGetResponseEnvelopeMessagesJSON   `json:"-"`

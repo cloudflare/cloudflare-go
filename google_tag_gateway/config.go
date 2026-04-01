@@ -40,15 +40,15 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/google-tag-gateway/config", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets the Google Tag Gateway configuration for a zone.
@@ -57,32 +57,32 @@ func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/google-tag-gateway/config", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Google Tag Gateway configuration for a zone.
 type Config struct {
 	// Enables or disables Google Tag Gateway for this zone.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Specifies the endpoint path for proxying Google Tag Manager requests. Use an
 	// absolute path starting with '/', with no nested paths and alphanumeric
 	// characters only (e.g. /metrics).
-	Endpoint string `json:"endpoint,required"`
+	Endpoint string `json:"endpoint" api:"required"`
 	// Hides the original client IP address from Google when enabled.
-	HideOriginalIP bool `json:"hideOriginalIp,required"`
+	HideOriginalIP bool `json:"hideOriginalIp" api:"required"`
 	// Specify the Google Tag Manager container or measurement ID (e.g. GTM-XXXXXXX or
 	// G-XXXXXXXXXX).
-	MeasurementID string `json:"measurementId,required"`
+	MeasurementID string `json:"measurementId" api:"required"`
 	// Set up the associated Google Tag on the zone automatically when enabled.
-	SetUpTag bool       `json:"setUpTag,nullable"`
+	SetUpTag bool       `json:"setUpTag" api:"nullable"`
 	JSON     configJSON `json:"-"`
 }
 
@@ -108,16 +108,16 @@ func (r configJSON) RawJSON() string {
 // Google Tag Gateway configuration for a zone.
 type ConfigParam struct {
 	// Enables or disables Google Tag Gateway for this zone.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Specifies the endpoint path for proxying Google Tag Manager requests. Use an
 	// absolute path starting with '/', with no nested paths and alphanumeric
 	// characters only (e.g. /metrics).
-	Endpoint param.Field[string] `json:"endpoint,required"`
+	Endpoint param.Field[string] `json:"endpoint" api:"required"`
 	// Hides the original client IP address from Google when enabled.
-	HideOriginalIP param.Field[bool] `json:"hideOriginalIp,required"`
+	HideOriginalIP param.Field[bool] `json:"hideOriginalIp" api:"required"`
 	// Specify the Google Tag Manager container or measurement ID (e.g. GTM-XXXXXXX or
 	// G-XXXXXXXXXX).
-	MeasurementID param.Field[string] `json:"measurementId,required"`
+	MeasurementID param.Field[string] `json:"measurementId" api:"required"`
 	// Set up the associated Google Tag on the zone automatically when enabled.
 	SetUpTag param.Field[bool] `json:"setUpTag"`
 }
@@ -128,9 +128,9 @@ func (r ConfigParam) MarshalJSON() (data []byte, err error) {
 
 type ConfigUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Google Tag Gateway configuration for a zone.
-	Config ConfigParam `json:"config,required"`
+	Config ConfigParam `json:"config" api:"required"`
 }
 
 func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -138,10 +138,10 @@ func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Google Tag Gateway configuration for a zone.
 	Result Config                           `json:"result"`
 	JSON   configUpdateResponseEnvelopeJSON `json:"-"`
@@ -167,8 +167,8 @@ func (r configUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConfigUpdateResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ConfigUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             configUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -215,8 +215,8 @@ func (r configUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ConfigUpdateResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ConfigUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             configUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -279,14 +279,14 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []ConfigGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ConfigGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConfigGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Google Tag Gateway configuration for a zone.
 	Result Config                        `json:"result"`
 	JSON   configGetResponseEnvelopeJSON `json:"-"`
@@ -312,8 +312,8 @@ func (r configGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConfigGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           ConfigGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             configGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -360,8 +360,8 @@ func (r configGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ConfigGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           ConfigGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             configGetResponseEnvelopeMessagesJSON   `json:"-"`

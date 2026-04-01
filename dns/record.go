@@ -57,15 +57,15 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Overwrite an existing DNS record.
@@ -81,19 +81,19 @@ func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params R
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if dnsRecordID == "" {
 		err = errors.New("missing required dns_record_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List, search, sort, and filter a zones' DNS records.
@@ -103,7 +103,7 @@ func (r *RecordService) List(ctx context.Context, params RecordListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -129,19 +129,19 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if dnsRecordID == "" {
 		err = errors.New("missing required dns_record_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Send a Batch of DNS Record API calls to be executed together.
@@ -170,15 +170,15 @@ func (r *RecordService) Batch(ctx context.Context, params RecordBatchParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/batch", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update an existing DNS record.
@@ -194,19 +194,19 @@ func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params Rec
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if dnsRecordID == "" {
 		err = errors.New("missing required dns_record_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // You can export your
@@ -221,11 +221,11 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/export", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // DNS Record Details
@@ -234,19 +234,19 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if dnsRecordID == "" {
 		err = errors.New("missing required dns_record_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/%s", query.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // You can upload your
@@ -262,15 +262,15 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/import", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Scan for common DNS records on your domain and automatically add them to your
@@ -287,15 +287,15 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the list of DNS records discovered up to this point by the
@@ -308,7 +308,7 @@ func (r *RecordService) ScanList(ctx context.Context, query RecordScanListParams
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/scan/review", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -339,15 +339,15 @@ func (r *RecordService) ScanReview(ctx context.Context, params RecordScanReviewP
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/scan/review", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Initiates an asynchronous scan for common DNS records on your domain. Note that
@@ -358,22 +358,22 @@ func (r *RecordService) ScanTrigger(ctx context.Context, body RecordScanTriggerP
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/scan/trigger", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ARecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type ARecordType `json:"type,required"`
+	Type ARecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -462,13 +462,13 @@ func (r aRecordSettingsJSON) RawJSON() string {
 
 type ARecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[ARecordType] `json:"type,required"`
+	Type param.Field[ARecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -519,13 +519,13 @@ func (r ARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type AAAARecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type AAAARecordType `json:"type,required"`
+	Type AAAARecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -615,13 +615,13 @@ func (r aaaaRecordSettingsJSON) RawJSON() string {
 
 type AAAARecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[AAAARecordType] `json:"type,required"`
+	Type param.Field[AAAARecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -687,7 +687,7 @@ type BatchPatchUnionParam interface {
 
 type BatchPatchARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	ARecordParam
 }
 
@@ -699,7 +699,7 @@ func (r BatchPatchARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchAAAARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	AAAARecordParam
 }
 
@@ -711,7 +711,7 @@ func (r BatchPatchAAAARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCNAMERecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	CNAMERecordParam
 }
 
@@ -723,7 +723,7 @@ func (r BatchPatchCNAMERecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchMXRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	MXRecordParam
 }
 
@@ -735,7 +735,7 @@ func (r BatchPatchMXRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchNSRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	NSRecordParam
 }
 
@@ -747,15 +747,15 @@ func (r BatchPatchNSRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchOpenpgpkeyRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[BatchPatchOpenpgpkeyRecordType] `json:"type,required"`
+	Type param.Field[BatchPatchOpenpgpkeyRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -811,7 +811,7 @@ func (r BatchPatchOpenpgpkeyRecordSettingsParam) MarshalJSON() (data []byte, err
 
 type BatchPatchPTRRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	PTRRecordParam
 }
 
@@ -823,7 +823,7 @@ func (r BatchPatchPTRRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchTXTRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	TXTRecordParam
 }
 
@@ -835,7 +835,7 @@ func (r BatchPatchTXTRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCAARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	CAARecordParam
 }
 
@@ -847,7 +847,7 @@ func (r BatchPatchCAARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchCERTRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	CERTRecordParam
 }
 
@@ -859,7 +859,7 @@ func (r BatchPatchCERTRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchDNSKEYRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	DNSKEYRecordParam
 }
 
@@ -871,7 +871,7 @@ func (r BatchPatchDNSKEYRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchDSRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	DSRecordParam
 }
 
@@ -883,7 +883,7 @@ func (r BatchPatchDSRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchHTTPSRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	HTTPSRecordParam
 }
 
@@ -895,7 +895,7 @@ func (r BatchPatchHTTPSRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchLOCRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	LOCRecordParam
 }
 
@@ -907,7 +907,7 @@ func (r BatchPatchLOCRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchNAPTRRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	NAPTRRecordParam
 }
 
@@ -919,7 +919,7 @@ func (r BatchPatchNAPTRRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSMIMEARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SMIMEARecordParam
 }
 
@@ -931,7 +931,7 @@ func (r BatchPatchSMIMEARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSRVRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SRVRecordParam
 }
 
@@ -943,7 +943,7 @@ func (r BatchPatchSRVRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSSHFPRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SSHFPRecordParam
 }
 
@@ -955,7 +955,7 @@ func (r BatchPatchSSHFPRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchSVCBRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SVCBRecordParam
 }
 
@@ -967,7 +967,7 @@ func (r BatchPatchSVCBRecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchTLSARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	TLSARecordParam
 }
 
@@ -979,7 +979,7 @@ func (r BatchPatchTLSARecordParam) implementsBatchPatchUnionParam() {}
 
 type BatchPatchURIRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	URIRecordParam
 }
 
@@ -1006,7 +1006,7 @@ type BatchPutUnionParam interface {
 
 type BatchPutARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	ARecordParam
 }
 
@@ -1018,7 +1018,7 @@ func (r BatchPutARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutAAAARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	AAAARecordParam
 }
 
@@ -1030,7 +1030,7 @@ func (r BatchPutAAAARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCNAMERecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	CNAMERecordParam
 }
 
@@ -1042,7 +1042,7 @@ func (r BatchPutCNAMERecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutMXRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	MXRecordParam
 }
 
@@ -1054,7 +1054,7 @@ func (r BatchPutMXRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutNSRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	NSRecordParam
 }
 
@@ -1066,15 +1066,15 @@ func (r BatchPutNSRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutOpenpgpkeyRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[BatchPutOpenpgpkeyRecordType] `json:"type,required"`
+	Type param.Field[BatchPutOpenpgpkeyRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1130,7 +1130,7 @@ func (r BatchPutOpenpgpkeyRecordSettingsParam) MarshalJSON() (data []byte, err e
 
 type BatchPutPTRRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	PTRRecordParam
 }
 
@@ -1142,7 +1142,7 @@ func (r BatchPutPTRRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutTXTRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	TXTRecordParam
 }
 
@@ -1154,7 +1154,7 @@ func (r BatchPutTXTRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCAARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	CAARecordParam
 }
 
@@ -1166,7 +1166,7 @@ func (r BatchPutCAARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutCERTRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	CERTRecordParam
 }
 
@@ -1178,7 +1178,7 @@ func (r BatchPutCERTRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutDNSKEYRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	DNSKEYRecordParam
 }
 
@@ -1190,7 +1190,7 @@ func (r BatchPutDNSKEYRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutDSRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	DSRecordParam
 }
 
@@ -1202,7 +1202,7 @@ func (r BatchPutDSRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutHTTPSRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	HTTPSRecordParam
 }
 
@@ -1214,7 +1214,7 @@ func (r BatchPutHTTPSRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutLOCRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	LOCRecordParam
 }
 
@@ -1226,7 +1226,7 @@ func (r BatchPutLOCRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutNAPTRRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	NAPTRRecordParam
 }
 
@@ -1238,7 +1238,7 @@ func (r BatchPutNAPTRRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSMIMEARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SMIMEARecordParam
 }
 
@@ -1250,7 +1250,7 @@ func (r BatchPutSMIMEARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSRVRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SRVRecordParam
 }
 
@@ -1262,7 +1262,7 @@ func (r BatchPutSRVRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSSHFPRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SSHFPRecordParam
 }
 
@@ -1274,7 +1274,7 @@ func (r BatchPutSSHFPRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutSVCBRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	SVCBRecordParam
 }
 
@@ -1286,7 +1286,7 @@ func (r BatchPutSVCBRecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutTLSARecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	TLSARecordParam
 }
 
@@ -1298,7 +1298,7 @@ func (r BatchPutTLSARecordParam) implementsBatchPutUnionParam() {}
 
 type BatchPutURIRecordParam struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	URIRecordParam
 }
 
@@ -1310,13 +1310,13 @@ func (r BatchPutURIRecordParam) implementsBatchPutUnionParam() {}
 
 type CAARecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type CAARecordType `json:"type,required"`
+	Type CAARecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -1434,13 +1434,13 @@ func (r caaRecordSettingsJSON) RawJSON() string {
 
 type CAARecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[CAARecordType] `json:"type,required"`
+	Type param.Field[CAARecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1503,13 +1503,13 @@ func (r CAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type CERTRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type CERTRecordType `json:"type,required"`
+	Type CERTRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -1630,13 +1630,13 @@ func (r certRecordSettingsJSON) RawJSON() string {
 
 type CERTRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[CERTRecordType] `json:"type,required"`
+	Type param.Field[CERTRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1701,13 +1701,13 @@ func (r CERTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type CNAMERecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type CNAMERecordType `json:"type,required"`
+	Type CNAMERecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -1800,13 +1800,13 @@ func (r cnameRecordSettingsJSON) RawJSON() string {
 
 type CNAMERecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[CNAMERecordType] `json:"type,required"`
+	Type param.Field[CNAMERecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1860,13 +1860,13 @@ func (r CNAMERecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type DNSKEYRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type DNSKEYRecordType `json:"type,required"`
+	Type DNSKEYRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -1988,13 +1988,13 @@ func (r dnskeyRecordSettingsJSON) RawJSON() string {
 
 type DNSKEYRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[DNSKEYRecordType] `json:"type,required"`
+	Type param.Field[DNSKEYRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2059,13 +2059,13 @@ func (r DNSKEYRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type DSRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type DSRecordType `json:"type,required"`
+	Type DSRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -2186,13 +2186,13 @@ func (r dsRecordSettingsJSON) RawJSON() string {
 
 type DSRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[DSRecordType] `json:"type,required"`
+	Type param.Field[DSRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2257,13 +2257,13 @@ func (r DSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type HTTPSRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type HTTPSRecordType `json:"type,required"`
+	Type HTTPSRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -2381,13 +2381,13 @@ func (r httpsRecordSettingsJSON) RawJSON() string {
 
 type HTTPSRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[HTTPSRecordType] `json:"type,required"`
+	Type param.Field[HTTPSRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2450,13 +2450,13 @@ func (r HTTPSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type LOCRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type LOCRecordType `json:"type,required"`
+	Type LOCRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -2633,13 +2633,13 @@ func (r locRecordSettingsJSON) RawJSON() string {
 
 type LOCRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[LOCRecordType] `json:"type,required"`
+	Type param.Field[LOCRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2720,20 +2720,21 @@ func (r LOCRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type MXRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type MXRecordType `json:"type,required"`
+	Type MXRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
 	// A valid mail server hostname.
 	Content string `json:"content" format:"hostname"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -2817,20 +2818,21 @@ func (r mxRecordSettingsJSON) RawJSON() string {
 
 type MXRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[MXRecordType] `json:"type,required"`
+	Type param.Field[MXRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// A valid mail server hostname.
 	Content param.Field[string] `json:"content" format:"hostname"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -2875,13 +2877,13 @@ func (r MXRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type NAPTRRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type NAPTRRecordType `json:"type,required"`
+	Type NAPTRRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -3008,13 +3010,13 @@ func (r naptrRecordSettingsJSON) RawJSON() string {
 
 type NAPTRRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[NAPTRRecordType] `json:"type,required"`
+	Type param.Field[NAPTRRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3083,13 +3085,13 @@ func (r NAPTRRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type NSRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type NSRecordType `json:"type,required"`
+	Type NSRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -3176,13 +3178,13 @@ func (r nsRecordSettingsJSON) RawJSON() string {
 
 type NSRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[NSRecordType] `json:"type,required"`
+	Type param.Field[NSRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3231,13 +3233,13 @@ func (r NSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type PTRRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type PTRRecordType `json:"type,required"`
+	Type PTRRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -3324,13 +3326,13 @@ func (r ptrRecordSettingsJSON) RawJSON() string {
 
 type PTRRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[PTRRecordType] `json:"type,required"`
+	Type param.Field[PTRRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3400,8 +3402,9 @@ type RecordResponse struct {
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Complete DNS record name, including the zone name, in Punycode.
 	Name string `json:"name"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting bool `json:"private_routing"`
@@ -3611,15 +3614,15 @@ func init() {
 
 type RecordResponseA struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -3653,15 +3656,15 @@ func (r RecordResponseA) implementsRecordResponse() {}
 
 type RecordResponseAAAA struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -3696,15 +3699,15 @@ func (r RecordResponseAAAA) implementsRecordResponse() {}
 
 type RecordResponseCNAME struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -3739,15 +3742,15 @@ func (r RecordResponseCNAME) implementsRecordResponse() {}
 
 type RecordResponseMX struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -3782,15 +3785,15 @@ func (r RecordResponseMX) implementsRecordResponse() {}
 
 type RecordResponseNS struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -3825,35 +3828,35 @@ func (r RecordResponseNS) implementsRecordResponse() {}
 
 type RecordResponseOpenpgpkey struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment string `json:"comment,required"`
+	Comment string `json:"comment" api:"required"`
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
-	Content string `json:"content,required"`
+	Content string `json:"content" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
-	Proxied bool `json:"proxied,required"`
+	Proxied bool `json:"proxied" api:"required"`
 	// Settings for the DNS record.
-	Settings RecordResponseOpenpgpkeySettings `json:"settings,required"`
+	Settings RecordResponseOpenpgpkeySettings `json:"settings" api:"required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags,required"`
+	Tags []RecordTags `json:"tags" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type RecordResponseOpenpgpkeyType `json:"type,required"`
+	Type RecordResponseOpenpgpkeyType `json:"type" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -3942,15 +3945,15 @@ func (r RecordResponseOpenpgpkeyType) IsKnown() bool {
 
 type RecordResponsePTR struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -3985,15 +3988,15 @@ func (r RecordResponsePTR) implementsRecordResponse() {}
 
 type RecordResponseTXT struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4028,15 +4031,15 @@ func (r RecordResponseTXT) implementsRecordResponse() {}
 
 type RecordResponseCAA struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4071,15 +4074,15 @@ func (r RecordResponseCAA) implementsRecordResponse() {}
 
 type RecordResponseCERT struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4114,15 +4117,15 @@ func (r RecordResponseCERT) implementsRecordResponse() {}
 
 type RecordResponseDNSKEY struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4157,15 +4160,15 @@ func (r RecordResponseDNSKEY) implementsRecordResponse() {}
 
 type RecordResponseDS struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4200,15 +4203,15 @@ func (r RecordResponseDS) implementsRecordResponse() {}
 
 type RecordResponseHTTPS struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4243,15 +4246,15 @@ func (r RecordResponseHTTPS) implementsRecordResponse() {}
 
 type RecordResponseLOC struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4286,15 +4289,15 @@ func (r RecordResponseLOC) implementsRecordResponse() {}
 
 type RecordResponseNAPTR struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4329,15 +4332,15 @@ func (r RecordResponseNAPTR) implementsRecordResponse() {}
 
 type RecordResponseSMIMEA struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4372,15 +4375,15 @@ func (r RecordResponseSMIMEA) implementsRecordResponse() {}
 
 type RecordResponseSRV struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4415,15 +4418,15 @@ func (r RecordResponseSRV) implementsRecordResponse() {}
 
 type RecordResponseSSHFP struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4458,15 +4461,15 @@ func (r RecordResponseSSHFP) implementsRecordResponse() {}
 
 type RecordResponseSVCB struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4501,15 +4504,15 @@ func (r RecordResponseSVCB) implementsRecordResponse() {}
 
 type RecordResponseTLSA struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4544,15 +4547,15 @@ func (r RecordResponseTLSA) implementsRecordResponse() {}
 
 type RecordResponseURI struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta interface{} `json:"meta" api:"required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable,required"`
+	Proxiable bool `json:"proxiable" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
@@ -4626,13 +4629,13 @@ type RecordTagsParam = string
 
 type SMIMEARecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type SMIMEARecordType `json:"type,required"`
+	Type SMIMEARecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -4754,13 +4757,13 @@ func (r smimeaRecordSettingsJSON) RawJSON() string {
 
 type SMIMEARecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[SMIMEARecordType] `json:"type,required"`
+	Type param.Field[SMIMEARecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -4825,13 +4828,13 @@ func (r SMIMEARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type SRVRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type SRVRecordType `json:"type,required"`
+	Type SRVRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -4892,8 +4895,9 @@ func (r SRVRecordType) IsKnown() bool {
 type SRVRecordData struct {
 	// The port of the service.
 	Port float64 `json:"port"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// A valid hostname.
 	Target string `json:"target" format:"hostname"`
@@ -4954,13 +4958,13 @@ func (r srvRecordSettingsJSON) RawJSON() string {
 
 type SRVRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[SRVRecordType] `json:"type,required"`
+	Type param.Field[SRVRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -4993,8 +4997,9 @@ func (r SRVRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 type SRVRecordDataParam struct {
 	// The port of the service.
 	Port param.Field[float64] `json:"port"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// A valid hostname.
 	Target param.Field[string] `json:"target" format:"hostname"`
@@ -5026,13 +5031,13 @@ func (r SRVRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type SSHFPRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type SSHFPRecordType `json:"type,required"`
+	Type SSHFPRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -5150,13 +5155,13 @@ func (r sshfpRecordSettingsJSON) RawJSON() string {
 
 type SSHFPRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[SSHFPRecordType] `json:"type,required"`
+	Type param.Field[SSHFPRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -5219,13 +5224,13 @@ func (r SSHFPRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type SVCBRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type SVCBRecordType `json:"type,required"`
+	Type SVCBRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -5343,13 +5348,13 @@ func (r svcbRecordSettingsJSON) RawJSON() string {
 
 type SVCBRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[SVCBRecordType] `json:"type,required"`
+	Type param.Field[SVCBRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -5412,13 +5417,13 @@ func (r SVCBRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type TLSARecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type TLSARecordType `json:"type,required"`
+	Type TLSARecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -5539,13 +5544,13 @@ func (r tlsaRecordSettingsJSON) RawJSON() string {
 
 type TLSARecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[TLSARecordType] `json:"type,required"`
+	Type param.Field[TLSARecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -5627,13 +5632,13 @@ func (r TTL) IsKnown() bool {
 
 type TXTRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type TXTRecordType `json:"type,required"`
+	Type TXTRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -5725,13 +5730,13 @@ func (r txtRecordSettingsJSON) RawJSON() string {
 
 type TXTRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[TXTRecordType] `json:"type,required"`
+	Type param.Field[TXTRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -5785,13 +5790,13 @@ func (r TXTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type URIRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
+	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type URIRecordType `json:"type,required"`
+	Type URIRecordType `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
@@ -5799,8 +5804,9 @@ type URIRecord struct {
 	Content string `json:"content"`
 	// Components of a URI record.
 	Data URIRecordData `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority float64 `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -5910,20 +5916,21 @@ func (r uriRecordSettingsJSON) RawJSON() string {
 
 type URIRecordParam struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[URIRecordType] `json:"type,required"`
+	Type param.Field[URIRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// Components of a URI record.
 	Data param.Field[URIRecordDataParam] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
@@ -6101,10 +6108,10 @@ func (r recordScanReviewResponseJSON) RawJSON() string {
 }
 
 type RecordScanTriggerResponse struct {
-	Errors   []RecordScanTriggerResponseError   `json:"errors,required"`
-	Messages []RecordScanTriggerResponseMessage `json:"messages,required"`
+	Errors   []RecordScanTriggerResponseError   `json:"errors" api:"required"`
+	Messages []RecordScanTriggerResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordScanTriggerResponseSuccess `json:"success,required"`
+	Success RecordScanTriggerResponseSuccess `json:"success" api:"required"`
 	JSON    recordScanTriggerResponseJSON    `json:"-"`
 }
 
@@ -6127,8 +6134,8 @@ func (r recordScanTriggerResponseJSON) RawJSON() string {
 }
 
 type RecordScanTriggerResponseError struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           RecordScanTriggerResponseErrorsSource `json:"source"`
 	JSON             recordScanTriggerResponseErrorJSON    `json:"-"`
@@ -6175,8 +6182,8 @@ func (r recordScanTriggerResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordScanTriggerResponseMessage struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           RecordScanTriggerResponseMessagesSource `json:"source"`
 	JSON             recordScanTriggerResponseMessageJSON    `json:"-"`
@@ -6239,8 +6246,8 @@ func (r RecordScanTriggerResponseSuccess) IsKnown() bool {
 
 type RecordNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   RecordNewParamsBodyUnion `json:"body,required"`
+	ZoneID param.Field[string]      `path:"zone_id" api:"required"`
+	Body   RecordNewParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
@@ -6249,21 +6256,22 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 
 type RecordNewParamsBody struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordNewParamsBodyType] `json:"type,required"`
+	Type param.Field[RecordNewParamsBodyType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -6294,13 +6302,13 @@ type RecordNewParamsBodyUnion interface {
 
 type RecordNewParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
+	Type param.Field[RecordNewParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -6390,10 +6398,10 @@ func (r RecordNewParamsBodyType) IsKnown() bool {
 }
 
 type RecordNewResponseEnvelope struct {
-	Errors   []RecordNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordResponse                   `json:"result"`
 	JSON    recordNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -6418,8 +6426,8 @@ func (r recordNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordNewResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           RecordNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -6466,8 +6474,8 @@ func (r recordNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordNewResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           RecordNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -6530,8 +6538,8 @@ func (r RecordNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string]         `path:"zone_id,required"`
-	Body   RecordUpdateParamsBodyUnion `json:"body,required"`
+	ZoneID param.Field[string]         `path:"zone_id" api:"required"`
+	Body   RecordUpdateParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -6540,21 +6548,22 @@ func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type RecordUpdateParamsBody struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordUpdateParamsBodyType] `json:"type,required"`
+	Type param.Field[RecordUpdateParamsBodyType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -6585,13 +6594,13 @@ type RecordUpdateParamsBodyUnion interface {
 
 type RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
+	Type param.Field[RecordUpdateParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -6681,10 +6690,10 @@ func (r RecordUpdateParamsBodyType) IsKnown() bool {
 }
 
 type RecordUpdateResponseEnvelope struct {
-	Errors   []RecordUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordResponse                      `json:"result"`
 	JSON    recordUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -6709,8 +6718,8 @@ func (r recordUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordUpdateResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RecordUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -6757,8 +6766,8 @@ func (r recordUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordUpdateResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           RecordUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -6821,7 +6830,7 @@ func (r RecordUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordListParams struct {
 	// Identifier.
-	ZoneID  param.Field[string]                  `path:"zone_id,required"`
+	ZoneID  param.Field[string]                  `path:"zone_id" api:"required"`
 	Comment param.Field[RecordListParamsComment] `query:"comment"`
 	Content param.Field[RecordListParamsContent] `query:"content"`
 	// Direction to order DNS records in.
@@ -7055,7 +7064,7 @@ func (r RecordListParamsType) IsKnown() bool {
 
 type RecordDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RecordDeleteResponseEnvelope struct {
@@ -7081,7 +7090,7 @@ func (r recordDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RecordBatchParams struct {
 	// Identifier.
-	ZoneID  param.Field[string]                       `path:"zone_id,required"`
+	ZoneID  param.Field[string]                       `path:"zone_id" api:"required"`
 	Deletes param.Field[[]RecordBatchParamsDelete]    `json:"deletes"`
 	Patches param.Field[[]BatchPatchUnionParam]       `json:"patches"`
 	Posts   param.Field[[]RecordBatchParamsPostUnion] `json:"posts"`
@@ -7094,7 +7103,7 @@ func (r RecordBatchParams) MarshalJSON() (data []byte, err error) {
 
 type RecordBatchParamsDelete struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r RecordBatchParamsDelete) MarshalJSON() (data []byte, err error) {
@@ -7103,21 +7112,22 @@ func (r RecordBatchParamsDelete) MarshalJSON() (data []byte, err error) {
 
 type RecordBatchParamsPost struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordBatchParamsPostsType] `json:"type,required"`
+	Type param.Field[RecordBatchParamsPostsType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -7148,13 +7158,13 @@ type RecordBatchParamsPostUnion interface {
 
 type RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
+	Type param.Field[RecordBatchParamsPostsDNSRecordsOpenpgpkeyRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -7244,10 +7254,10 @@ func (r RecordBatchParamsPostsType) IsKnown() bool {
 }
 
 type RecordBatchResponseEnvelope struct {
-	Errors   []RecordBatchResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordBatchResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordBatchResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordBatchResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordBatchResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordBatchResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordBatchResponse                `json:"result"`
 	JSON    recordBatchResponseEnvelopeJSON    `json:"-"`
 }
@@ -7272,8 +7282,8 @@ func (r recordBatchResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordBatchResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           RecordBatchResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordBatchResponseEnvelopeErrorsJSON   `json:"-"`
@@ -7320,8 +7330,8 @@ func (r recordBatchResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordBatchResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           RecordBatchResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordBatchResponseEnvelopeMessagesJSON   `json:"-"`
@@ -7384,8 +7394,8 @@ func (r RecordBatchResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string]       `path:"zone_id,required"`
-	Body   RecordEditParamsBodyUnion `json:"body,required"`
+	ZoneID param.Field[string]       `path:"zone_id" api:"required"`
+	Body   RecordEditParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
@@ -7394,21 +7404,22 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 
 type RecordEditParamsBody struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordEditParamsBodyType] `json:"type,required"`
+	Type param.Field[RecordEditParamsBodyType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -7439,13 +7450,13 @@ type RecordEditParamsBodyUnion interface {
 
 type RecordEditParamsBodyDNSRecordsOpenpgpkeyRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
+	Type param.Field[RecordEditParamsBodyDNSRecordsOpenpgpkeyRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -7535,10 +7546,10 @@ func (r RecordEditParamsBodyType) IsKnown() bool {
 }
 
 type RecordEditResponseEnvelope struct {
-	Errors   []RecordEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordResponse                    `json:"result"`
 	JSON    recordEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -7563,8 +7574,8 @@ func (r recordEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordEditResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RecordEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -7611,8 +7622,8 @@ func (r recordEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordEditResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RecordEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -7675,19 +7686,19 @@ func (r RecordEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordExportParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RecordGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RecordGetResponseEnvelope struct {
-	Errors   []RecordGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordResponse                   `json:"result"`
 	JSON    recordGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -7712,8 +7723,8 @@ func (r recordGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           RecordGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -7760,8 +7771,8 @@ func (r recordGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           RecordGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -7824,12 +7835,12 @@ func (r RecordGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordImportParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// BIND config to import.
 	//
 	// **Tip:** When using cURL, a file can be uploaded using
 	// `--form 'file=@bind_config.txt'`.
-	File param.Field[string] `json:"file,required"`
+	File param.Field[string] `json:"file" api:"required"`
 	// Whether or not proxiable records should receive the performance and security
 	// benefits of Cloudflare.
 	//
@@ -7853,10 +7864,10 @@ func (r RecordImportParams) MarshalMultipart() (data []byte, contentType string,
 }
 
 type RecordImportResponseEnvelope struct {
-	Errors   []RecordImportResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordImportResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordImportResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordImportResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordImportResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordImportResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordImportResponse                `json:"result"`
 	JSON    recordImportResponseEnvelopeJSON    `json:"-"`
 }
@@ -7881,8 +7892,8 @@ func (r recordImportResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordImportResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RecordImportResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordImportResponseEnvelopeErrorsJSON   `json:"-"`
@@ -7929,8 +7940,8 @@ func (r recordImportResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordImportResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           RecordImportResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordImportResponseEnvelopeMessagesJSON   `json:"-"`
@@ -7993,8 +8004,8 @@ func (r RecordImportResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordScanParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	Body   interface{}         `json:"body" api:"required"`
 }
 
 func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
@@ -8002,10 +8013,10 @@ func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordScanResponseEnvelope struct {
-	Errors   []RecordScanResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordScanResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordScanResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordScanResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordScanResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordScanResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordScanResponse                `json:"result"`
 	JSON    recordScanResponseEnvelopeJSON    `json:"-"`
 }
@@ -8030,8 +8041,8 @@ func (r recordScanResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordScanResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           RecordScanResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordScanResponseEnvelopeErrorsJSON   `json:"-"`
@@ -8078,8 +8089,8 @@ func (r recordScanResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordScanResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           RecordScanResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordScanResponseEnvelopeMessagesJSON   `json:"-"`
@@ -8142,12 +8153,12 @@ func (r RecordScanResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordScanListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RecordScanReviewParams struct {
 	// Identifier.
-	ZoneID  param.Field[string]                              `path:"zone_id,required"`
+	ZoneID  param.Field[string]                              `path:"zone_id" api:"required"`
 	Accepts param.Field[[]RecordScanReviewParamsAcceptUnion] `json:"accepts"`
 	Rejects param.Field[[]RecordScanReviewParamsReject]      `json:"rejects"`
 }
@@ -8158,21 +8169,22 @@ func (r RecordScanReviewParams) MarshalJSON() (data []byte, err error) {
 
 type RecordScanReviewParamsAccept struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordScanReviewParamsAcceptsType] `json:"type,required"`
+	Type param.Field[RecordScanReviewParamsAcceptsType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
+	// Required for MX and URI records; ignored for other record types (but may still
+	// be returned by the API). Records with lower priorities are preferred. This field
+	// is to be deprecated in favor of the priority field within the data map.
 	Priority param.Field[float64] `json:"priority"`
 	// Enables private network routing to the origin.
 	PrivateRouting param.Field[bool] `json:"private_routing"`
@@ -8204,13 +8216,13 @@ type RecordScanReviewParamsAcceptUnion interface {
 
 type RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecord struct {
 	// Complete DNS record name, including the zone name, in Punycode.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl,required"`
+	TTL param.Field[TTL] `json:"ttl" api:"required"`
 	// Record type.
-	Type param.Field[RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordType] `json:"type,required"`
+	Type param.Field[RecordScanReviewParamsAcceptsDNSRecordsOpenpgpkeyRecordType] `json:"type" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -8302,7 +8314,7 @@ func (r RecordScanReviewParamsAcceptsType) IsKnown() bool {
 
 type RecordScanReviewParamsReject struct {
 	// Identifier.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r RecordScanReviewParamsReject) MarshalJSON() (data []byte, err error) {
@@ -8310,10 +8322,10 @@ func (r RecordScanReviewParamsReject) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordScanReviewResponseEnvelope struct {
-	Errors   []RecordScanReviewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordScanReviewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RecordScanReviewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RecordScanReviewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RecordScanReviewResponseEnvelopeSuccess `json:"success,required"`
+	Success RecordScanReviewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RecordScanReviewResponse                `json:"result"`
 	JSON    recordScanReviewResponseEnvelopeJSON    `json:"-"`
 }
@@ -8338,8 +8350,8 @@ func (r recordScanReviewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RecordScanReviewResponseEnvelopeErrors struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           RecordScanReviewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             recordScanReviewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -8386,8 +8398,8 @@ func (r recordScanReviewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type RecordScanReviewResponseEnvelopeMessages struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           RecordScanReviewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             recordScanReviewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -8450,5 +8462,5 @@ func (r RecordScanReviewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordScanTriggerParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

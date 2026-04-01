@@ -40,26 +40,26 @@ func (r *ZoneTransferOutgoingStatusService) Get(ctx context.Context, query ZoneT
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/status", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ZoneTransferOutgoingStatusGetParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ZoneTransferOutgoingStatusGetResponseEnvelope struct {
-	Errors   []ZoneTransferOutgoingStatusGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneTransferOutgoingStatusGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ZoneTransferOutgoingStatusGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ZoneTransferOutgoingStatusGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ZoneTransferOutgoingStatusGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ZoneTransferOutgoingStatusGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// The zone transfer status of a primary zone.
 	Result EnableTransfer                                    `json:"result"`
 	JSON   zoneTransferOutgoingStatusGetResponseEnvelopeJSON `json:"-"`
@@ -85,8 +85,8 @@ func (r zoneTransferOutgoingStatusGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ZoneTransferOutgoingStatusGetResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           ZoneTransferOutgoingStatusGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             zoneTransferOutgoingStatusGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -134,8 +134,8 @@ func (r zoneTransferOutgoingStatusGetResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type ZoneTransferOutgoingStatusGetResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           ZoneTransferOutgoingStatusGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             zoneTransferOutgoingStatusGetResponseEnvelopeMessagesJSON   `json:"-"`

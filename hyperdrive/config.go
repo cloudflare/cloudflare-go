@@ -42,15 +42,15 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates and returns the specified Hyperdrive configuration.
@@ -59,19 +59,19 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if hyperdriveID == "" {
 		err = errors.New("missing required hyperdrive_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns a list of Hyperdrives.
@@ -81,7 +81,7 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -107,19 +107,19 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if hyperdriveID == "" {
 		err = errors.New("missing required hyperdrive_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", body.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Patches and returns the specified Hyperdrive configuration. Custom caching
@@ -129,19 +129,19 @@ func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params Co
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if hyperdriveID == "" {
 		err = errors.New("missing required hyperdrive_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the specified Hyperdrive configuration.
@@ -150,27 +150,27 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if hyperdriveID == "" {
 		err = errors.New("missing required hyperdrive_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", query.AccountID, hyperdriveID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConfigDeleteResponse = interface{}
 
 type ConfigNewParams struct {
 	// Define configurations using a unique string identifier.
-	AccountID  param.Field[string] `path:"account_id,required"`
-	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive" api:"required"`
 }
 
 func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
@@ -178,11 +178,11 @@ func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Hyperdrive            `json:"result" api:"required"`
 	// Return the status of the API call success.
-	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -222,8 +222,8 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigUpdateParams struct {
 	// Define configurations using a unique string identifier.
-	AccountID  param.Field[string] `path:"account_id,required"`
-	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
+	Hyperdrive HyperdriveParam     `json:"hyperdrive" api:"required"`
 }
 
 func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -231,11 +231,11 @@ func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Hyperdrive            `json:"result" api:"required"`
 	// Return the status of the API call success.
-	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -275,20 +275,20 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigListParams struct {
 	// Define configurations using a unique string identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigDeleteParams struct {
 	// Define configurations using a unique string identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigDeleteResponse  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ConfigDeleteResponse  `json:"result" api:"required,nullable"`
 	// Return the status of the API call success.
-	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -328,7 +328,7 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	// Define configurations using a unique string identifier.
-	AccountID param.Field[string]                       `path:"account_id,required"`
+	AccountID param.Field[string]                       `path:"account_id" api:"required"`
 	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
 	MTLS      param.Field[ConfigEditParamsMTLS]         `json:"mtls"`
 	// The name of the Hyperdrive configuration. Used to identify the configuration in
@@ -337,6 +337,10 @@ type ConfigEditParams struct {
 	Origin param.Field[ConfigEditParamsOriginUnion] `json:"origin"`
 	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
 	// the origin database.
+	//
+	// Maximum allowed: 20 for free tier accounts, 100 for paid tier accounts. If not
+	// specified, defaults to 20 for free tier and 60 for paid tier. Contact Cloudflare
+	// if you need a higher limit.
 	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
 }
 
@@ -486,10 +490,10 @@ func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme) IsKnown() bool
 
 type ConfigEditParamsOriginHyperdriveInternetOrigin struct {
 	// Defines the host (hostname or IP) of your origin database.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
 	// 3306 for MySQL if not specified.
-	Port param.Field[int64] `json:"port,required"`
+	Port param.Field[int64] `json:"port" api:"required"`
 }
 
 func (r ConfigEditParamsOriginHyperdriveInternetOrigin) MarshalJSON() (data []byte, err error) {
@@ -501,12 +505,12 @@ func (r ConfigEditParamsOriginHyperdriveInternetOrigin) implementsConfigEditPara
 type ConfigEditParamsOriginHyperdriveOverAccessOrigin struct {
 	// Defines the Client ID of the Access token to use when connecting to the origin
 	// database.
-	AccessClientID param.Field[string] `json:"access_client_id,required"`
+	AccessClientID param.Field[string] `json:"access_client_id" api:"required"`
 	// Defines the Client Secret of the Access Token to use when connecting to the
 	// origin database. The API never returns this write-only value.
-	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
+	AccessClientSecret param.Field[string] `json:"access_client_secret" api:"required"`
 	// Defines the host (hostname or IP) of your origin database.
-	Host param.Field[string] `json:"host,required"`
+	Host param.Field[string] `json:"host" api:"required"`
 }
 
 func (r ConfigEditParamsOriginHyperdriveOverAccessOrigin) MarshalJSON() (data []byte, err error) {
@@ -533,11 +537,11 @@ func (r ConfigEditParamsOriginScheme) IsKnown() bool {
 }
 
 type ConfigEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Hyperdrive            `json:"result" api:"required"`
 	// Return the status of the API call success.
-	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -577,15 +581,15 @@ func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigGetParams struct {
 	// Define configurations using a unique string identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Hyperdrive            `json:"result" api:"required"`
 	// Return the status of the API call success.
-	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`
 }
 

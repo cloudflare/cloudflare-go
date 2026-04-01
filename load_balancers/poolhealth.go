@@ -42,19 +42,19 @@ func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolH
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if poolID == "" {
 		err = errors.New("missing required pool_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/preview", params.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch the latest pool health status for a single pool.
@@ -63,19 +63,19 @@ func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if poolID == "" {
 		err = errors.New("missing required pool_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", query.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PoolHealthNewResponse struct {
@@ -208,7 +208,7 @@ func (r poolHealthGetResponsePOPHealthOriginsIPJSON) RawJSON() string {
 
 type PoolHealthNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -286,11 +286,11 @@ func (r PoolHealthNewParamsType) IsKnown() bool {
 }
 
 type PoolHealthNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PoolHealthNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   PoolHealthNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PoolHealthNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PoolHealthNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    poolHealthNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -330,17 +330,17 @@ func (r PoolHealthNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PoolHealthGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PoolHealthGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	Result PoolHealthGetResponse `json:"result,required"`
+	Result PoolHealthGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PoolHealthGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PoolHealthGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    poolHealthGetResponseEnvelopeJSON    `json:"-"`
 }
 

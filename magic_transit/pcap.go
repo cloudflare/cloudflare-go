@@ -49,15 +49,15 @@ func (r *PCAPService) New(ctx context.Context, params PCAPNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all packet capture requests for an account.
@@ -67,7 +67,7 @@ func (r *PCAPService) List(ctx context.Context, query PCAPListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -93,19 +93,19 @@ func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if pcapID == "" {
 		err = errors.New("missing required pcap_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps/%s", query.AccountID, pcapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Stop full PCAP.
@@ -114,15 +114,15 @@ func (r *PCAPService) Stop(ctx context.Context, pcapID string, body PCAPStopPara
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if pcapID == "" {
 		err = errors.New("missing required pcap_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/pcaps/%s/stop", body.AccountID, pcapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type PCAP struct {
@@ -1115,8 +1115,8 @@ func (r PCAPGetResponseType) IsKnown() bool {
 
 type PCAPNewParams struct {
 	// Identifier.
-	AccountID param.Field[string]    `path:"account_id,required"`
-	Body      PCAPNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]    `path:"account_id" api:"required"`
+	Body      PCAPNewParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r PCAPNewParams) MarshalJSON() (data []byte, err error) {
@@ -1125,12 +1125,12 @@ func (r PCAPNewParams) MarshalJSON() (data []byte, err error) {
 
 type PCAPNewParamsBody struct {
 	// The system used to collect packet captures.
-	System param.Field[PCAPNewParamsBodySystem] `json:"system,required"`
+	System param.Field[PCAPNewParamsBodySystem] `json:"system" api:"required"`
 	// The packet capture duration in seconds.
-	TimeLimit param.Field[float64] `json:"time_limit,required"`
+	TimeLimit param.Field[float64] `json:"time_limit" api:"required"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type param.Field[PCAPNewParamsBodyType] `json:"type,required"`
+	Type param.Field[PCAPNewParamsBodyType] `json:"type" api:"required"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
 	ByteLimit param.Field[float64] `json:"byte_limit"`
@@ -1165,14 +1165,14 @@ type PCAPNewParamsBodyUnion interface {
 
 type PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple struct {
 	// The limit of packets contained in a packet capture.
-	PacketLimit param.Field[float64] `json:"packet_limit,required"`
+	PacketLimit param.Field[float64] `json:"packet_limit" api:"required"`
 	// The system used to collect packet captures.
-	System param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleSystem] `json:"system,required"`
+	System param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleSystem] `json:"system" api:"required"`
 	// The packet capture duration in seconds.
-	TimeLimit param.Field[float64] `json:"time_limit,required"`
+	TimeLimit param.Field[float64] `json:"time_limit" api:"required"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleType] `json:"type,required"`
+	Type param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleType] `json:"type" api:"required"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
 	// The RFC 3339 offset timestamp from which to query backwards for packets. Must be
@@ -1222,16 +1222,16 @@ type PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFull struct {
 	// The name of the data center used for the packet capture. This can be a specific
 	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
 	// packet captures.
-	ColoName param.Field[string] `json:"colo_name,required"`
+	ColoName param.Field[string] `json:"colo_name" api:"required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf param.Field[string] `json:"destination_conf,required"`
+	DestinationConf param.Field[string] `json:"destination_conf" api:"required"`
 	// The system used to collect packet captures.
-	System param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFullSystem] `json:"system,required"`
+	System param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFullSystem] `json:"system" api:"required"`
 	// The packet capture duration in seconds.
-	TimeLimit param.Field[float64] `json:"time_limit,required"`
+	TimeLimit param.Field[float64] `json:"time_limit" api:"required"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFullType] `json:"type,required"`
+	Type param.Field[PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestFullType] `json:"type" api:"required"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
 	ByteLimit param.Field[float64] `json:"byte_limit"`
@@ -1312,11 +1312,11 @@ func (r PCAPNewParamsBodyType) IsKnown() bool {
 }
 
 type PCAPNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PCAPNewResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   PCAPNewResponse       `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PCAPNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PCAPNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    pcapNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1356,20 +1356,20 @@ func (r PCAPNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PCAPListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PCAPGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PCAPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PCAPGetResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   PCAPGetResponse       `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PCAPGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PCAPGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    pcapGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1409,5 +1409,5 @@ func (r PCAPGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type PCAPStopParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

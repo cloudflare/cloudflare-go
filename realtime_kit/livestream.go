@@ -45,15 +45,15 @@ func (r *LivestreamService) NewIndependentLivestream(ctx context.Context, appID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/livestreams", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of all active livestreams for the given livestream ID. Retreive
@@ -62,19 +62,19 @@ func (r *LivestreamService) GetActiveLivestreamsForLivestreamID(ctx context.Cont
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if livestreamID == "" {
 		err = errors.New("missing required livestream_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/livestreams/%s/active-livestream-session", query.AccountID, appID, livestreamID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of livestreams associated with the given App ID. It includes
@@ -85,15 +85,15 @@ func (r *LivestreamService) GetAllLivestreams(ctx context.Context, appID string,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/livestreams", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns livestream analytics for the specified time range.
@@ -101,15 +101,15 @@ func (r *LivestreamService) GetLivestreamAnalyticsComplete(ctx context.Context, 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/analytics/livestreams/overall", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns livestream session details for the given livestream session ID. Retrieve
@@ -119,19 +119,19 @@ func (r *LivestreamService) GetLivestreamSessionDetailsForSessionID(ctx context.
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if livestreamSessionID == "" {
 		err = errors.New("missing required livestream-session-id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/livestreams/sessions/%s", query.AccountID, appID, livestreamSessionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of a livestream with sessions for the given livestream ID.
@@ -140,19 +140,19 @@ func (r *LivestreamService) GetLivestreamSessionForLivestreamID(ctx context.Cont
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if livestreamID == "" {
 		err = errors.New("missing required livestream_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/livestreams/%s", params.AccountID, appID, livestreamID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns details of all active livestreams for the given meeting ID.
@@ -160,19 +160,19 @@ func (r *LivestreamService) GetMeetingActiveLivestreams(ctx context.Context, app
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-livestream", query.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Returns day-wise session and recording analytics data of an App for the
@@ -182,15 +182,15 @@ func (r *LivestreamService) GetOrgAnalytics(ctx context.Context, appID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/analytics/daywise", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Starts livestream of a meeting associated with the given meeting ID. Retreive
@@ -199,19 +199,19 @@ func (r *LivestreamService) StartLivestreamingAMeeting(ctx context.Context, appI
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/livestreams", params.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Stops the active livestream of a meeting associated with the given meeting ID.
@@ -220,19 +220,19 @@ func (r *LivestreamService) StopLivestreamingAMeeting(ctx context.Context, appID
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if meetingID == "" {
 		err = errors.New("missing required meeting_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-livestream/stop", body.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type LivestreamNewIndependentLivestreamResponse struct {
@@ -265,7 +265,7 @@ type LivestreamNewIndependentLivestreamResponseData struct {
 	Disabled bool `json:"disabled"`
 	// The server URL to which the RTMP encoder should send the video and audio data.
 	IngestServer string `json:"ingest_server"`
-	MeetingID    string `json:"meeting_id,nullable"`
+	MeetingID    string `json:"meeting_id" api:"nullable"`
 	Name         string `json:"name"`
 	// The web address that viewers can use to watch the livestream.
 	PlaybackURL string                                               `json:"playback_url"`
@@ -933,7 +933,7 @@ type LivestreamGetMeetingActiveLivestreamsResponseData struct {
 	IngestServer string `json:"ingest_server"`
 	MeetingID    string `json:"meeting_id"`
 	// Name of the livestream.
-	Name string `json:"name,nullable"`
+	Name string `json:"name" api:"nullable"`
 	// The web address that viewers can use to watch the livestream.
 	PlaybackURL string                                                  `json:"playback_url"`
 	Status      LivestreamGetMeetingActiveLivestreamsResponseDataStatus `json:"status"`
@@ -1267,7 +1267,7 @@ func (r livestreamStopLivestreamingAMeetingResponseDataJSON) RawJSON() string {
 
 type LivestreamNewIndependentLivestreamParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the livestream
 	Name param.Field[string] `json:"name"`
 }
@@ -1278,12 +1278,12 @@ func (r LivestreamNewIndependentLivestreamParams) MarshalJSON() (data []byte, er
 
 type LivestreamGetActiveLivestreamsForLivestreamIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LivestreamGetAllLivestreamsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the end time range in ISO format to access the live stream.
 	EndTime param.Field[time.Time] `query:"end_time" format:"date-time"`
 	// Exclude the RealtimeKit meetings that are livestreamed.
@@ -1345,7 +1345,7 @@ func (r LivestreamGetAllLivestreamsParamsStatus) IsKnown() bool {
 
 type LivestreamGetLivestreamAnalyticsCompleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the end time range in ISO format to access the livestream analytics.
 	EndTime param.Field[time.Time] `query:"end_time" format:"date-time"`
 	// Specify the start time range in ISO format to access the livestream analytics.
@@ -1363,12 +1363,12 @@ func (r LivestreamGetLivestreamAnalyticsCompleteParams) URLQuery() (v url.Values
 
 type LivestreamGetLivestreamSessionDetailsForSessionIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LivestreamGetLivestreamSessionForLivestreamIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The page number from which you want your page search results to be displayed.
 	PageNo param.Field[int64] `query:"page_no"`
 	// Number of results per page.
@@ -1386,12 +1386,12 @@ func (r LivestreamGetLivestreamSessionForLivestreamIDParams) URLQuery() (v url.V
 
 type LivestreamGetMeetingActiveLivestreamsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LivestreamGetOrgAnalyticsParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// end date in YYYY-MM-DD format
 	EndDate param.Field[string] `query:"end_date"`
 	// start date in YYYY-MM-DD format
@@ -1409,7 +1409,7 @@ func (r LivestreamGetOrgAnalyticsParams) URLQuery() (v url.Values) {
 
 type LivestreamStartLivestreamingAMeetingParams struct {
 	// The account identifier tag.
-	AccountID   param.Field[string]                                                `path:"account_id,required"`
+	AccountID   param.Field[string]                                                `path:"account_id" api:"required"`
 	Name        param.Field[string]                                                `json:"name"`
 	VideoConfig param.Field[LivestreamStartLivestreamingAMeetingParamsVideoConfig] `json:"video_config"`
 }
@@ -1431,5 +1431,5 @@ func (r LivestreamStartLivestreamingAMeetingParamsVideoConfig) MarshalJSON() (da
 
 type LivestreamStopLivestreamingAMeetingParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

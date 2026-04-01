@@ -40,19 +40,19 @@ func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/subdomain", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disable all workers.dev subdomains for a Worker.
@@ -61,19 +61,19 @@ func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, 
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/subdomain", body.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get if the Worker is available on the workers.dev subdomain.
@@ -82,26 +82,26 @@ func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, que
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/subdomain", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ScriptSubdomainNewResponse struct {
 	// Whether the Worker is available on the workers.dev subdomain.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether the Worker's Preview URLs are available on the workers.dev subdomain.
-	PreviewsEnabled bool                           `json:"previews_enabled,required"`
+	PreviewsEnabled bool                           `json:"previews_enabled" api:"required"`
 	JSON            scriptSubdomainNewResponseJSON `json:"-"`
 }
 
@@ -124,9 +124,9 @@ func (r scriptSubdomainNewResponseJSON) RawJSON() string {
 
 type ScriptSubdomainDeleteResponse struct {
 	// Whether the Worker is available on the workers.dev subdomain.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether the Worker's Preview URLs are available on the workers.dev subdomain.
-	PreviewsEnabled bool                              `json:"previews_enabled,required"`
+	PreviewsEnabled bool                              `json:"previews_enabled" api:"required"`
 	JSON            scriptSubdomainDeleteResponseJSON `json:"-"`
 }
 
@@ -149,9 +149,9 @@ func (r scriptSubdomainDeleteResponseJSON) RawJSON() string {
 
 type ScriptSubdomainGetResponse struct {
 	// Whether the Worker is available on the workers.dev subdomain.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Whether the Worker's Preview URLs are available on the workers.dev subdomain.
-	PreviewsEnabled bool                           `json:"previews_enabled,required"`
+	PreviewsEnabled bool                           `json:"previews_enabled" api:"required"`
 	JSON            scriptSubdomainGetResponseJSON `json:"-"`
 }
 
@@ -174,9 +174,9 @@ func (r scriptSubdomainGetResponseJSON) RawJSON() string {
 
 type ScriptSubdomainNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether the Worker should be available on the workers.dev subdomain.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Whether the Worker's Preview URLs should be available on the workers.dev
 	// subdomain.
 	PreviewsEnabled param.Field[bool] `json:"previews_enabled"`
@@ -187,11 +187,11 @@ func (r ScriptSubdomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptSubdomainNewResponseEnvelope struct {
-	Errors   []ScriptSubdomainNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSubdomainNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptSubdomainNewResponse                   `json:"result,required"`
+	Errors   []ScriptSubdomainNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSubdomainNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptSubdomainNewResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSubdomainNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptSubdomainNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptSubdomainNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -215,8 +215,8 @@ func (r scriptSubdomainNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSubdomainNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ScriptSubdomainNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSubdomainNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -263,8 +263,8 @@ func (r scriptSubdomainNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSubdomainNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ScriptSubdomainNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSubdomainNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -327,15 +327,15 @@ func (r ScriptSubdomainNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSubdomainDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptSubdomainDeleteResponseEnvelope struct {
-	Errors   []ScriptSubdomainDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSubdomainDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptSubdomainDeleteResponse                   `json:"result,required"`
+	Errors   []ScriptSubdomainDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSubdomainDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptSubdomainDeleteResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSubdomainDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptSubdomainDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptSubdomainDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -359,8 +359,8 @@ func (r scriptSubdomainDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSubdomainDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ScriptSubdomainDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSubdomainDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -407,8 +407,8 @@ func (r scriptSubdomainDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type ScriptSubdomainDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           ScriptSubdomainDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSubdomainDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -471,15 +471,15 @@ func (r ScriptSubdomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSubdomainGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptSubdomainGetResponseEnvelope struct {
-	Errors   []ScriptSubdomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptSubdomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptSubdomainGetResponse                   `json:"result,required"`
+	Errors   []ScriptSubdomainGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSubdomainGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptSubdomainGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptSubdomainGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptSubdomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptSubdomainGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -503,8 +503,8 @@ func (r scriptSubdomainGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptSubdomainGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           ScriptSubdomainGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptSubdomainGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -551,8 +551,8 @@ func (r scriptSubdomainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptSubdomainGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ScriptSubdomainGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptSubdomainGetResponseEnvelopeMessagesJSON   `json:"-"`

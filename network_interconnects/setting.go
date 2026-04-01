@@ -39,11 +39,11 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cni/settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Get the current settings for the active account
@@ -51,15 +51,15 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cni/settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type SettingUpdateResponse struct {
-	DefaultASN int64                     `json:"default_asn,required"`
+	DefaultASN int64                     `json:"default_asn" api:"required"`
 	JSON       settingUpdateResponseJSON `json:"-"`
 }
 
@@ -80,7 +80,7 @@ func (r settingUpdateResponseJSON) RawJSON() string {
 }
 
 type SettingGetResponse struct {
-	DefaultASN int64                  `json:"default_asn,required"`
+	DefaultASN int64                  `json:"default_asn" api:"required"`
 	JSON       settingGetResponseJSON `json:"-"`
 }
 
@@ -101,7 +101,7 @@ func (r settingGetResponseJSON) RawJSON() string {
 }
 
 type SettingUpdateParams struct {
-	AccountID  param.Field[string] `path:"account_id,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	DefaultASN param.Field[int64]  `json:"default_asn"`
 }
 
@@ -110,5 +110,5 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

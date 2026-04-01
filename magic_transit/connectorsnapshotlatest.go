@@ -40,24 +40,24 @@ func (r *ConnectorSnapshotLatestService) List(ctx context.Context, connectorID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/connectors/%s/telemetry/snapshots/latest", query.AccountID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConnectorSnapshotLatestListResponse struct {
-	Count float64                                   `json:"count,required"`
-	Items []ConnectorSnapshotLatestListResponseItem `json:"items,required"`
+	Count float64                                   `json:"count" api:"required"`
+	Items []ConnectorSnapshotLatestListResponseItem `json:"items" api:"required"`
 	JSON  connectorSnapshotLatestListResponseJSON   `json:"-"`
 }
 
@@ -81,17 +81,17 @@ func (r connectorSnapshotLatestListResponseJSON) RawJSON() string {
 // Snapshot
 type ConnectorSnapshotLatestListResponseItem struct {
 	// Count of failures to reclaim space
-	CountReclaimFailures float64 `json:"count_reclaim_failures,required"`
+	CountReclaimFailures float64 `json:"count_reclaim_failures" api:"required"`
 	// Count of reclaimed paths
-	CountReclaimedPaths float64 `json:"count_reclaimed_paths,required"`
+	CountReclaimedPaths float64 `json:"count_reclaimed_paths" api:"required"`
 	// Count of failed snapshot recordings
-	CountRecordFailed float64 `json:"count_record_failed,required"`
+	CountRecordFailed float64 `json:"count_record_failed" api:"required"`
 	// Count of failed snapshot transmissions
-	CountTransmitFailures float64 `json:"count_transmit_failures,required"`
+	CountTransmitFailures float64 `json:"count_transmit_failures" api:"required"`
 	// Time the Snapshot was recorded (seconds since the Unix epoch)
-	T float64 `json:"t,required"`
+	T float64 `json:"t" api:"required"`
 	// Version
-	V     string                                         `json:"v,required"`
+	V     string                                         `json:"v" api:"required"`
 	Bonds []ConnectorSnapshotLatestListResponseItemsBond `json:"bonds"`
 	// Count of processors/cores
 	CPUCount float64 `json:"cpu_count"`
@@ -122,9 +122,13 @@ type ConnectorSnapshotLatestListResponseItem struct {
 	// Time spent in system mode (milliseconds)
 	CPUTimeSystemMs float64 `json:"cpu_time_system_ms"`
 	// Time spent in user mode (milliseconds)
-	CPUTimeUserMs float64                                             `json:"cpu_time_user_ms"`
-	DHCPLeases    []ConnectorSnapshotLatestListResponseItemsDHCPLease `json:"dhcp_leases"`
-	Disks         []ConnectorSnapshotLatestListResponseItemsDisk      `json:"disks"`
+	CPUTimeUserMs float64 `json:"cpu_time_user_ms"`
+	// Number of network operations applied during state transition
+	Delta      float64                                             `json:"delta"`
+	DHCPLeases []ConnectorSnapshotLatestListResponseItemsDHCPLease `json:"dhcp_leases"`
+	Disks      []ConnectorSnapshotLatestListResponseItemsDisk      `json:"disks"`
+	// Simulated number of network operations applied during state transition
+	Epsilon float64 `json:"epsilon"`
 	// Name of high availability state
 	HaState string `json:"ha_state"`
 	// Numeric value associated with high availability state (0 = disabled, 1 = active,
@@ -278,6 +282,8 @@ type ConnectorSnapshotLatestListResponseItem struct {
 	MemoryZSwappedBytes float64                                          `json:"memory_z_swapped_bytes"`
 	Mounts              []ConnectorSnapshotLatestListResponseItemsMount  `json:"mounts"`
 	Netdevs             []ConnectorSnapshotLatestListResponseItemsNetdev `json:"netdevs"`
+	// Platform identifier
+	Platform string `json:"platform"`
 	// Number of ICMP Address Mask Reply messages received
 	SnmpIcmpInAddrMaskReps float64 `json:"snmp_icmp_in_addr_mask_reps"`
 	// Number of ICMP Address Mask Request messages received
@@ -448,8 +454,10 @@ type connectorSnapshotLatestListResponseItemJSON struct {
 	CPUTimeStealMs                 apijson.Field
 	CPUTimeSystemMs                apijson.Field
 	CPUTimeUserMs                  apijson.Field
+	Delta                          apijson.Field
 	DHCPLeases                     apijson.Field
 	Disks                          apijson.Field
+	Epsilon                        apijson.Field
 	HaState                        apijson.Field
 	HaValue                        apijson.Field
 	Interfaces                     apijson.Field
@@ -527,6 +535,7 @@ type connectorSnapshotLatestListResponseItemJSON struct {
 	MemoryZSwappedBytes            apijson.Field
 	Mounts                         apijson.Field
 	Netdevs                        apijson.Field
+	Platform                       apijson.Field
 	SnmpIcmpInAddrMaskReps         apijson.Field
 	SnmpIcmpInAddrMasks            apijson.Field
 	SnmpIcmpInCsumErrors           apijson.Field
@@ -611,9 +620,9 @@ func (r connectorSnapshotLatestListResponseItemJSON) RawJSON() string {
 // Snapshot Bond
 type ConnectorSnapshotLatestListResponseItemsBond struct {
 	// Name of the network interface
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Current status of the network interface
-	Status string                                           `json:"status,required"`
+	Status string                                           `json:"status" api:"required"`
 	JSON   connectorSnapshotLatestListResponseItemsBondJSON `json:"-"`
 }
 
@@ -637,20 +646,18 @@ func (r connectorSnapshotLatestListResponseItemsBondJSON) RawJSON() string {
 // Snapshot DHCP lease
 type ConnectorSnapshotLatestListResponseItemsDHCPLease struct {
 	// Client ID of the device the IP Address was leased to
-	ClientID string `json:"client_id,required"`
+	ClientID string `json:"client_id" api:"required"`
 	// Expiry time of the DHCP lease (seconds since the Unix epoch)
-	ExpiryTime float64 `json:"expiry_time,required"`
+	ExpiryTime float64 `json:"expiry_time" api:"required"`
 	// Hostname of the device the IP Address was leased to
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Name of the network interface
-	InterfaceName string `json:"interface_name,required"`
+	InterfaceName string `json:"interface_name" api:"required"`
 	// IP Address that was leased
-	IPAddress string `json:"ip_address,required"`
+	IPAddress string `json:"ip_address" api:"required"`
 	// MAC Address of the device the IP Address was leased to
-	MacAddress string `json:"mac_address,required"`
-	// Connector identifier
-	ConnectorID string                                                `json:"connector_id"`
-	JSON        connectorSnapshotLatestListResponseItemsDHCPLeaseJSON `json:"-"`
+	MacAddress string                                                `json:"mac_address" api:"required"`
+	JSON       connectorSnapshotLatestListResponseItemsDHCPLeaseJSON `json:"-"`
 }
 
 // connectorSnapshotLatestListResponseItemsDHCPLeaseJSON contains the JSON metadata
@@ -662,7 +669,6 @@ type connectorSnapshotLatestListResponseItemsDHCPLeaseJSON struct {
 	InterfaceName apijson.Field
 	IPAddress     apijson.Field
 	MacAddress    apijson.Field
-	ConnectorID   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -678,35 +684,33 @@ func (r connectorSnapshotLatestListResponseItemsDHCPLeaseJSON) RawJSON() string 
 // Snapshot Disk
 type ConnectorSnapshotLatestListResponseItemsDisk struct {
 	// I/Os currently in progress
-	InProgress float64 `json:"in_progress,required"`
+	InProgress float64 `json:"in_progress" api:"required"`
 	// Device major number
-	Major float64 `json:"major,required"`
+	Major float64 `json:"major" api:"required"`
 	// Reads merged
-	Merged float64 `json:"merged,required"`
+	Merged float64 `json:"merged" api:"required"`
 	// Device minor number
-	Minor float64 `json:"minor,required"`
+	Minor float64 `json:"minor" api:"required"`
 	// Device name
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Reads completed successfully
-	Reads float64 `json:"reads,required"`
+	Reads float64 `json:"reads" api:"required"`
 	// Sectors read successfully
-	SectorsRead float64 `json:"sectors_read,required"`
+	SectorsRead float64 `json:"sectors_read" api:"required"`
 	// Sectors written successfully
-	SectorsWritten float64 `json:"sectors_written,required"`
+	SectorsWritten float64 `json:"sectors_written" api:"required"`
 	// Time spent doing I/Os (milliseconds)
-	TimeInProgressMs float64 `json:"time_in_progress_ms,required"`
+	TimeInProgressMs float64 `json:"time_in_progress_ms" api:"required"`
 	// Time spent reading (milliseconds)
-	TimeReadingMs float64 `json:"time_reading_ms,required"`
+	TimeReadingMs float64 `json:"time_reading_ms" api:"required"`
 	// Time spent writing (milliseconds)
-	TimeWritingMs float64 `json:"time_writing_ms,required"`
+	TimeWritingMs float64 `json:"time_writing_ms" api:"required"`
 	// Weighted time spent doing I/Os (milliseconds)
-	WeightedTimeInProgressMs float64 `json:"weighted_time_in_progress_ms,required"`
+	WeightedTimeInProgressMs float64 `json:"weighted_time_in_progress_ms" api:"required"`
 	// Writes completed
-	Writes float64 `json:"writes,required"`
+	Writes float64 `json:"writes" api:"required"`
 	// Writes merged
-	WritesMerged float64 `json:"writes_merged,required"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
+	WritesMerged float64 `json:"writes_merged" api:"required"`
 	// Discards completed successfully
 	Discards float64 `json:"discards"`
 	// Discards merged
@@ -739,7 +743,6 @@ type connectorSnapshotLatestListResponseItemsDiskJSON struct {
 	WeightedTimeInProgressMs apijson.Field
 	Writes                   apijson.Field
 	WritesMerged             apijson.Field
-	ConnectorID              apijson.Field
 	Discards                 apijson.Field
 	DiscardsMerged           apijson.Field
 	Flushes                  apijson.Field
@@ -761,11 +764,9 @@ func (r connectorSnapshotLatestListResponseItemsDiskJSON) RawJSON() string {
 // Snapshot Interface
 type ConnectorSnapshotLatestListResponseItemsInterface struct {
 	// Name of the network interface
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// UP/DOWN state of the network interface
-	Operstate string `json:"operstate,required"`
-	// Connector identifier
-	ConnectorID string                                                        `json:"connector_id"`
+	Operstate   string                                                        `json:"operstate" api:"required"`
 	IPAddresses []ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress `json:"ip_addresses"`
 	// Speed of the network interface (bits per second)
 	Speed float64                                               `json:"speed"`
@@ -777,7 +778,6 @@ type ConnectorSnapshotLatestListResponseItemsInterface struct {
 type connectorSnapshotLatestListResponseItemsInterfaceJSON struct {
 	Name        apijson.Field
 	Operstate   apijson.Field
-	ConnectorID apijson.Field
 	IPAddresses apijson.Field
 	Speed       apijson.Field
 	raw         string
@@ -795,12 +795,10 @@ func (r connectorSnapshotLatestListResponseItemsInterfaceJSON) RawJSON() string 
 // Snapshot Interface Address
 type ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress struct {
 	// Name of the network interface
-	InterfaceName string `json:"interface_name,required"`
+	InterfaceName string `json:"interface_name" api:"required"`
 	// IP address of the network interface
-	IPAddress string `json:"ip_address,required"`
-	// Connector identifier
-	ConnectorID string                                                          `json:"connector_id"`
-	JSON        connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON `json:"-"`
+	IPAddress string                                                          `json:"ip_address" api:"required"`
+	JSON      connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON `json:"-"`
 }
 
 // connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON contains the
@@ -809,7 +807,6 @@ type ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress struct {
 type connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON struct {
 	InterfaceName apijson.Field
 	IPAddress     apijson.Field
-	ConnectorID   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -825,17 +822,15 @@ func (r connectorSnapshotLatestListResponseItemsInterfacesIPAddressJSON) RawJSON
 // Snapshot Mount
 type ConnectorSnapshotLatestListResponseItemsMount struct {
 	// File system on disk (EXT4, NTFS, etc.)
-	FileSystem string `json:"file_system,required"`
+	FileSystem string `json:"file_system" api:"required"`
 	// Kind of disk (HDD, SSD, etc.)
-	Kind string `json:"kind,required"`
+	Kind string `json:"kind" api:"required"`
 	// Path where disk is mounted
-	MountPoint string `json:"mount_point,required"`
+	MountPoint string `json:"mount_point" api:"required"`
 	// Name of the disk mount
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Available disk size (bytes)
 	AvailableBytes float64 `json:"available_bytes"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
 	// Determines whether the disk is read-only
 	IsReadOnly bool `json:"is_read_only"`
 	// Determines whether the disk is removable
@@ -853,7 +848,6 @@ type connectorSnapshotLatestListResponseItemsMountJSON struct {
 	MountPoint     apijson.Field
 	Name           apijson.Field
 	AvailableBytes apijson.Field
-	ConnectorID    apijson.Field
 	IsReadOnly     apijson.Field
 	IsRemovable    apijson.Field
 	TotalBytes     apijson.Field
@@ -872,41 +866,39 @@ func (r connectorSnapshotLatestListResponseItemsMountJSON) RawJSON() string {
 // Snapshot Netdev
 type ConnectorSnapshotLatestListResponseItemsNetdev struct {
 	// Name of the network device
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Total bytes received
-	RecvBytes float64 `json:"recv_bytes,required"`
+	RecvBytes float64 `json:"recv_bytes" api:"required"`
 	// Compressed packets received
-	RecvCompressed float64 `json:"recv_compressed,required"`
+	RecvCompressed float64 `json:"recv_compressed" api:"required"`
 	// Packets dropped
-	RecvDrop float64 `json:"recv_drop,required"`
+	RecvDrop float64 `json:"recv_drop" api:"required"`
 	// Bad packets received
-	RecvErrs float64 `json:"recv_errs,required"`
+	RecvErrs float64 `json:"recv_errs" api:"required"`
 	// FIFO overruns
-	RecvFifo float64 `json:"recv_fifo,required"`
+	RecvFifo float64 `json:"recv_fifo" api:"required"`
 	// Frame alignment errors
-	RecvFrame float64 `json:"recv_frame,required"`
+	RecvFrame float64 `json:"recv_frame" api:"required"`
 	// Multicast packets received
-	RecvMulticast float64 `json:"recv_multicast,required"`
+	RecvMulticast float64 `json:"recv_multicast" api:"required"`
 	// Total packets received
-	RecvPackets float64 `json:"recv_packets,required"`
+	RecvPackets float64 `json:"recv_packets" api:"required"`
 	// Total bytes transmitted
-	SentBytes float64 `json:"sent_bytes,required"`
+	SentBytes float64 `json:"sent_bytes" api:"required"`
 	// Number of packets not sent due to carrier errors
-	SentCarrier float64 `json:"sent_carrier,required"`
+	SentCarrier float64 `json:"sent_carrier" api:"required"`
 	// Number of collisions
-	SentColls float64 `json:"sent_colls,required"`
+	SentColls float64 `json:"sent_colls" api:"required"`
 	// Number of compressed packets transmitted
-	SentCompressed float64 `json:"sent_compressed,required"`
+	SentCompressed float64 `json:"sent_compressed" api:"required"`
 	// Number of packets dropped during transmission
-	SentDrop float64 `json:"sent_drop,required"`
+	SentDrop float64 `json:"sent_drop" api:"required"`
 	// Number of transmission errors
-	SentErrs float64 `json:"sent_errs,required"`
+	SentErrs float64 `json:"sent_errs" api:"required"`
 	// FIFO overruns
-	SentFifo float64 `json:"sent_fifo,required"`
+	SentFifo float64 `json:"sent_fifo" api:"required"`
 	// Total packets transmitted
-	SentPackets float64 `json:"sent_packets,required"`
-	// Connector identifier
-	ConnectorID string                                             `json:"connector_id"`
+	SentPackets float64                                            `json:"sent_packets" api:"required"`
 	JSON        connectorSnapshotLatestListResponseItemsNetdevJSON `json:"-"`
 }
 
@@ -930,7 +922,6 @@ type connectorSnapshotLatestListResponseItemsNetdevJSON struct {
 	SentErrs       apijson.Field
 	SentFifo       apijson.Field
 	SentPackets    apijson.Field
-	ConnectorID    apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -946,9 +937,7 @@ func (r connectorSnapshotLatestListResponseItemsNetdevJSON) RawJSON() string {
 // Snapshot Thermal
 type ConnectorSnapshotLatestListResponseItemsThermal struct {
 	// Sensor identifier for the component
-	Label string `json:"label,required"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
+	Label string `json:"label" api:"required"`
 	// Critical failure temperature of the component (degrees Celsius)
 	CriticalCelcius float64 `json:"critical_celcius"`
 	// Current temperature of the component (degrees Celsius)
@@ -962,7 +951,6 @@ type ConnectorSnapshotLatestListResponseItemsThermal struct {
 // for the struct [ConnectorSnapshotLatestListResponseItemsThermal]
 type connectorSnapshotLatestListResponseItemsThermalJSON struct {
 	Label           apijson.Field
-	ConnectorID     apijson.Field
 	CriticalCelcius apijson.Field
 	CurrentCelcius  apijson.Field
 	MaxCelcius      apijson.Field
@@ -981,16 +969,14 @@ func (r connectorSnapshotLatestListResponseItemsThermalJSON) RawJSON() string {
 // Snapshot Tunnels
 type ConnectorSnapshotLatestListResponseItemsTunnel struct {
 	// Name of tunnel health state (unknown, healthy, degraded, down)
-	HealthState string `json:"health_state,required"`
+	HealthState string `json:"health_state" api:"required"`
 	// Numeric value associated with tunnel state (0 = unknown, 1 = healthy, 2 =
 	// degraded, 3 = down)
-	HealthValue float64 `json:"health_value,required"`
+	HealthValue float64 `json:"health_value" api:"required"`
 	// The tunnel interface name (i.e. xfrm1, xfrm3.99, etc.)
-	InterfaceName string `json:"interface_name,required"`
+	InterfaceName string `json:"interface_name" api:"required"`
 	// Tunnel identifier
-	TunnelID string `json:"tunnel_id,required"`
-	// Connector identifier
-	ConnectorID string `json:"connector_id"`
+	TunnelID string `json:"tunnel_id" api:"required"`
 	// MTU as measured between the two ends of the tunnel
 	ProbedMtu float64 `json:"probed_mtu"`
 	// Number of recent healthy pings for this tunnel
@@ -1007,7 +993,6 @@ type connectorSnapshotLatestListResponseItemsTunnelJSON struct {
 	HealthValue          apijson.Field
 	InterfaceName        apijson.Field
 	TunnelID             apijson.Field
-	ConnectorID          apijson.Field
 	ProbedMtu            apijson.Field
 	RecentHealthyPings   apijson.Field
 	RecentUnhealthyPings apijson.Field
@@ -1025,12 +1010,12 @@ func (r connectorSnapshotLatestListResponseItemsTunnelJSON) RawJSON() string {
 
 type ConnectorSnapshotLatestListParams struct {
 	// Account identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConnectorSnapshotLatestListResponseEnvelope struct {
-	Result   ConnectorSnapshotLatestListResponse                   `json:"result,required"`
-	Success  bool                                                  `json:"success,required"`
+	Result   ConnectorSnapshotLatestListResponse                   `json:"result" api:"required"`
+	Success  bool                                                  `json:"success" api:"required"`
 	Errors   []ConnectorSnapshotLatestListResponseEnvelopeErrors   `json:"errors"`
 	Messages []ConnectorSnapshotLatestListResponseEnvelopeMessages `json:"messages"`
 	JSON     connectorSnapshotLatestListResponseEnvelopeJSON       `json:"-"`
@@ -1056,8 +1041,8 @@ func (r connectorSnapshotLatestListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConnectorSnapshotLatestListResponseEnvelopeErrors struct {
-	Code    float64                                               `json:"code,required"`
-	Message string                                                `json:"message,required"`
+	Code    float64                                               `json:"code" api:"required"`
+	Message string                                                `json:"message" api:"required"`
 	JSON    connectorSnapshotLatestListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -1079,8 +1064,8 @@ func (r connectorSnapshotLatestListResponseEnvelopeErrorsJSON) RawJSON() string 
 }
 
 type ConnectorSnapshotLatestListResponseEnvelopeMessages struct {
-	Code    float64                                                 `json:"code,required"`
-	Message string                                                  `json:"message,required"`
+	Code    float64                                                 `json:"code" api:"required"`
+	Message string                                                  `json:"message" api:"required"`
 	JSON    connectorSnapshotLatestListResponseEnvelopeMessagesJSON `json:"-"`
 }
 

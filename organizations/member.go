@@ -46,15 +46,15 @@ func (r *MemberService) New(ctx context.Context, organizationID string, body Mem
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s/members", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List memberships for an Organization. (Currently in Closed Beta - see
@@ -65,7 +65,7 @@ func (r *MemberService) List(ctx context.Context, organizationID string, query M
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s/members", organizationID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -93,15 +93,15 @@ func (r *MemberService) Delete(ctx context.Context, organizationID string, membe
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return err
 	}
 	if memberID == "" {
 		err = errors.New("missing required member_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("organizations/%s/members/%s", organizationID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Retrieve a single membership from an Organization. (Currently in Closed Beta -
@@ -111,29 +111,29 @@ func (r *MemberService) Get(ctx context.Context, organizationID string, memberID
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	if memberID == "" {
 		err = errors.New("missing required member_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s/members/%s", organizationID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OrganizationMember struct {
 	// Organization Member ID
-	ID         string                   `json:"id,required"`
-	CreateTime time.Time                `json:"create_time,required" format:"date-time"`
-	Meta       map[string]interface{}   `json:"meta,required"`
-	Status     OrganizationMemberStatus `json:"status,required"`
-	UpdateTime time.Time                `json:"update_time,required" format:"date-time"`
-	User       OrganizationMemberUser   `json:"user,required"`
+	ID         string                   `json:"id" api:"required"`
+	CreateTime time.Time                `json:"create_time" api:"required" format:"date-time"`
+	Meta       map[string]interface{}   `json:"meta" api:"required"`
+	Status     OrganizationMemberStatus `json:"status" api:"required"`
+	UpdateTime time.Time                `json:"update_time" api:"required" format:"date-time"`
+	User       OrganizationMemberUser   `json:"user" api:"required"`
 	JSON       organizationMemberJSON   `json:"-"`
 }
 
@@ -174,10 +174,10 @@ func (r OrganizationMemberStatus) IsKnown() bool {
 }
 
 type OrganizationMemberUser struct {
-	ID                             string                     `json:"id,required"`
-	Email                          string                     `json:"email,required"`
-	Name                           string                     `json:"name,required"`
-	TwoFactorAuthenticationEnabled bool                       `json:"two_factor_authentication_enabled,required"`
+	ID                             string                     `json:"id" api:"required"`
+	Email                          string                     `json:"email" api:"required"`
+	Name                           string                     `json:"name" api:"required"`
+	TwoFactorAuthenticationEnabled bool                       `json:"two_factor_authentication_enabled" api:"required"`
 	JSON                           organizationMemberUserJSON `json:"-"`
 }
 
@@ -201,7 +201,7 @@ func (r organizationMemberUserJSON) RawJSON() string {
 }
 
 type MemberNewParams struct {
-	Member param.Field[MemberNewParamsMember] `json:"member,required"`
+	Member param.Field[MemberNewParamsMember] `json:"member" api:"required"`
 }
 
 func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
@@ -209,7 +209,7 @@ func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MemberNewParamsMember struct {
-	User   param.Field[MemberNewParamsMemberUser]   `json:"user,required"`
+	User   param.Field[MemberNewParamsMemberUser]   `json:"user" api:"required"`
 	Status param.Field[MemberNewParamsMemberStatus] `json:"status"`
 }
 
@@ -218,7 +218,7 @@ func (r MemberNewParamsMember) MarshalJSON() (data []byte, err error) {
 }
 
 type MemberNewParamsMemberUser struct {
-	Email param.Field[string] `json:"email,required"`
+	Email param.Field[string] `json:"email" api:"required"`
 }
 
 func (r MemberNewParamsMemberUser) MarshalJSON() (data []byte, err error) {
@@ -241,10 +241,10 @@ func (r MemberNewParamsMemberStatus) IsKnown() bool {
 }
 
 type MemberNewResponseEnvelope struct {
-	Errors   []interface{}                    `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   OrganizationMember               `json:"result,required"`
-	Success  MemberNewResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []interface{}                    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo            `json:"messages" api:"required"`
+	Result   OrganizationMember               `json:"result" api:"required"`
+	Success  MemberNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON     memberNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -332,10 +332,10 @@ func (r MemberListParamsUser) URLQuery() (v url.Values) {
 }
 
 type MemberGetResponseEnvelope struct {
-	Errors   []interface{}                    `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   OrganizationMember               `json:"result,required"`
-	Success  MemberGetResponseEnvelopeSuccess `json:"success,required"`
+	Errors   []interface{}                    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo            `json:"messages" api:"required"`
+	Result   OrganizationMember               `json:"result" api:"required"`
+	Success  MemberGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON     memberGetResponseEnvelopeJSON    `json:"-"`
 }
 

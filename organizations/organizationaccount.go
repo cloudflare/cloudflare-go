@@ -46,23 +46,23 @@ func (r *OrganizationAccountService) Get(ctx context.Context, organizationID str
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s/accounts", organizationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type OrganizationAccountGetResponse struct {
-	ID        string                                 `json:"id,required"`
-	CreatedOn time.Time                              `json:"created_on,required" format:"date-time"`
-	Name      string                                 `json:"name,required,nullable"`
-	Settings  OrganizationAccountGetResponseSettings `json:"settings,required"`
-	Type      OrganizationAccountGetResponseType     `json:"type,required"`
+	ID        string                                 `json:"id" api:"required"`
+	CreatedOn time.Time                              `json:"created_on" api:"required" format:"date-time"`
+	Name      string                                 `json:"name" api:"required,nullable"`
+	Settings  OrganizationAccountGetResponseSettings `json:"settings" api:"required"`
+	Type      OrganizationAccountGetResponseType     `json:"type" api:"required"`
 	JSON      organizationAccountGetResponseJSON     `json:"-"`
 }
 
@@ -87,22 +87,22 @@ func (r organizationAccountGetResponseJSON) RawJSON() string {
 }
 
 type OrganizationAccountGetResponseSettings struct {
-	AbuseContactEmail    string    `json:"abuse_contact_email,required,nullable"`
-	AccessApprovalExpiry time.Time `json:"access_approval_expiry,required,nullable" format:"date-time"`
-	APIAccessEnabled     bool      `json:"api_access_enabled,required,nullable"`
+	AbuseContactEmail    string    `json:"abuse_contact_email" api:"required,nullable"`
+	AccessApprovalExpiry time.Time `json:"access_approval_expiry" api:"required,nullable" format:"date-time"`
+	APIAccessEnabled     bool      `json:"api_access_enabled" api:"required,nullable"`
 	// Use
 	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-list-dns-settings)
 	// instead. Deprecated.
 	//
 	// Deprecated: deprecated
-	DefaultNameservers string `json:"default_nameservers,required,nullable"`
-	EnforceTwofactor   bool   `json:"enforce_twofactor,required,nullable"`
+	DefaultNameservers string `json:"default_nameservers" api:"required,nullable"`
+	EnforceTwofactor   bool   `json:"enforce_twofactor" api:"required,nullable"`
 	// Use
 	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-list-dns-settings)
 	// instead. Deprecated.
 	//
 	// Deprecated: deprecated
-	UseAccountCustomNSByDefault bool                                       `json:"use_account_custom_ns_by_default,required,nullable"`
+	UseAccountCustomNSByDefault bool                                       `json:"use_account_custom_ns_by_default" api:"required,nullable"`
 	JSON                        organizationAccountGetResponseSettingsJSON `json:"-"`
 }
 
@@ -246,11 +246,11 @@ func (r OrganizationAccountGetParamsOrderBy) IsKnown() bool {
 }
 
 type OrganizationAccountGetResponseEnvelope struct {
-	Errors     []interface{}                                    `json:"errors,required"`
-	Messages   []shared.ResponseInfo                            `json:"messages,required"`
-	Result     []OrganizationAccountGetResponse                 `json:"result,required"`
-	ResultInfo OrganizationAccountGetResponseEnvelopeResultInfo `json:"result_info,required"`
-	Success    OrganizationAccountGetResponseEnvelopeSuccess    `json:"success,required"`
+	Errors     []interface{}                                    `json:"errors" api:"required"`
+	Messages   []shared.ResponseInfo                            `json:"messages" api:"required"`
+	Result     []OrganizationAccountGetResponse                 `json:"result" api:"required"`
+	ResultInfo OrganizationAccountGetResponseEnvelopeResultInfo `json:"result_info" api:"required"`
+	Success    OrganizationAccountGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	JSON       organizationAccountGetResponseEnvelopeJSON       `json:"-"`
 }
 

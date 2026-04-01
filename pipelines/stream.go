@@ -46,15 +46,15 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update a Stream.
@@ -63,19 +63,19 @@ func (r *StreamService) Update(ctx context.Context, streamID string, params Stre
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if streamID == "" {
 		err = errors.New("missing required stream_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", params.AccountID, streamID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List/Filter Streams in Account.
@@ -85,7 +85,7 @@ func (r *StreamService) List(ctx context.Context, params StreamListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -111,15 +111,15 @@ func (r *StreamService) Delete(ctx context.Context, streamID string, params Stre
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if streamID == "" {
 		err = errors.New("missing required stream_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", params.AccountID, streamID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
-	return
+	return err
 }
 
 // Get Stream Details.
@@ -128,32 +128,32 @@ func (r *StreamService) Get(ctx context.Context, streamID string, query StreamGe
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if streamID == "" {
 		err = errors.New("missing required stream_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", query.AccountID, streamID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type StreamNewResponse struct {
 	// Indicates a unique identifier for this stream.
-	ID         string                `json:"id,required"`
-	CreatedAt  time.Time             `json:"created_at,required" format:"date-time"`
-	HTTP       StreamNewResponseHTTP `json:"http,required"`
-	ModifiedAt time.Time             `json:"modified_at,required" format:"date-time"`
+	ID         string                `json:"id" api:"required"`
+	CreatedAt  time.Time             `json:"created_at" api:"required" format:"date-time"`
+	HTTP       StreamNewResponseHTTP `json:"http" api:"required"`
+	ModifiedAt time.Time             `json:"modified_at" api:"required" format:"date-time"`
 	// Indicates the name of the Stream.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Indicates the current version of this stream.
-	Version       int64                          `json:"version,required"`
-	WorkerBinding StreamNewResponseWorkerBinding `json:"worker_binding,required"`
+	Version       int64                          `json:"version" api:"required"`
+	WorkerBinding StreamNewResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
 	Endpoint string                  `json:"endpoint" format:"uri"`
 	Format   StreamNewResponseFormat `json:"format"`
@@ -188,9 +188,9 @@ func (r streamNewResponseJSON) RawJSON() string {
 
 type StreamNewResponseHTTP struct {
 	// Indicates that authentication is required for the HTTP endpoint.
-	Authentication bool `json:"authentication,required"`
+	Authentication bool `json:"authentication" api:"required"`
 	// Indicates that the HTTP endpoint is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Specifies the CORS options for the HTTP endpoint.
 	CORS StreamNewResponseHTTPCORS `json:"cors"`
 	JSON streamNewResponseHTTPJSON `json:"-"`
@@ -238,7 +238,7 @@ func (r streamNewResponseHttpcorsJSON) RawJSON() string {
 
 type StreamNewResponseWorkerBinding struct {
 	// Indicates that the worker binding is enabled.
-	Enabled bool                               `json:"enabled,required"`
+	Enabled bool                               `json:"enabled" api:"required"`
 	JSON    streamNewResponseWorkerBindingJSON `json:"-"`
 }
 
@@ -259,10 +259,10 @@ func (r streamNewResponseWorkerBindingJSON) RawJSON() string {
 }
 
 type StreamNewResponseFormat struct {
-	Type            StreamNewResponseFormatType            `json:"type,required"`
+	Type            StreamNewResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamNewResponseFormatCompression     `json:"compression"`
 	DecimalEncoding StreamNewResponseFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                  `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                  `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat StreamNewResponseFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                   `json:"unstructured"`
 	JSON            streamNewResponseFormatJSON            `json:"-"`
@@ -328,7 +328,7 @@ func init() {
 }
 
 type StreamNewResponseFormatJson struct {
-	Type            StreamNewResponseFormatJsonType            `json:"type,required"`
+	Type            StreamNewResponseFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding StreamNewResponseFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat StreamNewResponseFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                       `json:"unstructured"`
@@ -402,9 +402,9 @@ func (r StreamNewResponseFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamNewResponseFormatParquet struct {
-	Type          StreamNewResponseFormatParquetType        `json:"type,required"`
+	Type          StreamNewResponseFormatParquetType        `json:"type" api:"required"`
 	Compression   StreamNewResponseFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                     `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                     `json:"row_group_bytes" api:"nullable"`
 	JSON          streamNewResponseFormatParquetJSON        `json:"-"`
 }
 
@@ -527,7 +527,7 @@ func (r StreamNewResponseFormatTimestampFormat) IsKnown() bool {
 type StreamNewResponseSchema struct {
 	Fields   []StreamNewResponseSchemaField `json:"fields"`
 	Format   StreamNewResponseSchemaFormat  `json:"format"`
-	Inferred bool                           `json:"inferred,nullable"`
+	Inferred bool                           `json:"inferred" api:"nullable"`
 	JSON     streamNewResponseSchemaJSON    `json:"-"`
 }
 
@@ -550,8 +550,8 @@ func (r streamNewResponseSchemaJSON) RawJSON() string {
 }
 
 type StreamNewResponseSchemaField struct {
-	Type        StreamNewResponseSchemaFieldsType `json:"type,required"`
-	MetadataKey string                            `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsType `json:"type" api:"required"`
+	MetadataKey string                            `json:"metadata_key" api:"nullable"`
 	Name        string                            `json:"name"`
 	Required    bool                              `json:"required"`
 	SqlName     string                            `json:"sql_name"`
@@ -672,8 +672,8 @@ func init() {
 }
 
 type StreamNewResponseSchemaFieldsInt32 struct {
-	Type        StreamNewResponseSchemaFieldsInt32Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsInt32Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -717,8 +717,8 @@ func (r StreamNewResponseSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsInt64 struct {
-	Type        StreamNewResponseSchemaFieldsInt64Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsInt64Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -762,8 +762,8 @@ func (r StreamNewResponseSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsFloat32 struct {
-	Type        StreamNewResponseSchemaFieldsFloat32Type `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsFloat32Type `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -807,8 +807,8 @@ func (r StreamNewResponseSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsFloat64 struct {
-	Type        StreamNewResponseSchemaFieldsFloat64Type `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsFloat64Type `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -852,8 +852,8 @@ func (r StreamNewResponseSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsBool struct {
-	Type        StreamNewResponseSchemaFieldsBoolType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsBoolType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -897,8 +897,8 @@ func (r StreamNewResponseSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsString struct {
-	Type        StreamNewResponseSchemaFieldsStringType `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsStringType `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -942,8 +942,8 @@ func (r StreamNewResponseSchemaFieldsStringType) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsBinary struct {
-	Type        StreamNewResponseSchemaFieldsBinaryType `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsBinaryType `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -987,8 +987,8 @@ func (r StreamNewResponseSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsTimestamp struct {
-	Type        StreamNewResponseSchemaFieldsTimestampType `json:"type,required"`
-	MetadataKey string                                     `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsTimestampType `json:"type" api:"required"`
+	MetadataKey string                                     `json:"metadata_key" api:"nullable"`
 	Name        string                                     `json:"name"`
 	Required    bool                                       `json:"required"`
 	SqlName     string                                     `json:"sql_name"`
@@ -1051,8 +1051,8 @@ func (r StreamNewResponseSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFieldsJson struct {
-	Type        StreamNewResponseSchemaFieldsJsonType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        StreamNewResponseSchemaFieldsJsonType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -1179,10 +1179,10 @@ func (r StreamNewResponseSchemaFieldsUnit) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFormat struct {
-	Type            StreamNewResponseSchemaFormatType            `json:"type,required"`
+	Type            StreamNewResponseSchemaFormatType            `json:"type" api:"required"`
 	Compression     StreamNewResponseSchemaFormatCompression     `json:"compression"`
 	DecimalEncoding StreamNewResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                        `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                        `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat StreamNewResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                         `json:"unstructured"`
 	JSON            streamNewResponseSchemaFormatJSON            `json:"-"`
@@ -1248,7 +1248,7 @@ func init() {
 }
 
 type StreamNewResponseSchemaFormatJson struct {
-	Type            StreamNewResponseSchemaFormatJsonType            `json:"type,required"`
+	Type            StreamNewResponseSchemaFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding StreamNewResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat StreamNewResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                             `json:"unstructured"`
@@ -1322,9 +1322,9 @@ func (r StreamNewResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamNewResponseSchemaFormatParquet struct {
-	Type          StreamNewResponseSchemaFormatParquetType        `json:"type,required"`
+	Type          StreamNewResponseSchemaFormatParquetType        `json:"type" api:"required"`
 	Compression   StreamNewResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                           `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                           `json:"row_group_bytes" api:"nullable"`
 	JSON          streamNewResponseSchemaFormatParquetJSON        `json:"-"`
 }
 
@@ -1446,15 +1446,15 @@ func (r StreamNewResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type StreamUpdateResponse struct {
 	// Indicates a unique identifier for this stream.
-	ID         string                   `json:"id,required"`
-	CreatedAt  time.Time                `json:"created_at,required" format:"date-time"`
-	HTTP       StreamUpdateResponseHTTP `json:"http,required"`
-	ModifiedAt time.Time                `json:"modified_at,required" format:"date-time"`
+	ID         string                   `json:"id" api:"required"`
+	CreatedAt  time.Time                `json:"created_at" api:"required" format:"date-time"`
+	HTTP       StreamUpdateResponseHTTP `json:"http" api:"required"`
+	ModifiedAt time.Time                `json:"modified_at" api:"required" format:"date-time"`
 	// Indicates the name of the Stream.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Indicates the current version of this stream.
-	Version       int64                             `json:"version,required"`
-	WorkerBinding StreamUpdateResponseWorkerBinding `json:"worker_binding,required"`
+	Version       int64                             `json:"version" api:"required"`
+	WorkerBinding StreamUpdateResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
 	Endpoint string                     `json:"endpoint" format:"uri"`
 	Format   StreamUpdateResponseFormat `json:"format"`
@@ -1487,9 +1487,9 @@ func (r streamUpdateResponseJSON) RawJSON() string {
 
 type StreamUpdateResponseHTTP struct {
 	// Indicates that authentication is required for the HTTP endpoint.
-	Authentication bool `json:"authentication,required"`
+	Authentication bool `json:"authentication" api:"required"`
 	// Indicates that the HTTP endpoint is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Specifies the CORS options for the HTTP endpoint.
 	CORS StreamUpdateResponseHTTPCORS `json:"cors"`
 	JSON streamUpdateResponseHTTPJSON `json:"-"`
@@ -1537,7 +1537,7 @@ func (r streamUpdateResponseHttpcorsJSON) RawJSON() string {
 
 type StreamUpdateResponseWorkerBinding struct {
 	// Indicates that the worker binding is enabled.
-	Enabled bool                                  `json:"enabled,required"`
+	Enabled bool                                  `json:"enabled" api:"required"`
 	JSON    streamUpdateResponseWorkerBindingJSON `json:"-"`
 }
 
@@ -1558,10 +1558,10 @@ func (r streamUpdateResponseWorkerBindingJSON) RawJSON() string {
 }
 
 type StreamUpdateResponseFormat struct {
-	Type            StreamUpdateResponseFormatType            `json:"type,required"`
+	Type            StreamUpdateResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamUpdateResponseFormatCompression     `json:"compression"`
 	DecimalEncoding StreamUpdateResponseFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                     `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                     `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat StreamUpdateResponseFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                      `json:"unstructured"`
 	JSON            streamUpdateResponseFormatJSON            `json:"-"`
@@ -1627,7 +1627,7 @@ func init() {
 }
 
 type StreamUpdateResponseFormatJson struct {
-	Type            StreamUpdateResponseFormatJsonType            `json:"type,required"`
+	Type            StreamUpdateResponseFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding StreamUpdateResponseFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat StreamUpdateResponseFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                          `json:"unstructured"`
@@ -1701,9 +1701,9 @@ func (r StreamUpdateResponseFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamUpdateResponseFormatParquet struct {
-	Type          StreamUpdateResponseFormatParquetType        `json:"type,required"`
+	Type          StreamUpdateResponseFormatParquetType        `json:"type" api:"required"`
 	Compression   StreamUpdateResponseFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                        `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                        `json:"row_group_bytes" api:"nullable"`
 	JSON          streamUpdateResponseFormatParquetJSON        `json:"-"`
 }
 
@@ -1825,15 +1825,15 @@ func (r StreamUpdateResponseFormatTimestampFormat) IsKnown() bool {
 
 type StreamListResponse struct {
 	// Indicates a unique identifier for this stream.
-	ID         string                 `json:"id,required"`
-	CreatedAt  time.Time              `json:"created_at,required" format:"date-time"`
-	HTTP       StreamListResponseHTTP `json:"http,required"`
-	ModifiedAt time.Time              `json:"modified_at,required" format:"date-time"`
+	ID         string                 `json:"id" api:"required"`
+	CreatedAt  time.Time              `json:"created_at" api:"required" format:"date-time"`
+	HTTP       StreamListResponseHTTP `json:"http" api:"required"`
+	ModifiedAt time.Time              `json:"modified_at" api:"required" format:"date-time"`
 	// Indicates the name of the Stream.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Indicates the current version of this stream.
-	Version       int64                           `json:"version,required"`
-	WorkerBinding StreamListResponseWorkerBinding `json:"worker_binding,required"`
+	Version       int64                           `json:"version" api:"required"`
+	WorkerBinding StreamListResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
 	Endpoint string                   `json:"endpoint" format:"uri"`
 	Format   StreamListResponseFormat `json:"format"`
@@ -1868,9 +1868,9 @@ func (r streamListResponseJSON) RawJSON() string {
 
 type StreamListResponseHTTP struct {
 	// Indicates that authentication is required for the HTTP endpoint.
-	Authentication bool `json:"authentication,required"`
+	Authentication bool `json:"authentication" api:"required"`
 	// Indicates that the HTTP endpoint is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Specifies the CORS options for the HTTP endpoint.
 	CORS StreamListResponseHTTPCORS `json:"cors"`
 	JSON streamListResponseHTTPJSON `json:"-"`
@@ -1918,7 +1918,7 @@ func (r streamListResponseHttpcorsJSON) RawJSON() string {
 
 type StreamListResponseWorkerBinding struct {
 	// Indicates that the worker binding is enabled.
-	Enabled bool                                `json:"enabled,required"`
+	Enabled bool                                `json:"enabled" api:"required"`
 	JSON    streamListResponseWorkerBindingJSON `json:"-"`
 }
 
@@ -1939,10 +1939,10 @@ func (r streamListResponseWorkerBindingJSON) RawJSON() string {
 }
 
 type StreamListResponseFormat struct {
-	Type            StreamListResponseFormatType            `json:"type,required"`
+	Type            StreamListResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamListResponseFormatCompression     `json:"compression"`
 	DecimalEncoding StreamListResponseFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                   `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                   `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat StreamListResponseFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                    `json:"unstructured"`
 	JSON            streamListResponseFormatJSON            `json:"-"`
@@ -2008,7 +2008,7 @@ func init() {
 }
 
 type StreamListResponseFormatJson struct {
-	Type            StreamListResponseFormatJsonType            `json:"type,required"`
+	Type            StreamListResponseFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding StreamListResponseFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat StreamListResponseFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                        `json:"unstructured"`
@@ -2082,9 +2082,9 @@ func (r StreamListResponseFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamListResponseFormatParquet struct {
-	Type          StreamListResponseFormatParquetType        `json:"type,required"`
+	Type          StreamListResponseFormatParquetType        `json:"type" api:"required"`
 	Compression   StreamListResponseFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                      `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                      `json:"row_group_bytes" api:"nullable"`
 	JSON          streamListResponseFormatParquetJSON        `json:"-"`
 }
 
@@ -2207,7 +2207,7 @@ func (r StreamListResponseFormatTimestampFormat) IsKnown() bool {
 type StreamListResponseSchema struct {
 	Fields   []StreamListResponseSchemaField `json:"fields"`
 	Format   StreamListResponseSchemaFormat  `json:"format"`
-	Inferred bool                            `json:"inferred,nullable"`
+	Inferred bool                            `json:"inferred" api:"nullable"`
 	JSON     streamListResponseSchemaJSON    `json:"-"`
 }
 
@@ -2230,8 +2230,8 @@ func (r streamListResponseSchemaJSON) RawJSON() string {
 }
 
 type StreamListResponseSchemaField struct {
-	Type        StreamListResponseSchemaFieldsType `json:"type,required"`
-	MetadataKey string                             `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsType `json:"type" api:"required"`
+	MetadataKey string                             `json:"metadata_key" api:"nullable"`
 	Name        string                             `json:"name"`
 	Required    bool                               `json:"required"`
 	SqlName     string                             `json:"sql_name"`
@@ -2352,8 +2352,8 @@ func init() {
 }
 
 type StreamListResponseSchemaFieldsInt32 struct {
-	Type        StreamListResponseSchemaFieldsInt32Type `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsInt32Type `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -2397,8 +2397,8 @@ func (r StreamListResponseSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsInt64 struct {
-	Type        StreamListResponseSchemaFieldsInt64Type `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsInt64Type `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -2442,8 +2442,8 @@ func (r StreamListResponseSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsFloat32 struct {
-	Type        StreamListResponseSchemaFieldsFloat32Type `json:"type,required"`
-	MetadataKey string                                    `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsFloat32Type `json:"type" api:"required"`
+	MetadataKey string                                    `json:"metadata_key" api:"nullable"`
 	Name        string                                    `json:"name"`
 	Required    bool                                      `json:"required"`
 	SqlName     string                                    `json:"sql_name"`
@@ -2487,8 +2487,8 @@ func (r StreamListResponseSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsFloat64 struct {
-	Type        StreamListResponseSchemaFieldsFloat64Type `json:"type,required"`
-	MetadataKey string                                    `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsFloat64Type `json:"type" api:"required"`
+	MetadataKey string                                    `json:"metadata_key" api:"nullable"`
 	Name        string                                    `json:"name"`
 	Required    bool                                      `json:"required"`
 	SqlName     string                                    `json:"sql_name"`
@@ -2532,8 +2532,8 @@ func (r StreamListResponseSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsBool struct {
-	Type        StreamListResponseSchemaFieldsBoolType `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsBoolType `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -2577,8 +2577,8 @@ func (r StreamListResponseSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsString struct {
-	Type        StreamListResponseSchemaFieldsStringType `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsStringType `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -2622,8 +2622,8 @@ func (r StreamListResponseSchemaFieldsStringType) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsBinary struct {
-	Type        StreamListResponseSchemaFieldsBinaryType `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsBinaryType `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -2667,8 +2667,8 @@ func (r StreamListResponseSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsTimestamp struct {
-	Type        StreamListResponseSchemaFieldsTimestampType `json:"type,required"`
-	MetadataKey string                                      `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsTimestampType `json:"type" api:"required"`
+	MetadataKey string                                      `json:"metadata_key" api:"nullable"`
 	Name        string                                      `json:"name"`
 	Required    bool                                        `json:"required"`
 	SqlName     string                                      `json:"sql_name"`
@@ -2731,8 +2731,8 @@ func (r StreamListResponseSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFieldsJson struct {
-	Type        StreamListResponseSchemaFieldsJsonType `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        StreamListResponseSchemaFieldsJsonType `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -2859,10 +2859,10 @@ func (r StreamListResponseSchemaFieldsUnit) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFormat struct {
-	Type            StreamListResponseSchemaFormatType            `json:"type,required"`
+	Type            StreamListResponseSchemaFormatType            `json:"type" api:"required"`
 	Compression     StreamListResponseSchemaFormatCompression     `json:"compression"`
 	DecimalEncoding StreamListResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                         `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                         `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat StreamListResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                          `json:"unstructured"`
 	JSON            streamListResponseSchemaFormatJSON            `json:"-"`
@@ -2928,7 +2928,7 @@ func init() {
 }
 
 type StreamListResponseSchemaFormatJson struct {
-	Type            StreamListResponseSchemaFormatJsonType            `json:"type,required"`
+	Type            StreamListResponseSchemaFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding StreamListResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat StreamListResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                              `json:"unstructured"`
@@ -3002,9 +3002,9 @@ func (r StreamListResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamListResponseSchemaFormatParquet struct {
-	Type          StreamListResponseSchemaFormatParquetType        `json:"type,required"`
+	Type          StreamListResponseSchemaFormatParquetType        `json:"type" api:"required"`
 	Compression   StreamListResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                            `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                            `json:"row_group_bytes" api:"nullable"`
 	JSON          streamListResponseSchemaFormatParquetJSON        `json:"-"`
 }
 
@@ -3126,15 +3126,15 @@ func (r StreamListResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type StreamGetResponse struct {
 	// Indicates a unique identifier for this stream.
-	ID         string                `json:"id,required"`
-	CreatedAt  time.Time             `json:"created_at,required" format:"date-time"`
-	HTTP       StreamGetResponseHTTP `json:"http,required"`
-	ModifiedAt time.Time             `json:"modified_at,required" format:"date-time"`
+	ID         string                `json:"id" api:"required"`
+	CreatedAt  time.Time             `json:"created_at" api:"required" format:"date-time"`
+	HTTP       StreamGetResponseHTTP `json:"http" api:"required"`
+	ModifiedAt time.Time             `json:"modified_at" api:"required" format:"date-time"`
 	// Indicates the name of the Stream.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Indicates the current version of this stream.
-	Version       int64                          `json:"version,required"`
-	WorkerBinding StreamGetResponseWorkerBinding `json:"worker_binding,required"`
+	Version       int64                          `json:"version" api:"required"`
+	WorkerBinding StreamGetResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
 	Endpoint string                  `json:"endpoint" format:"uri"`
 	Format   StreamGetResponseFormat `json:"format"`
@@ -3169,9 +3169,9 @@ func (r streamGetResponseJSON) RawJSON() string {
 
 type StreamGetResponseHTTP struct {
 	// Indicates that authentication is required for the HTTP endpoint.
-	Authentication bool `json:"authentication,required"`
+	Authentication bool `json:"authentication" api:"required"`
 	// Indicates that the HTTP endpoint is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Specifies the CORS options for the HTTP endpoint.
 	CORS StreamGetResponseHTTPCORS `json:"cors"`
 	JSON streamGetResponseHTTPJSON `json:"-"`
@@ -3219,7 +3219,7 @@ func (r streamGetResponseHttpcorsJSON) RawJSON() string {
 
 type StreamGetResponseWorkerBinding struct {
 	// Indicates that the worker binding is enabled.
-	Enabled bool                               `json:"enabled,required"`
+	Enabled bool                               `json:"enabled" api:"required"`
 	JSON    streamGetResponseWorkerBindingJSON `json:"-"`
 }
 
@@ -3240,10 +3240,10 @@ func (r streamGetResponseWorkerBindingJSON) RawJSON() string {
 }
 
 type StreamGetResponseFormat struct {
-	Type            StreamGetResponseFormatType            `json:"type,required"`
+	Type            StreamGetResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamGetResponseFormatCompression     `json:"compression"`
 	DecimalEncoding StreamGetResponseFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                  `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                  `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat StreamGetResponseFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                   `json:"unstructured"`
 	JSON            streamGetResponseFormatJSON            `json:"-"`
@@ -3309,7 +3309,7 @@ func init() {
 }
 
 type StreamGetResponseFormatJson struct {
-	Type            StreamGetResponseFormatJsonType            `json:"type,required"`
+	Type            StreamGetResponseFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding StreamGetResponseFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat StreamGetResponseFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                       `json:"unstructured"`
@@ -3383,9 +3383,9 @@ func (r StreamGetResponseFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamGetResponseFormatParquet struct {
-	Type          StreamGetResponseFormatParquetType        `json:"type,required"`
+	Type          StreamGetResponseFormatParquetType        `json:"type" api:"required"`
 	Compression   StreamGetResponseFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                     `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                     `json:"row_group_bytes" api:"nullable"`
 	JSON          streamGetResponseFormatParquetJSON        `json:"-"`
 }
 
@@ -3508,7 +3508,7 @@ func (r StreamGetResponseFormatTimestampFormat) IsKnown() bool {
 type StreamGetResponseSchema struct {
 	Fields   []StreamGetResponseSchemaField `json:"fields"`
 	Format   StreamGetResponseSchemaFormat  `json:"format"`
-	Inferred bool                           `json:"inferred,nullable"`
+	Inferred bool                           `json:"inferred" api:"nullable"`
 	JSON     streamGetResponseSchemaJSON    `json:"-"`
 }
 
@@ -3531,8 +3531,8 @@ func (r streamGetResponseSchemaJSON) RawJSON() string {
 }
 
 type StreamGetResponseSchemaField struct {
-	Type        StreamGetResponseSchemaFieldsType `json:"type,required"`
-	MetadataKey string                            `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsType `json:"type" api:"required"`
+	MetadataKey string                            `json:"metadata_key" api:"nullable"`
 	Name        string                            `json:"name"`
 	Required    bool                              `json:"required"`
 	SqlName     string                            `json:"sql_name"`
@@ -3653,8 +3653,8 @@ func init() {
 }
 
 type StreamGetResponseSchemaFieldsInt32 struct {
-	Type        StreamGetResponseSchemaFieldsInt32Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsInt32Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -3698,8 +3698,8 @@ func (r StreamGetResponseSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsInt64 struct {
-	Type        StreamGetResponseSchemaFieldsInt64Type `json:"type,required"`
-	MetadataKey string                                 `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsInt64Type `json:"type" api:"required"`
+	MetadataKey string                                 `json:"metadata_key" api:"nullable"`
 	Name        string                                 `json:"name"`
 	Required    bool                                   `json:"required"`
 	SqlName     string                                 `json:"sql_name"`
@@ -3743,8 +3743,8 @@ func (r StreamGetResponseSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsFloat32 struct {
-	Type        StreamGetResponseSchemaFieldsFloat32Type `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsFloat32Type `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -3788,8 +3788,8 @@ func (r StreamGetResponseSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsFloat64 struct {
-	Type        StreamGetResponseSchemaFieldsFloat64Type `json:"type,required"`
-	MetadataKey string                                   `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsFloat64Type `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
 	Name        string                                   `json:"name"`
 	Required    bool                                     `json:"required"`
 	SqlName     string                                   `json:"sql_name"`
@@ -3833,8 +3833,8 @@ func (r StreamGetResponseSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsBool struct {
-	Type        StreamGetResponseSchemaFieldsBoolType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsBoolType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -3878,8 +3878,8 @@ func (r StreamGetResponseSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsString struct {
-	Type        StreamGetResponseSchemaFieldsStringType `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsStringType `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -3923,8 +3923,8 @@ func (r StreamGetResponseSchemaFieldsStringType) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsBinary struct {
-	Type        StreamGetResponseSchemaFieldsBinaryType `json:"type,required"`
-	MetadataKey string                                  `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsBinaryType `json:"type" api:"required"`
+	MetadataKey string                                  `json:"metadata_key" api:"nullable"`
 	Name        string                                  `json:"name"`
 	Required    bool                                    `json:"required"`
 	SqlName     string                                  `json:"sql_name"`
@@ -3968,8 +3968,8 @@ func (r StreamGetResponseSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsTimestamp struct {
-	Type        StreamGetResponseSchemaFieldsTimestampType `json:"type,required"`
-	MetadataKey string                                     `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsTimestampType `json:"type" api:"required"`
+	MetadataKey string                                     `json:"metadata_key" api:"nullable"`
 	Name        string                                     `json:"name"`
 	Required    bool                                       `json:"required"`
 	SqlName     string                                     `json:"sql_name"`
@@ -4032,8 +4032,8 @@ func (r StreamGetResponseSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFieldsJson struct {
-	Type        StreamGetResponseSchemaFieldsJsonType `json:"type,required"`
-	MetadataKey string                                `json:"metadata_key,nullable"`
+	Type        StreamGetResponseSchemaFieldsJsonType `json:"type" api:"required"`
+	MetadataKey string                                `json:"metadata_key" api:"nullable"`
 	Name        string                                `json:"name"`
 	Required    bool                                  `json:"required"`
 	SqlName     string                                `json:"sql_name"`
@@ -4160,10 +4160,10 @@ func (r StreamGetResponseSchemaFieldsUnit) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFormat struct {
-	Type            StreamGetResponseSchemaFormatType            `json:"type,required"`
+	Type            StreamGetResponseSchemaFormatType            `json:"type" api:"required"`
 	Compression     StreamGetResponseSchemaFormatCompression     `json:"compression"`
 	DecimalEncoding StreamGetResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                        `json:"row_group_bytes,nullable"`
+	RowGroupBytes   int64                                        `json:"row_group_bytes" api:"nullable"`
 	TimestampFormat StreamGetResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                         `json:"unstructured"`
 	JSON            streamGetResponseSchemaFormatJSON            `json:"-"`
@@ -4229,7 +4229,7 @@ func init() {
 }
 
 type StreamGetResponseSchemaFormatJson struct {
-	Type            StreamGetResponseSchemaFormatJsonType            `json:"type,required"`
+	Type            StreamGetResponseSchemaFormatJsonType            `json:"type" api:"required"`
 	DecimalEncoding StreamGetResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
 	TimestampFormat StreamGetResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
 	Unstructured    bool                                             `json:"unstructured"`
@@ -4303,9 +4303,9 @@ func (r StreamGetResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamGetResponseSchemaFormatParquet struct {
-	Type          StreamGetResponseSchemaFormatParquetType        `json:"type,required"`
+	Type          StreamGetResponseSchemaFormatParquetType        `json:"type" api:"required"`
 	Compression   StreamGetResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                           `json:"row_group_bytes,nullable"`
+	RowGroupBytes int64                                           `json:"row_group_bytes" api:"nullable"`
 	JSON          streamGetResponseSchemaFormatParquetJSON        `json:"-"`
 }
 
@@ -4427,9 +4427,9 @@ func (r StreamGetResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type StreamNewParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the name of the Stream.
-	Name          param.Field[string]                       `json:"name,required"`
+	Name          param.Field[string]                       `json:"name" api:"required"`
 	Format        param.Field[StreamNewParamsFormatUnion]   `json:"format"`
 	HTTP          param.Field[StreamNewParamsHTTP]          `json:"http"`
 	Schema        param.Field[StreamNewParamsSchema]        `json:"schema"`
@@ -4441,7 +4441,7 @@ func (r StreamNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StreamNewParamsFormat struct {
-	Type            param.Field[StreamNewParamsFormatType]            `json:"type,required"`
+	Type            param.Field[StreamNewParamsFormatType]            `json:"type" api:"required"`
 	Compression     param.Field[StreamNewParamsFormatCompression]     `json:"compression"`
 	DecimalEncoding param.Field[StreamNewParamsFormatDecimalEncoding] `json:"decimal_encoding"`
 	RowGroupBytes   param.Field[int64]                                `json:"row_group_bytes"`
@@ -4462,7 +4462,7 @@ type StreamNewParamsFormatUnion interface {
 }
 
 type StreamNewParamsFormatJson struct {
-	Type            param.Field[StreamNewParamsFormatJsonType]            `json:"type,required"`
+	Type            param.Field[StreamNewParamsFormatJsonType]            `json:"type" api:"required"`
 	DecimalEncoding param.Field[StreamNewParamsFormatJsonDecimalEncoding] `json:"decimal_encoding"`
 	TimestampFormat param.Field[StreamNewParamsFormatJsonTimestampFormat] `json:"timestamp_format"`
 	Unstructured    param.Field[bool]                                     `json:"unstructured"`
@@ -4520,7 +4520,7 @@ func (r StreamNewParamsFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamNewParamsFormatParquet struct {
-	Type          param.Field[StreamNewParamsFormatParquetType]        `json:"type,required"`
+	Type          param.Field[StreamNewParamsFormatParquetType]        `json:"type" api:"required"`
 	Compression   param.Field[StreamNewParamsFormatParquetCompression] `json:"compression"`
 	RowGroupBytes param.Field[int64]                                   `json:"row_group_bytes"`
 }
@@ -4629,9 +4629,9 @@ func (r StreamNewParamsFormatTimestampFormat) IsKnown() bool {
 
 type StreamNewParamsHTTP struct {
 	// Indicates that authentication is required for the HTTP endpoint.
-	Authentication param.Field[bool] `json:"authentication,required"`
+	Authentication param.Field[bool] `json:"authentication" api:"required"`
 	// Indicates that the HTTP endpoint is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Specifies the CORS options for the HTTP endpoint.
 	CORS param.Field[StreamNewParamsHTTPCORS] `json:"cors"`
 }
@@ -4660,7 +4660,7 @@ func (r StreamNewParamsSchema) MarshalJSON() (data []byte, err error) {
 }
 
 type StreamNewParamsSchemaField struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsType] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                          `json:"metadata_key"`
 	Name        param.Field[string]                          `json:"name"`
 	Required    param.Field[bool]                            `json:"required"`
@@ -4690,7 +4690,7 @@ type StreamNewParamsSchemaFieldUnion interface {
 }
 
 type StreamNewParamsSchemaFieldsInt32 struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsInt32Type] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsInt32Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                               `json:"metadata_key"`
 	Name        param.Field[string]                               `json:"name"`
 	Required    param.Field[bool]                                 `json:"required"`
@@ -4718,7 +4718,7 @@ func (r StreamNewParamsSchemaFieldsInt32Type) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsInt64 struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsInt64Type] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsInt64Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                               `json:"metadata_key"`
 	Name        param.Field[string]                               `json:"name"`
 	Required    param.Field[bool]                                 `json:"required"`
@@ -4746,7 +4746,7 @@ func (r StreamNewParamsSchemaFieldsInt64Type) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsFloat32 struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsFloat32Type] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsFloat32Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                                 `json:"metadata_key"`
 	Name        param.Field[string]                                 `json:"name"`
 	Required    param.Field[bool]                                   `json:"required"`
@@ -4774,7 +4774,7 @@ func (r StreamNewParamsSchemaFieldsFloat32Type) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsFloat64 struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsFloat64Type] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsFloat64Type] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                                 `json:"metadata_key"`
 	Name        param.Field[string]                                 `json:"name"`
 	Required    param.Field[bool]                                   `json:"required"`
@@ -4802,7 +4802,7 @@ func (r StreamNewParamsSchemaFieldsFloat64Type) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsBool struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsBoolType] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsBoolType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                              `json:"metadata_key"`
 	Name        param.Field[string]                              `json:"name"`
 	Required    param.Field[bool]                                `json:"required"`
@@ -4830,7 +4830,7 @@ func (r StreamNewParamsSchemaFieldsBoolType) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsString struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsStringType] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsStringType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                                `json:"metadata_key"`
 	Name        param.Field[string]                                `json:"name"`
 	Required    param.Field[bool]                                  `json:"required"`
@@ -4858,7 +4858,7 @@ func (r StreamNewParamsSchemaFieldsStringType) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsBinary struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsBinaryType] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsBinaryType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                                `json:"metadata_key"`
 	Name        param.Field[string]                                `json:"name"`
 	Required    param.Field[bool]                                  `json:"required"`
@@ -4886,7 +4886,7 @@ func (r StreamNewParamsSchemaFieldsBinaryType) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsTimestamp struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsTimestampType] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsTimestampType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                                   `json:"metadata_key"`
 	Name        param.Field[string]                                   `json:"name"`
 	Required    param.Field[bool]                                     `json:"required"`
@@ -4932,7 +4932,7 @@ func (r StreamNewParamsSchemaFieldsTimestampUnit) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFieldsJson struct {
-	Type        param.Field[StreamNewParamsSchemaFieldsJsonType] `json:"type,required"`
+	Type        param.Field[StreamNewParamsSchemaFieldsJsonType] `json:"type" api:"required"`
 	MetadataKey param.Field[string]                              `json:"metadata_key"`
 	Name        param.Field[string]                              `json:"name"`
 	Required    param.Field[bool]                                `json:"required"`
@@ -5019,7 +5019,7 @@ func (r StreamNewParamsSchemaFieldsUnit) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFormat struct {
-	Type            param.Field[StreamNewParamsSchemaFormatType]            `json:"type,required"`
+	Type            param.Field[StreamNewParamsSchemaFormatType]            `json:"type" api:"required"`
 	Compression     param.Field[StreamNewParamsSchemaFormatCompression]     `json:"compression"`
 	DecimalEncoding param.Field[StreamNewParamsSchemaFormatDecimalEncoding] `json:"decimal_encoding"`
 	RowGroupBytes   param.Field[int64]                                      `json:"row_group_bytes"`
@@ -5040,7 +5040,7 @@ type StreamNewParamsSchemaFormatUnion interface {
 }
 
 type StreamNewParamsSchemaFormatJson struct {
-	Type            param.Field[StreamNewParamsSchemaFormatJsonType]            `json:"type,required"`
+	Type            param.Field[StreamNewParamsSchemaFormatJsonType]            `json:"type" api:"required"`
 	DecimalEncoding param.Field[StreamNewParamsSchemaFormatJsonDecimalEncoding] `json:"decimal_encoding"`
 	TimestampFormat param.Field[StreamNewParamsSchemaFormatJsonTimestampFormat] `json:"timestamp_format"`
 	Unstructured    param.Field[bool]                                           `json:"unstructured"`
@@ -5098,7 +5098,7 @@ func (r StreamNewParamsSchemaFormatJsonTimestampFormat) IsKnown() bool {
 }
 
 type StreamNewParamsSchemaFormatParquet struct {
-	Type          param.Field[StreamNewParamsSchemaFormatParquetType]        `json:"type,required"`
+	Type          param.Field[StreamNewParamsSchemaFormatParquetType]        `json:"type" api:"required"`
 	Compression   param.Field[StreamNewParamsSchemaFormatParquetCompression] `json:"compression"`
 	RowGroupBytes param.Field[int64]                                         `json:"row_group_bytes"`
 }
@@ -5207,7 +5207,7 @@ func (r StreamNewParamsSchemaFormatTimestampFormat) IsKnown() bool {
 
 type StreamNewParamsWorkerBinding struct {
 	// Indicates that the worker binding is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r StreamNewParamsWorkerBinding) MarshalJSON() (data []byte, err error) {
@@ -5215,9 +5215,9 @@ func (r StreamNewParamsWorkerBinding) MarshalJSON() (data []byte, err error) {
 }
 
 type StreamNewResponseEnvelope struct {
-	Result StreamNewResponse `json:"result,required"`
+	Result StreamNewResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                          `json:"success,required"`
+	Success bool                          `json:"success" api:"required"`
 	JSON    streamNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5240,7 +5240,7 @@ func (r streamNewResponseEnvelopeJSON) RawJSON() string {
 
 type StreamUpdateParams struct {
 	// Specifies the public ID of the account.
-	AccountID     param.Field[string]                          `path:"account_id,required"`
+	AccountID     param.Field[string]                          `path:"account_id" api:"required"`
 	HTTP          param.Field[StreamUpdateParamsHTTP]          `json:"http"`
 	WorkerBinding param.Field[StreamUpdateParamsWorkerBinding] `json:"worker_binding"`
 }
@@ -5251,9 +5251,9 @@ func (r StreamUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type StreamUpdateParamsHTTP struct {
 	// Indicates that authentication is required for the HTTP endpoint.
-	Authentication param.Field[bool] `json:"authentication,required"`
+	Authentication param.Field[bool] `json:"authentication" api:"required"`
 	// Indicates that the HTTP endpoint is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Specifies the CORS options for the HTTP endpoint.
 	CORS param.Field[StreamUpdateParamsHTTPCORS] `json:"cors"`
 }
@@ -5273,7 +5273,7 @@ func (r StreamUpdateParamsHTTPCORS) MarshalJSON() (data []byte, err error) {
 
 type StreamUpdateParamsWorkerBinding struct {
 	// Indicates that the worker binding is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r StreamUpdateParamsWorkerBinding) MarshalJSON() (data []byte, err error) {
@@ -5281,9 +5281,9 @@ func (r StreamUpdateParamsWorkerBinding) MarshalJSON() (data []byte, err error) 
 }
 
 type StreamUpdateResponseEnvelope struct {
-	Result StreamUpdateResponse `json:"result,required"`
+	Result StreamUpdateResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                             `json:"success,required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    streamUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5306,7 +5306,7 @@ func (r streamUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type StreamListParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string]  `path:"account_id,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
 	// Specifies the public ID of the pipeline.
@@ -5323,7 +5323,7 @@ func (r StreamListParams) URLQuery() (v url.Values) {
 
 type StreamDeleteParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Delete stream forcefully, including deleting any dependent pipelines.
 	Force param.Field[string] `query:"force"`
 }
@@ -5338,13 +5338,13 @@ func (r StreamDeleteParams) URLQuery() (v url.Values) {
 
 type StreamGetParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type StreamGetResponseEnvelope struct {
-	Result StreamGetResponse `json:"result,required"`
+	Result StreamGetResponse `json:"result" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool                          `json:"success,required"`
+	Success bool                          `json:"success" api:"required"`
 	JSON    streamGetResponseEnvelopeJSON `json:"-"`
 }
 

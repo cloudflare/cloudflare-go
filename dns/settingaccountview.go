@@ -44,15 +44,15 @@ func (r *SettingAccountViewService) New(ctx context.Context, params SettingAccou
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_settings/views", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List DNS Internal Views for an Account
@@ -62,7 +62,7 @@ func (r *SettingAccountViewService) List(ctx context.Context, params SettingAcco
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_settings/views", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -88,19 +88,19 @@ func (r *SettingAccountViewService) Delete(ctx context.Context, viewID string, b
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if viewID == "" {
 		err = errors.New("missing required view_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_settings/views/%s", body.AccountID, viewID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update an existing Internal DNS View
@@ -109,19 +109,19 @@ func (r *SettingAccountViewService) Edit(ctx context.Context, viewID string, par
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if viewID == "" {
 		err = errors.New("missing required view_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_settings/views/%s", params.AccountID, viewID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get DNS Internal View
@@ -130,32 +130,32 @@ func (r *SettingAccountViewService) Get(ctx context.Context, viewID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if viewID == "" {
 		err = errors.New("missing required view_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_settings/views/%s", query.AccountID, viewID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SettingAccountViewNewResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the view was created.
-	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
+	CreatedTime time.Time `json:"created_time" api:"required" format:"date-time"`
 	// When the view was last modified.
-	ModifiedTime time.Time `json:"modified_time,required" format:"date-time"`
+	ModifiedTime time.Time `json:"modified_time" api:"required" format:"date-time"`
 	// The name of the view.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The list of zones linked to this view.
-	Zones []string                          `json:"zones,required"`
+	Zones []string                          `json:"zones" api:"required"`
 	JSON  settingAccountViewNewResponseJSON `json:"-"`
 }
 
@@ -181,15 +181,15 @@ func (r settingAccountViewNewResponseJSON) RawJSON() string {
 
 type SettingAccountViewListResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the view was created.
-	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
+	CreatedTime time.Time `json:"created_time" api:"required" format:"date-time"`
 	// When the view was last modified.
-	ModifiedTime time.Time `json:"modified_time,required" format:"date-time"`
+	ModifiedTime time.Time `json:"modified_time" api:"required" format:"date-time"`
 	// The name of the view.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The list of zones linked to this view.
-	Zones []string                           `json:"zones,required"`
+	Zones []string                           `json:"zones" api:"required"`
 	JSON  settingAccountViewListResponseJSON `json:"-"`
 }
 
@@ -237,15 +237,15 @@ func (r settingAccountViewDeleteResponseJSON) RawJSON() string {
 
 type SettingAccountViewEditResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the view was created.
-	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
+	CreatedTime time.Time `json:"created_time" api:"required" format:"date-time"`
 	// When the view was last modified.
-	ModifiedTime time.Time `json:"modified_time,required" format:"date-time"`
+	ModifiedTime time.Time `json:"modified_time" api:"required" format:"date-time"`
 	// The name of the view.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The list of zones linked to this view.
-	Zones []string                           `json:"zones,required"`
+	Zones []string                           `json:"zones" api:"required"`
 	JSON  settingAccountViewEditResponseJSON `json:"-"`
 }
 
@@ -271,15 +271,15 @@ func (r settingAccountViewEditResponseJSON) RawJSON() string {
 
 type SettingAccountViewGetResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// When the view was created.
-	CreatedTime time.Time `json:"created_time,required" format:"date-time"`
+	CreatedTime time.Time `json:"created_time" api:"required" format:"date-time"`
 	// When the view was last modified.
-	ModifiedTime time.Time `json:"modified_time,required" format:"date-time"`
+	ModifiedTime time.Time `json:"modified_time" api:"required" format:"date-time"`
 	// The name of the view.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The list of zones linked to this view.
-	Zones []string                          `json:"zones,required"`
+	Zones []string                          `json:"zones" api:"required"`
 	JSON  settingAccountViewGetResponseJSON `json:"-"`
 }
 
@@ -305,11 +305,11 @@ func (r settingAccountViewGetResponseJSON) RawJSON() string {
 
 type SettingAccountViewNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the view.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The list of zones linked to this view.
-	Zones param.Field[[]string] `json:"zones,required"`
+	Zones param.Field[[]string] `json:"zones" api:"required"`
 }
 
 func (r SettingAccountViewNewParams) MarshalJSON() (data []byte, err error) {
@@ -317,10 +317,10 @@ func (r SettingAccountViewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingAccountViewNewResponseEnvelope struct {
-	Errors   []SettingAccountViewNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAccountViewNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingAccountViewNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingAccountViewNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingAccountViewNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingAccountViewNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingAccountViewNewResponse                `json:"result"`
 	JSON    settingAccountViewNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -345,8 +345,8 @@ func (r settingAccountViewNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingAccountViewNewResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           SettingAccountViewNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingAccountViewNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -393,8 +393,8 @@ func (r settingAccountViewNewResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type SettingAccountViewNewResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           SettingAccountViewNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingAccountViewNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -457,7 +457,7 @@ func (r SettingAccountViewNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingAccountViewListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order DNS views in.
 	Direction param.Field[SettingAccountViewListParamsDirection] `query:"direction"`
 	// Whether to match all search requirements or at least one (any). If set to `all`,
@@ -559,7 +559,7 @@ func (r SettingAccountViewListParamsOrder) IsKnown() bool {
 
 type SettingAccountViewDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingAccountViewDeleteResponseEnvelope struct {
@@ -585,7 +585,7 @@ func (r settingAccountViewDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingAccountViewEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the view.
 	Name param.Field[string] `json:"name"`
 	// The list of zones linked to this view.
@@ -597,10 +597,10 @@ func (r SettingAccountViewEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingAccountViewEditResponseEnvelope struct {
-	Errors   []SettingAccountViewEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAccountViewEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingAccountViewEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingAccountViewEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingAccountViewEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingAccountViewEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingAccountViewEditResponse                `json:"result"`
 	JSON    settingAccountViewEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -625,8 +625,8 @@ func (r settingAccountViewEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingAccountViewEditResponseEnvelopeErrors struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           SettingAccountViewEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingAccountViewEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -673,8 +673,8 @@ func (r settingAccountViewEditResponseEnvelopeErrorsSourceJSON) RawJSON() string
 }
 
 type SettingAccountViewEditResponseEnvelopeMessages struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           SettingAccountViewEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingAccountViewEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -737,14 +737,14 @@ func (r SettingAccountViewEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingAccountViewGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingAccountViewGetResponseEnvelope struct {
-	Errors   []SettingAccountViewGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAccountViewGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []SettingAccountViewGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingAccountViewGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success SettingAccountViewGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SettingAccountViewGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  SettingAccountViewGetResponse                `json:"result"`
 	JSON    settingAccountViewGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -769,8 +769,8 @@ func (r settingAccountViewGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SettingAccountViewGetResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           SettingAccountViewGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             settingAccountViewGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -817,8 +817,8 @@ func (r settingAccountViewGetResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type SettingAccountViewGetResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           SettingAccountViewGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             settingAccountViewGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -1146,6 +1146,36 @@ Methods:
 
 - <code title="get /accounts/{account_id}/warp_connector/{tunnel_id}/token">client.ZeroTrust.Tunnels.WARPConnector.Token.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorTokenService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tunnelID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorTokenGetParams">TunnelWARPConnectorTokenGetParams</a>) (\*<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+#### Connections
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectionGetResponse">TunnelWARPConnectorConnectionGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/warp_connector/{tunnel_id}/connections">client.ZeroTrust.Tunnels.WARPConnector.Connections.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tunnelID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectionGetParams">TunnelWARPConnectorConnectionGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectionGetResponse">TunnelWARPConnectorConnectionGetResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Connectors
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectorGetResponse">TunnelWARPConnectorConnectorGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/warp_connector/{tunnel_id}/connectors/{connector_id}">client.ZeroTrust.Tunnels.WARPConnector.Connectors.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectorService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tunnelID <a href="https://pkg.go.dev/builtin#string">string</a>, connectorID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectorGetParams">TunnelWARPConnectorConnectorGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorConnectorGetResponse">TunnelWARPConnectorConnectorGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Failover
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorFailoverUpdateResponse">TunnelWARPConnectorFailoverUpdateResponse</a>
+
+Methods:
+
+- <code title="put /accounts/{account_id}/warp_connector/{tunnel_id}/failover">client.ZeroTrust.Tunnels.WARPConnector.Failover.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorFailoverService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tunnelID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorFailoverUpdateParams">TunnelWARPConnectorFailoverUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/zero_trust#TunnelWARPConnectorFailoverUpdateResponse">TunnelWARPConnectorFailoverUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## ConnectivitySettings
 
 Response Types:

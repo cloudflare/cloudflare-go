@@ -43,21 +43,21 @@ func (r *MarkdownService) New(ctx context.Context, params MarkdownNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/browser-rendering/markdown", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type MarkdownNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]        `path:"account_id,required"`
-	Body      MarkdownNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]        `path:"account_id" api:"required"`
+	Body      MarkdownNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -119,7 +119,7 @@ type MarkdownNewParamsBodyUnion interface {
 
 type MarkdownNewParamsBodyObject struct {
 	// URL to navigate to, eg. `https://example.com`.
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// The maximum duration allowed for the browser action to complete after the page
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
@@ -220,8 +220,8 @@ func (r MarkdownNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 
 // Provide credentials for HTTP authentication.
 type MarkdownNewParamsBodyObjectAuthenticate struct {
-	Password param.Field[string] `json:"password,required"`
-	Username param.Field[string] `json:"username,required"`
+	Password param.Field[string] `json:"password" api:"required"`
+	Username param.Field[string] `json:"username" api:"required"`
 }
 
 func (r MarkdownNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
@@ -229,8 +229,9 @@ func (r MarkdownNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err
 }
 
 type MarkdownNewParamsBodyObjectCookie struct {
-	Name         param.Field[string]                                         `json:"name,required"`
-	Value        param.Field[string]                                         `json:"value,required"`
+	// Cookie name.
+	Name         param.Field[string]                                         `json:"name" api:"required"`
+	Value        param.Field[string]                                         `json:"value" api:"required"`
 	Domain       param.Field[string]                                         `json:"domain"`
 	Expires      param.Field[float64]                                        `json:"expires"`
 	HTTPOnly     param.Field[bool]                                           `json:"httpOnly"`
@@ -391,8 +392,8 @@ func (r MarkdownNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
 type MarkdownNewParamsBodyObjectViewport struct {
-	Height            param.Field[float64] `json:"height,required"`
-	Width             param.Field[float64] `json:"width,required"`
+	Height            param.Field[float64] `json:"height" api:"required"`
+	Width             param.Field[float64] `json:"width" api:"required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
 	HasTouch          param.Field[bool]    `json:"hasTouch"`
 	IsLandscape       param.Field[bool]    `json:"isLandscape"`
@@ -406,7 +407,7 @@ func (r MarkdownNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err err
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
 type MarkdownNewParamsBodyObjectWaitForSelector struct {
-	Selector param.Field[string]                                            `json:"selector,required"`
+	Selector param.Field[string]                                            `json:"selector" api:"required"`
 	Hidden   param.Field[MarkdownNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
 	Timeout  param.Field[float64]                                           `json:"timeout"`
 	Visible  param.Field[MarkdownNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
@@ -445,10 +446,10 @@ func (r MarkdownNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 }
 
 type MarkdownNewResponseEnvelope struct {
-	// Response status
-	Success bool                                `json:"success,required"`
+	// Response status.
+	Success bool                                `json:"success" api:"required"`
 	Errors  []MarkdownNewResponseEnvelopeErrors `json:"errors"`
-	// Markdown
+	// Markdown content.
 	Result string                          `json:"result"`
 	JSON   markdownNewResponseEnvelopeJSON `json:"-"`
 }
@@ -472,10 +473,10 @@ func (r markdownNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type MarkdownNewResponseEnvelopeErrors struct {
-	// Error code
-	Code float64 `json:"code,required"`
-	// Error Message
-	Message string                                `json:"message,required"`
+	// Error code.
+	Code float64 `json:"code" api:"required"`
+	// Error message.
+	Message string                                `json:"message" api:"required"`
 	JSON    markdownNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 

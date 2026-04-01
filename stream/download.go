@@ -42,19 +42,19 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete the downloads for a video. Use `/downloads/{download_type}` instead for
@@ -64,19 +64,19 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists the downloads created for a video.
@@ -85,19 +85,19 @@ func (r *DownloadService) Get(ctx context.Context, identifier string, query Down
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DownloadNewResponse struct {
@@ -266,8 +266,8 @@ func (r DownloadGetResponseDefaultStatus) IsKnown() bool {
 
 type DownloadNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
@@ -275,10 +275,10 @@ func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DownloadNewResponseEnvelope struct {
-	Errors   []DownloadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DownloadNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DownloadNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DownloadNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DownloadNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DownloadNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DownloadNewResponse                `json:"result"`
 	JSON    downloadNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -303,8 +303,8 @@ func (r downloadNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DownloadNewResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           DownloadNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             downloadNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -351,8 +351,8 @@ func (r downloadNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DownloadNewResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           DownloadNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             downloadNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -415,14 +415,14 @@ func (r DownloadNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DownloadDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DownloadDeleteResponseEnvelope struct {
-	Errors   []DownloadDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DownloadDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DownloadDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DownloadDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DownloadDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DownloadDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  string                                `json:"result"`
 	JSON    downloadDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -447,8 +447,8 @@ func (r downloadDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DownloadDeleteResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DownloadDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             downloadDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -495,8 +495,8 @@ func (r downloadDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DownloadDeleteResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DownloadDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             downloadDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -559,14 +559,14 @@ func (r DownloadDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DownloadGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DownloadGetResponseEnvelope struct {
-	Errors   []DownloadGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DownloadGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DownloadGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DownloadGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DownloadGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DownloadGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// An object with download type keys. Each key is optional and only present if that
 	// download type has been created.
 	Result DownloadGetResponse             `json:"result"`
@@ -593,8 +593,8 @@ func (r downloadGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DownloadGetResponseEnvelopeErrors struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           DownloadGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             downloadGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -641,8 +641,8 @@ func (r downloadGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DownloadGetResponseEnvelopeMessages struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           DownloadGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             downloadGetResponseEnvelopeMessagesJSON   `json:"-"`

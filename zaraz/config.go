@@ -43,15 +43,15 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/config", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets latest Zaraz configuration for a zone. It can be preview or published
@@ -62,37 +62,37 @@ func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/config", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
-// Zaraz configuration
+// Zaraz configuration.
 type Configuration struct {
 	// Data layer compatibility mode enabled.
-	DataLayer bool `json:"dataLayer,required"`
+	DataLayer bool `json:"dataLayer" api:"required"`
 	// The key for Zaraz debug mode.
-	DebugKey string `json:"debugKey,required"`
+	DebugKey string `json:"debugKey" api:"required"`
 	// General Zaraz settings.
-	Settings ConfigurationSettings `json:"settings,required"`
+	Settings ConfigurationSettings `json:"settings" api:"required"`
 	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
 	// and value is the tool configuration object.
-	Tools map[string]ConfigurationTool `json:"tools,required"`
+	Tools map[string]ConfigurationTool `json:"tools" api:"required"`
 	// Triggers set up under Zaraz configuration, where key is the trigger
 	// alpha-numeric ID and value is the trigger configuration.
-	Triggers map[string]ConfigurationTrigger `json:"triggers,required"`
+	Triggers map[string]ConfigurationTrigger `json:"triggers" api:"required"`
 	// Variables set up under Zaraz configuration, where key is the variable
 	// alpha-numeric ID and value is the variable configuration. Values of variables of
 	// type secret are not included.
-	Variables map[string]ConfigurationVariable `json:"variables,required"`
+	Variables map[string]ConfigurationVariable `json:"variables" api:"required"`
 	// Zaraz internal version of the config.
-	ZarazVersion int64 `json:"zarazVersion,required"`
+	ZarazVersion int64 `json:"zarazVersion" api:"required"`
 	// Cloudflare Monitoring settings.
 	Analytics ConfigurationAnalytics `json:"analytics"`
 	// Consent management configuration.
@@ -129,7 +129,7 @@ func (r configurationJSON) RawJSON() string {
 // General Zaraz settings.
 type ConfigurationSettings struct {
 	// Automatic injection of Zaraz scripts enabled.
-	AutoInjectScript bool `json:"autoInjectScript,required"`
+	AutoInjectScript bool `json:"autoInjectScript" api:"required"`
 	// Details of the worker that receives and edits Zaraz Context object.
 	ContextEnricher ConfigurationSettingsContextEnricher `json:"contextEnricher"`
 	// The domain Zaraz will use for writing and reading its cookies.
@@ -144,7 +144,7 @@ type ConfigurationSettings struct {
 	HideIPAddress bool `json:"hideIPAddress"`
 	// Removing URL query params enabled.
 	HideQueryParams bool `json:"hideQueryParams"`
-	// Removing sensitive data from User Aagent string enabled.
+	// Removing sensitive data from User Agent string enabled.
 	HideUserAgent bool `json:"hideUserAgent"`
 	// Custom endpoint for Zaraz init script.
 	InitPath string `json:"initPath"`
@@ -190,8 +190,8 @@ func (r configurationSettingsJSON) RawJSON() string {
 
 // Details of the worker that receives and edits Zaraz Context object.
 type ConfigurationSettingsContextEnricher struct {
-	EscapedWorkerName string                                   `json:"escapedWorkerName,required"`
-	WorkerTag         string                                   `json:"workerTag,required"`
+	EscapedWorkerName string                                   `json:"escapedWorkerName" api:"required"`
+	WorkerTag         string                                   `json:"workerTag" api:"required"`
 	JSON              configurationSettingsContextEnricherJSON `json:"-"`
 }
 
@@ -214,35 +214,35 @@ func (r configurationSettingsContextEnricherJSON) RawJSON() string {
 
 type ConfigurationTool struct {
 	// This field can have the runtime type of [[]string].
-	BlockingTriggers interface{} `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component string `json:"component,required"`
+	BlockingTriggers interface{} `json:"blockingTriggers" api:"required"`
+	// Tool's internal name.
+	Component string `json:"component" api:"required"`
 	// This field can have the runtime type of
 	// [map[string]ConfigurationToolsZarazManagedComponentDefaultFieldsUnion],
 	// [map[string]ConfigurationToolsWorkerDefaultFieldsUnion].
-	DefaultFields interface{} `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled bool `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name string `json:"name,required"`
+	DefaultFields interface{} `json:"defaultFields" api:"required"`
+	// Whether tool is enabled.
+	Enabled bool `json:"enabled" api:"required"`
+	// Tool's name defined by the user.
+	Name string `json:"name" api:"required"`
 	// This field can have the runtime type of [[]string].
-	Permissions interface{} `json:"permissions,required"`
+	Permissions interface{} `json:"permissions" api:"required"`
 	// This field can have the runtime type of
 	// [map[string]ConfigurationToolsZarazManagedComponentSettingsUnion],
 	// [map[string]ConfigurationToolsWorkerSettingsUnion].
-	Settings interface{}            `json:"settings,required"`
-	Type     ConfigurationToolsType `json:"type,required"`
+	Settings interface{}            `json:"settings" api:"required"`
+	Type     ConfigurationToolsType `json:"type" api:"required"`
 	// This field can have the runtime type of [map[string]NeoEvent].
 	Actions interface{} `json:"actions"`
-	// Default consent purpose ID
+	// Default consent purpose ID.
 	DefaultPurpose string `json:"defaultPurpose"`
 	// This field can have the runtime type of [[]NeoEvent].
 	NeoEvents interface{} `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
-	// Components and Custom HTML tool with a defaultPurpose assigned
+	// Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorName string `json:"vendorName"`
 	// Vendor's Privacy Policy URL for TCF compliant consent modal, required for Custom
-	// Managed Components and Custom HTML tool with a defaultPurpose assigned
+	// Managed Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorPolicyURL string `json:"vendorPolicyUrl"`
 	// This field can have the runtime type of [ConfigurationToolsWorkerWorker].
 	Worker interface{}           `json:"worker"`
@@ -315,33 +315,33 @@ func init() {
 }
 
 type ConfigurationToolsZarazManagedComponent struct {
-	// List of blocking trigger IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component string `json:"component,required"`
-	// Default fields for tool's actions
-	DefaultFields map[string]ConfigurationToolsZarazManagedComponentDefaultFieldsUnion `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled bool `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name string `json:"name,required"`
-	// List of permissions granted to the component
-	Permissions []string `json:"permissions,required"`
-	// Tool's settings
-	Settings map[string]ConfigurationToolsZarazManagedComponentSettingsUnion `json:"settings,required"`
-	Type     ConfigurationToolsZarazManagedComponentType                     `json:"type,required"`
+	// List of blocking trigger IDs.
+	BlockingTriggers []string `json:"blockingTriggers" api:"required"`
+	// Tool's internal name.
+	Component string `json:"component" api:"required"`
+	// Default fields for tool's actions.
+	DefaultFields map[string]ConfigurationToolsZarazManagedComponentDefaultFieldsUnion `json:"defaultFields" api:"required"`
+	// Whether tool is enabled.
+	Enabled bool `json:"enabled" api:"required"`
+	// Tool's name defined by the user.
+	Name string `json:"name" api:"required"`
+	// List of permissions granted to the component.
+	Permissions []string `json:"permissions" api:"required"`
+	// Tool's settings.
+	Settings map[string]ConfigurationToolsZarazManagedComponentSettingsUnion `json:"settings" api:"required"`
+	Type     ConfigurationToolsZarazManagedComponentType                     `json:"type" api:"required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
 	Actions map[string]NeoEvent `json:"actions"`
-	// Default consent purpose ID
+	// Default consent purpose ID.
 	DefaultPurpose string `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
 	NeoEvents []NeoEvent `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
-	// Components and Custom HTML tool with a defaultPurpose assigned
+	// Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorName string `json:"vendorName"`
 	// Vendor's Privacy Policy URL for TCF compliant consent modal, required for Custom
-	// Managed Components and Custom HTML tool with a defaultPurpose assigned
+	// Managed Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorPolicyURL string                                      `json:"vendorPolicyUrl"`
 	JSON            configurationToolsZarazManagedComponentJSON `json:"-"`
 }
@@ -439,35 +439,35 @@ func (r ConfigurationToolsZarazManagedComponentType) IsKnown() bool {
 }
 
 type ConfigurationToolsWorker struct {
-	// List of blocking trigger IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component string `json:"component,required"`
-	// Default fields for tool's actions
-	DefaultFields map[string]ConfigurationToolsWorkerDefaultFieldsUnion `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled bool `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name string `json:"name,required"`
-	// List of permissions granted to the component
-	Permissions []string `json:"permissions,required"`
-	// Tool's settings
-	Settings map[string]ConfigurationToolsWorkerSettingsUnion `json:"settings,required"`
-	Type     ConfigurationToolsWorkerType                     `json:"type,required"`
-	// Cloudflare worker that acts as a managed component
-	Worker ConfigurationToolsWorkerWorker `json:"worker,required"`
+	// List of blocking trigger IDs.
+	BlockingTriggers []string `json:"blockingTriggers" api:"required"`
+	// Tool's internal name.
+	Component string `json:"component" api:"required"`
+	// Default fields for tool's actions.
+	DefaultFields map[string]ConfigurationToolsWorkerDefaultFieldsUnion `json:"defaultFields" api:"required"`
+	// Whether tool is enabled.
+	Enabled bool `json:"enabled" api:"required"`
+	// Tool's name defined by the user.
+	Name string `json:"name" api:"required"`
+	// List of permissions granted to the component.
+	Permissions []string `json:"permissions" api:"required"`
+	// Tool's settings.
+	Settings map[string]ConfigurationToolsWorkerSettingsUnion `json:"settings" api:"required"`
+	Type     ConfigurationToolsWorkerType                     `json:"type" api:"required"`
+	// Cloudflare worker that acts as a managed component.
+	Worker ConfigurationToolsWorkerWorker `json:"worker" api:"required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
 	Actions map[string]NeoEvent `json:"actions"`
-	// Default consent purpose ID
+	// Default consent purpose ID.
 	DefaultPurpose string `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
 	NeoEvents []NeoEvent `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
-	// Components and Custom HTML tool with a defaultPurpose assigned
+	// Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorName string `json:"vendorName"`
 	// Vendor's Privacy Policy URL for TCF compliant consent modal, required for Custom
-	// Managed Components and Custom HTML tool with a defaultPurpose assigned
+	// Managed Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorPolicyURL string                       `json:"vendorPolicyUrl"`
 	JSON            configurationToolsWorkerJSON `json:"-"`
 }
@@ -565,10 +565,10 @@ func (r ConfigurationToolsWorkerType) IsKnown() bool {
 	return false
 }
 
-// Cloudflare worker that acts as a managed component
+// Cloudflare worker that acts as a managed component.
 type ConfigurationToolsWorkerWorker struct {
-	EscapedWorkerName string                             `json:"escapedWorkerName,required"`
-	WorkerTag         string                             `json:"workerTag,required"`
+	EscapedWorkerName string                             `json:"escapedWorkerName" api:"required"`
+	WorkerTag         string                             `json:"workerTag" api:"required"`
 	JSON              configurationToolsWorkerWorkerJSON `json:"-"`
 }
 
@@ -606,11 +606,11 @@ func (r ConfigurationToolsType) IsKnown() bool {
 
 type ConfigurationTrigger struct {
 	// Rules defining when the trigger is not fired.
-	ExcludeRules []ConfigurationTriggersExcludeRule `json:"excludeRules,required"`
+	ExcludeRules []ConfigurationTriggersExcludeRule `json:"excludeRules" api:"required"`
 	// Rules defining when the trigger is fired.
-	LoadRules []ConfigurationTriggersLoadRule `json:"loadRules,required"`
+	LoadRules []ConfigurationTriggersLoadRule `json:"loadRules" api:"required"`
 	// Trigger name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Trigger description.
 	Description string                      `json:"description"`
 	System      ConfigurationTriggersSystem `json:"system"`
@@ -638,7 +638,7 @@ func (r configurationTriggerJSON) RawJSON() string {
 }
 
 type ConfigurationTriggersExcludeRule struct {
-	ID     string                                  `json:"id,required"`
+	ID     string                                  `json:"id" api:"required"`
 	Action ConfigurationTriggersExcludeRulesAction `json:"action"`
 	Match  string                                  `json:"match"`
 	Op     ConfigurationTriggersExcludeRulesOp     `json:"op"`
@@ -743,10 +743,10 @@ func init() {
 }
 
 type ConfigurationTriggersExcludeRulesZarazLoadRule struct {
-	ID    string                                             `json:"id,required"`
-	Match string                                             `json:"match,required"`
-	Op    ConfigurationTriggersExcludeRulesZarazLoadRuleOp   `json:"op,required"`
-	Value string                                             `json:"value,required"`
+	ID    string                                             `json:"id" api:"required"`
+	Match string                                             `json:"match" api:"required"`
+	Op    ConfigurationTriggersExcludeRulesZarazLoadRuleOp   `json:"op" api:"required"`
+	Value string                                             `json:"value" api:"required"`
 	JSON  configurationTriggersExcludeRulesZarazLoadRuleJSON `json:"-"`
 }
 
@@ -796,9 +796,9 @@ func (r ConfigurationTriggersExcludeRulesZarazLoadRuleOp) IsKnown() bool {
 }
 
 type ConfigurationTriggersExcludeRulesZarazClickListenerRule struct {
-	ID       string                                                          `json:"id,required"`
-	Action   ConfigurationTriggersExcludeRulesZarazClickListenerRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersExcludeRulesZarazClickListenerRuleSettings `json:"settings,required"`
+	ID       string                                                          `json:"id" api:"required"`
+	Action   ConfigurationTriggersExcludeRulesZarazClickListenerRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersExcludeRulesZarazClickListenerRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazClickListenerRuleJSON     `json:"-"`
 }
 
@@ -839,9 +839,9 @@ func (r ConfigurationTriggersExcludeRulesZarazClickListenerRuleAction) IsKnown()
 }
 
 type ConfigurationTriggersExcludeRulesZarazClickListenerRuleSettings struct {
-	Selector    string                                                              `json:"selector,required"`
-	Type        ConfigurationTriggersExcludeRulesZarazClickListenerRuleSettingsType `json:"type,required"`
-	WaitForTags int64                                                               `json:"waitForTags,required"`
+	Selector    string                                                              `json:"selector" api:"required"`
+	Type        ConfigurationTriggersExcludeRulesZarazClickListenerRuleSettingsType `json:"type" api:"required"`
+	WaitForTags int64                                                               `json:"waitForTags" api:"required"`
 	JSON        configurationTriggersExcludeRulesZarazClickListenerRuleSettingsJSON `json:"-"`
 }
 
@@ -880,9 +880,9 @@ func (r ConfigurationTriggersExcludeRulesZarazClickListenerRuleSettingsType) IsK
 }
 
 type ConfigurationTriggersExcludeRulesZarazTimerRule struct {
-	ID       string                                                  `json:"id,required"`
-	Action   ConfigurationTriggersExcludeRulesZarazTimerRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersExcludeRulesZarazTimerRuleSettings `json:"settings,required"`
+	ID       string                                                  `json:"id" api:"required"`
+	Action   ConfigurationTriggersExcludeRulesZarazTimerRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersExcludeRulesZarazTimerRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazTimerRuleJSON     `json:"-"`
 }
 
@@ -922,8 +922,8 @@ func (r ConfigurationTriggersExcludeRulesZarazTimerRuleAction) IsKnown() bool {
 }
 
 type ConfigurationTriggersExcludeRulesZarazTimerRuleSettings struct {
-	Interval int64                                                       `json:"interval,required"`
-	Limit    int64                                                       `json:"limit,required"`
+	Interval int64                                                       `json:"interval" api:"required"`
+	Limit    int64                                                       `json:"limit" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazTimerRuleSettingsJSON `json:"-"`
 }
 
@@ -946,9 +946,9 @@ func (r configurationTriggersExcludeRulesZarazTimerRuleSettingsJSON) RawJSON() s
 }
 
 type ConfigurationTriggersExcludeRulesZarazFormSubmissionRule struct {
-	ID       string                                                           `json:"id,required"`
-	Action   ConfigurationTriggersExcludeRulesZarazFormSubmissionRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersExcludeRulesZarazFormSubmissionRuleSettings `json:"settings,required"`
+	ID       string                                                           `json:"id" api:"required"`
+	Action   ConfigurationTriggersExcludeRulesZarazFormSubmissionRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersExcludeRulesZarazFormSubmissionRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazFormSubmissionRuleJSON     `json:"-"`
 }
 
@@ -989,8 +989,8 @@ func (r ConfigurationTriggersExcludeRulesZarazFormSubmissionRuleAction) IsKnown(
 }
 
 type ConfigurationTriggersExcludeRulesZarazFormSubmissionRuleSettings struct {
-	Selector string                                                               `json:"selector,required"`
-	Validate bool                                                                 `json:"validate,required"`
+	Selector string                                                               `json:"selector" api:"required"`
+	Validate bool                                                                 `json:"validate" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON `json:"-"`
 }
 
@@ -1013,9 +1013,9 @@ func (r configurationTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON) Ra
 }
 
 type ConfigurationTriggersExcludeRulesZarazVariableMatchRule struct {
-	ID       string                                                          `json:"id,required"`
-	Action   ConfigurationTriggersExcludeRulesZarazVariableMatchRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersExcludeRulesZarazVariableMatchRuleSettings `json:"settings,required"`
+	ID       string                                                          `json:"id" api:"required"`
+	Action   ConfigurationTriggersExcludeRulesZarazVariableMatchRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersExcludeRulesZarazVariableMatchRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazVariableMatchRuleJSON     `json:"-"`
 }
 
@@ -1056,8 +1056,8 @@ func (r ConfigurationTriggersExcludeRulesZarazVariableMatchRuleAction) IsKnown()
 }
 
 type ConfigurationTriggersExcludeRulesZarazVariableMatchRuleSettings struct {
-	Match    string                                                              `json:"match,required"`
-	Variable string                                                              `json:"variable,required"`
+	Match    string                                                              `json:"match" api:"required"`
+	Variable string                                                              `json:"variable" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON `json:"-"`
 }
 
@@ -1080,9 +1080,9 @@ func (r configurationTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON) Raw
 }
 
 type ConfigurationTriggersExcludeRulesZarazScrollDepthRule struct {
-	ID       string                                                        `json:"id,required"`
-	Action   ConfigurationTriggersExcludeRulesZarazScrollDepthRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersExcludeRulesZarazScrollDepthRuleSettings `json:"settings,required"`
+	ID       string                                                        `json:"id" api:"required"`
+	Action   ConfigurationTriggersExcludeRulesZarazScrollDepthRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersExcludeRulesZarazScrollDepthRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazScrollDepthRuleJSON     `json:"-"`
 }
 
@@ -1122,7 +1122,7 @@ func (r ConfigurationTriggersExcludeRulesZarazScrollDepthRuleAction) IsKnown() b
 }
 
 type ConfigurationTriggersExcludeRulesZarazScrollDepthRuleSettings struct {
-	Positions string                                                            `json:"positions,required"`
+	Positions string                                                            `json:"positions" api:"required"`
 	JSON      configurationTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON `json:"-"`
 }
 
@@ -1144,9 +1144,9 @@ func (r configurationTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON) RawJS
 }
 
 type ConfigurationTriggersExcludeRulesZarazElementVisibilityRule struct {
-	ID       string                                                              `json:"id,required"`
-	Action   ConfigurationTriggersExcludeRulesZarazElementVisibilityRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersExcludeRulesZarazElementVisibilityRuleSettings `json:"settings,required"`
+	ID       string                                                              `json:"id" api:"required"`
+	Action   ConfigurationTriggersExcludeRulesZarazElementVisibilityRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersExcludeRulesZarazElementVisibilityRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazElementVisibilityRuleJSON     `json:"-"`
 }
 
@@ -1187,7 +1187,7 @@ func (r ConfigurationTriggersExcludeRulesZarazElementVisibilityRuleAction) IsKno
 }
 
 type ConfigurationTriggersExcludeRulesZarazElementVisibilityRuleSettings struct {
-	Selector string                                                                  `json:"selector,required"`
+	Selector string                                                                  `json:"selector" api:"required"`
 	JSON     configurationTriggersExcludeRulesZarazElementVisibilityRuleSettingsJSON `json:"-"`
 }
 
@@ -1251,7 +1251,7 @@ func (r ConfigurationTriggersExcludeRulesOp) IsKnown() bool {
 }
 
 type ConfigurationTriggersLoadRule struct {
-	ID     string                               `json:"id,required"`
+	ID     string                               `json:"id" api:"required"`
 	Action ConfigurationTriggersLoadRulesAction `json:"action"`
 	Match  string                               `json:"match"`
 	Op     ConfigurationTriggersLoadRulesOp     `json:"op"`
@@ -1356,10 +1356,10 @@ func init() {
 }
 
 type ConfigurationTriggersLoadRulesZarazLoadRule struct {
-	ID    string                                          `json:"id,required"`
-	Match string                                          `json:"match,required"`
-	Op    ConfigurationTriggersLoadRulesZarazLoadRuleOp   `json:"op,required"`
-	Value string                                          `json:"value,required"`
+	ID    string                                          `json:"id" api:"required"`
+	Match string                                          `json:"match" api:"required"`
+	Op    ConfigurationTriggersLoadRulesZarazLoadRuleOp   `json:"op" api:"required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  configurationTriggersLoadRulesZarazLoadRuleJSON `json:"-"`
 }
 
@@ -1408,9 +1408,9 @@ func (r ConfigurationTriggersLoadRulesZarazLoadRuleOp) IsKnown() bool {
 }
 
 type ConfigurationTriggersLoadRulesZarazClickListenerRule struct {
-	ID       string                                                       `json:"id,required"`
-	Action   ConfigurationTriggersLoadRulesZarazClickListenerRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersLoadRulesZarazClickListenerRuleSettings `json:"settings,required"`
+	ID       string                                                       `json:"id" api:"required"`
+	Action   ConfigurationTriggersLoadRulesZarazClickListenerRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersLoadRulesZarazClickListenerRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazClickListenerRuleJSON     `json:"-"`
 }
 
@@ -1450,9 +1450,9 @@ func (r ConfigurationTriggersLoadRulesZarazClickListenerRuleAction) IsKnown() bo
 }
 
 type ConfigurationTriggersLoadRulesZarazClickListenerRuleSettings struct {
-	Selector    string                                                           `json:"selector,required"`
-	Type        ConfigurationTriggersLoadRulesZarazClickListenerRuleSettingsType `json:"type,required"`
-	WaitForTags int64                                                            `json:"waitForTags,required"`
+	Selector    string                                                           `json:"selector" api:"required"`
+	Type        ConfigurationTriggersLoadRulesZarazClickListenerRuleSettingsType `json:"type" api:"required"`
+	WaitForTags int64                                                            `json:"waitForTags" api:"required"`
 	JSON        configurationTriggersLoadRulesZarazClickListenerRuleSettingsJSON `json:"-"`
 }
 
@@ -1491,9 +1491,9 @@ func (r ConfigurationTriggersLoadRulesZarazClickListenerRuleSettingsType) IsKnow
 }
 
 type ConfigurationTriggersLoadRulesZarazTimerRule struct {
-	ID       string                                               `json:"id,required"`
-	Action   ConfigurationTriggersLoadRulesZarazTimerRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersLoadRulesZarazTimerRuleSettings `json:"settings,required"`
+	ID       string                                               `json:"id" api:"required"`
+	Action   ConfigurationTriggersLoadRulesZarazTimerRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersLoadRulesZarazTimerRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazTimerRuleJSON     `json:"-"`
 }
 
@@ -1532,8 +1532,8 @@ func (r ConfigurationTriggersLoadRulesZarazTimerRuleAction) IsKnown() bool {
 }
 
 type ConfigurationTriggersLoadRulesZarazTimerRuleSettings struct {
-	Interval int64                                                    `json:"interval,required"`
-	Limit    int64                                                    `json:"limit,required"`
+	Interval int64                                                    `json:"interval" api:"required"`
+	Limit    int64                                                    `json:"limit" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazTimerRuleSettingsJSON `json:"-"`
 }
 
@@ -1555,9 +1555,9 @@ func (r configurationTriggersLoadRulesZarazTimerRuleSettingsJSON) RawJSON() stri
 }
 
 type ConfigurationTriggersLoadRulesZarazFormSubmissionRule struct {
-	ID       string                                                        `json:"id,required"`
-	Action   ConfigurationTriggersLoadRulesZarazFormSubmissionRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersLoadRulesZarazFormSubmissionRuleSettings `json:"settings,required"`
+	ID       string                                                        `json:"id" api:"required"`
+	Action   ConfigurationTriggersLoadRulesZarazFormSubmissionRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersLoadRulesZarazFormSubmissionRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazFormSubmissionRuleJSON     `json:"-"`
 }
 
@@ -1597,8 +1597,8 @@ func (r ConfigurationTriggersLoadRulesZarazFormSubmissionRuleAction) IsKnown() b
 }
 
 type ConfigurationTriggersLoadRulesZarazFormSubmissionRuleSettings struct {
-	Selector string                                                            `json:"selector,required"`
-	Validate bool                                                              `json:"validate,required"`
+	Selector string                                                            `json:"selector" api:"required"`
+	Validate bool                                                              `json:"validate" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON `json:"-"`
 }
 
@@ -1621,9 +1621,9 @@ func (r configurationTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON) RawJS
 }
 
 type ConfigurationTriggersLoadRulesZarazVariableMatchRule struct {
-	ID       string                                                       `json:"id,required"`
-	Action   ConfigurationTriggersLoadRulesZarazVariableMatchRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersLoadRulesZarazVariableMatchRuleSettings `json:"settings,required"`
+	ID       string                                                       `json:"id" api:"required"`
+	Action   ConfigurationTriggersLoadRulesZarazVariableMatchRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersLoadRulesZarazVariableMatchRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazVariableMatchRuleJSON     `json:"-"`
 }
 
@@ -1663,8 +1663,8 @@ func (r ConfigurationTriggersLoadRulesZarazVariableMatchRuleAction) IsKnown() bo
 }
 
 type ConfigurationTriggersLoadRulesZarazVariableMatchRuleSettings struct {
-	Match    string                                                           `json:"match,required"`
-	Variable string                                                           `json:"variable,required"`
+	Match    string                                                           `json:"match" api:"required"`
+	Variable string                                                           `json:"variable" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazVariableMatchRuleSettingsJSON `json:"-"`
 }
 
@@ -1687,9 +1687,9 @@ func (r configurationTriggersLoadRulesZarazVariableMatchRuleSettingsJSON) RawJSO
 }
 
 type ConfigurationTriggersLoadRulesZarazScrollDepthRule struct {
-	ID       string                                                     `json:"id,required"`
-	Action   ConfigurationTriggersLoadRulesZarazScrollDepthRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersLoadRulesZarazScrollDepthRuleSettings `json:"settings,required"`
+	ID       string                                                     `json:"id" api:"required"`
+	Action   ConfigurationTriggersLoadRulesZarazScrollDepthRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersLoadRulesZarazScrollDepthRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazScrollDepthRuleJSON     `json:"-"`
 }
 
@@ -1729,7 +1729,7 @@ func (r ConfigurationTriggersLoadRulesZarazScrollDepthRuleAction) IsKnown() bool
 }
 
 type ConfigurationTriggersLoadRulesZarazScrollDepthRuleSettings struct {
-	Positions string                                                         `json:"positions,required"`
+	Positions string                                                         `json:"positions" api:"required"`
 	JSON      configurationTriggersLoadRulesZarazScrollDepthRuleSettingsJSON `json:"-"`
 }
 
@@ -1751,9 +1751,9 @@ func (r configurationTriggersLoadRulesZarazScrollDepthRuleSettingsJSON) RawJSON(
 }
 
 type ConfigurationTriggersLoadRulesZarazElementVisibilityRule struct {
-	ID       string                                                           `json:"id,required"`
-	Action   ConfigurationTriggersLoadRulesZarazElementVisibilityRuleAction   `json:"action,required"`
-	Settings ConfigurationTriggersLoadRulesZarazElementVisibilityRuleSettings `json:"settings,required"`
+	ID       string                                                           `json:"id" api:"required"`
+	Action   ConfigurationTriggersLoadRulesZarazElementVisibilityRuleAction   `json:"action" api:"required"`
+	Settings ConfigurationTriggersLoadRulesZarazElementVisibilityRuleSettings `json:"settings" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazElementVisibilityRuleJSON     `json:"-"`
 }
 
@@ -1794,7 +1794,7 @@ func (r ConfigurationTriggersLoadRulesZarazElementVisibilityRuleAction) IsKnown(
 }
 
 type ConfigurationTriggersLoadRulesZarazElementVisibilityRuleSettings struct {
-	Selector string                                                               `json:"selector,required"`
+	Selector string                                                               `json:"selector" api:"required"`
 	JSON     configurationTriggersLoadRulesZarazElementVisibilityRuleSettingsJSON `json:"-"`
 }
 
@@ -1872,11 +1872,11 @@ func (r ConfigurationTriggersSystem) IsKnown() bool {
 }
 
 type ConfigurationVariable struct {
-	Name string                     `json:"name,required"`
-	Type ConfigurationVariablesType `json:"type,required"`
+	Name string                     `json:"name" api:"required"`
+	Type ConfigurationVariablesType `json:"type" api:"required"`
 	// This field can have the runtime type of [string],
 	// [ConfigurationVariablesZarazWorkerVariableValue].
-	Value interface{}               `json:"value,required"`
+	Value interface{}               `json:"value" api:"required"`
 	JSON  configurationVariableJSON `json:"-"`
 	union ConfigurationVariablesUnion
 }
@@ -1945,9 +1945,9 @@ func init() {
 }
 
 type ConfigurationVariablesZarazStringVariable struct {
-	Name  string                                        `json:"name,required"`
-	Type  ConfigurationVariablesZarazStringVariableType `json:"type,required"`
-	Value string                                        `json:"value,required"`
+	Name  string                                        `json:"name" api:"required"`
+	Type  ConfigurationVariablesZarazStringVariableType `json:"type" api:"required"`
+	Value string                                        `json:"value" api:"required"`
 	JSON  configurationVariablesZarazStringVariableJSON `json:"-"`
 }
 
@@ -1986,9 +1986,9 @@ func (r ConfigurationVariablesZarazStringVariableType) IsKnown() bool {
 }
 
 type ConfigurationVariablesZarazSecretVariable struct {
-	Name  string                                        `json:"name,required"`
-	Type  ConfigurationVariablesZarazSecretVariableType `json:"type,required"`
-	Value string                                        `json:"value,required"`
+	Name  string                                        `json:"name" api:"required"`
+	Type  ConfigurationVariablesZarazSecretVariableType `json:"type" api:"required"`
+	Value string                                        `json:"value" api:"required"`
 	JSON  configurationVariablesZarazSecretVariableJSON `json:"-"`
 }
 
@@ -2027,9 +2027,9 @@ func (r ConfigurationVariablesZarazSecretVariableType) IsKnown() bool {
 }
 
 type ConfigurationVariablesZarazWorkerVariable struct {
-	Name  string                                         `json:"name,required"`
-	Type  ConfigurationVariablesZarazWorkerVariableType  `json:"type,required"`
-	Value ConfigurationVariablesZarazWorkerVariableValue `json:"value,required"`
+	Name  string                                         `json:"name" api:"required"`
+	Type  ConfigurationVariablesZarazWorkerVariableType  `json:"type" api:"required"`
+	Value ConfigurationVariablesZarazWorkerVariableValue `json:"value" api:"required"`
 	JSON  configurationVariablesZarazWorkerVariableJSON  `json:"-"`
 }
 
@@ -2068,8 +2068,8 @@ func (r ConfigurationVariablesZarazWorkerVariableType) IsKnown() bool {
 }
 
 type ConfigurationVariablesZarazWorkerVariableValue struct {
-	EscapedWorkerName string                                             `json:"escapedWorkerName,required"`
-	WorkerTag         string                                             `json:"workerTag,required"`
+	EscapedWorkerName string                                             `json:"escapedWorkerName" api:"required"`
+	WorkerTag         string                                             `json:"workerTag" api:"required"`
 	JSON              configurationVariablesZarazWorkerVariableValueJSON `json:"-"`
 }
 
@@ -2137,22 +2137,22 @@ func (r configurationAnalyticsJSON) RawJSON() string {
 
 // Consent management configuration.
 type ConfigurationConsent struct {
-	Enabled                bool                  `json:"enabled,required"`
+	Enabled                bool                  `json:"enabled" api:"required"`
 	ButtonTextTranslations ButtonTextTranslation `json:"buttonTextTranslations"`
 	CompanyEmail           string                `json:"companyEmail"`
 	CompanyName            string                `json:"companyName"`
 	CompanyStreetAddress   string                `json:"companyStreetAddress"`
 	ConsentModalIntroHTML  string                `json:"consentModalIntroHTML"`
-	// Object where keys are language codes
+	// Object where keys are language codes.
 	ConsentModalIntroHTMLWithTranslations map[string]string `json:"consentModalIntroHTMLWithTranslations"`
 	CookieName                            string            `json:"cookieName"`
 	CustomCSS                             string            `json:"customCSS"`
 	CustomIntroDisclaimerDismissed        bool              `json:"customIntroDisclaimerDismissed"`
 	DefaultLanguage                       string            `json:"defaultLanguage"`
 	HideModal                             bool              `json:"hideModal"`
-	// Object where keys are purpose alpha-numeric IDs
+	// Object where keys are purpose alpha-numeric IDs.
 	Purposes map[string]ConfigurationConsentPurpose `json:"purposes"`
-	// Object where keys are purpose alpha-numeric IDs
+	// Object where keys are purpose alpha-numeric IDs.
 	PurposesWithTranslations map[string]ConfigurationConsentPurposesWithTranslation `json:"purposesWithTranslations"`
 	TcfCompliant             bool                                                   `json:"tcfCompliant"`
 	JSON                     configurationConsentJSON                               `json:"-"`
@@ -2189,8 +2189,8 @@ func (r configurationConsentJSON) RawJSON() string {
 }
 
 type ConfigurationConsentPurpose struct {
-	Description string                          `json:"description,required"`
-	Name        string                          `json:"name,required"`
+	Description string                          `json:"description" api:"required"`
+	Name        string                          `json:"name" api:"required"`
 	JSON        configurationConsentPurposeJSON `json:"-"`
 }
 
@@ -2212,11 +2212,11 @@ func (r configurationConsentPurposeJSON) RawJSON() string {
 }
 
 type ConfigurationConsentPurposesWithTranslation struct {
-	// Object where keys are language codes
-	Description map[string]string `json:"description,required"`
-	// Object where keys are language codes
-	Name  map[string]string                               `json:"name,required"`
-	Order int64                                           `json:"order,required"`
+	// Object where keys are language codes.
+	Description map[string]string `json:"description" api:"required"`
+	// Object where keys are language codes.
+	Name  map[string]string                               `json:"name" api:"required"`
+	Order int64                                           `json:"order" api:"required"`
 	JSON  configurationConsentPurposesWithTranslationJSON `json:"-"`
 }
 
@@ -2240,25 +2240,25 @@ func (r configurationConsentPurposesWithTranslationJSON) RawJSON() string {
 
 type ConfigUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Data layer compatibility mode enabled.
-	DataLayer param.Field[bool] `json:"dataLayer,required"`
+	DataLayer param.Field[bool] `json:"dataLayer" api:"required"`
 	// The key for Zaraz debug mode.
-	DebugKey param.Field[string] `json:"debugKey,required"`
+	DebugKey param.Field[string] `json:"debugKey" api:"required"`
 	// General Zaraz settings.
-	Settings param.Field[ConfigUpdateParamsSettings] `json:"settings,required"`
+	Settings param.Field[ConfigUpdateParamsSettings] `json:"settings" api:"required"`
 	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
 	// and value is the tool configuration object.
-	Tools param.Field[map[string]ConfigUpdateParamsToolsUnion] `json:"tools,required"`
+	Tools param.Field[map[string]ConfigUpdateParamsToolsUnion] `json:"tools" api:"required"`
 	// Triggers set up under Zaraz configuration, where key is the trigger
 	// alpha-numeric ID and value is the trigger configuration.
-	Triggers param.Field[map[string]ConfigUpdateParamsTriggers] `json:"triggers,required"`
+	Triggers param.Field[map[string]ConfigUpdateParamsTriggers] `json:"triggers" api:"required"`
 	// Variables set up under Zaraz configuration, where key is the variable
 	// alpha-numeric ID and value is the variable configuration. Values of variables of
 	// type secret are not included.
-	Variables param.Field[map[string]ConfigUpdateParamsVariablesUnion] `json:"variables,required"`
+	Variables param.Field[map[string]ConfigUpdateParamsVariablesUnion] `json:"variables" api:"required"`
 	// Zaraz internal version of the config.
-	ZarazVersion param.Field[int64] `json:"zarazVersion,required"`
+	ZarazVersion param.Field[int64] `json:"zarazVersion" api:"required"`
 	// Cloudflare Monitoring settings.
 	Analytics param.Field[ConfigUpdateParamsAnalytics] `json:"analytics"`
 	// Consent management configuration.
@@ -2274,7 +2274,7 @@ func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 // General Zaraz settings.
 type ConfigUpdateParamsSettings struct {
 	// Automatic injection of Zaraz scripts enabled.
-	AutoInjectScript param.Field[bool] `json:"autoInjectScript,required"`
+	AutoInjectScript param.Field[bool] `json:"autoInjectScript" api:"required"`
 	// Details of the worker that receives and edits Zaraz Context object.
 	ContextEnricher param.Field[ConfigUpdateParamsSettingsContextEnricher] `json:"contextEnricher"`
 	// The domain Zaraz will use for writing and reading its cookies.
@@ -2289,7 +2289,7 @@ type ConfigUpdateParamsSettings struct {
 	HideIPAddress param.Field[bool] `json:"hideIPAddress"`
 	// Removing URL query params enabled.
 	HideQueryParams param.Field[bool] `json:"hideQueryParams"`
-	// Removing sensitive data from User Aagent string enabled.
+	// Removing sensitive data from User Agent string enabled.
 	HideUserAgent param.Field[bool] `json:"hideUserAgent"`
 	// Custom endpoint for Zaraz init script.
 	InitPath param.Field[string] `json:"initPath"`
@@ -2309,8 +2309,8 @@ func (r ConfigUpdateParamsSettings) MarshalJSON() (data []byte, err error) {
 
 // Details of the worker that receives and edits Zaraz Context object.
 type ConfigUpdateParamsSettingsContextEnricher struct {
-	EscapedWorkerName param.Field[string] `json:"escapedWorkerName,required"`
-	WorkerTag         param.Field[string] `json:"workerTag,required"`
+	EscapedWorkerName param.Field[string] `json:"escapedWorkerName" api:"required"`
+	WorkerTag         param.Field[string] `json:"workerTag" api:"required"`
 }
 
 func (r ConfigUpdateParamsSettingsContextEnricher) MarshalJSON() (data []byte, err error) {
@@ -2318,26 +2318,26 @@ func (r ConfigUpdateParamsSettingsContextEnricher) MarshalJSON() (data []byte, e
 }
 
 type ConfigUpdateParamsTools struct {
-	BlockingTriggers param.Field[interface{}] `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component     param.Field[string]      `json:"component,required"`
-	DefaultFields param.Field[interface{}] `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name        param.Field[string]                      `json:"name,required"`
-	Permissions param.Field[interface{}]                 `json:"permissions,required"`
-	Settings    param.Field[interface{}]                 `json:"settings,required"`
-	Type        param.Field[ConfigUpdateParamsToolsType] `json:"type,required"`
+	BlockingTriggers param.Field[interface{}] `json:"blockingTriggers" api:"required"`
+	// Tool's internal name.
+	Component     param.Field[string]      `json:"component" api:"required"`
+	DefaultFields param.Field[interface{}] `json:"defaultFields" api:"required"`
+	// Whether tool is enabled.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// Tool's name defined by the user.
+	Name        param.Field[string]                      `json:"name" api:"required"`
+	Permissions param.Field[interface{}]                 `json:"permissions" api:"required"`
+	Settings    param.Field[interface{}]                 `json:"settings" api:"required"`
+	Type        param.Field[ConfigUpdateParamsToolsType] `json:"type" api:"required"`
 	Actions     param.Field[interface{}]                 `json:"actions"`
-	// Default consent purpose ID
+	// Default consent purpose ID.
 	DefaultPurpose param.Field[string]      `json:"defaultPurpose"`
 	NeoEvents      param.Field[interface{}] `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
-	// Components and Custom HTML tool with a defaultPurpose assigned
+	// Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorName param.Field[string] `json:"vendorName"`
 	// Vendor's Privacy Policy URL for TCF compliant consent modal, required for Custom
-	// Managed Components and Custom HTML tool with a defaultPurpose assigned
+	// Managed Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorPolicyURL param.Field[string]      `json:"vendorPolicyUrl"`
 	Worker          param.Field[interface{}] `json:"worker"`
 }
@@ -2355,33 +2355,33 @@ type ConfigUpdateParamsToolsUnion interface {
 }
 
 type ConfigUpdateParamsToolsZarazManagedComponent struct {
-	// List of blocking trigger IDs
-	BlockingTriggers param.Field[[]string] `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component param.Field[string] `json:"component,required"`
-	// Default fields for tool's actions
-	DefaultFields param.Field[map[string]ConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion] `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name param.Field[string] `json:"name,required"`
-	// List of permissions granted to the component
-	Permissions param.Field[[]string] `json:"permissions,required"`
-	// Tool's settings
-	Settings param.Field[map[string]ConfigUpdateParamsToolsZarazManagedComponentSettingsUnion] `json:"settings,required"`
-	Type     param.Field[ConfigUpdateParamsToolsZarazManagedComponentType]                     `json:"type,required"`
+	// List of blocking trigger IDs.
+	BlockingTriggers param.Field[[]string] `json:"blockingTriggers" api:"required"`
+	// Tool's internal name.
+	Component param.Field[string] `json:"component" api:"required"`
+	// Default fields for tool's actions.
+	DefaultFields param.Field[map[string]ConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion] `json:"defaultFields" api:"required"`
+	// Whether tool is enabled.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// Tool's name defined by the user.
+	Name param.Field[string] `json:"name" api:"required"`
+	// List of permissions granted to the component.
+	Permissions param.Field[[]string] `json:"permissions" api:"required"`
+	// Tool's settings.
+	Settings param.Field[map[string]ConfigUpdateParamsToolsZarazManagedComponentSettingsUnion] `json:"settings" api:"required"`
+	Type     param.Field[ConfigUpdateParamsToolsZarazManagedComponentType]                     `json:"type" api:"required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
 	Actions param.Field[map[string]NeoEventParam] `json:"actions"`
-	// Default consent purpose ID
+	// Default consent purpose ID.
 	DefaultPurpose param.Field[string] `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
 	NeoEvents param.Field[[]NeoEventParam] `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
-	// Components and Custom HTML tool with a defaultPurpose assigned
+	// Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorName param.Field[string] `json:"vendorName"`
 	// Vendor's Privacy Policy URL for TCF compliant consent modal, required for Custom
-	// Managed Components and Custom HTML tool with a defaultPurpose assigned
+	// Managed Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorPolicyURL param.Field[string] `json:"vendorPolicyUrl"`
 }
 
@@ -2416,35 +2416,35 @@ func (r ConfigUpdateParamsToolsZarazManagedComponentType) IsKnown() bool {
 }
 
 type ConfigUpdateParamsToolsWorker struct {
-	// List of blocking trigger IDs
-	BlockingTriggers param.Field[[]string] `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component param.Field[string] `json:"component,required"`
-	// Default fields for tool's actions
-	DefaultFields param.Field[map[string]ConfigUpdateParamsToolsWorkerDefaultFieldsUnion] `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name param.Field[string] `json:"name,required"`
-	// List of permissions granted to the component
-	Permissions param.Field[[]string] `json:"permissions,required"`
-	// Tool's settings
-	Settings param.Field[map[string]ConfigUpdateParamsToolsWorkerSettingsUnion] `json:"settings,required"`
-	Type     param.Field[ConfigUpdateParamsToolsWorkerType]                     `json:"type,required"`
-	// Cloudflare worker that acts as a managed component
-	Worker param.Field[ConfigUpdateParamsToolsWorkerWorker] `json:"worker,required"`
+	// List of blocking trigger IDs.
+	BlockingTriggers param.Field[[]string] `json:"blockingTriggers" api:"required"`
+	// Tool's internal name.
+	Component param.Field[string] `json:"component" api:"required"`
+	// Default fields for tool's actions.
+	DefaultFields param.Field[map[string]ConfigUpdateParamsToolsWorkerDefaultFieldsUnion] `json:"defaultFields" api:"required"`
+	// Whether tool is enabled.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// Tool's name defined by the user.
+	Name param.Field[string] `json:"name" api:"required"`
+	// List of permissions granted to the component.
+	Permissions param.Field[[]string] `json:"permissions" api:"required"`
+	// Tool's settings.
+	Settings param.Field[map[string]ConfigUpdateParamsToolsWorkerSettingsUnion] `json:"settings" api:"required"`
+	Type     param.Field[ConfigUpdateParamsToolsWorkerType]                     `json:"type" api:"required"`
+	// Cloudflare worker that acts as a managed component.
+	Worker param.Field[ConfigUpdateParamsToolsWorkerWorker] `json:"worker" api:"required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
 	Actions param.Field[map[string]NeoEventParam] `json:"actions"`
-	// Default consent purpose ID
+	// Default consent purpose ID.
 	DefaultPurpose param.Field[string] `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
 	NeoEvents param.Field[[]NeoEventParam] `json:"neoEvents"`
 	// Vendor name for TCF compliant consent modal, required for Custom Managed
-	// Components and Custom HTML tool with a defaultPurpose assigned
+	// Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorName param.Field[string] `json:"vendorName"`
 	// Vendor's Privacy Policy URL for TCF compliant consent modal, required for Custom
-	// Managed Components and Custom HTML tool with a defaultPurpose assigned
+	// Managed Components and Custom HTML tool with a defaultPurpose assigned.
 	VendorPolicyURL param.Field[string] `json:"vendorPolicyUrl"`
 }
 
@@ -2478,10 +2478,10 @@ func (r ConfigUpdateParamsToolsWorkerType) IsKnown() bool {
 	return false
 }
 
-// Cloudflare worker that acts as a managed component
+// Cloudflare worker that acts as a managed component.
 type ConfigUpdateParamsToolsWorkerWorker struct {
-	EscapedWorkerName param.Field[string] `json:"escapedWorkerName,required"`
-	WorkerTag         param.Field[string] `json:"workerTag,required"`
+	EscapedWorkerName param.Field[string] `json:"escapedWorkerName" api:"required"`
+	WorkerTag         param.Field[string] `json:"workerTag" api:"required"`
 }
 
 func (r ConfigUpdateParamsToolsWorkerWorker) MarshalJSON() (data []byte, err error) {
@@ -2505,11 +2505,11 @@ func (r ConfigUpdateParamsToolsType) IsKnown() bool {
 
 type ConfigUpdateParamsTriggers struct {
 	// Rules defining when the trigger is not fired.
-	ExcludeRules param.Field[[]ConfigUpdateParamsTriggersExcludeRuleUnion] `json:"excludeRules,required"`
+	ExcludeRules param.Field[[]ConfigUpdateParamsTriggersExcludeRuleUnion] `json:"excludeRules" api:"required"`
 	// Rules defining when the trigger is fired.
-	LoadRules param.Field[[]ConfigUpdateParamsTriggersLoadRuleUnion] `json:"loadRules,required"`
+	LoadRules param.Field[[]ConfigUpdateParamsTriggersLoadRuleUnion] `json:"loadRules" api:"required"`
 	// Trigger name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Trigger description.
 	Description param.Field[string]                           `json:"description"`
 	System      param.Field[ConfigUpdateParamsTriggersSystem] `json:"system"`
@@ -2520,7 +2520,7 @@ func (r ConfigUpdateParamsTriggers) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateParamsTriggersExcludeRule struct {
-	ID       param.Field[string]                                       `json:"id,required"`
+	ID       param.Field[string]                                       `json:"id" api:"required"`
 	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesAction] `json:"action"`
 	Match    param.Field[string]                                       `json:"match"`
 	Op       param.Field[ConfigUpdateParamsTriggersExcludeRulesOp]     `json:"op"`
@@ -2548,10 +2548,10 @@ type ConfigUpdateParamsTriggersExcludeRuleUnion interface {
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazLoadRule struct {
-	ID    param.Field[string]                                                `json:"id,required"`
-	Match param.Field[string]                                                `json:"match,required"`
-	Op    param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazLoadRuleOp] `json:"op,required"`
-	Value param.Field[string]                                                `json:"value,required"`
+	ID    param.Field[string]                                                `json:"id" api:"required"`
+	Match param.Field[string]                                                `json:"match" api:"required"`
+	Op    param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazLoadRuleOp] `json:"op" api:"required"`
+	Value param.Field[string]                                                `json:"value" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazLoadRule) MarshalJSON() (data []byte, err error) {
@@ -2585,9 +2585,9 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazLoadRuleOp) IsKnown() bool {
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRule struct {
-	ID       param.Field[string]                                                               `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                               `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRule) MarshalJSON() (data []byte, err error) {
@@ -2612,9 +2612,9 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleAction) IsKn
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleSettings struct {
-	Selector    param.Field[string]                                                                   `json:"selector,required"`
-	Type        param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleSettingsType] `json:"type,required"`
-	WaitForTags param.Field[int64]                                                                    `json:"waitForTags,required"`
+	Selector    param.Field[string]                                                                   `json:"selector" api:"required"`
+	Type        param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleSettingsType] `json:"type" api:"required"`
+	WaitForTags param.Field[int64]                                                                    `json:"waitForTags" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -2637,9 +2637,9 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazClickListenerRuleSettingsType
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazTimerRule struct {
-	ID       param.Field[string]                                                       `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                       `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazTimerRule) MarshalJSON() (data []byte, err error) {
@@ -2664,8 +2664,8 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleAction) IsKnown() bo
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleSettings struct {
-	Interval param.Field[int64] `json:"interval,required"`
-	Limit    param.Field[int64] `json:"limit,required"`
+	Interval param.Field[int64] `json:"interval" api:"required"`
+	Limit    param.Field[int64] `json:"limit" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -2673,9 +2673,9 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazTimerRuleSettings) MarshalJSO
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRule struct {
-	ID       param.Field[string]                                                                `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                                `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRule) MarshalJSON() (data []byte, err error) {
@@ -2700,8 +2700,8 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleAction) IsK
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleSettings struct {
-	Selector param.Field[string] `json:"selector,required"`
-	Validate param.Field[bool]   `json:"validate,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
+	Validate param.Field[bool]   `json:"validate" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -2709,9 +2709,9 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazFormSubmissionRuleSettings) M
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRule struct {
-	ID       param.Field[string]                                                               `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                               `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRule) MarshalJSON() (data []byte, err error) {
@@ -2736,8 +2736,8 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleAction) IsKn
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleSettings struct {
-	Match    param.Field[string] `json:"match,required"`
-	Variable param.Field[string] `json:"variable,required"`
+	Match    param.Field[string] `json:"match" api:"required"`
+	Variable param.Field[string] `json:"variable" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -2745,9 +2745,9 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazVariableMatchRuleSettings) Ma
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRule struct {
-	ID       param.Field[string]                                                             `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                             `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRule) MarshalJSON() (data []byte, err error) {
@@ -2772,7 +2772,7 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleAction) IsKnow
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleSettings struct {
-	Positions param.Field[string] `json:"positions,required"`
+	Positions param.Field[string] `json:"positions" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -2780,9 +2780,9 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazScrollDepthRuleSettings) Mars
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRule struct {
-	ID       param.Field[string]                                                                   `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                                   `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRule) MarshalJSON() (data []byte, err error) {
@@ -2807,7 +2807,7 @@ func (r ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRuleAction) 
 }
 
 type ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRuleSettings struct {
-	Selector param.Field[string] `json:"selector,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersExcludeRulesZarazElementVisibilityRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -2857,7 +2857,7 @@ func (r ConfigUpdateParamsTriggersExcludeRulesOp) IsKnown() bool {
 }
 
 type ConfigUpdateParamsTriggersLoadRule struct {
-	ID       param.Field[string]                                    `json:"id,required"`
+	ID       param.Field[string]                                    `json:"id" api:"required"`
 	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesAction] `json:"action"`
 	Match    param.Field[string]                                    `json:"match"`
 	Op       param.Field[ConfigUpdateParamsTriggersLoadRulesOp]     `json:"op"`
@@ -2884,10 +2884,10 @@ type ConfigUpdateParamsTriggersLoadRuleUnion interface {
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazLoadRule struct {
-	ID    param.Field[string]                                             `json:"id,required"`
-	Match param.Field[string]                                             `json:"match,required"`
-	Op    param.Field[ConfigUpdateParamsTriggersLoadRulesZarazLoadRuleOp] `json:"op,required"`
-	Value param.Field[string]                                             `json:"value,required"`
+	ID    param.Field[string]                                             `json:"id" api:"required"`
+	Match param.Field[string]                                             `json:"match" api:"required"`
+	Op    param.Field[ConfigUpdateParamsTriggersLoadRulesZarazLoadRuleOp] `json:"op" api:"required"`
+	Value param.Field[string]                                             `json:"value" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazLoadRule) MarshalJSON() (data []byte, err error) {
@@ -2921,9 +2921,9 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazLoadRuleOp) IsKnown() bool {
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRule struct {
-	ID       param.Field[string]                                                            `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                            `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRule) MarshalJSON() (data []byte, err error) {
@@ -2948,9 +2948,9 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleAction) IsKnown
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleSettings struct {
-	Selector    param.Field[string]                                                                `json:"selector,required"`
-	Type        param.Field[ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleSettingsType] `json:"type,required"`
-	WaitForTags param.Field[int64]                                                                 `json:"waitForTags,required"`
+	Selector    param.Field[string]                                                                `json:"selector" api:"required"`
+	Type        param.Field[ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleSettingsType] `json:"type" api:"required"`
+	WaitForTags param.Field[int64]                                                                 `json:"waitForTags" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -2973,9 +2973,9 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazClickListenerRuleSettingsType) I
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazTimerRule struct {
-	ID       param.Field[string]                                                    `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                    `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazTimerRule) MarshalJSON() (data []byte, err error) {
@@ -3000,8 +3000,8 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleAction) IsKnown() bool 
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleSettings struct {
-	Interval param.Field[int64] `json:"interval,required"`
-	Limit    param.Field[int64] `json:"limit,required"`
+	Interval param.Field[int64] `json:"interval" api:"required"`
+	Limit    param.Field[int64] `json:"limit" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -3009,9 +3009,9 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazTimerRuleSettings) MarshalJSON()
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRule struct {
-	ID       param.Field[string]                                                             `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                             `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRule) MarshalJSON() (data []byte, err error) {
@@ -3036,8 +3036,8 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleAction) IsKnow
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleSettings struct {
-	Selector param.Field[string] `json:"selector,required"`
-	Validate param.Field[bool]   `json:"validate,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
+	Validate param.Field[bool]   `json:"validate" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -3045,9 +3045,9 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazFormSubmissionRuleSettings) Mars
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRule struct {
-	ID       param.Field[string]                                                            `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                            `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRule) MarshalJSON() (data []byte, err error) {
@@ -3072,8 +3072,8 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleAction) IsKnown
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleSettings struct {
-	Match    param.Field[string] `json:"match,required"`
-	Variable param.Field[string] `json:"variable,required"`
+	Match    param.Field[string] `json:"match" api:"required"`
+	Variable param.Field[string] `json:"variable" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -3081,9 +3081,9 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazVariableMatchRuleSettings) Marsh
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRule struct {
-	ID       param.Field[string]                                                          `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                          `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRule) MarshalJSON() (data []byte, err error) {
@@ -3108,7 +3108,7 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleAction) IsKnown()
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleSettings struct {
-	Positions param.Field[string] `json:"positions,required"`
+	Positions param.Field[string] `json:"positions" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -3116,9 +3116,9 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazScrollDepthRuleSettings) Marshal
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRule struct {
-	ID       param.Field[string]                                                                `json:"id,required"`
-	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRuleAction]   `json:"action,required"`
-	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRuleSettings] `json:"settings,required"`
+	ID       param.Field[string]                                                                `json:"id" api:"required"`
+	Action   param.Field[ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRuleAction]   `json:"action" api:"required"`
+	Settings param.Field[ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRuleSettings] `json:"settings" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRule) MarshalJSON() (data []byte, err error) {
@@ -3143,7 +3143,7 @@ func (r ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRuleAction) IsK
 }
 
 type ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRuleSettings struct {
-	Selector param.Field[string] `json:"selector,required"`
+	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
 func (r ConfigUpdateParamsTriggersLoadRulesZarazElementVisibilityRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -3207,9 +3207,9 @@ func (r ConfigUpdateParamsTriggersSystem) IsKnown() bool {
 }
 
 type ConfigUpdateParamsVariables struct {
-	Name  param.Field[string]                          `json:"name,required"`
-	Type  param.Field[ConfigUpdateParamsVariablesType] `json:"type,required"`
-	Value param.Field[interface{}]                     `json:"value,required"`
+	Name  param.Field[string]                          `json:"name" api:"required"`
+	Type  param.Field[ConfigUpdateParamsVariablesType] `json:"type" api:"required"`
+	Value param.Field[interface{}]                     `json:"value" api:"required"`
 }
 
 func (r ConfigUpdateParamsVariables) MarshalJSON() (data []byte, err error) {
@@ -3227,9 +3227,9 @@ type ConfigUpdateParamsVariablesUnion interface {
 }
 
 type ConfigUpdateParamsVariablesZarazStringVariable struct {
-	Name  param.Field[string]                                             `json:"name,required"`
-	Type  param.Field[ConfigUpdateParamsVariablesZarazStringVariableType] `json:"type,required"`
-	Value param.Field[string]                                             `json:"value,required"`
+	Name  param.Field[string]                                             `json:"name" api:"required"`
+	Type  param.Field[ConfigUpdateParamsVariablesZarazStringVariableType] `json:"type" api:"required"`
+	Value param.Field[string]                                             `json:"value" api:"required"`
 }
 
 func (r ConfigUpdateParamsVariablesZarazStringVariable) MarshalJSON() (data []byte, err error) {
@@ -3254,9 +3254,9 @@ func (r ConfigUpdateParamsVariablesZarazStringVariableType) IsKnown() bool {
 }
 
 type ConfigUpdateParamsVariablesZarazSecretVariable struct {
-	Name  param.Field[string]                                             `json:"name,required"`
-	Type  param.Field[ConfigUpdateParamsVariablesZarazSecretVariableType] `json:"type,required"`
-	Value param.Field[string]                                             `json:"value,required"`
+	Name  param.Field[string]                                             `json:"name" api:"required"`
+	Type  param.Field[ConfigUpdateParamsVariablesZarazSecretVariableType] `json:"type" api:"required"`
+	Value param.Field[string]                                             `json:"value" api:"required"`
 }
 
 func (r ConfigUpdateParamsVariablesZarazSecretVariable) MarshalJSON() (data []byte, err error) {
@@ -3281,9 +3281,9 @@ func (r ConfigUpdateParamsVariablesZarazSecretVariableType) IsKnown() bool {
 }
 
 type ConfigUpdateParamsVariablesZarazWorkerVariable struct {
-	Name  param.Field[string]                                              `json:"name,required"`
-	Type  param.Field[ConfigUpdateParamsVariablesZarazWorkerVariableType]  `json:"type,required"`
-	Value param.Field[ConfigUpdateParamsVariablesZarazWorkerVariableValue] `json:"value,required"`
+	Name  param.Field[string]                                              `json:"name" api:"required"`
+	Type  param.Field[ConfigUpdateParamsVariablesZarazWorkerVariableType]  `json:"type" api:"required"`
+	Value param.Field[ConfigUpdateParamsVariablesZarazWorkerVariableValue] `json:"value" api:"required"`
 }
 
 func (r ConfigUpdateParamsVariablesZarazWorkerVariable) MarshalJSON() (data []byte, err error) {
@@ -3308,8 +3308,8 @@ func (r ConfigUpdateParamsVariablesZarazWorkerVariableType) IsKnown() bool {
 }
 
 type ConfigUpdateParamsVariablesZarazWorkerVariableValue struct {
-	EscapedWorkerName param.Field[string] `json:"escapedWorkerName,required"`
-	WorkerTag         param.Field[string] `json:"workerTag,required"`
+	EscapedWorkerName param.Field[string] `json:"escapedWorkerName" api:"required"`
+	WorkerTag         param.Field[string] `json:"workerTag" api:"required"`
 }
 
 func (r ConfigUpdateParamsVariablesZarazWorkerVariableValue) MarshalJSON() (data []byte, err error) {
@@ -3348,22 +3348,22 @@ func (r ConfigUpdateParamsAnalytics) MarshalJSON() (data []byte, err error) {
 
 // Consent management configuration.
 type ConfigUpdateParamsConsent struct {
-	Enabled                param.Field[bool]                       `json:"enabled,required"`
+	Enabled                param.Field[bool]                       `json:"enabled" api:"required"`
 	ButtonTextTranslations param.Field[ButtonTextTranslationParam] `json:"buttonTextTranslations"`
 	CompanyEmail           param.Field[string]                     `json:"companyEmail"`
 	CompanyName            param.Field[string]                     `json:"companyName"`
 	CompanyStreetAddress   param.Field[string]                     `json:"companyStreetAddress"`
 	ConsentModalIntroHTML  param.Field[string]                     `json:"consentModalIntroHTML"`
-	// Object where keys are language codes
+	// Object where keys are language codes.
 	ConsentModalIntroHTMLWithTranslations param.Field[map[string]string] `json:"consentModalIntroHTMLWithTranslations"`
 	CookieName                            param.Field[string]            `json:"cookieName"`
 	CustomCSS                             param.Field[string]            `json:"customCSS"`
 	CustomIntroDisclaimerDismissed        param.Field[bool]              `json:"customIntroDisclaimerDismissed"`
 	DefaultLanguage                       param.Field[string]            `json:"defaultLanguage"`
 	HideModal                             param.Field[bool]              `json:"hideModal"`
-	// Object where keys are purpose alpha-numeric IDs
+	// Object where keys are purpose alpha-numeric IDs.
 	Purposes param.Field[map[string]ConfigUpdateParamsConsentPurposes] `json:"purposes"`
-	// Object where keys are purpose alpha-numeric IDs
+	// Object where keys are purpose alpha-numeric IDs.
 	PurposesWithTranslations param.Field[map[string]ConfigUpdateParamsConsentPurposesWithTranslations] `json:"purposesWithTranslations"`
 	TcfCompliant             param.Field[bool]                                                         `json:"tcfCompliant"`
 }
@@ -3373,8 +3373,8 @@ func (r ConfigUpdateParamsConsent) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateParamsConsentPurposes struct {
-	Description param.Field[string] `json:"description,required"`
-	Name        param.Field[string] `json:"name,required"`
+	Description param.Field[string] `json:"description" api:"required"`
+	Name        param.Field[string] `json:"name" api:"required"`
 }
 
 func (r ConfigUpdateParamsConsentPurposes) MarshalJSON() (data []byte, err error) {
@@ -3382,11 +3382,11 @@ func (r ConfigUpdateParamsConsentPurposes) MarshalJSON() (data []byte, err error
 }
 
 type ConfigUpdateParamsConsentPurposesWithTranslations struct {
-	// Object where keys are language codes
-	Description param.Field[map[string]string] `json:"description,required"`
-	// Object where keys are language codes
-	Name  param.Field[map[string]string] `json:"name,required"`
-	Order param.Field[int64]             `json:"order,required"`
+	// Object where keys are language codes.
+	Description param.Field[map[string]string] `json:"description" api:"required"`
+	// Object where keys are language codes.
+	Name  param.Field[map[string]string] `json:"name" api:"required"`
+	Order param.Field[int64]             `json:"order" api:"required"`
 }
 
 func (r ConfigUpdateParamsConsentPurposesWithTranslations) MarshalJSON() (data []byte, err error) {
@@ -3394,12 +3394,12 @@ func (r ConfigUpdateParamsConsentPurposesWithTranslations) MarshalJSON() (data [
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz configuration
-	Result Configuration `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                             `json:"success,required"`
+	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Zaraz configuration.
+	Result Configuration `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success bool                             `json:"success" api:"required"`
 	JSON    configUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3423,8 +3423,8 @@ func (r configUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConfigUpdateResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           ConfigUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             configUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3471,8 +3471,8 @@ func (r configUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ConfigUpdateResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ConfigUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             configUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3520,16 +3520,16 @@ func (r configUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 
 type ConfigGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []ConfigGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigGetResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz configuration
-	Result Configuration `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                          `json:"success,required"`
+	Errors   []ConfigGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConfigGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Zaraz configuration.
+	Result Configuration `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success bool                          `json:"success" api:"required"`
 	JSON    configGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3553,8 +3553,8 @@ func (r configGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ConfigGetResponseEnvelopeErrors struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           ConfigGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             configGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3601,8 +3601,8 @@ func (r configGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ConfigGetResponseEnvelopeMessages struct {
-	Code             int64                                   `json:"code,required"`
-	Message          string                                  `json:"message,required"`
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
 	DocumentationURL string                                  `json:"documentation_url"`
 	Source           ConfigGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             configGetResponseEnvelopeMessagesJSON   `json:"-"`

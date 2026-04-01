@@ -42,15 +42,15 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/subscriptions", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an account subscription.
@@ -59,19 +59,19 @@ func (r *SubscriptionService) Update(ctx context.Context, subscriptionIdentifier
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subscriptionIdentifier == "" {
 		err = errors.New("missing required subscription_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/subscriptions/%s", params.AccountID, subscriptionIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Deletes an account's subscription.
@@ -80,19 +80,19 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if subscriptionIdentifier == "" {
 		err = errors.New("missing required subscription_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/subscriptions/%s", body.AccountID, subscriptionIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all of an account's subscriptions.
@@ -102,7 +102,7 @@ func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetPara
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/subscriptions", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -146,8 +146,8 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 
 type SubscriptionNewParams struct {
 	// Identifier
-	AccountID    param.Field[string]      `path:"account_id,required"`
-	Subscription shared.SubscriptionParam `json:"subscription,required"`
+	AccountID    param.Field[string]      `path:"account_id" api:"required"`
+	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
@@ -155,11 +155,11 @@ func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   shared.Subscription   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   shared.Subscription   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SubscriptionNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -199,8 +199,8 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionUpdateParams struct {
 	// Identifier
-	AccountID    param.Field[string]      `path:"account_id,required"`
-	Subscription shared.SubscriptionParam `json:"subscription,required"`
+	AccountID    param.Field[string]      `path:"account_id" api:"required"`
+	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
 }
 
 func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -208,11 +208,11 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   shared.Subscription   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   shared.Subscription   `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -252,15 +252,15 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SubscriptionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   SubscriptionDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   SubscriptionDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SubscriptionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success SubscriptionDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subscriptionDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -300,5 +300,5 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

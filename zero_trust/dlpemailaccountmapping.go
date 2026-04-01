@@ -36,43 +36,44 @@ func NewDLPEmailAccountMappingService(opts ...option.RequestOption) (r *DLPEmail
 	return
 }
 
-// Create mapping
+// Creates a mapping between a Cloudflare account and an email provider for DLP
+// email scanning integration.
 func (r *DLPEmailAccountMappingService) New(ctx context.Context, params DLPEmailAccountMappingNewParams, opts ...option.RequestOption) (res *DLPEmailAccountMappingNewResponse, err error) {
 	var env DLPEmailAccountMappingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/email/account_mapping", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
-// Get mapping
+// Retrieves the email provider mapping configuration for DLP email scanning.
 func (r *DLPEmailAccountMappingService) Get(ctx context.Context, query DLPEmailAccountMappingGetParams, opts ...option.RequestOption) (res *DLPEmailAccountMappingGetResponse, err error) {
 	var env DLPEmailAccountMappingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/email/account_mapping", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DLPEmailAccountMappingNewResponse struct {
-	AddinIdentifierToken string                                            `json:"addin_identifier_token,required" format:"uuid"`
-	AuthRequirements     DLPEmailAccountMappingNewResponseAuthRequirements `json:"auth_requirements,required"`
+	AddinIdentifierToken string                                            `json:"addin_identifier_token" api:"required" format:"uuid"`
+	AuthRequirements     DLPEmailAccountMappingNewResponseAuthRequirements `json:"auth_requirements" api:"required"`
 	JSON                 dlpEmailAccountMappingNewResponseJSON             `json:"-"`
 }
 
@@ -94,7 +95,7 @@ func (r dlpEmailAccountMappingNewResponseJSON) RawJSON() string {
 }
 
 type DLPEmailAccountMappingNewResponseAuthRequirements struct {
-	Type DLPEmailAccountMappingNewResponseAuthRequirementsType `json:"type,required"`
+	Type DLPEmailAccountMappingNewResponseAuthRequirementsType `json:"type" api:"required"`
 	// This field can have the runtime type of [[]string].
 	AllowedMicrosoftOrganizations interface{}                                           `json:"allowed_microsoft_organizations"`
 	JSON                          dlpEmailAccountMappingNewResponseAuthRequirementsJSON `json:"-"`
@@ -155,8 +156,8 @@ func init() {
 }
 
 type DLPEmailAccountMappingNewResponseAuthRequirementsObject struct {
-	AllowedMicrosoftOrganizations []string                                                    `json:"allowed_microsoft_organizations,required"`
-	Type                          DLPEmailAccountMappingNewResponseAuthRequirementsObjectType `json:"type,required"`
+	AllowedMicrosoftOrganizations []string                                                    `json:"allowed_microsoft_organizations" api:"required"`
+	Type                          DLPEmailAccountMappingNewResponseAuthRequirementsObjectType `json:"type" api:"required"`
 	JSON                          dlpEmailAccountMappingNewResponseAuthRequirementsObjectJSON `json:"-"`
 }
 
@@ -196,7 +197,7 @@ func (r DLPEmailAccountMappingNewResponseAuthRequirementsObjectType) IsKnown() b
 }
 
 type DLPEmailAccountMappingNewResponseAuthRequirementsType struct {
-	Type DLPEmailAccountMappingNewResponseAuthRequirementsTypeType `json:"type,required"`
+	Type DLPEmailAccountMappingNewResponseAuthRequirementsTypeType `json:"type" api:"required"`
 	JSON dlpEmailAccountMappingNewResponseAuthRequirementsTypeJSON `json:"-"`
 }
 
@@ -234,8 +235,8 @@ func (r DLPEmailAccountMappingNewResponseAuthRequirementsTypeType) IsKnown() boo
 }
 
 type DLPEmailAccountMappingGetResponse struct {
-	AddinIdentifierToken string                                            `json:"addin_identifier_token,required" format:"uuid"`
-	AuthRequirements     DLPEmailAccountMappingGetResponseAuthRequirements `json:"auth_requirements,required"`
+	AddinIdentifierToken string                                            `json:"addin_identifier_token" api:"required" format:"uuid"`
+	AuthRequirements     DLPEmailAccountMappingGetResponseAuthRequirements `json:"auth_requirements" api:"required"`
 	JSON                 dlpEmailAccountMappingGetResponseJSON             `json:"-"`
 }
 
@@ -257,7 +258,7 @@ func (r dlpEmailAccountMappingGetResponseJSON) RawJSON() string {
 }
 
 type DLPEmailAccountMappingGetResponseAuthRequirements struct {
-	Type DLPEmailAccountMappingGetResponseAuthRequirementsType `json:"type,required"`
+	Type DLPEmailAccountMappingGetResponseAuthRequirementsType `json:"type" api:"required"`
 	// This field can have the runtime type of [[]string].
 	AllowedMicrosoftOrganizations interface{}                                           `json:"allowed_microsoft_organizations"`
 	JSON                          dlpEmailAccountMappingGetResponseAuthRequirementsJSON `json:"-"`
@@ -318,8 +319,8 @@ func init() {
 }
 
 type DLPEmailAccountMappingGetResponseAuthRequirementsObject struct {
-	AllowedMicrosoftOrganizations []string                                                    `json:"allowed_microsoft_organizations,required"`
-	Type                          DLPEmailAccountMappingGetResponseAuthRequirementsObjectType `json:"type,required"`
+	AllowedMicrosoftOrganizations []string                                                    `json:"allowed_microsoft_organizations" api:"required"`
+	Type                          DLPEmailAccountMappingGetResponseAuthRequirementsObjectType `json:"type" api:"required"`
 	JSON                          dlpEmailAccountMappingGetResponseAuthRequirementsObjectJSON `json:"-"`
 }
 
@@ -359,7 +360,7 @@ func (r DLPEmailAccountMappingGetResponseAuthRequirementsObjectType) IsKnown() b
 }
 
 type DLPEmailAccountMappingGetResponseAuthRequirementsType struct {
-	Type DLPEmailAccountMappingGetResponseAuthRequirementsTypeType `json:"type,required"`
+	Type DLPEmailAccountMappingGetResponseAuthRequirementsTypeType `json:"type" api:"required"`
 	JSON dlpEmailAccountMappingGetResponseAuthRequirementsTypeJSON `json:"-"`
 }
 
@@ -397,8 +398,8 @@ func (r DLPEmailAccountMappingGetResponseAuthRequirementsTypeType) IsKnown() boo
 }
 
 type DLPEmailAccountMappingNewParams struct {
-	AccountID        param.Field[string]                                               `path:"account_id,required"`
-	AuthRequirements param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsUnion] `json:"auth_requirements,required"`
+	AccountID        param.Field[string]                                               `path:"account_id" api:"required"`
+	AuthRequirements param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsUnion] `json:"auth_requirements" api:"required"`
 }
 
 func (r DLPEmailAccountMappingNewParams) MarshalJSON() (data []byte, err error) {
@@ -406,7 +407,7 @@ func (r DLPEmailAccountMappingNewParams) MarshalJSON() (data []byte, err error) 
 }
 
 type DLPEmailAccountMappingNewParamsAuthRequirements struct {
-	Type                          param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsType] `json:"type,required"`
+	Type                          param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsType] `json:"type" api:"required"`
 	AllowedMicrosoftOrganizations param.Field[interface{}]                                         `json:"allowed_microsoft_organizations"`
 }
 
@@ -425,8 +426,8 @@ type DLPEmailAccountMappingNewParamsAuthRequirementsUnion interface {
 }
 
 type DLPEmailAccountMappingNewParamsAuthRequirementsObject struct {
-	AllowedMicrosoftOrganizations param.Field[[]string]                                                  `json:"allowed_microsoft_organizations,required"`
-	Type                          param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsObjectType] `json:"type,required"`
+	AllowedMicrosoftOrganizations param.Field[[]string]                                                  `json:"allowed_microsoft_organizations" api:"required"`
+	Type                          param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsObjectType] `json:"type" api:"required"`
 }
 
 func (r DLPEmailAccountMappingNewParamsAuthRequirementsObject) MarshalJSON() (data []byte, err error) {
@@ -451,7 +452,7 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirementsObjectType) IsKnown() boo
 }
 
 type DLPEmailAccountMappingNewParamsAuthRequirementsType struct {
-	Type param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsTypeType] `json:"type,required"`
+	Type param.Field[DLPEmailAccountMappingNewParamsAuthRequirementsTypeType] `json:"type" api:"required"`
 }
 
 func (r DLPEmailAccountMappingNewParamsAuthRequirementsType) MarshalJSON() (data []byte, err error) {
@@ -476,10 +477,10 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirementsTypeType) IsKnown() bool 
 }
 
 type DLPEmailAccountMappingNewResponseEnvelope struct {
-	Errors   []DLPEmailAccountMappingNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPEmailAccountMappingNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPEmailAccountMappingNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPEmailAccountMappingNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPEmailAccountMappingNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPEmailAccountMappingNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DLPEmailAccountMappingNewResponse                `json:"result"`
 	JSON    dlpEmailAccountMappingNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -504,8 +505,8 @@ func (r dlpEmailAccountMappingNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPEmailAccountMappingNewResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           DLPEmailAccountMappingNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpEmailAccountMappingNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -552,8 +553,8 @@ func (r dlpEmailAccountMappingNewResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type DLPEmailAccountMappingNewResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           DLPEmailAccountMappingNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpEmailAccountMappingNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -616,14 +617,14 @@ func (r DLPEmailAccountMappingNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEmailAccountMappingGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPEmailAccountMappingGetResponseEnvelope struct {
-	Errors   []DLPEmailAccountMappingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPEmailAccountMappingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DLPEmailAccountMappingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPEmailAccountMappingGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DLPEmailAccountMappingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DLPEmailAccountMappingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  DLPEmailAccountMappingGetResponse                `json:"result"`
 	JSON    dlpEmailAccountMappingGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -648,8 +649,8 @@ func (r dlpEmailAccountMappingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DLPEmailAccountMappingGetResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           DLPEmailAccountMappingGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dlpEmailAccountMappingGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -696,8 +697,8 @@ func (r dlpEmailAccountMappingGetResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type DLPEmailAccountMappingGetResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           DLPEmailAccountMappingGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dlpEmailAccountMappingGetResponseEnvelopeMessagesJSON   `json:"-"`

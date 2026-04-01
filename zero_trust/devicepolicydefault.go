@@ -49,15 +49,15 @@ func (r *DevicePolicyDefaultService) Edit(ctx context.Context, params DevicePoli
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches the default device settings profile for an account.
@@ -66,15 +66,15 @@ func (r *DevicePolicyDefaultService) Get(ctx context.Context, query DevicePolicy
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/policy", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DevicePolicyDefaultEditResponse struct {
@@ -284,7 +284,7 @@ func (r devicePolicyDefaultGetResponseServiceModeV2JSON) RawJSON() string {
 }
 
 type DevicePolicyDefaultEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether to allow the user to switch WARP between modes.
 	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
 	// Whether to receive update notifications when a new version of the client is
@@ -347,11 +347,11 @@ func (r DevicePolicyDefaultEditParamsServiceModeV2) MarshalJSON() (data []byte, 
 }
 
 type DevicePolicyDefaultEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   DevicePolicyDefaultEditResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo           `json:"messages" api:"required"`
+	Result   DevicePolicyDefaultEditResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePolicyDefaultEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePolicyDefaultEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePolicyDefaultEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -390,15 +390,15 @@ func (r DevicePolicyDefaultEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePolicyDefaultGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePolicyDefaultGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   DevicePolicyDefaultGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo          `json:"messages" api:"required"`
+	Result   DevicePolicyDefaultGetResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePolicyDefaultGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePolicyDefaultGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePolicyDefaultGetResponseEnvelopeJSON    `json:"-"`
 }
 

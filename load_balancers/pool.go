@@ -49,15 +49,15 @@ func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify a configured pool.
@@ -66,19 +66,19 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if poolID == "" {
 		err = errors.New("missing required pool_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List configured pools.
@@ -88,7 +88,7 @@ func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -114,19 +114,19 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDelete
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if poolID == "" {
 		err = errors.New("missing required pool_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", body.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Apply changes to a number of existing pools, overwriting the supplied
@@ -139,7 +139,7 @@ func (r *PoolService) BulkEdit(ctx context.Context, params PoolBulkEditParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
@@ -168,19 +168,19 @@ func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditPa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if poolID == "" {
 		err = errors.New("missing required pool_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetch a single configured pool.
@@ -189,26 +189,26 @@ func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if poolID == "" {
 		err = errors.New("missing required pool_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", query.AccountID, poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Pool struct {
 	ID string `json:"id"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions []CheckRegion `json:"check_regions,nullable"`
+	CheckRegions []CheckRegion `json:"check_regions" api:"nullable"`
 	CreatedOn    string        `json:"created_on"`
 	// A human-readable description of the pool.
 	Description string `json:"description"`
@@ -223,7 +223,7 @@ type Pool struct {
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude float64 `json:"latitude"`
 	// Configures load shedding policies and percentages for the pool.
-	LoadShedding LoadShedding `json:"load_shedding,nullable"`
+	LoadShedding LoadShedding `json:"load_shedding" api:"nullable"`
 	// The longitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, latitude must also be set.
 	Longitude float64 `json:"longitude"`
@@ -251,10 +251,10 @@ type Pool struct {
 	NotificationEmail string `json:"notification_email"`
 	// Filter pool and origin health notifications by resource type or health status.
 	// Use null to reset.
-	NotificationFilter NotificationFilter `json:"notification_filter,nullable"`
+	NotificationFilter NotificationFilter `json:"notification_filter" api:"nullable"`
 	// Configures origin steering for the pool. Controls how origins are selected for
 	// new sessions and traffic without session affinity.
-	OriginSteering OriginSteering `json:"origin_steering,nullable"`
+	OriginSteering OriginSteering `json:"origin_steering" api:"nullable"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
 	Origins []Origin `json:"origins"`
@@ -317,13 +317,13 @@ func (r poolDeleteResponseJSON) RawJSON() string {
 
 type PoolNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]OriginParam] `json:"origins,required"`
+	Origins param.Field[[]OriginParam] `json:"origins" api:"required"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -367,11 +367,11 @@ func (r PoolNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PoolNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Pool                  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PoolNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PoolNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    poolNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -411,13 +411,13 @@ func (r PoolNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PoolUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]OriginParam] `json:"origins,required"`
+	Origins param.Field[[]OriginParam] `json:"origins" api:"required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
@@ -464,11 +464,11 @@ func (r PoolUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PoolUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Pool                  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PoolUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success PoolUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    poolUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -508,7 +508,7 @@ func (r PoolUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PoolListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[string] `query:"monitor"`
@@ -524,15 +524,15 @@ func (r PoolListParams) URLQuery() (v url.Values) {
 
 type PoolDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PoolDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PoolDeleteResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   PoolDeleteResponse    `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PoolDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success PoolDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    poolDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -572,7 +572,7 @@ func (r PoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type PoolBulkEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The email address to send health status notifications to. This field is now
 	// deprecated in favor of Cloudflare Notifications for Load Balancing, so only
 	// resetting this field with an empty string `""` is accepted.
@@ -602,7 +602,7 @@ func (r PoolBulkEditParamsNotificationEmail) IsKnown() bool {
 
 type PoolEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
@@ -655,11 +655,11 @@ func (r PoolEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PoolEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Pool                  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PoolEditResponseEnvelopeSuccess `json:"success,required"`
+	Success PoolEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    poolEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -699,15 +699,15 @@ func (r PoolEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PoolGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PoolGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Pool                  `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success PoolGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PoolGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    poolGetResponseEnvelopeJSON    `json:"-"`
 }
 

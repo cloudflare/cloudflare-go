@@ -41,27 +41,27 @@ func (r *NamespaceTableMaintenanceConfigService) Update(ctx context.Context, buc
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if namespace == "" {
 		err = errors.New("missing required namespace parameter")
-		return
+		return nil, err
 	}
 	if tableName == "" {
 		err = errors.New("missing required table_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/namespaces/%s/tables/%s/maintenance-configs", params.AccountID, bucketName, namespace, tableName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieve the maintenance configuration for a specific table, including
@@ -71,27 +71,27 @@ func (r *NamespaceTableMaintenanceConfigService) Get(ctx context.Context, bucket
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	if namespace == "" {
 		err = errors.New("missing required namespace parameter")
-		return
+		return nil, err
 	}
 	if tableName == "" {
 		err = errors.New("missing required table_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/namespaces/%s/tables/%s/maintenance-configs", query.AccountID, bucketName, namespace, tableName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Configures maintenance for the table.
@@ -123,9 +123,9 @@ func (r namespaceTableMaintenanceConfigUpdateResponseJSON) RawJSON() string {
 // Configures compaction settings for table optimization.
 type NamespaceTableMaintenanceConfigUpdateResponseCompaction struct {
 	// Specifies the state of maintenance operations.
-	State NamespaceTableMaintenanceConfigUpdateResponseCompactionState `json:"state,required"`
+	State NamespaceTableMaintenanceConfigUpdateResponseCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
-	TargetSizeMB NamespaceTableMaintenanceConfigUpdateResponseCompactionTargetSizeMB `json:"target_size_mb,required"`
+	TargetSizeMB NamespaceTableMaintenanceConfigUpdateResponseCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
 	JSON         namespaceTableMaintenanceConfigUpdateResponseCompactionJSON         `json:"-"`
 }
 
@@ -187,11 +187,11 @@ type NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration struct {
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
 	// minutes). Defaults to "7d".
-	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
-	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
-	State NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state,required"`
+	State NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state" api:"required"`
 	JSON  namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON  `json:"-"`
 }
 
@@ -233,7 +233,7 @@ func (r NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState) Is
 // Contains table maintenance configuration.
 type NamespaceTableMaintenanceConfigGetResponse struct {
 	// Configures maintenance for the table.
-	MaintenanceConfig NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig `json:"maintenance_config,required"`
+	MaintenanceConfig NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig `json:"maintenance_config" api:"required"`
 	JSON              namespaceTableMaintenanceConfigGetResponseJSON              `json:"-"`
 }
 
@@ -283,9 +283,9 @@ func (r namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON) RawJSON
 // Configures compaction settings for table optimization.
 type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompaction struct {
 	// Specifies the state of maintenance operations.
-	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionState `json:"state,required"`
+	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
-	TargetSizeMB NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb,required"`
+	TargetSizeMB NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
 	JSON         namespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionJSON         `json:"-"`
 }
 
@@ -347,11 +347,11 @@ type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirati
 	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
 	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
 	// minutes). Defaults to "7d".
-	MaxSnapshotAge string `json:"max_snapshot_age,required"`
+	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
-	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep,required"`
+	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
-	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state,required"`
+	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state" api:"required"`
 	JSON  namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
 }
 
@@ -392,7 +392,7 @@ func (r NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpir
 
 type NamespaceTableMaintenanceConfigUpdateParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Updates compaction configuration (all fields optional).
 	Compaction param.Field[NamespaceTableMaintenanceConfigUpdateParamsCompaction] `json:"compaction"`
 	// Updates snapshot expiration configuration (all fields optional).
@@ -481,11 +481,11 @@ func (r NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState) IsKn
 
 type NamespaceTableMaintenanceConfigUpdateResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []NamespaceTableMaintenanceConfigUpdateResponseEnvelopeErrors `json:"errors,required"`
+	Errors []NamespaceTableMaintenanceConfigUpdateResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []NamespaceTableMaintenanceConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Messages []NamespaceTableMaintenanceConfigUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Configures maintenance for the table.
 	Result NamespaceTableMaintenanceConfigUpdateResponse             `json:"result"`
 	JSON   namespaceTableMaintenanceConfigUpdateResponseEnvelopeJSON `json:"-"`
@@ -512,9 +512,9 @@ func (r namespaceTableMaintenanceConfigUpdateResponseEnvelopeJSON) RawJSON() str
 
 type NamespaceTableMaintenanceConfigUpdateResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                                          `json:"message,required"`
+	Message string                                                          `json:"message" api:"required"`
 	JSON    namespaceTableMaintenanceConfigUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -538,9 +538,9 @@ func (r namespaceTableMaintenanceConfigUpdateResponseEnvelopeErrorsJSON) RawJSON
 
 type NamespaceTableMaintenanceConfigUpdateResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                                            `json:"message,required"`
+	Message string                                                            `json:"message" api:"required"`
 	JSON    namespaceTableMaintenanceConfigUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -564,16 +564,16 @@ func (r namespaceTableMaintenanceConfigUpdateResponseEnvelopeMessagesJSON) RawJS
 
 type NamespaceTableMaintenanceConfigGetParams struct {
 	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NamespaceTableMaintenanceConfigGetResponseEnvelope struct {
 	// Contains errors if the API call was unsuccessful.
-	Errors []NamespaceTableMaintenanceConfigGetResponseEnvelopeErrors `json:"errors,required"`
+	Errors []NamespaceTableMaintenanceConfigGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contains informational messages.
-	Messages []NamespaceTableMaintenanceConfigGetResponseEnvelopeMessages `json:"messages,required"`
+	Messages []NamespaceTableMaintenanceConfigGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
-	Success bool `json:"success,required"`
+	Success bool `json:"success" api:"required"`
 	// Contains table maintenance configuration.
 	Result NamespaceTableMaintenanceConfigGetResponse             `json:"result"`
 	JSON   namespaceTableMaintenanceConfigGetResponseEnvelopeJSON `json:"-"`
@@ -600,9 +600,9 @@ func (r namespaceTableMaintenanceConfigGetResponseEnvelopeJSON) RawJSON() string
 
 type NamespaceTableMaintenanceConfigGetResponseEnvelopeErrors struct {
 	// Specifies the error code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Describes the error.
-	Message string                                                       `json:"message,required"`
+	Message string                                                       `json:"message" api:"required"`
 	JSON    namespaceTableMaintenanceConfigGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -626,9 +626,9 @@ func (r namespaceTableMaintenanceConfigGetResponseEnvelopeErrorsJSON) RawJSON() 
 
 type NamespaceTableMaintenanceConfigGetResponseEnvelopeMessages struct {
 	// Specifies the message code.
-	Code int64 `json:"code,required"`
+	Code int64 `json:"code" api:"required"`
 	// Contains the message text.
-	Message string                                                         `json:"message,required"`
+	Message string                                                         `json:"message" api:"required"`
 	JSON    namespaceTableMaintenanceConfigGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 

@@ -120,13 +120,13 @@ func (r *AccessCertificateSettingService) GetAutoPaging(ctx context.Context, que
 type CertificateSettings struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
-	ChinaNetwork bool `json:"china_network,required"`
+	ChinaNetwork bool `json:"china_network" api:"required"`
 	// Client Certificate Forwarding is a feature that takes the client cert provided
 	// by the eyeball to the edge, and forwards it to the origin as a HTTP header to
 	// allow logging on the origin.
-	ClientCertificateForwarding bool `json:"client_certificate_forwarding,required"`
+	ClientCertificateForwarding bool `json:"client_certificate_forwarding" api:"required"`
 	// The hostname that these settings apply to.
-	Hostname string                  `json:"hostname,required"`
+	Hostname string                  `json:"hostname" api:"required"`
 	JSON     certificateSettingsJSON `json:"-"`
 }
 
@@ -151,13 +151,13 @@ func (r certificateSettingsJSON) RawJSON() string {
 type CertificateSettingsParam struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
-	ChinaNetwork param.Field[bool] `json:"china_network,required"`
+	ChinaNetwork param.Field[bool] `json:"china_network" api:"required"`
 	// Client Certificate Forwarding is a feature that takes the client cert provided
 	// by the eyeball to the edge, and forwards it to the origin as a HTTP header to
 	// allow logging on the origin.
-	ClientCertificateForwarding param.Field[bool] `json:"client_certificate_forwarding,required"`
+	ClientCertificateForwarding param.Field[bool] `json:"client_certificate_forwarding" api:"required"`
 	// The hostname that these settings apply to.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 }
 
 func (r CertificateSettingsParam) MarshalJSON() (data []byte, err error) {
@@ -165,7 +165,7 @@ func (r CertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateSettingUpdateParams struct {
-	Settings param.Field[[]CertificateSettingsParam] `json:"settings,required"`
+	Settings param.Field[[]CertificateSettingsParam] `json:"settings" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.

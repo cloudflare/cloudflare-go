@@ -39,19 +39,19 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if addressMapID == "" {
 		err = errors.New("missing required address_map_id parameter")
-		return
+		return nil, err
 	}
 	if ipAddress == "" {
 		err = errors.New("missing required ip_address parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Remove an IP from a particular address map.
@@ -59,26 +59,26 @@ func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, i
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if addressMapID == "" {
 		err = errors.New("missing required address_map_id parameter")
-		return
+		return nil, err
 	}
 	if ipAddress == "" {
 		err = errors.New("missing required ip_address parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type AddressMapIPUpdateResponse struct {
-	Errors   []AddressMapIPUpdateResponseError   `json:"errors,required"`
-	Messages []AddressMapIPUpdateResponseMessage `json:"messages,required"`
+	Errors   []AddressMapIPUpdateResponseError   `json:"errors" api:"required"`
+	Messages []AddressMapIPUpdateResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    AddressMapIPUpdateResponseSuccess    `json:"success,required"`
+	Success    AddressMapIPUpdateResponseSuccess    `json:"success" api:"required"`
 	ResultInfo AddressMapIPUpdateResponseResultInfo `json:"result_info"`
 	JSON       addressMapIPUpdateResponseJSON       `json:"-"`
 }
@@ -103,8 +103,8 @@ func (r addressMapIPUpdateResponseJSON) RawJSON() string {
 }
 
 type AddressMapIPUpdateResponseError struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AddressMapIPUpdateResponseErrorsSource `json:"source"`
 	JSON             addressMapIPUpdateResponseErrorJSON    `json:"-"`
@@ -151,8 +151,8 @@ func (r addressMapIPUpdateResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapIPUpdateResponseMessage struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AddressMapIPUpdateResponseMessagesSource `json:"source"`
 	JSON             addressMapIPUpdateResponseMessageJSON    `json:"-"`
@@ -245,10 +245,10 @@ func (r addressMapIPUpdateResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapIPDeleteResponse struct {
-	Errors   []AddressMapIPDeleteResponseError   `json:"errors,required"`
-	Messages []AddressMapIPDeleteResponseMessage `json:"messages,required"`
+	Errors   []AddressMapIPDeleteResponseError   `json:"errors" api:"required"`
+	Messages []AddressMapIPDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    AddressMapIPDeleteResponseSuccess    `json:"success,required"`
+	Success    AddressMapIPDeleteResponseSuccess    `json:"success" api:"required"`
 	ResultInfo AddressMapIPDeleteResponseResultInfo `json:"result_info"`
 	JSON       addressMapIPDeleteResponseJSON       `json:"-"`
 }
@@ -273,8 +273,8 @@ func (r addressMapIPDeleteResponseJSON) RawJSON() string {
 }
 
 type AddressMapIPDeleteResponseError struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AddressMapIPDeleteResponseErrorsSource `json:"source"`
 	JSON             addressMapIPDeleteResponseErrorJSON    `json:"-"`
@@ -321,8 +321,8 @@ func (r addressMapIPDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressMapIPDeleteResponseMessage struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AddressMapIPDeleteResponseMessagesSource `json:"source"`
 	JSON             addressMapIPDeleteResponseMessageJSON    `json:"-"`
@@ -416,8 +416,8 @@ func (r addressMapIPDeleteResponseResultInfoJSON) RawJSON() string {
 
 type AddressMapIPUpdateParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -426,5 +426,5 @@ func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type AddressMapIPDeleteParams struct {
 	// Identifier of a Cloudflare account.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

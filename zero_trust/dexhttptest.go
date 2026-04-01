@@ -45,25 +45,25 @@ func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXH
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if testID == "" {
 		err = errors.New("missing required test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPDetails struct {
 	// The url of the HTTP synthetic application test
 	Host            string                       `json:"host"`
-	HTTPStats       HTTPDetailsHTTPStats         `json:"httpStats,nullable"`
+	HTTPStats       HTTPDetailsHTTPStats         `json:"httpStats" api:"nullable"`
 	HTTPStatsByColo []HTTPDetailsHTTPStatsByColo `json:"httpStatsByColo"`
 	// The interval at which the HTTP synthetic application test is set to run.
 	Interval string          `json:"interval"`
@@ -72,7 +72,7 @@ type HTTPDetails struct {
 	Method string `json:"method"`
 	// The name of the HTTP synthetic application test
 	Name           string                     `json:"name"`
-	TargetPolicies []DigitalExperienceMonitor `json:"target_policies,nullable"`
+	TargetPolicies []DigitalExperienceMonitor `json:"target_policies" api:"nullable"`
 	Targeted       bool                       `json:"targeted"`
 	JSON           httpDetailsJSON            `json:"-"`
 }
@@ -101,13 +101,13 @@ func (r httpDetailsJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStats struct {
-	AvailabilityPct      HTTPDetailsHTTPStatsAvailabilityPct  `json:"availabilityPct,required"`
-	DNSResponseTimeMs    TestStatOverTime                     `json:"dnsResponseTimeMs,required"`
-	HTTPStatusCode       []HTTPDetailsHTTPStatsHTTPStatusCode `json:"httpStatusCode,required"`
-	ResourceFetchTimeMs  TestStatOverTime                     `json:"resourceFetchTimeMs,required"`
-	ServerResponseTimeMs TestStatOverTime                     `json:"serverResponseTimeMs,required"`
+	AvailabilityPct      HTTPDetailsHTTPStatsAvailabilityPct  `json:"availabilityPct" api:"required"`
+	DNSResponseTimeMs    TestStatOverTime                     `json:"dnsResponseTimeMs" api:"required"`
+	HTTPStatusCode       []HTTPDetailsHTTPStatsHTTPStatusCode `json:"httpStatusCode" api:"required"`
+	ResourceFetchTimeMs  TestStatOverTime                     `json:"resourceFetchTimeMs" api:"required"`
+	ServerResponseTimeMs TestStatOverTime                     `json:"serverResponseTimeMs" api:"required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                    `json:"uniqueDevicesTotal,required"`
+	UniqueDevicesTotal int64                    `json:"uniqueDevicesTotal" api:"required"`
 	JSON               httpDetailsHTTPStatsJSON `json:"-"`
 }
 
@@ -133,13 +133,13 @@ func (r httpDetailsHTTPStatsJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStatsAvailabilityPct struct {
-	Slots []HTTPDetailsHTTPStatsAvailabilityPctSlot `json:"slots,required"`
+	Slots []HTTPDetailsHTTPStatsAvailabilityPctSlot `json:"slots" api:"required"`
 	// average observed in the time period
-	Avg float64 `json:"avg,nullable"`
+	Avg float64 `json:"avg" api:"nullable"`
 	// highest observed in the time period
-	Max float64 `json:"max,nullable"`
+	Max float64 `json:"max" api:"nullable"`
 	// lowest observed in the time period
-	Min  float64                                 `json:"min,nullable"`
+	Min  float64                                 `json:"min" api:"nullable"`
 	JSON httpDetailsHTTPStatsAvailabilityPctJSON `json:"-"`
 }
 
@@ -163,8 +163,8 @@ func (r httpDetailsHTTPStatsAvailabilityPctJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStatsAvailabilityPctSlot struct {
-	Timestamp string                                      `json:"timestamp,required"`
-	Value     float64                                     `json:"value,required"`
+	Timestamp string                                      `json:"timestamp" api:"required"`
+	Value     float64                                     `json:"value" api:"required"`
 	JSON      httpDetailsHTTPStatsAvailabilityPctSlotJSON `json:"-"`
 }
 
@@ -186,11 +186,11 @@ func (r httpDetailsHTTPStatsAvailabilityPctSlotJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStatsHTTPStatusCode struct {
-	Status200 int64                                  `json:"status200,required"`
-	Status300 int64                                  `json:"status300,required"`
-	Status400 int64                                  `json:"status400,required"`
-	Status500 int64                                  `json:"status500,required"`
-	Timestamp string                                 `json:"timestamp,required"`
+	Status200 int64                                  `json:"status200" api:"required"`
+	Status300 int64                                  `json:"status300" api:"required"`
+	Status400 int64                                  `json:"status400" api:"required"`
+	Status500 int64                                  `json:"status500" api:"required"`
+	Timestamp string                                 `json:"timestamp" api:"required"`
 	JSON      httpDetailsHTTPStatsHTTPStatusCodeJSON `json:"-"`
 }
 
@@ -215,14 +215,14 @@ func (r httpDetailsHTTPStatsHTTPStatusCodeJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStatsByColo struct {
-	AvailabilityPct      HTTPDetailsHTTPStatsByColoAvailabilityPct  `json:"availabilityPct,required"`
-	Colo                 string                                     `json:"colo,required"`
-	DNSResponseTimeMs    TestStatOverTime                           `json:"dnsResponseTimeMs,required"`
-	HTTPStatusCode       []HTTPDetailsHTTPStatsByColoHTTPStatusCode `json:"httpStatusCode,required"`
-	ResourceFetchTimeMs  TestStatOverTime                           `json:"resourceFetchTimeMs,required"`
-	ServerResponseTimeMs TestStatOverTime                           `json:"serverResponseTimeMs,required"`
+	AvailabilityPct      HTTPDetailsHTTPStatsByColoAvailabilityPct  `json:"availabilityPct" api:"required"`
+	Colo                 string                                     `json:"colo" api:"required"`
+	DNSResponseTimeMs    TestStatOverTime                           `json:"dnsResponseTimeMs" api:"required"`
+	HTTPStatusCode       []HTTPDetailsHTTPStatsByColoHTTPStatusCode `json:"httpStatusCode" api:"required"`
+	ResourceFetchTimeMs  TestStatOverTime                           `json:"resourceFetchTimeMs" api:"required"`
+	ServerResponseTimeMs TestStatOverTime                           `json:"serverResponseTimeMs" api:"required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                          `json:"uniqueDevicesTotal,required"`
+	UniqueDevicesTotal int64                          `json:"uniqueDevicesTotal" api:"required"`
 	JSON               httpDetailsHTTPStatsByColoJSON `json:"-"`
 }
 
@@ -249,13 +249,13 @@ func (r httpDetailsHTTPStatsByColoJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStatsByColoAvailabilityPct struct {
-	Slots []HTTPDetailsHTTPStatsByColoAvailabilityPctSlot `json:"slots,required"`
+	Slots []HTTPDetailsHTTPStatsByColoAvailabilityPctSlot `json:"slots" api:"required"`
 	// average observed in the time period
-	Avg float64 `json:"avg,nullable"`
+	Avg float64 `json:"avg" api:"nullable"`
 	// highest observed in the time period
-	Max float64 `json:"max,nullable"`
+	Max float64 `json:"max" api:"nullable"`
 	// lowest observed in the time period
-	Min  float64                                       `json:"min,nullable"`
+	Min  float64                                       `json:"min" api:"nullable"`
 	JSON httpDetailsHTTPStatsByColoAvailabilityPctJSON `json:"-"`
 }
 
@@ -279,8 +279,8 @@ func (r httpDetailsHTTPStatsByColoAvailabilityPctJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStatsByColoAvailabilityPctSlot struct {
-	Timestamp string                                            `json:"timestamp,required"`
-	Value     float64                                           `json:"value,required"`
+	Timestamp string                                            `json:"timestamp" api:"required"`
+	Value     float64                                           `json:"value" api:"required"`
 	JSON      httpDetailsHTTPStatsByColoAvailabilityPctSlotJSON `json:"-"`
 }
 
@@ -302,11 +302,11 @@ func (r httpDetailsHTTPStatsByColoAvailabilityPctSlotJSON) RawJSON() string {
 }
 
 type HTTPDetailsHTTPStatsByColoHTTPStatusCode struct {
-	Status200 int64                                        `json:"status200,required"`
-	Status300 int64                                        `json:"status300,required"`
-	Status400 int64                                        `json:"status400,required"`
-	Status500 int64                                        `json:"status500,required"`
-	Timestamp string                                       `json:"timestamp,required"`
+	Status200 int64                                        `json:"status200" api:"required"`
+	Status300 int64                                        `json:"status300" api:"required"`
+	Status400 int64                                        `json:"status400" api:"required"`
+	Status500 int64                                        `json:"status500" api:"required"`
+	Timestamp string                                       `json:"timestamp" api:"required"`
 	JSON      httpDetailsHTTPStatsByColoHTTPStatusCodeJSON `json:"-"`
 }
 
@@ -345,13 +345,13 @@ func (r HTTPDetailsKind) IsKnown() bool {
 }
 
 type DEXHTTPTestGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for aggregate metrics in ISO ms
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// Time interval for aggregate time slots.
-	Interval param.Field[DexhttpTestGetParamsInterval] `query:"interval,required"`
+	Interval param.Field[DexhttpTestGetParamsInterval] `query:"interval" api:"required"`
 	// End time for aggregate metrics in ISO ms
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
@@ -385,10 +385,10 @@ func (r DexhttpTestGetParamsInterval) IsKnown() bool {
 }
 
 type DexhttpTestGetResponseEnvelope struct {
-	Errors   []DexhttpTestGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexhttpTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DexhttpTestGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DexhttpTestGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  HTTPDetails                           `json:"result"`
 	JSON    dexhttpTestGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -413,8 +413,8 @@ func (r dexhttpTestGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DexhttpTestGetResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           DexhttpTestGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexhttpTestGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -461,8 +461,8 @@ func (r dexhttpTestGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DexhttpTestGetResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           DexhttpTestGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexhttpTestGetResponseEnvelopeMessagesJSON   `json:"-"`

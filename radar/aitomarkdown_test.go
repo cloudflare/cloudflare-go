@@ -27,12 +27,13 @@ func TestAIToMarkdownNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AI.ToMarkdown.New(context.TODO(), radar.AIToMarkdownNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Files:     cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+		Files:     cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("Example data")))}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

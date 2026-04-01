@@ -24,6 +24,7 @@ func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -36,9 +37,17 @@ func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 				Enabled:          cloudflare.F(true),
 				HeadSamplingRate: cloudflare.F(1.000000),
 				Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
+					Destinations:     cloudflare.F([]string{"string"}),
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
 					InvocationLogs:   cloudflare.F(true),
+					Persist:          cloudflare.F(true),
+				}),
+				Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
+					Destinations:     cloudflare.F([]string{"string"}),
+					Enabled:          cloudflare.F(true),
+					HeadSamplingRate: cloudflare.F(1.000000),
+					Persist:          cloudflare.F(true),
 				}),
 			}),
 			Subdomain: cloudflare.F(workers.WorkerSubdomainParam{
@@ -70,6 +79,7 @@ func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -85,9 +95,17 @@ func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
 					Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
+						Destinations:     cloudflare.F([]string{"string"}),
 						Enabled:          cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(1.000000),
 						InvocationLogs:   cloudflare.F(true),
+						Persist:          cloudflare.F(true),
+					}),
+					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
+						Destinations:     cloudflare.F([]string{"string"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(1.000000),
+						Persist:          cloudflare.F(true),
 					}),
 				}),
 				Subdomain: cloudflare.F(workers.WorkerSubdomainParam{
@@ -120,6 +138,7 @@ func TestBetaWorkerListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -149,6 +168,7 @@ func TestBetaWorkerDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -178,6 +198,7 @@ func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -193,9 +214,17 @@ func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
 					Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
+						Destinations:     cloudflare.F([]string{"string"}),
 						Enabled:          cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(1.000000),
 						InvocationLogs:   cloudflare.F(true),
+						Persist:          cloudflare.F(true),
+					}),
+					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
+						Destinations:     cloudflare.F([]string{"string"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(1.000000),
+						Persist:          cloudflare.F(true),
 					}),
 				}),
 				Subdomain: cloudflare.F(workers.WorkerSubdomainParam{
@@ -228,6 +257,7 @@ func TestBetaWorkerGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

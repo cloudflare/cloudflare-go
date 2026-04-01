@@ -45,15 +45,15 @@ func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an existing Web Analytics site.
@@ -62,19 +62,19 @@ func (r *SiteInfoService) Update(ctx context.Context, siteID string, params Site
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all Web Analytics sites of an account.
@@ -84,7 +84,7 @@ func (r *SiteInfoService) List(ctx context.Context, params SiteInfoListParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info/list", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -110,19 +110,19 @@ func (r *SiteInfoService) Delete(ctx context.Context, siteID string, body SiteIn
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", body.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves a Web Analytics site.
@@ -131,19 +131,19 @@ func (r *SiteInfoService) Get(ctx context.Context, siteID string, query SiteInfo
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if siteID == "" {
 		err = errors.New("missing required site_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", query.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Site struct {
@@ -237,7 +237,7 @@ func (r siteInfoDeleteResponseJSON) RawJSON() string {
 
 type SiteInfoNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
 	AutoInstall param.Field[bool] `json:"auto_install"`
@@ -252,10 +252,10 @@ func (r SiteInfoNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	Result  Site                            `json:"result"`
 	JSON    siteInfoNewResponseEnvelopeJSON `json:"-"`
 }
@@ -281,7 +281,7 @@ func (r siteInfoNewResponseEnvelopeJSON) RawJSON() string {
 
 type SiteInfoUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
 	AutoInstall param.Field[bool] `json:"auto_install"`
@@ -302,10 +302,10 @@ func (r SiteInfoUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteInfoUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                               `json:"success,required"`
+	Success bool                               `json:"success" api:"required"`
 	Result  Site                               `json:"result"`
 	JSON    siteInfoUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -331,7 +331,7 @@ func (r siteInfoUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type SiteInfoListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The property used to sort the list of results.
 	OrderBy param.Field[SiteInfoListParamsOrderBy] `query:"order_by"`
 	// Current page within the paginated list of results.
@@ -366,14 +366,14 @@ func (r SiteInfoListParamsOrderBy) IsKnown() bool {
 
 type SiteInfoDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteInfoDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                               `json:"success,required"`
+	Success bool                               `json:"success" api:"required"`
 	Result  SiteInfoDeleteResponse             `json:"result"`
 	JSON    siteInfoDeleteResponseEnvelopeJSON `json:"-"`
 }
@@ -399,14 +399,14 @@ func (r siteInfoDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SiteInfoGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteInfoGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	Result  Site                            `json:"result"`
 	JSON    siteInfoGetResponseEnvelopeJSON `json:"-"`
 }

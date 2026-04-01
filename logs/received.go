@@ -51,26 +51,26 @@ func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/logs/received", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Value
-	return
+	return res, nil
 }
 
 type ReceivedGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Sets the (exclusive) end of the requested time frame. This can be a unix
 	// timestamp (in seconds or nanoseconds), or an absolute timestamp that conforms to
 	// RFC 3339. `end` must be at least five minutes earlier than now and must be later
 	// than `start`. Difference between `start` and `end` must be not greater than one
 	// hour.
-	End param.Field[ReceivedGetParamsEndUnion] `query:"end,required"`
+	End param.Field[ReceivedGetParamsEndUnion] `query:"end" api:"required"`
 	// When `?count=` is provided, the response will contain up to `count` results.
 	// Since results are not sorted, you are likely to get different data for repeated
 	// requests. `count` must be an integer > 0.

@@ -42,26 +42,26 @@ func (r *TemporaryCredentialService) New(ctx context.Context, params TemporaryCr
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/temp-access-credentials", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TemporaryCredentialParam struct {
 	// Name of the R2 bucket.
-	Bucket param.Field[string] `json:"bucket,required"`
+	Bucket param.Field[string] `json:"bucket" api:"required"`
 	// The parent access key id to use for signing.
-	ParentAccessKeyID param.Field[string] `json:"parentAccessKeyId,required"`
+	ParentAccessKeyID param.Field[string] `json:"parentAccessKeyId" api:"required"`
 	// Permissions allowed on the credentials.
-	Permission param.Field[TemporaryCredentialPermission] `json:"permission,required"`
+	Permission param.Field[TemporaryCredentialPermission] `json:"permission" api:"required"`
 	// How long the credentials will live for in seconds.
-	TTLSeconds param.Field[float64] `json:"ttlSeconds,required"`
+	TTLSeconds param.Field[float64] `json:"ttlSeconds" api:"required"`
 	// Optional object paths to scope the credentials to.
 	Objects param.Field[[]string] `json:"objects"`
 	// Optional prefix paths to scope the credentials to.
@@ -120,8 +120,8 @@ func (r temporaryCredentialNewResponseJSON) RawJSON() string {
 
 type TemporaryCredentialNewParams struct {
 	// Account ID.
-	AccountID           param.Field[string]      `path:"account_id,required"`
-	TemporaryCredential TemporaryCredentialParam `json:"temporary_credential,required"`
+	AccountID           param.Field[string]      `path:"account_id" api:"required"`
+	TemporaryCredential TemporaryCredentialParam `json:"temporary_credential" api:"required"`
 }
 
 func (r TemporaryCredentialNewParams) MarshalJSON() (data []byte, err error) {
@@ -129,11 +129,11 @@ func (r TemporaryCredentialNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TemporaryCredentialNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []string                       `json:"messages,required"`
-	Result   TemporaryCredentialNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []string                       `json:"messages" api:"required"`
+	Result   TemporaryCredentialNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success TemporaryCredentialNewResponseEnvelopeSuccess `json:"success,required"`
+	Success TemporaryCredentialNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    temporaryCredentialNewResponseEnvelopeJSON    `json:"-"`
 }
 

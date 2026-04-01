@@ -40,19 +40,19 @@ func (r *QuotaService) Get(ctx context.Context, query QuotaGetParams, opts ...op
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/quota", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type QuotaGetResponse struct {
-	Secrets QuotaGetResponseSecrets `json:"secrets,required"`
+	Secrets QuotaGetResponseSecrets `json:"secrets" api:"required"`
 	JSON    quotaGetResponseJSON    `json:"-"`
 }
 
@@ -74,9 +74,9 @@ func (r quotaGetResponseJSON) RawJSON() string {
 
 type QuotaGetResponseSecrets struct {
 	// The number of secrets the account is entitlted to use
-	Quota float64 `json:"quota,required"`
+	Quota float64 `json:"quota" api:"required"`
 	// The number of secrets the account is currently using
-	Usage float64                     `json:"usage,required"`
+	Usage float64                     `json:"usage" api:"required"`
 	JSON  quotaGetResponseSecretsJSON `json:"-"`
 }
 
@@ -99,14 +99,14 @@ func (r quotaGetResponseSecretsJSON) RawJSON() string {
 
 type QuotaGetParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QuotaGetResponseEnvelope struct {
-	Errors   []QuotaGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QuotaGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []QuotaGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []QuotaGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    QuotaGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    QuotaGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     QuotaGetResponse                   `json:"result"`
 	ResultInfo QuotaGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       quotaGetResponseEnvelopeJSON       `json:"-"`
@@ -133,8 +133,8 @@ func (r quotaGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type QuotaGetResponseEnvelopeErrors struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           QuotaGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             quotaGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -181,8 +181,8 @@ func (r quotaGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type QuotaGetResponseEnvelopeMessages struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           QuotaGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             quotaGetResponseEnvelopeMessagesJSON   `json:"-"`

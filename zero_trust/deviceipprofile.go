@@ -44,15 +44,15 @@ func (r *DeviceIPProfileService) New(ctx context.Context, params DeviceIPProfile
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/ip-profiles", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a WARP Device IP profile. Currently, only IPv4 Device subnets can be
@@ -62,19 +62,19 @@ func (r *DeviceIPProfileService) Update(ctx context.Context, profileID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/ip-profiles/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists WARP Device IP profiles.
@@ -84,7 +84,7 @@ func (r *DeviceIPProfileService) List(ctx context.Context, params DeviceIPProfil
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/ip-profiles", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -110,19 +110,19 @@ func (r *DeviceIPProfileService) Delete(ctx context.Context, profileID string, b
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/ip-profiles/%s", body.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single WARP Device IP profile.
@@ -131,44 +131,44 @@ func (r *DeviceIPProfileService) Get(ctx context.Context, profileID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if profileID == "" {
 		err = errors.New("missing required profile_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/ip-profiles/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type IPProfile struct {
 	// The ID of the Device IP profile.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The RFC3339Nano timestamp when the Device IP profile was created.
-	CreatedAt string `json:"created_at,required"`
+	CreatedAt string `json:"created_at" api:"required"`
 	// An optional description of the Device IP profile.
-	Description string `json:"description,required,nullable"`
+	Description string `json:"description" api:"required,nullable"`
 	// Whether the Device IP profile is enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The wirefilter expression to match registrations. Available values:
 	// "identity.name", "identity.email", "identity.groups.id", "identity.groups.name",
 	// "identity.groups.email", "identity.saml_attributes".
-	Match string `json:"match,required"`
+	Match string `json:"match" api:"required"`
 	// A user-friendly name for the Device IP profile.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The precedence of the Device IP profile. Lower values indicate higher
 	// precedence. Device IP profile will be evaluated in ascending order of this
 	// field.
-	Precedence int64 `json:"precedence,required"`
+	Precedence int64 `json:"precedence" api:"required"`
 	// The ID of the Subnet.
-	SubnetID string `json:"subnet_id,required"`
+	SubnetID string `json:"subnet_id" api:"required"`
 	// The RFC3339Nano timestamp when the Device IP profile was last updated.
-	UpdatedAt string        `json:"updated_at,required"`
+	UpdatedAt string        `json:"updated_at" api:"required"`
 	JSON      ipProfileJSON `json:"-"`
 }
 
@@ -218,19 +218,19 @@ func (r deviceIPProfileDeleteResponseJSON) RawJSON() string {
 }
 
 type DeviceIPProfileNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The wirefilter expression to match registrations. Available values:
 	// "identity.name", "identity.email", "identity.groups.id", "identity.groups.name",
 	// "identity.groups.email", "identity.saml_attributes".
-	Match param.Field[string] `json:"match,required"`
+	Match param.Field[string] `json:"match" api:"required"`
 	// A user-friendly name for the Device IP profile.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The precedence of the Device IP profile. Lower values indicate higher
 	// precedence. Device IP profile will be evaluated in ascending order of this
 	// field.
-	Precedence param.Field[int64] `json:"precedence,required"`
+	Precedence param.Field[int64] `json:"precedence" api:"required"`
 	// The ID of the Subnet.
-	SubnetID param.Field[string] `json:"subnet_id,required"`
+	SubnetID param.Field[string] `json:"subnet_id" api:"required"`
 	// An optional description of the Device IP profile.
 	Description param.Field[string] `json:"description"`
 	// Whether the Device IP profile will be applied to matching devices.
@@ -242,11 +242,11 @@ func (r DeviceIPProfileNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceIPProfileNewResponseEnvelope struct {
-	Errors   []DeviceIPProfileNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceIPProfileNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPProfile                                    `json:"result,required"`
+	Errors   []DeviceIPProfileNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceIPProfileNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   IPProfile                                    `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                   `json:"success,required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    deviceIPProfileNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -272,8 +272,8 @@ func (r deviceIPProfileNewResponseEnvelopeJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileNewResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
+	Code    int64                                        `json:"code" api:"required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    deviceIPProfileNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -297,8 +297,8 @@ func (r deviceIPProfileNewResponseEnvelopeErrorsJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileNewResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
+	Code    int64                                          `json:"code" api:"required"`
+	Message string                                         `json:"message" api:"required"`
 	JSON    deviceIPProfileNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -320,7 +320,7 @@ func (r deviceIPProfileNewResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type DeviceIPProfileUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the Device IP profile.
 	Description param.Field[string] `json:"description"`
 	// Whether the Device IP profile is enabled.
@@ -344,11 +344,11 @@ func (r DeviceIPProfileUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceIPProfileUpdateResponseEnvelope struct {
-	Errors   []DeviceIPProfileUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceIPProfileUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPProfile                                       `json:"result,required"`
+	Errors   []DeviceIPProfileUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceIPProfileUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   IPProfile                                       `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                      `json:"success,required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    deviceIPProfileUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -374,8 +374,8 @@ func (r deviceIPProfileUpdateResponseEnvelopeJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
+	Code    int64                                           `json:"code" api:"required"`
+	Message string                                          `json:"message" api:"required"`
 	JSON    deviceIPProfileUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -399,8 +399,8 @@ func (r deviceIPProfileUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
+	Code    int64                                             `json:"code" api:"required"`
+	Message string                                            `json:"message" api:"required"`
 	JSON    deviceIPProfileUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -422,7 +422,7 @@ func (r deviceIPProfileUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type DeviceIPProfileListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The number of IP profiles to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
 }
@@ -437,15 +437,15 @@ func (r DeviceIPProfileListParams) URLQuery() (v url.Values) {
 }
 
 type DeviceIPProfileDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceIPProfileDeleteResponseEnvelope struct {
-	Errors   []DeviceIPProfileDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceIPProfileDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceIPProfileDeleteResponse                   `json:"result,required"`
+	Errors   []DeviceIPProfileDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceIPProfileDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   DeviceIPProfileDeleteResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                      `json:"success,required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    deviceIPProfileDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -471,8 +471,8 @@ func (r deviceIPProfileDeleteResponseEnvelopeJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileDeleteResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
+	Code    int64                                           `json:"code" api:"required"`
+	Message string                                          `json:"message" api:"required"`
 	JSON    deviceIPProfileDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -496,8 +496,8 @@ func (r deviceIPProfileDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileDeleteResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
+	Code    int64                                             `json:"code" api:"required"`
+	Message string                                            `json:"message" api:"required"`
 	JSON    deviceIPProfileDeleteResponseEnvelopeMessagesJSON `json:"-"`
 }
 
@@ -519,15 +519,15 @@ func (r deviceIPProfileDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type DeviceIPProfileGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DeviceIPProfileGetResponseEnvelope struct {
-	Errors   []DeviceIPProfileGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceIPProfileGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IPProfile                                    `json:"result,required"`
+	Errors   []DeviceIPProfileGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DeviceIPProfileGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   IPProfile                                    `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                   `json:"success,required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    deviceIPProfileGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -553,8 +553,8 @@ func (r deviceIPProfileGetResponseEnvelopeJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
+	Code    int64                                        `json:"code" api:"required"`
+	Message string                                       `json:"message" api:"required"`
 	JSON    deviceIPProfileGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -578,8 +578,8 @@ func (r deviceIPProfileGetResponseEnvelopeErrorsJSON) RawJSON() string {
 // A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceIPProfileGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
+	Code    int64                                          `json:"code" api:"required"`
+	Message string                                         `json:"message" api:"required"`
 	JSON    deviceIPProfileGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 

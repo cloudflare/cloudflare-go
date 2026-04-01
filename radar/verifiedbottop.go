@@ -46,10 +46,10 @@ func (r *VerifiedBotTopService) Bots(ctx context.Context, query VerifiedBotTopBo
 	path := "radar/verified_bots/top/bots"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the top verified bot categories by HTTP requests, along with their
@@ -64,16 +64,16 @@ func (r *VerifiedBotTopService) Categories(ctx context.Context, query VerifiedBo
 	path := "radar/verified_bots/top/categories"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type VerifiedBotTopBotsResponse struct {
 	// Metadata for the results.
-	Meta VerifiedBotTopBotsResponseMeta   `json:"meta,required"`
-	Top0 []VerifiedBotTopBotsResponseTop0 `json:"top_0,required"`
+	Meta VerifiedBotTopBotsResponseMeta   `json:"meta" api:"required"`
+	Top0 []VerifiedBotTopBotsResponseTop0 `json:"top_0" api:"required"`
 	JSON verifiedBotTopBotsResponseJSON   `json:"-"`
 }
 
@@ -96,15 +96,15 @@ func (r verifiedBotTopBotsResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type VerifiedBotTopBotsResponseMeta struct {
-	ConfidenceInfo VerifiedBotTopBotsResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []VerifiedBotTopBotsResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo VerifiedBotTopBotsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []VerifiedBotTopBotsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization VerifiedBotTopBotsResponseMetaNormalization `json:"normalization,required"`
+	Normalization VerifiedBotTopBotsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []VerifiedBotTopBotsResponseMetaUnit `json:"units,required"`
+	Units []VerifiedBotTopBotsResponseMetaUnit `json:"units" api:"required"`
 	JSON  verifiedBotTopBotsResponseMetaJSON   `json:"-"`
 }
 
@@ -129,9 +129,9 @@ func (r verifiedBotTopBotsResponseMetaJSON) RawJSON() string {
 }
 
 type VerifiedBotTopBotsResponseMetaConfidenceInfo struct {
-	Annotations []VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                            `json:"level,required"`
+	Level int64                                            `json:"level" api:"required"`
 	JSON  verifiedBotTopBotsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -155,15 +155,15 @@ func (r verifiedBotTopBotsResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                            `json:"description,required"`
-	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	DataSource  VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                            `json:"description" api:"required"`
+	EndDate     time.Time                                                         `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
 	JSON            verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -250,9 +250,9 @@ func (r VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationsEventType) IsKnow
 
 type VerifiedBotTopBotsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                   `json:"startTime" api:"required" format:"date-time"`
 	JSON      verifiedBotTopBotsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -297,8 +297,8 @@ func (r VerifiedBotTopBotsResponseMetaNormalization) IsKnown() bool {
 }
 
 type VerifiedBotTopBotsResponseMetaUnit struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
+	Name  string                                 `json:"name" api:"required"`
+	Value string                                 `json:"value" api:"required"`
 	JSON  verifiedBotTopBotsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -320,11 +320,11 @@ func (r verifiedBotTopBotsResponseMetaUnitJSON) RawJSON() string {
 }
 
 type VerifiedBotTopBotsResponseTop0 struct {
-	BotCategory string `json:"botCategory,required"`
-	BotName     string `json:"botName,required"`
-	BotOwner    string `json:"botOwner,required"`
+	BotCategory string `json:"botCategory" api:"required"`
+	BotName     string `json:"botName" api:"required"`
+	BotOwner    string `json:"botOwner" api:"required"`
 	// A numeric string.
-	Value string                             `json:"value,required"`
+	Value string                             `json:"value" api:"required"`
 	JSON  verifiedBotTopBotsResponseTop0JSON `json:"-"`
 }
 
@@ -349,8 +349,8 @@ func (r verifiedBotTopBotsResponseTop0JSON) RawJSON() string {
 
 type VerifiedBotTopCategoriesResponse struct {
 	// Metadata for the results.
-	Meta VerifiedBotTopCategoriesResponseMeta   `json:"meta,required"`
-	Top0 []VerifiedBotTopCategoriesResponseTop0 `json:"top_0,required"`
+	Meta VerifiedBotTopCategoriesResponseMeta   `json:"meta" api:"required"`
+	Top0 []VerifiedBotTopCategoriesResponseTop0 `json:"top_0" api:"required"`
 	JSON verifiedBotTopCategoriesResponseJSON   `json:"-"`
 }
 
@@ -373,15 +373,15 @@ func (r verifiedBotTopCategoriesResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type VerifiedBotTopCategoriesResponseMeta struct {
-	ConfidenceInfo VerifiedBotTopCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []VerifiedBotTopCategoriesResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo VerifiedBotTopCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []VerifiedBotTopCategoriesResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization VerifiedBotTopCategoriesResponseMetaNormalization `json:"normalization,required"`
+	Normalization VerifiedBotTopCategoriesResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []VerifiedBotTopCategoriesResponseMetaUnit `json:"units,required"`
+	Units []VerifiedBotTopCategoriesResponseMetaUnit `json:"units" api:"required"`
 	JSON  verifiedBotTopCategoriesResponseMetaJSON   `json:"-"`
 }
 
@@ -406,9 +406,9 @@ func (r verifiedBotTopCategoriesResponseMetaJSON) RawJSON() string {
 }
 
 type VerifiedBotTopCategoriesResponseMetaConfidenceInfo struct {
-	Annotations []VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                  `json:"level,required"`
+	Level int64                                                  `json:"level" api:"required"`
 	JSON  verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -432,15 +432,15 @@ func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string
 // Annotation associated with the result (e.g. outage or other type of event).
 type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                  `json:"description,required"`
-	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	DataSource  VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                  `json:"description" api:"required"`
+	EndDate     time.Time                                                               `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
 	JSON            verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -528,9 +528,9 @@ func (r VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationsEventType) 
 
 type VerifiedBotTopCategoriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                         `json:"startTime" api:"required" format:"date-time"`
 	JSON      verifiedBotTopCategoriesResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -575,8 +575,8 @@ func (r VerifiedBotTopCategoriesResponseMetaNormalization) IsKnown() bool {
 }
 
 type VerifiedBotTopCategoriesResponseMetaUnit struct {
-	Name  string                                       `json:"name,required"`
-	Value string                                       `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  verifiedBotTopCategoriesResponseMetaUnitJSON `json:"-"`
 }
 
@@ -598,9 +598,9 @@ func (r verifiedBotTopCategoriesResponseMetaUnitJSON) RawJSON() string {
 }
 
 type VerifiedBotTopCategoriesResponseTop0 struct {
-	BotCategory string `json:"botCategory,required"`
+	BotCategory string `json:"botCategory" api:"required"`
 	// A numeric string.
-	Value string                                   `json:"value,required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  verifiedBotTopCategoriesResponseTop0JSON `json:"-"`
 }
 
@@ -677,8 +677,8 @@ func (r VerifiedBotTopBotsParamsFormat) IsKnown() bool {
 }
 
 type VerifiedBotTopBotsResponseEnvelope struct {
-	Result  VerifiedBotTopBotsResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  VerifiedBotTopBotsResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    verifiedBotTopBotsResponseEnvelopeJSON `json:"-"`
 }
 
@@ -755,8 +755,8 @@ func (r VerifiedBotTopCategoriesParamsFormat) IsKnown() bool {
 }
 
 type VerifiedBotTopCategoriesResponseEnvelope struct {
-	Result  VerifiedBotTopCategoriesResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  VerifiedBotTopCategoriesResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    verifiedBotTopCategoriesResponseEnvelopeJSON `json:"-"`
 }
 

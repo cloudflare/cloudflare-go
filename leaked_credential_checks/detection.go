@@ -42,15 +42,15 @@ func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update user-defined detection pattern for Leaked Credential Checks.
@@ -59,19 +59,19 @@ func (r *DetectionService) Update(ctx context.Context, detectionID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if detectionID == "" {
 		err = errors.New("missing required detection_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections/%s", params.ZoneID, detectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List user-defined detection patterns for Leaked Credential Checks.
@@ -81,7 +81,7 @@ func (r *DetectionService) List(ctx context.Context, query DetectionListParams, 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -107,19 +107,19 @@ func (r *DetectionService) Delete(ctx context.Context, detectionID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if detectionID == "" {
 		err = errors.New("missing required detection_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections/%s", body.ZoneID, detectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get user-defined detection pattern for Leaked Credential Checks.
@@ -128,19 +128,19 @@ func (r *DetectionService) Get(ctx context.Context, detectionID string, query De
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if detectionID == "" {
 		err = errors.New("missing required detection_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections/%s", query.ZoneID, detectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Defines a custom set of username/password expressions to match Leaked Credential
@@ -267,7 +267,7 @@ func (r detectionGetResponseJSON) RawJSON() string {
 
 type DetectionNewParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password param.Field[string] `json:"password"`
 	// Defines the ruleset expression to use in matching the username in a request.
@@ -279,13 +279,13 @@ func (r DetectionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DetectionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines a custom set of username/password expressions to match Leaked Credential
 	// Checks on.
-	Result DetectionNewResponse `json:"result,required"`
+	Result DetectionNewResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success DetectionNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DetectionNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    detectionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -325,7 +325,7 @@ func (r DetectionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DetectionUpdateParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password param.Field[string] `json:"password"`
 	// Defines the ruleset expression to use in matching the username in a request.
@@ -337,13 +337,13 @@ func (r DetectionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DetectionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines a custom set of username/password expressions to match Leaked Credential
 	// Checks on.
-	Result DetectionUpdateResponse `json:"result,required"`
+	Result DetectionUpdateResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success DetectionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DetectionUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    detectionUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -383,20 +383,20 @@ func (r DetectionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DetectionListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DetectionDeleteParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DetectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   DetectionDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   DetectionDeleteResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success DetectionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DetectionDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    detectionDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -436,17 +436,17 @@ func (r DetectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DetectionGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DetectionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Defines a custom set of username/password expressions to match Leaked Credential
 	// Checks on.
-	Result DetectionGetResponse `json:"result,required"`
+	Result DetectionGetResponse `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success DetectionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DetectionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    detectionGetResponseEnvelopeJSON    `json:"-"`
 }
 

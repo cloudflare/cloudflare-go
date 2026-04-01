@@ -25,6 +25,7 @@ func TestThreatEventCategoryNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -33,6 +34,7 @@ func TestThreatEventCategoryNewWithOptionalParams(t *testing.T) {
 		KillChain:   cloudflare.F(0.000000),
 		Name:        cloudflare.F("name"),
 		MitreAttack: cloudflare.F([]string{"T1234"}),
+		MitreCapec:  cloudflare.F([]string{"123"}),
 		Shortname:   cloudflare.F("shortname"),
 	})
 	if err != nil {
@@ -55,6 +57,7 @@ func TestThreatEventCategoryListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -82,6 +85,7 @@ func TestThreatEventCategoryDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -112,6 +116,7 @@ func TestThreatEventCategoryEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -122,6 +127,7 @@ func TestThreatEventCategoryEditWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("account_id"),
 			KillChain:   cloudflare.F(0.000000),
 			MitreAttack: cloudflare.F([]string{"T1234"}),
+			MitreCapec:  cloudflare.F([]string{"123"}),
 			Name:        cloudflare.F("name"),
 			Shortname:   cloudflare.F("shortname"),
 		},
@@ -146,6 +152,7 @@ func TestThreatEventCategoryGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

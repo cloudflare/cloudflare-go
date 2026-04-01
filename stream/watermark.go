@@ -46,15 +46,15 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists all watermark profiles for an account.
@@ -64,7 +64,7 @@ func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -90,19 +90,19 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, body W
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", body.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves details for a single watermark profile.
@@ -111,19 +111,19 @@ func (r *WatermarkService) Get(ctx context.Context, identifier string, query Wat
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Watermark struct {
@@ -189,9 +189,9 @@ func (r watermarkJSON) RawJSON() string {
 
 type WatermarkNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The image file to upload.
-	File param.Field[string] `json:"file,required"`
+	File param.Field[string] `json:"file" api:"required"`
 	// A short description of the watermark profile.
 	Name param.Field[string] `json:"name"`
 	// The translucency of the image. A value of `0.0` makes the image completely
@@ -229,10 +229,10 @@ func (r WatermarkNewParams) MarshalMultipart() (data []byte, contentType string,
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []WatermarkNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []WatermarkNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WatermarkNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
+	Success WatermarkNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Watermark                           `json:"result"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -257,8 +257,8 @@ func (r watermarkNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WatermarkNewResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           WatermarkNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             watermarkNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -305,8 +305,8 @@ func (r watermarkNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WatermarkNewResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           WatermarkNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             watermarkNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -369,19 +369,19 @@ func (r WatermarkNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type WatermarkListParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WatermarkDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []WatermarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []WatermarkDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WatermarkDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  string                                 `json:"result"`
 	JSON    watermarkDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -406,8 +406,8 @@ func (r watermarkDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WatermarkDeleteResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           WatermarkDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             watermarkDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -454,8 +454,8 @@ func (r watermarkDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WatermarkDeleteResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           WatermarkDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             watermarkDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -518,14 +518,14 @@ func (r WatermarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type WatermarkGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []WatermarkGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []WatermarkGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WatermarkGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
+	Success WatermarkGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Watermark                           `json:"result"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -550,8 +550,8 @@ func (r watermarkGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WatermarkGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           WatermarkGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             watermarkGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -598,8 +598,8 @@ func (r watermarkGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type WatermarkGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           WatermarkGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             watermarkGetResponseEnvelopeMessagesJSON   `json:"-"`

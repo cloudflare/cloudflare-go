@@ -45,15 +45,15 @@ func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationU
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/configuration", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets the current API Shield configuration settings for a zone, including
@@ -63,19 +63,19 @@ func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetP
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/configuration", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Configuration struct {
-	AuthIDCharacteristics []ConfigurationAuthIDCharacteristic `json:"auth_id_characteristics,required"`
+	AuthIDCharacteristics []ConfigurationAuthIDCharacteristic `json:"auth_id_characteristics" api:"required"`
 	JSON                  configurationJSON                   `json:"-"`
 }
 
@@ -97,9 +97,9 @@ func (r configurationJSON) RawJSON() string {
 // Auth ID Characteristic
 type ConfigurationAuthIDCharacteristic struct {
 	// The name of the characteristic field, i.e., the header or cookie name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The type of characteristic.
-	Type  ConfigurationAuthIDCharacteristicsType `json:"type,required"`
+	Type  ConfigurationAuthIDCharacteristicsType `json:"type" api:"required"`
 	JSON  configurationAuthIDCharacteristicJSON  `json:"-"`
 	union ConfigurationAuthIDCharacteristicsUnion
 }
@@ -163,9 +163,9 @@ func init() {
 // Auth ID Characteristic
 type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic struct {
 	// The name of the characteristic field, i.e., the header or cookie name.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The type of characteristic.
-	Type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicType `json:"type,required"`
+	Type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicType `json:"type" api:"required"`
 	JSON configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJSON `json:"-"`
 }
 
@@ -215,9 +215,9 @@ type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim str
 	// https://www.rfc-editor.org/rfc/rfc9535.html). The JSONPath expression may be in
 	// dot or bracket notation, may only specify literal keys or array indexes, and
 	// must return a singleton value, which will be interpreted as a string.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The type of characteristic.
-	Type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType `json:"type,required"`
+	Type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType `json:"type" api:"required"`
 	JSON configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimJSON `json:"-"`
 }
 
@@ -275,7 +275,7 @@ func (r ConfigurationAuthIDCharacteristicsType) IsKnown() bool {
 }
 
 type ConfigurationParam struct {
-	AuthIDCharacteristics param.Field[[]ConfigurationAuthIDCharacteristicsUnionParam] `json:"auth_id_characteristics,required"`
+	AuthIDCharacteristics param.Field[[]ConfigurationAuthIDCharacteristicsUnionParam] `json:"auth_id_characteristics" api:"required"`
 }
 
 func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -285,9 +285,9 @@ func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
 // Auth ID Characteristic
 type ConfigurationAuthIDCharacteristicParam struct {
 	// The name of the characteristic field, i.e., the header or cookie name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The type of characteristic.
-	Type param.Field[ConfigurationAuthIDCharacteristicsType] `json:"type,required"`
+	Type param.Field[ConfigurationAuthIDCharacteristicsType] `json:"type" api:"required"`
 }
 
 func (r ConfigurationAuthIDCharacteristicParam) MarshalJSON() (data []byte, err error) {
@@ -310,9 +310,9 @@ type ConfigurationAuthIDCharacteristicsUnionParam interface {
 // Auth ID Characteristic
 type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam struct {
 	// The name of the characteristic field, i.e., the header or cookie name.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The type of characteristic.
-	Type param.Field[ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicType] `json:"type,required"`
+	Type param.Field[ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicType] `json:"type" api:"required"`
 }
 
 func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam) MarshalJSON() (data []byte, err error) {
@@ -331,9 +331,9 @@ type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimPara
 	// https://www.rfc-editor.org/rfc/rfc9535.html). The JSONPath expression may be in
 	// dot or bracket notation, may only specify literal keys or array indexes, and
 	// must return a singleton value, which will be interpreted as a string.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The type of characteristic.
-	Type param.Field[ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType] `json:"type,required"`
+	Type param.Field[ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType] `json:"type" api:"required"`
 }
 
 func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam) MarshalJSON() (data []byte, err error) {
@@ -345,8 +345,8 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimP
 
 type ConfigurationUpdateParams struct {
 	// Identifier.
-	ZoneID        param.Field[string] `path:"zone_id,required"`
-	Configuration ConfigurationParam  `json:"configuration,required"`
+	ZoneID        param.Field[string] `path:"zone_id" api:"required"`
+	Configuration ConfigurationParam  `json:"configuration" api:"required"`
 	// Ensures that the configuration is written or retrieved in normalized fashion
 	Normalize param.Field[bool] `query:"normalize"`
 }
@@ -365,11 +365,11 @@ func (r ConfigurationUpdateParams) URLQuery() (v url.Values) {
 }
 
 type ConfigurationUpdateResponseEnvelope struct {
-	Errors   Message       `json:"errors,required"`
-	Messages Message       `json:"messages,required"`
-	Result   Configuration `json:"result,required"`
+	Errors   Message       `json:"errors" api:"required"`
+	Messages Message       `json:"messages" api:"required"`
+	Result   Configuration `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigurationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configurationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -409,7 +409,7 @@ func (r ConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Ensures that the configuration is written or retrieved in normalized fashion
 	Normalize param.Field[bool] `query:"normalize"`
 }
@@ -423,11 +423,11 @@ func (r ConfigurationGetParams) URLQuery() (v url.Values) {
 }
 
 type ConfigurationGetResponseEnvelope struct {
-	Errors   Message       `json:"errors,required"`
-	Messages Message       `json:"messages,required"`
-	Result   Configuration `json:"result,required"`
+	Errors   Message       `json:"errors" api:"required"`
+	Messages Message       `json:"messages" api:"required"`
+	Result   Configuration `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigurationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configurationGetResponseEnvelopeJSON    `json:"-"`
 }
 

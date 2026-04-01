@@ -46,15 +46,15 @@ func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a device posture rule.
@@ -63,19 +63,19 @@ func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches device posture rules for a Zero Trust account.
@@ -85,7 +85,7 @@ func (r *DevicePostureService) List(ctx context.Context, query DevicePostureList
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -111,19 +111,19 @@ func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body D
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single device posture rule.
@@ -132,19 +132,19 @@ func (r *DevicePostureService) Get(ctx context.Context, ruleID string, query Dev
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/posture/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CarbonblackInput = string
@@ -153,9 +153,9 @@ type CarbonblackInputParam = string
 
 type ClientCertificateInput struct {
 	// UUID of Cloudflare managed certificate.
-	CertificateID string `json:"certificate_id,required"`
+	CertificateID string `json:"certificate_id" api:"required"`
 	// Common Name that is protected by the certificate.
-	Cn   string                     `json:"cn,required"`
+	Cn   string                     `json:"cn" api:"required"`
 	JSON clientCertificateInputJSON `json:"-"`
 }
 
@@ -180,9 +180,9 @@ func (r ClientCertificateInput) implementsDeviceInput() {}
 
 type ClientCertificateInputParam struct {
 	// UUID of Cloudflare managed certificate.
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 	// Common Name that is protected by the certificate.
-	Cn param.Field[string] `json:"cn,required"`
+	Cn param.Field[string] `json:"cn" api:"required"`
 }
 
 func (r ClientCertificateInputParam) MarshalJSON() (data []byte, err error) {
@@ -193,7 +193,7 @@ func (r ClientCertificateInputParam) implementsDeviceInputUnionParam() {}
 
 type CrowdstrikeInput struct {
 	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
+	ConnectionID string `json:"connection_id" api:"required"`
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen string `json:"last_seen"`
 	// Operator.
@@ -296,7 +296,7 @@ func (r CrowdstrikeInputVersionOperator) IsKnown() bool {
 
 type CrowdstrikeInputParam struct {
 	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen param.Field[string] `json:"last_seen"`
 	// Operator.
@@ -599,9 +599,9 @@ func init() {
 
 type DeviceInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system.
-	OperatingSystem DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system" api:"required"`
 	// File path.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
 	// Signing certificate thumbprint.
@@ -649,7 +649,7 @@ func (r DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown()
 
 type DeviceInputTeamsDevicesAccessSerialNumberListInputRequest struct {
 	// UUID of Access List.
-	ID   string                                                        `json:"id,required"`
+	ID   string                                                        `json:"id" api:"required"`
 	JSON deviceInputTeamsDevicesAccessSerialNumberListInputRequestJSON `json:"-"`
 }
 
@@ -674,9 +674,9 @@ func (r DeviceInputTeamsDevicesAccessSerialNumberListInputRequest) implementsDev
 
 type DeviceInputTeamsDevicesApplicationInputRequest struct {
 	// Operating system.
-	OperatingSystem DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system" api:"required"`
 	// Path for the application.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
 	// Signing certificate thumbprint.
@@ -724,12 +724,12 @@ func (r DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown()
 
 type DeviceInputTeamsDevicesClientCertificateV2InputRequest struct {
 	// UUID of Cloudflare managed certificate.
-	CertificateID string `json:"certificate_id,required"`
+	CertificateID string `json:"certificate_id" api:"required"`
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
-	CheckPrivateKey bool `json:"check_private_key,required"`
+	CheckPrivateKey bool `json:"check_private_key" api:"required"`
 	// Operating system.
-	OperatingSystem DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem `json:"operating_system" api:"required"`
 	// Certificate Common Name. This may include one or more variables in the ${ }
 	// notation. Only ${serial_number} and ${hostname} are valid variables.
 	Cn string `json:"cn"`
@@ -865,11 +865,11 @@ func (r DeviceInputTeamsDevicesAntivirusInputRequest) implementsDeviceInput() {}
 
 type DeviceInputTeamsDevicesCustomS2sInputRequest struct {
 	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
+	ConnectionID string `json:"connection_id" api:"required"`
 	// Operator.
-	Operator DeviceInputTeamsDevicesCustomS2sInputRequestOperator `json:"operator,required"`
+	Operator DeviceInputTeamsDevicesCustomS2sInputRequestOperator `json:"operator" api:"required"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
-	Score float64                                          `json:"score,required"`
+	Score float64                                          `json:"score" api:"required"`
 	JSON  deviceInputTeamsDevicesCustomS2sInputRequestJSON `json:"-"`
 }
 
@@ -1218,9 +1218,9 @@ type DeviceInputUnionParam interface {
 
 type DeviceInputTeamsDevicesCarbonblackInputRequestParam struct {
 	// Operating system.
-	OperatingSystem param.Field[DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system" api:"required"`
 	// File path.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// SHA-256.
 	Sha256 param.Field[string] `json:"sha256"`
 	// Signing certificate thumbprint.
@@ -1235,7 +1235,7 @@ func (r DeviceInputTeamsDevicesCarbonblackInputRequestParam) implementsDeviceInp
 
 type DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam struct {
 	// UUID of Access List.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam) MarshalJSON() (data []byte, err error) {
@@ -1247,9 +1247,9 @@ func (r DeviceInputTeamsDevicesAccessSerialNumberListInputRequestParam) implemen
 
 type DeviceInputTeamsDevicesApplicationInputRequestParam struct {
 	// Operating system.
-	OperatingSystem param.Field[DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system" api:"required"`
 	// Path for the application.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// SHA-256.
 	Sha256 param.Field[string] `json:"sha256"`
 	// Signing certificate thumbprint.
@@ -1264,12 +1264,12 @@ func (r DeviceInputTeamsDevicesApplicationInputRequestParam) implementsDeviceInp
 
 type DeviceInputTeamsDevicesClientCertificateV2InputRequestParam struct {
 	// UUID of Cloudflare managed certificate.
-	CertificateID param.Field[string] `json:"certificate_id,required"`
+	CertificateID param.Field[string] `json:"certificate_id" api:"required"`
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
-	CheckPrivateKey param.Field[bool] `json:"check_private_key,required"`
+	CheckPrivateKey param.Field[bool] `json:"check_private_key" api:"required"`
 	// Operating system.
-	OperatingSystem param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem] `json:"operating_system" api:"required"`
 	// Certificate Common Name. This may include one or more variables in the ${ }
 	// notation. Only ${serial_number} and ${hostname} are valid variables.
 	Cn param.Field[string] `json:"cn"`
@@ -1312,11 +1312,11 @@ func (r DeviceInputTeamsDevicesAntivirusInputRequestParam) implementsDeviceInput
 
 type DeviceInputTeamsDevicesCustomS2sInputRequestParam struct {
 	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
 	// Operator.
-	Operator param.Field[DeviceInputTeamsDevicesCustomS2sInputRequestOperator] `json:"operator,required"`
+	Operator param.Field[DeviceInputTeamsDevicesCustomS2sInputRequestOperator] `json:"operator" api:"required"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
-	Score param.Field[float64] `json:"score,required"`
+	Score param.Field[float64] `json:"score" api:"required"`
 }
 
 func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) MarshalJSON() (data []byte, err error) {
@@ -1496,7 +1496,7 @@ func (r DiskEncryptionInputParam) implementsDeviceInputUnionParam() {}
 
 type DomainJoinedInput struct {
 	// Operating System.
-	OperatingSystem DomainJoinedInputOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DomainJoinedInputOperatingSystem `json:"operating_system" api:"required"`
 	// Domain.
 	Domain string                `json:"domain"`
 	JSON   domainJoinedInputJSON `json:"-"`
@@ -1538,7 +1538,7 @@ func (r DomainJoinedInputOperatingSystem) IsKnown() bool {
 
 type DomainJoinedInputParam struct {
 	// Operating System.
-	OperatingSystem param.Field[DomainJoinedInputOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DomainJoinedInputOperatingSystem] `json:"operating_system" api:"required"`
 	// Domain.
 	Domain param.Field[string] `json:"domain"`
 }
@@ -1551,9 +1551,9 @@ func (r DomainJoinedInputParam) implementsDeviceInputUnionParam() {}
 
 type FileInput struct {
 	// Operating system.
-	OperatingSystem FileInputOperatingSystem `json:"operating_system,required"`
+	OperatingSystem FileInputOperatingSystem `json:"operating_system" api:"required"`
 	// File path.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// Whether or not file exists.
 	Exists bool `json:"exists"`
 	// SHA-256.
@@ -1603,9 +1603,9 @@ func (r FileInputOperatingSystem) IsKnown() bool {
 
 type FileInputParam struct {
 	// Operating system.
-	OperatingSystem param.Field[FileInputOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[FileInputOperatingSystem] `json:"operating_system" api:"required"`
 	// File path.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// Whether or not file exists.
 	Exists param.Field[bool] `json:"exists"`
 	// SHA-256.
@@ -1622,9 +1622,9 @@ func (r FileInputParam) implementsDeviceInputUnionParam() {}
 
 type FirewallInput struct {
 	// Enabled.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Operating System.
-	OperatingSystem FirewallInputOperatingSystem `json:"operating_system,required"`
+	OperatingSystem FirewallInputOperatingSystem `json:"operating_system" api:"required"`
 	JSON            firewallInputJSON            `json:"-"`
 }
 
@@ -1664,9 +1664,9 @@ func (r FirewallInputOperatingSystem) IsKnown() bool {
 
 type FirewallInputParam struct {
 	// Enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Operating System.
-	OperatingSystem param.Field[FirewallInputOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[FirewallInputOperatingSystem] `json:"operating_system" api:"required"`
 }
 
 func (r FirewallInputParam) MarshalJSON() (data []byte, err error) {
@@ -1677,9 +1677,9 @@ func (r FirewallInputParam) implementsDeviceInputUnionParam() {}
 
 type IntuneInput struct {
 	// Compliance Status.
-	ComplianceStatus IntuneInputComplianceStatus `json:"compliance_status,required"`
+	ComplianceStatus IntuneInputComplianceStatus `json:"compliance_status" api:"required"`
 	// Posture Integration ID.
-	ConnectionID string          `json:"connection_id,required"`
+	ConnectionID string          `json:"connection_id" api:"required"`
 	JSON         intuneInputJSON `json:"-"`
 }
 
@@ -1723,9 +1723,9 @@ func (r IntuneInputComplianceStatus) IsKnown() bool {
 
 type IntuneInputParam struct {
 	// Compliance Status.
-	ComplianceStatus param.Field[IntuneInputComplianceStatus] `json:"compliance_status,required"`
+	ComplianceStatus param.Field[IntuneInputComplianceStatus] `json:"compliance_status" api:"required"`
 	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
 }
 
 func (r IntuneInputParam) MarshalJSON() (data []byte, err error) {
@@ -1736,11 +1736,11 @@ func (r IntuneInputParam) implementsDeviceInputUnionParam() {}
 
 type KolideInput struct {
 	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
+	ConnectionID string `json:"connection_id" api:"required"`
 	// Count Operator.
-	CountOperator KolideInputCountOperator `json:"countOperator,required"`
+	CountOperator KolideInputCountOperator `json:"countOperator" api:"required"`
 	// The Number of Issues.
-	IssueCount string          `json:"issue_count,required"`
+	IssueCount string          `json:"issue_count" api:"required"`
 	JSON       kolideInputJSON `json:"-"`
 }
 
@@ -1784,11 +1784,11 @@ func (r KolideInputCountOperator) IsKnown() bool {
 
 type KolideInputParam struct {
 	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
 	// Count Operator.
-	CountOperator param.Field[KolideInputCountOperator] `json:"countOperator,required"`
+	CountOperator param.Field[KolideInputCountOperator] `json:"countOperator" api:"required"`
 	// The Number of Issues.
-	IssueCount param.Field[string] `json:"issue_count,required"`
+	IssueCount param.Field[string] `json:"issue_count" api:"required"`
 }
 
 func (r KolideInputParam) MarshalJSON() (data []byte, err error) {
@@ -1799,11 +1799,11 @@ func (r KolideInputParam) implementsDeviceInputUnionParam() {}
 
 type OSVersionInput struct {
 	// Operating System.
-	OperatingSystem OSVersionInputOperatingSystem `json:"operating_system,required"`
+	OperatingSystem OSVersionInputOperatingSystem `json:"operating_system" api:"required"`
 	// Operator.
-	Operator OSVersionInputOperator `json:"operator,required"`
+	Operator OSVersionInputOperator `json:"operator" api:"required"`
 	// Version of OS.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// Operating System Distribution Name (linux only).
 	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only).
@@ -1873,11 +1873,11 @@ func (r OSVersionInputOperator) IsKnown() bool {
 
 type OSVersionInputParam struct {
 	// Operating System.
-	OperatingSystem param.Field[OSVersionInputOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[OSVersionInputOperatingSystem] `json:"operating_system" api:"required"`
 	// Operator.
-	Operator param.Field[OSVersionInputOperator] `json:"operator,required"`
+	Operator param.Field[OSVersionInputOperator] `json:"operator" api:"required"`
 	// Version of OS.
-	Version param.Field[string] `json:"version,required"`
+	Version param.Field[string] `json:"version" api:"required"`
 	// Operating System Distribution Name (linux only).
 	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only).
@@ -1896,9 +1896,9 @@ func (r OSVersionInputParam) implementsDeviceInputUnionParam() {}
 
 type SentineloneInput struct {
 	// Operating system.
-	OperatingSystem SentineloneInputOperatingSystem `json:"operating_system,required"`
+	OperatingSystem SentineloneInputOperatingSystem `json:"operating_system" api:"required"`
 	// File path.
-	Path string `json:"path,required"`
+	Path string `json:"path" api:"required"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
 	// Signing certificate thumbprint.
@@ -1946,9 +1946,9 @@ func (r SentineloneInputOperatingSystem) IsKnown() bool {
 
 type SentineloneInputParam struct {
 	// Operating system.
-	OperatingSystem param.Field[SentineloneInputOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[SentineloneInputOperatingSystem] `json:"operating_system" api:"required"`
 	// File path.
-	Path param.Field[string] `json:"path,required"`
+	Path param.Field[string] `json:"path" api:"required"`
 	// SHA-256.
 	Sha256 param.Field[string] `json:"sha256"`
 	// Signing certificate thumbprint.
@@ -1963,7 +1963,7 @@ func (r SentineloneInputParam) implementsDeviceInputUnionParam() {}
 
 type SentineloneS2sInput struct {
 	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
+	ConnectionID string `json:"connection_id" api:"required"`
 	// The Number of active threats.
 	ActiveThreats float64 `json:"active_threats"`
 	// Whether device is infected.
@@ -2063,7 +2063,7 @@ func (r SentineloneS2sInputOperator) IsKnown() bool {
 
 type SentineloneS2sInputParam struct {
 	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
 	// The Number of active threats.
 	ActiveThreats param.Field[float64] `json:"active_threats"`
 	// Whether device is infected.
@@ -2086,7 +2086,7 @@ func (r SentineloneS2sInputParam) implementsDeviceInputUnionParam() {}
 
 type TaniumInput struct {
 	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
+	ConnectionID string `json:"connection_id" api:"required"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen string `json:"eid_last_seen"`
 	// Operator to evaluate risk_level or eid_last_seen.
@@ -2180,7 +2180,7 @@ func (r TaniumInputScoreOperator) IsKnown() bool {
 
 type TaniumInputParam struct {
 	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen param.Field[string] `json:"eid_last_seen"`
 	// Operator to evaluate risk_level or eid_last_seen.
@@ -2201,9 +2201,9 @@ func (r TaniumInputParam) implementsDeviceInputUnionParam() {}
 
 type UniqueClientIDInput struct {
 	// List ID.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Operating System.
-	OperatingSystem UniqueClientIDInputOperatingSystem `json:"operating_system,required"`
+	OperatingSystem UniqueClientIDInputOperatingSystem `json:"operating_system" api:"required"`
 	JSON            uniqueClientIDInputJSON            `json:"-"`
 }
 
@@ -2245,9 +2245,9 @@ func (r UniqueClientIDInputOperatingSystem) IsKnown() bool {
 
 type UniqueClientIDInputParam struct {
 	// List ID.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// Operating System.
-	OperatingSystem param.Field[UniqueClientIDInputOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[UniqueClientIDInputOperatingSystem] `json:"operating_system" api:"required"`
 }
 
 func (r UniqueClientIDInputParam) MarshalJSON() (data []byte, err error) {
@@ -2258,9 +2258,9 @@ func (r UniqueClientIDInputParam) implementsDeviceInputUnionParam() {}
 
 type WorkspaceOneInput struct {
 	// Compliance Status.
-	ComplianceStatus WorkspaceOneInputComplianceStatus `json:"compliance_status,required"`
+	ComplianceStatus WorkspaceOneInputComplianceStatus `json:"compliance_status" api:"required"`
 	// Posture Integration ID.
-	ConnectionID string                `json:"connection_id,required"`
+	ConnectionID string                `json:"connection_id" api:"required"`
 	JSON         workspaceOneInputJSON `json:"-"`
 }
 
@@ -2302,9 +2302,9 @@ func (r WorkspaceOneInputComplianceStatus) IsKnown() bool {
 
 type WorkspaceOneInputParam struct {
 	// Compliance Status.
-	ComplianceStatus param.Field[WorkspaceOneInputComplianceStatus] `json:"compliance_status,required"`
+	ComplianceStatus param.Field[WorkspaceOneInputComplianceStatus] `json:"compliance_status" api:"required"`
 	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
 }
 
 func (r WorkspaceOneInputParam) MarshalJSON() (data []byte, err error) {
@@ -2336,11 +2336,11 @@ func (r devicePostureDeleteResponseJSON) RawJSON() string {
 }
 
 type DevicePostureNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the device posture rule.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The type of device posture rule.
-	Type param.Field[DevicePostureNewParamsType] `json:"type,required"`
+	Type param.Field[DevicePostureNewParamsType] `json:"type" api:"required"`
 	// The description of the device posture rule.
 	Description param.Field[string] `json:"description"`
 	// Sets the expiration time for a posture check result. If empty, the result
@@ -2397,11 +2397,11 @@ func (r DevicePostureNewParamsType) IsKnown() bool {
 }
 
 type DevicePostureNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DevicePostureRule     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DevicePostureRule     `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2440,11 +2440,11 @@ func (r DevicePostureNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the device posture rule.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The type of device posture rule.
-	Type param.Field[DevicePostureUpdateParamsType] `json:"type,required"`
+	Type param.Field[DevicePostureUpdateParamsType] `json:"type" api:"required"`
 	// The description of the device posture rule.
 	Description param.Field[string] `json:"description"`
 	// Sets the expiration time for a posture check result. If empty, the result
@@ -2501,11 +2501,11 @@ func (r DevicePostureUpdateParamsType) IsKnown() bool {
 }
 
 type DevicePostureUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DevicePostureRule     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DevicePostureRule     `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2544,19 +2544,19 @@ func (r DevicePostureUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePostureDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePostureDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DevicePostureDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo       `json:"messages" api:"required"`
+	Result   DevicePostureDeleteResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2595,15 +2595,15 @@ func (r DevicePostureDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePostureGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DevicePostureRule     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   DevicePostureRule     `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DevicePostureGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    devicePostureGetResponseEnvelopeJSON    `json:"-"`
 }
 

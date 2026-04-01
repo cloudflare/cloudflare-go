@@ -44,11 +44,11 @@ func (r *IdentityProviderSCIMGroupService) List(ctx context.Context, identityPro
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if identityProviderID == "" {
 		err = errors.New("missing required identity_provider_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/identity_providers/%s/scim/groups", params.AccountID, identityProviderID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -71,7 +71,7 @@ func (r *IdentityProviderSCIMGroupService) ListAutoPaging(ctx context.Context, i
 
 type IdentityProviderSCIMGroupListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The unique Cloudflare-generated Id of the SCIM Group resource; also known as the
 	// "Id".
 	CfResourceID param.Field[string] `query:"cf_resource_id"`

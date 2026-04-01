@@ -63,7 +63,7 @@ func (r *VersionService) List(ctx context.Context, rulesetID string, query Versi
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions", accountOrZone, accountOrZoneID, rulesetID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -107,15 +107,15 @@ func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVe
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return err
 	}
 	if rulesetVersion == "" {
 		err = errors.New("missing required ruleset_version parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Fetches a specific version of an account or zone ruleset.
@@ -142,35 +142,35 @@ func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersi
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
-		return
+		return nil, err
 	}
 	if rulesetVersion == "" {
 		err = errors.New("missing required ruleset_version parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A ruleset object.
 type VersionListResponse struct {
 	// The unique ID of the ruleset.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The kind of the ruleset.
-	Kind Kind `json:"kind,required"`
+	Kind Kind `json:"kind" api:"required"`
 	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The human-readable name of the ruleset.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The phase of the ruleset.
-	Phase Phase `json:"phase,required"`
+	Phase Phase `json:"phase" api:"required"`
 	// The version of the ruleset.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// An informative description of the ruleset.
 	Description string                  `json:"description"`
 	JSON        versionListResponseJSON `json:"-"`
@@ -201,19 +201,19 @@ func (r versionListResponseJSON) RawJSON() string {
 // A ruleset object.
 type VersionGetResponse struct {
 	// The unique ID of the ruleset.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The kind of the ruleset.
-	Kind Kind `json:"kind,required"`
+	Kind Kind `json:"kind" api:"required"`
 	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The human-readable name of the ruleset.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The phase of the ruleset.
-	Phase Phase `json:"phase,required"`
+	Phase Phase `json:"phase" api:"required"`
 	// The list of rules in the ruleset.
-	Rules []VersionGetResponseRule `json:"rules,required"`
+	Rules []VersionGetResponseRule `json:"rules" api:"required"`
 	// The version of the ruleset.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// An informative description of the ruleset.
 	Description string                 `json:"description"`
 	JSON        versionGetResponseJSON `json:"-"`
@@ -244,9 +244,9 @@ func (r versionGetResponseJSON) RawJSON() string {
 
 type VersionGetResponseRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -476,9 +476,9 @@ func init() {
 
 type VersionGetResponseRulesRulesetsChallengeRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -552,9 +552,9 @@ func (r VersionGetResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type VersionGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                 `json:"username_expression,required"`
+	UsernameExpression string                                                                 `json:"username_expression" api:"required"`
 	JSON               versionGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -580,9 +580,9 @@ func (r versionGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) 
 type VersionGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -628,9 +628,9 @@ func (r versionGetResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() str
 
 type VersionGetResponseRulesRulesetsJSChallengeRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -704,9 +704,9 @@ func (r VersionGetResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 // Configuration for exposed credential checking.
 type VersionGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                   `json:"username_expression,required"`
+	UsernameExpression string                                                                   `json:"username_expression" api:"required"`
 	JSON               versionGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -732,9 +732,9 @@ func (r versionGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON
 type VersionGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -781,9 +781,9 @@ func (r versionGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() s
 
 type VersionGetResponseRulesRulesetsSetCacheControlRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -923,7 +923,7 @@ func (r versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersJSON) 
 // A cache-control directive configuration.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutable struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                            `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
@@ -992,7 +992,7 @@ func init() {
 // Set the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
@@ -1038,7 +1038,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmuta
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
@@ -1101,7 +1101,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersImmuta
 // seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -1174,9 +1174,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
@@ -1223,7 +1223,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
@@ -1285,7 +1285,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMaxAge
 // A cache-control directive configuration.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
@@ -1354,7 +1354,7 @@ func init() {
 // Set the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
@@ -1400,7 +1400,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRe
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
@@ -1462,7 +1462,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustRe
 // A cache-control directive configuration.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
@@ -1531,7 +1531,7 @@ func init() {
 // Set the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
@@ -1577,7 +1577,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUn
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
@@ -1640,7 +1640,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersMustUn
 // names).
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCache struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// This field can have the runtime type of [[]string].
@@ -1713,7 +1713,7 @@ func init() {
 // Set the directive with optional qualifiers.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -1763,7 +1763,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCach
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
@@ -1825,7 +1825,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoCach
 // A cache-control directive configuration.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStore struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                          `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
@@ -1894,7 +1894,7 @@ func init() {
 // Set the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
@@ -1940,7 +1940,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStor
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
@@ -2002,7 +2002,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoStor
 // A cache-control directive configuration.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransform struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                              `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
@@ -2071,7 +2071,7 @@ func init() {
 // Set the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
@@ -2117,7 +2117,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTran
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
@@ -2180,7 +2180,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersNoTran
 // names).
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivate struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// This field can have the runtime type of [[]string].
@@ -2253,7 +2253,7 @@ func init() {
 // Set the directive with optional qualifiers.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// Optional list of header names to qualify the directive (e.g., for "private" or
@@ -2303,7 +2303,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivat
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
@@ -2365,7 +2365,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPrivat
 // A cache-control directive configuration.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                  `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
@@ -2434,7 +2434,7 @@ func init() {
 // Set the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
@@ -2480,7 +2480,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyR
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                 `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
@@ -2542,7 +2542,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersProxyR
 // A cache-control directive configuration.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublic struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                         `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
@@ -2611,7 +2611,7 @@ func init() {
 // Set the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
@@ -2657,7 +2657,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublic
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
@@ -2720,7 +2720,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersPublic
 // seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxage struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -2793,9 +2793,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
@@ -2842,7 +2842,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxag
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
@@ -2905,7 +2905,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersSMaxag
 // seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfError struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -2978,9 +2978,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
@@ -3027,7 +3027,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleI
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
@@ -3090,7 +3090,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleI
 // seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool `json:"cloudflare_only"`
 	// The duration value in seconds for the directive.
@@ -3163,9 +3163,9 @@ func init() {
 // Set the directive with a duration value in seconds.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation" api:"required"`
 	// The duration value in seconds for the directive.
-	Value int64 `json:"value,required"`
+	Value int64 `json:"value" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                   `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
@@ -3212,7 +3212,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleW
 // Remove the directive.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
 	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                      `json:"cloudflare_only"`
 	JSON           versionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
@@ -3274,9 +3274,9 @@ func (r VersionGetResponseRulesRulesetsSetCacheControlRuleActionParametersStaleW
 // Configuration for exposed credential checking.
 type VersionGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                       `json:"username_expression,required"`
+	UsernameExpression string                                                                       `json:"username_expression" api:"required"`
 	JSON               versionGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -3302,9 +3302,9 @@ func (r versionGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck
 type VersionGetResponseRulesRulesetsSetCacheControlRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -3351,9 +3351,9 @@ func (r versionGetResponseRulesRulesetsSetCacheControlRuleRatelimitJSON) RawJSON
 
 type VersionGetResponseRulesRulesetsSetCacheTagsRule struct {
 	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
 	// The version of the rule.
-	Version string `json:"version,required"`
+	Version string `json:"version" api:"required"`
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -3427,7 +3427,7 @@ func (r VersionGetResponseRulesRulesetsSetCacheTagsRuleAction) IsKnown() bool {
 // The parameters configuring the rule's action.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParameters struct {
 	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation `json:"operation" api:"required"`
 	// An expression that evaluates to an array of cache tag values.
 	Expression string `json:"expression"`
 	// This field can have the runtime type of [[]string].
@@ -3523,9 +3523,9 @@ func init() {
 // Add cache tags using a list of values.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                              `json:"values,required"`
+	Values []string                                                                              `json:"values" api:"required"`
 	JSON   versionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
 }
 
@@ -3570,9 +3570,9 @@ func (r VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheT
 // Add cache tags using an expression.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      versionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -3617,9 +3617,9 @@ func (r VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersAddCacheT
 // Remove cache tags using a list of values.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                                 `json:"values,required"`
+	Values []string                                                                                 `json:"values" api:"required"`
 	JSON   versionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
 }
 
@@ -3664,9 +3664,9 @@ func (r VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCac
 // Remove cache tags using an expression.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      versionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -3711,9 +3711,9 @@ func (r VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersRemoveCac
 // Set cache tags using a list of values.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
 	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation" api:"required"`
 	// A list of cache tag values.
-	Values []string                                                                              `json:"values,required"`
+	Values []string                                                                              `json:"values" api:"required"`
 	JSON   versionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
 }
 
@@ -3758,9 +3758,9 @@ func (r VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheT
 // Set cache tags using an expression.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
 	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation,required"`
+	Operation VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation" api:"required"`
 	JSON      versionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
 }
 
@@ -3822,9 +3822,9 @@ func (r VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParametersOperation
 // Configuration for exposed credential checking.
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression,required"`
+	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                    `json:"username_expression,required"`
+	UsernameExpression string                                                                    `json:"username_expression" api:"required"`
 	JSON               versionGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
 }
 
@@ -3850,9 +3850,9 @@ func (r versionGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheckJSO
 type VersionGetResponseRulesRulesetsSetCacheTagsRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
-	Characteristics []string `json:"characteristics,required"`
+	Characteristics []string `json:"characteristics" api:"required"`
 	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period,required"`
+	Period int64 `json:"period" api:"required"`
 	// An expression that defines when the rate limit counter should be incremented. It
 	// defaults to the same as the rule's expression.
 	CountingExpression string `json:"counting_expression"`
@@ -3955,13 +3955,13 @@ type VersionGetParams struct {
 // A response object.
 type VersionGetResponseEnvelope struct {
 	// A list of error messages.
-	Errors []VersionGetResponseEnvelopeErrors `json:"errors,required"`
+	Errors []VersionGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
-	Messages []VersionGetResponseEnvelopeMessages `json:"messages,required"`
+	Messages []VersionGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A ruleset object.
-	Result VersionGetResponse `json:"result,required"`
+	Result VersionGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success VersionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success VersionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    versionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3987,7 +3987,7 @@ func (r versionGetResponseEnvelopeJSON) RawJSON() string {
 // A message.
 type VersionGetResponseEnvelopeErrors struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -4016,7 +4016,7 @@ func (r versionGetResponseEnvelopeErrorsJSON) RawJSON() string {
 // The source of this message.
 type VersionGetResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                     `json:"pointer,required"`
+	Pointer string                                     `json:"pointer" api:"required"`
 	JSON    versionGetResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
@@ -4039,7 +4039,7 @@ func (r versionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 // A message.
 type VersionGetResponseEnvelopeMessages struct {
 	// A text description of this message.
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
@@ -4068,7 +4068,7 @@ func (r versionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 // The source of this message.
 type VersionGetResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                       `json:"pointer,required"`
+	Pointer string                                       `json:"pointer" api:"required"`
 	JSON    versionGetResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 

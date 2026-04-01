@@ -40,15 +40,15 @@ func (r *CertificatePackQuotaService) Get(ctx context.Context, query Certificate
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/quota", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CertificatePackQuotaGetResponse struct {
@@ -99,14 +99,14 @@ func (r certificatePackQuotaGetResponseAdvancedJSON) RawJSON() string {
 
 type CertificatePackQuotaGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CertificatePackQuotaGetResponseEnvelope struct {
-	Errors   []CertificatePackQuotaGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackQuotaGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CertificatePackQuotaGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CertificatePackQuotaGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CertificatePackQuotaGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CertificatePackQuotaGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CertificatePackQuotaGetResponse                `json:"result"`
 	JSON    certificatePackQuotaGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -131,8 +131,8 @@ func (r certificatePackQuotaGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CertificatePackQuotaGetResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           CertificatePackQuotaGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             certificatePackQuotaGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -179,8 +179,8 @@ func (r certificatePackQuotaGetResponseEnvelopeErrorsSourceJSON) RawJSON() strin
 }
 
 type CertificatePackQuotaGetResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           CertificatePackQuotaGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             certificatePackQuotaGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -44,10 +44,10 @@ func (r *CTLogService) List(ctx context.Context, query CTLogListParams, opts ...
 	path := "radar/ct/logs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the requested certificate log information.
@@ -56,19 +56,19 @@ func (r *CTLogService) Get(ctx context.Context, logSlug string, query CTLogGetPa
 	opts = slices.Concat(r.Options, opts)
 	if logSlug == "" {
 		err = errors.New("missing required log_slug parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("radar/ct/logs/%s", logSlug)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CTLogListResponse struct {
-	CertificateLogs []CTLogListResponseCertificateLog `json:"certificateLogs,required"`
+	CertificateLogs []CTLogListResponseCertificateLog `json:"certificateLogs" api:"required"`
 	JSON            ctLogListResponseJSON             `json:"-"`
 }
 
@@ -90,25 +90,25 @@ func (r ctLogListResponseJSON) RawJSON() string {
 
 type CTLogListResponseCertificateLog struct {
 	// The API standard that the certificate log follows.
-	API CTLogListResponseCertificateLogsAPI `json:"api,required"`
+	API CTLogListResponseCertificateLogsAPI `json:"api" api:"required"`
 	// A brief description of the certificate log.
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// The end date and time for when the log will stop accepting certificates.
-	EndExclusive time.Time `json:"endExclusive,required" format:"date-time"`
+	EndExclusive time.Time `json:"endExclusive" api:"required" format:"date-time"`
 	// The organization responsible for operating the certificate log.
-	Operator string `json:"operator,required"`
+	Operator string `json:"operator" api:"required"`
 	// A URL-friendly, kebab-case identifier for the certificate log.
-	Slug string `json:"slug,required"`
+	Slug string `json:"slug" api:"required"`
 	// The start date and time for when the log starts accepting certificates.
-	StartInclusive time.Time `json:"startInclusive,required" format:"date-time"`
+	StartInclusive time.Time `json:"startInclusive" api:"required" format:"date-time"`
 	// The current state of the certificate log. More details about log states can be
 	// found here:
 	// https://googlechrome.github.io/CertificateTransparency/log_states.html
-	State CTLogListResponseCertificateLogsState `json:"state,required"`
+	State CTLogListResponseCertificateLogsState `json:"state" api:"required"`
 	// Timestamp of when the log state was last updated.
-	StateTimestamp time.Time `json:"stateTimestamp,required" format:"date-time"`
+	StateTimestamp time.Time `json:"stateTimestamp" api:"required" format:"date-time"`
 	// The URL for the certificate log.
-	URL  string                              `json:"url,required"`
+	URL  string                              `json:"url" api:"required"`
 	JSON ctLogListResponseCertificateLogJSON `json:"-"`
 }
 
@@ -175,7 +175,7 @@ func (r CTLogListResponseCertificateLogsState) IsKnown() bool {
 }
 
 type CTLogGetResponse struct {
-	CertificateLog CTLogGetResponseCertificateLog `json:"certificateLog,required"`
+	CertificateLog CTLogGetResponseCertificateLog `json:"certificateLog" api:"required"`
 	JSON           ctLogGetResponseJSON           `json:"-"`
 }
 
@@ -197,40 +197,40 @@ func (r ctLogGetResponseJSON) RawJSON() string {
 
 type CTLogGetResponseCertificateLog struct {
 	// The API standard that the certificate log follows.
-	API CTLogGetResponseCertificateLogAPI `json:"api,required"`
+	API CTLogGetResponseCertificateLogAPI `json:"api" api:"required"`
 	// The average throughput of the CT log, measured in certificates per hour
 	// (certs/hour).
-	AvgThroughput float64 `json:"avgThroughput,required"`
+	AvgThroughput float64 `json:"avgThroughput" api:"required"`
 	// A brief description of the certificate log.
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// The end date and time for when the log will stop accepting certificates.
-	EndExclusive time.Time `json:"endExclusive,required" format:"date-time"`
+	EndExclusive time.Time `json:"endExclusive" api:"required" format:"date-time"`
 	// Timestamp of the most recent update to the CT log.
-	LastUpdate time.Time `json:"lastUpdate,required" format:"date-time"`
+	LastUpdate time.Time `json:"lastUpdate" api:"required" format:"date-time"`
 	// The organization responsible for operating the certificate log.
-	Operator string `json:"operator,required"`
+	Operator string `json:"operator" api:"required"`
 	// Log performance metrics, including averages and per-endpoint details.
-	Performance CTLogGetResponseCertificateLogPerformance `json:"performance,required,nullable"`
+	Performance CTLogGetResponseCertificateLogPerformance `json:"performance" api:"required,nullable"`
 	// Logs from the same operator.
-	Related []CTLogGetResponseCertificateLogRelated `json:"related,required"`
+	Related []CTLogGetResponseCertificateLogRelated `json:"related" api:"required"`
 	// A URL-friendly, kebab-case identifier for the certificate log.
-	Slug string `json:"slug,required"`
+	Slug string `json:"slug" api:"required"`
 	// The start date and time for when the log starts accepting certificates.
-	StartInclusive time.Time `json:"startInclusive,required" format:"date-time"`
+	StartInclusive time.Time `json:"startInclusive" api:"required" format:"date-time"`
 	// The current state of the certificate log. More details about log states can be
 	// found here:
 	// https://googlechrome.github.io/CertificateTransparency/log_states.html
-	State CTLogGetResponseCertificateLogState `json:"state,required"`
+	State CTLogGetResponseCertificateLogState `json:"state" api:"required"`
 	// Timestamp of when the log state was last updated.
-	StateTimestamp time.Time `json:"stateTimestamp,required" format:"date-time"`
+	StateTimestamp time.Time `json:"stateTimestamp" api:"required" format:"date-time"`
 	// Number of certificates that are eligible for inclusion to this log but have not
 	// been included yet. Based on certificates signed by trusted root CAs within the
 	// log's accepted date range.
-	SubmittableCERTCount string `json:"submittableCertCount,required,nullable"`
+	SubmittableCERTCount string `json:"submittableCertCount" api:"required,nullable"`
 	// Number of certificates already included in this CT log.
-	SubmittedCERTCount string `json:"submittedCertCount,required,nullable"`
+	SubmittedCERTCount string `json:"submittedCertCount" api:"required,nullable"`
 	// The URL for the certificate log.
-	URL  string                             `json:"url,required"`
+	URL  string                             `json:"url" api:"required"`
 	JSON ctLogGetResponseCertificateLogJSON `json:"-"`
 }
 
@@ -282,9 +282,9 @@ func (r CTLogGetResponseCertificateLogAPI) IsKnown() bool {
 
 // Log performance metrics, including averages and per-endpoint details.
 type CTLogGetResponseCertificateLogPerformance struct {
-	Endpoints    []CTLogGetResponseCertificateLogPerformanceEndpoint `json:"endpoints,required"`
-	ResponseTime float64                                             `json:"responseTime,required"`
-	Uptime       float64                                             `json:"uptime,required"`
+	Endpoints    []CTLogGetResponseCertificateLogPerformanceEndpoint `json:"endpoints" api:"required"`
+	ResponseTime float64                                             `json:"responseTime" api:"required"`
+	Uptime       float64                                             `json:"uptime" api:"required"`
 	JSON         ctLogGetResponseCertificateLogPerformanceJSON       `json:"-"`
 }
 
@@ -308,9 +308,9 @@ func (r ctLogGetResponseCertificateLogPerformanceJSON) RawJSON() string {
 
 type CTLogGetResponseCertificateLogPerformanceEndpoint struct {
 	// The certificate log endpoint names used in performance metrics.
-	Endpoint     CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint `json:"endpoint,required"`
-	ResponseTime float64                                                    `json:"responseTime,required"`
-	Uptime       float64                                                    `json:"uptime,required"`
+	Endpoint     CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint `json:"endpoint" api:"required"`
+	ResponseTime float64                                                    `json:"responseTime" api:"required"`
+	Uptime       float64                                                    `json:"uptime" api:"required"`
 	JSON         ctLogGetResponseCertificateLogPerformanceEndpointJSON      `json:"-"`
 }
 
@@ -355,17 +355,17 @@ func (r CTLogGetResponseCertificateLogPerformanceEndpointsEndpoint) IsKnown() bo
 
 type CTLogGetResponseCertificateLogRelated struct {
 	// A brief description of the certificate log.
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// The end date and time for when the log will stop accepting certificates.
-	EndExclusive time.Time `json:"endExclusive,required" format:"date-time"`
+	EndExclusive time.Time `json:"endExclusive" api:"required" format:"date-time"`
 	// A URL-friendly, kebab-case identifier for the certificate log.
-	Slug string `json:"slug,required"`
+	Slug string `json:"slug" api:"required"`
 	// The start date and time for when the log starts accepting certificates.
-	StartInclusive time.Time `json:"startInclusive,required" format:"date-time"`
+	StartInclusive time.Time `json:"startInclusive" api:"required" format:"date-time"`
 	// The current state of the certificate log. More details about log states can be
 	// found here:
 	// https://googlechrome.github.io/CertificateTransparency/log_states.html
-	State CTLogGetResponseCertificateLogRelatedState `json:"state,required"`
+	State CTLogGetResponseCertificateLogRelatedState `json:"state" api:"required"`
 	JSON  ctLogGetResponseCertificateLogRelatedJSON  `json:"-"`
 }
 
@@ -467,8 +467,8 @@ func (r CTLogListParamsFormat) IsKnown() bool {
 }
 
 type CTLogListResponseEnvelope struct {
-	Result  CTLogListResponse             `json:"result,required"`
-	Success bool                          `json:"success,required"`
+	Result  CTLogListResponse             `json:"result" api:"required"`
+	Success bool                          `json:"success" api:"required"`
 	JSON    ctLogListResponseEnvelopeJSON `json:"-"`
 }
 
@@ -519,8 +519,8 @@ func (r CTLogGetParamsFormat) IsKnown() bool {
 }
 
 type CTLogGetResponseEnvelope struct {
-	Result  CTLogGetResponse             `json:"result,required"`
-	Success bool                         `json:"success,required"`
+	Result  CTLogGetResponse             `json:"result" api:"required"`
+	Success bool                         `json:"success" api:"required"`
 	JSON    ctLogGetResponseEnvelopeJSON `json:"-"`
 }
 

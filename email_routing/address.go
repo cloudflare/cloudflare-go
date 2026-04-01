@@ -45,15 +45,15 @@ func (r *AddressService) New(ctx context.Context, params AddressNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists existing destination addresses.
@@ -63,7 +63,7 @@ func (r *AddressService) List(ctx context.Context, params AddressListParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -89,19 +89,19 @@ func (r *AddressService) Delete(ctx context.Context, destinationAddressIdentifie
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if destinationAddressIdentifier == "" {
 		err = errors.New("missing required destination_address_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", body.AccountID, destinationAddressIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets information for a specific destination email already created.
@@ -110,19 +110,19 @@ func (r *AddressService) Get(ctx context.Context, destinationAddressIdentifier s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if destinationAddressIdentifier == "" {
 		err = errors.New("missing required destination_address_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", query.AccountID, destinationAddressIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Address struct {
@@ -167,9 +167,9 @@ func (r addressJSON) RawJSON() string {
 
 type AddressNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The contact email address of the user.
-	Email param.Field[string] `json:"email,required"`
+	Email param.Field[string] `json:"email" api:"required"`
 }
 
 func (r AddressNewParams) MarshalJSON() (data []byte, err error) {
@@ -177,10 +177,10 @@ func (r AddressNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressNewResponseEnvelope struct {
-	Errors   []AddressNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AddressNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AddressNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AddressNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AddressNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Address                           `json:"result"`
 	JSON    addressNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -205,8 +205,8 @@ func (r addressNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AddressNewResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AddressNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             addressNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -253,8 +253,8 @@ func (r addressNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressNewResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AddressNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             addressNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -317,7 +317,7 @@ func (r AddressNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AddressListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sorts results in an ascending or descending order.
 	Direction param.Field[AddressListParamsDirection] `query:"direction"`
 	// Page number of paginated results.
@@ -370,14 +370,14 @@ func (r AddressListParamsVerified) IsKnown() bool {
 
 type AddressDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AddressDeleteResponseEnvelope struct {
-	Errors   []AddressDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AddressDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AddressDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AddressDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AddressDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Address                              `json:"result"`
 	JSON    addressDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -402,8 +402,8 @@ func (r addressDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AddressDeleteResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           AddressDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             addressDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -450,8 +450,8 @@ func (r addressDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressDeleteResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           AddressDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             addressDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -514,14 +514,14 @@ func (r AddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AddressGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AddressGetResponseEnvelope struct {
-	Errors   []AddressGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AddressGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AddressGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AddressGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AddressGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Address                           `json:"result"`
 	JSON    addressGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -546,8 +546,8 @@ func (r addressGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AddressGetResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AddressGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             addressGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -594,8 +594,8 @@ func (r addressGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AddressGetResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AddressGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             addressGetResponseEnvelopeMessagesJSON   `json:"-"`

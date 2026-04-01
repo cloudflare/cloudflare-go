@@ -35,47 +35,47 @@ func NewRiskScoringIntegrationReferenceService(opts ...option.RequestOption) (r 
 	return
 }
 
-// Get risk score integration by reference id.
+// Retrieves a Zero Trust risk score integration using its external reference ID.
 func (r *RiskScoringIntegrationReferenceService) Get(ctx context.Context, referenceID string, query RiskScoringIntegrationReferenceGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationReferenceGetResponse, err error) {
 	var env RiskScoringIntegrationReferenceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if referenceID == "" {
 		err = errors.New("missing required reference_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations/reference_id/%s", query.AccountID, referenceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RiskScoringIntegrationReferenceGetResponse struct {
 	// The id of the integration, a UUIDv4.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// The Cloudflare account tag.
-	AccountTag string `json:"account_tag,required"`
+	AccountTag string `json:"account_tag" api:"required"`
 	// Whether this integration is enabled and should export changes in risk score.
-	Active bool `json:"active,required"`
+	Active bool `json:"active" api:"required"`
 	// When the integration was created in RFC3339 format.
-	CreatedAt       time.Time                                                 `json:"created_at,required" format:"date-time"`
-	IntegrationType RiskScoringIntegrationReferenceGetResponseIntegrationType `json:"integration_type,required"`
+	CreatedAt       time.Time                                                 `json:"created_at" api:"required" format:"date-time"`
+	IntegrationType RiskScoringIntegrationReferenceGetResponseIntegrationType `json:"integration_type" api:"required"`
 	// A reference ID defined by the client. Should be set to the Access-Okta IDP
 	// integration ID. Useful when the risk-score integration needs to be associated
 	// with a secondary asset and recalled using that ID.
-	ReferenceID string `json:"reference_id,required"`
+	ReferenceID string `json:"reference_id" api:"required"`
 	// The base URL for the tenant. E.g. "https://tenant.okta.com".
-	TenantURL string `json:"tenant_url,required"`
+	TenantURL string `json:"tenant_url" api:"required"`
 	// The URL for the Shared Signals Framework configuration, e.g.
 	// "/.well-known/sse-configuration/{integration_uuid}/".
 	// https://openid.net/specs/openid-sse-framework-1_0.html#rfc.section.6.2.1.
-	WellKnownURL string                                         `json:"well_known_url,required"`
+	WellKnownURL string                                         `json:"well_known_url" api:"required"`
 	JSON         riskScoringIntegrationReferenceGetResponseJSON `json:"-"`
 }
 
@@ -117,14 +117,14 @@ func (r RiskScoringIntegrationReferenceGetResponseIntegrationType) IsKnown() boo
 }
 
 type RiskScoringIntegrationReferenceGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringIntegrationReferenceGetResponseEnvelope struct {
-	Errors   []RiskScoringIntegrationReferenceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringIntegrationReferenceGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringIntegrationReferenceGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringIntegrationReferenceGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RiskScoringIntegrationReferenceGetResponse                `json:"result"`
 	JSON    riskScoringIntegrationReferenceGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -149,8 +149,8 @@ func (r riskScoringIntegrationReferenceGetResponseEnvelopeJSON) RawJSON() string
 }
 
 type RiskScoringIntegrationReferenceGetResponseEnvelopeErrors struct {
-	Code             int64                                                          `json:"code,required"`
-	Message          string                                                         `json:"message,required"`
+	Code             int64                                                          `json:"code" api:"required"`
+	Message          string                                                         `json:"message" api:"required"`
 	DocumentationURL string                                                         `json:"documentation_url"`
 	Source           RiskScoringIntegrationReferenceGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringIntegrationReferenceGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -199,8 +199,8 @@ func (r riskScoringIntegrationReferenceGetResponseEnvelopeErrorsSourceJSON) RawJ
 }
 
 type RiskScoringIntegrationReferenceGetResponseEnvelopeMessages struct {
-	Code             int64                                                            `json:"code,required"`
-	Message          string                                                           `json:"message,required"`
+	Code             int64                                                            `json:"code" api:"required"`
+	Message          string                                                           `json:"message" api:"required"`
 	DocumentationURL string                                                           `json:"documentation_url"`
 	Source           RiskScoringIntegrationReferenceGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringIntegrationReferenceGetResponseEnvelopeMessagesJSON   `json:"-"`

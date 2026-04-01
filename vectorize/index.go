@@ -51,15 +51,15 @@ func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns a list of Vectorize Indexes
@@ -69,7 +69,7 @@ func (r *IndexService) List(ctx context.Context, query IndexListParams, opts ...
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -95,19 +95,19 @@ func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexD
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s", body.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete a set of vectors from an index by their vector identifiers.
@@ -116,19 +116,19 @@ func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/delete_by_ids", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the specified Vectorize Index.
@@ -137,19 +137,19 @@ func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGet
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s", query.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a set of vectors from an index by their vector identifiers.
@@ -158,19 +158,19 @@ func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params In
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/get_by_ids", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get information about a vectorize index.
@@ -179,19 +179,19 @@ func (r *IndexService) Info(ctx context.Context, indexName string, query IndexIn
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/info", query.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Inserts vectors into the specified index and returns a mutation id corresponding
@@ -201,19 +201,19 @@ func (r *IndexService) Insert(ctx context.Context, indexName string, params Inde
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/insert", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns a paginated list of vector identifiers from the specified index.
@@ -222,19 +222,19 @@ func (r *IndexService) ListVectors(ctx context.Context, indexName string, params
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/list", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Finds vectors closest to a given vector in an index.
@@ -243,19 +243,19 @@ func (r *IndexService) Query(ctx context.Context, indexName string, params Index
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/query", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Upserts vectors into the specified index, creating them if they do not exist and
@@ -265,19 +265,19 @@ func (r *IndexService) Upsert(ctx context.Context, indexName string, params Inde
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if indexName == "" {
 		err = errors.New("missing required index_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/upsert", params.AccountID, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CreateIndex struct {
@@ -313,9 +313,9 @@ func (r createIndexJSON) RawJSON() string {
 
 type IndexDimensionConfiguration struct {
 	// Specifies the number of dimensions for the index
-	Dimensions int64 `json:"dimensions,required"`
+	Dimensions int64 `json:"dimensions" api:"required"`
 	// Specifies the type of metric to use calculating distance.
-	Metric IndexDimensionConfigurationMetric `json:"metric,required"`
+	Metric IndexDimensionConfigurationMetric `json:"metric" api:"required"`
 	JSON   indexDimensionConfigurationJSON   `json:"-"`
 }
 
@@ -355,9 +355,9 @@ func (r IndexDimensionConfigurationMetric) IsKnown() bool {
 
 type IndexDimensionConfigurationParam struct {
 	// Specifies the number of dimensions for the index
-	Dimensions param.Field[int64] `json:"dimensions,required"`
+	Dimensions param.Field[int64] `json:"dimensions" api:"required"`
 	// Specifies the type of metric to use calculating distance.
-	Metric param.Field[IndexDimensionConfigurationMetric] `json:"metric,required"`
+	Metric param.Field[IndexDimensionConfigurationMetric] `json:"metric" api:"required"`
 }
 
 func (r IndexDimensionConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -395,7 +395,7 @@ type IndexInfoResponse struct {
 	Dimensions int64 `json:"dimensions"`
 	// Specifies the timestamp the last mutation batch was processed as an ISO8601
 	// string.
-	ProcessedUpToDatetime time.Time `json:"processedUpToDatetime,nullable" format:"date-time"`
+	ProcessedUpToDatetime time.Time `json:"processedUpToDatetime" api:"nullable" format:"date-time"`
 	// The unique identifier for the async mutation operation containing the changeset.
 	ProcessedUpToMutation string `json:"processedUpToMutation"`
 	// Specifies the number of vectors present in the index
@@ -446,17 +446,17 @@ func (r indexInsertResponseJSON) RawJSON() string {
 
 type IndexListVectorsResponse struct {
 	// Number of vectors returned in this response
-	Count int64 `json:"count,required"`
+	Count int64 `json:"count" api:"required"`
 	// Whether there are more vectors available beyond this response
-	IsTruncated bool `json:"isTruncated,required"`
+	IsTruncated bool `json:"isTruncated" api:"required"`
 	// Total number of vectors in the index
-	TotalCount int64 `json:"totalCount,required"`
+	TotalCount int64 `json:"totalCount" api:"required"`
 	// Array of vector items
-	Vectors []IndexListVectorsResponseVector `json:"vectors,required"`
+	Vectors []IndexListVectorsResponseVector `json:"vectors" api:"required"`
 	// When the cursor expires as an ISO8601 string
-	CursorExpirationTimestamp time.Time `json:"cursorExpirationTimestamp,nullable" format:"date-time"`
+	CursorExpirationTimestamp time.Time `json:"cursorExpirationTimestamp" api:"nullable" format:"date-time"`
 	// Cursor for the next page of results
-	NextCursor string                       `json:"nextCursor,nullable"`
+	NextCursor string                       `json:"nextCursor" api:"nullable"`
 	JSON       indexListVectorsResponseJSON `json:"-"`
 }
 
@@ -483,7 +483,7 @@ func (r indexListVectorsResponseJSON) RawJSON() string {
 
 type IndexListVectorsResponseVector struct {
 	// Identifier for a Vector
-	ID   string                             `json:"id,required"`
+	ID   string                             `json:"id" api:"required"`
 	JSON indexListVectorsResponseVectorJSON `json:"-"`
 }
 
@@ -531,11 +531,11 @@ func (r indexQueryResponseJSON) RawJSON() string {
 type IndexQueryResponseMatch struct {
 	// Identifier for a Vector
 	ID        string      `json:"id"`
-	Metadata  interface{} `json:"metadata,nullable"`
-	Namespace string      `json:"namespace,nullable"`
+	Metadata  interface{} `json:"metadata" api:"nullable"`
+	Namespace string      `json:"namespace" api:"nullable"`
 	// The score of the vector according to the index's distance metric
 	Score  float64                     `json:"score"`
-	Values []float64                   `json:"values,nullable"`
+	Values []float64                   `json:"values" api:"nullable"`
 	JSON   indexQueryResponseMatchJSON `json:"-"`
 }
 
@@ -583,10 +583,10 @@ func (r indexUpsertResponseJSON) RawJSON() string {
 
 type IndexNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the type of configuration to use for the index.
-	Config param.Field[IndexNewParamsConfigUnion] `json:"config,required"`
-	Name   param.Field[string]                    `json:"name,required"`
+	Config param.Field[IndexNewParamsConfigUnion] `json:"config" api:"required"`
+	Name   param.Field[string]                    `json:"name" api:"required"`
 	// Specifies the description of the index.
 	Description param.Field[string] `json:"description"`
 }
@@ -622,7 +622,7 @@ type IndexNewParamsConfigUnion interface {
 
 type IndexNewParamsConfigVectorizeIndexPresetConfiguration struct {
 	// Specifies the preset to use for the index.
-	Preset param.Field[IndexNewParamsConfigVectorizeIndexPresetConfigurationPreset] `json:"preset,required"`
+	Preset param.Field[IndexNewParamsConfigVectorizeIndexPresetConfigurationPreset] `json:"preset" api:"required"`
 }
 
 func (r IndexNewParamsConfigVectorizeIndexPresetConfiguration) MarshalJSON() (data []byte, err error) {
@@ -688,11 +688,11 @@ func (r IndexNewParamsConfigPreset) IsKnown() bool {
 }
 
 type IndexNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CreateIndex           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   CreateIndex           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexNewResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -732,20 +732,20 @@ func (r IndexNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexListParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndexDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndexDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -785,7 +785,7 @@ func (r IndexDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexDeleteByIDsParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of vector identifiers to delete from the index indicated by the path.
 	IDs param.Field[[]string] `json:"ids"`
 }
@@ -795,11 +795,11 @@ func (r IndexDeleteByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexDeleteByIDsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   IndexDeleteByIDsResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo    `json:"messages" api:"required"`
+	Result   IndexDeleteByIDsResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexDeleteByIDsResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexDeleteByIDsResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexDeleteByIDsResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -839,15 +839,15 @@ func (r IndexDeleteByIDsResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndexGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CreateIndex           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   CreateIndex           `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexGetResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -887,7 +887,7 @@ func (r IndexGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexGetByIDsParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of vector identifiers to retrieve from the index indicated by the path.
 	IDs param.Field[[]string] `json:"ids"`
 }
@@ -897,12 +897,12 @@ func (r IndexGetByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexGetByIDsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Array of vectors with matching ids.
-	Result IndexGetByIDsResponse `json:"result,required,nullable"`
+	Result IndexGetByIDsResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexGetByIDsResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexGetByIDsResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexGetByIDsResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -942,15 +942,15 @@ func (r IndexGetByIDsResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexInfoParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndexInfoResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexInfoResponse     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   IndexInfoResponse     `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexInfoResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexInfoResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexInfoResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -990,9 +990,9 @@ func (r IndexInfoResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexInsertParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ndjson file containing vectors to insert.
-	Body io.Reader `json:"body,required" format:"binary"`
+	Body io.Reader `json:"body" api:"required" format:"binary"`
 	// Behavior for ndjson parse failures.
 	UnparsableBehavior param.Field[IndexInsertParamsUnparsableBehavior] `query:"unparsable-behavior"`
 }
@@ -1037,11 +1037,11 @@ func (r IndexInsertParamsUnparsableBehavior) IsKnown() bool {
 }
 
 type IndexInsertResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexInsertResponse   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   IndexInsertResponse   `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexInsertResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexInsertResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexInsertResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1081,7 +1081,7 @@ func (r IndexInsertResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexListVectorsParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Maximum number of vectors to return
 	Count param.Field[int64] `query:"count"`
 	// Cursor for pagination to get the next page of results
@@ -1097,11 +1097,11 @@ func (r IndexListVectorsParams) URLQuery() (v url.Values) {
 }
 
 type IndexListVectorsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   IndexListVectorsResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo    `json:"messages" api:"required"`
+	Result   IndexListVectorsResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexListVectorsResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexListVectorsResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexListVectorsResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1141,9 +1141,9 @@ func (r IndexListVectorsResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexQueryParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The search vector that will be used to find the nearest neighbors.
-	Vector param.Field[[]float64] `json:"vector,required"`
+	Vector param.Field[[]float64] `json:"vector" api:"required"`
 	// A metadata filter expression used to limit nearest neighbor results.
 	Filter param.Field[interface{}] `json:"filter"`
 	// Whether to return no metadata, indexed metadata or all metadata associated with
@@ -1178,11 +1178,11 @@ func (r IndexQueryParamsReturnMetadata) IsKnown() bool {
 }
 
 type IndexQueryResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexQueryResponse    `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   IndexQueryResponse    `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexQueryResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexQueryResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexQueryResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1222,9 +1222,9 @@ func (r IndexQueryResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexUpsertParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ndjson file containing vectors to upsert.
-	Body io.Reader `json:"body,required" format:"binary"`
+	Body io.Reader `json:"body" api:"required" format:"binary"`
 	// Behavior for ndjson parse failures.
 	UnparsableBehavior param.Field[IndexUpsertParamsUnparsableBehavior] `query:"unparsable-behavior"`
 }
@@ -1269,11 +1269,11 @@ func (r IndexUpsertParamsUnparsableBehavior) IsKnown() bool {
 }
 
 type IndexUpsertResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IndexUpsertResponse   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   IndexUpsertResponse   `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success IndexUpsertResponseEnvelopeSuccess `json:"success,required"`
+	Success IndexUpsertResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    indexUpsertResponseEnvelopeJSON    `json:"-"`
 }
 

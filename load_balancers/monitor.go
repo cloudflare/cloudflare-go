@@ -46,15 +46,15 @@ func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Modify a configured monitor.
@@ -63,19 +63,19 @@ func (r *MonitorService) Update(ctx context.Context, monitorID string, params Mo
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorID == "" {
 		err = errors.New("missing required monitor_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List configured monitors for an account.
@@ -85,7 +85,7 @@ func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -111,19 +111,19 @@ func (r *MonitorService) Delete(ctx context.Context, monitorID string, body Moni
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorID == "" {
 		err = errors.New("missing required monitor_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", body.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Apply changes to an existing monitor, overwriting the supplied properties.
@@ -132,19 +132,19 @@ func (r *MonitorService) Edit(ctx context.Context, monitorID string, params Moni
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorID == "" {
 		err = errors.New("missing required monitor_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List a single configured monitor for an account.
@@ -153,19 +153,19 @@ func (r *MonitorService) Get(ctx context.Context, monitorID string, query Monito
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if monitorID == "" {
 		err = errors.New("missing required monitor_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", query.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Monitor struct {
@@ -209,7 +209,7 @@ type Monitor struct {
 	// The port number to connect to for the health check. Required for TCP, UDP, and
 	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
 	// non-standard port (HTTP: default 80, HTTPS: default 443).
-	Port int64 `json:"port,nullable"`
+	Port int64 `json:"port" api:"nullable"`
 	// Assign this monitor to emulate the specified zone while probing. This parameter
 	// is only valid for HTTP and HTTPS monitors.
 	ProbeZone string `json:"probe_zone"`
@@ -301,7 +301,7 @@ func (r monitorDeleteResponseJSON) RawJSON() string {
 
 type MonitorNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -379,11 +379,11 @@ func (r MonitorNewParamsType) IsKnown() bool {
 }
 
 type MonitorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Monitor               `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorNewResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -423,7 +423,7 @@ func (r MonitorNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -501,11 +501,11 @@ func (r MonitorUpdateParamsType) IsKnown() bool {
 }
 
 type MonitorUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Monitor               `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -545,20 +545,20 @@ func (r MonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MonitorDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   MonitorDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -598,7 +598,7 @@ func (r MonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorEditParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -676,11 +676,11 @@ func (r MonitorEditParamsType) IsKnown() bool {
 }
 
 type MonitorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Monitor               `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorEditResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -720,15 +720,15 @@ func (r MonitorEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Monitor               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Monitor               `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success MonitorGetResponseEnvelopeSuccess `json:"success,required"`
+	Success MonitorGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    monitorGetResponseEnvelopeJSON    `json:"-"`
 }
 

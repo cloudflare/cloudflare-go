@@ -24,6 +24,7 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -35,12 +36,15 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		CollectLogs:             cloudflare.F(true),
 		RateLimitingInterval:    cloudflare.F(int64(0)),
 		RateLimitingLimit:       cloudflare.F(int64(0)),
-		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
 		Authentication:          cloudflare.F(true),
 		LogManagement:           cloudflare.F(int64(10000)),
 		LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayNewParamsLogManagementStrategyStopInserting),
 		Logpush:                 cloudflare.F(true),
 		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
+		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
+		RetryBackoff:            cloudflare.F(ai_gateway.AIGatewayNewParamsRetryBackoffConstant),
+		RetryDelay:              cloudflare.F(int64(0)),
+		RetryMaxAttempts:        cloudflare.F(int64(1)),
 		WorkersAIBillingMode:    cloudflare.F(ai_gateway.AIGatewayNewParamsWorkersAIBillingModePostpaid),
 		Zdr:                     cloudflare.F(true),
 	})
@@ -63,6 +67,7 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -76,7 +81,6 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			CollectLogs:             cloudflare.F(true),
 			RateLimitingInterval:    cloudflare.F(int64(0)),
 			RateLimitingLimit:       cloudflare.F(int64(0)),
-			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 			Authentication:          cloudflare.F(true),
 			DLP: cloudflare.F[ai_gateway.AIGatewayUpdateParamsDLPUnion](ai_gateway.AIGatewayUpdateParamsDLPObject{
 				Action:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsDLPObjectActionBlock),
@@ -95,7 +99,11 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 				URL:         cloudflare.F("url"),
 				ContentType: cloudflare.F(ai_gateway.AIGatewayUpdateParamsOtelContentTypeJson),
 			}}),
-			StoreID: cloudflare.F("store_id"),
+			RateLimitingTechnique: cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
+			RetryBackoff:          cloudflare.F(ai_gateway.AIGatewayUpdateParamsRetryBackoffConstant),
+			RetryDelay:            cloudflare.F(int64(0)),
+			RetryMaxAttempts:      cloudflare.F(int64(1)),
+			StoreID:               cloudflare.F("store_id"),
 			Stripe: cloudflare.F(ai_gateway.AIGatewayUpdateParamsStripe{
 				Authorization: cloudflare.F("authorization"),
 				UsageEvents: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsStripeUsageEvent{{
@@ -125,6 +133,7 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -153,6 +162,7 @@ func TestAIGatewayDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -182,6 +192,7 @@ func TestAIGatewayGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

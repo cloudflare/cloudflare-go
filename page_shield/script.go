@@ -46,7 +46,7 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/scripts", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -72,50 +72,56 @@ func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGe
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if scriptID == "" {
 		err = errors.New("missing required script_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/page_shield/scripts/%s", query.ZoneID, scriptID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Script struct {
 	// Identifier
-	ID                    string    `json:"id,required"`
-	AddedAt               time.Time `json:"added_at,required" format:"date-time"`
-	FirstSeenAt           time.Time `json:"first_seen_at,required" format:"date-time"`
-	Host                  string    `json:"host,required"`
-	LastSeenAt            time.Time `json:"last_seen_at,required" format:"date-time"`
-	URL                   string    `json:"url,required"`
-	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
+	ID                    string    `json:"id" api:"required"`
+	AddedAt               time.Time `json:"added_at" api:"required" format:"date-time"`
+	FirstSeenAt           time.Time `json:"first_seen_at" api:"required" format:"date-time"`
+	Host                  string    `json:"host" api:"required"`
+	LastSeenAt            time.Time `json:"last_seen_at" api:"required" format:"date-time"`
+	URL                   string    `json:"url" api:"required"`
+	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path" api:"required"`
 	// The cryptomining score of the JavaScript content.
-	CryptominingScore int64 `json:"cryptomining_score,nullable"`
-	// The dataflow score of the JavaScript content.
-	DataflowScore           int64 `json:"dataflow_score,nullable"`
+	CryptominingScore int64 `json:"cryptomining_score" api:"nullable"`
+	// The dataflow score of the JavaScript content. This field has been deprecated in
+	// favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
+	DataflowScore           int64 `json:"dataflow_score" api:"nullable"`
 	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
 	// The timestamp of when the script was last fetched.
-	FetchedAt    string `json:"fetched_at,nullable"`
+	FetchedAt    string `json:"fetched_at" api:"nullable"`
 	FirstPageURL string `json:"first_page_url"`
 	// The computed hash of the analyzed script.
-	Hash string `json:"hash,nullable"`
+	Hash string `json:"hash" api:"nullable"`
 	// The integrity score of the JavaScript content.
-	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	JSIntegrityScore int64 `json:"js_integrity_score" api:"nullable"`
 	// The magecart score of the JavaScript content.
-	MagecartScore             int64    `json:"magecart_score,nullable"`
+	MagecartScore             int64    `json:"magecart_score" api:"nullable"`
 	MaliciousDomainCategories []string `json:"malicious_domain_categories"`
 	MaliciousURLCategories    []string `json:"malicious_url_categories"`
 	// The malware score of the JavaScript content.
-	MalwareScore int64 `json:"malware_score,nullable"`
-	// The obfuscation score of the JavaScript content.
-	ObfuscationScore     int64      `json:"obfuscation_score,nullable"`
+	MalwareScore int64 `json:"malware_score" api:"nullable"`
+	// The obfuscation score of the JavaScript content. This field has been deprecated
+	// in favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
+	ObfuscationScore     int64      `json:"obfuscation_score" api:"nullable"`
 	PageURLs             []string   `json:"page_urls"`
 	URLReportedMalicious bool       `json:"url_reported_malicious"`
 	JSON                 scriptJSON `json:"-"`
@@ -158,36 +164,42 @@ func (r scriptJSON) RawJSON() string {
 
 type ScriptGetResponse struct {
 	// Identifier
-	ID                    string    `json:"id,required"`
-	AddedAt               time.Time `json:"added_at,required" format:"date-time"`
-	FirstSeenAt           time.Time `json:"first_seen_at,required" format:"date-time"`
-	Host                  string    `json:"host,required"`
-	LastSeenAt            time.Time `json:"last_seen_at,required" format:"date-time"`
-	URL                   string    `json:"url,required"`
-	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
+	ID                    string    `json:"id" api:"required"`
+	AddedAt               time.Time `json:"added_at" api:"required" format:"date-time"`
+	FirstSeenAt           time.Time `json:"first_seen_at" api:"required" format:"date-time"`
+	Host                  string    `json:"host" api:"required"`
+	LastSeenAt            time.Time `json:"last_seen_at" api:"required" format:"date-time"`
+	URL                   string    `json:"url" api:"required"`
+	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path" api:"required"`
 	// The cryptomining score of the JavaScript content.
-	CryptominingScore int64 `json:"cryptomining_score,nullable"`
-	// The dataflow score of the JavaScript content.
-	DataflowScore           int64 `json:"dataflow_score,nullable"`
+	CryptominingScore int64 `json:"cryptomining_score" api:"nullable"`
+	// The dataflow score of the JavaScript content. This field has been deprecated in
+	// favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
+	DataflowScore           int64 `json:"dataflow_score" api:"nullable"`
 	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
 	// The timestamp of when the script was last fetched.
-	FetchedAt    string `json:"fetched_at,nullable"`
+	FetchedAt    string `json:"fetched_at" api:"nullable"`
 	FirstPageURL string `json:"first_page_url"`
 	// The computed hash of the analyzed script.
-	Hash string `json:"hash,nullable"`
+	Hash string `json:"hash" api:"nullable"`
 	// The integrity score of the JavaScript content.
-	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	JSIntegrityScore int64 `json:"js_integrity_score" api:"nullable"`
 	// The magecart score of the JavaScript content.
-	MagecartScore             int64    `json:"magecart_score,nullable"`
+	MagecartScore             int64    `json:"magecart_score" api:"nullable"`
 	MaliciousDomainCategories []string `json:"malicious_domain_categories"`
 	MaliciousURLCategories    []string `json:"malicious_url_categories"`
 	// The malware score of the JavaScript content.
-	MalwareScore int64 `json:"malware_score,nullable"`
-	// The obfuscation score of the JavaScript content.
-	ObfuscationScore     int64                      `json:"obfuscation_score,nullable"`
+	MalwareScore int64 `json:"malware_score" api:"nullable"`
+	// The obfuscation score of the JavaScript content. This field has been deprecated
+	// in favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
+	ObfuscationScore     int64                      `json:"obfuscation_score" api:"nullable"`
 	PageURLs             []string                   `json:"page_urls"`
 	URLReportedMalicious bool                       `json:"url_reported_malicious"`
-	Versions             []ScriptGetResponseVersion `json:"versions,nullable"`
+	Versions             []ScriptGetResponseVersion `json:"versions" api:"nullable"`
 	JSON                 scriptGetResponseJSON      `json:"-"`
 }
 
@@ -231,21 +243,27 @@ func (r scriptGetResponseJSON) RawJSON() string {
 // The version of the analyzed script.
 type ScriptGetResponseVersion struct {
 	// The cryptomining score of the JavaScript content.
-	CryptominingScore int64 `json:"cryptomining_score,nullable"`
-	// The dataflow score of the JavaScript content.
-	DataflowScore int64 `json:"dataflow_score,nullable"`
+	CryptominingScore int64 `json:"cryptomining_score" api:"nullable"`
+	// The dataflow score of the JavaScript content. This field has been deprecated in
+	// favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
+	DataflowScore int64 `json:"dataflow_score" api:"nullable"`
 	// The timestamp of when the script was last fetched.
-	FetchedAt string `json:"fetched_at,nullable"`
+	FetchedAt string `json:"fetched_at" api:"nullable"`
 	// The computed hash of the analyzed script.
-	Hash string `json:"hash,nullable"`
+	Hash string `json:"hash" api:"nullable"`
 	// The integrity score of the JavaScript content.
-	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	JSIntegrityScore int64 `json:"js_integrity_score" api:"nullable"`
 	// The magecart score of the JavaScript content.
-	MagecartScore int64 `json:"magecart_score,nullable"`
+	MagecartScore int64 `json:"magecart_score" api:"nullable"`
 	// The malware score of the JavaScript content.
-	MalwareScore int64 `json:"malware_score,nullable"`
-	// The obfuscation score of the JavaScript content.
-	ObfuscationScore int64                        `json:"obfuscation_score,nullable"`
+	MalwareScore int64 `json:"malware_score" api:"nullable"`
+	// The obfuscation score of the JavaScript content. This field has been deprecated
+	// in favour of js_integrity_score.
+	//
+	// Deprecated: deprecated
+	ObfuscationScore int64                        `json:"obfuscation_score" api:"nullable"`
 	JSON             scriptGetResponseVersionJSON `json:"-"`
 }
 
@@ -274,7 +292,7 @@ func (r scriptGetResponseVersionJSON) RawJSON() string {
 
 type ScriptListParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned scripts.
 	Direction param.Field[ScriptListParamsDirection] `query:"direction"`
 	// When true, excludes scripts seen in a `/cdn-cgi` path from the returned scripts.
@@ -382,13 +400,13 @@ func (r ScriptListParamsOrderBy) IsKnown() bool {
 
 type ScriptGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ScriptGetResponseEnvelope struct {
-	Result ScriptGetResponse `json:"result,required,nullable"`
+	Result ScriptGetResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
-	Success  ScriptGetResponseEnvelopeSuccess `json:"success,required"`
+	Success  ScriptGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo            `json:"errors"`
 	Messages []shared.ResponseInfo            `json:"messages"`
 	JSON     scriptGetResponseEnvelopeJSON    `json:"-"`

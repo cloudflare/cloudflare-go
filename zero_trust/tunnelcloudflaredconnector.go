@@ -41,38 +41,38 @@ func (r *TunnelCloudflaredConnectorService) Get(ctx context.Context, tunnelID st
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	if connectorID == "" {
 		err = errors.New("missing required connector_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connectors/%s", query.AccountID, tunnelID, connectorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TunnelCloudflaredConnectorGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelCloudflaredConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// A client (typically cloudflared) that maintains connections to a Cloudflare data
 	// center.
-	Result Client `json:"result,required"`
+	Result Client `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success TunnelCloudflaredConnectorGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredConnectorGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    tunnelCloudflaredConnectorGetResponseEnvelopeJSON    `json:"-"`
 }
 

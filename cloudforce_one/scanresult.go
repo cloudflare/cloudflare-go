@@ -40,19 +40,19 @@ func (r *ScanResultService) Get(ctx context.Context, configID string, query Scan
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if configID == "" {
 		err = errors.New("missing required config_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/scans/results/%s", query.AccountID, configID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ScanResult struct {
@@ -80,7 +80,7 @@ func (r scanResultJSON) RawJSON() string {
 }
 
 type ScanResultGetResponse struct {
-	OneOneOneOne []ScanResult              `json:"1.1.1.1,required"`
+	OneOneOneOne []ScanResult              `json:"1.1.1.1" api:"required"`
 	JSON         scanResultGetResponseJSON `json:"-"`
 }
 
@@ -102,14 +102,14 @@ func (r scanResultGetResponseJSON) RawJSON() string {
 
 type ScanResultGetParams struct {
 	// Defines the Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScanResultGetResponseEnvelope struct {
-	Errors   []string                          `json:"errors,required"`
-	Messages []string                          `json:"messages,required"`
-	Result   ScanResultGetResponse             `json:"result,required"`
-	Success  bool                              `json:"success,required"`
+	Errors   []string                          `json:"errors" api:"required"`
+	Messages []string                          `json:"messages" api:"required"`
+	Result   ScanResultGetResponse             `json:"result" api:"required"`
+	Success  bool                              `json:"success" api:"required"`
 	JSON     scanResultGetResponseEnvelopeJSON `json:"-"`
 }
 

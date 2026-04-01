@@ -40,20 +40,20 @@ func (r *PublishService) New(ctx context.Context, params PublishNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/settings/zaraz/publish", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PublishNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Zaraz configuration description.
 	Body string `json:"body"`
 }
@@ -63,11 +63,11 @@ func (r PublishNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PublishNewResponseEnvelope struct {
-	Errors   []PublishNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PublishNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   string                               `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                           `json:"success,required"`
+	Errors   []PublishNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PublishNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   string                               `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success bool                           `json:"success" api:"required"`
 	JSON    publishNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -91,8 +91,8 @@ func (r publishNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type PublishNewResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           PublishNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             publishNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -139,8 +139,8 @@ func (r publishNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type PublishNewResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           PublishNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             publishNewResponseEnvelopeMessagesJSON   `json:"-"`

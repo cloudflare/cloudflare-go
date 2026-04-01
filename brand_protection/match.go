@@ -41,11 +41,11 @@ func (r *MatchService) Download(ctx context.Context, params MatchDownloadParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/matches/download", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Return matches for string queries based on ID
@@ -53,11 +53,11 @@ func (r *MatchService) Get(ctx context.Context, params MatchGetParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/matches", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type MatchDownloadResponse struct {
@@ -107,7 +107,7 @@ func (r matchGetResponseJSON) RawJSON() string {
 }
 
 type MatchDownloadParams struct {
-	AccountID       param.Field[string] `path:"account_id,required"`
+	AccountID       param.Field[string] `path:"account_id" api:"required"`
 	ID              param.Field[string] `query:"id"`
 	IncludeDomainID param.Field[bool]   `query:"include_domain_id"`
 	Limit           param.Field[int64]  `query:"limit"`
@@ -123,7 +123,7 @@ func (r MatchDownloadParams) URLQuery() (v url.Values) {
 }
 
 type MatchGetParams struct {
-	AccountID       param.Field[string] `path:"account_id,required"`
+	AccountID       param.Field[string] `path:"account_id" api:"required"`
 	ID              param.Field[string] `query:"id"`
 	IncludeDomainID param.Field[bool]   `query:"include_domain_id"`
 	Limit           param.Field[int64]  `query:"limit"`

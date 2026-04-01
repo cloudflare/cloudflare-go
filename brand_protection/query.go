@@ -43,11 +43,11 @@ func (r *QueryService) New(ctx context.Context, params QueryNewParams, opts ...o
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/queries", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
-	return
+	return err
 }
 
 // Return a success message after deleting saved string queries by ID
@@ -56,11 +56,11 @@ func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opt
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/queries", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
-	return
+	return err
 }
 
 // Return a success message after creating new saved string queries in bulk
@@ -69,15 +69,15 @@ func (r *QueryService) Bulk(ctx context.Context, params QueryBulkParams, opts ..
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/brand-protection/queries/bulk", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
-	return
+	return err
 }
 
 type QueryNewParams struct {
-	AccountID     param.Field[string]      `path:"account_id,required"`
+	AccountID     param.Field[string]      `path:"account_id" api:"required"`
 	ID            param.Field[string]      `query:"id"`
 	QueryScan     param.Field[bool]        `query:"scan"`
 	QueryTag      param.Field[string]      `query:"tag"`
@@ -101,7 +101,7 @@ func (r QueryNewParams) URLQuery() (v url.Values) {
 }
 
 type QueryDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	ID        param.Field[string] `query:"id"`
 	Scan      param.Field[bool]   `query:"scan"`
 	Tag       param.Field[string] `query:"tag"`
@@ -116,7 +116,7 @@ func (r QueryDeleteParams) URLQuery() (v url.Values) {
 }
 
 type QueryBulkParams struct {
-	AccountID param.Field[string]                   `path:"account_id,required"`
+	AccountID param.Field[string]                   `path:"account_id" api:"required"`
 	Queries   param.Field[[]map[string]interface{}] `json:"queries"`
 }
 

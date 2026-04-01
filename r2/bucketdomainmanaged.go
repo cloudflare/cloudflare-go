@@ -39,57 +39,57 @@ func NewBucketDomainManagedService(opts ...option.RequestOption) (r *BucketDomai
 func (r *BucketDomainManagedService) Update(ctx context.Context, bucketName string, params BucketDomainManagedUpdateParams, opts ...option.RequestOption) (res *BucketDomainManagedUpdateResponse, err error) {
 	var env BucketDomainManagedUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/managed", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets state of public access over the bucket's R2-managed (r2.dev) domain.
 func (r *BucketDomainManagedService) List(ctx context.Context, bucketName string, params BucketDomainManagedListParams, opts ...option.RequestOption) (res *BucketDomainManagedListResponse, err error) {
 	var env BucketDomainManagedListResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/managed", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BucketDomainManagedUpdateResponse struct {
 	// Bucket ID.
-	BucketID string `json:"bucketId,required"`
+	BucketID string `json:"bucketId" api:"required"`
 	// Domain name of the bucket's r2.dev domain.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// Whether this bucket is publicly accessible at the r2.dev domain.
-	Enabled bool                                  `json:"enabled,required"`
+	Enabled bool                                  `json:"enabled" api:"required"`
 	JSON    bucketDomainManagedUpdateResponseJSON `json:"-"`
 }
 
@@ -113,11 +113,11 @@ func (r bucketDomainManagedUpdateResponseJSON) RawJSON() string {
 
 type BucketDomainManagedListResponse struct {
 	// Bucket ID.
-	BucketID string `json:"bucketId,required"`
+	BucketID string `json:"bucketId" api:"required"`
 	// Domain name of the bucket's r2.dev domain.
-	Domain string `json:"domain,required"`
+	Domain string `json:"domain" api:"required"`
 	// Whether this bucket is publicly accessible at the r2.dev domain.
-	Enabled bool                                `json:"enabled,required"`
+	Enabled bool                                `json:"enabled" api:"required"`
 	JSON    bucketDomainManagedListResponseJSON `json:"-"`
 }
 
@@ -141,9 +141,9 @@ func (r bucketDomainManagedListResponseJSON) RawJSON() string {
 
 type BucketDomainManagedUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether to enable public bucket access at the r2.dev domain.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainManagedUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -170,11 +170,11 @@ func (r BucketDomainManagedUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainManagedUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []string                          `json:"messages,required"`
-	Result   BucketDomainManagedUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors" api:"required"`
+	Messages []string                          `json:"messages" api:"required"`
+	Result   BucketDomainManagedUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDomainManagedUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDomainManagedUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDomainManagedUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -214,7 +214,7 @@ func (r BucketDomainManagedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainManagedListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketDomainManagedListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -237,11 +237,11 @@ func (r BucketDomainManagedListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketDomainManagedListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []string                        `json:"messages,required"`
-	Result   BucketDomainManagedListResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors" api:"required"`
+	Messages []string                        `json:"messages" api:"required"`
+	Result   BucketDomainManagedListResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketDomainManagedListResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketDomainManagedListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketDomainManagedListResponseEnvelopeJSON    `json:"-"`
 }
 

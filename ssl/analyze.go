@@ -42,22 +42,22 @@ func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/analyze", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AnalyzeNewResponse = interface{}
 
 type AnalyzeNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -72,10 +72,10 @@ func (r AnalyzeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AnalyzeNewResponseEnvelope struct {
-	Errors   []AnalyzeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyzeNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AnalyzeNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AnalyzeNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AnalyzeNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AnalyzeNewResponse                `json:"result"`
 	JSON    analyzeNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -100,8 +100,8 @@ func (r analyzeNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AnalyzeNewResponseEnvelopeErrors struct {
-	Code             int64                                  `json:"code,required"`
-	Message          string                                 `json:"message,required"`
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
 	DocumentationURL string                                 `json:"documentation_url"`
 	Source           AnalyzeNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             analyzeNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -148,8 +148,8 @@ func (r analyzeNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type AnalyzeNewResponseEnvelopeMessages struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           AnalyzeNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             analyzeNewResponseEnvelopeMessagesJSON   `json:"-"`

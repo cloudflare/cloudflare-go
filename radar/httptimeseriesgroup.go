@@ -48,10 +48,10 @@ func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTim
 	path := "radar/http/timeseries_groups/bot_class"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by user agent over time.
@@ -65,10 +65,10 @@ func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTime
 	path := "radar/http/timeseries_groups/browser"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by user agent family over time.
@@ -82,10 +82,10 @@ func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HT
 	path := "radar/http/timeseries_groups/browser_family"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by device type over time.
@@ -99,10 +99,10 @@ func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPT
 	path := "radar/http/timeseries_groups/device_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by HTTP protocol (HTTP vs. HTTPS)
@@ -117,10 +117,10 @@ func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTT
 	path := "radar/http/timeseries_groups/http_protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by HTTP version over time.
@@ -134,10 +134,10 @@ func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTP
 	path := "radar/http/timeseries_groups/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by IP version over time.
@@ -151,10 +151,10 @@ func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTi
 	path := "radar/http/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by operating system over time.
@@ -168,10 +168,10 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 	path := "radar/http/timeseries_groups/os"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by post-quantum support over time.
@@ -185,10 +185,10 @@ func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTP
 	path := "radar/http/timeseries_groups/post_quantum"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests by TLS version over time.
@@ -202,16 +202,16 @@ func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPT
 	path := "radar/http/timeseries_groups/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPTimeseriesGroupBotClassResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupBotClassResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupBotClassResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupBotClassResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupBotClassResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupBotClassResponseJSON   `json:"-"`
 }
 
@@ -237,16 +237,16 @@ type HTTPTimeseriesGroupBotClassResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupBotClassResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupBotClassResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupBotClassResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupBotClassResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupBotClassResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupBotClassResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupBotClassResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupBotClassResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupBotClassResponseMetaJSON   `json:"-"`
 }
 
@@ -293,9 +293,9 @@ func (r HTTPTimeseriesGroupBotClassResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                     `json:"level,required"`
+	Level int64                                                     `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupBotClassResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -319,15 +319,15 @@ func (r httpTimeseriesGroupBotClassResponseMetaConfidenceInfoJSON) RawJSON() str
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                     `json:"description,required"`
-	EndDate     time.Time                                                                  `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                     `json:"description" api:"required"`
+	EndDate     time.Time                                                                  `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
-	LinkedURL       string                                                              `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                           `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -415,9 +415,9 @@ func (r HTTPTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationsEventTyp
 
 type HTTPTimeseriesGroupBotClassResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                            `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupBotClassResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -462,8 +462,8 @@ func (r HTTPTimeseriesGroupBotClassResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupBotClassResponseMetaUnit struct {
-	Name  string                                          `json:"name,required"`
-	Value string                                          `json:"value,required"`
+	Name  string                                          `json:"name" api:"required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupBotClassResponseMetaUnitJSON `json:"-"`
 }
 
@@ -485,9 +485,9 @@ func (r httpTimeseriesGroupBotClassResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupBotClassResponseSerie0 struct {
-	Bot        []string                                      `json:"bot,required"`
-	Human      []string                                      `json:"human,required"`
-	Timestamps []time.Time                                   `json:"timestamps,required" format:"date-time"`
+	Bot        []string                                      `json:"bot" api:"required"`
+	Human      []string                                      `json:"human" api:"required"`
+	Timestamps []time.Time                                   `json:"timestamps" api:"required" format:"date-time"`
 	JSON       httpTimeseriesGroupBotClassResponseSerie0JSON `json:"-"`
 }
 
@@ -511,8 +511,8 @@ func (r httpTimeseriesGroupBotClassResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupBrowserResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupBrowserResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupBrowserResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupBrowserResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupBrowserResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupBrowserResponseJSON   `json:"-"`
 }
 
@@ -538,16 +538,16 @@ type HTTPTimeseriesGroupBrowserResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupBrowserResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupBrowserResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupBrowserResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupBrowserResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupBrowserResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupBrowserResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupBrowserResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupBrowserResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupBrowserResponseMetaJSON   `json:"-"`
 }
 
@@ -594,9 +594,9 @@ func (r HTTPTimeseriesGroupBrowserResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                    `json:"level,required"`
+	Level int64                                                    `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupBrowserResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -620,15 +620,15 @@ func (r httpTimeseriesGroupBrowserResponseMetaConfidenceInfoJSON) RawJSON() stri
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                    `json:"description,required"`
-	EndDate     time.Time                                                                 `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                    `json:"description" api:"required"`
+	EndDate     time.Time                                                                 `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                               `json:"isInstantaneous,required"`
-	LinkedURL       string                                                             `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                          `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                               `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                             `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                          `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -716,9 +716,9 @@ func (r HTTPTimeseriesGroupBrowserResponseMetaConfidenceInfoAnnotationsEventType
 
 type HTTPTimeseriesGroupBrowserResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                           `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupBrowserResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -763,8 +763,8 @@ func (r HTTPTimeseriesGroupBrowserResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupBrowserResponseMetaUnit struct {
-	Name  string                                         `json:"name,required"`
-	Value string                                         `json:"value,required"`
+	Name  string                                         `json:"name" api:"required"`
+	Value string                                         `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupBrowserResponseMetaUnitJSON `json:"-"`
 }
 
@@ -786,8 +786,8 @@ func (r httpTimeseriesGroupBrowserResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupBrowserResponseSerie0 struct {
-	Timestamps  []time.Time                                  `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                          `json:"-,extras"`
+	Timestamps  []time.Time                                  `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                          `json:"-" api:"extrafields"`
 	JSON        httpTimeseriesGroupBrowserResponseSerie0JSON `json:"-"`
 }
 
@@ -809,8 +809,8 @@ func (r httpTimeseriesGroupBrowserResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupBrowserFamilyResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupBrowserFamilyResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupBrowserFamilyResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupBrowserFamilyResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupBrowserFamilyResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupBrowserFamilyResponseJSON   `json:"-"`
 }
 
@@ -836,16 +836,16 @@ type HTTPTimeseriesGroupBrowserFamilyResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupBrowserFamilyResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupBrowserFamilyResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupBrowserFamilyResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupBrowserFamilyResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupBrowserFamilyResponseMetaJSON   `json:"-"`
 }
 
@@ -892,9 +892,9 @@ func (r HTTPTimeseriesGroupBrowserFamilyResponseMetaAggInterval) IsKnown() bool 
 }
 
 type HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                          `json:"level,required"`
+	Level int64                                                          `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -919,15 +919,15 @@ func (r httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoJSON) RawJSON(
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                          `json:"description,required"`
-	EndDate     time.Time                                                                       `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                          `json:"description" api:"required"`
+	EndDate     time.Time                                                                       `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                     `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                   `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                                `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                     `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                   `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                                `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1015,9 +1015,9 @@ func (r HTTPTimeseriesGroupBrowserFamilyResponseMetaConfidenceInfoAnnotationsEve
 
 type HTTPTimeseriesGroupBrowserFamilyResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                                 `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupBrowserFamilyResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1062,8 +1062,8 @@ func (r HTTPTimeseriesGroupBrowserFamilyResponseMetaNormalization) IsKnown() boo
 }
 
 type HTTPTimeseriesGroupBrowserFamilyResponseMetaUnit struct {
-	Name  string                                               `json:"name,required"`
-	Value string                                               `json:"value,required"`
+	Name  string                                               `json:"name" api:"required"`
+	Value string                                               `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupBrowserFamilyResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1085,8 +1085,8 @@ func (r httpTimeseriesGroupBrowserFamilyResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupBrowserFamilyResponseSerie0 struct {
-	Timestamps  []time.Time                                        `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                                `json:"-,extras"`
+	Timestamps  []time.Time                                        `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                                `json:"-" api:"extrafields"`
 	JSON        httpTimeseriesGroupBrowserFamilyResponseSerie0JSON `json:"-"`
 }
 
@@ -1108,8 +1108,8 @@ func (r httpTimeseriesGroupBrowserFamilyResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupDeviceTypeResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupDeviceTypeResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupDeviceTypeResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupDeviceTypeResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupDeviceTypeResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupDeviceTypeResponseJSON   `json:"-"`
 }
 
@@ -1135,16 +1135,16 @@ type HTTPTimeseriesGroupDeviceTypeResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupDeviceTypeResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupDeviceTypeResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupDeviceTypeResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupDeviceTypeResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupDeviceTypeResponseMetaJSON   `json:"-"`
 }
 
@@ -1191,9 +1191,9 @@ func (r HTTPTimeseriesGroupDeviceTypeResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                       `json:"level,required"`
+	Level int64                                                       `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1218,15 +1218,15 @@ func (r httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoJSON) RawJSON() s
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1314,9 +1314,9 @@ func (r HTTPTimeseriesGroupDeviceTypeResponseMetaConfidenceInfoAnnotationsEventT
 
 type HTTPTimeseriesGroupDeviceTypeResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupDeviceTypeResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1361,8 +1361,8 @@ func (r HTTPTimeseriesGroupDeviceTypeResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupDeviceTypeResponseMetaUnit struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
+	Name  string                                            `json:"name" api:"required"`
+	Value string                                            `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupDeviceTypeResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1384,10 +1384,10 @@ func (r httpTimeseriesGroupDeviceTypeResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupDeviceTypeResponseSerie0 struct {
-	Desktop    []string                                        `json:"desktop,required"`
-	Mobile     []string                                        `json:"mobile,required"`
-	Other      []string                                        `json:"other,required"`
-	Timestamps []time.Time                                     `json:"timestamps,required" format:"date-time"`
+	Desktop    []string                                        `json:"desktop" api:"required"`
+	Mobile     []string                                        `json:"mobile" api:"required"`
+	Other      []string                                        `json:"other" api:"required"`
+	Timestamps []time.Time                                     `json:"timestamps" api:"required" format:"date-time"`
 	JSON       httpTimeseriesGroupDeviceTypeResponseSerie0JSON `json:"-"`
 }
 
@@ -1412,8 +1412,8 @@ func (r httpTimeseriesGroupDeviceTypeResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupHTTPProtocolResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupHTTPProtocolResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupHTTPProtocolResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupHTTPProtocolResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupHTTPProtocolResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupHTTPProtocolResponseJSON   `json:"-"`
 }
 
@@ -1439,16 +1439,16 @@ type HTTPTimeseriesGroupHTTPProtocolResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupHTTPProtocolResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupHTTPProtocolResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupHTTPProtocolResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupHTTPProtocolResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupHTTPProtocolResponseMetaJSON   `json:"-"`
 }
 
@@ -1495,9 +1495,9 @@ func (r HTTPTimeseriesGroupHTTPProtocolResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                         `json:"level,required"`
+	Level int64                                                         `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1522,15 +1522,15 @@ func (r httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoJSON) RawJSON()
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                         `json:"description,required"`
-	EndDate     time.Time                                                                      `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                         `json:"description" api:"required"`
+	EndDate     time.Time                                                                      `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                               `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                    `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                  `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                               `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1618,9 +1618,9 @@ func (r HTTPTimeseriesGroupHTTPProtocolResponseMetaConfidenceInfoAnnotationsEven
 
 type HTTPTimeseriesGroupHTTPProtocolResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                                `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupHTTPProtocolResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1665,8 +1665,8 @@ func (r HTTPTimeseriesGroupHTTPProtocolResponseMetaNormalization) IsKnown() bool
 }
 
 type HTTPTimeseriesGroupHTTPProtocolResponseMetaUnit struct {
-	Name  string                                              `json:"name,required"`
-	Value string                                              `json:"value,required"`
+	Name  string                                              `json:"name" api:"required"`
+	Value string                                              `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupHTTPProtocolResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1688,9 +1688,9 @@ func (r httpTimeseriesGroupHTTPProtocolResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupHTTPProtocolResponseSerie0 struct {
-	HTTP       []string                                          `json:"http,required"`
-	HTTPS      []string                                          `json:"https,required"`
-	Timestamps []time.Time                                       `json:"timestamps,required" format:"date-time"`
+	HTTP       []string                                          `json:"http" api:"required"`
+	HTTPS      []string                                          `json:"https" api:"required"`
+	Timestamps []time.Time                                       `json:"timestamps" api:"required" format:"date-time"`
 	JSON       httpTimeseriesGroupHTTPProtocolResponseSerie0JSON `json:"-"`
 }
 
@@ -1714,8 +1714,8 @@ func (r httpTimeseriesGroupHTTPProtocolResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupHTTPVersionResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupHTTPVersionResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupHTTPVersionResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupHTTPVersionResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupHTTPVersionResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupHTTPVersionResponseJSON   `json:"-"`
 }
 
@@ -1741,16 +1741,16 @@ type HTTPTimeseriesGroupHTTPVersionResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupHTTPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupHTTPVersionResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupHTTPVersionResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupHTTPVersionResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupHTTPVersionResponseMetaJSON   `json:"-"`
 }
 
@@ -1797,9 +1797,9 @@ func (r HTTPTimeseriesGroupHTTPVersionResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                        `json:"level,required"`
+	Level int64                                                        `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1824,15 +1824,15 @@ func (r httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoJSON) RawJSON() 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                        `json:"description,required"`
-	EndDate     time.Time                                                                     `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                        `json:"description" api:"required"`
+	EndDate     time.Time                                                                     `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                              `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                 `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                              `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1920,9 +1920,9 @@ func (r HTTPTimeseriesGroupHTTPVersionResponseMetaConfidenceInfoAnnotationsEvent
 
 type HTTPTimeseriesGroupHTTPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                               `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupHTTPVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1967,8 +1967,8 @@ func (r HTTPTimeseriesGroupHTTPVersionResponseMetaNormalization) IsKnown() bool 
 }
 
 type HTTPTimeseriesGroupHTTPVersionResponseMetaUnit struct {
-	Name  string                                             `json:"name,required"`
-	Value string                                             `json:"value,required"`
+	Name  string                                             `json:"name" api:"required"`
+	Value string                                             `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupHTTPVersionResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1990,10 +1990,10 @@ func (r httpTimeseriesGroupHTTPVersionResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupHTTPVersionResponseSerie0 struct {
-	HTTP1X     []string                                         `json:"HTTP/1.x,required"`
-	HTTP2      []string                                         `json:"HTTP/2,required"`
-	HTTP3      []string                                         `json:"HTTP/3,required"`
-	Timestamps []time.Time                                      `json:"timestamps,required" format:"date-time"`
+	HTTP1X     []string                                         `json:"HTTP/1.x" api:"required"`
+	HTTP2      []string                                         `json:"HTTP/2" api:"required"`
+	HTTP3      []string                                         `json:"HTTP/3" api:"required"`
+	Timestamps []time.Time                                      `json:"timestamps" api:"required" format:"date-time"`
 	JSON       httpTimeseriesGroupHTTPVersionResponseSerie0JSON `json:"-"`
 }
 
@@ -2018,8 +2018,8 @@ func (r httpTimeseriesGroupHTTPVersionResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupIPVersionResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupIPVersionResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupIPVersionResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupIPVersionResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupIPVersionResponseJSON   `json:"-"`
 }
 
@@ -2045,16 +2045,16 @@ type HTTPTimeseriesGroupIPVersionResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupIPVersionResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupIPVersionResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupIPVersionResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupIPVersionResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupIPVersionResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupIPVersionResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupIPVersionResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupIPVersionResponseMetaJSON   `json:"-"`
 }
 
@@ -2101,9 +2101,9 @@ func (r HTTPTimeseriesGroupIPVersionResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                      `json:"level,required"`
+	Level int64                                                      `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2127,15 +2127,15 @@ func (r httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoJSON) RawJSON() st
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                      `json:"description,required"`
-	EndDate     time.Time                                                                   `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                      `json:"description" api:"required"`
+	EndDate     time.Time                                                                   `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
-	LinkedURL       string                                                               `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                            `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                               `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                            `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2223,9 +2223,9 @@ func (r HTTPTimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationsEventTy
 
 type HTTPTimeseriesGroupIPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                             `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupIPVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2270,8 +2270,8 @@ func (r HTTPTimeseriesGroupIPVersionResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupIPVersionResponseMetaUnit struct {
-	Name  string                                           `json:"name,required"`
-	Value string                                           `json:"value,required"`
+	Name  string                                           `json:"name" api:"required"`
+	Value string                                           `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupIPVersionResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2293,9 +2293,9 @@ func (r httpTimeseriesGroupIPVersionResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupIPVersionResponseSerie0 struct {
-	IPv4       []string                                       `json:"IPv4,required"`
-	IPv6       []string                                       `json:"IPv6,required"`
-	Timestamps []time.Time                                    `json:"timestamps,required" format:"date-time"`
+	IPv4       []string                                       `json:"IPv4" api:"required"`
+	IPv6       []string                                       `json:"IPv6" api:"required"`
+	Timestamps []time.Time                                    `json:"timestamps" api:"required" format:"date-time"`
 	JSON       httpTimeseriesGroupIPVersionResponseSerie0JSON `json:"-"`
 }
 
@@ -2319,8 +2319,8 @@ func (r httpTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupOSResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupOSResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupOSResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupOSResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupOSResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupOSResponseJSON   `json:"-"`
 }
 
@@ -2346,16 +2346,16 @@ type HTTPTimeseriesGroupOSResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupOSResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupOSResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupOSResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupOSResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupOSResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupOSResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupOSResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupOSResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupOSResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupOSResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupOSResponseMetaJSON   `json:"-"`
 }
 
@@ -2402,9 +2402,9 @@ func (r HTTPTimeseriesGroupOSResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupOSResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                               `json:"level,required"`
+	Level int64                                               `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupOSResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2428,15 +2428,15 @@ func (r httpTimeseriesGroupOSResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                               `json:"description,required"`
-	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                               `json:"description" api:"required"`
+	EndDate     time.Time                                                            `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                        `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                     `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2524,9 +2524,9 @@ func (r HTTPTimeseriesGroupOSResponseMetaConfidenceInfoAnnotationsEventType) IsK
 
 type HTTPTimeseriesGroupOSResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                      `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupOSResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2571,8 +2571,8 @@ func (r HTTPTimeseriesGroupOSResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupOSResponseMetaUnit struct {
-	Name  string                                    `json:"name,required"`
-	Value string                                    `json:"value,required"`
+	Name  string                                    `json:"name" api:"required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupOSResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2594,8 +2594,8 @@ func (r httpTimeseriesGroupOSResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupOSResponseSerie0 struct {
-	Timestamps  []time.Time                             `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                     `json:"-,extras"`
+	Timestamps  []time.Time                             `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                     `json:"-" api:"extrafields"`
 	JSON        httpTimeseriesGroupOSResponseSerie0JSON `json:"-"`
 }
 
@@ -2617,8 +2617,8 @@ func (r httpTimeseriesGroupOSResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupPostQuantumResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupPostQuantumResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupPostQuantumResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupPostQuantumResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupPostQuantumResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupPostQuantumResponseJSON   `json:"-"`
 }
 
@@ -2644,16 +2644,16 @@ type HTTPTimeseriesGroupPostQuantumResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupPostQuantumResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupPostQuantumResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupPostQuantumResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupPostQuantumResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupPostQuantumResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupPostQuantumResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupPostQuantumResponseMetaJSON   `json:"-"`
 }
 
@@ -2700,9 +2700,9 @@ func (r HTTPTimeseriesGroupPostQuantumResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                        `json:"level,required"`
+	Level int64                                                        `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2727,15 +2727,15 @@ func (r httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoJSON) RawJSON() 
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                        `json:"description,required"`
-	EndDate     time.Time                                                                     `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                        `json:"description" api:"required"`
+	EndDate     time.Time                                                                     `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                 `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                              `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                 `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                              `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2823,9 +2823,9 @@ func (r HTTPTimeseriesGroupPostQuantumResponseMetaConfidenceInfoAnnotationsEvent
 
 type HTTPTimeseriesGroupPostQuantumResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                               `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupPostQuantumResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2870,8 +2870,8 @@ func (r HTTPTimeseriesGroupPostQuantumResponseMetaNormalization) IsKnown() bool 
 }
 
 type HTTPTimeseriesGroupPostQuantumResponseMetaUnit struct {
-	Name  string                                             `json:"name,required"`
-	Value string                                             `json:"value,required"`
+	Name  string                                             `json:"name" api:"required"`
+	Value string                                             `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupPostQuantumResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2893,9 +2893,9 @@ func (r httpTimeseriesGroupPostQuantumResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupPostQuantumResponseSerie0 struct {
-	NotSupported []string                                         `json:"NOT_SUPPORTED,required"`
-	Supported    []string                                         `json:"SUPPORTED,required"`
-	Timestamps   []time.Time                                      `json:"timestamps,required" format:"date-time"`
+	NotSupported []string                                         `json:"NOT_SUPPORTED" api:"required"`
+	Supported    []string                                         `json:"SUPPORTED" api:"required"`
+	Timestamps   []time.Time                                      `json:"timestamps" api:"required" format:"date-time"`
 	JSON         httpTimeseriesGroupPostQuantumResponseSerie0JSON `json:"-"`
 }
 
@@ -2919,8 +2919,8 @@ func (r httpTimeseriesGroupPostQuantumResponseSerie0JSON) RawJSON() string {
 
 type HTTPTimeseriesGroupTLSVersionResponse struct {
 	// Metadata for the results.
-	Meta   HTTPTimeseriesGroupTLSVersionResponseMeta   `json:"meta,required"`
-	Serie0 HTTPTimeseriesGroupTLSVersionResponseSerie0 `json:"serie_0,required"`
+	Meta   HTTPTimeseriesGroupTLSVersionResponseMeta   `json:"meta" api:"required"`
+	Serie0 HTTPTimeseriesGroupTLSVersionResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   httpTimeseriesGroupTLSVersionResponseJSON   `json:"-"`
 }
 
@@ -2946,16 +2946,16 @@ type HTTPTimeseriesGroupTLSVersionResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []HTTPTimeseriesGroupTLSVersionResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []HTTPTimeseriesGroupTLSVersionResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTimeseriesGroupTLSVersionResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTimeseriesGroupTLSVersionResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTimeseriesGroupTLSVersionResponseMetaUnit `json:"units,required"`
+	Units []HTTPTimeseriesGroupTLSVersionResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTimeseriesGroupTLSVersionResponseMetaJSON   `json:"-"`
 }
 
@@ -3002,9 +3002,9 @@ func (r HTTPTimeseriesGroupTLSVersionResponseMetaAggInterval) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                       `json:"level,required"`
+	Level int64                                                       `json:"level" api:"required"`
 	JSON  httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -3029,15 +3029,15 @@ func (r httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoJSON) RawJSON() s
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -3125,9 +3125,9 @@ func (r HTTPTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationsEventT
 
 type HTTPTimeseriesGroupTLSVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTimeseriesGroupTLSVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -3172,8 +3172,8 @@ func (r HTTPTimeseriesGroupTLSVersionResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupTLSVersionResponseMetaUnit struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
+	Name  string                                            `json:"name" api:"required"`
+	Value string                                            `json:"value" api:"required"`
 	JSON  httpTimeseriesGroupTLSVersionResponseMetaUnitJSON `json:"-"`
 }
 
@@ -3195,12 +3195,12 @@ func (r httpTimeseriesGroupTLSVersionResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTimeseriesGroupTLSVersionResponseSerie0 struct {
-	Timestamps []time.Time                                     `json:"timestamps,required" format:"date-time"`
-	TLS1_0     []string                                        `json:"TLS 1.0,required"`
-	TLS1_1     []string                                        `json:"TLS 1.1,required"`
-	TLS1_2     []string                                        `json:"TLS 1.2,required"`
-	TLS1_3     []string                                        `json:"TLS 1.3,required"`
-	TLSQuic    []string                                        `json:"TLS QUIC,required"`
+	Timestamps []time.Time                                     `json:"timestamps" api:"required" format:"date-time"`
+	TLS1_0     []string                                        `json:"TLS 1.0" api:"required"`
+	TLS1_1     []string                                        `json:"TLS 1.1" api:"required"`
+	TLS1_2     []string                                        `json:"TLS 1.2" api:"required"`
+	TLS1_3     []string                                        `json:"TLS 1.3" api:"required"`
+	TLSQuic    []string                                        `json:"TLS QUIC" api:"required"`
 	JSON       httpTimeseriesGroupTLSVersionResponseSerie0JSON `json:"-"`
 }
 
@@ -3439,8 +3439,8 @@ func (r HTTPTimeseriesGroupBotClassParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupBotClassResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupBotClassResponse             `json:"result,required"`
-	Success bool                                            `json:"success,required"`
+	Result  HTTPTimeseriesGroupBotClassResponse             `json:"result" api:"required"`
+	Success bool                                            `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupBotClassResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3697,8 +3697,8 @@ func (r HTTPTimeseriesGroupBrowserParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupBrowserResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupBrowserResponse             `json:"result,required"`
-	Success bool                                           `json:"success,required"`
+	Result  HTTPTimeseriesGroupBrowserResponse             `json:"result" api:"required"`
+	Success bool                                           `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupBrowserResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3936,8 +3936,8 @@ func (r HTTPTimeseriesGroupBrowserFamilyParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupBrowserFamilyResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupBrowserFamilyResponse             `json:"result,required"`
-	Success bool                                                 `json:"success,required"`
+	Result  HTTPTimeseriesGroupBrowserFamilyResponse             `json:"result" api:"required"`
+	Success bool                                                 `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupBrowserFamilyResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4172,8 +4172,8 @@ func (r HTTPTimeseriesGroupDeviceTypeParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupDeviceTypeResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupDeviceTypeResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
+	Result  HTTPTimeseriesGroupDeviceTypeResponse             `json:"result" api:"required"`
+	Success bool                                              `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupDeviceTypeResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4409,8 +4409,8 @@ func (r HTTPTimeseriesGroupHTTPProtocolParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupHTTPProtocolResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupHTTPProtocolResponse             `json:"result,required"`
-	Success bool                                                `json:"success,required"`
+	Result  HTTPTimeseriesGroupHTTPProtocolResponse             `json:"result" api:"required"`
+	Success bool                                                `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupHTTPProtocolResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4645,8 +4645,8 @@ func (r HTTPTimeseriesGroupHTTPVersionParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupHTTPVersionResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupHTTPVersionResponse             `json:"result,required"`
-	Success bool                                               `json:"success,required"`
+	Result  HTTPTimeseriesGroupHTTPVersionResponse             `json:"result" api:"required"`
+	Success bool                                               `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupHTTPVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4882,8 +4882,8 @@ func (r HTTPTimeseriesGroupIPVersionParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupIPVersionResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupIPVersionResponse             `json:"result,required"`
-	Success bool                                             `json:"success,required"`
+	Result  HTTPTimeseriesGroupIPVersionResponse             `json:"result" api:"required"`
+	Success bool                                             `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupIPVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5114,8 +5114,8 @@ func (r HTTPTimeseriesGroupOSParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupOSResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupOSResponse             `json:"result,required"`
-	Success bool                                      `json:"success,required"`
+	Result  HTTPTimeseriesGroupOSResponse             `json:"result" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupOSResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5368,8 +5368,8 @@ func (r HTTPTimeseriesGroupPostQuantumParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupPostQuantumResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupPostQuantumResponse             `json:"result,required"`
-	Success bool                                               `json:"success,required"`
+	Result  HTTPTimeseriesGroupPostQuantumResponse             `json:"result" api:"required"`
+	Success bool                                               `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupPostQuantumResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5602,8 +5602,8 @@ func (r HTTPTimeseriesGroupTLSVersionParamsOS) IsKnown() bool {
 }
 
 type HTTPTimeseriesGroupTLSVersionResponseEnvelope struct {
-	Result  HTTPTimeseriesGroupTLSVersionResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
+	Result  HTTPTimeseriesGroupTLSVersionResponse             `json:"result" api:"required"`
+	Success bool                                              `json:"success" api:"required"`
 	JSON    httpTimeseriesGroupTLSVersionResponseEnvelopeJSON `json:"-"`
 }
 

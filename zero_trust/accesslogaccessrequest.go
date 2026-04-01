@@ -43,20 +43,28 @@ func (r *AccessLogAccessRequestService) List(ctx context.Context, params AccessL
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/logs/access_requests", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AccessLogAccessRequestListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Operator for the `allowed` filter.
+	AllowedOp param.Field[AccessLogAccessRequestListParamsAllowedOp] `query:"allowedOp"`
+	// Operator for the `app_type` filter.
+	AppTypeOp param.Field[AccessLogAccessRequestListParamsAppTypeOp] `query:"app_typeOp"`
+	// Operator for the `app_uid` filter.
+	AppUIDOp param.Field[AccessLogAccessRequestListParamsAppUIDOp] `query:"app_uidOp"`
+	// Operator for the `country_code` filter.
+	CountryCodeOp param.Field[AccessLogAccessRequestListParamsCountryCodeOp] `query:"country_codeOp"`
 	// The chronological sorting order for the logs.
 	Direction param.Field[AccessLogAccessRequestListParamsDirection] `query:"direction"`
 	// Filter by user email. Defaults to substring matching. To force exact matching,
@@ -66,18 +74,31 @@ type AccessLogAccessRequestListParams struct {
 	Email param.Field[string] `query:"email" format:"email"`
 	// When true, `email` is matched exactly instead of substring matching.
 	EmailExact param.Field[bool] `query:"email_exact"`
+	// Operator for the `email` filter.
+	EmailOp param.Field[AccessLogAccessRequestListParamsEmailOp] `query:"emailOp"`
+	// Comma-separated list of fields to include in the response. When omitted, all
+	// fields are returned.
+	Fields param.Field[string] `query:"fields"`
+	// Operator for the `idp` filter.
+	IdPOp param.Field[AccessLogAccessRequestListParamsIdPOp] `query:"idpOp"`
 	// The maximum number of log entries to retrieve.
 	Limit param.Field[int64] `query:"limit"`
+	// Operator for the `non_identity` filter.
+	NonIdentityOp param.Field[AccessLogAccessRequestListParamsNonIdentityOp] `query:"non_identityOp"`
 	// Page number of results.
 	Page param.Field[int64] `query:"page"`
 	// Number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
+	// Operator for the `ray_id` filter.
+	RayIDOp param.Field[AccessLogAccessRequestListParamsRayIDOp] `query:"ray_idOp"`
 	// The earliest event timestamp to query.
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// The latest event timestamp to query.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 	// Filter by user UUID.
 	UserID param.Field[string] `query:"user_id" format:"uuid"`
+	// Operator for the `user_id` filter.
+	UserIDOp param.Field[AccessLogAccessRequestListParamsUserIDOp] `query:"user_idOp"`
 }
 
 // URLQuery serializes [AccessLogAccessRequestListParams]'s query parameters as
@@ -87,6 +108,70 @@ func (r AccessLogAccessRequestListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Operator for the `allowed` filter.
+type AccessLogAccessRequestListParamsAllowedOp string
+
+const (
+	AccessLogAccessRequestListParamsAllowedOpEq  AccessLogAccessRequestListParamsAllowedOp = "eq"
+	AccessLogAccessRequestListParamsAllowedOpNeq AccessLogAccessRequestListParamsAllowedOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsAllowedOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsAllowedOpEq, AccessLogAccessRequestListParamsAllowedOpNeq:
+		return true
+	}
+	return false
+}
+
+// Operator for the `app_type` filter.
+type AccessLogAccessRequestListParamsAppTypeOp string
+
+const (
+	AccessLogAccessRequestListParamsAppTypeOpEq  AccessLogAccessRequestListParamsAppTypeOp = "eq"
+	AccessLogAccessRequestListParamsAppTypeOpNeq AccessLogAccessRequestListParamsAppTypeOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsAppTypeOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsAppTypeOpEq, AccessLogAccessRequestListParamsAppTypeOpNeq:
+		return true
+	}
+	return false
+}
+
+// Operator for the `app_uid` filter.
+type AccessLogAccessRequestListParamsAppUIDOp string
+
+const (
+	AccessLogAccessRequestListParamsAppUIDOpEq  AccessLogAccessRequestListParamsAppUIDOp = "eq"
+	AccessLogAccessRequestListParamsAppUIDOpNeq AccessLogAccessRequestListParamsAppUIDOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsAppUIDOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsAppUIDOpEq, AccessLogAccessRequestListParamsAppUIDOpNeq:
+		return true
+	}
+	return false
+}
+
+// Operator for the `country_code` filter.
+type AccessLogAccessRequestListParamsCountryCodeOp string
+
+const (
+	AccessLogAccessRequestListParamsCountryCodeOpEq  AccessLogAccessRequestListParamsCountryCodeOp = "eq"
+	AccessLogAccessRequestListParamsCountryCodeOpNeq AccessLogAccessRequestListParamsCountryCodeOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsCountryCodeOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsCountryCodeOpEq, AccessLogAccessRequestListParamsCountryCodeOpNeq:
+		return true
+	}
+	return false
 }
 
 // The chronological sorting order for the logs.
@@ -105,11 +190,91 @@ func (r AccessLogAccessRequestListParamsDirection) IsKnown() bool {
 	return false
 }
 
+// Operator for the `email` filter.
+type AccessLogAccessRequestListParamsEmailOp string
+
+const (
+	AccessLogAccessRequestListParamsEmailOpEq  AccessLogAccessRequestListParamsEmailOp = "eq"
+	AccessLogAccessRequestListParamsEmailOpNeq AccessLogAccessRequestListParamsEmailOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsEmailOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsEmailOpEq, AccessLogAccessRequestListParamsEmailOpNeq:
+		return true
+	}
+	return false
+}
+
+// Operator for the `idp` filter.
+type AccessLogAccessRequestListParamsIdPOp string
+
+const (
+	AccessLogAccessRequestListParamsIdPOpEq  AccessLogAccessRequestListParamsIdPOp = "eq"
+	AccessLogAccessRequestListParamsIdPOpNeq AccessLogAccessRequestListParamsIdPOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsIdPOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsIdPOpEq, AccessLogAccessRequestListParamsIdPOpNeq:
+		return true
+	}
+	return false
+}
+
+// Operator for the `non_identity` filter.
+type AccessLogAccessRequestListParamsNonIdentityOp string
+
+const (
+	AccessLogAccessRequestListParamsNonIdentityOpEq  AccessLogAccessRequestListParamsNonIdentityOp = "eq"
+	AccessLogAccessRequestListParamsNonIdentityOpNeq AccessLogAccessRequestListParamsNonIdentityOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsNonIdentityOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsNonIdentityOpEq, AccessLogAccessRequestListParamsNonIdentityOpNeq:
+		return true
+	}
+	return false
+}
+
+// Operator for the `ray_id` filter.
+type AccessLogAccessRequestListParamsRayIDOp string
+
+const (
+	AccessLogAccessRequestListParamsRayIDOpEq  AccessLogAccessRequestListParamsRayIDOp = "eq"
+	AccessLogAccessRequestListParamsRayIDOpNeq AccessLogAccessRequestListParamsRayIDOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsRayIDOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsRayIDOpEq, AccessLogAccessRequestListParamsRayIDOpNeq:
+		return true
+	}
+	return false
+}
+
+// Operator for the `user_id` filter.
+type AccessLogAccessRequestListParamsUserIDOp string
+
+const (
+	AccessLogAccessRequestListParamsUserIDOpEq  AccessLogAccessRequestListParamsUserIDOp = "eq"
+	AccessLogAccessRequestListParamsUserIDOpNeq AccessLogAccessRequestListParamsUserIDOp = "neq"
+)
+
+func (r AccessLogAccessRequestListParamsUserIDOp) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListParamsUserIDOpEq, AccessLogAccessRequestListParamsUserIDOpNeq:
+		return true
+	}
+	return false
+}
+
 type AccessLogAccessRequestListResponseEnvelope struct {
-	Errors   []AccessLogAccessRequestListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessLogAccessRequestListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessLogAccessRequestListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessLogAccessRequestListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessLogAccessRequestListResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessLogAccessRequestListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  []AccessRequest                                   `json:"result"`
 	JSON    accessLogAccessRequestListResponseEnvelopeJSON    `json:"-"`
 }
@@ -134,8 +299,8 @@ func (r accessLogAccessRequestListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessLogAccessRequestListResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AccessLogAccessRequestListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessLogAccessRequestListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -182,8 +347,8 @@ func (r accessLogAccessRequestListResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type AccessLogAccessRequestListResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           AccessLogAccessRequestListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessLogAccessRequestListResponseEnvelopeMessagesJSON   `json:"-"`

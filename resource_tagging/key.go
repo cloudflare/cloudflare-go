@@ -43,7 +43,7 @@ func (r *KeyService) List(ctx context.Context, params KeyListParams, opts ...opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/tags/keys", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -65,7 +65,7 @@ func (r *KeyService) ListAutoPaging(ctx context.Context, params KeyListParams, o
 
 type KeyListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cursor for pagination.
 	Cursor param.Field[string] `query:"cursor"`
 }

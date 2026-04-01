@@ -46,7 +46,7 @@ func (r *PhishguardReportService) List(ctx context.Context, params PhishguardRep
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/phishguard/reports", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -68,16 +68,16 @@ func (r *PhishguardReportService) ListAutoPaging(ctx context.Context, params Phi
 }
 
 type PhishguardReportListResponse struct {
-	ID          int64                                   `json:"id,required"`
-	Content     string                                  `json:"content,required"`
-	CreatedAt   time.Time                               `json:"created_at,required" format:"date-time"`
-	Disposition PhishguardReportListResponseDisposition `json:"disposition,required"`
-	Fields      PhishguardReportListResponseFields      `json:"fields,required"`
-	Priority    string                                  `json:"priority,required"`
-	Title       string                                  `json:"title,required"`
-	Ts          time.Time                               `json:"ts,required" format:"date-time"`
-	UpdatedAt   time.Time                               `json:"updated_at,required" format:"date-time"`
-	Tags        []PhishguardReportListResponseTag       `json:"tags,nullable"`
+	ID          int64                                   `json:"id" api:"required"`
+	Content     string                                  `json:"content" api:"required"`
+	CreatedAt   time.Time                               `json:"created_at" api:"required" format:"date-time"`
+	Disposition PhishguardReportListResponseDisposition `json:"disposition" api:"required"`
+	Fields      PhishguardReportListResponseFields      `json:"fields" api:"required"`
+	Priority    string                                  `json:"priority" api:"required"`
+	Title       string                                  `json:"title" api:"required"`
+	Ts          time.Time                               `json:"ts" api:"required" format:"date-time"`
+	UpdatedAt   time.Time                               `json:"updated_at" api:"required" format:"date-time"`
+	Tags        []PhishguardReportListResponseTag       `json:"tags" api:"nullable"`
 	JSON        phishguardReportListResponseJSON        `json:"-"`
 }
 
@@ -130,10 +130,10 @@ func (r PhishguardReportListResponseDisposition) IsKnown() bool {
 }
 
 type PhishguardReportListResponseFields struct {
-	To        []string                               `json:"to,required"`
-	Ts        time.Time                              `json:"ts,required" format:"date-time"`
-	From      string                                 `json:"from,nullable"`
-	PostfixID string                                 `json:"postfix_id,nullable"`
+	To        []string                               `json:"to" api:"required"`
+	Ts        time.Time                              `json:"ts" api:"required" format:"date-time"`
+	From      string                                 `json:"from" api:"nullable"`
+	PostfixID string                                 `json:"postfix_id" api:"nullable"`
 	JSON      phishguardReportListResponseFieldsJSON `json:"-"`
 }
 
@@ -157,8 +157,8 @@ func (r phishguardReportListResponseFieldsJSON) RawJSON() string {
 }
 
 type PhishguardReportListResponseTag struct {
-	Category string                              `json:"category,required"`
-	Value    string                              `json:"value,required"`
+	Category string                              `json:"category" api:"required"`
+	Value    string                              `json:"value" api:"required"`
 	JSON     phishguardReportListResponseTagJSON `json:"-"`
 }
 
@@ -181,7 +181,7 @@ func (r phishguardReportListResponseTagJSON) RawJSON() string {
 
 type PhishguardReportListParams struct {
 	// Account Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The end of the search date range (RFC3339 format).
 	End      param.Field[time.Time] `query:"end" format:"date-time"`
 	FromDate param.Field[time.Time] `query:"from_date" format:"date"`

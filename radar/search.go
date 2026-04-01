@@ -45,14 +45,14 @@ func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, op
 	path := "radar/search/global"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SearchGlobalResponse struct {
-	Search []SearchGlobalResponseSearch `json:"search,required"`
+	Search []SearchGlobalResponseSearch `json:"search" api:"required"`
 	JSON   searchGlobalResponseJSON     `json:"-"`
 }
 
@@ -73,9 +73,9 @@ func (r searchGlobalResponseJSON) RawJSON() string {
 }
 
 type SearchGlobalResponseSearch struct {
-	Code string                         `json:"code,required"`
-	Name string                         `json:"name,required"`
-	Type string                         `json:"type,required"`
+	Code string                         `json:"code" api:"required"`
+	Name string                         `json:"name" api:"required"`
+	Type string                         `json:"type" api:"required"`
 	JSON searchGlobalResponseSearchJSON `json:"-"`
 }
 
@@ -99,7 +99,7 @@ func (r searchGlobalResponseSearchJSON) RawJSON() string {
 
 type SearchGlobalParams struct {
 	// String used to perform the search operation.
-	Query param.Field[string] `query:"query,required"`
+	Query param.Field[string] `query:"query" api:"required"`
 	// Search types excluded from results.
 	Exclude param.Field[[]SearchGlobalParamsExclude] `query:"exclude"`
 	// Format in which results will be returned.
@@ -187,8 +187,8 @@ func (r SearchGlobalParamsInclude) IsKnown() bool {
 }
 
 type SearchGlobalResponseEnvelope struct {
-	Result  SearchGlobalResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  SearchGlobalResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    searchGlobalResponseEnvelopeJSON `json:"-"`
 }
 

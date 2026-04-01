@@ -45,15 +45,15 @@ func (r *HostnameService) New(ctx context.Context, params HostnameNewParams, opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List Web3 Hostnames
@@ -63,7 +63,7 @@ func (r *HostnameService) List(ctx context.Context, query HostnameListParams, op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -89,19 +89,19 @@ func (r *HostnameService) Delete(ctx context.Context, identifier string, body Ho
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", body.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Edit Web3 Hostname
@@ -110,19 +110,19 @@ func (r *HostnameService) Edit(ctx context.Context, identifier string, params Ho
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", params.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Web3 Hostname Details
@@ -131,19 +131,19 @@ func (r *HostnameService) Get(ctx context.Context, identifier string, query Host
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", query.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Hostname struct {
@@ -223,7 +223,7 @@ func (r HostnameTarget) IsKnown() bool {
 
 type HostnameDeleteResponse struct {
 	// Specify the identifier of the hostname.
-	ID   string                     `json:"id,required"`
+	ID   string                     `json:"id" api:"required"`
 	JSON hostnameDeleteResponseJSON `json:"-"`
 }
 
@@ -245,11 +245,11 @@ func (r hostnameDeleteResponseJSON) RawJSON() string {
 
 type HostnameNewParams struct {
 	// Specify the identifier of the hostname.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specify the hostname that points to the target gateway via CNAME.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Specify the target gateway of the hostname.
-	Target param.Field[HostnameNewParamsTarget] `json:"target,required"`
+	Target param.Field[HostnameNewParamsTarget] `json:"target" api:"required"`
 	// Specify an optional description of the hostname.
 	Description param.Field[string] `json:"description"`
 	// Specify the DNSLink value used if the target is ipfs.
@@ -278,11 +278,11 @@ func (r HostnameNewParamsTarget) IsKnown() bool {
 }
 
 type HostnameNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Hostname              `json:"result" api:"required"`
 	// Specifies whether the API call was successful.
-	Success HostnameNewResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Provides the API response.
 	ResultInfo interface{}                     `json:"result_info"`
 	JSON       hostnameNewResponseEnvelopeJSON `json:"-"`
@@ -325,20 +325,20 @@ func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type HostnameListParams struct {
 	// Specify the identifier of the hostname.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameDeleteParams struct {
 	// Specify the identifier of the hostname.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   HostnameDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo  `json:"messages" api:"required"`
+	Result   HostnameDeleteResponse `json:"result" api:"required,nullable"`
 	// Specifies whether the API call was successful.
-	Success HostnameDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    hostnameDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -378,7 +378,7 @@ func (r HostnameDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type HostnameEditParams struct {
 	// Specify the identifier of the hostname.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specify an optional description of the hostname.
 	Description param.Field[string] `json:"description"`
 	// Specify the DNSLink value used if the target is ipfs.
@@ -390,11 +390,11 @@ func (r HostnameEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Hostname              `json:"result" api:"required"`
 	// Specifies whether the API call was successful.
-	Success HostnameEditResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Provides the API response.
 	ResultInfo interface{}                      `json:"result_info"`
 	JSON       hostnameEditResponseEnvelopeJSON `json:"-"`
@@ -437,15 +437,15 @@ func (r HostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type HostnameGetParams struct {
 	// Specify the identifier of the hostname.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hostname              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Hostname              `json:"result" api:"required"`
 	// Specifies whether the API call was successful.
-	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
+	Success HostnameGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Provides the API response.
 	ResultInfo interface{}                     `json:"result_info"`
 	JSON       hostnameGetResponseEnvelopeJSON `json:"-"`

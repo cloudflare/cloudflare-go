@@ -41,16 +41,16 @@ func (r *ThreatEventAttackerService) List(ctx context.Context, params ThreatEven
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/attackers", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreatEventAttackerListResponse struct {
-	Items ThreatEventAttackerListResponseItems `json:"items,required"`
-	Type  string                               `json:"type,required"`
+	Items ThreatEventAttackerListResponseItems `json:"items" api:"required"`
+	Type  string                               `json:"type" api:"required"`
 	JSON  threatEventAttackerListResponseJSON  `json:"-"`
 }
 
@@ -72,7 +72,7 @@ func (r threatEventAttackerListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventAttackerListResponseItems struct {
-	Type string                                   `json:"type,required"`
+	Type string                                   `json:"type" api:"required"`
 	JSON threatEventAttackerListResponseItemsJSON `json:"-"`
 }
 
@@ -94,7 +94,7 @@ func (r threatEventAttackerListResponseItemsJSON) RawJSON() string {
 
 type ThreatEventAttackerListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of dataset IDs to query attackers from. If not provided, uses the default
 	// dataset.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`

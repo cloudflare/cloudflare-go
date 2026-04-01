@@ -41,15 +41,15 @@ func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListPa
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Availability struct {
@@ -243,14 +243,14 @@ func (r availabilityRegionsPerPlanJSON) RawJSON() string {
 
 type AvailabilityListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type AvailabilityListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                 `json:"success,required"`
+	Success bool                                 `json:"success" api:"required"`
 	Result  Availability                         `json:"result"`
 	JSON    availabilityListResponseEnvelopeJSON `json:"-"`
 }

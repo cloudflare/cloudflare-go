@@ -43,11 +43,11 @@ func (r *BinaryStorageService) New(ctx context.Context, params BinaryStorageNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/binary", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieves a file from Binary Storage
@@ -56,22 +56,22 @@ func (r *BinaryStorageService) Get(ctx context.Context, hash string, query Binar
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if hash == "" {
 		err = errors.New("missing required hash parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/binary/%s", query.AccountID, hash)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type BinaryStorageNewResponse struct {
-	ContentType string                       `json:"content_type,required"`
-	Md5         string                       `json:"md5,required"`
-	Sha1        string                       `json:"sha1,required"`
-	Sha256      string                       `json:"sha256,required"`
+	ContentType string                       `json:"content_type" api:"required"`
+	Md5         string                       `json:"md5" api:"required"`
+	Sha1        string                       `json:"sha1" api:"required"`
+	Sha256      string                       `json:"sha256" api:"required"`
 	JSON        binaryStorageNewResponseJSON `json:"-"`
 }
 
@@ -96,9 +96,9 @@ func (r binaryStorageNewResponseJSON) RawJSON() string {
 
 type BinaryStorageNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The binary file content to upload.
-	File param.Field[io.Reader] `json:"file,required" format:"binary"`
+	File param.Field[io.Reader] `json:"file" api:"required" format:"binary"`
 }
 
 func (r BinaryStorageNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -118,5 +118,5 @@ func (r BinaryStorageNewParams) MarshalMultipart() (data []byte, contentType str
 
 type BinaryStorageGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

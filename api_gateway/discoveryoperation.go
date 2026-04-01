@@ -44,7 +44,7 @@ func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOp
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/discovery/operations", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -70,15 +70,15 @@ func (r *DiscoveryOperationService) BulkEdit(ctx context.Context, params Discove
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/discovery/operations", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update the `state` on a discovered operation
@@ -87,19 +87,19 @@ func (r *DiscoveryOperationService) Edit(ctx context.Context, operationID string
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if operationID == "" {
 		err = errors.New("missing required operation_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/discovery/operations/%s", params.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DiscoveryOperationBulkEditResponse map[string]DiscoveryOperationBulkEditResponseItem
@@ -198,7 +198,7 @@ func (r DiscoveryOperationEditResponseState) IsKnown() bool {
 
 type DiscoveryOperationListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When `true`, only return API Discovery results that are not saved into API
 	// Shield Endpoint Management
 	Diff param.Field[bool] `query:"diff"`
@@ -326,8 +326,8 @@ func (r DiscoveryOperationListParamsState) IsKnown() bool {
 
 type DiscoveryOperationBulkEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string]                             `path:"zone_id,required"`
-	Body   map[string]DiscoveryOperationBulkEditParamsBody `json:"body,required"`
+	ZoneID param.Field[string]                             `path:"zone_id" api:"required"`
+	Body   map[string]DiscoveryOperationBulkEditParamsBody `json:"body" api:"required"`
 }
 
 func (r DiscoveryOperationBulkEditParams) MarshalJSON() (data []byte, err error) {
@@ -367,11 +367,11 @@ func (r DiscoveryOperationBulkEditParamsBodyState) IsKnown() bool {
 }
 
 type DiscoveryOperationBulkEditResponseEnvelope struct {
-	Errors   Message                            `json:"errors,required"`
-	Messages Message                            `json:"messages,required"`
-	Result   DiscoveryOperationBulkEditResponse `json:"result,required"`
+	Errors   Message                            `json:"errors" api:"required"`
+	Messages Message                            `json:"messages" api:"required"`
+	Result   DiscoveryOperationBulkEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success DiscoveryOperationBulkEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DiscoveryOperationBulkEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    discoveryOperationBulkEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -411,7 +411,7 @@ func (r DiscoveryOperationBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DiscoveryOperationEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Mark state of operation in API Discovery
 	//
 	// - `review` - Mark operation as for review
@@ -443,11 +443,11 @@ func (r DiscoveryOperationEditParamsState) IsKnown() bool {
 }
 
 type DiscoveryOperationEditResponseEnvelope struct {
-	Errors   Message                        `json:"errors,required"`
-	Messages Message                        `json:"messages,required"`
-	Result   DiscoveryOperationEditResponse `json:"result,required"`
+	Errors   Message                        `json:"errors" api:"required"`
+	Messages Message                        `json:"messages" api:"required"`
+	Result   DiscoveryOperationEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success DiscoveryOperationEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DiscoveryOperationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    discoveryOperationEditResponseEnvelopeJSON    `json:"-"`
 }
 

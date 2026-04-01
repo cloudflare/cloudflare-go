@@ -45,15 +45,15 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/rules", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List token validation rules
@@ -63,7 +63,7 @@ func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/rules", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -89,19 +89,19 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/rules/%s", body.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Create zone token validation rules.
@@ -113,7 +113,7 @@ func (r *RuleService) BulkNew(ctx context.Context, params RuleBulkNewParams, opt
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/rules/bulk", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
@@ -148,7 +148,7 @@ func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/rules/bulk", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
@@ -180,19 +180,19 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditPa
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/rules/%s", params.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a zone token validation rule.
@@ -201,43 +201,43 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParam
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if ruleID == "" {
 		err = errors.New("missing required rule_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/token_validation/rules/%s", query.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // A Token Validation rule that can enforce security policies using JWT Tokens.
 type TokenValidationRule struct {
 	// Action to take on requests that match operations included in `selector` and fail
 	// `expression`.
-	Action TokenValidationRuleAction `json:"action,required"`
+	Action TokenValidationRuleAction `json:"action" api:"required"`
 	// A human-readable description that gives more details than `title`.
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// Toggle rule on or off.
-	Enabled bool `json:"enabled,required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// Rule expression. Requests that fail to match this expression will be subject to
 	// `action`.
 	//
 	// For details on expressions, see the
 	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
-	Expression string `json:"expression,required"`
+	Expression string `json:"expression" api:"required"`
 	// Select operations covered by this rule.
 	//
 	// For details on selectors, see the
 	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
-	Selector TokenValidationRuleSelector `json:"selector,required"`
+	Selector TokenValidationRuleSelector `json:"selector" api:"required"`
 	// A human-readable name for the rule.
-	Title string `json:"title,required"`
+	Title string `json:"title" api:"required"`
 	// UUID.
 	ID          string                  `json:"id"`
 	CreatedAt   time.Time               `json:"created_at" format:"date-time"`
@@ -292,9 +292,9 @@ func (r TokenValidationRuleAction) IsKnown() bool {
 // [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
 type TokenValidationRuleSelector struct {
 	// Ignore operations that were otherwise included by `include`.
-	Exclude []TokenValidationRuleSelectorExclude `json:"exclude,nullable"`
+	Exclude []TokenValidationRuleSelectorExclude `json:"exclude" api:"nullable"`
 	// Select all matching operations.
-	Include []TokenValidationRuleSelectorInclude `json:"include,nullable"`
+	Include []TokenValidationRuleSelectorInclude `json:"include" api:"nullable"`
 	JSON    tokenValidationRuleSelectorJSON      `json:"-"`
 }
 
@@ -363,27 +363,27 @@ type RuleDeleteResponse = interface{}
 
 type RuleNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Action to take on requests that match operations included in `selector` and fail
 	// `expression`.
-	Action param.Field[RuleNewParamsAction] `json:"action,required"`
+	Action param.Field[RuleNewParamsAction] `json:"action" api:"required"`
 	// A human-readable description that gives more details than `title`.
-	Description param.Field[string] `json:"description,required"`
+	Description param.Field[string] `json:"description" api:"required"`
 	// Toggle rule on or off.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Rule expression. Requests that fail to match this expression will be subject to
 	// `action`.
 	//
 	// For details on expressions, see the
 	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// Select operations covered by this rule.
 	//
 	// For details on selectors, see the
 	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
-	Selector param.Field[RuleNewParamsSelector] `json:"selector,required"`
+	Selector param.Field[RuleNewParamsSelector] `json:"selector" api:"required"`
 	// A human-readable name for the rule.
-	Title param.Field[string] `json:"title,required"`
+	Title param.Field[string] `json:"title" api:"required"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
@@ -441,12 +441,12 @@ func (r RuleNewParamsSelectorInclude) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
 	// A Token Validation rule that can enforce security policies using JWT Tokens.
-	Result TokenValidationRule `json:"result,required"`
+	Result TokenValidationRule `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -486,7 +486,7 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Select rules with these IDs.
 	ID param.Field[string] `query:"id"`
 	// Action to take on requests that match operations included in `selector` and fail
@@ -535,14 +535,14 @@ func (r RuleListParamsAction) IsKnown() bool {
 
 type RuleDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  RuleDeleteResponse                `json:"result"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -583,8 +583,8 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleBulkNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string]     `path:"zone_id,required"`
-	Body   []RuleBulkNewParamsBody `json:"body,required"`
+	ZoneID param.Field[string]     `path:"zone_id" api:"required"`
+	Body   []RuleBulkNewParamsBody `json:"body" api:"required"`
 }
 
 func (r RuleBulkNewParams) MarshalJSON() (data []byte, err error) {
@@ -595,24 +595,24 @@ func (r RuleBulkNewParams) MarshalJSON() (data []byte, err error) {
 type RuleBulkNewParamsBody struct {
 	// Action to take on requests that match operations included in `selector` and fail
 	// `expression`.
-	Action param.Field[RuleBulkNewParamsBodyAction] `json:"action,required"`
+	Action param.Field[RuleBulkNewParamsBodyAction] `json:"action" api:"required"`
 	// A human-readable description that gives more details than `title`.
-	Description param.Field[string] `json:"description,required"`
+	Description param.Field[string] `json:"description" api:"required"`
 	// Toggle rule on or off.
-	Enabled param.Field[bool] `json:"enabled,required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Rule expression. Requests that fail to match this expression will be subject to
 	// `action`.
 	//
 	// For details on expressions, see the
 	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
-	Expression param.Field[string] `json:"expression,required"`
+	Expression param.Field[string] `json:"expression" api:"required"`
 	// Select operations covered by this rule.
 	//
 	// For details on selectors, see the
 	// [Cloudflare Docs](https://developers.cloudflare.com/api-shield/security/jwt-validation/).
-	Selector param.Field[RuleBulkNewParamsBodySelector] `json:"selector,required"`
+	Selector param.Field[RuleBulkNewParamsBodySelector] `json:"selector" api:"required"`
 	// A human-readable name for the rule.
-	Title param.Field[string] `json:"title,required"`
+	Title param.Field[string] `json:"title" api:"required"`
 }
 
 func (r RuleBulkNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -671,8 +671,8 @@ func (r RuleBulkNewParamsBodySelectorInclude) MarshalJSON() (data []byte, err er
 
 type RuleBulkEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string]      `path:"zone_id,required"`
-	Body   []RuleBulkEditParamsBody `json:"body,required"`
+	ZoneID param.Field[string]      `path:"zone_id" api:"required"`
+	Body   []RuleBulkEditParamsBody `json:"body" api:"required"`
 }
 
 func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
@@ -681,7 +681,7 @@ func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
 
 type RuleBulkEditParamsBody struct {
 	// Rule ID this patch applies to
-	ID param.Field[string] `json:"id,required" format:"uuid"`
+	ID param.Field[string] `json:"id" api:"required" format:"uuid"`
 	// Action to take on requests that match operations included in `selector` and fail
 	// `expression`.
 	Action param.Field[RuleBulkEditParamsBodyAction] `json:"action"`
@@ -755,7 +755,7 @@ type RuleBulkEditParamsBodyPositionUnion interface {
 
 type RuleBulkEditParamsBodyPositionAPIShieldIndex struct {
 	// Move rule to this position
-	Index param.Field[int64] `json:"index,required"`
+	Index param.Field[int64] `json:"index" api:"required"`
 }
 
 func (r RuleBulkEditParamsBodyPositionAPIShieldIndex) MarshalJSON() (data []byte, err error) {
@@ -826,7 +826,7 @@ func (r RuleBulkEditParamsBodySelectorInclude) MarshalJSON() (data []byte, err e
 
 type RuleEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Action to take on requests that match operations included in `selector` and fail
 	// `expression`.
 	Action param.Field[RuleEditParamsAction] `json:"action"`
@@ -900,7 +900,7 @@ type RuleEditParamsPositionUnion interface {
 
 type RuleEditParamsPositionAPIShieldIndex struct {
 	// Move rule to this position
-	Index param.Field[int64] `json:"index,required"`
+	Index param.Field[int64] `json:"index" api:"required"`
 }
 
 func (r RuleEditParamsPositionAPIShieldIndex) MarshalJSON() (data []byte, err error) {
@@ -967,12 +967,12 @@ func (r RuleEditParamsSelectorInclude) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleEditResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
 	// A Token Validation rule that can enforce security policies using JWT Tokens.
-	Result TokenValidationRule `json:"result,required"`
+	Result TokenValidationRule `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RuleEditResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1012,16 +1012,16 @@ func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   api_gateway.Message `json:"errors,required"`
-	Messages api_gateway.Message `json:"messages,required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
 	// A Token Validation rule that can enforce security policies using JWT Tokens.
-	Result TokenValidationRule `json:"result,required"`
+	Result TokenValidationRule `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success RuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
 }
 

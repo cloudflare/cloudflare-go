@@ -44,11 +44,11 @@ func (r *AccessApplicationPolicyTestUserService) List(ctx context.Context, polic
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if policyTestID == "" {
 		err = errors.New("missing required policy_test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/access/policy-tests/%s/users", params.AccountID, policyTestID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -118,7 +118,7 @@ func (r AccessApplicationPolicyTestUserListResponseStatus) IsKnown() bool {
 
 type AccessApplicationPolicyTestUserListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page    param.Field[int64] `query:"page"`
 	PerPage param.Field[int64] `query:"per_page"`

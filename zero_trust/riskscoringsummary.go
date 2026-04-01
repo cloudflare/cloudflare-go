@@ -35,25 +35,26 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 	return
 }
 
-// Get risk score info for all users in the account
+// Gets an aggregate summary of risk scores across the account, including
+// distribution and trends.
 func (r *RiskScoringSummaryService) Get(ctx context.Context, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
 	var env RiskScoringSummaryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/summary", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RiskScoringSummaryGetResponse struct {
-	Users []RiskScoringSummaryGetResponseUser `json:"users,required"`
+	Users []RiskScoringSummaryGetResponseUser `json:"users" api:"required"`
 	JSON  riskScoringSummaryGetResponseJSON   `json:"-"`
 }
 
@@ -74,12 +75,12 @@ func (r riskScoringSummaryGetResponseJSON) RawJSON() string {
 }
 
 type RiskScoringSummaryGetResponseUser struct {
-	Email        string                                         `json:"email,required"`
-	EventCount   int64                                          `json:"event_count,required"`
-	LastEvent    time.Time                                      `json:"last_event,required" format:"date-time"`
-	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level,required"`
-	Name         string                                         `json:"name,required"`
-	UserID       string                                         `json:"user_id,required" format:"uuid"`
+	Email        string                                         `json:"email" api:"required"`
+	EventCount   int64                                          `json:"event_count" api:"required"`
+	LastEvent    time.Time                                      `json:"last_event" api:"required" format:"date-time"`
+	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level" api:"required"`
+	Name         string                                         `json:"name" api:"required"`
+	UserID       string                                         `json:"user_id" api:"required" format:"uuid"`
 	JSON         riskScoringSummaryGetResponseUserJSON          `json:"-"`
 }
 
@@ -121,14 +122,14 @@ func (r RiskScoringSummaryGetResponseUsersMaxRiskLevel) IsKnown() bool {
 }
 
 type RiskScoringSummaryGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringSummaryGetResponseEnvelope struct {
-	Errors   []RiskScoringSummaryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RiskScoringSummaryGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []RiskScoringSummaryGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RiskScoringSummaryGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    RiskScoringSummaryGetResponseEnvelopeSuccess    `json:"success,required"`
+	Success    RiskScoringSummaryGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	Result     RiskScoringSummaryGetResponse                   `json:"result"`
 	ResultInfo RiskScoringSummaryGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       riskScoringSummaryGetResponseEnvelopeJSON       `json:"-"`
@@ -155,8 +156,8 @@ func (r riskScoringSummaryGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RiskScoringSummaryGetResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           RiskScoringSummaryGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             riskScoringSummaryGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -203,8 +204,8 @@ func (r riskScoringSummaryGetResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type RiskScoringSummaryGetResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           RiskScoringSummaryGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             riskScoringSummaryGetResponseEnvelopeMessagesJSON   `json:"-"`
@@ -273,7 +274,9 @@ type RiskScoringSummaryGetResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                             `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                             `json:"total_pages"`
 	JSON       riskScoringSummaryGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -284,6 +287,7 @@ type riskScoringSummaryGetResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -42,15 +42,15 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/subscription", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates zone subscriptions, either plan or add-ons.
@@ -59,15 +59,15 @@ func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpd
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/subscription", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists zone subscription details.
@@ -76,15 +76,15 @@ func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetPara
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/subscription", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SubscriptionNewResponse struct {
@@ -341,8 +341,8 @@ func (r SubscriptionGetResponseState) IsKnown() bool {
 
 type SubscriptionNewParams struct {
 	// Identifier
-	ZoneID       param.Field[string]      `path:"zone_id,required"`
-	Subscription shared.SubscriptionParam `json:"subscription,required"`
+	ZoneID       param.Field[string]      `path:"zone_id" api:"required"`
+	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
@@ -350,11 +350,11 @@ func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   SubscriptionNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   SubscriptionNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
+	Success SubscriptionNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -394,8 +394,8 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionUpdateParams struct {
 	// Identifier
-	ZoneID       param.Field[string]      `path:"zone_id,required"`
-	Subscription shared.SubscriptionParam `json:"subscription,required"`
+	ZoneID       param.Field[string]      `path:"zone_id" api:"required"`
+	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
 }
 
 func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -403,11 +403,11 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   SubscriptionUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo      `json:"messages" api:"required"`
+	Result   SubscriptionUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -447,15 +447,15 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   SubscriptionGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   SubscriptionGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SubscriptionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`
 }
 

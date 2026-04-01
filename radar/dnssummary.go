@@ -46,10 +46,10 @@ func (r *DNSSummaryService) CacheHit(ctx context.Context, query DNSSummaryCacheH
 	path := "radar/dns/summary/cache_hit"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS responses by DNSSEC (DNS Security Extensions)
@@ -64,10 +64,10 @@ func (r *DNSSummaryService) DNSSEC(ctx context.Context, query DNSSummaryDNSSECPa
 	path := "radar/dns/summary/dnssec"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by DNSSEC (DNS Security Extensions)
@@ -82,10 +82,10 @@ func (r *DNSSummaryService) DNSSECAware(ctx context.Context, query DNSSummaryDNS
 	path := "radar/dns/summary/dnssec_aware"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNSSEC-validated answers by end-to-end security
@@ -100,10 +100,10 @@ func (r *DNSSummaryService) DNSSECE2E(ctx context.Context, query DNSSummaryDNSSE
 	path := "radar/dns/summary/dnssec_e2e"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by IP version.
@@ -117,10 +117,10 @@ func (r *DNSSummaryService) IPVersion(ctx context.Context, query DNSSummaryIPVer
 	path := "radar/dns/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by matching answers.
@@ -134,10 +134,10 @@ func (r *DNSSummaryService) MatchingAnswer(ctx context.Context, query DNSSummary
 	path := "radar/dns/summary/matching_answer"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by DNS transport protocol.
@@ -151,10 +151,10 @@ func (r *DNSSummaryService) Protocol(ctx context.Context, query DNSSummaryProtoc
 	path := "radar/dns/summary/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by type.
@@ -168,10 +168,10 @@ func (r *DNSSummaryService) QueryType(ctx context.Context, query DNSSummaryQuery
 	path := "radar/dns/summary/query_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by response code.
@@ -185,10 +185,10 @@ func (r *DNSSummaryService) ResponseCode(ctx context.Context, query DNSSummaryRe
 	path := "radar/dns/summary/response_code"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of DNS queries by minimum response TTL.
@@ -202,16 +202,16 @@ func (r *DNSSummaryService) ResponseTTL(ctx context.Context, query DNSSummaryRes
 	path := "radar/dns/summary/response_ttl"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type DNSSummaryCacheHitResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryCacheHitResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryCacheHitResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryCacheHitResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryCacheHitResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryCacheHitResponseJSON     `json:"-"`
 }
 
@@ -234,15 +234,15 @@ func (r dnsSummaryCacheHitResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryCacheHitResponseMeta struct {
-	ConfidenceInfo DNSSummaryCacheHitResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryCacheHitResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryCacheHitResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryCacheHitResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryCacheHitResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryCacheHitResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryCacheHitResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryCacheHitResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryCacheHitResponseMetaJSON   `json:"-"`
 }
 
@@ -267,9 +267,9 @@ func (r dnsSummaryCacheHitResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryCacheHitResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                            `json:"level,required"`
+	Level int64                                            `json:"level" api:"required"`
 	JSON  dnsSummaryCacheHitResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -293,15 +293,15 @@ func (r dnsSummaryCacheHitResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                            `json:"description,required"`
-	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                            `json:"description" api:"required"`
+	EndDate     time.Time                                                         `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryCacheHitResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -388,9 +388,9 @@ func (r DNSSummaryCacheHitResponseMetaConfidenceInfoAnnotationsEventType) IsKnow
 
 type DNSSummaryCacheHitResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                   `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryCacheHitResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -435,8 +435,8 @@ func (r DNSSummaryCacheHitResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryCacheHitResponseMetaUnit struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
+	Name  string                                 `json:"name" api:"required"`
+	Value string                                 `json:"value" api:"required"`
 	JSON  dnsSummaryCacheHitResponseMetaUnitJSON `json:"-"`
 }
 
@@ -459,9 +459,9 @@ func (r dnsSummaryCacheHitResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryCacheHitResponseSummary0 struct {
 	// A numeric string.
-	Negative string `json:"NEGATIVE,required"`
+	Negative string `json:"NEGATIVE" api:"required"`
 	// A numeric string.
-	Positive string                                 `json:"POSITIVE,required"`
+	Positive string                                 `json:"POSITIVE" api:"required"`
 	JSON     dnsSummaryCacheHitResponseSummary0JSON `json:"-"`
 }
 
@@ -484,8 +484,8 @@ func (r dnsSummaryCacheHitResponseSummary0JSON) RawJSON() string {
 
 type DNSSummaryDNSSECResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryDNSSECResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryDNSSECResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryDNSSECResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryDNSSECResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryDNSSECResponseJSON     `json:"-"`
 }
 
@@ -508,15 +508,15 @@ func (r dnsSummaryDNSSECResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryDNSSECResponseMeta struct {
-	ConfidenceInfo DNSSummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryDNSSECResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryDNSSECResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryDNSSECResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryDNSSECResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryDNSSECResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryDNSSECResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryDNSSECResponseMetaJSON   `json:"-"`
 }
 
@@ -541,9 +541,9 @@ func (r dnsSummaryDNSSECResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                          `json:"level,required"`
+	Level int64                                          `json:"level" api:"required"`
 	JSON  dnsSummaryDNSSECResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -567,15 +567,15 @@ func (r dnsSummaryDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                          `json:"description,required"`
-	EndDate     time.Time                                                       `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                          `json:"description" api:"required"`
+	EndDate     time.Time                                                       `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                     `json:"isInstantaneous,required"`
-	LinkedURL       string                                                   `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                     `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                   `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -662,9 +662,9 @@ func (r DNSSummaryDNSSECResponseMetaConfidenceInfoAnnotationsEventType) IsKnown(
 
 type DNSSummaryDNSSECResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                 `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                 `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryDNSSECResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -709,8 +709,8 @@ func (r DNSSummaryDNSSECResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryDNSSECResponseMetaUnit struct {
-	Name  string                               `json:"name,required"`
-	Value string                               `json:"value,required"`
+	Name  string                               `json:"name" api:"required"`
+	Value string                               `json:"value" api:"required"`
 	JSON  dnsSummaryDNSSECResponseMetaUnitJSON `json:"-"`
 }
 
@@ -733,13 +733,13 @@ func (r dnsSummaryDNSSECResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryDNSSECResponseSummary0 struct {
 	// A numeric string.
-	Insecure string `json:"INSECURE,required"`
+	Insecure string `json:"INSECURE" api:"required"`
 	// A numeric string.
-	Invalid string `json:"INVALID,required"`
+	Invalid string `json:"INVALID" api:"required"`
 	// A numeric string.
-	Other string `json:"OTHER,required"`
+	Other string `json:"OTHER" api:"required"`
 	// A numeric string.
-	Secure string                               `json:"SECURE,required"`
+	Secure string                               `json:"SECURE" api:"required"`
 	JSON   dnsSummaryDNSSECResponseSummary0JSON `json:"-"`
 }
 
@@ -764,8 +764,8 @@ func (r dnsSummaryDNSSECResponseSummary0JSON) RawJSON() string {
 
 type DNSSummaryDNSSECAwareResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryDNSSECAwareResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryDNSSECAwareResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryDNSSECAwareResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryDNSSECAwareResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryDNSSECAwareResponseJSON     `json:"-"`
 }
 
@@ -788,15 +788,15 @@ func (r dnsSummaryDNSSECAwareResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryDNSSECAwareResponseMeta struct {
-	ConfidenceInfo DNSSummaryDNSSECAwareResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryDNSSECAwareResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryDNSSECAwareResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryDNSSECAwareResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryDNSSECAwareResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryDNSSECAwareResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryDNSSECAwareResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryDNSSECAwareResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryDNSSECAwareResponseMetaJSON   `json:"-"`
 }
 
@@ -821,9 +821,9 @@ func (r dnsSummaryDNSSECAwareResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryDNSSECAwareResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                               `json:"level,required"`
+	Level int64                                               `json:"level" api:"required"`
 	JSON  dnsSummaryDNSSECAwareResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -847,15 +847,15 @@ func (r dnsSummaryDNSSECAwareResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                               `json:"description,required"`
-	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                               `json:"description" api:"required"`
+	EndDate     time.Time                                                            `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                        `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                     `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -943,9 +943,9 @@ func (r DNSSummaryDNSSECAwareResponseMetaConfidenceInfoAnnotationsEventType) IsK
 
 type DNSSummaryDNSSECAwareResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                      `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryDNSSECAwareResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -990,8 +990,8 @@ func (r DNSSummaryDNSSECAwareResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryDNSSECAwareResponseMetaUnit struct {
-	Name  string                                    `json:"name,required"`
-	Value string                                    `json:"value,required"`
+	Name  string                                    `json:"name" api:"required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  dnsSummaryDNSSECAwareResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1014,9 +1014,9 @@ func (r dnsSummaryDNSSECAwareResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryDNSSECAwareResponseSummary0 struct {
 	// A numeric string.
-	NotSupported string `json:"NOT_SUPPORTED,required"`
+	NotSupported string `json:"NOT_SUPPORTED" api:"required"`
 	// A numeric string.
-	Supported string                                    `json:"SUPPORTED,required"`
+	Supported string                                    `json:"SUPPORTED" api:"required"`
 	JSON      dnsSummaryDNSSECAwareResponseSummary0JSON `json:"-"`
 }
 
@@ -1039,8 +1039,8 @@ func (r dnsSummaryDNSSECAwareResponseSummary0JSON) RawJSON() string {
 
 type DNSSummaryDnssece2EResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryDnssece2EResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryDnssece2EResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryDnssece2EResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryDnssece2EResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryDnssece2EResponseJSON     `json:"-"`
 }
 
@@ -1063,15 +1063,15 @@ func (r dnsSummaryDnssece2EResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryDnssece2EResponseMeta struct {
-	ConfidenceInfo DNSSummaryDnssece2EResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryDnssece2EResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryDnssece2EResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryDnssece2EResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryDnssece2EResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryDnssece2EResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryDnssece2EResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryDnssece2EResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryDnssece2EResponseMetaJSON   `json:"-"`
 }
 
@@ -1096,9 +1096,9 @@ func (r dnsSummaryDnssece2EResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryDnssece2EResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                             `json:"level,required"`
+	Level int64                                             `json:"level" api:"required"`
 	JSON  dnsSummaryDnssece2EResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1122,15 +1122,15 @@ func (r dnsSummaryDnssece2EResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                             `json:"description,required"`
-	EndDate     time.Time                                                          `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                             `json:"description" api:"required"`
+	EndDate     time.Time                                                          `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
-	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                      `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                   `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryDnssece2EResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1218,9 +1218,9 @@ func (r DNSSummaryDnssece2EResponseMetaConfidenceInfoAnnotationsEventType) IsKno
 
 type DNSSummaryDnssece2EResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                    `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryDnssece2EResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1265,8 +1265,8 @@ func (r DNSSummaryDnssece2EResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryDnssece2EResponseMetaUnit struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
+	Name  string                                  `json:"name" api:"required"`
+	Value string                                  `json:"value" api:"required"`
 	JSON  dnsSummaryDnssece2EResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1289,9 +1289,9 @@ func (r dnsSummaryDnssece2EResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryDnssece2EResponseSummary0 struct {
 	// A numeric string.
-	Negative string `json:"NEGATIVE,required"`
+	Negative string `json:"NEGATIVE" api:"required"`
 	// A numeric string.
-	Positive string                                  `json:"POSITIVE,required"`
+	Positive string                                  `json:"POSITIVE" api:"required"`
 	JSON     dnsSummaryDnssece2EResponseSummary0JSON `json:"-"`
 }
 
@@ -1314,8 +1314,8 @@ func (r dnsSummaryDnssece2EResponseSummary0JSON) RawJSON() string {
 
 type DNSSummaryIPVersionResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryIPVersionResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryIPVersionResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryIPVersionResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryIPVersionResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryIPVersionResponseJSON     `json:"-"`
 }
 
@@ -1338,15 +1338,15 @@ func (r dnsSummaryIPVersionResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryIPVersionResponseMeta struct {
-	ConfidenceInfo DNSSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryIPVersionResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryIPVersionResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryIPVersionResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryIPVersionResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryIPVersionResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryIPVersionResponseMetaJSON   `json:"-"`
 }
 
@@ -1371,9 +1371,9 @@ func (r dnsSummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                             `json:"level,required"`
+	Level int64                                             `json:"level" api:"required"`
 	JSON  dnsSummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1397,15 +1397,15 @@ func (r dnsSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                             `json:"description,required"`
-	EndDate     time.Time                                                          `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                             `json:"description" api:"required"`
+	EndDate     time.Time                                                          `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
-	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                      `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                   `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1493,9 +1493,9 @@ func (r DNSSummaryIPVersionResponseMetaConfidenceInfoAnnotationsEventType) IsKno
 
 type DNSSummaryIPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                    `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryIPVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1540,8 +1540,8 @@ func (r DNSSummaryIPVersionResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryIPVersionResponseMetaUnit struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
+	Name  string                                  `json:"name" api:"required"`
+	Value string                                  `json:"value" api:"required"`
 	JSON  dnsSummaryIPVersionResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1564,9 +1564,9 @@ func (r dnsSummaryIPVersionResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryIPVersionResponseSummary0 struct {
 	// A numeric string.
-	IPv4 string `json:"IPv4,required"`
+	IPv4 string `json:"IPv4" api:"required"`
 	// A numeric string.
-	IPv6 string                                  `json:"IPv6,required"`
+	IPv6 string                                  `json:"IPv6" api:"required"`
 	JSON dnsSummaryIPVersionResponseSummary0JSON `json:"-"`
 }
 
@@ -1589,8 +1589,8 @@ func (r dnsSummaryIPVersionResponseSummary0JSON) RawJSON() string {
 
 type DNSSummaryMatchingAnswerResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryMatchingAnswerResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryMatchingAnswerResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryMatchingAnswerResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryMatchingAnswerResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryMatchingAnswerResponseJSON     `json:"-"`
 }
 
@@ -1613,15 +1613,15 @@ func (r dnsSummaryMatchingAnswerResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryMatchingAnswerResponseMeta struct {
-	ConfidenceInfo DNSSummaryMatchingAnswerResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryMatchingAnswerResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryMatchingAnswerResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryMatchingAnswerResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryMatchingAnswerResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryMatchingAnswerResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryMatchingAnswerResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryMatchingAnswerResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryMatchingAnswerResponseMetaJSON   `json:"-"`
 }
 
@@ -1646,9 +1646,9 @@ func (r dnsSummaryMatchingAnswerResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryMatchingAnswerResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                  `json:"level,required"`
+	Level int64                                                  `json:"level" api:"required"`
 	JSON  dnsSummaryMatchingAnswerResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1672,15 +1672,15 @@ func (r dnsSummaryMatchingAnswerResponseMetaConfidenceInfoJSON) RawJSON() string
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                  `json:"description,required"`
-	EndDate     time.Time                                                               `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                  `json:"description" api:"required"`
+	EndDate     time.Time                                                               `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
-	LinkedURL       string                                                           `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                        `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1768,9 +1768,9 @@ func (r DNSSummaryMatchingAnswerResponseMetaConfidenceInfoAnnotationsEventType) 
 
 type DNSSummaryMatchingAnswerResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                         `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryMatchingAnswerResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -1815,8 +1815,8 @@ func (r DNSSummaryMatchingAnswerResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryMatchingAnswerResponseMetaUnit struct {
-	Name  string                                       `json:"name,required"`
-	Value string                                       `json:"value,required"`
+	Name  string                                       `json:"name" api:"required"`
+	Value string                                       `json:"value" api:"required"`
 	JSON  dnsSummaryMatchingAnswerResponseMetaUnitJSON `json:"-"`
 }
 
@@ -1839,9 +1839,9 @@ func (r dnsSummaryMatchingAnswerResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryMatchingAnswerResponseSummary0 struct {
 	// A numeric string.
-	Negative string `json:"NEGATIVE,required"`
+	Negative string `json:"NEGATIVE" api:"required"`
 	// A numeric string.
-	Positive string                                       `json:"POSITIVE,required"`
+	Positive string                                       `json:"POSITIVE" api:"required"`
 	JSON     dnsSummaryMatchingAnswerResponseSummary0JSON `json:"-"`
 }
 
@@ -1864,8 +1864,8 @@ func (r dnsSummaryMatchingAnswerResponseSummary0JSON) RawJSON() string {
 
 type DNSSummaryProtocolResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryProtocolResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryProtocolResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryProtocolResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryProtocolResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryProtocolResponseJSON     `json:"-"`
 }
 
@@ -1888,15 +1888,15 @@ func (r dnsSummaryProtocolResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryProtocolResponseMeta struct {
-	ConfidenceInfo DNSSummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryProtocolResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryProtocolResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryProtocolResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryProtocolResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryProtocolResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryProtocolResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryProtocolResponseMetaJSON   `json:"-"`
 }
 
@@ -1921,9 +1921,9 @@ func (r dnsSummaryProtocolResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryProtocolResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                            `json:"level,required"`
+	Level int64                                            `json:"level" api:"required"`
 	JSON  dnsSummaryProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -1947,15 +1947,15 @@ func (r dnsSummaryProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                            `json:"description,required"`
-	EndDate     time.Time                                                         `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryProtocolResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                            `json:"description" api:"required"`
+	EndDate     time.Time                                                         `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryProtocolResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
-	LinkedURL       string                                                     `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                  `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2042,9 +2042,9 @@ func (r DNSSummaryProtocolResponseMetaConfidenceInfoAnnotationsEventType) IsKnow
 
 type DNSSummaryProtocolResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                   `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryProtocolResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2089,8 +2089,8 @@ func (r DNSSummaryProtocolResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryProtocolResponseMetaUnit struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
+	Name  string                                 `json:"name" api:"required"`
+	Value string                                 `json:"value" api:"required"`
 	JSON  dnsSummaryProtocolResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2113,13 +2113,13 @@ func (r dnsSummaryProtocolResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryProtocolResponseSummary0 struct {
 	// A numeric string.
-	HTTPS string `json:"HTTPS,required"`
+	HTTPS string `json:"HTTPS" api:"required"`
 	// A numeric string.
-	TCP string `json:"TCP,required"`
+	TCP string `json:"TCP" api:"required"`
 	// A numeric string.
-	TLS string `json:"TLS,required"`
+	TLS string `json:"TLS" api:"required"`
 	// A numeric string.
-	Udp  string                                 `json:"UDP,required"`
+	Udp  string                                 `json:"UDP" api:"required"`
 	JSON dnsSummaryProtocolResponseSummary0JSON `json:"-"`
 }
 
@@ -2144,8 +2144,8 @@ func (r dnsSummaryProtocolResponseSummary0JSON) RawJSON() string {
 
 type DNSSummaryQueryTypeResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryQueryTypeResponseMeta `json:"meta,required"`
-	Summary0 map[string]string               `json:"summary_0,required"`
+	Meta     DNSSummaryQueryTypeResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string               `json:"summary_0" api:"required"`
 	JSON     dnsSummaryQueryTypeResponseJSON `json:"-"`
 }
 
@@ -2168,15 +2168,15 @@ func (r dnsSummaryQueryTypeResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryQueryTypeResponseMeta struct {
-	ConfidenceInfo DNSSummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryQueryTypeResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryQueryTypeResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryQueryTypeResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryQueryTypeResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryQueryTypeResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryQueryTypeResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryQueryTypeResponseMetaJSON   `json:"-"`
 }
 
@@ -2201,9 +2201,9 @@ func (r dnsSummaryQueryTypeResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryQueryTypeResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                             `json:"level,required"`
+	Level int64                                             `json:"level" api:"required"`
 	JSON  dnsSummaryQueryTypeResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2227,15 +2227,15 @@ func (r dnsSummaryQueryTypeResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                             `json:"description,required"`
-	EndDate     time.Time                                                          `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                             `json:"description" api:"required"`
+	EndDate     time.Time                                                          `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
-	LinkedURL       string                                                      `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                   `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                      `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                   `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryQueryTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2323,9 +2323,9 @@ func (r DNSSummaryQueryTypeResponseMetaConfidenceInfoAnnotationsEventType) IsKno
 
 type DNSSummaryQueryTypeResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                    `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryQueryTypeResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2370,8 +2370,8 @@ func (r DNSSummaryQueryTypeResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryQueryTypeResponseMetaUnit struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
+	Name  string                                  `json:"name" api:"required"`
+	Value string                                  `json:"value" api:"required"`
 	JSON  dnsSummaryQueryTypeResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2394,8 +2394,8 @@ func (r dnsSummaryQueryTypeResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryResponseCodeResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryResponseCodeResponseMeta `json:"meta,required"`
-	Summary0 map[string]string                  `json:"summary_0,required"`
+	Meta     DNSSummaryResponseCodeResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string                  `json:"summary_0" api:"required"`
 	JSON     dnsSummaryResponseCodeResponseJSON `json:"-"`
 }
 
@@ -2418,15 +2418,15 @@ func (r dnsSummaryResponseCodeResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryResponseCodeResponseMeta struct {
-	ConfidenceInfo DNSSummaryResponseCodeResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryResponseCodeResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryResponseCodeResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryResponseCodeResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryResponseCodeResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryResponseCodeResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryResponseCodeResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryResponseCodeResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryResponseCodeResponseMetaJSON   `json:"-"`
 }
 
@@ -2451,9 +2451,9 @@ func (r dnsSummaryResponseCodeResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryResponseCodeResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                `json:"level,required"`
+	Level int64                                                `json:"level" api:"required"`
 	JSON  dnsSummaryResponseCodeResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2477,15 +2477,15 @@ func (r dnsSummaryResponseCodeResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                `json:"description,required"`
-	EndDate     time.Time                                                             `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                `json:"description" api:"required"`
+	EndDate     time.Time                                                             `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
-	LinkedURL       string                                                         `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                      `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                         `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                      `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryResponseCodeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2573,9 +2573,9 @@ func (r DNSSummaryResponseCodeResponseMetaConfidenceInfoAnnotationsEventType) Is
 
 type DNSSummaryResponseCodeResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                       `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryResponseCodeResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2620,8 +2620,8 @@ func (r DNSSummaryResponseCodeResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryResponseCodeResponseMetaUnit struct {
-	Name  string                                     `json:"name,required"`
-	Value string                                     `json:"value,required"`
+	Name  string                                     `json:"name" api:"required"`
+	Value string                                     `json:"value" api:"required"`
 	JSON  dnsSummaryResponseCodeResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2644,8 +2644,8 @@ func (r dnsSummaryResponseCodeResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryResponseTTLResponse struct {
 	// Metadata for the results.
-	Meta     DNSSummaryResponseTTLResponseMeta     `json:"meta,required"`
-	Summary0 DNSSummaryResponseTTLResponseSummary0 `json:"summary_0,required"`
+	Meta     DNSSummaryResponseTTLResponseMeta     `json:"meta" api:"required"`
+	Summary0 DNSSummaryResponseTTLResponseSummary0 `json:"summary_0" api:"required"`
 	JSON     dnsSummaryResponseTTLResponseJSON     `json:"-"`
 }
 
@@ -2668,15 +2668,15 @@ func (r dnsSummaryResponseTTLResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type DNSSummaryResponseTTLResponseMeta struct {
-	ConfidenceInfo DNSSummaryResponseTTLResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []DNSSummaryResponseTTLResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo DNSSummaryResponseTTLResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []DNSSummaryResponseTTLResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization DNSSummaryResponseTTLResponseMetaNormalization `json:"normalization,required"`
+	Normalization DNSSummaryResponseTTLResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []DNSSummaryResponseTTLResponseMetaUnit `json:"units,required"`
+	Units []DNSSummaryResponseTTLResponseMetaUnit `json:"units" api:"required"`
 	JSON  dnsSummaryResponseTTLResponseMetaJSON   `json:"-"`
 }
 
@@ -2701,9 +2701,9 @@ func (r dnsSummaryResponseTTLResponseMetaJSON) RawJSON() string {
 }
 
 type DNSSummaryResponseTTLResponseMetaConfidenceInfo struct {
-	Annotations []DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                               `json:"level,required"`
+	Level int64                                               `json:"level" api:"required"`
 	JSON  dnsSummaryResponseTTLResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -2727,15 +2727,15 @@ func (r dnsSummaryResponseTTLResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                               `json:"description,required"`
-	EndDate     time.Time                                                            `json:"endDate,required" format:"date-time"`
+	DataSource  DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                               `json:"description" api:"required"`
+	EndDate     time.Time                                                            `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
-	LinkedURL       string                                                        `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                     `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                        `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                     `json:"startDate" api:"required" format:"date-time"`
 	JSON            dnsSummaryResponseTTLResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2823,9 +2823,9 @@ func (r DNSSummaryResponseTTLResponseMetaConfidenceInfoAnnotationsEventType) IsK
 
 type DNSSummaryResponseTTLResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                      `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                      `json:"startTime" api:"required" format:"date-time"`
 	JSON      dnsSummaryResponseTTLResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -2870,8 +2870,8 @@ func (r DNSSummaryResponseTTLResponseMetaNormalization) IsKnown() bool {
 }
 
 type DNSSummaryResponseTTLResponseMetaUnit struct {
-	Name  string                                    `json:"name,required"`
-	Value string                                    `json:"value,required"`
+	Name  string                                    `json:"name" api:"required"`
+	Value string                                    `json:"value" api:"required"`
 	JSON  dnsSummaryResponseTTLResponseMetaUnitJSON `json:"-"`
 }
 
@@ -2894,19 +2894,19 @@ func (r dnsSummaryResponseTTLResponseMetaUnitJSON) RawJSON() string {
 
 type DNSSummaryResponseTTLResponseSummary0 struct {
 	// A numeric string.
-	Gt15mLte1h string `json:"gt_15m_lte_1h,required"`
+	Gt15mLte1h string `json:"gt_15m_lte_1h" api:"required"`
 	// A numeric string.
-	Gt1dLte1w string `json:"gt_1d_lte_1w,required"`
+	Gt1dLte1w string `json:"gt_1d_lte_1w" api:"required"`
 	// A numeric string.
-	Gt1hLte1d string `json:"gt_1h_lte_1d,required"`
+	Gt1hLte1d string `json:"gt_1h_lte_1d" api:"required"`
 	// A numeric string.
-	Gt1mLte5m string `json:"gt_1m_lte_5m,required"`
+	Gt1mLte5m string `json:"gt_1m_lte_5m" api:"required"`
 	// A numeric string.
-	Gt1w string `json:"gt_1w,required"`
+	Gt1w string `json:"gt_1w" api:"required"`
 	// A numeric string.
-	Gt5mLte15m string `json:"gt_5m_lte_15m,required"`
+	Gt5mLte15m string `json:"gt_5m_lte_15m" api:"required"`
 	// A numeric string.
-	Lte1m string                                    `json:"lte_1m,required"`
+	Lte1m string                                    `json:"lte_1m" api:"required"`
 	JSON  dnsSummaryResponseTTLResponseSummary0JSON `json:"-"`
 }
 
@@ -3146,8 +3146,8 @@ func (r DNSSummaryCacheHitParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryCacheHitResponseEnvelope struct {
-	Result  DNSSummaryCacheHitResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  DNSSummaryCacheHitResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    dnsSummaryCacheHitResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3381,8 +3381,8 @@ func (r DNSSummaryDNSSECParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryDNSSECResponseEnvelope struct {
-	Result  DNSSummaryDNSSECResponse             `json:"result,required"`
-	Success bool                                 `json:"success,required"`
+	Result  DNSSummaryDNSSECResponse             `json:"result" api:"required"`
+	Success bool                                 `json:"success" api:"required"`
 	JSON    dnsSummaryDNSSECResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3617,8 +3617,8 @@ func (r DNSSummaryDNSSECAwareParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryDNSSECAwareResponseEnvelope struct {
-	Result  DNSSummaryDNSSECAwareResponse             `json:"result,required"`
-	Success bool                                      `json:"success,required"`
+	Result  DNSSummaryDNSSECAwareResponse             `json:"result" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    dnsSummaryDNSSECAwareResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3853,8 +3853,8 @@ func (r DNSSummaryDnssece2EParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryDnssece2EResponseEnvelope struct {
-	Result  DNSSummaryDnssece2EResponse             `json:"result,required"`
-	Success bool                                    `json:"success,required"`
+	Result  DNSSummaryDnssece2EResponse             `json:"result" api:"required"`
+	Success bool                                    `json:"success" api:"required"`
 	JSON    dnsSummaryDnssece2EResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4089,8 +4089,8 @@ func (r DNSSummaryIPVersionParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryIPVersionResponseEnvelope struct {
-	Result  DNSSummaryIPVersionResponse             `json:"result,required"`
-	Success bool                                    `json:"success,required"`
+	Result  DNSSummaryIPVersionResponse             `json:"result" api:"required"`
+	Success bool                                    `json:"success" api:"required"`
 	JSON    dnsSummaryIPVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4325,8 +4325,8 @@ func (r DNSSummaryMatchingAnswerParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryMatchingAnswerResponseEnvelope struct {
-	Result  DNSSummaryMatchingAnswerResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  DNSSummaryMatchingAnswerResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    dnsSummaryMatchingAnswerResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4542,8 +4542,8 @@ func (r DNSSummaryProtocolParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryProtocolResponseEnvelope struct {
-	Result  DNSSummaryProtocolResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
+	Result  DNSSummaryProtocolResponse             `json:"result" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    dnsSummaryProtocolResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4679,8 +4679,8 @@ func (r DNSSummaryQueryTypeParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryQueryTypeResponseEnvelope struct {
-	Result  DNSSummaryQueryTypeResponse             `json:"result,required"`
-	Success bool                                    `json:"success,required"`
+	Result  DNSSummaryQueryTypeResponse             `json:"result" api:"required"`
+	Success bool                                    `json:"success" api:"required"`
 	JSON    dnsSummaryQueryTypeResponseEnvelopeJSON `json:"-"`
 }
 
@@ -4885,8 +4885,8 @@ func (r DNSSummaryResponseCodeParamsQueryType) IsKnown() bool {
 }
 
 type DNSSummaryResponseCodeResponseEnvelope struct {
-	Result  DNSSummaryResponseCodeResponse             `json:"result,required"`
-	Success bool                                       `json:"success,required"`
+	Result  DNSSummaryResponseCodeResponse             `json:"result" api:"required"`
+	Success bool                                       `json:"success" api:"required"`
 	JSON    dnsSummaryResponseCodeResponseEnvelopeJSON `json:"-"`
 }
 
@@ -5121,8 +5121,8 @@ func (r DNSSummaryResponseTTLParamsResponseCode) IsKnown() bool {
 }
 
 type DNSSummaryResponseTTLResponseEnvelope struct {
-	Result  DNSSummaryResponseTTLResponse             `json:"result,required"`
-	Success bool                                      `json:"success,required"`
+	Result  DNSSummaryResponseTTLResponse             `json:"result" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    dnsSummaryResponseTTLResponseEnvelopeJSON `json:"-"`
 }
 

@@ -46,15 +46,15 @@ func (r *CertificatePackService) New(ctx context.Context, params CertificatePack
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // For a given zone, list all active certificate packs.
@@ -64,7 +64,7 @@ func (r *CertificatePackService) List(ctx context.Context, params CertificatePac
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -90,19 +90,19 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificatePackID == "" {
 		err = errors.New("missing required certificate_pack_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // For a given zone, restart validation or add cloudflare branding for an advanced
@@ -113,19 +113,19 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificatePackID == "" {
 		err = errors.New("missing required certificate_pack_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // For a given zone, get a certificate pack.
@@ -134,19 +134,19 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if certificatePackID == "" {
 		err = errors.New("missing required certificate_pack_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Host = string
@@ -229,16 +229,16 @@ func (r ValidationMethod) IsKnown() bool {
 // A certificate pack with all its properties.
 type CertificatePackNewResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
-	Certificates []CertificatePackNewResponseCertificate `json:"certificates,required"`
+	Certificates []CertificatePackNewResponseCertificate `json:"certificates" api:"required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []Host `json:"hosts,required"`
+	Hosts []Host `json:"hosts" api:"required"`
 	// Status of certificate pack.
-	Status Status `json:"status,required"`
+	Status Status `json:"status" api:"required"`
 	// Type of certificate pack.
-	Type CertificatePackNewResponseType `json:"type,required"`
+	Type CertificatePackNewResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
@@ -293,11 +293,11 @@ func (r certificatePackNewResponseJSON) RawJSON() string {
 // An individual certificate within a certificate pack.
 type CertificatePackNewResponseCertificate struct {
 	// Certificate identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Hostnames covered by this certificate.
-	Hosts []string `json:"hosts,required"`
+	Hosts []string `json:"hosts" api:"required"`
 	// Certificate status.
-	Status string `json:"status,required"`
+	Status string `json:"status" api:"required"`
 	// Certificate bundle method.
 	BundleMethod string `json:"bundle_method"`
 	// When the certificate from the authority expires.
@@ -581,16 +581,16 @@ func (r CertificatePackNewResponseValidityDays) IsKnown() bool {
 // A certificate pack with all its properties.
 type CertificatePackListResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
-	Certificates []CertificatePackListResponseCertificate `json:"certificates,required"`
+	Certificates []CertificatePackListResponseCertificate `json:"certificates" api:"required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []Host `json:"hosts,required"`
+	Hosts []Host `json:"hosts" api:"required"`
 	// Status of certificate pack.
-	Status Status `json:"status,required"`
+	Status Status `json:"status" api:"required"`
 	// Type of certificate pack.
-	Type CertificatePackListResponseType `json:"type,required"`
+	Type CertificatePackListResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
@@ -645,11 +645,11 @@ func (r certificatePackListResponseJSON) RawJSON() string {
 // An individual certificate within a certificate pack.
 type CertificatePackListResponseCertificate struct {
 	// Certificate identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Hostnames covered by this certificate.
-	Hosts []string `json:"hosts,required"`
+	Hosts []string `json:"hosts" api:"required"`
 	// Certificate status.
-	Status string `json:"status,required"`
+	Status string `json:"status" api:"required"`
 	// Certificate bundle method.
 	BundleMethod string `json:"bundle_method"`
 	// When the certificate from the authority expires.
@@ -955,16 +955,16 @@ func (r certificatePackDeleteResponseJSON) RawJSON() string {
 // A certificate pack with all its properties.
 type CertificatePackEditResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
-	Certificates []CertificatePackEditResponseCertificate `json:"certificates,required"`
+	Certificates []CertificatePackEditResponseCertificate `json:"certificates" api:"required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []Host `json:"hosts,required"`
+	Hosts []Host `json:"hosts" api:"required"`
 	// Status of certificate pack.
-	Status Status `json:"status,required"`
+	Status Status `json:"status" api:"required"`
 	// Type of certificate pack.
-	Type CertificatePackEditResponseType `json:"type,required"`
+	Type CertificatePackEditResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
@@ -1019,11 +1019,11 @@ func (r certificatePackEditResponseJSON) RawJSON() string {
 // An individual certificate within a certificate pack.
 type CertificatePackEditResponseCertificate struct {
 	// Certificate identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Hostnames covered by this certificate.
-	Hosts []string `json:"hosts,required"`
+	Hosts []string `json:"hosts" api:"required"`
 	// Certificate status.
-	Status string `json:"status,required"`
+	Status string `json:"status" api:"required"`
 	// Certificate bundle method.
 	BundleMethod string `json:"bundle_method"`
 	// When the certificate from the authority expires.
@@ -1307,16 +1307,16 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 // A certificate pack with all its properties.
 type CertificatePackGetResponse struct {
 	// Identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
-	Certificates []CertificatePackGetResponseCertificate `json:"certificates,required"`
+	Certificates []CertificatePackGetResponseCertificate `json:"certificates" api:"required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []Host `json:"hosts,required"`
+	Hosts []Host `json:"hosts" api:"required"`
 	// Status of certificate pack.
-	Status Status `json:"status,required"`
+	Status Status `json:"status" api:"required"`
 	// Type of certificate pack.
-	Type CertificatePackGetResponseType `json:"type,required"`
+	Type CertificatePackGetResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
@@ -1371,11 +1371,11 @@ func (r certificatePackGetResponseJSON) RawJSON() string {
 // An individual certificate within a certificate pack.
 type CertificatePackGetResponseCertificate struct {
 	// Certificate identifier.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Hostnames covered by this certificate.
-	Hosts []string `json:"hosts,required"`
+	Hosts []string `json:"hosts" api:"required"`
 	// Certificate status.
-	Status string `json:"status,required"`
+	Status string `json:"status" api:"required"`
 	// Certificate bundle method.
 	BundleMethod string `json:"bundle_method"`
 	// When the certificate from the authority expires.
@@ -1658,20 +1658,20 @@ func (r CertificatePackGetResponseValidityDays) IsKnown() bool {
 
 type CertificatePackNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-	CertificateAuthority param.Field[CertificatePackNewParamsCertificateAuthority] `json:"certificate_authority,required"`
+	CertificateAuthority param.Field[CertificatePackNewParamsCertificateAuthority] `json:"certificate_authority" api:"required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts param.Field[[]HostParam] `json:"hosts,required"`
+	Hosts param.Field[[]HostParam] `json:"hosts" api:"required"`
 	// Type of certificate pack.
-	Type param.Field[CertificatePackNewParamsType] `json:"type,required"`
+	Type param.Field[CertificatePackNewParamsType] `json:"type" api:"required"`
 	// Validation Method selected for the order.
-	ValidationMethod param.Field[CertificatePackNewParamsValidationMethod] `json:"validation_method,required"`
+	ValidationMethod param.Field[CertificatePackNewParamsValidationMethod] `json:"validation_method" api:"required"`
 	// Validity Days selected for the order.
-	ValidityDays param.Field[CertificatePackNewParamsValidityDays] `json:"validity_days,required"`
+	ValidityDays param.Field[CertificatePackNewParamsValidityDays] `json:"validity_days" api:"required"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
@@ -1751,10 +1751,10 @@ func (r CertificatePackNewParamsValidityDays) IsKnown() bool {
 }
 
 type CertificatePackNewResponseEnvelope struct {
-	Errors   []CertificatePackNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CertificatePackNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CertificatePackNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CertificatePackNewResponseEnvelopeSuccess `json:"success,required"`
+	Success CertificatePackNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A certificate pack with all its properties.
 	Result CertificatePackNewResponse             `json:"result"`
 	JSON   certificatePackNewResponseEnvelopeJSON `json:"-"`
@@ -1780,8 +1780,8 @@ func (r certificatePackNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CertificatePackNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           CertificatePackNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             certificatePackNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1828,8 +1828,8 @@ func (r certificatePackNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CertificatePackNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           CertificatePackNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             certificatePackNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1892,7 +1892,7 @@ func (r CertificatePackNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specify the deployment environment for the certificate packs.
 	Deploy param.Field[CertificatePackListParamsDeploy] `query:"deploy"`
 	// Page number of paginated results.
@@ -1945,14 +1945,14 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 
 type CertificatePackDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CertificatePackDeleteResponseEnvelope struct {
-	Errors   []CertificatePackDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CertificatePackDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CertificatePackDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CertificatePackDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success CertificatePackDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  CertificatePackDeleteResponse                `json:"result"`
 	JSON    certificatePackDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -1977,8 +1977,8 @@ func (r certificatePackDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CertificatePackDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CertificatePackDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             certificatePackDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -2025,8 +2025,8 @@ func (r certificatePackDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string 
 }
 
 type CertificatePackDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code,required"`
-	Message          string                                              `json:"message,required"`
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
 	DocumentationURL string                                              `json:"documentation_url"`
 	Source           CertificatePackDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             certificatePackDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -2089,7 +2089,7 @@ func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
@@ -2100,10 +2100,10 @@ func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CertificatePackEditResponseEnvelope struct {
-	Errors   []CertificatePackEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CertificatePackEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CertificatePackEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CertificatePackEditResponseEnvelopeSuccess `json:"success,required"`
+	Success CertificatePackEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A certificate pack with all its properties.
 	Result CertificatePackEditResponse             `json:"result"`
 	JSON   certificatePackEditResponseEnvelopeJSON `json:"-"`
@@ -2129,8 +2129,8 @@ func (r certificatePackEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CertificatePackEditResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           CertificatePackEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             certificatePackEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -2177,8 +2177,8 @@ func (r certificatePackEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CertificatePackEditResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           CertificatePackEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             certificatePackEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -2241,14 +2241,14 @@ func (r CertificatePackEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type CertificatePackGetResponseEnvelope struct {
-	Errors   []CertificatePackGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []CertificatePackGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []CertificatePackGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
+	Success CertificatePackGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A certificate pack with all its properties.
 	Result CertificatePackGetResponse             `json:"result"`
 	JSON   certificatePackGetResponseEnvelopeJSON `json:"-"`
@@ -2274,8 +2274,8 @@ func (r certificatePackGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CertificatePackGetResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code,required"`
-	Message          string                                         `json:"message,required"`
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
 	DocumentationURL string                                         `json:"documentation_url"`
 	Source           CertificatePackGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             certificatePackGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -2322,8 +2322,8 @@ func (r certificatePackGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type CertificatePackGetResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           CertificatePackGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             certificatePackGetResponseEnvelopeMessagesJSON   `json:"-"`

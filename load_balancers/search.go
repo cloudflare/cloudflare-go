@@ -44,7 +44,7 @@ func (r *SearchService) List(ctx context.Context, params SearchListParams, opts 
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/search", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -155,7 +155,7 @@ func (r SearchListResponseResourcesResourceType) IsKnown() bool {
 
 type SearchListParams struct {
 	// Identifier.
-	AccountID param.Field[string]  `path:"account_id,required"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
 	// Search query term.

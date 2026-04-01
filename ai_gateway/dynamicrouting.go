@@ -43,19 +43,19 @@ func (r *DynamicRoutingService) New(ctx context.Context, gatewayID string, param
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes", params.AccountID, gatewayID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Update an AI Gateway Dynamic Route.
@@ -63,19 +63,19 @@ func (r *DynamicRoutingService) Update(ctx context.Context, gatewayID string, id
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s", params.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // List all AI Gateway Dynamic Routes.
@@ -83,15 +83,15 @@ func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes", query.AccountID, gatewayID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete an AI Gateway Dynamic Route.
@@ -100,23 +100,23 @@ func (r *DynamicRoutingService) Delete(ctx context.Context, gatewayID string, id
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s", body.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Create a new AI Gateway Dynamic Route Deployment.
@@ -125,23 +125,23 @@ func (r *DynamicRoutingService) NewDeployment(ctx context.Context, gatewayID str
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s/deployments", params.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Create a new AI Gateway Dynamic Route Version.
@@ -150,23 +150,23 @@ func (r *DynamicRoutingService) NewVersion(ctx context.Context, gatewayID string
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s/versions", params.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get an AI Gateway Dynamic Route.
@@ -175,23 +175,23 @@ func (r *DynamicRoutingService) Get(ctx context.Context, gatewayID string, id st
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get an AI Gateway Dynamic Route Version.
@@ -200,27 +200,27 @@ func (r *DynamicRoutingService) GetVersion(ctx context.Context, gatewayID string
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	if versionID == "" {
 		err = errors.New("missing required version_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s/versions/%s", query.AccountID, gatewayID, id, versionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List all AI Gateway Dynamic Route Deployments.
@@ -228,19 +228,19 @@ func (r *DynamicRoutingService) ListDeployments(ctx context.Context, gatewayID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s/deployments", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List all AI Gateway Dynamic Route Versions.
@@ -248,30 +248,30 @@ func (r *DynamicRoutingService) ListVersions(ctx context.Context, gatewayID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if gatewayID == "" {
 		err = errors.New("missing required gateway_id parameter")
-		return
+		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes/%s/versions", query.AccountID, gatewayID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type DynamicRoutingNewResponse struct {
-	ID         string                              `json:"id,required"`
-	CreatedAt  time.Time                           `json:"created_at,required" format:"date-time"`
-	Deployment DynamicRoutingNewResponseDeployment `json:"deployment,required"`
-	Elements   []DynamicRoutingNewResponseElement  `json:"elements,required"`
-	GatewayID  string                              `json:"gateway_id,required"`
-	ModifiedAt time.Time                           `json:"modified_at,required" format:"date-time"`
-	Name       string                              `json:"name,required"`
-	Version    DynamicRoutingNewResponseVersion    `json:"version,required"`
+	ID         string                              `json:"id" api:"required"`
+	CreatedAt  time.Time                           `json:"created_at" api:"required" format:"date-time"`
+	Deployment DynamicRoutingNewResponseDeployment `json:"deployment" api:"required"`
+	Elements   []DynamicRoutingNewResponseElement  `json:"elements" api:"required"`
+	GatewayID  string                              `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                           `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                              `json:"name" api:"required"`
+	Version    DynamicRoutingNewResponseVersion    `json:"version" api:"required"`
 	JSON       dynamicRoutingNewResponseJSON       `json:"-"`
 }
 
@@ -299,10 +299,9 @@ func (r dynamicRoutingNewResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewResponseDeployment struct {
-	CreatedAt    string                                  `json:"created_at,required"`
-	DeploymentID string                                  `json:"deployment_id,required"`
-	VersionID    string                                  `json:"version_id,required"`
-	Comment      string                                  `json:"comment,nullable"`
+	CreatedAt    string                                  `json:"created_at" api:"required"`
+	DeploymentID string                                  `json:"deployment_id" api:"required"`
+	VersionID    string                                  `json:"version_id" api:"required"`
 	JSON         dynamicRoutingNewResponseDeploymentJSON `json:"-"`
 }
 
@@ -312,7 +311,6 @@ type dynamicRoutingNewResponseDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -326,12 +324,12 @@ func (r dynamicRoutingNewResponseDeploymentJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewResponseElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingNewResponseElementsObjectOutputs],
 	// [map[string]DynamicRoutingNewResponseElementsObjectOutput].
-	Outputs interface{}                           `json:"outputs,required"`
-	Type    DynamicRoutingNewResponseElementsType `json:"type,required"`
+	Outputs interface{}                           `json:"outputs" api:"required"`
+	Type    DynamicRoutingNewResponseElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingNewResponseElementsObjectProperties].
 	Properties interface{}                          `json:"properties"`
@@ -419,9 +417,9 @@ func init() {
 }
 
 type DynamicRoutingNewResponseElementsObject struct {
-	ID      string                                         `json:"id,required"`
-	Outputs DynamicRoutingNewResponseElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingNewResponseElementsObjectType    `json:"type,required"`
+	ID      string                                         `json:"id" api:"required"`
+	Outputs DynamicRoutingNewResponseElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingNewResponseElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingNewResponseElementsObjectJSON    `json:"-"`
 }
 
@@ -446,7 +444,7 @@ func (r dynamicRoutingNewResponseElementsObjectJSON) RawJSON() string {
 func (r DynamicRoutingNewResponseElementsObject) implementsDynamicRoutingNewResponseElement() {}
 
 type DynamicRoutingNewResponseElementsObjectOutputs struct {
-	Next DynamicRoutingNewResponseElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingNewResponseElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingNewResponseElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -467,7 +465,7 @@ func (r dynamicRoutingNewResponseElementsObjectOutputsJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewResponseElementsObjectOutputsNext struct {
-	ElementID string                                                 `json:"elementId,required"`
+	ElementID string                                                 `json:"elementId" api:"required"`
 	JSON      dynamicRoutingNewResponseElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -521,11 +519,10 @@ func (r DynamicRoutingNewResponseElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingNewResponseVersion struct {
-	Active    DynamicRoutingNewResponseVersionActive `json:"active,required"`
-	CreatedAt string                                 `json:"created_at,required"`
-	Data      string                                 `json:"data,required"`
-	VersionID string                                 `json:"version_id,required"`
-	Comment   string                                 `json:"comment,nullable"`
+	Active    DynamicRoutingNewResponseVersionActive `json:"active" api:"required"`
+	CreatedAt string                                 `json:"created_at" api:"required"`
+	Data      string                                 `json:"data" api:"required"`
+	VersionID string                                 `json:"version_id" api:"required"`
 	JSON      dynamicRoutingNewResponseVersionJSON   `json:"-"`
 }
 
@@ -536,7 +533,6 @@ type dynamicRoutingNewResponseVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -565,8 +561,8 @@ func (r DynamicRoutingNewResponseVersionActive) IsKnown() bool {
 }
 
 type DynamicRoutingUpdateResponse struct {
-	Route   DynamicRoutingUpdateResponseRoute `json:"route,required"`
-	Success bool                              `json:"success,required"`
+	Route   DynamicRoutingUpdateResponseRoute `json:"route" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    dynamicRoutingUpdateResponseJSON  `json:"-"`
 }
 
@@ -588,15 +584,15 @@ func (r dynamicRoutingUpdateResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingUpdateResponseRoute struct {
-	ID         string                                      `json:"id,required"`
-	AccountTag string                                      `json:"account_tag,required"`
-	CreatedAt  time.Time                                   `json:"created_at,required" format:"date-time"`
-	Deployment DynamicRoutingUpdateResponseRouteDeployment `json:"deployment,required"`
-	Elements   []DynamicRoutingUpdateResponseRouteElement  `json:"elements,required"`
-	GatewayID  string                                      `json:"gateway_id,required"`
-	ModifiedAt time.Time                                   `json:"modified_at,required" format:"date-time"`
-	Name       string                                      `json:"name,required"`
-	Version    DynamicRoutingUpdateResponseRouteVersion    `json:"version,required"`
+	ID         string                                      `json:"id" api:"required"`
+	AccountTag string                                      `json:"account_tag" api:"required"`
+	CreatedAt  time.Time                                   `json:"created_at" api:"required" format:"date-time"`
+	Deployment DynamicRoutingUpdateResponseRouteDeployment `json:"deployment" api:"required"`
+	Elements   []DynamicRoutingUpdateResponseRouteElement  `json:"elements" api:"required"`
+	GatewayID  string                                      `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                                   `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                                      `json:"name" api:"required"`
+	Version    DynamicRoutingUpdateResponseRouteVersion    `json:"version" api:"required"`
 	JSON       dynamicRoutingUpdateResponseRouteJSON       `json:"-"`
 }
 
@@ -625,10 +621,9 @@ func (r dynamicRoutingUpdateResponseRouteJSON) RawJSON() string {
 }
 
 type DynamicRoutingUpdateResponseRouteDeployment struct {
-	CreatedAt    string                                          `json:"created_at,required"`
-	DeploymentID string                                          `json:"deployment_id,required"`
-	VersionID    string                                          `json:"version_id,required"`
-	Comment      string                                          `json:"comment,nullable"`
+	CreatedAt    string                                          `json:"created_at" api:"required"`
+	DeploymentID string                                          `json:"deployment_id" api:"required"`
+	VersionID    string                                          `json:"version_id" api:"required"`
 	JSON         dynamicRoutingUpdateResponseRouteDeploymentJSON `json:"-"`
 }
 
@@ -638,7 +633,6 @@ type dynamicRoutingUpdateResponseRouteDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -652,12 +646,12 @@ func (r dynamicRoutingUpdateResponseRouteDeploymentJSON) RawJSON() string {
 }
 
 type DynamicRoutingUpdateResponseRouteElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingUpdateResponseRouteElementsObjectOutputs],
 	// [map[string]DynamicRoutingUpdateResponseRouteElementsObjectOutput].
-	Outputs interface{}                                   `json:"outputs,required"`
-	Type    DynamicRoutingUpdateResponseRouteElementsType `json:"type,required"`
+	Outputs interface{}                                   `json:"outputs" api:"required"`
+	Type    DynamicRoutingUpdateResponseRouteElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingUpdateResponseRouteElementsObjectProperties].
 	Properties interface{}                                  `json:"properties"`
@@ -745,9 +739,9 @@ func init() {
 }
 
 type DynamicRoutingUpdateResponseRouteElementsObject struct {
-	ID      string                                                 `json:"id,required"`
-	Outputs DynamicRoutingUpdateResponseRouteElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingUpdateResponseRouteElementsObjectType    `json:"type,required"`
+	ID      string                                                 `json:"id" api:"required"`
+	Outputs DynamicRoutingUpdateResponseRouteElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingUpdateResponseRouteElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingUpdateResponseRouteElementsObjectJSON    `json:"-"`
 }
 
@@ -773,7 +767,7 @@ func (r DynamicRoutingUpdateResponseRouteElementsObject) implementsDynamicRoutin
 }
 
 type DynamicRoutingUpdateResponseRouteElementsObjectOutputs struct {
-	Next DynamicRoutingUpdateResponseRouteElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingUpdateResponseRouteElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingUpdateResponseRouteElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -794,7 +788,7 @@ func (r dynamicRoutingUpdateResponseRouteElementsObjectOutputsJSON) RawJSON() st
 }
 
 type DynamicRoutingUpdateResponseRouteElementsObjectOutputsNext struct {
-	ElementID string                                                         `json:"elementId,required"`
+	ElementID string                                                         `json:"elementId" api:"required"`
 	JSON      dynamicRoutingUpdateResponseRouteElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -849,11 +843,10 @@ func (r DynamicRoutingUpdateResponseRouteElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingUpdateResponseRouteVersion struct {
-	Active    DynamicRoutingUpdateResponseRouteVersionActive `json:"active,required"`
-	CreatedAt string                                         `json:"created_at,required"`
-	Data      string                                         `json:"data,required"`
-	VersionID string                                         `json:"version_id,required"`
-	Comment   string                                         `json:"comment,nullable"`
+	Active    DynamicRoutingUpdateResponseRouteVersionActive `json:"active" api:"required"`
+	CreatedAt string                                         `json:"created_at" api:"required"`
+	Data      string                                         `json:"data" api:"required"`
+	VersionID string                                         `json:"version_id" api:"required"`
 	JSON      dynamicRoutingUpdateResponseRouteVersionJSON   `json:"-"`
 }
 
@@ -864,7 +857,6 @@ type dynamicRoutingUpdateResponseRouteVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -893,8 +885,8 @@ func (r DynamicRoutingUpdateResponseRouteVersionActive) IsKnown() bool {
 }
 
 type DynamicRoutingListResponse struct {
-	Data    DynamicRoutingListResponseData `json:"data,required"`
-	Success bool                           `json:"success,required"`
+	Data    DynamicRoutingListResponseData `json:"data" api:"required"`
+	Success bool                           `json:"success" api:"required"`
 	JSON    dynamicRoutingListResponseJSON `json:"-"`
 }
 
@@ -916,11 +908,11 @@ func (r dynamicRoutingListResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingListResponseData struct {
-	OrderBy          string                                `json:"order_by,required"`
-	OrderByDirection string                                `json:"order_by_direction,required"`
-	Page             float64                               `json:"page,required"`
-	PerPage          float64                               `json:"per_page,required"`
-	Routes           []DynamicRoutingListResponseDataRoute `json:"routes,required"`
+	OrderBy          string                                `json:"order_by" api:"required"`
+	OrderByDirection string                                `json:"order_by_direction" api:"required"`
+	Page             float64                               `json:"page" api:"required"`
+	PerPage          float64                               `json:"per_page" api:"required"`
+	Routes           []DynamicRoutingListResponseDataRoute `json:"routes" api:"required"`
 	JSON             dynamicRoutingListResponseDataJSON    `json:"-"`
 }
 
@@ -945,15 +937,15 @@ func (r dynamicRoutingListResponseDataJSON) RawJSON() string {
 }
 
 type DynamicRoutingListResponseDataRoute struct {
-	ID         string                                         `json:"id,required"`
-	AccountTag string                                         `json:"account_tag,required"`
-	CreatedAt  time.Time                                      `json:"created_at,required" format:"date-time"`
-	Deployment DynamicRoutingListResponseDataRoutesDeployment `json:"deployment,required"`
-	Elements   []DynamicRoutingListResponseDataRoutesElement  `json:"elements,required"`
-	GatewayID  string                                         `json:"gateway_id,required"`
-	ModifiedAt time.Time                                      `json:"modified_at,required" format:"date-time"`
-	Name       string                                         `json:"name,required"`
-	Version    DynamicRoutingListResponseDataRoutesVersion    `json:"version,required"`
+	ID         string                                         `json:"id" api:"required"`
+	AccountTag string                                         `json:"account_tag" api:"required"`
+	CreatedAt  time.Time                                      `json:"created_at" api:"required" format:"date-time"`
+	Deployment DynamicRoutingListResponseDataRoutesDeployment `json:"deployment" api:"required"`
+	Elements   []DynamicRoutingListResponseDataRoutesElement  `json:"elements" api:"required"`
+	GatewayID  string                                         `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                                      `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                                         `json:"name" api:"required"`
+	Version    DynamicRoutingListResponseDataRoutesVersion    `json:"version" api:"required"`
 	JSON       dynamicRoutingListResponseDataRouteJSON        `json:"-"`
 }
 
@@ -982,10 +974,9 @@ func (r dynamicRoutingListResponseDataRouteJSON) RawJSON() string {
 }
 
 type DynamicRoutingListResponseDataRoutesDeployment struct {
-	CreatedAt    string                                             `json:"created_at,required"`
-	DeploymentID string                                             `json:"deployment_id,required"`
-	VersionID    string                                             `json:"version_id,required"`
-	Comment      string                                             `json:"comment,nullable"`
+	CreatedAt    string                                             `json:"created_at" api:"required"`
+	DeploymentID string                                             `json:"deployment_id" api:"required"`
+	VersionID    string                                             `json:"version_id" api:"required"`
 	JSON         dynamicRoutingListResponseDataRoutesDeploymentJSON `json:"-"`
 }
 
@@ -995,7 +986,6 @@ type dynamicRoutingListResponseDataRoutesDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -1009,12 +999,12 @@ func (r dynamicRoutingListResponseDataRoutesDeploymentJSON) RawJSON() string {
 }
 
 type DynamicRoutingListResponseDataRoutesElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingListResponseDataRoutesElementsObjectOutputs],
 	// [map[string]DynamicRoutingListResponseDataRoutesElementsObjectOutput].
-	Outputs interface{}                                      `json:"outputs,required"`
-	Type    DynamicRoutingListResponseDataRoutesElementsType `json:"type,required"`
+	Outputs interface{}                                      `json:"outputs" api:"required"`
+	Type    DynamicRoutingListResponseDataRoutesElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingListResponseDataRoutesElementsObjectProperties].
 	Properties interface{}                                     `json:"properties"`
@@ -1102,9 +1092,9 @@ func init() {
 }
 
 type DynamicRoutingListResponseDataRoutesElementsObject struct {
-	ID      string                                                    `json:"id,required"`
-	Outputs DynamicRoutingListResponseDataRoutesElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingListResponseDataRoutesElementsObjectType    `json:"type,required"`
+	ID      string                                                    `json:"id" api:"required"`
+	Outputs DynamicRoutingListResponseDataRoutesElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingListResponseDataRoutesElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingListResponseDataRoutesElementsObjectJSON    `json:"-"`
 }
 
@@ -1130,7 +1120,7 @@ func (r DynamicRoutingListResponseDataRoutesElementsObject) implementsDynamicRou
 }
 
 type DynamicRoutingListResponseDataRoutesElementsObjectOutputs struct {
-	Next DynamicRoutingListResponseDataRoutesElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingListResponseDataRoutesElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingListResponseDataRoutesElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -1152,7 +1142,7 @@ func (r dynamicRoutingListResponseDataRoutesElementsObjectOutputsJSON) RawJSON()
 }
 
 type DynamicRoutingListResponseDataRoutesElementsObjectOutputsNext struct {
-	ElementID string                                                            `json:"elementId,required"`
+	ElementID string                                                            `json:"elementId" api:"required"`
 	JSON      dynamicRoutingListResponseDataRoutesElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -1207,11 +1197,10 @@ func (r DynamicRoutingListResponseDataRoutesElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingListResponseDataRoutesVersion struct {
-	Active    DynamicRoutingListResponseDataRoutesVersionActive `json:"active,required"`
-	CreatedAt string                                            `json:"created_at,required"`
-	Data      string                                            `json:"data,required"`
-	VersionID string                                            `json:"version_id,required"`
-	Comment   string                                            `json:"comment,nullable"`
+	Active    DynamicRoutingListResponseDataRoutesVersionActive `json:"active" api:"required"`
+	CreatedAt string                                            `json:"created_at" api:"required"`
+	Data      string                                            `json:"data" api:"required"`
+	VersionID string                                            `json:"version_id" api:"required"`
 	JSON      dynamicRoutingListResponseDataRoutesVersionJSON   `json:"-"`
 }
 
@@ -1222,7 +1211,6 @@ type dynamicRoutingListResponseDataRoutesVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1251,12 +1239,12 @@ func (r DynamicRoutingListResponseDataRoutesVersionActive) IsKnown() bool {
 }
 
 type DynamicRoutingDeleteResponse struct {
-	ID         string                                `json:"id,required"`
-	CreatedAt  time.Time                             `json:"created_at,required" format:"date-time"`
-	Elements   []DynamicRoutingDeleteResponseElement `json:"elements,required"`
-	GatewayID  string                                `json:"gateway_id,required"`
-	ModifiedAt time.Time                             `json:"modified_at,required" format:"date-time"`
-	Name       string                                `json:"name,required"`
+	ID         string                                `json:"id" api:"required"`
+	CreatedAt  time.Time                             `json:"created_at" api:"required" format:"date-time"`
+	Elements   []DynamicRoutingDeleteResponseElement `json:"elements" api:"required"`
+	GatewayID  string                                `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                             `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                                `json:"name" api:"required"`
 	JSON       dynamicRoutingDeleteResponseJSON      `json:"-"`
 }
 
@@ -1282,12 +1270,12 @@ func (r dynamicRoutingDeleteResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingDeleteResponseElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingDeleteResponseElementsObjectOutputs],
 	// [map[string]DynamicRoutingDeleteResponseElementsObjectOutput].
-	Outputs interface{}                              `json:"outputs,required"`
-	Type    DynamicRoutingDeleteResponseElementsType `json:"type,required"`
+	Outputs interface{}                              `json:"outputs" api:"required"`
+	Type    DynamicRoutingDeleteResponseElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingDeleteResponseElementsObjectProperties].
 	Properties interface{}                             `json:"properties"`
@@ -1375,9 +1363,9 @@ func init() {
 }
 
 type DynamicRoutingDeleteResponseElementsObject struct {
-	ID      string                                            `json:"id,required"`
-	Outputs DynamicRoutingDeleteResponseElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingDeleteResponseElementsObjectType    `json:"type,required"`
+	ID      string                                            `json:"id" api:"required"`
+	Outputs DynamicRoutingDeleteResponseElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingDeleteResponseElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingDeleteResponseElementsObjectJSON    `json:"-"`
 }
 
@@ -1402,7 +1390,7 @@ func (r dynamicRoutingDeleteResponseElementsObjectJSON) RawJSON() string {
 func (r DynamicRoutingDeleteResponseElementsObject) implementsDynamicRoutingDeleteResponseElement() {}
 
 type DynamicRoutingDeleteResponseElementsObjectOutputs struct {
-	Next DynamicRoutingDeleteResponseElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingDeleteResponseElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingDeleteResponseElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -1423,7 +1411,7 @@ func (r dynamicRoutingDeleteResponseElementsObjectOutputsJSON) RawJSON() string 
 }
 
 type DynamicRoutingDeleteResponseElementsObjectOutputsNext struct {
-	ElementID string                                                    `json:"elementId,required"`
+	ElementID string                                                    `json:"elementId" api:"required"`
 	JSON      dynamicRoutingDeleteResponseElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -1477,12 +1465,12 @@ func (r DynamicRoutingDeleteResponseElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingNewDeploymentResponse struct {
-	ID         string                                       `json:"id,required"`
-	CreatedAt  time.Time                                    `json:"created_at,required" format:"date-time"`
-	Elements   []DynamicRoutingNewDeploymentResponseElement `json:"elements,required"`
-	GatewayID  string                                       `json:"gateway_id,required"`
-	ModifiedAt time.Time                                    `json:"modified_at,required" format:"date-time"`
-	Name       string                                       `json:"name,required"`
+	ID         string                                       `json:"id" api:"required"`
+	CreatedAt  time.Time                                    `json:"created_at" api:"required" format:"date-time"`
+	Elements   []DynamicRoutingNewDeploymentResponseElement `json:"elements" api:"required"`
+	GatewayID  string                                       `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                                    `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                                       `json:"name" api:"required"`
 	JSON       dynamicRoutingNewDeploymentResponseJSON      `json:"-"`
 }
 
@@ -1508,12 +1496,12 @@ func (r dynamicRoutingNewDeploymentResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewDeploymentResponseElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingNewDeploymentResponseElementsObjectOutputs],
 	// [map[string]DynamicRoutingNewDeploymentResponseElementsObjectOutput].
-	Outputs interface{}                                     `json:"outputs,required"`
-	Type    DynamicRoutingNewDeploymentResponseElementsType `json:"type,required"`
+	Outputs interface{}                                     `json:"outputs" api:"required"`
+	Type    DynamicRoutingNewDeploymentResponseElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingNewDeploymentResponseElementsObjectProperties].
 	Properties interface{}                                    `json:"properties"`
@@ -1601,9 +1589,9 @@ func init() {
 }
 
 type DynamicRoutingNewDeploymentResponseElementsObject struct {
-	ID      string                                                   `json:"id,required"`
-	Outputs DynamicRoutingNewDeploymentResponseElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingNewDeploymentResponseElementsObjectType    `json:"type,required"`
+	ID      string                                                   `json:"id" api:"required"`
+	Outputs DynamicRoutingNewDeploymentResponseElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingNewDeploymentResponseElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingNewDeploymentResponseElementsObjectJSON    `json:"-"`
 }
 
@@ -1629,7 +1617,7 @@ func (r DynamicRoutingNewDeploymentResponseElementsObject) implementsDynamicRout
 }
 
 type DynamicRoutingNewDeploymentResponseElementsObjectOutputs struct {
-	Next DynamicRoutingNewDeploymentResponseElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingNewDeploymentResponseElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingNewDeploymentResponseElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -1651,7 +1639,7 @@ func (r dynamicRoutingNewDeploymentResponseElementsObjectOutputsJSON) RawJSON() 
 }
 
 type DynamicRoutingNewDeploymentResponseElementsObjectOutputsNext struct {
-	ElementID string                                                           `json:"elementId,required"`
+	ElementID string                                                           `json:"elementId" api:"required"`
 	JSON      dynamicRoutingNewDeploymentResponseElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -1706,12 +1694,12 @@ func (r DynamicRoutingNewDeploymentResponseElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingNewVersionResponse struct {
-	ID         string                                    `json:"id,required"`
-	CreatedAt  time.Time                                 `json:"created_at,required" format:"date-time"`
-	Elements   []DynamicRoutingNewVersionResponseElement `json:"elements,required"`
-	GatewayID  string                                    `json:"gateway_id,required"`
-	ModifiedAt time.Time                                 `json:"modified_at,required" format:"date-time"`
-	Name       string                                    `json:"name,required"`
+	ID         string                                    `json:"id" api:"required"`
+	CreatedAt  time.Time                                 `json:"created_at" api:"required" format:"date-time"`
+	Elements   []DynamicRoutingNewVersionResponseElement `json:"elements" api:"required"`
+	GatewayID  string                                    `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                                    `json:"name" api:"required"`
 	JSON       dynamicRoutingNewVersionResponseJSON      `json:"-"`
 }
 
@@ -1737,12 +1725,12 @@ func (r dynamicRoutingNewVersionResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewVersionResponseElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingNewVersionResponseElementsObjectOutputs],
 	// [map[string]DynamicRoutingNewVersionResponseElementsObjectOutput].
-	Outputs interface{}                                  `json:"outputs,required"`
-	Type    DynamicRoutingNewVersionResponseElementsType `json:"type,required"`
+	Outputs interface{}                                  `json:"outputs" api:"required"`
+	Type    DynamicRoutingNewVersionResponseElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingNewVersionResponseElementsObjectProperties].
 	Properties interface{}                                 `json:"properties"`
@@ -1830,9 +1818,9 @@ func init() {
 }
 
 type DynamicRoutingNewVersionResponseElementsObject struct {
-	ID      string                                                `json:"id,required"`
-	Outputs DynamicRoutingNewVersionResponseElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingNewVersionResponseElementsObjectType    `json:"type,required"`
+	ID      string                                                `json:"id" api:"required"`
+	Outputs DynamicRoutingNewVersionResponseElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingNewVersionResponseElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingNewVersionResponseElementsObjectJSON    `json:"-"`
 }
 
@@ -1858,7 +1846,7 @@ func (r DynamicRoutingNewVersionResponseElementsObject) implementsDynamicRouting
 }
 
 type DynamicRoutingNewVersionResponseElementsObjectOutputs struct {
-	Next DynamicRoutingNewVersionResponseElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingNewVersionResponseElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingNewVersionResponseElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -1879,7 +1867,7 @@ func (r dynamicRoutingNewVersionResponseElementsObjectOutputsJSON) RawJSON() str
 }
 
 type DynamicRoutingNewVersionResponseElementsObjectOutputsNext struct {
-	ElementID string                                                        `json:"elementId,required"`
+	ElementID string                                                        `json:"elementId" api:"required"`
 	JSON      dynamicRoutingNewVersionResponseElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -1934,14 +1922,14 @@ func (r DynamicRoutingNewVersionResponseElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingGetResponse struct {
-	ID         string                              `json:"id,required"`
-	CreatedAt  time.Time                           `json:"created_at,required" format:"date-time"`
-	Deployment DynamicRoutingGetResponseDeployment `json:"deployment,required"`
-	Elements   []DynamicRoutingGetResponseElement  `json:"elements,required"`
-	GatewayID  string                              `json:"gateway_id,required"`
-	ModifiedAt time.Time                           `json:"modified_at,required" format:"date-time"`
-	Name       string                              `json:"name,required"`
-	Version    DynamicRoutingGetResponseVersion    `json:"version,required"`
+	ID         string                              `json:"id" api:"required"`
+	CreatedAt  time.Time                           `json:"created_at" api:"required" format:"date-time"`
+	Deployment DynamicRoutingGetResponseDeployment `json:"deployment" api:"required"`
+	Elements   []DynamicRoutingGetResponseElement  `json:"elements" api:"required"`
+	GatewayID  string                              `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                           `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                              `json:"name" api:"required"`
+	Version    DynamicRoutingGetResponseVersion    `json:"version" api:"required"`
 	JSON       dynamicRoutingGetResponseJSON       `json:"-"`
 }
 
@@ -1969,10 +1957,9 @@ func (r dynamicRoutingGetResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingGetResponseDeployment struct {
-	CreatedAt    string                                  `json:"created_at,required"`
-	DeploymentID string                                  `json:"deployment_id,required"`
-	VersionID    string                                  `json:"version_id,required"`
-	Comment      string                                  `json:"comment,nullable"`
+	CreatedAt    string                                  `json:"created_at" api:"required"`
+	DeploymentID string                                  `json:"deployment_id" api:"required"`
+	VersionID    string                                  `json:"version_id" api:"required"`
 	JSON         dynamicRoutingGetResponseDeploymentJSON `json:"-"`
 }
 
@@ -1982,7 +1969,6 @@ type dynamicRoutingGetResponseDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -1996,12 +1982,12 @@ func (r dynamicRoutingGetResponseDeploymentJSON) RawJSON() string {
 }
 
 type DynamicRoutingGetResponseElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingGetResponseElementsObjectOutputs],
 	// [map[string]DynamicRoutingGetResponseElementsObjectOutput].
-	Outputs interface{}                           `json:"outputs,required"`
-	Type    DynamicRoutingGetResponseElementsType `json:"type,required"`
+	Outputs interface{}                           `json:"outputs" api:"required"`
+	Type    DynamicRoutingGetResponseElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingGetResponseElementsObjectProperties].
 	Properties interface{}                          `json:"properties"`
@@ -2089,9 +2075,9 @@ func init() {
 }
 
 type DynamicRoutingGetResponseElementsObject struct {
-	ID      string                                         `json:"id,required"`
-	Outputs DynamicRoutingGetResponseElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingGetResponseElementsObjectType    `json:"type,required"`
+	ID      string                                         `json:"id" api:"required"`
+	Outputs DynamicRoutingGetResponseElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingGetResponseElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingGetResponseElementsObjectJSON    `json:"-"`
 }
 
@@ -2116,7 +2102,7 @@ func (r dynamicRoutingGetResponseElementsObjectJSON) RawJSON() string {
 func (r DynamicRoutingGetResponseElementsObject) implementsDynamicRoutingGetResponseElement() {}
 
 type DynamicRoutingGetResponseElementsObjectOutputs struct {
-	Next DynamicRoutingGetResponseElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingGetResponseElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingGetResponseElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -2137,7 +2123,7 @@ func (r dynamicRoutingGetResponseElementsObjectOutputsJSON) RawJSON() string {
 }
 
 type DynamicRoutingGetResponseElementsObjectOutputsNext struct {
-	ElementID string                                                 `json:"elementId,required"`
+	ElementID string                                                 `json:"elementId" api:"required"`
 	JSON      dynamicRoutingGetResponseElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -2191,11 +2177,10 @@ func (r DynamicRoutingGetResponseElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingGetResponseVersion struct {
-	Active    DynamicRoutingGetResponseVersionActive `json:"active,required"`
-	CreatedAt string                                 `json:"created_at,required"`
-	Data      string                                 `json:"data,required"`
-	VersionID string                                 `json:"version_id,required"`
-	Comment   string                                 `json:"comment,nullable"`
+	Active    DynamicRoutingGetResponseVersionActive `json:"active" api:"required"`
+	CreatedAt string                                 `json:"created_at" api:"required"`
+	Data      string                                 `json:"data" api:"required"`
+	VersionID string                                 `json:"version_id" api:"required"`
 	JSON      dynamicRoutingGetResponseVersionJSON   `json:"-"`
 }
 
@@ -2206,7 +2191,6 @@ type dynamicRoutingGetResponseVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2235,16 +2219,15 @@ func (r DynamicRoutingGetResponseVersionActive) IsKnown() bool {
 }
 
 type DynamicRoutingGetVersionResponse struct {
-	ID         string                                    `json:"id,required"`
-	Active     DynamicRoutingGetVersionResponseActive    `json:"active,required"`
-	CreatedAt  string                                    `json:"created_at,required"`
-	Data       string                                    `json:"data,required"`
-	Elements   []DynamicRoutingGetVersionResponseElement `json:"elements,required"`
-	GatewayID  string                                    `json:"gateway_id,required"`
-	ModifiedAt time.Time                                 `json:"modified_at,required" format:"date-time"`
-	Name       string                                    `json:"name,required"`
-	VersionID  string                                    `json:"version_id,required"`
-	Comment    string                                    `json:"comment,nullable"`
+	ID         string                                    `json:"id" api:"required"`
+	Active     DynamicRoutingGetVersionResponseActive    `json:"active" api:"required"`
+	CreatedAt  string                                    `json:"created_at" api:"required"`
+	Data       string                                    `json:"data" api:"required"`
+	Elements   []DynamicRoutingGetVersionResponseElement `json:"elements" api:"required"`
+	GatewayID  string                                    `json:"gateway_id" api:"required"`
+	ModifiedAt time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
+	Name       string                                    `json:"name" api:"required"`
+	VersionID  string                                    `json:"version_id" api:"required"`
 	JSON       dynamicRoutingGetVersionResponseJSON      `json:"-"`
 }
 
@@ -2260,7 +2243,6 @@ type dynamicRoutingGetVersionResponseJSON struct {
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2289,12 +2271,12 @@ func (r DynamicRoutingGetVersionResponseActive) IsKnown() bool {
 }
 
 type DynamicRoutingGetVersionResponseElement struct {
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingGetVersionResponseElementsObjectOutputs],
 	// [map[string]DynamicRoutingGetVersionResponseElementsObjectOutput].
-	Outputs interface{}                                  `json:"outputs,required"`
-	Type    DynamicRoutingGetVersionResponseElementsType `json:"type,required"`
+	Outputs interface{}                                  `json:"outputs" api:"required"`
+	Type    DynamicRoutingGetVersionResponseElementsType `json:"type" api:"required"`
 	// This field can have the runtime type of
 	// [DynamicRoutingGetVersionResponseElementsObjectProperties].
 	Properties interface{}                                 `json:"properties"`
@@ -2382,9 +2364,9 @@ func init() {
 }
 
 type DynamicRoutingGetVersionResponseElementsObject struct {
-	ID      string                                                `json:"id,required"`
-	Outputs DynamicRoutingGetVersionResponseElementsObjectOutputs `json:"outputs,required"`
-	Type    DynamicRoutingGetVersionResponseElementsObjectType    `json:"type,required"`
+	ID      string                                                `json:"id" api:"required"`
+	Outputs DynamicRoutingGetVersionResponseElementsObjectOutputs `json:"outputs" api:"required"`
+	Type    DynamicRoutingGetVersionResponseElementsObjectType    `json:"type" api:"required"`
 	JSON    dynamicRoutingGetVersionResponseElementsObjectJSON    `json:"-"`
 }
 
@@ -2410,7 +2392,7 @@ func (r DynamicRoutingGetVersionResponseElementsObject) implementsDynamicRouting
 }
 
 type DynamicRoutingGetVersionResponseElementsObjectOutputs struct {
-	Next DynamicRoutingGetVersionResponseElementsObjectOutputsNext `json:"next,required"`
+	Next DynamicRoutingGetVersionResponseElementsObjectOutputsNext `json:"next" api:"required"`
 	JSON dynamicRoutingGetVersionResponseElementsObjectOutputsJSON `json:"-"`
 }
 
@@ -2431,7 +2413,7 @@ func (r dynamicRoutingGetVersionResponseElementsObjectOutputsJSON) RawJSON() str
 }
 
 type DynamicRoutingGetVersionResponseElementsObjectOutputsNext struct {
-	ElementID string                                                        `json:"elementId,required"`
+	ElementID string                                                        `json:"elementId" api:"required"`
 	JSON      dynamicRoutingGetVersionResponseElementsObjectOutputsNextJSON `json:"-"`
 }
 
@@ -2486,8 +2468,8 @@ func (r DynamicRoutingGetVersionResponseElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingListDeploymentsResponse struct {
-	Data    DynamicRoutingListDeploymentsResponseData `json:"data,required"`
-	Success bool                                      `json:"success,required"`
+	Data    DynamicRoutingListDeploymentsResponseData `json:"data" api:"required"`
+	Success bool                                      `json:"success" api:"required"`
 	JSON    dynamicRoutingListDeploymentsResponseJSON `json:"-"`
 }
 
@@ -2509,11 +2491,11 @@ func (r dynamicRoutingListDeploymentsResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingListDeploymentsResponseData struct {
-	Deployments      []DynamicRoutingListDeploymentsResponseDataDeployment `json:"deployments,required"`
-	OrderBy          string                                                `json:"order_by,required"`
-	OrderByDirection string                                                `json:"order_by_direction,required"`
-	Page             float64                                               `json:"page,required"`
-	PerPage          float64                                               `json:"per_page,required"`
+	Deployments      []DynamicRoutingListDeploymentsResponseDataDeployment `json:"deployments" api:"required"`
+	OrderBy          string                                                `json:"order_by" api:"required"`
+	OrderByDirection string                                                `json:"order_by_direction" api:"required"`
+	Page             float64                                               `json:"page" api:"required"`
+	PerPage          float64                                               `json:"per_page" api:"required"`
 	JSON             dynamicRoutingListDeploymentsResponseDataJSON         `json:"-"`
 }
 
@@ -2538,10 +2520,9 @@ func (r dynamicRoutingListDeploymentsResponseDataJSON) RawJSON() string {
 }
 
 type DynamicRoutingListDeploymentsResponseDataDeployment struct {
-	CreatedAt    string                                                  `json:"created_at,required"`
-	DeploymentID string                                                  `json:"deployment_id,required"`
-	VersionID    string                                                  `json:"version_id,required"`
-	Comment      string                                                  `json:"comment,nullable"`
+	CreatedAt    string                                                  `json:"created_at" api:"required"`
+	DeploymentID string                                                  `json:"deployment_id" api:"required"`
+	VersionID    string                                                  `json:"version_id" api:"required"`
 	JSON         dynamicRoutingListDeploymentsResponseDataDeploymentJSON `json:"-"`
 }
 
@@ -2551,7 +2532,6 @@ type dynamicRoutingListDeploymentsResponseDataDeploymentJSON struct {
 	CreatedAt    apijson.Field
 	DeploymentID apijson.Field
 	VersionID    apijson.Field
-	Comment      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -2565,8 +2545,8 @@ func (r dynamicRoutingListDeploymentsResponseDataDeploymentJSON) RawJSON() strin
 }
 
 type DynamicRoutingListVersionsResponse struct {
-	Data    DynamicRoutingListVersionsResponseData `json:"data,required"`
-	Success bool                                   `json:"success,required"`
+	Data    DynamicRoutingListVersionsResponseData `json:"data" api:"required"`
+	Success bool                                   `json:"success" api:"required"`
 	JSON    dynamicRoutingListVersionsResponseJSON `json:"-"`
 }
 
@@ -2588,11 +2568,11 @@ func (r dynamicRoutingListVersionsResponseJSON) RawJSON() string {
 }
 
 type DynamicRoutingListVersionsResponseData struct {
-	OrderBy          string                                          `json:"order_by,required"`
-	OrderByDirection string                                          `json:"order_by_direction,required"`
-	Page             float64                                         `json:"page,required"`
-	PerPage          float64                                         `json:"per_page,required"`
-	Versions         []DynamicRoutingListVersionsResponseDataVersion `json:"versions,required"`
+	OrderBy          string                                          `json:"order_by" api:"required"`
+	OrderByDirection string                                          `json:"order_by_direction" api:"required"`
+	Page             float64                                         `json:"page" api:"required"`
+	PerPage          float64                                         `json:"per_page" api:"required"`
+	Versions         []DynamicRoutingListVersionsResponseDataVersion `json:"versions" api:"required"`
 	JSON             dynamicRoutingListVersionsResponseDataJSON      `json:"-"`
 }
 
@@ -2617,11 +2597,10 @@ func (r dynamicRoutingListVersionsResponseDataJSON) RawJSON() string {
 }
 
 type DynamicRoutingListVersionsResponseDataVersion struct {
-	Active    DynamicRoutingListVersionsResponseDataVersionsActive `json:"active,required"`
-	CreatedAt string                                               `json:"created_at,required"`
-	Data      string                                               `json:"data,required"`
-	VersionID string                                               `json:"version_id,required"`
-	Comment   string                                               `json:"comment,nullable"`
+	Active    DynamicRoutingListVersionsResponseDataVersionsActive `json:"active" api:"required"`
+	CreatedAt string                                               `json:"created_at" api:"required"`
+	Data      string                                               `json:"data" api:"required"`
+	VersionID string                                               `json:"version_id" api:"required"`
 	JSON      dynamicRoutingListVersionsResponseDataVersionJSON    `json:"-"`
 }
 
@@ -2632,7 +2611,6 @@ type dynamicRoutingListVersionsResponseDataVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
-	Comment     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2661,9 +2639,9 @@ func (r DynamicRoutingListVersionsResponseDataVersionsActive) IsKnown() bool {
 }
 
 type DynamicRoutingNewParams struct {
-	AccountID param.Field[string]                                `path:"account_id,required"`
-	Elements  param.Field[[]DynamicRoutingNewParamsElementUnion] `json:"elements,required"`
-	Name      param.Field[string]                                `json:"name,required"`
+	AccountID param.Field[string]                                `path:"account_id" api:"required"`
+	Elements  param.Field[[]DynamicRoutingNewParamsElementUnion] `json:"elements" api:"required"`
+	Name      param.Field[string]                                `json:"name" api:"required"`
 }
 
 func (r DynamicRoutingNewParams) MarshalJSON() (data []byte, err error) {
@@ -2671,9 +2649,9 @@ func (r DynamicRoutingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DynamicRoutingNewParamsElement struct {
-	ID         param.Field[string]                              `json:"id,required"`
-	Outputs    param.Field[interface{}]                         `json:"outputs,required"`
-	Type       param.Field[DynamicRoutingNewParamsElementsType] `json:"type,required"`
+	ID         param.Field[string]                              `json:"id" api:"required"`
+	Outputs    param.Field[interface{}]                         `json:"outputs" api:"required"`
+	Type       param.Field[DynamicRoutingNewParamsElementsType] `json:"type" api:"required"`
 	Properties param.Field[interface{}]                         `json:"properties"`
 }
 
@@ -2695,9 +2673,9 @@ type DynamicRoutingNewParamsElementUnion interface {
 }
 
 type DynamicRoutingNewParamsElementsObject struct {
-	ID      param.Field[string]                                       `json:"id,required"`
-	Outputs param.Field[DynamicRoutingNewParamsElementsObjectOutputs] `json:"outputs,required"`
-	Type    param.Field[DynamicRoutingNewParamsElementsObjectType]    `json:"type,required"`
+	ID      param.Field[string]                                       `json:"id" api:"required"`
+	Outputs param.Field[DynamicRoutingNewParamsElementsObjectOutputs] `json:"outputs" api:"required"`
+	Type    param.Field[DynamicRoutingNewParamsElementsObjectType]    `json:"type" api:"required"`
 }
 
 func (r DynamicRoutingNewParamsElementsObject) MarshalJSON() (data []byte, err error) {
@@ -2707,7 +2685,7 @@ func (r DynamicRoutingNewParamsElementsObject) MarshalJSON() (data []byte, err e
 func (r DynamicRoutingNewParamsElementsObject) implementsDynamicRoutingNewParamsElementUnion() {}
 
 type DynamicRoutingNewParamsElementsObjectOutputs struct {
-	Next param.Field[DynamicRoutingNewParamsElementsObjectOutputsNext] `json:"next,required"`
+	Next param.Field[DynamicRoutingNewParamsElementsObjectOutputsNext] `json:"next" api:"required"`
 }
 
 func (r DynamicRoutingNewParamsElementsObjectOutputs) MarshalJSON() (data []byte, err error) {
@@ -2715,7 +2693,7 @@ func (r DynamicRoutingNewParamsElementsObjectOutputs) MarshalJSON() (data []byte
 }
 
 type DynamicRoutingNewParamsElementsObjectOutputsNext struct {
-	ElementID param.Field[string] `json:"elementId,required"`
+	ElementID param.Field[string] `json:"elementId" api:"required"`
 }
 
 func (r DynamicRoutingNewParamsElementsObjectOutputsNext) MarshalJSON() (data []byte, err error) {
@@ -2756,8 +2734,8 @@ func (r DynamicRoutingNewParamsElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingNewResponseEnvelope struct {
-	Result  DynamicRoutingNewResponse             `json:"result,required"`
-	Success bool                                  `json:"success,required"`
+	Result  DynamicRoutingNewResponse             `json:"result" api:"required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    dynamicRoutingNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2779,8 +2757,8 @@ func (r dynamicRoutingNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Name      param.Field[string] `json:"name,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Name      param.Field[string] `json:"name" api:"required"`
 }
 
 func (r DynamicRoutingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -2788,16 +2766,16 @@ func (r DynamicRoutingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DynamicRoutingListParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DynamicRoutingDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DynamicRoutingDeleteResponseEnvelope struct {
-	Result  DynamicRoutingDeleteResponse             `json:"result,required"`
-	Success bool                                     `json:"success,required"`
+	Result  DynamicRoutingDeleteResponse             `json:"result" api:"required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    dynamicRoutingDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2819,9 +2797,8 @@ func (r dynamicRoutingDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewDeploymentParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
-	Comment   param.Field[string] `json:"comment,required"`
-	VersionID param.Field[string] `json:"version_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	VersionID param.Field[string] `json:"version_id" api:"required"`
 }
 
 func (r DynamicRoutingNewDeploymentParams) MarshalJSON() (data []byte, err error) {
@@ -2829,8 +2806,8 @@ func (r DynamicRoutingNewDeploymentParams) MarshalJSON() (data []byte, err error
 }
 
 type DynamicRoutingNewDeploymentResponseEnvelope struct {
-	Result  DynamicRoutingNewDeploymentResponse             `json:"result,required"`
-	Success bool                                            `json:"success,required"`
+	Result  DynamicRoutingNewDeploymentResponse             `json:"result" api:"required"`
+	Success bool                                            `json:"success" api:"required"`
 	JSON    dynamicRoutingNewDeploymentResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2852,9 +2829,8 @@ func (r dynamicRoutingNewDeploymentResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewVersionParams struct {
-	AccountID param.Field[string]                                       `path:"account_id,required"`
-	Comment   param.Field[string]                                       `json:"comment,required"`
-	Elements  param.Field[[]DynamicRoutingNewVersionParamsElementUnion] `json:"elements,required"`
+	AccountID param.Field[string]                                       `path:"account_id" api:"required"`
+	Elements  param.Field[[]DynamicRoutingNewVersionParamsElementUnion] `json:"elements" api:"required"`
 }
 
 func (r DynamicRoutingNewVersionParams) MarshalJSON() (data []byte, err error) {
@@ -2862,9 +2838,9 @@ func (r DynamicRoutingNewVersionParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DynamicRoutingNewVersionParamsElement struct {
-	ID         param.Field[string]                                     `json:"id,required"`
-	Outputs    param.Field[interface{}]                                `json:"outputs,required"`
-	Type       param.Field[DynamicRoutingNewVersionParamsElementsType] `json:"type,required"`
+	ID         param.Field[string]                                     `json:"id" api:"required"`
+	Outputs    param.Field[interface{}]                                `json:"outputs" api:"required"`
+	Type       param.Field[DynamicRoutingNewVersionParamsElementsType] `json:"type" api:"required"`
 	Properties param.Field[interface{}]                                `json:"properties"`
 }
 
@@ -2887,9 +2863,9 @@ type DynamicRoutingNewVersionParamsElementUnion interface {
 }
 
 type DynamicRoutingNewVersionParamsElementsObject struct {
-	ID      param.Field[string]                                              `json:"id,required"`
-	Outputs param.Field[DynamicRoutingNewVersionParamsElementsObjectOutputs] `json:"outputs,required"`
-	Type    param.Field[DynamicRoutingNewVersionParamsElementsObjectType]    `json:"type,required"`
+	ID      param.Field[string]                                              `json:"id" api:"required"`
+	Outputs param.Field[DynamicRoutingNewVersionParamsElementsObjectOutputs] `json:"outputs" api:"required"`
+	Type    param.Field[DynamicRoutingNewVersionParamsElementsObjectType]    `json:"type" api:"required"`
 }
 
 func (r DynamicRoutingNewVersionParamsElementsObject) MarshalJSON() (data []byte, err error) {
@@ -2900,7 +2876,7 @@ func (r DynamicRoutingNewVersionParamsElementsObject) implementsDynamicRoutingNe
 }
 
 type DynamicRoutingNewVersionParamsElementsObjectOutputs struct {
-	Next param.Field[DynamicRoutingNewVersionParamsElementsObjectOutputsNext] `json:"next,required"`
+	Next param.Field[DynamicRoutingNewVersionParamsElementsObjectOutputsNext] `json:"next" api:"required"`
 }
 
 func (r DynamicRoutingNewVersionParamsElementsObjectOutputs) MarshalJSON() (data []byte, err error) {
@@ -2908,7 +2884,7 @@ func (r DynamicRoutingNewVersionParamsElementsObjectOutputs) MarshalJSON() (data
 }
 
 type DynamicRoutingNewVersionParamsElementsObjectOutputsNext struct {
-	ElementID param.Field[string] `json:"elementId,required"`
+	ElementID param.Field[string] `json:"elementId" api:"required"`
 }
 
 func (r DynamicRoutingNewVersionParamsElementsObjectOutputsNext) MarshalJSON() (data []byte, err error) {
@@ -2949,8 +2925,8 @@ func (r DynamicRoutingNewVersionParamsElementsType) IsKnown() bool {
 }
 
 type DynamicRoutingNewVersionResponseEnvelope struct {
-	Result  DynamicRoutingNewVersionResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  DynamicRoutingNewVersionResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    dynamicRoutingNewVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2972,12 +2948,12 @@ func (r dynamicRoutingNewVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DynamicRoutingGetResponseEnvelope struct {
-	Result  DynamicRoutingGetResponse             `json:"result,required"`
-	Success bool                                  `json:"success,required"`
+	Result  DynamicRoutingGetResponse             `json:"result" api:"required"`
+	Success bool                                  `json:"success" api:"required"`
 	JSON    dynamicRoutingGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2999,12 +2975,12 @@ func (r dynamicRoutingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingGetVersionParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DynamicRoutingGetVersionResponseEnvelope struct {
-	Result  DynamicRoutingGetVersionResponse             `json:"result,required"`
-	Success bool                                         `json:"success,required"`
+	Result  DynamicRoutingGetVersionResponse             `json:"result" api:"required"`
+	Success bool                                         `json:"success" api:"required"`
 	JSON    dynamicRoutingGetVersionResponseEnvelopeJSON `json:"-"`
 }
 
@@ -3026,9 +3002,9 @@ func (r dynamicRoutingGetVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingListDeploymentsParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DynamicRoutingListVersionsParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

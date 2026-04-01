@@ -42,15 +42,15 @@ func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditP
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/argo/smart_routing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the value of Argo Smart Routing enablement setting.
@@ -59,24 +59,24 @@ func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetPara
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/argo/smart_routing", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type SmartRoutingEditResponse struct {
 	// Specifies the identifier of the Argo Smart Routing setting.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Specifies if the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Specifies the enablement value of Argo Smart Routing.
-	Value SmartRoutingEditResponseValue `json:"value,required"`
+	Value SmartRoutingEditResponseValue `json:"value" api:"required"`
 	// Specifies the time when the setting was last modified.
 	ModifiedOn time.Time                    `json:"modified_on" format:"date-time"`
 	JSON       smartRoutingEditResponseJSON `json:"-"`
@@ -119,11 +119,11 @@ func (r SmartRoutingEditResponseValue) IsKnown() bool {
 
 type SmartRoutingGetResponse struct {
 	// Specifies the identifier of the Argo Smart Routing setting.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Specifies if the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Specifies the enablement value of Argo Smart Routing.
-	Value SmartRoutingGetResponseValue `json:"value,required"`
+	Value SmartRoutingGetResponseValue `json:"value" api:"required"`
 	// Specifies the time when the setting was last modified.
 	ModifiedOn time.Time                   `json:"modified_on" format:"date-time"`
 	JSON       smartRoutingGetResponseJSON `json:"-"`
@@ -166,9 +166,9 @@ func (r SmartRoutingGetResponseValue) IsKnown() bool {
 
 type SmartRoutingEditParams struct {
 	// Specifies the zone associated with the API call.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specifies the enablement value of Argo Smart Routing.
-	Value param.Field[SmartRoutingEditParamsValue] `json:"value,required"`
+	Value param.Field[SmartRoutingEditParamsValue] `json:"value" api:"required"`
 }
 
 func (r SmartRoutingEditParams) MarshalJSON() (data []byte, err error) {
@@ -192,11 +192,11 @@ func (r SmartRoutingEditParamsValue) IsKnown() bool {
 }
 
 type SmartRoutingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   SmartRoutingEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo    `json:"messages" api:"required"`
+	Result   SmartRoutingEditResponse `json:"result" api:"required"`
 	// Describes a successful API response.
-	Success SmartRoutingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success SmartRoutingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    smartRoutingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -236,15 +236,15 @@ func (r SmartRoutingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartRoutingGetParams struct {
 	// Specifies the zone associated with the API call.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SmartRoutingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   SmartRoutingGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo   `json:"messages" api:"required"`
+	Result   SmartRoutingGetResponse `json:"result" api:"required"`
 	// Describes a successful API response.
-	Success SmartRoutingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success SmartRoutingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    smartRoutingGetResponseEnvelopeJSON    `json:"-"`
 }
 

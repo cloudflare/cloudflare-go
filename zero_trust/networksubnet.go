@@ -47,7 +47,7 @@ func (r *NetworkSubnetService) List(ctx context.Context, params NetworkSubnetLis
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/subnets", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -69,7 +69,7 @@ func (r *NetworkSubnetService) ListAutoPaging(ctx context.Context, params Networ
 
 type NetworkSubnetListParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If set, only include subnets in the given address family - `v4` or `v6`
 	AddressFamily param.Field[NetworkSubnetListParamsAddressFamily] `query:"address_family"`
 	// If set, only list subnets with the given comment.

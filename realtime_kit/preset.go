@@ -45,15 +45,15 @@ func (r *PresetService) New(ctx context.Context, appID string, params PresetNewP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/presets", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Update a preset by the provided preset ID
@@ -61,19 +61,19 @@ func (r *PresetService) Update(ctx context.Context, appID string, presetID strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if presetID == "" {
 		err = errors.New("missing required preset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/presets/%s", params.AccountID, appID, presetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Deletes a preset using the provided preset ID
@@ -81,19 +81,19 @@ func (r *PresetService) Delete(ctx context.Context, appID string, presetID strin
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if presetID == "" {
 		err = errors.New("missing required preset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/presets/%s", body.AccountID, appID, presetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Fetches all the presets belonging to an App.
@@ -101,15 +101,15 @@ func (r *PresetService) Get(ctx context.Context, appID string, params PresetGetP
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/presets", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Fetches details of a preset using the provided preset ID
@@ -117,26 +117,26 @@ func (r *PresetService) GetPresetByID(ctx context.Context, appID string, presetI
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if presetID == "" {
 		err = errors.New("missing required preset_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/presets/%s", query.AccountID, appID, presetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type PresetNewResponse struct {
 	// Data returned by the operation
-	Data PresetNewResponseData `json:"data,required"`
+	Data PresetNewResponseData `json:"data" api:"required"`
 	// Success status of the operation
-	Success bool                  `json:"success,required"`
+	Success bool                  `json:"success" api:"required"`
 	JSON    presetNewResponseJSON `json:"-"`
 }
 
@@ -160,11 +160,11 @@ func (r presetNewResponseJSON) RawJSON() string {
 // Data returned by the operation
 type PresetNewResponseData struct {
 	// ID of the preset
-	ID     string                      `json:"id,required" format:"uuid"`
-	Config PresetNewResponseDataConfig `json:"config,required"`
+	ID     string                      `json:"id" api:"required" format:"uuid"`
+	Config PresetNewResponseDataConfig `json:"config" api:"required"`
 	// Name of the preset
-	Name        string                           `json:"name,required"`
-	UI          PresetNewResponseDataUI          `json:"ui,required"`
+	Name        string                           `json:"name" api:"required"`
+	UI          PresetNewResponseDataUI          `json:"ui" api:"required"`
 	Permissions PresetNewResponseDataPermissions `json:"permissions"`
 	JSON        presetNewResponseDataJSON        `json:"-"`
 }
@@ -191,13 +191,13 @@ func (r presetNewResponseDataJSON) RawJSON() string {
 
 type PresetNewResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count,required"`
+	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
-	MaxVideoStreams PresetNewResponseDataConfigMaxVideoStreams `json:"max_video_streams,required"`
+	MaxVideoStreams PresetNewResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
-	Media PresetNewResponseDataConfigMedia `json:"media,required"`
+	Media PresetNewResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
-	ViewType PresetNewResponseDataConfigViewType `json:"view_type,required"`
+	ViewType PresetNewResponseDataConfigViewType `json:"view_type" api:"required"`
 	JSON     presetNewResponseDataConfigJSON     `json:"-"`
 }
 
@@ -223,9 +223,9 @@ func (r presetNewResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetNewResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop,required"`
+	Desktop int64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                          `json:"mobile,required"`
+	Mobile int64                                          `json:"mobile" api:"required"`
 	JSON   presetNewResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -249,9 +249,9 @@ func (r presetNewResponseDataConfigMaxVideoStreamsJSON) RawJSON() string {
 // Media configuration options. eg: Video quality
 type PresetNewResponseDataConfigMedia struct {
 	// Configuration options for participant screen shares
-	Screenshare PresetNewResponseDataConfigMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetNewResponseDataConfigMediaScreenshare `json:"screenshare" api:"required"`
 	// Configuration options for participant videos
-	Video PresetNewResponseDataConfigMediaVideo `json:"video,required"`
+	Video PresetNewResponseDataConfigMediaVideo `json:"video" api:"required"`
 	// Control options for Audio quality.
 	Audio PresetNewResponseDataConfigMediaAudio `json:"audio"`
 	JSON  presetNewResponseDataConfigMediaJSON  `json:"-"`
@@ -278,9 +278,9 @@ func (r presetNewResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetNewResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
-	Quality PresetNewResponseDataConfigMediaScreenshareQuality `json:"quality,required"`
+	Quality PresetNewResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetNewResponseDataConfigMediaScreenshareJSON    `json:"-"`
 }
 
@@ -321,9 +321,9 @@ func (r PresetNewResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetNewResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
-	Quality PresetNewResponseDataConfigMediaVideoQuality `json:"quality,required"`
+	Quality PresetNewResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
 	JSON    presetNewResponseDataConfigMediaVideoJSON    `json:"-"`
 }
 
@@ -405,7 +405,7 @@ func (r PresetNewResponseDataConfigViewType) IsKnown() bool {
 }
 
 type PresetNewResponseDataUI struct {
-	DesignTokens PresetNewResponseDataUIDesignTokens `json:"design_tokens,required"`
+	DesignTokens PresetNewResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
 	ConfigDiff   interface{}                         `json:"config_diff"`
 	JSON         presetNewResponseDataUIJSON         `json:"-"`
 }
@@ -428,12 +428,12 @@ func (r presetNewResponseDataUIJSON) RawJSON() string {
 }
 
 type PresetNewResponseDataUIDesignTokens struct {
-	BorderRadius PresetNewResponseDataUIDesignTokensBorderRadius `json:"border_radius,required"`
-	BorderWidth  PresetNewResponseDataUIDesignTokensBorderWidth  `json:"border_width,required"`
-	Colors       PresetNewResponseDataUIDesignTokensColors       `json:"colors,required"`
-	Logo         string                                          `json:"logo,required"`
-	SpacingBase  float64                                         `json:"spacing_base,required"`
-	Theme        PresetNewResponseDataUIDesignTokensTheme        `json:"theme,required"`
+	BorderRadius PresetNewResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetNewResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetNewResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	Logo         string                                          `json:"logo" api:"required"`
+	SpacingBase  float64                                         `json:"spacing_base" api:"required"`
+	Theme        PresetNewResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
 	JSON         presetNewResponseDataUIDesignTokensJSON         `json:"-"`
 }
 
@@ -487,14 +487,14 @@ func (r PresetNewResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
 }
 
 type PresetNewResponseDataUIDesignTokensColors struct {
-	Background  PresetNewResponseDataUIDesignTokensColorsBackground `json:"background,required"`
-	Brand       PresetNewResponseDataUIDesignTokensColorsBrand      `json:"brand,required"`
-	Danger      string                                              `json:"danger,required"`
-	Success     string                                              `json:"success,required"`
-	Text        string                                              `json:"text,required"`
-	TextOnBrand string                                              `json:"text_on_brand,required"`
-	VideoBg     string                                              `json:"video_bg,required"`
-	Warning     string                                              `json:"warning,required"`
+	Background  PresetNewResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetNewResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                              `json:"danger" api:"required"`
+	Success     string                                              `json:"success" api:"required"`
+	Text        string                                              `json:"text" api:"required"`
+	TextOnBrand string                                              `json:"text_on_brand" api:"required"`
+	VideoBg     string                                              `json:"video_bg" api:"required"`
+	Warning     string                                              `json:"warning" api:"required"`
 	JSON        presetNewResponseDataUIDesignTokensColorsJSON       `json:"-"`
 }
 
@@ -522,11 +522,11 @@ func (r presetNewResponseDataUIDesignTokensColorsJSON) RawJSON() string {
 }
 
 type PresetNewResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                  `json:"1000,required"`
-	Number600  string                                                  `json:"600,required"`
-	Number700  string                                                  `json:"700,required"`
-	Number800  string                                                  `json:"800,required"`
-	Number900  string                                                  `json:"900,required"`
+	Number1000 string                                                  `json:"1000" api:"required"`
+	Number600  string                                                  `json:"600" api:"required"`
+	Number700  string                                                  `json:"700" api:"required"`
+	Number800  string                                                  `json:"800" api:"required"`
+	Number900  string                                                  `json:"900" api:"required"`
 	JSON       presetNewResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
 }
 
@@ -551,11 +551,11 @@ func (r presetNewResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() strin
 }
 
 type PresetNewResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                             `json:"300,required"`
-	Number400 string                                             `json:"400,required"`
-	Number500 string                                             `json:"500,required"`
-	Number600 string                                             `json:"600,required"`
-	Number700 string                                             `json:"700,required"`
+	Number300 string                                             `json:"300" api:"required"`
+	Number400 string                                             `json:"400" api:"required"`
+	Number500 string                                             `json:"500" api:"required"`
+	Number600 string                                             `json:"600" api:"required"`
+	Number700 string                                             `json:"700" api:"required"`
 	JSON      presetNewResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
 }
 
@@ -595,34 +595,34 @@ func (r PresetNewResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetNewResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests,required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests,required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions,required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name,required"`
-	CanLivestream                   bool `json:"can_livestream,required"`
-	CanRecord                       bool `json:"can_record,required"`
-	CanSpotlight                    bool `json:"can_spotlight,required"`
+	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool `json:"can_livestream" api:"required"`
+	CanRecord                       bool `json:"can_record" api:"required"`
+	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
 	// Chat permissions
-	Chat                            PresetNewResponseDataPermissionsChat              `json:"chat,required"`
-	ConnectedMeetings               PresetNewResponseDataPermissionsConnectedMeetings `json:"connected_meetings,required"`
-	DisableParticipantAudio         bool                                              `json:"disable_participant_audio,required"`
-	DisableParticipantScreensharing bool                                              `json:"disable_participant_screensharing,required"`
-	DisableParticipantVideo         bool                                              `json:"disable_participant_video,required"`
+	Chat                            PresetNewResponseDataPermissionsChat              `json:"chat" api:"required"`
+	ConnectedMeetings               PresetNewResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
+	DisableParticipantAudio         bool                                              `json:"disable_participant_audio" api:"required"`
+	DisableParticipantScreensharing bool                                              `json:"disable_participant_screensharing" api:"required"`
+	DisableParticipantVideo         bool                                              `json:"disable_participant_video" api:"required"`
 	// Whether this participant is visible to others or not
-	HiddenParticipant bool `json:"hidden_participant,required"`
-	KickParticipant   bool `json:"kick_participant,required"`
+	HiddenParticipant bool `json:"hidden_participant" api:"required"`
+	KickParticipant   bool `json:"kick_participant" api:"required"`
 	// Media permissions
-	Media          PresetNewResponseDataPermissionsMedia `json:"media,required"`
-	PinParticipant bool                                  `json:"pin_participant,required"`
+	Media          PresetNewResponseDataPermissionsMedia `json:"media" api:"required"`
+	PinParticipant bool                                  `json:"pin_participant" api:"required"`
 	// Plugin permissions
-	Plugins PresetNewResponseDataPermissionsPlugins `json:"plugins,required"`
+	Plugins PresetNewResponseDataPermissionsPlugins `json:"plugins" api:"required"`
 	// Poll permissions
-	Polls PresetNewResponseDataPermissionsPolls `json:"polls,required"`
+	Polls PresetNewResponseDataPermissionsPolls `json:"polls" api:"required"`
 	// Type of the recording peer
-	RecorderType        PresetNewResponseDataPermissionsRecorderType `json:"recorder_type,required"`
-	ShowParticipantList bool                                         `json:"show_participant_list,required"`
+	RecorderType        PresetNewResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
+	ShowParticipantList bool                                         `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetNewResponseDataPermissionsWaitingRoomType `json:"waiting_room_type,required"`
+	WaitingRoomType PresetNewResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
 	IsRecorder      bool                                            `json:"is_recorder"`
 	JSON            presetNewResponseDataPermissionsJSON            `json:"-"`
 }
@@ -666,8 +666,8 @@ func (r presetNewResponseDataPermissionsJSON) RawJSON() string {
 
 // Chat permissions
 type PresetNewResponseDataPermissionsChat struct {
-	Private PresetNewResponseDataPermissionsChatPrivate `json:"private,required"`
-	Public  PresetNewResponseDataPermissionsChatPublic  `json:"public,required"`
+	Private PresetNewResponseDataPermissionsChatPrivate `json:"private" api:"required"`
+	Public  PresetNewResponseDataPermissionsChatPublic  `json:"public" api:"required"`
 	JSON    presetNewResponseDataPermissionsChatJSON    `json:"-"`
 }
 
@@ -689,10 +689,10 @@ func (r presetNewResponseDataPermissionsChatJSON) RawJSON() string {
 }
 
 type PresetNewResponseDataPermissionsChatPrivate struct {
-	CanReceive bool                                            `json:"can_receive,required"`
-	CanSend    bool                                            `json:"can_send,required"`
-	Files      bool                                            `json:"files,required"`
-	Text       bool                                            `json:"text,required"`
+	CanReceive bool                                            `json:"can_receive" api:"required"`
+	CanSend    bool                                            `json:"can_send" api:"required"`
+	Files      bool                                            `json:"files" api:"required"`
+	Text       bool                                            `json:"text" api:"required"`
 	JSON       presetNewResponseDataPermissionsChatPrivateJSON `json:"-"`
 }
 
@@ -717,11 +717,11 @@ func (r presetNewResponseDataPermissionsChatPrivateJSON) RawJSON() string {
 
 type PresetNewResponseDataPermissionsChatPublic struct {
 	// Can send messages in general
-	CanSend bool `json:"can_send,required"`
+	CanSend bool `json:"can_send" api:"required"`
 	// Can send file messages
-	Files bool `json:"files,required"`
+	Files bool `json:"files" api:"required"`
 	// Can send text messages
-	Text bool                                           `json:"text,required"`
+	Text bool                                           `json:"text" api:"required"`
 	JSON presetNewResponseDataPermissionsChatPublicJSON `json:"-"`
 }
 
@@ -744,9 +744,9 @@ func (r presetNewResponseDataPermissionsChatPublicJSON) RawJSON() string {
 }
 
 type PresetNewResponseDataPermissionsConnectedMeetings struct {
-	CanAlterConnectedMeetings  bool                                                  `json:"can_alter_connected_meetings,required"`
-	CanSwitchConnectedMeetings bool                                                  `json:"can_switch_connected_meetings,required"`
-	CanSwitchToParentMeeting   bool                                                  `json:"can_switch_to_parent_meeting,required"`
+	CanAlterConnectedMeetings  bool                                                  `json:"can_alter_connected_meetings" api:"required"`
+	CanSwitchConnectedMeetings bool                                                  `json:"can_switch_connected_meetings" api:"required"`
+	CanSwitchToParentMeeting   bool                                                  `json:"can_switch_to_parent_meeting" api:"required"`
 	JSON                       presetNewResponseDataPermissionsConnectedMeetingsJSON `json:"-"`
 }
 
@@ -771,11 +771,11 @@ func (r presetNewResponseDataPermissionsConnectedMeetingsJSON) RawJSON() string 
 // Media permissions
 type PresetNewResponseDataPermissionsMedia struct {
 	// Audio permissions
-	Audio PresetNewResponseDataPermissionsMediaAudio `json:"audio,required"`
+	Audio PresetNewResponseDataPermissionsMediaAudio `json:"audio" api:"required"`
 	// Screenshare permissions
-	Screenshare PresetNewResponseDataPermissionsMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetNewResponseDataPermissionsMediaScreenshare `json:"screenshare" api:"required"`
 	// Video permissions
-	Video PresetNewResponseDataPermissionsMediaVideo `json:"video,required"`
+	Video PresetNewResponseDataPermissionsMediaVideo `json:"video" api:"required"`
 	JSON  presetNewResponseDataPermissionsMediaJSON  `json:"-"`
 }
 
@@ -800,7 +800,7 @@ func (r presetNewResponseDataPermissionsMediaJSON) RawJSON() string {
 // Audio permissions
 type PresetNewResponseDataPermissionsMediaAudio struct {
 	// Can produce audio
-	CanProduce PresetNewResponseDataPermissionsMediaAudioCanProduce `json:"can_produce,required"`
+	CanProduce PresetNewResponseDataPermissionsMediaAudioCanProduce `json:"can_produce" api:"required"`
 	JSON       presetNewResponseDataPermissionsMediaAudioJSON       `json:"-"`
 }
 
@@ -840,7 +840,7 @@ func (r PresetNewResponseDataPermissionsMediaAudioCanProduce) IsKnown() bool {
 // Screenshare permissions
 type PresetNewResponseDataPermissionsMediaScreenshare struct {
 	// Can produce screen share video
-	CanProduce PresetNewResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce,required"`
+	CanProduce PresetNewResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce" api:"required"`
 	JSON       presetNewResponseDataPermissionsMediaScreenshareJSON       `json:"-"`
 }
 
@@ -880,7 +880,7 @@ func (r PresetNewResponseDataPermissionsMediaScreenshareCanProduce) IsKnown() bo
 // Video permissions
 type PresetNewResponseDataPermissionsMediaVideo struct {
 	// Can produce video
-	CanProduce PresetNewResponseDataPermissionsMediaVideoCanProduce `json:"can_produce,required"`
+	CanProduce PresetNewResponseDataPermissionsMediaVideoCanProduce `json:"can_produce" api:"required"`
 	JSON       presetNewResponseDataPermissionsMediaVideoJSON       `json:"-"`
 }
 
@@ -920,12 +920,12 @@ func (r PresetNewResponseDataPermissionsMediaVideoCanProduce) IsKnown() bool {
 // Plugin permissions
 type PresetNewResponseDataPermissionsPlugins struct {
 	// Can close plugins that are already open
-	CanClose bool `json:"can_close,required"`
+	CanClose bool `json:"can_close" api:"required"`
 	// Can edit plugin config
-	CanEditConfig bool `json:"can_edit_config,required"`
+	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                               `json:"can_start,required"`
-	Config   PresetNewResponseDataPermissionsPluginsConfigUnion `json:"config,required" format:"uuid"`
+	CanStart bool                                               `json:"can_start" api:"required"`
+	Config   PresetNewResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
 	JSON     presetNewResponseDataPermissionsPluginsJSON        `json:"-"`
 }
 
@@ -970,8 +970,8 @@ func init() {
 }
 
 type PresetNewResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control,required"`
-	HandlesViewOnly bool                                                             `json:"handles_view_only,required"`
+	AccessControl   PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
+	HandlesViewOnly bool                                                             `json:"handles_view_only" api:"required"`
 	JSON            presetNewResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
 }
 
@@ -1013,11 +1013,11 @@ func (r PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl) IsKnow
 // Poll permissions
 type PresetNewResponseDataPermissionsPolls struct {
 	// Can create polls
-	CanCreate bool `json:"can_create,required"`
+	CanCreate bool `json:"can_create" api:"required"`
 	// Can view polls
-	CanView bool `json:"can_view,required"`
+	CanView bool `json:"can_view" api:"required"`
 	// Can vote on polls
-	CanVote bool                                      `json:"can_vote,required"`
+	CanVote bool                                      `json:"can_vote" api:"required"`
 	JSON    presetNewResponseDataPermissionsPollsJSON `json:"-"`
 }
 
@@ -1075,9 +1075,9 @@ func (r PresetNewResponseDataPermissionsWaitingRoomType) IsKnown() bool {
 
 type PresetUpdateResponse struct {
 	// Data returned by the operation
-	Data PresetUpdateResponseData `json:"data,required"`
+	Data PresetUpdateResponseData `json:"data" api:"required"`
 	// Success status of the operation
-	Success bool                     `json:"success,required"`
+	Success bool                     `json:"success" api:"required"`
 	JSON    presetUpdateResponseJSON `json:"-"`
 }
 
@@ -1101,11 +1101,11 @@ func (r presetUpdateResponseJSON) RawJSON() string {
 // Data returned by the operation
 type PresetUpdateResponseData struct {
 	// ID of the preset
-	ID     string                         `json:"id,required" format:"uuid"`
-	Config PresetUpdateResponseDataConfig `json:"config,required"`
+	ID     string                         `json:"id" api:"required" format:"uuid"`
+	Config PresetUpdateResponseDataConfig `json:"config" api:"required"`
 	// Name of the preset
-	Name        string                              `json:"name,required"`
-	UI          PresetUpdateResponseDataUI          `json:"ui,required"`
+	Name        string                              `json:"name" api:"required"`
+	UI          PresetUpdateResponseDataUI          `json:"ui" api:"required"`
 	Permissions PresetUpdateResponseDataPermissions `json:"permissions"`
 	JSON        presetUpdateResponseDataJSON        `json:"-"`
 }
@@ -1132,13 +1132,13 @@ func (r presetUpdateResponseDataJSON) RawJSON() string {
 
 type PresetUpdateResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count,required"`
+	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
-	MaxVideoStreams PresetUpdateResponseDataConfigMaxVideoStreams `json:"max_video_streams,required"`
+	MaxVideoStreams PresetUpdateResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
-	Media PresetUpdateResponseDataConfigMedia `json:"media,required"`
+	Media PresetUpdateResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
-	ViewType PresetUpdateResponseDataConfigViewType `json:"view_type,required"`
+	ViewType PresetUpdateResponseDataConfigViewType `json:"view_type" api:"required"`
 	JSON     presetUpdateResponseDataConfigJSON     `json:"-"`
 }
 
@@ -1164,9 +1164,9 @@ func (r presetUpdateResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetUpdateResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop,required"`
+	Desktop int64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                             `json:"mobile,required"`
+	Mobile int64                                             `json:"mobile" api:"required"`
 	JSON   presetUpdateResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -1190,9 +1190,9 @@ func (r presetUpdateResponseDataConfigMaxVideoStreamsJSON) RawJSON() string {
 // Media configuration options. eg: Video quality
 type PresetUpdateResponseDataConfigMedia struct {
 	// Configuration options for participant screen shares
-	Screenshare PresetUpdateResponseDataConfigMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetUpdateResponseDataConfigMediaScreenshare `json:"screenshare" api:"required"`
 	// Configuration options for participant videos
-	Video PresetUpdateResponseDataConfigMediaVideo `json:"video,required"`
+	Video PresetUpdateResponseDataConfigMediaVideo `json:"video" api:"required"`
 	// Control options for Audio quality.
 	Audio PresetUpdateResponseDataConfigMediaAudio `json:"audio"`
 	JSON  presetUpdateResponseDataConfigMediaJSON  `json:"-"`
@@ -1219,9 +1219,9 @@ func (r presetUpdateResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetUpdateResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
-	Quality PresetUpdateResponseDataConfigMediaScreenshareQuality `json:"quality,required"`
+	Quality PresetUpdateResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetUpdateResponseDataConfigMediaScreenshareJSON    `json:"-"`
 }
 
@@ -1262,9 +1262,9 @@ func (r PresetUpdateResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetUpdateResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
-	Quality PresetUpdateResponseDataConfigMediaVideoQuality `json:"quality,required"`
+	Quality PresetUpdateResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
 	JSON    presetUpdateResponseDataConfigMediaVideoJSON    `json:"-"`
 }
 
@@ -1346,7 +1346,7 @@ func (r PresetUpdateResponseDataConfigViewType) IsKnown() bool {
 }
 
 type PresetUpdateResponseDataUI struct {
-	DesignTokens PresetUpdateResponseDataUIDesignTokens `json:"design_tokens,required"`
+	DesignTokens PresetUpdateResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
 	ConfigDiff   interface{}                            `json:"config_diff"`
 	JSON         presetUpdateResponseDataUIJSON         `json:"-"`
 }
@@ -1369,12 +1369,12 @@ func (r presetUpdateResponseDataUIJSON) RawJSON() string {
 }
 
 type PresetUpdateResponseDataUIDesignTokens struct {
-	BorderRadius PresetUpdateResponseDataUIDesignTokensBorderRadius `json:"border_radius,required"`
-	BorderWidth  PresetUpdateResponseDataUIDesignTokensBorderWidth  `json:"border_width,required"`
-	Colors       PresetUpdateResponseDataUIDesignTokensColors       `json:"colors,required"`
-	Logo         string                                             `json:"logo,required"`
-	SpacingBase  float64                                            `json:"spacing_base,required"`
-	Theme        PresetUpdateResponseDataUIDesignTokensTheme        `json:"theme,required"`
+	BorderRadius PresetUpdateResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetUpdateResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetUpdateResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	Logo         string                                             `json:"logo" api:"required"`
+	SpacingBase  float64                                            `json:"spacing_base" api:"required"`
+	Theme        PresetUpdateResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
 	JSON         presetUpdateResponseDataUIDesignTokensJSON         `json:"-"`
 }
 
@@ -1428,14 +1428,14 @@ func (r PresetUpdateResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
 }
 
 type PresetUpdateResponseDataUIDesignTokensColors struct {
-	Background  PresetUpdateResponseDataUIDesignTokensColorsBackground `json:"background,required"`
-	Brand       PresetUpdateResponseDataUIDesignTokensColorsBrand      `json:"brand,required"`
-	Danger      string                                                 `json:"danger,required"`
-	Success     string                                                 `json:"success,required"`
-	Text        string                                                 `json:"text,required"`
-	TextOnBrand string                                                 `json:"text_on_brand,required"`
-	VideoBg     string                                                 `json:"video_bg,required"`
-	Warning     string                                                 `json:"warning,required"`
+	Background  PresetUpdateResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetUpdateResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                                 `json:"danger" api:"required"`
+	Success     string                                                 `json:"success" api:"required"`
+	Text        string                                                 `json:"text" api:"required"`
+	TextOnBrand string                                                 `json:"text_on_brand" api:"required"`
+	VideoBg     string                                                 `json:"video_bg" api:"required"`
+	Warning     string                                                 `json:"warning" api:"required"`
 	JSON        presetUpdateResponseDataUIDesignTokensColorsJSON       `json:"-"`
 }
 
@@ -1463,11 +1463,11 @@ func (r presetUpdateResponseDataUIDesignTokensColorsJSON) RawJSON() string {
 }
 
 type PresetUpdateResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                     `json:"1000,required"`
-	Number600  string                                                     `json:"600,required"`
-	Number700  string                                                     `json:"700,required"`
-	Number800  string                                                     `json:"800,required"`
-	Number900  string                                                     `json:"900,required"`
+	Number1000 string                                                     `json:"1000" api:"required"`
+	Number600  string                                                     `json:"600" api:"required"`
+	Number700  string                                                     `json:"700" api:"required"`
+	Number800  string                                                     `json:"800" api:"required"`
+	Number900  string                                                     `json:"900" api:"required"`
 	JSON       presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
 }
 
@@ -1492,11 +1492,11 @@ func (r presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() st
 }
 
 type PresetUpdateResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                                `json:"300,required"`
-	Number400 string                                                `json:"400,required"`
-	Number500 string                                                `json:"500,required"`
-	Number600 string                                                `json:"600,required"`
-	Number700 string                                                `json:"700,required"`
+	Number300 string                                                `json:"300" api:"required"`
+	Number400 string                                                `json:"400" api:"required"`
+	Number500 string                                                `json:"500" api:"required"`
+	Number600 string                                                `json:"600" api:"required"`
+	Number700 string                                                `json:"700" api:"required"`
 	JSON      presetUpdateResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
 }
 
@@ -1536,34 +1536,34 @@ func (r PresetUpdateResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetUpdateResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests,required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests,required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions,required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name,required"`
-	CanLivestream                   bool `json:"can_livestream,required"`
-	CanRecord                       bool `json:"can_record,required"`
-	CanSpotlight                    bool `json:"can_spotlight,required"`
+	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool `json:"can_livestream" api:"required"`
+	CanRecord                       bool `json:"can_record" api:"required"`
+	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
 	// Chat permissions
-	Chat                            PresetUpdateResponseDataPermissionsChat              `json:"chat,required"`
-	ConnectedMeetings               PresetUpdateResponseDataPermissionsConnectedMeetings `json:"connected_meetings,required"`
-	DisableParticipantAudio         bool                                                 `json:"disable_participant_audio,required"`
-	DisableParticipantScreensharing bool                                                 `json:"disable_participant_screensharing,required"`
-	DisableParticipantVideo         bool                                                 `json:"disable_participant_video,required"`
+	Chat                            PresetUpdateResponseDataPermissionsChat              `json:"chat" api:"required"`
+	ConnectedMeetings               PresetUpdateResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
+	DisableParticipantAudio         bool                                                 `json:"disable_participant_audio" api:"required"`
+	DisableParticipantScreensharing bool                                                 `json:"disable_participant_screensharing" api:"required"`
+	DisableParticipantVideo         bool                                                 `json:"disable_participant_video" api:"required"`
 	// Whether this participant is visible to others or not
-	HiddenParticipant bool `json:"hidden_participant,required"`
-	KickParticipant   bool `json:"kick_participant,required"`
+	HiddenParticipant bool `json:"hidden_participant" api:"required"`
+	KickParticipant   bool `json:"kick_participant" api:"required"`
 	// Media permissions
-	Media          PresetUpdateResponseDataPermissionsMedia `json:"media,required"`
-	PinParticipant bool                                     `json:"pin_participant,required"`
+	Media          PresetUpdateResponseDataPermissionsMedia `json:"media" api:"required"`
+	PinParticipant bool                                     `json:"pin_participant" api:"required"`
 	// Plugin permissions
-	Plugins PresetUpdateResponseDataPermissionsPlugins `json:"plugins,required"`
+	Plugins PresetUpdateResponseDataPermissionsPlugins `json:"plugins" api:"required"`
 	// Poll permissions
-	Polls PresetUpdateResponseDataPermissionsPolls `json:"polls,required"`
+	Polls PresetUpdateResponseDataPermissionsPolls `json:"polls" api:"required"`
 	// Type of the recording peer
-	RecorderType        PresetUpdateResponseDataPermissionsRecorderType `json:"recorder_type,required"`
-	ShowParticipantList bool                                            `json:"show_participant_list,required"`
+	RecorderType        PresetUpdateResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
+	ShowParticipantList bool                                            `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetUpdateResponseDataPermissionsWaitingRoomType `json:"waiting_room_type,required"`
+	WaitingRoomType PresetUpdateResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
 	IsRecorder      bool                                               `json:"is_recorder"`
 	JSON            presetUpdateResponseDataPermissionsJSON            `json:"-"`
 }
@@ -1607,8 +1607,8 @@ func (r presetUpdateResponseDataPermissionsJSON) RawJSON() string {
 
 // Chat permissions
 type PresetUpdateResponseDataPermissionsChat struct {
-	Private PresetUpdateResponseDataPermissionsChatPrivate `json:"private,required"`
-	Public  PresetUpdateResponseDataPermissionsChatPublic  `json:"public,required"`
+	Private PresetUpdateResponseDataPermissionsChatPrivate `json:"private" api:"required"`
+	Public  PresetUpdateResponseDataPermissionsChatPublic  `json:"public" api:"required"`
 	JSON    presetUpdateResponseDataPermissionsChatJSON    `json:"-"`
 }
 
@@ -1630,10 +1630,10 @@ func (r presetUpdateResponseDataPermissionsChatJSON) RawJSON() string {
 }
 
 type PresetUpdateResponseDataPermissionsChatPrivate struct {
-	CanReceive bool                                               `json:"can_receive,required"`
-	CanSend    bool                                               `json:"can_send,required"`
-	Files      bool                                               `json:"files,required"`
-	Text       bool                                               `json:"text,required"`
+	CanReceive bool                                               `json:"can_receive" api:"required"`
+	CanSend    bool                                               `json:"can_send" api:"required"`
+	Files      bool                                               `json:"files" api:"required"`
+	Text       bool                                               `json:"text" api:"required"`
 	JSON       presetUpdateResponseDataPermissionsChatPrivateJSON `json:"-"`
 }
 
@@ -1658,11 +1658,11 @@ func (r presetUpdateResponseDataPermissionsChatPrivateJSON) RawJSON() string {
 
 type PresetUpdateResponseDataPermissionsChatPublic struct {
 	// Can send messages in general
-	CanSend bool `json:"can_send,required"`
+	CanSend bool `json:"can_send" api:"required"`
 	// Can send file messages
-	Files bool `json:"files,required"`
+	Files bool `json:"files" api:"required"`
 	// Can send text messages
-	Text bool                                              `json:"text,required"`
+	Text bool                                              `json:"text" api:"required"`
 	JSON presetUpdateResponseDataPermissionsChatPublicJSON `json:"-"`
 }
 
@@ -1685,9 +1685,9 @@ func (r presetUpdateResponseDataPermissionsChatPublicJSON) RawJSON() string {
 }
 
 type PresetUpdateResponseDataPermissionsConnectedMeetings struct {
-	CanAlterConnectedMeetings  bool                                                     `json:"can_alter_connected_meetings,required"`
-	CanSwitchConnectedMeetings bool                                                     `json:"can_switch_connected_meetings,required"`
-	CanSwitchToParentMeeting   bool                                                     `json:"can_switch_to_parent_meeting,required"`
+	CanAlterConnectedMeetings  bool                                                     `json:"can_alter_connected_meetings" api:"required"`
+	CanSwitchConnectedMeetings bool                                                     `json:"can_switch_connected_meetings" api:"required"`
+	CanSwitchToParentMeeting   bool                                                     `json:"can_switch_to_parent_meeting" api:"required"`
 	JSON                       presetUpdateResponseDataPermissionsConnectedMeetingsJSON `json:"-"`
 }
 
@@ -1712,11 +1712,11 @@ func (r presetUpdateResponseDataPermissionsConnectedMeetingsJSON) RawJSON() stri
 // Media permissions
 type PresetUpdateResponseDataPermissionsMedia struct {
 	// Audio permissions
-	Audio PresetUpdateResponseDataPermissionsMediaAudio `json:"audio,required"`
+	Audio PresetUpdateResponseDataPermissionsMediaAudio `json:"audio" api:"required"`
 	// Screenshare permissions
-	Screenshare PresetUpdateResponseDataPermissionsMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetUpdateResponseDataPermissionsMediaScreenshare `json:"screenshare" api:"required"`
 	// Video permissions
-	Video PresetUpdateResponseDataPermissionsMediaVideo `json:"video,required"`
+	Video PresetUpdateResponseDataPermissionsMediaVideo `json:"video" api:"required"`
 	JSON  presetUpdateResponseDataPermissionsMediaJSON  `json:"-"`
 }
 
@@ -1741,7 +1741,7 @@ func (r presetUpdateResponseDataPermissionsMediaJSON) RawJSON() string {
 // Audio permissions
 type PresetUpdateResponseDataPermissionsMediaAudio struct {
 	// Can produce audio
-	CanProduce PresetUpdateResponseDataPermissionsMediaAudioCanProduce `json:"can_produce,required"`
+	CanProduce PresetUpdateResponseDataPermissionsMediaAudioCanProduce `json:"can_produce" api:"required"`
 	JSON       presetUpdateResponseDataPermissionsMediaAudioJSON       `json:"-"`
 }
 
@@ -1781,7 +1781,7 @@ func (r PresetUpdateResponseDataPermissionsMediaAudioCanProduce) IsKnown() bool 
 // Screenshare permissions
 type PresetUpdateResponseDataPermissionsMediaScreenshare struct {
 	// Can produce screen share video
-	CanProduce PresetUpdateResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce,required"`
+	CanProduce PresetUpdateResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce" api:"required"`
 	JSON       presetUpdateResponseDataPermissionsMediaScreenshareJSON       `json:"-"`
 }
 
@@ -1821,7 +1821,7 @@ func (r PresetUpdateResponseDataPermissionsMediaScreenshareCanProduce) IsKnown()
 // Video permissions
 type PresetUpdateResponseDataPermissionsMediaVideo struct {
 	// Can produce video
-	CanProduce PresetUpdateResponseDataPermissionsMediaVideoCanProduce `json:"can_produce,required"`
+	CanProduce PresetUpdateResponseDataPermissionsMediaVideoCanProduce `json:"can_produce" api:"required"`
 	JSON       presetUpdateResponseDataPermissionsMediaVideoJSON       `json:"-"`
 }
 
@@ -1861,12 +1861,12 @@ func (r PresetUpdateResponseDataPermissionsMediaVideoCanProduce) IsKnown() bool 
 // Plugin permissions
 type PresetUpdateResponseDataPermissionsPlugins struct {
 	// Can close plugins that are already open
-	CanClose bool `json:"can_close,required"`
+	CanClose bool `json:"can_close" api:"required"`
 	// Can edit plugin config
-	CanEditConfig bool `json:"can_edit_config,required"`
+	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                                  `json:"can_start,required"`
-	Config   PresetUpdateResponseDataPermissionsPluginsConfigUnion `json:"config,required" format:"uuid"`
+	CanStart bool                                                  `json:"can_start" api:"required"`
+	Config   PresetUpdateResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
 	JSON     presetUpdateResponseDataPermissionsPluginsJSON        `json:"-"`
 }
 
@@ -1911,8 +1911,8 @@ func init() {
 }
 
 type PresetUpdateResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control,required"`
-	HandlesViewOnly bool                                                                `json:"handles_view_only,required"`
+	AccessControl   PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
+	HandlesViewOnly bool                                                                `json:"handles_view_only" api:"required"`
 	JSON            presetUpdateResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
 }
 
@@ -1954,11 +1954,11 @@ func (r PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl) IsK
 // Poll permissions
 type PresetUpdateResponseDataPermissionsPolls struct {
 	// Can create polls
-	CanCreate bool `json:"can_create,required"`
+	CanCreate bool `json:"can_create" api:"required"`
 	// Can view polls
-	CanView bool `json:"can_view,required"`
+	CanView bool `json:"can_view" api:"required"`
 	// Can vote on polls
-	CanVote bool                                         `json:"can_vote,required"`
+	CanVote bool                                         `json:"can_vote" api:"required"`
 	JSON    presetUpdateResponseDataPermissionsPollsJSON `json:"-"`
 }
 
@@ -2016,9 +2016,9 @@ func (r PresetUpdateResponseDataPermissionsWaitingRoomType) IsKnown() bool {
 
 type PresetDeleteResponse struct {
 	// Data returned by the operation
-	Data PresetDeleteResponseData `json:"data,required"`
+	Data PresetDeleteResponseData `json:"data" api:"required"`
 	// Success status of the operation
-	Success bool                     `json:"success,required"`
+	Success bool                     `json:"success" api:"required"`
 	JSON    presetDeleteResponseJSON `json:"-"`
 }
 
@@ -2042,11 +2042,11 @@ func (r presetDeleteResponseJSON) RawJSON() string {
 // Data returned by the operation
 type PresetDeleteResponseData struct {
 	// ID of the preset
-	ID     string                         `json:"id,required" format:"uuid"`
-	Config PresetDeleteResponseDataConfig `json:"config,required"`
+	ID     string                         `json:"id" api:"required" format:"uuid"`
+	Config PresetDeleteResponseDataConfig `json:"config" api:"required"`
 	// Name of the preset
-	Name        string                              `json:"name,required"`
-	UI          PresetDeleteResponseDataUI          `json:"ui,required"`
+	Name        string                              `json:"name" api:"required"`
+	UI          PresetDeleteResponseDataUI          `json:"ui" api:"required"`
 	Permissions PresetDeleteResponseDataPermissions `json:"permissions"`
 	JSON        presetDeleteResponseDataJSON        `json:"-"`
 }
@@ -2073,13 +2073,13 @@ func (r presetDeleteResponseDataJSON) RawJSON() string {
 
 type PresetDeleteResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count,required"`
+	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
-	MaxVideoStreams PresetDeleteResponseDataConfigMaxVideoStreams `json:"max_video_streams,required"`
+	MaxVideoStreams PresetDeleteResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
-	Media PresetDeleteResponseDataConfigMedia `json:"media,required"`
+	Media PresetDeleteResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
-	ViewType PresetDeleteResponseDataConfigViewType `json:"view_type,required"`
+	ViewType PresetDeleteResponseDataConfigViewType `json:"view_type" api:"required"`
 	JSON     presetDeleteResponseDataConfigJSON     `json:"-"`
 }
 
@@ -2105,9 +2105,9 @@ func (r presetDeleteResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetDeleteResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop,required"`
+	Desktop int64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                             `json:"mobile,required"`
+	Mobile int64                                             `json:"mobile" api:"required"`
 	JSON   presetDeleteResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -2131,9 +2131,9 @@ func (r presetDeleteResponseDataConfigMaxVideoStreamsJSON) RawJSON() string {
 // Media configuration options. eg: Video quality
 type PresetDeleteResponseDataConfigMedia struct {
 	// Configuration options for participant screen shares
-	Screenshare PresetDeleteResponseDataConfigMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetDeleteResponseDataConfigMediaScreenshare `json:"screenshare" api:"required"`
 	// Configuration options for participant videos
-	Video PresetDeleteResponseDataConfigMediaVideo `json:"video,required"`
+	Video PresetDeleteResponseDataConfigMediaVideo `json:"video" api:"required"`
 	// Control options for Audio quality.
 	Audio PresetDeleteResponseDataConfigMediaAudio `json:"audio"`
 	JSON  presetDeleteResponseDataConfigMediaJSON  `json:"-"`
@@ -2160,9 +2160,9 @@ func (r presetDeleteResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetDeleteResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
-	Quality PresetDeleteResponseDataConfigMediaScreenshareQuality `json:"quality,required"`
+	Quality PresetDeleteResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetDeleteResponseDataConfigMediaScreenshareJSON    `json:"-"`
 }
 
@@ -2203,9 +2203,9 @@ func (r PresetDeleteResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetDeleteResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
-	Quality PresetDeleteResponseDataConfigMediaVideoQuality `json:"quality,required"`
+	Quality PresetDeleteResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
 	JSON    presetDeleteResponseDataConfigMediaVideoJSON    `json:"-"`
 }
 
@@ -2287,7 +2287,7 @@ func (r PresetDeleteResponseDataConfigViewType) IsKnown() bool {
 }
 
 type PresetDeleteResponseDataUI struct {
-	DesignTokens PresetDeleteResponseDataUIDesignTokens `json:"design_tokens,required"`
+	DesignTokens PresetDeleteResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
 	ConfigDiff   interface{}                            `json:"config_diff"`
 	JSON         presetDeleteResponseDataUIJSON         `json:"-"`
 }
@@ -2310,12 +2310,12 @@ func (r presetDeleteResponseDataUIJSON) RawJSON() string {
 }
 
 type PresetDeleteResponseDataUIDesignTokens struct {
-	BorderRadius PresetDeleteResponseDataUIDesignTokensBorderRadius `json:"border_radius,required"`
-	BorderWidth  PresetDeleteResponseDataUIDesignTokensBorderWidth  `json:"border_width,required"`
-	Colors       PresetDeleteResponseDataUIDesignTokensColors       `json:"colors,required"`
-	Logo         string                                             `json:"logo,required"`
-	SpacingBase  float64                                            `json:"spacing_base,required"`
-	Theme        PresetDeleteResponseDataUIDesignTokensTheme        `json:"theme,required"`
+	BorderRadius PresetDeleteResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetDeleteResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetDeleteResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	Logo         string                                             `json:"logo" api:"required"`
+	SpacingBase  float64                                            `json:"spacing_base" api:"required"`
+	Theme        PresetDeleteResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
 	JSON         presetDeleteResponseDataUIDesignTokensJSON         `json:"-"`
 }
 
@@ -2369,14 +2369,14 @@ func (r PresetDeleteResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
 }
 
 type PresetDeleteResponseDataUIDesignTokensColors struct {
-	Background  PresetDeleteResponseDataUIDesignTokensColorsBackground `json:"background,required"`
-	Brand       PresetDeleteResponseDataUIDesignTokensColorsBrand      `json:"brand,required"`
-	Danger      string                                                 `json:"danger,required"`
-	Success     string                                                 `json:"success,required"`
-	Text        string                                                 `json:"text,required"`
-	TextOnBrand string                                                 `json:"text_on_brand,required"`
-	VideoBg     string                                                 `json:"video_bg,required"`
-	Warning     string                                                 `json:"warning,required"`
+	Background  PresetDeleteResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetDeleteResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                                 `json:"danger" api:"required"`
+	Success     string                                                 `json:"success" api:"required"`
+	Text        string                                                 `json:"text" api:"required"`
+	TextOnBrand string                                                 `json:"text_on_brand" api:"required"`
+	VideoBg     string                                                 `json:"video_bg" api:"required"`
+	Warning     string                                                 `json:"warning" api:"required"`
 	JSON        presetDeleteResponseDataUIDesignTokensColorsJSON       `json:"-"`
 }
 
@@ -2404,11 +2404,11 @@ func (r presetDeleteResponseDataUIDesignTokensColorsJSON) RawJSON() string {
 }
 
 type PresetDeleteResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                     `json:"1000,required"`
-	Number600  string                                                     `json:"600,required"`
-	Number700  string                                                     `json:"700,required"`
-	Number800  string                                                     `json:"800,required"`
-	Number900  string                                                     `json:"900,required"`
+	Number1000 string                                                     `json:"1000" api:"required"`
+	Number600  string                                                     `json:"600" api:"required"`
+	Number700  string                                                     `json:"700" api:"required"`
+	Number800  string                                                     `json:"800" api:"required"`
+	Number900  string                                                     `json:"900" api:"required"`
 	JSON       presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
 }
 
@@ -2433,11 +2433,11 @@ func (r presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() st
 }
 
 type PresetDeleteResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                                `json:"300,required"`
-	Number400 string                                                `json:"400,required"`
-	Number500 string                                                `json:"500,required"`
-	Number600 string                                                `json:"600,required"`
-	Number700 string                                                `json:"700,required"`
+	Number300 string                                                `json:"300" api:"required"`
+	Number400 string                                                `json:"400" api:"required"`
+	Number500 string                                                `json:"500" api:"required"`
+	Number600 string                                                `json:"600" api:"required"`
+	Number700 string                                                `json:"700" api:"required"`
 	JSON      presetDeleteResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
 }
 
@@ -2477,34 +2477,34 @@ func (r PresetDeleteResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetDeleteResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests,required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests,required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions,required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name,required"`
-	CanLivestream                   bool `json:"can_livestream,required"`
-	CanRecord                       bool `json:"can_record,required"`
-	CanSpotlight                    bool `json:"can_spotlight,required"`
+	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool `json:"can_livestream" api:"required"`
+	CanRecord                       bool `json:"can_record" api:"required"`
+	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
 	// Chat permissions
-	Chat                            PresetDeleteResponseDataPermissionsChat              `json:"chat,required"`
-	ConnectedMeetings               PresetDeleteResponseDataPermissionsConnectedMeetings `json:"connected_meetings,required"`
-	DisableParticipantAudio         bool                                                 `json:"disable_participant_audio,required"`
-	DisableParticipantScreensharing bool                                                 `json:"disable_participant_screensharing,required"`
-	DisableParticipantVideo         bool                                                 `json:"disable_participant_video,required"`
+	Chat                            PresetDeleteResponseDataPermissionsChat              `json:"chat" api:"required"`
+	ConnectedMeetings               PresetDeleteResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
+	DisableParticipantAudio         bool                                                 `json:"disable_participant_audio" api:"required"`
+	DisableParticipantScreensharing bool                                                 `json:"disable_participant_screensharing" api:"required"`
+	DisableParticipantVideo         bool                                                 `json:"disable_participant_video" api:"required"`
 	// Whether this participant is visible to others or not
-	HiddenParticipant bool `json:"hidden_participant,required"`
-	KickParticipant   bool `json:"kick_participant,required"`
+	HiddenParticipant bool `json:"hidden_participant" api:"required"`
+	KickParticipant   bool `json:"kick_participant" api:"required"`
 	// Media permissions
-	Media          PresetDeleteResponseDataPermissionsMedia `json:"media,required"`
-	PinParticipant bool                                     `json:"pin_participant,required"`
+	Media          PresetDeleteResponseDataPermissionsMedia `json:"media" api:"required"`
+	PinParticipant bool                                     `json:"pin_participant" api:"required"`
 	// Plugin permissions
-	Plugins PresetDeleteResponseDataPermissionsPlugins `json:"plugins,required"`
+	Plugins PresetDeleteResponseDataPermissionsPlugins `json:"plugins" api:"required"`
 	// Poll permissions
-	Polls PresetDeleteResponseDataPermissionsPolls `json:"polls,required"`
+	Polls PresetDeleteResponseDataPermissionsPolls `json:"polls" api:"required"`
 	// Type of the recording peer
-	RecorderType        PresetDeleteResponseDataPermissionsRecorderType `json:"recorder_type,required"`
-	ShowParticipantList bool                                            `json:"show_participant_list,required"`
+	RecorderType        PresetDeleteResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
+	ShowParticipantList bool                                            `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetDeleteResponseDataPermissionsWaitingRoomType `json:"waiting_room_type,required"`
+	WaitingRoomType PresetDeleteResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
 	IsRecorder      bool                                               `json:"is_recorder"`
 	JSON            presetDeleteResponseDataPermissionsJSON            `json:"-"`
 }
@@ -2548,8 +2548,8 @@ func (r presetDeleteResponseDataPermissionsJSON) RawJSON() string {
 
 // Chat permissions
 type PresetDeleteResponseDataPermissionsChat struct {
-	Private PresetDeleteResponseDataPermissionsChatPrivate `json:"private,required"`
-	Public  PresetDeleteResponseDataPermissionsChatPublic  `json:"public,required"`
+	Private PresetDeleteResponseDataPermissionsChatPrivate `json:"private" api:"required"`
+	Public  PresetDeleteResponseDataPermissionsChatPublic  `json:"public" api:"required"`
 	JSON    presetDeleteResponseDataPermissionsChatJSON    `json:"-"`
 }
 
@@ -2571,10 +2571,10 @@ func (r presetDeleteResponseDataPermissionsChatJSON) RawJSON() string {
 }
 
 type PresetDeleteResponseDataPermissionsChatPrivate struct {
-	CanReceive bool                                               `json:"can_receive,required"`
-	CanSend    bool                                               `json:"can_send,required"`
-	Files      bool                                               `json:"files,required"`
-	Text       bool                                               `json:"text,required"`
+	CanReceive bool                                               `json:"can_receive" api:"required"`
+	CanSend    bool                                               `json:"can_send" api:"required"`
+	Files      bool                                               `json:"files" api:"required"`
+	Text       bool                                               `json:"text" api:"required"`
 	JSON       presetDeleteResponseDataPermissionsChatPrivateJSON `json:"-"`
 }
 
@@ -2599,11 +2599,11 @@ func (r presetDeleteResponseDataPermissionsChatPrivateJSON) RawJSON() string {
 
 type PresetDeleteResponseDataPermissionsChatPublic struct {
 	// Can send messages in general
-	CanSend bool `json:"can_send,required"`
+	CanSend bool `json:"can_send" api:"required"`
 	// Can send file messages
-	Files bool `json:"files,required"`
+	Files bool `json:"files" api:"required"`
 	// Can send text messages
-	Text bool                                              `json:"text,required"`
+	Text bool                                              `json:"text" api:"required"`
 	JSON presetDeleteResponseDataPermissionsChatPublicJSON `json:"-"`
 }
 
@@ -2626,9 +2626,9 @@ func (r presetDeleteResponseDataPermissionsChatPublicJSON) RawJSON() string {
 }
 
 type PresetDeleteResponseDataPermissionsConnectedMeetings struct {
-	CanAlterConnectedMeetings  bool                                                     `json:"can_alter_connected_meetings,required"`
-	CanSwitchConnectedMeetings bool                                                     `json:"can_switch_connected_meetings,required"`
-	CanSwitchToParentMeeting   bool                                                     `json:"can_switch_to_parent_meeting,required"`
+	CanAlterConnectedMeetings  bool                                                     `json:"can_alter_connected_meetings" api:"required"`
+	CanSwitchConnectedMeetings bool                                                     `json:"can_switch_connected_meetings" api:"required"`
+	CanSwitchToParentMeeting   bool                                                     `json:"can_switch_to_parent_meeting" api:"required"`
 	JSON                       presetDeleteResponseDataPermissionsConnectedMeetingsJSON `json:"-"`
 }
 
@@ -2653,11 +2653,11 @@ func (r presetDeleteResponseDataPermissionsConnectedMeetingsJSON) RawJSON() stri
 // Media permissions
 type PresetDeleteResponseDataPermissionsMedia struct {
 	// Audio permissions
-	Audio PresetDeleteResponseDataPermissionsMediaAudio `json:"audio,required"`
+	Audio PresetDeleteResponseDataPermissionsMediaAudio `json:"audio" api:"required"`
 	// Screenshare permissions
-	Screenshare PresetDeleteResponseDataPermissionsMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetDeleteResponseDataPermissionsMediaScreenshare `json:"screenshare" api:"required"`
 	// Video permissions
-	Video PresetDeleteResponseDataPermissionsMediaVideo `json:"video,required"`
+	Video PresetDeleteResponseDataPermissionsMediaVideo `json:"video" api:"required"`
 	JSON  presetDeleteResponseDataPermissionsMediaJSON  `json:"-"`
 }
 
@@ -2682,7 +2682,7 @@ func (r presetDeleteResponseDataPermissionsMediaJSON) RawJSON() string {
 // Audio permissions
 type PresetDeleteResponseDataPermissionsMediaAudio struct {
 	// Can produce audio
-	CanProduce PresetDeleteResponseDataPermissionsMediaAudioCanProduce `json:"can_produce,required"`
+	CanProduce PresetDeleteResponseDataPermissionsMediaAudioCanProduce `json:"can_produce" api:"required"`
 	JSON       presetDeleteResponseDataPermissionsMediaAudioJSON       `json:"-"`
 }
 
@@ -2722,7 +2722,7 @@ func (r PresetDeleteResponseDataPermissionsMediaAudioCanProduce) IsKnown() bool 
 // Screenshare permissions
 type PresetDeleteResponseDataPermissionsMediaScreenshare struct {
 	// Can produce screen share video
-	CanProduce PresetDeleteResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce,required"`
+	CanProduce PresetDeleteResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce" api:"required"`
 	JSON       presetDeleteResponseDataPermissionsMediaScreenshareJSON       `json:"-"`
 }
 
@@ -2762,7 +2762,7 @@ func (r PresetDeleteResponseDataPermissionsMediaScreenshareCanProduce) IsKnown()
 // Video permissions
 type PresetDeleteResponseDataPermissionsMediaVideo struct {
 	// Can produce video
-	CanProduce PresetDeleteResponseDataPermissionsMediaVideoCanProduce `json:"can_produce,required"`
+	CanProduce PresetDeleteResponseDataPermissionsMediaVideoCanProduce `json:"can_produce" api:"required"`
 	JSON       presetDeleteResponseDataPermissionsMediaVideoJSON       `json:"-"`
 }
 
@@ -2802,12 +2802,12 @@ func (r PresetDeleteResponseDataPermissionsMediaVideoCanProduce) IsKnown() bool 
 // Plugin permissions
 type PresetDeleteResponseDataPermissionsPlugins struct {
 	// Can close plugins that are already open
-	CanClose bool `json:"can_close,required"`
+	CanClose bool `json:"can_close" api:"required"`
 	// Can edit plugin config
-	CanEditConfig bool `json:"can_edit_config,required"`
+	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                                  `json:"can_start,required"`
-	Config   PresetDeleteResponseDataPermissionsPluginsConfigUnion `json:"config,required" format:"uuid"`
+	CanStart bool                                                  `json:"can_start" api:"required"`
+	Config   PresetDeleteResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
 	JSON     presetDeleteResponseDataPermissionsPluginsJSON        `json:"-"`
 }
 
@@ -2852,8 +2852,8 @@ func init() {
 }
 
 type PresetDeleteResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control,required"`
-	HandlesViewOnly bool                                                                `json:"handles_view_only,required"`
+	AccessControl   PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
+	HandlesViewOnly bool                                                                `json:"handles_view_only" api:"required"`
 	JSON            presetDeleteResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
 }
 
@@ -2895,11 +2895,11 @@ func (r PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl) IsK
 // Poll permissions
 type PresetDeleteResponseDataPermissionsPolls struct {
 	// Can create polls
-	CanCreate bool `json:"can_create,required"`
+	CanCreate bool `json:"can_create" api:"required"`
 	// Can view polls
-	CanView bool `json:"can_view,required"`
+	CanView bool `json:"can_view" api:"required"`
 	// Can vote on polls
-	CanVote bool                                         `json:"can_vote,required"`
+	CanVote bool                                         `json:"can_vote" api:"required"`
 	JSON    presetDeleteResponseDataPermissionsPollsJSON `json:"-"`
 }
 
@@ -2956,9 +2956,9 @@ func (r PresetDeleteResponseDataPermissionsWaitingRoomType) IsKnown() bool {
 }
 
 type PresetGetResponse struct {
-	Data    []PresetGetResponseData `json:"data,required"`
-	Paging  PresetGetResponsePaging `json:"paging,required"`
-	Success bool                    `json:"success,required"`
+	Data    []PresetGetResponseData `json:"data" api:"required"`
+	Paging  PresetGetResponsePaging `json:"paging" api:"required"`
+	Success bool                    `json:"success" api:"required"`
 	JSON    presetGetResponseJSON   `json:"-"`
 }
 
@@ -3013,9 +3013,9 @@ func (r presetGetResponseDataJSON) RawJSON() string {
 }
 
 type PresetGetResponsePaging struct {
-	EndOffset   float64                     `json:"end_offset,required"`
-	StartOffset float64                     `json:"start_offset,required"`
-	TotalCount  float64                     `json:"total_count,required"`
+	EndOffset   float64                     `json:"end_offset" api:"required"`
+	StartOffset float64                     `json:"start_offset" api:"required"`
+	TotalCount  float64                     `json:"total_count" api:"required"`
 	JSON        presetGetResponsePagingJSON `json:"-"`
 }
 
@@ -3039,9 +3039,9 @@ func (r presetGetResponsePagingJSON) RawJSON() string {
 
 type PresetGetPresetByIDResponse struct {
 	// Data returned by the operation
-	Data PresetGetPresetByIDResponseData `json:"data,required"`
+	Data PresetGetPresetByIDResponseData `json:"data" api:"required"`
 	// Success status of the operation
-	Success bool                            `json:"success,required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    presetGetPresetByIDResponseJSON `json:"-"`
 }
 
@@ -3065,11 +3065,11 @@ func (r presetGetPresetByIDResponseJSON) RawJSON() string {
 // Data returned by the operation
 type PresetGetPresetByIDResponseData struct {
 	// ID of the preset
-	ID     string                                `json:"id,required" format:"uuid"`
-	Config PresetGetPresetByIDResponseDataConfig `json:"config,required"`
+	ID     string                                `json:"id" api:"required" format:"uuid"`
+	Config PresetGetPresetByIDResponseDataConfig `json:"config" api:"required"`
 	// Name of the preset
-	Name        string                                     `json:"name,required"`
-	UI          PresetGetPresetByIDResponseDataUI          `json:"ui,required"`
+	Name        string                                     `json:"name" api:"required"`
+	UI          PresetGetPresetByIDResponseDataUI          `json:"ui" api:"required"`
 	Permissions PresetGetPresetByIDResponseDataPermissions `json:"permissions"`
 	JSON        presetGetPresetByIDResponseDataJSON        `json:"-"`
 }
@@ -3096,13 +3096,13 @@ func (r presetGetPresetByIDResponseDataJSON) RawJSON() string {
 
 type PresetGetPresetByIDResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count,required"`
+	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
-	MaxVideoStreams PresetGetPresetByIDResponseDataConfigMaxVideoStreams `json:"max_video_streams,required"`
+	MaxVideoStreams PresetGetPresetByIDResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
-	Media PresetGetPresetByIDResponseDataConfigMedia `json:"media,required"`
+	Media PresetGetPresetByIDResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
-	ViewType PresetGetPresetByIDResponseDataConfigViewType `json:"view_type,required"`
+	ViewType PresetGetPresetByIDResponseDataConfigViewType `json:"view_type" api:"required"`
 	JSON     presetGetPresetByIDResponseDataConfigJSON     `json:"-"`
 }
 
@@ -3128,9 +3128,9 @@ func (r presetGetPresetByIDResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetGetPresetByIDResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop,required"`
+	Desktop int64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                                    `json:"mobile,required"`
+	Mobile int64                                                    `json:"mobile" api:"required"`
 	JSON   presetGetPresetByIDResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -3154,9 +3154,9 @@ func (r presetGetPresetByIDResponseDataConfigMaxVideoStreamsJSON) RawJSON() stri
 // Media configuration options. eg: Video quality
 type PresetGetPresetByIDResponseDataConfigMedia struct {
 	// Configuration options for participant screen shares
-	Screenshare PresetGetPresetByIDResponseDataConfigMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetGetPresetByIDResponseDataConfigMediaScreenshare `json:"screenshare" api:"required"`
 	// Configuration options for participant videos
-	Video PresetGetPresetByIDResponseDataConfigMediaVideo `json:"video,required"`
+	Video PresetGetPresetByIDResponseDataConfigMediaVideo `json:"video" api:"required"`
 	// Control options for Audio quality.
 	Audio PresetGetPresetByIDResponseDataConfigMediaAudio `json:"audio"`
 	JSON  presetGetPresetByIDResponseDataConfigMediaJSON  `json:"-"`
@@ -3183,9 +3183,9 @@ func (r presetGetPresetByIDResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetGetPresetByIDResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
-	Quality PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality `json:"quality,required"`
+	Quality PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetGetPresetByIDResponseDataConfigMediaScreenshareJSON    `json:"-"`
 }
 
@@ -3226,9 +3226,9 @@ func (r PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality) IsKnown() 
 // Configuration options for participant videos
 type PresetGetPresetByIDResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate,required"`
+	FrameRate int64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
-	Quality PresetGetPresetByIDResponseDataConfigMediaVideoQuality `json:"quality,required"`
+	Quality PresetGetPresetByIDResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
 	JSON    presetGetPresetByIDResponseDataConfigMediaVideoJSON    `json:"-"`
 }
 
@@ -3310,7 +3310,7 @@ func (r PresetGetPresetByIDResponseDataConfigViewType) IsKnown() bool {
 }
 
 type PresetGetPresetByIDResponseDataUI struct {
-	DesignTokens PresetGetPresetByIDResponseDataUIDesignTokens `json:"design_tokens,required"`
+	DesignTokens PresetGetPresetByIDResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
 	ConfigDiff   interface{}                                   `json:"config_diff"`
 	JSON         presetGetPresetByIDResponseDataUIJSON         `json:"-"`
 }
@@ -3333,12 +3333,12 @@ func (r presetGetPresetByIDResponseDataUIJSON) RawJSON() string {
 }
 
 type PresetGetPresetByIDResponseDataUIDesignTokens struct {
-	BorderRadius PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius `json:"border_radius,required"`
-	BorderWidth  PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth  `json:"border_width,required"`
-	Colors       PresetGetPresetByIDResponseDataUIDesignTokensColors       `json:"colors,required"`
-	Logo         string                                                    `json:"logo,required"`
-	SpacingBase  float64                                                   `json:"spacing_base,required"`
-	Theme        PresetGetPresetByIDResponseDataUIDesignTokensTheme        `json:"theme,required"`
+	BorderRadius PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetGetPresetByIDResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	Logo         string                                                    `json:"logo" api:"required"`
+	SpacingBase  float64                                                   `json:"spacing_base" api:"required"`
+	Theme        PresetGetPresetByIDResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
 	JSON         presetGetPresetByIDResponseDataUIDesignTokensJSON         `json:"-"`
 }
 
@@ -3392,14 +3392,14 @@ func (r PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth) IsKnown() bool
 }
 
 type PresetGetPresetByIDResponseDataUIDesignTokensColors struct {
-	Background  PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground `json:"background,required"`
-	Brand       PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand      `json:"brand,required"`
-	Danger      string                                                        `json:"danger,required"`
-	Success     string                                                        `json:"success,required"`
-	Text        string                                                        `json:"text,required"`
-	TextOnBrand string                                                        `json:"text_on_brand,required"`
-	VideoBg     string                                                        `json:"video_bg,required"`
-	Warning     string                                                        `json:"warning,required"`
+	Background  PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                                        `json:"danger" api:"required"`
+	Success     string                                                        `json:"success" api:"required"`
+	Text        string                                                        `json:"text" api:"required"`
+	TextOnBrand string                                                        `json:"text_on_brand" api:"required"`
+	VideoBg     string                                                        `json:"video_bg" api:"required"`
+	Warning     string                                                        `json:"warning" api:"required"`
 	JSON        presetGetPresetByIDResponseDataUIDesignTokensColorsJSON       `json:"-"`
 }
 
@@ -3427,11 +3427,11 @@ func (r presetGetPresetByIDResponseDataUIDesignTokensColorsJSON) RawJSON() strin
 }
 
 type PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                            `json:"1000,required"`
-	Number600  string                                                            `json:"600,required"`
-	Number700  string                                                            `json:"700,required"`
-	Number800  string                                                            `json:"800,required"`
-	Number900  string                                                            `json:"900,required"`
+	Number1000 string                                                            `json:"1000" api:"required"`
+	Number600  string                                                            `json:"600" api:"required"`
+	Number700  string                                                            `json:"700" api:"required"`
+	Number800  string                                                            `json:"800" api:"required"`
+	Number900  string                                                            `json:"900" api:"required"`
 	JSON       presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
 }
 
@@ -3457,11 +3457,11 @@ func (r presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON) RawJS
 }
 
 type PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                                       `json:"300,required"`
-	Number400 string                                                       `json:"400,required"`
-	Number500 string                                                       `json:"500,required"`
-	Number600 string                                                       `json:"600,required"`
-	Number700 string                                                       `json:"700,required"`
+	Number300 string                                                       `json:"300" api:"required"`
+	Number400 string                                                       `json:"400" api:"required"`
+	Number500 string                                                       `json:"500" api:"required"`
+	Number600 string                                                       `json:"600" api:"required"`
+	Number700 string                                                       `json:"700" api:"required"`
 	JSON      presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
 }
 
@@ -3502,34 +3502,34 @@ func (r PresetGetPresetByIDResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetGetPresetByIDResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests,required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests,required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions,required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name,required"`
-	CanLivestream                   bool `json:"can_livestream,required"`
-	CanRecord                       bool `json:"can_record,required"`
-	CanSpotlight                    bool `json:"can_spotlight,required"`
+	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool `json:"can_livestream" api:"required"`
+	CanRecord                       bool `json:"can_record" api:"required"`
+	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
 	// Chat permissions
-	Chat                            PresetGetPresetByIDResponseDataPermissionsChat              `json:"chat,required"`
-	ConnectedMeetings               PresetGetPresetByIDResponseDataPermissionsConnectedMeetings `json:"connected_meetings,required"`
-	DisableParticipantAudio         bool                                                        `json:"disable_participant_audio,required"`
-	DisableParticipantScreensharing bool                                                        `json:"disable_participant_screensharing,required"`
-	DisableParticipantVideo         bool                                                        `json:"disable_participant_video,required"`
+	Chat                            PresetGetPresetByIDResponseDataPermissionsChat              `json:"chat" api:"required"`
+	ConnectedMeetings               PresetGetPresetByIDResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
+	DisableParticipantAudio         bool                                                        `json:"disable_participant_audio" api:"required"`
+	DisableParticipantScreensharing bool                                                        `json:"disable_participant_screensharing" api:"required"`
+	DisableParticipantVideo         bool                                                        `json:"disable_participant_video" api:"required"`
 	// Whether this participant is visible to others or not
-	HiddenParticipant bool `json:"hidden_participant,required"`
-	KickParticipant   bool `json:"kick_participant,required"`
+	HiddenParticipant bool `json:"hidden_participant" api:"required"`
+	KickParticipant   bool `json:"kick_participant" api:"required"`
 	// Media permissions
-	Media          PresetGetPresetByIDResponseDataPermissionsMedia `json:"media,required"`
-	PinParticipant bool                                            `json:"pin_participant,required"`
+	Media          PresetGetPresetByIDResponseDataPermissionsMedia `json:"media" api:"required"`
+	PinParticipant bool                                            `json:"pin_participant" api:"required"`
 	// Plugin permissions
-	Plugins PresetGetPresetByIDResponseDataPermissionsPlugins `json:"plugins,required"`
+	Plugins PresetGetPresetByIDResponseDataPermissionsPlugins `json:"plugins" api:"required"`
 	// Poll permissions
-	Polls PresetGetPresetByIDResponseDataPermissionsPolls `json:"polls,required"`
+	Polls PresetGetPresetByIDResponseDataPermissionsPolls `json:"polls" api:"required"`
 	// Type of the recording peer
-	RecorderType        PresetGetPresetByIDResponseDataPermissionsRecorderType `json:"recorder_type,required"`
-	ShowParticipantList bool                                                   `json:"show_participant_list,required"`
+	RecorderType        PresetGetPresetByIDResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
+	ShowParticipantList bool                                                   `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetGetPresetByIDResponseDataPermissionsWaitingRoomType `json:"waiting_room_type,required"`
+	WaitingRoomType PresetGetPresetByIDResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
 	IsRecorder      bool                                                      `json:"is_recorder"`
 	JSON            presetGetPresetByIDResponseDataPermissionsJSON            `json:"-"`
 }
@@ -3573,8 +3573,8 @@ func (r presetGetPresetByIDResponseDataPermissionsJSON) RawJSON() string {
 
 // Chat permissions
 type PresetGetPresetByIDResponseDataPermissionsChat struct {
-	Private PresetGetPresetByIDResponseDataPermissionsChatPrivate `json:"private,required"`
-	Public  PresetGetPresetByIDResponseDataPermissionsChatPublic  `json:"public,required"`
+	Private PresetGetPresetByIDResponseDataPermissionsChatPrivate `json:"private" api:"required"`
+	Public  PresetGetPresetByIDResponseDataPermissionsChatPublic  `json:"public" api:"required"`
 	JSON    presetGetPresetByIDResponseDataPermissionsChatJSON    `json:"-"`
 }
 
@@ -3596,10 +3596,10 @@ func (r presetGetPresetByIDResponseDataPermissionsChatJSON) RawJSON() string {
 }
 
 type PresetGetPresetByIDResponseDataPermissionsChatPrivate struct {
-	CanReceive bool                                                      `json:"can_receive,required"`
-	CanSend    bool                                                      `json:"can_send,required"`
-	Files      bool                                                      `json:"files,required"`
-	Text       bool                                                      `json:"text,required"`
+	CanReceive bool                                                      `json:"can_receive" api:"required"`
+	CanSend    bool                                                      `json:"can_send" api:"required"`
+	Files      bool                                                      `json:"files" api:"required"`
+	Text       bool                                                      `json:"text" api:"required"`
 	JSON       presetGetPresetByIDResponseDataPermissionsChatPrivateJSON `json:"-"`
 }
 
@@ -3624,11 +3624,11 @@ func (r presetGetPresetByIDResponseDataPermissionsChatPrivateJSON) RawJSON() str
 
 type PresetGetPresetByIDResponseDataPermissionsChatPublic struct {
 	// Can send messages in general
-	CanSend bool `json:"can_send,required"`
+	CanSend bool `json:"can_send" api:"required"`
 	// Can send file messages
-	Files bool `json:"files,required"`
+	Files bool `json:"files" api:"required"`
 	// Can send text messages
-	Text bool                                                     `json:"text,required"`
+	Text bool                                                     `json:"text" api:"required"`
 	JSON presetGetPresetByIDResponseDataPermissionsChatPublicJSON `json:"-"`
 }
 
@@ -3651,9 +3651,9 @@ func (r presetGetPresetByIDResponseDataPermissionsChatPublicJSON) RawJSON() stri
 }
 
 type PresetGetPresetByIDResponseDataPermissionsConnectedMeetings struct {
-	CanAlterConnectedMeetings  bool                                                            `json:"can_alter_connected_meetings,required"`
-	CanSwitchConnectedMeetings bool                                                            `json:"can_switch_connected_meetings,required"`
-	CanSwitchToParentMeeting   bool                                                            `json:"can_switch_to_parent_meeting,required"`
+	CanAlterConnectedMeetings  bool                                                            `json:"can_alter_connected_meetings" api:"required"`
+	CanSwitchConnectedMeetings bool                                                            `json:"can_switch_connected_meetings" api:"required"`
+	CanSwitchToParentMeeting   bool                                                            `json:"can_switch_to_parent_meeting" api:"required"`
 	JSON                       presetGetPresetByIDResponseDataPermissionsConnectedMeetingsJSON `json:"-"`
 }
 
@@ -3679,11 +3679,11 @@ func (r presetGetPresetByIDResponseDataPermissionsConnectedMeetingsJSON) RawJSON
 // Media permissions
 type PresetGetPresetByIDResponseDataPermissionsMedia struct {
 	// Audio permissions
-	Audio PresetGetPresetByIDResponseDataPermissionsMediaAudio `json:"audio,required"`
+	Audio PresetGetPresetByIDResponseDataPermissionsMediaAudio `json:"audio" api:"required"`
 	// Screenshare permissions
-	Screenshare PresetGetPresetByIDResponseDataPermissionsMediaScreenshare `json:"screenshare,required"`
+	Screenshare PresetGetPresetByIDResponseDataPermissionsMediaScreenshare `json:"screenshare" api:"required"`
 	// Video permissions
-	Video PresetGetPresetByIDResponseDataPermissionsMediaVideo `json:"video,required"`
+	Video PresetGetPresetByIDResponseDataPermissionsMediaVideo `json:"video" api:"required"`
 	JSON  presetGetPresetByIDResponseDataPermissionsMediaJSON  `json:"-"`
 }
 
@@ -3708,7 +3708,7 @@ func (r presetGetPresetByIDResponseDataPermissionsMediaJSON) RawJSON() string {
 // Audio permissions
 type PresetGetPresetByIDResponseDataPermissionsMediaAudio struct {
 	// Can produce audio
-	CanProduce PresetGetPresetByIDResponseDataPermissionsMediaAudioCanProduce `json:"can_produce,required"`
+	CanProduce PresetGetPresetByIDResponseDataPermissionsMediaAudioCanProduce `json:"can_produce" api:"required"`
 	JSON       presetGetPresetByIDResponseDataPermissionsMediaAudioJSON       `json:"-"`
 }
 
@@ -3748,7 +3748,7 @@ func (r PresetGetPresetByIDResponseDataPermissionsMediaAudioCanProduce) IsKnown(
 // Screenshare permissions
 type PresetGetPresetByIDResponseDataPermissionsMediaScreenshare struct {
 	// Can produce screen share video
-	CanProduce PresetGetPresetByIDResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce,required"`
+	CanProduce PresetGetPresetByIDResponseDataPermissionsMediaScreenshareCanProduce `json:"can_produce" api:"required"`
 	JSON       presetGetPresetByIDResponseDataPermissionsMediaScreenshareJSON       `json:"-"`
 }
 
@@ -3789,7 +3789,7 @@ func (r PresetGetPresetByIDResponseDataPermissionsMediaScreenshareCanProduce) Is
 // Video permissions
 type PresetGetPresetByIDResponseDataPermissionsMediaVideo struct {
 	// Can produce video
-	CanProduce PresetGetPresetByIDResponseDataPermissionsMediaVideoCanProduce `json:"can_produce,required"`
+	CanProduce PresetGetPresetByIDResponseDataPermissionsMediaVideoCanProduce `json:"can_produce" api:"required"`
 	JSON       presetGetPresetByIDResponseDataPermissionsMediaVideoJSON       `json:"-"`
 }
 
@@ -3829,12 +3829,12 @@ func (r PresetGetPresetByIDResponseDataPermissionsMediaVideoCanProduce) IsKnown(
 // Plugin permissions
 type PresetGetPresetByIDResponseDataPermissionsPlugins struct {
 	// Can close plugins that are already open
-	CanClose bool `json:"can_close,required"`
+	CanClose bool `json:"can_close" api:"required"`
 	// Can edit plugin config
-	CanEditConfig bool `json:"can_edit_config,required"`
+	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                                         `json:"can_start,required"`
-	Config   PresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion `json:"config,required" format:"uuid"`
+	CanStart bool                                                         `json:"can_start" api:"required"`
+	Config   PresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
 	JSON     presetGetPresetByIDResponseDataPermissionsPluginsJSON        `json:"-"`
 }
 
@@ -3879,8 +3879,8 @@ func init() {
 }
 
 type PresetGetPresetByIDResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control,required"`
-	HandlesViewOnly bool                                                                       `json:"handles_view_only,required"`
+	AccessControl   PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
+	HandlesViewOnly bool                                                                       `json:"handles_view_only" api:"required"`
 	JSON            presetGetPresetByIDResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
 }
 
@@ -3923,11 +3923,11 @@ func (r PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessContr
 // Poll permissions
 type PresetGetPresetByIDResponseDataPermissionsPolls struct {
 	// Can create polls
-	CanCreate bool `json:"can_create,required"`
+	CanCreate bool `json:"can_create" api:"required"`
 	// Can view polls
-	CanView bool `json:"can_view,required"`
+	CanView bool `json:"can_view" api:"required"`
 	// Can vote on polls
-	CanVote bool                                                `json:"can_vote,required"`
+	CanVote bool                                                `json:"can_vote" api:"required"`
 	JSON    presetGetPresetByIDResponseDataPermissionsPollsJSON `json:"-"`
 }
 
@@ -3985,11 +3985,11 @@ func (r PresetGetPresetByIDResponseDataPermissionsWaitingRoomType) IsKnown() boo
 
 type PresetNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]                `path:"account_id,required"`
-	Config    param.Field[PresetNewParamsConfig] `json:"config,required"`
+	AccountID param.Field[string]                `path:"account_id" api:"required"`
+	Config    param.Field[PresetNewParamsConfig] `json:"config" api:"required"`
 	// Name of the preset
-	Name        param.Field[string]                     `json:"name,required"`
-	UI          param.Field[PresetNewParamsUI]          `json:"ui,required"`
+	Name        param.Field[string]                     `json:"name" api:"required"`
+	UI          param.Field[PresetNewParamsUI]          `json:"ui" api:"required"`
 	Permissions param.Field[PresetNewParamsPermissions] `json:"permissions"`
 }
 
@@ -3999,13 +3999,13 @@ func (r PresetNewParams) MarshalJSON() (data []byte, err error) {
 
 type PresetNewParamsConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount param.Field[int64] `json:"max_screenshare_count,required"`
+	MaxScreenshareCount param.Field[int64] `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
-	MaxVideoStreams param.Field[PresetNewParamsConfigMaxVideoStreams] `json:"max_video_streams,required"`
+	MaxVideoStreams param.Field[PresetNewParamsConfigMaxVideoStreams] `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
-	Media param.Field[PresetNewParamsConfigMedia] `json:"media,required"`
+	Media param.Field[PresetNewParamsConfigMedia] `json:"media" api:"required"`
 	// Type of the meeting
-	ViewType param.Field[PresetNewParamsConfigViewType] `json:"view_type,required"`
+	ViewType param.Field[PresetNewParamsConfigViewType] `json:"view_type" api:"required"`
 }
 
 func (r PresetNewParamsConfig) MarshalJSON() (data []byte, err error) {
@@ -4015,9 +4015,9 @@ func (r PresetNewParamsConfig) MarshalJSON() (data []byte, err error) {
 // Maximum number of streams that are visible on a device
 type PresetNewParamsConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop param.Field[int64] `json:"desktop,required"`
+	Desktop param.Field[int64] `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile param.Field[int64] `json:"mobile,required"`
+	Mobile param.Field[int64] `json:"mobile" api:"required"`
 }
 
 func (r PresetNewParamsConfigMaxVideoStreams) MarshalJSON() (data []byte, err error) {
@@ -4027,9 +4027,9 @@ func (r PresetNewParamsConfigMaxVideoStreams) MarshalJSON() (data []byte, err er
 // Media configuration options. eg: Video quality
 type PresetNewParamsConfigMedia struct {
 	// Configuration options for participant screen shares
-	Screenshare param.Field[PresetNewParamsConfigMediaScreenshare] `json:"screenshare,required"`
+	Screenshare param.Field[PresetNewParamsConfigMediaScreenshare] `json:"screenshare" api:"required"`
 	// Configuration options for participant videos
-	Video param.Field[PresetNewParamsConfigMediaVideo] `json:"video,required"`
+	Video param.Field[PresetNewParamsConfigMediaVideo] `json:"video" api:"required"`
 	// Control options for Audio quality.
 	Audio param.Field[PresetNewParamsConfigMediaAudio] `json:"audio"`
 }
@@ -4041,9 +4041,9 @@ func (r PresetNewParamsConfigMedia) MarshalJSON() (data []byte, err error) {
 // Configuration options for participant screen shares
 type PresetNewParamsConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate param.Field[int64] `json:"frame_rate,required"`
+	FrameRate param.Field[int64] `json:"frame_rate" api:"required"`
 	// Quality of screen share
-	Quality param.Field[PresetNewParamsConfigMediaScreenshareQuality] `json:"quality,required"`
+	Quality param.Field[PresetNewParamsConfigMediaScreenshareQuality] `json:"quality" api:"required"`
 }
 
 func (r PresetNewParamsConfigMediaScreenshare) MarshalJSON() (data []byte, err error) {
@@ -4070,9 +4070,9 @@ func (r PresetNewParamsConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetNewParamsConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate param.Field[int64] `json:"frame_rate,required"`
+	FrameRate param.Field[int64] `json:"frame_rate" api:"required"`
 	// Video quality of participants
-	Quality param.Field[PresetNewParamsConfigMediaVideoQuality] `json:"quality,required"`
+	Quality param.Field[PresetNewParamsConfigMediaVideoQuality] `json:"quality" api:"required"`
 }
 
 func (r PresetNewParamsConfigMediaVideo) MarshalJSON() (data []byte, err error) {
@@ -4126,7 +4126,7 @@ func (r PresetNewParamsConfigViewType) IsKnown() bool {
 }
 
 type PresetNewParamsUI struct {
-	DesignTokens param.Field[PresetNewParamsUIDesignTokens] `json:"design_tokens,required"`
+	DesignTokens param.Field[PresetNewParamsUIDesignTokens] `json:"design_tokens" api:"required"`
 	ConfigDiff   param.Field[interface{}]                   `json:"config_diff"`
 }
 
@@ -4135,12 +4135,12 @@ func (r PresetNewParamsUI) MarshalJSON() (data []byte, err error) {
 }
 
 type PresetNewParamsUIDesignTokens struct {
-	BorderRadius param.Field[PresetNewParamsUIDesignTokensBorderRadius] `json:"border_radius,required"`
-	BorderWidth  param.Field[PresetNewParamsUIDesignTokensBorderWidth]  `json:"border_width,required"`
-	Colors       param.Field[PresetNewParamsUIDesignTokensColors]       `json:"colors,required"`
-	Logo         param.Field[string]                                    `json:"logo,required"`
-	SpacingBase  param.Field[float64]                                   `json:"spacing_base,required"`
-	Theme        param.Field[PresetNewParamsUIDesignTokensTheme]        `json:"theme,required"`
+	BorderRadius param.Field[PresetNewParamsUIDesignTokensBorderRadius] `json:"border_radius" api:"required"`
+	BorderWidth  param.Field[PresetNewParamsUIDesignTokensBorderWidth]  `json:"border_width" api:"required"`
+	Colors       param.Field[PresetNewParamsUIDesignTokensColors]       `json:"colors" api:"required"`
+	Logo         param.Field[string]                                    `json:"logo" api:"required"`
+	SpacingBase  param.Field[float64]                                   `json:"spacing_base" api:"required"`
+	Theme        param.Field[PresetNewParamsUIDesignTokensTheme]        `json:"theme" api:"required"`
 }
 
 func (r PresetNewParamsUIDesignTokens) MarshalJSON() (data []byte, err error) {
@@ -4176,14 +4176,14 @@ func (r PresetNewParamsUIDesignTokensBorderWidth) IsKnown() bool {
 }
 
 type PresetNewParamsUIDesignTokensColors struct {
-	Background  param.Field[PresetNewParamsUIDesignTokensColorsBackground] `json:"background,required"`
-	Brand       param.Field[PresetNewParamsUIDesignTokensColorsBrand]      `json:"brand,required"`
-	Danger      param.Field[string]                                        `json:"danger,required"`
-	Success     param.Field[string]                                        `json:"success,required"`
-	Text        param.Field[string]                                        `json:"text,required"`
-	TextOnBrand param.Field[string]                                        `json:"text_on_brand,required"`
-	VideoBg     param.Field[string]                                        `json:"video_bg,required"`
-	Warning     param.Field[string]                                        `json:"warning,required"`
+	Background  param.Field[PresetNewParamsUIDesignTokensColorsBackground] `json:"background" api:"required"`
+	Brand       param.Field[PresetNewParamsUIDesignTokensColorsBrand]      `json:"brand" api:"required"`
+	Danger      param.Field[string]                                        `json:"danger" api:"required"`
+	Success     param.Field[string]                                        `json:"success" api:"required"`
+	Text        param.Field[string]                                        `json:"text" api:"required"`
+	TextOnBrand param.Field[string]                                        `json:"text_on_brand" api:"required"`
+	VideoBg     param.Field[string]                                        `json:"video_bg" api:"required"`
+	Warning     param.Field[string]                                        `json:"warning" api:"required"`
 }
 
 func (r PresetNewParamsUIDesignTokensColors) MarshalJSON() (data []byte, err error) {
@@ -4191,11 +4191,11 @@ func (r PresetNewParamsUIDesignTokensColors) MarshalJSON() (data []byte, err err
 }
 
 type PresetNewParamsUIDesignTokensColorsBackground struct {
-	Number1000 param.Field[string] `json:"1000,required"`
-	Number600  param.Field[string] `json:"600,required"`
-	Number700  param.Field[string] `json:"700,required"`
-	Number800  param.Field[string] `json:"800,required"`
-	Number900  param.Field[string] `json:"900,required"`
+	Number1000 param.Field[string] `json:"1000" api:"required"`
+	Number600  param.Field[string] `json:"600" api:"required"`
+	Number700  param.Field[string] `json:"700" api:"required"`
+	Number800  param.Field[string] `json:"800" api:"required"`
+	Number900  param.Field[string] `json:"900" api:"required"`
 }
 
 func (r PresetNewParamsUIDesignTokensColorsBackground) MarshalJSON() (data []byte, err error) {
@@ -4203,11 +4203,11 @@ func (r PresetNewParamsUIDesignTokensColorsBackground) MarshalJSON() (data []byt
 }
 
 type PresetNewParamsUIDesignTokensColorsBrand struct {
-	Number300 param.Field[string] `json:"300,required"`
-	Number400 param.Field[string] `json:"400,required"`
-	Number500 param.Field[string] `json:"500,required"`
-	Number600 param.Field[string] `json:"600,required"`
-	Number700 param.Field[string] `json:"700,required"`
+	Number300 param.Field[string] `json:"300" api:"required"`
+	Number400 param.Field[string] `json:"400" api:"required"`
+	Number500 param.Field[string] `json:"500" api:"required"`
+	Number600 param.Field[string] `json:"600" api:"required"`
+	Number700 param.Field[string] `json:"700" api:"required"`
 }
 
 func (r PresetNewParamsUIDesignTokensColorsBrand) MarshalJSON() (data []byte, err error) {
@@ -4230,34 +4230,34 @@ func (r PresetNewParamsUIDesignTokensTheme) IsKnown() bool {
 
 type PresetNewParamsPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           param.Field[bool] `json:"accept_waiting_requests,required"`
-	CanAcceptProductionRequests     param.Field[bool] `json:"can_accept_production_requests,required"`
-	CanChangeParticipantPermissions param.Field[bool] `json:"can_change_participant_permissions,required"`
-	CanEditDisplayName              param.Field[bool] `json:"can_edit_display_name,required"`
-	CanLivestream                   param.Field[bool] `json:"can_livestream,required"`
-	CanRecord                       param.Field[bool] `json:"can_record,required"`
-	CanSpotlight                    param.Field[bool] `json:"can_spotlight,required"`
+	AcceptWaitingRequests           param.Field[bool] `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     param.Field[bool] `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions param.Field[bool] `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              param.Field[bool] `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   param.Field[bool] `json:"can_livestream" api:"required"`
+	CanRecord                       param.Field[bool] `json:"can_record" api:"required"`
+	CanSpotlight                    param.Field[bool] `json:"can_spotlight" api:"required"`
 	// Chat permissions
-	Chat                            param.Field[PresetNewParamsPermissionsChat]              `json:"chat,required"`
-	ConnectedMeetings               param.Field[PresetNewParamsPermissionsConnectedMeetings] `json:"connected_meetings,required"`
-	DisableParticipantAudio         param.Field[bool]                                        `json:"disable_participant_audio,required"`
-	DisableParticipantScreensharing param.Field[bool]                                        `json:"disable_participant_screensharing,required"`
-	DisableParticipantVideo         param.Field[bool]                                        `json:"disable_participant_video,required"`
+	Chat                            param.Field[PresetNewParamsPermissionsChat]              `json:"chat" api:"required"`
+	ConnectedMeetings               param.Field[PresetNewParamsPermissionsConnectedMeetings] `json:"connected_meetings" api:"required"`
+	DisableParticipantAudio         param.Field[bool]                                        `json:"disable_participant_audio" api:"required"`
+	DisableParticipantScreensharing param.Field[bool]                                        `json:"disable_participant_screensharing" api:"required"`
+	DisableParticipantVideo         param.Field[bool]                                        `json:"disable_participant_video" api:"required"`
 	// Whether this participant is visible to others or not
-	HiddenParticipant param.Field[bool] `json:"hidden_participant,required"`
-	KickParticipant   param.Field[bool] `json:"kick_participant,required"`
+	HiddenParticipant param.Field[bool] `json:"hidden_participant" api:"required"`
+	KickParticipant   param.Field[bool] `json:"kick_participant" api:"required"`
 	// Media permissions
-	Media          param.Field[PresetNewParamsPermissionsMedia] `json:"media,required"`
-	PinParticipant param.Field[bool]                            `json:"pin_participant,required"`
+	Media          param.Field[PresetNewParamsPermissionsMedia] `json:"media" api:"required"`
+	PinParticipant param.Field[bool]                            `json:"pin_participant" api:"required"`
 	// Plugin permissions
-	Plugins param.Field[PresetNewParamsPermissionsPlugins] `json:"plugins,required"`
+	Plugins param.Field[PresetNewParamsPermissionsPlugins] `json:"plugins" api:"required"`
 	// Poll permissions
-	Polls param.Field[PresetNewParamsPermissionsPolls] `json:"polls,required"`
+	Polls param.Field[PresetNewParamsPermissionsPolls] `json:"polls" api:"required"`
 	// Type of the recording peer
-	RecorderType        param.Field[PresetNewParamsPermissionsRecorderType] `json:"recorder_type,required"`
-	ShowParticipantList param.Field[bool]                                   `json:"show_participant_list,required"`
+	RecorderType        param.Field[PresetNewParamsPermissionsRecorderType] `json:"recorder_type" api:"required"`
+	ShowParticipantList param.Field[bool]                                   `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType param.Field[PresetNewParamsPermissionsWaitingRoomType] `json:"waiting_room_type,required"`
+	WaitingRoomType param.Field[PresetNewParamsPermissionsWaitingRoomType] `json:"waiting_room_type" api:"required"`
 	IsRecorder      param.Field[bool]                                      `json:"is_recorder"`
 }
 
@@ -4267,8 +4267,8 @@ func (r PresetNewParamsPermissions) MarshalJSON() (data []byte, err error) {
 
 // Chat permissions
 type PresetNewParamsPermissionsChat struct {
-	Private param.Field[PresetNewParamsPermissionsChatPrivate] `json:"private,required"`
-	Public  param.Field[PresetNewParamsPermissionsChatPublic]  `json:"public,required"`
+	Private param.Field[PresetNewParamsPermissionsChatPrivate] `json:"private" api:"required"`
+	Public  param.Field[PresetNewParamsPermissionsChatPublic]  `json:"public" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsChat) MarshalJSON() (data []byte, err error) {
@@ -4276,10 +4276,10 @@ func (r PresetNewParamsPermissionsChat) MarshalJSON() (data []byte, err error) {
 }
 
 type PresetNewParamsPermissionsChatPrivate struct {
-	CanReceive param.Field[bool] `json:"can_receive,required"`
-	CanSend    param.Field[bool] `json:"can_send,required"`
-	Files      param.Field[bool] `json:"files,required"`
-	Text       param.Field[bool] `json:"text,required"`
+	CanReceive param.Field[bool] `json:"can_receive" api:"required"`
+	CanSend    param.Field[bool] `json:"can_send" api:"required"`
+	Files      param.Field[bool] `json:"files" api:"required"`
+	Text       param.Field[bool] `json:"text" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsChatPrivate) MarshalJSON() (data []byte, err error) {
@@ -4288,11 +4288,11 @@ func (r PresetNewParamsPermissionsChatPrivate) MarshalJSON() (data []byte, err e
 
 type PresetNewParamsPermissionsChatPublic struct {
 	// Can send messages in general
-	CanSend param.Field[bool] `json:"can_send,required"`
+	CanSend param.Field[bool] `json:"can_send" api:"required"`
 	// Can send file messages
-	Files param.Field[bool] `json:"files,required"`
+	Files param.Field[bool] `json:"files" api:"required"`
 	// Can send text messages
-	Text param.Field[bool] `json:"text,required"`
+	Text param.Field[bool] `json:"text" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsChatPublic) MarshalJSON() (data []byte, err error) {
@@ -4300,9 +4300,9 @@ func (r PresetNewParamsPermissionsChatPublic) MarshalJSON() (data []byte, err er
 }
 
 type PresetNewParamsPermissionsConnectedMeetings struct {
-	CanAlterConnectedMeetings  param.Field[bool] `json:"can_alter_connected_meetings,required"`
-	CanSwitchConnectedMeetings param.Field[bool] `json:"can_switch_connected_meetings,required"`
-	CanSwitchToParentMeeting   param.Field[bool] `json:"can_switch_to_parent_meeting,required"`
+	CanAlterConnectedMeetings  param.Field[bool] `json:"can_alter_connected_meetings" api:"required"`
+	CanSwitchConnectedMeetings param.Field[bool] `json:"can_switch_connected_meetings" api:"required"`
+	CanSwitchToParentMeeting   param.Field[bool] `json:"can_switch_to_parent_meeting" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsConnectedMeetings) MarshalJSON() (data []byte, err error) {
@@ -4312,11 +4312,11 @@ func (r PresetNewParamsPermissionsConnectedMeetings) MarshalJSON() (data []byte,
 // Media permissions
 type PresetNewParamsPermissionsMedia struct {
 	// Audio permissions
-	Audio param.Field[PresetNewParamsPermissionsMediaAudio] `json:"audio,required"`
+	Audio param.Field[PresetNewParamsPermissionsMediaAudio] `json:"audio" api:"required"`
 	// Screenshare permissions
-	Screenshare param.Field[PresetNewParamsPermissionsMediaScreenshare] `json:"screenshare,required"`
+	Screenshare param.Field[PresetNewParamsPermissionsMediaScreenshare] `json:"screenshare" api:"required"`
 	// Video permissions
-	Video param.Field[PresetNewParamsPermissionsMediaVideo] `json:"video,required"`
+	Video param.Field[PresetNewParamsPermissionsMediaVideo] `json:"video" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsMedia) MarshalJSON() (data []byte, err error) {
@@ -4326,7 +4326,7 @@ func (r PresetNewParamsPermissionsMedia) MarshalJSON() (data []byte, err error) 
 // Audio permissions
 type PresetNewParamsPermissionsMediaAudio struct {
 	// Can produce audio
-	CanProduce param.Field[PresetNewParamsPermissionsMediaAudioCanProduce] `json:"can_produce,required"`
+	CanProduce param.Field[PresetNewParamsPermissionsMediaAudioCanProduce] `json:"can_produce" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsMediaAudio) MarshalJSON() (data []byte, err error) {
@@ -4353,7 +4353,7 @@ func (r PresetNewParamsPermissionsMediaAudioCanProduce) IsKnown() bool {
 // Screenshare permissions
 type PresetNewParamsPermissionsMediaScreenshare struct {
 	// Can produce screen share video
-	CanProduce param.Field[PresetNewParamsPermissionsMediaScreenshareCanProduce] `json:"can_produce,required"`
+	CanProduce param.Field[PresetNewParamsPermissionsMediaScreenshareCanProduce] `json:"can_produce" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsMediaScreenshare) MarshalJSON() (data []byte, err error) {
@@ -4380,7 +4380,7 @@ func (r PresetNewParamsPermissionsMediaScreenshareCanProduce) IsKnown() bool {
 // Video permissions
 type PresetNewParamsPermissionsMediaVideo struct {
 	// Can produce video
-	CanProduce param.Field[PresetNewParamsPermissionsMediaVideoCanProduce] `json:"can_produce,required"`
+	CanProduce param.Field[PresetNewParamsPermissionsMediaVideoCanProduce] `json:"can_produce" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsMediaVideo) MarshalJSON() (data []byte, err error) {
@@ -4407,12 +4407,12 @@ func (r PresetNewParamsPermissionsMediaVideoCanProduce) IsKnown() bool {
 // Plugin permissions
 type PresetNewParamsPermissionsPlugins struct {
 	// Can close plugins that are already open
-	CanClose param.Field[bool] `json:"can_close,required"`
+	CanClose param.Field[bool] `json:"can_close" api:"required"`
 	// Can edit plugin config
-	CanEditConfig param.Field[bool] `json:"can_edit_config,required"`
+	CanEditConfig param.Field[bool] `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart param.Field[bool]                                         `json:"can_start,required"`
-	Config   param.Field[PresetNewParamsPermissionsPluginsConfigUnion] `json:"config,required" format:"uuid"`
+	CanStart param.Field[bool]                                         `json:"can_start" api:"required"`
+	Config   param.Field[PresetNewParamsPermissionsPluginsConfigUnion] `json:"config" api:"required" format:"uuid"`
 }
 
 func (r PresetNewParamsPermissionsPlugins) MarshalJSON() (data []byte, err error) {
@@ -4426,8 +4426,8 @@ type PresetNewParamsPermissionsPluginsConfigUnion interface {
 }
 
 type PresetNewParamsPermissionsPluginsConfigObject struct {
-	AccessControl   param.Field[PresetNewParamsPermissionsPluginsConfigObjectAccessControl] `json:"access_control,required"`
-	HandlesViewOnly param.Field[bool]                                                       `json:"handles_view_only,required"`
+	AccessControl   param.Field[PresetNewParamsPermissionsPluginsConfigObjectAccessControl] `json:"access_control" api:"required"`
+	HandlesViewOnly param.Field[bool]                                                       `json:"handles_view_only" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsPluginsConfigObject) MarshalJSON() (data []byte, err error) {
@@ -4455,11 +4455,11 @@ func (r PresetNewParamsPermissionsPluginsConfigObjectAccessControl) IsKnown() bo
 // Poll permissions
 type PresetNewParamsPermissionsPolls struct {
 	// Can create polls
-	CanCreate param.Field[bool] `json:"can_create,required"`
+	CanCreate param.Field[bool] `json:"can_create" api:"required"`
 	// Can view polls
-	CanView param.Field[bool] `json:"can_view,required"`
+	CanView param.Field[bool] `json:"can_view" api:"required"`
 	// Can vote on polls
-	CanVote param.Field[bool] `json:"can_vote,required"`
+	CanVote param.Field[bool] `json:"can_vote" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsPolls) MarshalJSON() (data []byte, err error) {
@@ -4502,7 +4502,7 @@ func (r PresetNewParamsPermissionsWaitingRoomType) IsKnown() bool {
 
 type PresetUpdateParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]                   `path:"account_id,required"`
+	AccountID param.Field[string]                   `path:"account_id" api:"required"`
 	Config    param.Field[PresetUpdateParamsConfig] `json:"config"`
 	// Name of the preset
 	Name        param.Field[string]                        `json:"name"`
@@ -5005,12 +5005,12 @@ func (r PresetUpdateParamsUIDesignTokensTheme) IsKnown() bool {
 
 type PresetDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PresetGetParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The page number from which you want your page search results to be displayed.
 	PageNo param.Field[float64] `query:"page_no"`
 	// Number of results per page
@@ -5027,5 +5027,5 @@ func (r PresetGetParams) URLQuery() (v url.Values) {
 
 type PresetGetPresetByIDParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

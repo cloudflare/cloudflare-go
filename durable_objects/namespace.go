@@ -46,7 +46,7 @@ func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams,
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -96,7 +96,7 @@ func (r namespaceJSON) RawJSON() string {
 
 type NamespaceListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Current page.
 	Page param.Field[int64] `query:"page"`
 	// Items per-page.

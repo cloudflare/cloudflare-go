@@ -46,10 +46,10 @@ func (r *HTTPTopService) Browser(ctx context.Context, query HTTPTopBrowserParams
 	path := "radar/http/top/browser"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the top user agents, aggregated in families, by HTTP requests.
@@ -63,16 +63,16 @@ func (r *HTTPTopService) BrowserFamily(ctx context.Context, query HTTPTopBrowser
 	path := "radar/http/top/browser_family"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPTopBrowserResponse struct {
 	// Metadata for the results.
-	Meta HTTPTopBrowserResponseMeta   `json:"meta,required"`
-	Top0 []HTTPTopBrowserResponseTop0 `json:"top_0,required"`
+	Meta HTTPTopBrowserResponseMeta   `json:"meta" api:"required"`
+	Top0 []HTTPTopBrowserResponseTop0 `json:"top_0" api:"required"`
 	JSON httpTopBrowserResponseJSON   `json:"-"`
 }
 
@@ -95,15 +95,15 @@ func (r httpTopBrowserResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPTopBrowserResponseMeta struct {
-	ConfidenceInfo HTTPTopBrowserResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []HTTPTopBrowserResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo HTTPTopBrowserResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []HTTPTopBrowserResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTopBrowserResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTopBrowserResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTopBrowserResponseMetaUnit `json:"units,required"`
+	Units []HTTPTopBrowserResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTopBrowserResponseMetaJSON   `json:"-"`
 }
 
@@ -128,9 +128,9 @@ func (r httpTopBrowserResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPTopBrowserResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTopBrowserResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTopBrowserResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                        `json:"level,required"`
+	Level int64                                        `json:"level" api:"required"`
 	JSON  httpTopBrowserResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -154,15 +154,15 @@ func (r httpTopBrowserResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTopBrowserResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                        `json:"description,required"`
-	EndDate     time.Time                                                     `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                        `json:"description" api:"required"`
+	EndDate     time.Time                                                     `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
-	LinkedURL       string                                                 `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                              `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                   `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                 `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                              `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTopBrowserResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -249,9 +249,9 @@ func (r HTTPTopBrowserResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() 
 
 type HTTPTopBrowserResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                               `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                               `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTopBrowserResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -296,8 +296,8 @@ func (r HTTPTopBrowserResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTopBrowserResponseMetaUnit struct {
-	Name  string                             `json:"name,required"`
-	Value string                             `json:"value,required"`
+	Name  string                             `json:"name" api:"required"`
+	Value string                             `json:"value" api:"required"`
 	JSON  httpTopBrowserResponseMetaUnitJSON `json:"-"`
 }
 
@@ -319,8 +319,8 @@ func (r httpTopBrowserResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTopBrowserResponseTop0 struct {
-	Name  string                         `json:"name,required"`
-	Value string                         `json:"value,required"`
+	Name  string                         `json:"name" api:"required"`
+	Value string                         `json:"value" api:"required"`
 	JSON  httpTopBrowserResponseTop0JSON `json:"-"`
 }
 
@@ -343,8 +343,8 @@ func (r httpTopBrowserResponseTop0JSON) RawJSON() string {
 
 type HTTPTopBrowserFamilyResponse struct {
 	// Metadata for the results.
-	Meta HTTPTopBrowserFamilyResponseMeta   `json:"meta,required"`
-	Top0 []HTTPTopBrowserFamilyResponseTop0 `json:"top_0,required"`
+	Meta HTTPTopBrowserFamilyResponseMeta   `json:"meta" api:"required"`
+	Top0 []HTTPTopBrowserFamilyResponseTop0 `json:"top_0" api:"required"`
 	JSON httpTopBrowserFamilyResponseJSON   `json:"-"`
 }
 
@@ -367,15 +367,15 @@ func (r httpTopBrowserFamilyResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type HTTPTopBrowserFamilyResponseMeta struct {
-	ConfidenceInfo HTTPTopBrowserFamilyResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []HTTPTopBrowserFamilyResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo HTTPTopBrowserFamilyResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []HTTPTopBrowserFamilyResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization HTTPTopBrowserFamilyResponseMetaNormalization `json:"normalization,required"`
+	Normalization HTTPTopBrowserFamilyResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []HTTPTopBrowserFamilyResponseMetaUnit `json:"units,required"`
+	Units []HTTPTopBrowserFamilyResponseMetaUnit `json:"units" api:"required"`
 	JSON  httpTopBrowserFamilyResponseMetaJSON   `json:"-"`
 }
 
@@ -400,9 +400,9 @@ func (r httpTopBrowserFamilyResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPTopBrowserFamilyResponseMetaConfidenceInfo struct {
-	Annotations []HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                              `json:"level,required"`
+	Level int64                                              `json:"level" api:"required"`
 	JSON  httpTopBrowserFamilyResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -426,15 +426,15 @@ func (r httpTopBrowserFamilyResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                              `json:"description,required"`
-	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	DataSource  HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                              `json:"description" api:"required"`
+	EndDate     time.Time                                                           `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
-	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
 	JSON            httpTopBrowserFamilyResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -522,9 +522,9 @@ func (r HTTPTopBrowserFamilyResponseMetaConfidenceInfoAnnotationsEventType) IsKn
 
 type HTTPTopBrowserFamilyResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                     `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                     `json:"startTime" api:"required" format:"date-time"`
 	JSON      httpTopBrowserFamilyResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -569,8 +569,8 @@ func (r HTTPTopBrowserFamilyResponseMetaNormalization) IsKnown() bool {
 }
 
 type HTTPTopBrowserFamilyResponseMetaUnit struct {
-	Name  string                                   `json:"name,required"`
-	Value string                                   `json:"value,required"`
+	Name  string                                   `json:"name" api:"required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  httpTopBrowserFamilyResponseMetaUnitJSON `json:"-"`
 }
 
@@ -592,8 +592,8 @@ func (r httpTopBrowserFamilyResponseMetaUnitJSON) RawJSON() string {
 }
 
 type HTTPTopBrowserFamilyResponseTop0 struct {
-	Name  string                               `json:"name,required"`
-	Value string                               `json:"value,required"`
+	Name  string                               `json:"name" api:"required"`
+	Value string                               `json:"value" api:"required"`
 	JSON  httpTopBrowserFamilyResponseTop0JSON `json:"-"`
 }
 
@@ -823,8 +823,8 @@ func (r HTTPTopBrowserParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTopBrowserResponseEnvelope struct {
-	Result  HTTPTopBrowserResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  HTTPTopBrowserResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    httpTopBrowserResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1036,8 +1036,8 @@ func (r HTTPTopBrowserFamilyParamsTLSVersion) IsKnown() bool {
 }
 
 type HTTPTopBrowserFamilyResponseEnvelope struct {
-	Result  HTTPTopBrowserFamilyResponse             `json:"result,required"`
-	Success bool                                     `json:"success,required"`
+	Result  HTTPTopBrowserFamilyResponse             `json:"result" api:"required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    httpTopBrowserFamilyResponseEnvelopeJSON `json:"-"`
 }
 

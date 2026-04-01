@@ -44,14 +44,14 @@ func (r *TrafficAnomalyLocationService) Get(ctx context.Context, query TrafficAn
 	path := "radar/traffic_anomalies/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TrafficAnomalyLocationGetResponse struct {
-	TrafficAnomalies []TrafficAnomalyLocationGetResponseTrafficAnomaly `json:"trafficAnomalies,required"`
+	TrafficAnomalies []TrafficAnomalyLocationGetResponseTrafficAnomaly `json:"trafficAnomalies" api:"required"`
 	JSON             trafficAnomalyLocationGetResponseJSON             `json:"-"`
 }
 
@@ -72,10 +72,10 @@ func (r trafficAnomalyLocationGetResponseJSON) RawJSON() string {
 }
 
 type TrafficAnomalyLocationGetResponseTrafficAnomaly struct {
-	ClientCountryAlpha2 string `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string `json:"clientCountryName,required"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2" api:"required"`
+	ClientCountryName   string `json:"clientCountryName" api:"required"`
 	// A numeric string.
-	Value string                                              `json:"value,required"`
+	Value string                                              `json:"value" api:"required"`
 	JSON  trafficAnomalyLocationGetResponseTrafficAnomalyJSON `json:"-"`
 }
 
@@ -152,8 +152,8 @@ func (r TrafficAnomalyLocationGetParamsStatus) IsKnown() bool {
 }
 
 type TrafficAnomalyLocationGetResponseEnvelope struct {
-	Result  TrafficAnomalyLocationGetResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
+	Result  TrafficAnomalyLocationGetResponse             `json:"result" api:"required"`
+	Success bool                                          `json:"success" api:"required"`
 	JSON    trafficAnomalyLocationGetResponseEnvelopeJSON `json:"-"`
 }
 

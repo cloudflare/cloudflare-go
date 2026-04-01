@@ -41,19 +41,19 @@ func (r *TunnelCloudflaredConfigurationService) Update(ctx context.Context, tunn
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets the configuration for a remotely-managed tunnel
@@ -62,19 +62,19 @@ func (r *TunnelCloudflaredConfigurationService) Get(ctx context.Context, tunnelI
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if tunnelID == "" {
 		err = errors.New("missing required tunnel_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Cloudflare Tunnel configuration
@@ -147,11 +147,11 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigJSON) RawJSON() string
 // Public hostname
 type TunnelCloudflaredConfigurationUpdateResponseConfigIngress struct {
 	// Public hostname for this service.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Protocol and address of destination server. Supported protocols: http://,
 	// https://, unix://, tcp://, ssh://, rdp://, unix+tls://, smb://. Alternatively
 	// can return a HTTP status code http_status:[code] e.g. 'http_status:404'.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
 	OriginRequest TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest `json:"originRequest"`
@@ -264,8 +264,8 @@ type TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAcces
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AUDTag   []string `json:"audTag,required"`
-	TeamName string   `json:"teamName,required"`
+	AUDTag   []string `json:"audTag" api:"required"`
+	TeamName string   `json:"teamName" api:"required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required bool                                                                             `json:"required"`
 	JSON     tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccessJSON `json:"-"`
@@ -374,8 +374,8 @@ type TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccess struc
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AUDTag   []string `json:"audTag,required"`
-	TeamName string   `json:"teamName,required"`
+	AUDTag   []string `json:"audTag" api:"required"`
+	TeamName string   `json:"teamName" api:"required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required bool                                                                      `json:"required"`
 	JSON     tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccessJSON `json:"-"`
@@ -488,11 +488,11 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigJSON) RawJSON() string {
 // Public hostname
 type TunnelCloudflaredConfigurationGetResponseConfigIngress struct {
 	// Public hostname for this service.
-	Hostname string `json:"hostname,required"`
+	Hostname string `json:"hostname" api:"required"`
 	// Protocol and address of destination server. Supported protocols: http://,
 	// https://, unix://, tcp://, ssh://, rdp://, unix+tls://, smb://. Alternatively
 	// can return a HTTP status code http_status:[code] e.g. 'http_status:404'.
-	Service string `json:"service,required"`
+	Service string `json:"service" api:"required"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
 	OriginRequest TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest `json:"originRequest"`
@@ -604,8 +604,8 @@ type TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccess s
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AUDTag   []string `json:"audTag,required"`
-	TeamName string   `json:"teamName,required"`
+	AUDTag   []string `json:"audTag" api:"required"`
+	TeamName string   `json:"teamName" api:"required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required bool                                                                          `json:"required"`
 	JSON     tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccessJSON `json:"-"`
@@ -714,8 +714,8 @@ type TunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AUDTag   []string `json:"audTag,required"`
-	TeamName string   `json:"teamName,required"`
+	AUDTag   []string `json:"audTag" api:"required"`
+	TeamName string   `json:"teamName" api:"required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required bool                                                                   `json:"required"`
 	JSON     tunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccessJSON `json:"-"`
@@ -760,7 +760,7 @@ func (r TunnelCloudflaredConfigurationGetResponseSource) IsKnown() bool {
 
 type TunnelCloudflaredConfigurationUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The tunnel configuration and ingress rules.
 	Config param.Field[TunnelCloudflaredConfigurationUpdateParamsConfig] `json:"config"`
 }
@@ -786,11 +786,11 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfig) MarshalJSON() (data []
 // Public hostname
 type TunnelCloudflaredConfigurationUpdateParamsConfigIngress struct {
 	// Public hostname for this service.
-	Hostname param.Field[string] `json:"hostname,required"`
+	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// Protocol and address of destination server. Supported protocols: http://,
 	// https://, unix://, tcp://, ssh://, rdp://, unix+tls://, smb://. Alternatively
 	// can return a HTTP status code http_status:[code] e.g. 'http_status:404'.
-	Service param.Field[string] `json:"service,required"`
+	Service param.Field[string] `json:"service" api:"required"`
 	// Configuration parameters for the public hostname specific connection settings
 	// between cloudflared and origin server.
 	OriginRequest param.Field[TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest] `json:"originRequest"`
@@ -858,8 +858,8 @@ type TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAccess 
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AUDTag   param.Field[[]string] `json:"audTag,required"`
-	TeamName param.Field[string]   `json:"teamName,required"`
+	AUDTag   param.Field[[]string] `json:"audTag" api:"required"`
+	TeamName param.Field[string]   `json:"teamName" api:"required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required param.Field[bool] `json:"required"`
 }
@@ -924,8 +924,8 @@ type TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess struct 
 	// Access applications that are allowed to reach this hostname for this Tunnel.
 	// Audience tags can be identified in the dashboard or via the List Access policies
 	// API.
-	AUDTag   param.Field[[]string] `json:"audTag,required"`
-	TeamName param.Field[string]   `json:"teamName,required"`
+	AUDTag   param.Field[[]string] `json:"audTag" api:"required"`
+	TeamName param.Field[string]   `json:"teamName" api:"required"`
 	// Deny traffic that has not fulfilled Access authorization.
 	Required param.Field[bool] `json:"required"`
 }
@@ -935,10 +935,10 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess) Mar
 }
 
 type TunnelCloudflaredConfigurationUpdateResponseEnvelope struct {
-	Errors   []TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Cloudflare Tunnel configuration
 	Result TunnelCloudflaredConfigurationUpdateResponse             `json:"result"`
 	JSON   tunnelCloudflaredConfigurationUpdateResponseEnvelopeJSON `json:"-"`
@@ -964,8 +964,8 @@ func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeJSON) RawJSON() stri
 }
 
 type TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                            `json:"code,required"`
-	Message          string                                                           `json:"message,required"`
+	Code             int64                                                            `json:"code" api:"required"`
+	Message          string                                                           `json:"message" api:"required"`
 	DocumentationURL string                                                           `json:"documentation_url"`
 	Source           TunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1014,8 +1014,8 @@ func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeErrorsSourceJSON) Ra
 }
 
 type TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                              `json:"code,required"`
-	Message          string                                                             `json:"message,required"`
+	Code             int64                                                              `json:"code" api:"required"`
+	Message          string                                                             `json:"message" api:"required"`
 	DocumentationURL string                                                             `json:"documentation_url"`
 	Source           TunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1080,14 +1080,14 @@ func (r TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess) IsKnown() b
 
 type TunnelCloudflaredConfigurationGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TunnelCloudflaredConfigurationGetResponseEnvelope struct {
-	Errors   []TunnelCloudflaredConfigurationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelCloudflaredConfigurationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []TunnelCloudflaredConfigurationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TunnelCloudflaredConfigurationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Cloudflare Tunnel configuration
 	Result TunnelCloudflaredConfigurationGetResponse             `json:"result"`
 	JSON   tunnelCloudflaredConfigurationGetResponseEnvelopeJSON `json:"-"`
@@ -1113,8 +1113,8 @@ func (r tunnelCloudflaredConfigurationGetResponseEnvelopeJSON) RawJSON() string 
 }
 
 type TunnelCloudflaredConfigurationGetResponseEnvelopeErrors struct {
-	Code             int64                                                         `json:"code,required"`
-	Message          string                                                        `json:"message,required"`
+	Code             int64                                                         `json:"code" api:"required"`
+	Message          string                                                        `json:"message" api:"required"`
 	DocumentationURL string                                                        `json:"documentation_url"`
 	Source           TunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1163,8 +1163,8 @@ func (r tunnelCloudflaredConfigurationGetResponseEnvelopeErrorsSourceJSON) RawJS
 }
 
 type TunnelCloudflaredConfigurationGetResponseEnvelopeMessages struct {
-	Code             int64                                                           `json:"code,required"`
-	Message          string                                                          `json:"message,required"`
+	Code             int64                                                           `json:"code" api:"required"`
+	Message          string                                                          `json:"message" api:"required"`
 	DocumentationURL string                                                          `json:"documentation_url"`
 	Source           TunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesJSON   `json:"-"`

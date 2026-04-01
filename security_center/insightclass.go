@@ -62,10 +62,10 @@ func (r *InsightClassService) Get(ctx context.Context, params InsightClassGetPar
 	path := fmt.Sprintf("%s/%s/security-center/insights/class", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type InsightClassGetResponse struct {
@@ -118,10 +118,10 @@ func (r InsightClassGetParams) URLQuery() (v url.Values) {
 }
 
 type InsightClassGetResponseEnvelope struct {
-	Errors   []InsightClassGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InsightClassGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []InsightClassGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InsightClassGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success InsightClassGetResponseEnvelopeSuccess `json:"success,required"`
+	Success InsightClassGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  []InsightClassGetResponse              `json:"result"`
 	JSON    insightClassGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -146,8 +146,8 @@ func (r insightClassGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InsightClassGetResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           InsightClassGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             insightClassGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -194,8 +194,8 @@ func (r insightClassGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type InsightClassGetResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           InsightClassGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             insightClassGetResponseEnvelopeMessagesJSON   `json:"-"`

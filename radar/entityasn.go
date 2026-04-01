@@ -43,10 +43,10 @@ func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, 
 	path := "radar/entities/asns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves Internet Routing Registry AS-SETs that an AS is a member of.
@@ -56,10 +56,10 @@ func (r *EntityASNService) AsSet(ctx context.Context, asn int64, query EntityASN
 	path := fmt.Sprintf("radar/entities/asns/%v/as_set", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves a ranked list of Autonomous Systems based on their presence in the
@@ -71,10 +71,10 @@ func (r *EntityASNService) BotnetThreatFeed(ctx context.Context, query EntityASN
 	path := "radar/entities/asns/botnet_threat_feed"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the requested autonomous system information. (A confidence level below
@@ -87,10 +87,10 @@ func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGe
 	path := fmt.Sprintf("radar/entities/asns/%v", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the requested autonomous system information based on IP address.
@@ -101,10 +101,10 @@ func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts
 	path := "radar/entities/asns/ip"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves AS-level relationship for given networks.
@@ -114,14 +114,14 @@ func (r *EntityASNService) Rel(ctx context.Context, asn int64, query EntityASNRe
 	path := fmt.Sprintf("radar/entities/asns/%v/rel", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EntityASNListResponse struct {
-	ASNs []EntityASNListResponseASN `json:"asns,required"`
+	ASNs []EntityASNListResponseASN `json:"asns" api:"required"`
 	JSON entityASNListResponseJSON  `json:"-"`
 }
 
@@ -142,10 +142,10 @@ func (r entityASNListResponseJSON) RawJSON() string {
 }
 
 type EntityASNListResponseASN struct {
-	ASN         int64                        `json:"asn,required"`
-	Country     string                       `json:"country,required"`
-	CountryName string                       `json:"countryName,required"`
-	Name        string                       `json:"name,required"`
+	ASN         int64                        `json:"asn" api:"required"`
+	Country     string                       `json:"country" api:"required"`
+	CountryName string                       `json:"countryName" api:"required"`
+	Name        string                       `json:"name" api:"required"`
 	Aka         string                       `json:"aka"`
 	OrgName     string                       `json:"orgName"`
 	Website     string                       `json:"website"`
@@ -175,9 +175,9 @@ func (r entityASNListResponseASNJSON) RawJSON() string {
 }
 
 type EntityASNAsSetResponse struct {
-	AsSets []EntityASNAsSetResponseAsSet `json:"as_sets,required"`
+	AsSets []EntityASNAsSetResponseAsSet `json:"as_sets" api:"required"`
 	// Paths from the AS-SET that include the given AS to its upstreams recursively
-	Paths [][]string                 `json:"paths,required"`
+	Paths [][]string                 `json:"paths" api:"required"`
 	JSON  entityASNAsSetResponseJSON `json:"-"`
 }
 
@@ -200,17 +200,17 @@ func (r entityASNAsSetResponseJSON) RawJSON() string {
 
 type EntityASNAsSetResponseAsSet struct {
 	// The number of AS members in the AS-SET
-	AsMembersCount int64 `json:"as_members_count,required"`
+	AsMembersCount int64 `json:"as_members_count" api:"required"`
 	// The number of AS-SET members in the AS-SET
-	AsSetMembersCount int64 `json:"as_set_members_count,required"`
+	AsSetMembersCount int64 `json:"as_set_members_count" api:"required"`
 	// The number of recursive upstream AS-SETs
-	AsSetUpstreamsCount int64 `json:"as_set_upstreams_count,required"`
+	AsSetUpstreamsCount int64 `json:"as_set_upstreams_count" api:"required"`
 	// The number of unique ASNs in the AS-SETs recursive downstream
-	ASNConeSize int64 `json:"asn_cone_size,required"`
+	ASNConeSize int64 `json:"asn_cone_size" api:"required"`
 	// The IRR sources of the AS-SET
-	IrrSources []string `json:"irr_sources,required"`
+	IrrSources []string `json:"irr_sources" api:"required"`
 	// The name of the AS-SET
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The AS number following hierarchical AS-SET name
 	HierarchicalASN int64 `json:"hierarchical_asn"`
 	// The inferred AS number of the AS-SET
@@ -245,8 +245,8 @@ func (r entityASNAsSetResponseAsSetJSON) RawJSON() string {
 }
 
 type EntityASNBotnetThreatFeedResponse struct {
-	Ases []EntityASNBotnetThreatFeedResponseAse `json:"ases,required"`
-	Meta EntityASNBotnetThreatFeedResponseMeta  `json:"meta,required"`
+	Ases []EntityASNBotnetThreatFeedResponseAse `json:"ases" api:"required"`
+	Meta EntityASNBotnetThreatFeedResponseMeta  `json:"meta" api:"required"`
 	JSON entityASNBotnetThreatFeedResponseJSON  `json:"-"`
 }
 
@@ -268,10 +268,10 @@ func (r entityASNBotnetThreatFeedResponseJSON) RawJSON() string {
 }
 
 type EntityASNBotnetThreatFeedResponseAse struct {
-	ASN        int64                                    `json:"asn,required"`
-	Country    string                                   `json:"country,required"`
-	Name       string                                   `json:"name,required"`
-	Rank       int64                                    `json:"rank,required"`
+	ASN        int64                                    `json:"asn" api:"required"`
+	Country    string                                   `json:"country" api:"required"`
+	Name       string                                   `json:"name" api:"required"`
+	Rank       int64                                    `json:"rank" api:"required"`
 	RankChange int64                                    `json:"rankChange"`
 	JSON       entityASNBotnetThreatFeedResponseAseJSON `json:"-"`
 }
@@ -297,8 +297,8 @@ func (r entityASNBotnetThreatFeedResponseAseJSON) RawJSON() string {
 }
 
 type EntityASNBotnetThreatFeedResponseMeta struct {
-	Date        string                                    `json:"date,required"`
-	Total       int64                                     `json:"total,required"`
+	Date        string                                    `json:"date" api:"required"`
+	Total       int64                                     `json:"total" api:"required"`
 	CompareDate string                                    `json:"compareDate"`
 	JSON        entityASNBotnetThreatFeedResponseMetaJSON `json:"-"`
 }
@@ -322,7 +322,7 @@ func (r entityASNBotnetThreatFeedResponseMetaJSON) RawJSON() string {
 }
 
 type EntityASNGetResponse struct {
-	ASN  EntityASNGetResponseASN  `json:"asn,required"`
+	ASN  EntityASNGetResponseASN  `json:"asn" api:"required"`
 	JSON entityASNGetResponseJSON `json:"-"`
 }
 
@@ -343,17 +343,17 @@ func (r entityASNGetResponseJSON) RawJSON() string {
 }
 
 type EntityASNGetResponseASN struct {
-	ASN             int64                                 `json:"asn,required"`
-	ConfidenceLevel int64                                 `json:"confidenceLevel,required"`
-	Country         string                                `json:"country,required"`
-	CountryName     string                                `json:"countryName,required"`
-	EstimatedUsers  EntityASNGetResponseASNEstimatedUsers `json:"estimatedUsers,required"`
-	Name            string                                `json:"name,required"`
-	OrgName         string                                `json:"orgName,required"`
-	Related         []EntityASNGetResponseASNRelated      `json:"related,required"`
+	ASN             int64                                 `json:"asn" api:"required"`
+	ConfidenceLevel int64                                 `json:"confidenceLevel" api:"required"`
+	Country         string                                `json:"country" api:"required"`
+	CountryName     string                                `json:"countryName" api:"required"`
+	EstimatedUsers  EntityASNGetResponseASNEstimatedUsers `json:"estimatedUsers" api:"required"`
+	Name            string                                `json:"name" api:"required"`
+	OrgName         string                                `json:"orgName" api:"required"`
+	Related         []EntityASNGetResponseASNRelated      `json:"related" api:"required"`
 	// Regional Internet Registry.
-	Source  string                      `json:"source,required"`
-	Website string                      `json:"website,required"`
+	Source  string                      `json:"source" api:"required"`
+	Website string                      `json:"website" api:"required"`
 	Aka     string                      `json:"aka"`
 	JSON    entityASNGetResponseASNJSON `json:"-"`
 }
@@ -385,7 +385,7 @@ func (r entityASNGetResponseASNJSON) RawJSON() string {
 }
 
 type EntityASNGetResponseASNEstimatedUsers struct {
-	Locations []EntityASNGetResponseASNEstimatedUsersLocation `json:"locations,required"`
+	Locations []EntityASNGetResponseASNEstimatedUsersLocation `json:"locations" api:"required"`
 	// Total estimated users.
 	EstimatedUsers int64                                     `json:"estimatedUsers"`
 	JSON           entityASNGetResponseASNEstimatedUsersJSON `json:"-"`
@@ -409,8 +409,8 @@ func (r entityASNGetResponseASNEstimatedUsersJSON) RawJSON() string {
 }
 
 type EntityASNGetResponseASNEstimatedUsersLocation struct {
-	LocationAlpha2 string `json:"locationAlpha2,required"`
-	LocationName   string `json:"locationName,required"`
+	LocationAlpha2 string `json:"locationAlpha2" api:"required"`
+	LocationName   string `json:"locationName" api:"required"`
 	// Estimated users per location.
 	EstimatedUsers int64                                             `json:"estimatedUsers"`
 	JSON           entityASNGetResponseASNEstimatedUsersLocationJSON `json:"-"`
@@ -435,8 +435,8 @@ func (r entityASNGetResponseASNEstimatedUsersLocationJSON) RawJSON() string {
 }
 
 type EntityASNGetResponseASNRelated struct {
-	ASN  int64  `json:"asn,required"`
-	Name string `json:"name,required"`
+	ASN  int64  `json:"asn" api:"required"`
+	Name string `json:"name" api:"required"`
 	Aka  string `json:"aka"`
 	// Total estimated users.
 	EstimatedUsers int64                              `json:"estimatedUsers"`
@@ -463,7 +463,7 @@ func (r entityASNGetResponseASNRelatedJSON) RawJSON() string {
 }
 
 type EntityAsnipResponse struct {
-	ASN  EntityAsnipResponseASN  `json:"asn,required"`
+	ASN  EntityAsnipResponseASN  `json:"asn" api:"required"`
 	JSON entityAsnipResponseJSON `json:"-"`
 }
 
@@ -484,16 +484,16 @@ func (r entityAsnipResponseJSON) RawJSON() string {
 }
 
 type EntityAsnipResponseASN struct {
-	ASN            int64                                `json:"asn,required"`
-	Country        string                               `json:"country,required"`
-	CountryName    string                               `json:"countryName,required"`
-	EstimatedUsers EntityAsnipResponseASNEstimatedUsers `json:"estimatedUsers,required"`
-	Name           string                               `json:"name,required"`
-	OrgName        string                               `json:"orgName,required"`
-	Related        []EntityAsnipResponseASNRelated      `json:"related,required"`
+	ASN            int64                                `json:"asn" api:"required"`
+	Country        string                               `json:"country" api:"required"`
+	CountryName    string                               `json:"countryName" api:"required"`
+	EstimatedUsers EntityAsnipResponseASNEstimatedUsers `json:"estimatedUsers" api:"required"`
+	Name           string                               `json:"name" api:"required"`
+	OrgName        string                               `json:"orgName" api:"required"`
+	Related        []EntityAsnipResponseASNRelated      `json:"related" api:"required"`
 	// Regional Internet Registry.
-	Source  string                     `json:"source,required"`
-	Website string                     `json:"website,required"`
+	Source  string                     `json:"source" api:"required"`
+	Website string                     `json:"website" api:"required"`
 	Aka     string                     `json:"aka"`
 	JSON    entityAsnipResponseASNJSON `json:"-"`
 }
@@ -524,7 +524,7 @@ func (r entityAsnipResponseASNJSON) RawJSON() string {
 }
 
 type EntityAsnipResponseASNEstimatedUsers struct {
-	Locations []EntityAsnipResponseASNEstimatedUsersLocation `json:"locations,required"`
+	Locations []EntityAsnipResponseASNEstimatedUsersLocation `json:"locations" api:"required"`
 	// Total estimated users.
 	EstimatedUsers int64                                    `json:"estimatedUsers"`
 	JSON           entityAsnipResponseASNEstimatedUsersJSON `json:"-"`
@@ -548,8 +548,8 @@ func (r entityAsnipResponseASNEstimatedUsersJSON) RawJSON() string {
 }
 
 type EntityAsnipResponseASNEstimatedUsersLocation struct {
-	LocationAlpha2 string `json:"locationAlpha2,required"`
-	LocationName   string `json:"locationName,required"`
+	LocationAlpha2 string `json:"locationAlpha2" api:"required"`
+	LocationName   string `json:"locationName" api:"required"`
 	// Estimated users per location.
 	EstimatedUsers int64                                            `json:"estimatedUsers"`
 	JSON           entityAsnipResponseASNEstimatedUsersLocationJSON `json:"-"`
@@ -574,8 +574,8 @@ func (r entityAsnipResponseASNEstimatedUsersLocationJSON) RawJSON() string {
 }
 
 type EntityAsnipResponseASNRelated struct {
-	ASN  int64  `json:"asn,required"`
-	Name string `json:"name,required"`
+	ASN  int64  `json:"asn" api:"required"`
+	Name string `json:"name" api:"required"`
 	Aka  string `json:"aka"`
 	// Total estimated users.
 	EstimatedUsers int64                             `json:"estimatedUsers"`
@@ -602,8 +602,8 @@ func (r entityAsnipResponseASNRelatedJSON) RawJSON() string {
 }
 
 type EntityASNRelResponse struct {
-	Meta EntityASNRelResponseMeta  `json:"meta,required"`
-	Rels []EntityASNRelResponseRel `json:"rels,required"`
+	Meta EntityASNRelResponseMeta  `json:"meta" api:"required"`
+	Rels []EntityASNRelResponseRel `json:"rels" api:"required"`
 	JSON entityASNRelResponseJSON  `json:"-"`
 }
 
@@ -625,9 +625,9 @@ func (r entityASNRelResponseJSON) RawJSON() string {
 }
 
 type EntityASNRelResponseMeta struct {
-	DataTime   string                       `json:"data_time,required"`
-	QueryTime  string                       `json:"query_time,required"`
-	TotalPeers int64                        `json:"total_peers,required"`
+	DataTime   string                       `json:"data_time" api:"required"`
+	QueryTime  string                       `json:"query_time" api:"required"`
+	TotalPeers int64                        `json:"total_peers" api:"required"`
 	JSON       entityASNRelResponseMetaJSON `json:"-"`
 }
 
@@ -650,13 +650,13 @@ func (r entityASNRelResponseMetaJSON) RawJSON() string {
 }
 
 type EntityASNRelResponseRel struct {
-	Asn1        int64                       `json:"asn1,required"`
-	Asn1Country string                      `json:"asn1_country,required"`
-	Asn1Name    string                      `json:"asn1_name,required"`
-	Asn2        int64                       `json:"asn2,required"`
-	Asn2Country string                      `json:"asn2_country,required"`
-	Asn2Name    string                      `json:"asn2_name,required"`
-	Rel         string                      `json:"rel,required"`
+	Asn1        int64                       `json:"asn1" api:"required"`
+	Asn1Country string                      `json:"asn1_country" api:"required"`
+	Asn1Name    string                      `json:"asn1_name" api:"required"`
+	Asn2        int64                       `json:"asn2" api:"required"`
+	Asn2Country string                      `json:"asn2_country" api:"required"`
+	Asn2Name    string                      `json:"asn2_name" api:"required"`
+	Rel         string                      `json:"rel" api:"required"`
 	JSON        entityASNRelResponseRelJSON `json:"-"`
 }
 
@@ -739,8 +739,8 @@ func (r EntityASNListParamsOrderBy) IsKnown() bool {
 }
 
 type EntityASNListResponseEnvelope struct {
-	Result  EntityASNListResponse             `json:"result,required"`
-	Success bool                              `json:"success,required"`
+	Result  EntityASNListResponse             `json:"result" api:"required"`
+	Success bool                              `json:"success" api:"required"`
 	JSON    entityASNListResponseEnvelopeJSON `json:"-"`
 }
 
@@ -791,8 +791,8 @@ func (r EntityASNAsSetParamsFormat) IsKnown() bool {
 }
 
 type EntityASNAsSetResponseEnvelope struct {
-	Result  EntityASNAsSetResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
+	Result  EntityASNAsSetResponse             `json:"result" api:"required"`
+	Success bool                               `json:"success" api:"required"`
 	JSON    entityASNAsSetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -898,8 +898,8 @@ func (r EntityASNBotnetThreatFeedParamsSortOrder) IsKnown() bool {
 }
 
 type EntityASNBotnetThreatFeedResponseEnvelope struct {
-	Result  EntityASNBotnetThreatFeedResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
+	Result  EntityASNBotnetThreatFeedResponse             `json:"result" api:"required"`
+	Success bool                                          `json:"success" api:"required"`
 	JSON    entityASNBotnetThreatFeedResponseEnvelopeJSON `json:"-"`
 }
 
@@ -950,8 +950,8 @@ func (r EntityASNGetParamsFormat) IsKnown() bool {
 }
 
 type EntityASNGetResponseEnvelope struct {
-	Result  EntityASNGetResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  EntityASNGetResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    entityASNGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -974,7 +974,7 @@ func (r entityASNGetResponseEnvelopeJSON) RawJSON() string {
 
 type EntityASNIPParams struct {
 	// IP address.
-	IP param.Field[string] `query:"ip,required" format:"ip"`
+	IP param.Field[string] `query:"ip" api:"required" format:"ip"`
 	// Format in which results will be returned.
 	Format param.Field[EntityAsnipParamsFormat] `query:"format"`
 }
@@ -1004,8 +1004,8 @@ func (r EntityAsnipParamsFormat) IsKnown() bool {
 }
 
 type EntityAsnipResponseEnvelope struct {
-	Result  EntityAsnipResponse             `json:"result,required"`
-	Success bool                            `json:"success,required"`
+	Result  EntityAsnipResponse             `json:"result" api:"required"`
+	Success bool                            `json:"success" api:"required"`
 	JSON    entityAsnipResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1058,8 +1058,8 @@ func (r EntityASNRelParamsFormat) IsKnown() bool {
 }
 
 type EntityASNRelResponseEnvelope struct {
-	Result  EntityASNRelResponse             `json:"result,required"`
-	Success bool                             `json:"success,required"`
+	Result  EntityASNRelResponse             `json:"result" api:"required"`
+	Success bool                             `json:"success" api:"required"`
 	JSON    entityASNRelResponseEnvelopeJSON `json:"-"`
 }
 

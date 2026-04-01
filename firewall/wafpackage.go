@@ -56,7 +56,7 @@ func (r *WAFPackageService) List(ctx context.Context, params WAFPackageListParam
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -91,15 +91,15 @@ func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAF
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if packageID == "" {
 		err = errors.New("missing required package_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s", query.ZoneID, packageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type WAFPackageListResponse = interface{}
@@ -172,11 +172,11 @@ func init() {
 }
 
 type WAFPackageGetResponseFirewallAPIResponseSingle struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required"`
 	// Defines whether the API call was successful.
-	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`
+	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success" api:"required"`
 	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`
 }
 
@@ -256,7 +256,7 @@ func (r WAFPackageGetResponseSuccess) IsKnown() bool {
 
 type WAFPackageListParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned packages.
 	Direction param.Field[WAFPackageListParamsDirection] `query:"direction"`
 	// When set to `all`, all the search requirements must match. When set to `any`,
@@ -330,5 +330,5 @@ func (r WAFPackageListParamsOrder) IsKnown() bool {
 
 type WAFPackageGetParams struct {
 	// Defines an identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

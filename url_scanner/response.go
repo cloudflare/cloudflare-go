@@ -40,18 +40,18 @@ func (r *ResponseService) Get(ctx context.Context, responseID string, query Resp
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if responseID == "" {
 		err = errors.New("missing required response_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/v2/responses/%s", query.AccountID, responseID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ResponseGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

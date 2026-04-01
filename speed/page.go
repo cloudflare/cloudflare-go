@@ -48,7 +48,7 @@ func (r *PageService) List(ctx context.Context, query PageListParams, opts ...op
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -74,19 +74,19 @@ func (r *PageService) Trend(ctx context.Context, url string, params PageTrendPar
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	if url == "" {
 		err = errors.New("missing required url parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", params.ZoneID, url)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type PageListResponse struct {
@@ -137,21 +137,21 @@ func (r PageListResponseScheduleFrequency) IsKnown() bool {
 
 type PageListParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type PageTrendParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The type of device.
-	DeviceType param.Field[PageTrendParamsDeviceType] `query:"deviceType,required"`
+	DeviceType param.Field[PageTrendParamsDeviceType] `query:"deviceType" api:"required"`
 	// A comma-separated list of metrics to include in the results.
-	Metrics param.Field[string] `query:"metrics,required"`
+	Metrics param.Field[string] `query:"metrics" api:"required"`
 	// A test region.
-	Region param.Field[PageTrendParamsRegion] `query:"region,required"`
-	Start  param.Field[time.Time]             `query:"start,required" format:"date-time"`
+	Region param.Field[PageTrendParamsRegion] `query:"region" api:"required"`
+	Start  param.Field[time.Time]             `query:"start" api:"required" format:"date-time"`
 	// The timezone of the start and end timestamps.
-	Tz  param.Field[string]    `query:"tz,required"`
+	Tz  param.Field[string]    `query:"tz" api:"required"`
 	End param.Field[time.Time] `query:"end" format:"date-time"`
 }
 
@@ -215,10 +215,10 @@ func (r PageTrendParamsRegion) IsKnown() bool {
 }
 
 type PageTrendResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success bool                          `json:"success,required"`
+	Success bool                          `json:"success" api:"required"`
 	Result  Trend                         `json:"result"`
 	JSON    pageTrendResponseEnvelopeJSON `json:"-"`
 }

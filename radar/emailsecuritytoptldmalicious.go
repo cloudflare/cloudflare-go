@@ -43,16 +43,16 @@ func (r *EmailSecurityTopTLDMaliciousService) Get(ctx context.Context, malicious
 	path := fmt.Sprintf("radar/email/security/top/tlds/malicious/%v", malicious)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type EmailSecurityTopTLDMaliciousGetResponse struct {
 	// Metadata for the results.
-	Meta EmailSecurityTopTLDMaliciousGetResponseMeta   `json:"meta,required"`
-	Top0 []EmailSecurityTopTLDMaliciousGetResponseTop0 `json:"top_0,required"`
+	Meta EmailSecurityTopTLDMaliciousGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []EmailSecurityTopTLDMaliciousGetResponseTop0 `json:"top_0" api:"required"`
 	JSON emailSecurityTopTLDMaliciousGetResponseJSON   `json:"-"`
 }
 
@@ -75,15 +75,15 @@ func (r emailSecurityTopTLDMaliciousGetResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type EmailSecurityTopTLDMaliciousGetResponseMeta struct {
-	ConfidenceInfo EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []EmailSecurityTopTLDMaliciousGetResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []EmailSecurityTopTLDMaliciousGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailSecurityTopTLDMaliciousGetResponseMetaNormalization `json:"normalization,required"`
+	Normalization EmailSecurityTopTLDMaliciousGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailSecurityTopTLDMaliciousGetResponseMetaUnit `json:"units,required"`
+	Units []EmailSecurityTopTLDMaliciousGetResponseMetaUnit `json:"units" api:"required"`
 	JSON  emailSecurityTopTLDMaliciousGetResponseMetaJSON   `json:"-"`
 }
 
@@ -108,9 +108,9 @@ func (r emailSecurityTopTLDMaliciousGetResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfo struct {
-	Annotations []EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                         `json:"level,required"`
+	Level int64                                                         `json:"level" api:"required"`
 	JSON  emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -135,15 +135,15 @@ func (r emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoJSON) RawJSON()
 // Annotation associated with the result (e.g. outage or other type of event).
 type EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                         `json:"description,required"`
-	EndDate     time.Time                                                                      `json:"endDate,required" format:"date-time"`
+	DataSource  EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                         `json:"description" api:"required"`
+	EndDate     time.Time                                                                      `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                    `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                  `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                               `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                    `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                  `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                               `json:"startDate" api:"required" format:"date-time"`
 	JSON            emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -231,9 +231,9 @@ func (r EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEven
 
 type EmailSecurityTopTLDMaliciousGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                                `json:"startTime" api:"required" format:"date-time"`
 	JSON      emailSecurityTopTLDMaliciousGetResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -278,8 +278,8 @@ func (r EmailSecurityTopTLDMaliciousGetResponseMetaNormalization) IsKnown() bool
 }
 
 type EmailSecurityTopTLDMaliciousGetResponseMetaUnit struct {
-	Name  string                                              `json:"name,required"`
-	Value string                                              `json:"value,required"`
+	Name  string                                              `json:"name" api:"required"`
+	Value string                                              `json:"value" api:"required"`
 	JSON  emailSecurityTopTLDMaliciousGetResponseMetaUnitJSON `json:"-"`
 }
 
@@ -301,9 +301,9 @@ func (r emailSecurityTopTLDMaliciousGetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type EmailSecurityTopTLDMaliciousGetResponseTop0 struct {
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// A numeric string.
-	Value string                                          `json:"value,required"`
+	Value string                                          `json:"value" api:"required"`
 	JSON  emailSecurityTopTLDMaliciousGetResponseTop0JSON `json:"-"`
 }
 
@@ -493,8 +493,8 @@ func (r EmailSecurityTopTLDMaliciousGetParamsTLSVersion) IsKnown() bool {
 }
 
 type EmailSecurityTopTLDMaliciousGetResponseEnvelope struct {
-	Result  EmailSecurityTopTLDMaliciousGetResponse             `json:"result,required"`
-	Success bool                                                `json:"success,required"`
+	Result  EmailSecurityTopTLDMaliciousGetResponse             `json:"result" api:"required"`
+	Success bool                                                `json:"success" api:"required"`
 	JSON    emailSecurityTopTLDMaliciousGetResponseEnvelopeJSON `json:"-"`
 }
 

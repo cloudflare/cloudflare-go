@@ -59,10 +59,10 @@ func (r *ValidateService) Destination(ctx context.Context, params ValidateDestin
 	path := fmt.Sprintf("%s/%s/logpush/validate/destination", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Checks if there is an existing job with a destination.
@@ -90,10 +90,10 @@ func (r *ValidateService) DestinationExists(ctx context.Context, params Validate
 	path := fmt.Sprintf("%s/%s/logpush/validate/destination/exists", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Validates logpull origin with logpull_options.
@@ -121,10 +121,10 @@ func (r *ValidateService) Origin(ctx context.Context, params ValidateOriginParam
 	path := fmt.Sprintf("%s/%s/logpush/validate/origin", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ValidateDestinationResponse struct {
@@ -198,7 +198,7 @@ type ValidateDestinationParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
 	// pushed. Additional configuration parameters supported by the destination may be
 	// included.
-	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
+	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -210,11 +210,11 @@ func (r ValidateDestinationParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateDestinationResponseEnvelope struct {
-	Errors   []ValidateDestinationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ValidateDestinationResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ValidateDestinationResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ValidateDestinationResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ValidateDestinationResponseEnvelopeSuccess `json:"success,required"`
-	Result  ValidateDestinationResponse                `json:"result,nullable"`
+	Success ValidateDestinationResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ValidateDestinationResponse                `json:"result" api:"nullable"`
 	JSON    validateDestinationResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -238,8 +238,8 @@ func (r validateDestinationResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ValidateDestinationResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ValidateDestinationResponseEnvelopeErrorsSource `json:"source"`
 	JSON             validateDestinationResponseEnvelopeErrorsJSON   `json:"-"`
@@ -286,8 +286,8 @@ func (r validateDestinationResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ValidateDestinationResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ValidateDestinationResponseEnvelopeMessagesSource `json:"source"`
 	JSON             validateDestinationResponseEnvelopeMessagesJSON   `json:"-"`
@@ -352,7 +352,7 @@ type ValidateDestinationExistsParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
 	// pushed. Additional configuration parameters supported by the destination may be
 	// included.
-	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
+	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -364,11 +364,11 @@ func (r ValidateDestinationExistsParams) MarshalJSON() (data []byte, err error) 
 }
 
 type ValidateDestinationExistsResponseEnvelope struct {
-	Errors   []ValidateDestinationExistsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ValidateDestinationExistsResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ValidateDestinationExistsResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ValidateDestinationExistsResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ValidateDestinationExistsResponseEnvelopeSuccess `json:"success,required"`
-	Result  ValidateDestinationExistsResponse                `json:"result,nullable"`
+	Success ValidateDestinationExistsResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ValidateDestinationExistsResponse                `json:"result" api:"nullable"`
 	JSON    validateDestinationExistsResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -392,8 +392,8 @@ func (r validateDestinationExistsResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ValidateDestinationExistsResponseEnvelopeErrors struct {
-	Code             int64                                                 `json:"code,required"`
-	Message          string                                                `json:"message,required"`
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
 	DocumentationURL string                                                `json:"documentation_url"`
 	Source           ValidateDestinationExistsResponseEnvelopeErrorsSource `json:"source"`
 	JSON             validateDestinationExistsResponseEnvelopeErrorsJSON   `json:"-"`
@@ -440,8 +440,8 @@ func (r validateDestinationExistsResponseEnvelopeErrorsSourceJSON) RawJSON() str
 }
 
 type ValidateDestinationExistsResponseEnvelopeMessages struct {
-	Code             int64                                                   `json:"code,required"`
-	Message          string                                                  `json:"message,required"`
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
 	DocumentationURL string                                                  `json:"documentation_url"`
 	Source           ValidateDestinationExistsResponseEnvelopeMessagesSource `json:"source"`
 	JSON             validateDestinationExistsResponseEnvelopeMessagesJSON   `json:"-"`
@@ -509,7 +509,7 @@ type ValidateOriginParams struct {
 	// the logpull api, copy the url (full url or just the query string) of your call
 	// here, and logpush will keep on making this call for you, setting start and end
 	// times appropriately.
-	LogpullOptions param.Field[string] `json:"logpull_options,required" format:"uri-reference"`
+	LogpullOptions param.Field[string] `json:"logpull_options" api:"required" format:"uri-reference"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -521,11 +521,11 @@ func (r ValidateOriginParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateOriginResponseEnvelope struct {
-	Errors   []ValidateOriginResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ValidateOriginResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []ValidateOriginResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ValidateOriginResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ValidateOriginResponseEnvelopeSuccess `json:"success,required"`
-	Result  ValidateOriginResponse                `json:"result,nullable"`
+	Success ValidateOriginResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  ValidateOriginResponse                `json:"result" api:"nullable"`
 	JSON    validateOriginResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -549,8 +549,8 @@ func (r validateOriginResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ValidateOriginResponseEnvelopeErrors struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ValidateOriginResponseEnvelopeErrorsSource `json:"source"`
 	JSON             validateOriginResponseEnvelopeErrorsJSON   `json:"-"`
@@ -597,8 +597,8 @@ func (r validateOriginResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ValidateOriginResponseEnvelopeMessages struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ValidateOriginResponseEnvelopeMessagesSource `json:"source"`
 	JSON             validateOriginResponseEnvelopeMessagesJSON   `json:"-"`

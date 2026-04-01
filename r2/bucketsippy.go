@@ -39,72 +39,72 @@ func NewBucketSippyService(opts ...option.RequestOption) (r *BucketSippyService)
 func (r *BucketSippyService) Update(ctx context.Context, bucketName string, params BucketSippyUpdateParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env BucketSippyUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disables Sippy on this bucket.
 func (r *BucketSippyService) Delete(ctx context.Context, bucketName string, params BucketSippyDeleteParams, opts ...option.RequestOption) (res *BucketSippyDeleteResponse, err error) {
 	var env BucketSippyDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Gets configuration for Sippy for an existing R2 bucket.
 func (r *BucketSippyService) Get(ctx context.Context, bucketName string, params BucketSippyGetParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env BucketSippyGetResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if bucketName == "" {
 		err = errors.New("missing required bucket_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Provider string
@@ -181,12 +181,12 @@ func (r sippyDestinationJSON) RawJSON() string {
 // Details about the configured source bucket.
 type SippySource struct {
 	// Name of the bucket on the provider (AWS, GCS only).
-	Bucket string `json:"bucket,nullable"`
+	Bucket string `json:"bucket" api:"nullable"`
 	// S3-compatible URL (Generic S3-compatible providers only).
-	BucketURL string              `json:"bucketUrl,nullable"`
+	BucketURL string              `json:"bucketUrl" api:"nullable"`
 	Provider  SippySourceProvider `json:"provider"`
 	// Region where the bucket resides (AWS only).
-	Region string          `json:"region,nullable"`
+	Region string          `json:"region" api:"nullable"`
 	JSON   sippySourceJSON `json:"-"`
 }
 
@@ -261,8 +261,8 @@ func (r BucketSippyDeleteResponseEnabled) IsKnown() bool {
 
 type BucketSippyUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string]              `path:"account_id,required"`
-	Body      BucketSippyUpdateParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]              `path:"account_id" api:"required"`
+	Body      BucketSippyUpdateParamsBodyUnion `json:"body" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketSippyUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -504,11 +504,11 @@ func (r BucketSippyUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   Sippy                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
+	Result   Sippy                 `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketSippyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketSippyUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketSippyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -548,7 +548,7 @@ func (r BucketSippyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketSippyDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketSippyDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -571,11 +571,11 @@ func (r BucketSippyDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []string                  `json:"messages,required"`
-	Result   BucketSippyDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []string                  `json:"messages" api:"required"`
+	Result   BucketSippyDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketSippyDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketSippyDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketSippyDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -615,7 +615,7 @@ func (r BucketSippyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketSippyGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketSippyGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -638,11 +638,11 @@ func (r BucketSippyGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketSippyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   Sippy                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []string              `json:"messages" api:"required"`
+	Result   Sippy                 `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success BucketSippyGetResponseEnvelopeSuccess `json:"success,required"`
+	Success BucketSippyGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    bucketSippyGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -67,15 +67,15 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, 
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates an Access policy specific to an application. To update a reusable
@@ -103,19 +103,19 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID strin
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, appID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists Access policies configured for an application. Returns both exclusively
@@ -144,7 +144,7 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string,
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, appID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -190,19 +190,19 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, appID strin
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, appID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Fetches a single Access policy configured for an application. Returns both
@@ -230,24 +230,24 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, 
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return
+		return nil, err
 	}
 	if policyID == "" {
 		err = errors.New("missing required policy_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, appID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Enforces a device posture rule has run successfully
 type AccessDevicePostureRule struct {
-	DevicePosture AccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	DevicePosture AccessDevicePostureRuleDevicePosture `json:"device_posture" api:"required"`
 	JSON          accessDevicePostureRuleJSON          `json:"-"`
 }
 
@@ -271,7 +271,7 @@ func (r AccessDevicePostureRule) implementsAccessRule() {}
 
 type AccessDevicePostureRuleDevicePosture struct {
 	// The ID of a device posture integration.
-	IntegrationUID string                                   `json:"integration_uid,required"`
+	IntegrationUID string                                   `json:"integration_uid" api:"required"`
 	JSON           accessDevicePostureRuleDevicePostureJSON `json:"-"`
 }
 
@@ -293,7 +293,7 @@ func (r accessDevicePostureRuleDevicePostureJSON) RawJSON() string {
 
 // Enforces a device posture rule has run successfully
 type AccessDevicePostureRuleParam struct {
-	DevicePosture param.Field[AccessDevicePostureRuleDevicePostureParam] `json:"device_posture,required"`
+	DevicePosture param.Field[AccessDevicePostureRuleDevicePostureParam] `json:"device_posture" api:"required"`
 }
 
 func (r AccessDevicePostureRuleParam) MarshalJSON() (data []byte, err error) {
@@ -304,7 +304,7 @@ func (r AccessDevicePostureRuleParam) implementsAccessRuleUnionParam() {}
 
 type AccessDevicePostureRuleDevicePostureParam struct {
 	// The ID of a device posture integration.
-	IntegrationUID param.Field[string] `json:"integration_uid,required"`
+	IntegrationUID param.Field[string] `json:"integration_uid" api:"required"`
 }
 
 func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {
@@ -559,7 +559,7 @@ func init() {
 
 // Matches an Azure Authentication Context. Requires an Azure identity provider.
 type AccessRuleAccessAuthContextRule struct {
-	AuthContext AccessRuleAccessAuthContextRuleAuthContext `json:"auth_context,required"`
+	AuthContext AccessRuleAccessAuthContextRuleAuthContext `json:"auth_context" api:"required"`
 	JSON        accessRuleAccessAuthContextRuleJSON        `json:"-"`
 }
 
@@ -583,11 +583,11 @@ func (r AccessRuleAccessAuthContextRule) implementsAccessRule() {}
 
 type AccessRuleAccessAuthContextRuleAuthContext struct {
 	// The ID of an Authentication context.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The ACID of an Authentication context.
-	AcID string `json:"ac_id,required"`
+	AcID string `json:"ac_id" api:"required"`
 	// The ID of your Azure identity provider.
-	IdentityProviderID string                                         `json:"identity_provider_id,required"`
+	IdentityProviderID string                                         `json:"identity_provider_id" api:"required"`
 	JSON               accessRuleAccessAuthContextRuleAuthContextJSON `json:"-"`
 }
 
@@ -611,7 +611,7 @@ func (r accessRuleAccessAuthContextRuleAuthContextJSON) RawJSON() string {
 
 // Matches a specific common name.
 type AccessRuleAccessCommonNameRule struct {
-	CommonName AccessRuleAccessCommonNameRuleCommonName `json:"common_name,required"`
+	CommonName AccessRuleAccessCommonNameRuleCommonName `json:"common_name" api:"required"`
 	JSON       accessRuleAccessCommonNameRuleJSON       `json:"-"`
 }
 
@@ -635,7 +635,7 @@ func (r AccessRuleAccessCommonNameRule) implementsAccessRule() {}
 
 type AccessRuleAccessCommonNameRuleCommonName struct {
 	// The common name to match.
-	CommonName string                                       `json:"common_name,required"`
+	CommonName string                                       `json:"common_name" api:"required"`
 	JSON       accessRuleAccessCommonNameRuleCommonNameJSON `json:"-"`
 }
 
@@ -657,7 +657,7 @@ func (r accessRuleAccessCommonNameRuleCommonNameJSON) RawJSON() string {
 
 // Matches a specific identity provider id.
 type AccessRuleAccessLoginMethodRule struct {
-	LoginMethod AccessRuleAccessLoginMethodRuleLoginMethod `json:"login_method,required"`
+	LoginMethod AccessRuleAccessLoginMethodRuleLoginMethod `json:"login_method" api:"required"`
 	JSON        accessRuleAccessLoginMethodRuleJSON        `json:"-"`
 }
 
@@ -681,7 +681,7 @@ func (r AccessRuleAccessLoginMethodRule) implementsAccessRule() {}
 
 type AccessRuleAccessLoginMethodRuleLoginMethod struct {
 	// The ID of an identity provider.
-	ID   string                                         `json:"id,required"`
+	ID   string                                         `json:"id" api:"required"`
 	JSON accessRuleAccessLoginMethodRuleLoginMethodJSON `json:"-"`
 }
 
@@ -703,7 +703,7 @@ func (r accessRuleAccessLoginMethodRuleLoginMethodJSON) RawJSON() string {
 
 // Matches an OIDC claim. Requires an OIDC identity provider.
 type AccessRuleAccessOIDCClaimRule struct {
-	OIDC AccessRuleAccessOIDCClaimRuleOIDC `json:"oidc,required"`
+	OIDC AccessRuleAccessOIDCClaimRuleOIDC `json:"oidc" api:"required"`
 	JSON accessRuleAccessOIDCClaimRuleJSON `json:"-"`
 }
 
@@ -727,11 +727,11 @@ func (r AccessRuleAccessOIDCClaimRule) implementsAccessRule() {}
 
 type AccessRuleAccessOIDCClaimRuleOIDC struct {
 	// The name of the OIDC claim.
-	ClaimName string `json:"claim_name,required"`
+	ClaimName string `json:"claim_name" api:"required"`
 	// The OIDC claim value to look for.
-	ClaimValue string `json:"claim_value,required"`
+	ClaimValue string `json:"claim_value" api:"required"`
 	// The ID of your OIDC identity provider.
-	IdentityProviderID string                                `json:"identity_provider_id,required"`
+	IdentityProviderID string                                `json:"identity_provider_id" api:"required"`
 	JSON               accessRuleAccessOIDCClaimRuleOIDCJSON `json:"-"`
 }
 
@@ -756,7 +756,7 @@ func (r accessRuleAccessOIDCClaimRuleOIDCJSON) RawJSON() string {
 // Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
 // application. Only compatible with non_identity and bypass decisions.
 type AccessRuleAccessLinkedAppTokenRule struct {
-	LinkedAppToken AccessRuleAccessLinkedAppTokenRuleLinkedAppToken `json:"linked_app_token,required"`
+	LinkedAppToken AccessRuleAccessLinkedAppTokenRuleLinkedAppToken `json:"linked_app_token" api:"required"`
 	JSON           accessRuleAccessLinkedAppTokenRuleJSON           `json:"-"`
 }
 
@@ -780,7 +780,7 @@ func (r AccessRuleAccessLinkedAppTokenRule) implementsAccessRule() {}
 
 type AccessRuleAccessLinkedAppTokenRuleLinkedAppToken struct {
 	// The ID of an Access OIDC SaaS application
-	AppUID string                                               `json:"app_uid,required"`
+	AppUID string                                               `json:"app_uid" api:"required"`
 	JSON   accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON `json:"-"`
 }
 
@@ -802,7 +802,7 @@ func (r accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON) RawJSON() string {
 
 // Matches a user's risk score.
 type AccessRuleAccessUserRiskScoreRule struct {
-	UserRiskScore AccessRuleAccessUserRiskScoreRuleUserRiskScore `json:"user_risk_score,required"`
+	UserRiskScore AccessRuleAccessUserRiskScoreRuleUserRiskScore `json:"user_risk_score" api:"required"`
 	JSON          accessRuleAccessUserRiskScoreRuleJSON          `json:"-"`
 }
 
@@ -827,7 +827,7 @@ func (r AccessRuleAccessUserRiskScoreRule) implementsAccessRule() {}
 type AccessRuleAccessUserRiskScoreRuleUserRiskScore struct {
 	// A list of risk score levels to match. Values can be low, medium, high, or
 	// unscored.
-	UserRiskScore []AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore `json:"user_risk_score,required"`
+	UserRiskScore []AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore `json:"user_risk_score" api:"required"`
 	JSON          accessRuleAccessUserRiskScoreRuleUserRiskScoreJSON            `json:"-"`
 }
 
@@ -924,7 +924,7 @@ type AccessRuleUnionParam interface {
 
 // Matches an Azure Authentication Context. Requires an Azure identity provider.
 type AccessRuleAccessAuthContextRuleParam struct {
-	AuthContext param.Field[AccessRuleAccessAuthContextRuleAuthContextParam] `json:"auth_context,required"`
+	AuthContext param.Field[AccessRuleAccessAuthContextRuleAuthContextParam] `json:"auth_context" api:"required"`
 }
 
 func (r AccessRuleAccessAuthContextRuleParam) MarshalJSON() (data []byte, err error) {
@@ -935,11 +935,11 @@ func (r AccessRuleAccessAuthContextRuleParam) implementsAccessRuleUnionParam() {
 
 type AccessRuleAccessAuthContextRuleAuthContextParam struct {
 	// The ID of an Authentication context.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// The ACID of an Authentication context.
-	AcID param.Field[string] `json:"ac_id,required"`
+	AcID param.Field[string] `json:"ac_id" api:"required"`
 	// The ID of your Azure identity provider.
-	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id" api:"required"`
 }
 
 func (r AccessRuleAccessAuthContextRuleAuthContextParam) MarshalJSON() (data []byte, err error) {
@@ -948,7 +948,7 @@ func (r AccessRuleAccessAuthContextRuleAuthContextParam) MarshalJSON() (data []b
 
 // Matches a specific common name.
 type AccessRuleAccessCommonNameRuleParam struct {
-	CommonName param.Field[AccessRuleAccessCommonNameRuleCommonNameParam] `json:"common_name,required"`
+	CommonName param.Field[AccessRuleAccessCommonNameRuleCommonNameParam] `json:"common_name" api:"required"`
 }
 
 func (r AccessRuleAccessCommonNameRuleParam) MarshalJSON() (data []byte, err error) {
@@ -959,7 +959,7 @@ func (r AccessRuleAccessCommonNameRuleParam) implementsAccessRuleUnionParam() {}
 
 type AccessRuleAccessCommonNameRuleCommonNameParam struct {
 	// The common name to match.
-	CommonName param.Field[string] `json:"common_name,required"`
+	CommonName param.Field[string] `json:"common_name" api:"required"`
 }
 
 func (r AccessRuleAccessCommonNameRuleCommonNameParam) MarshalJSON() (data []byte, err error) {
@@ -968,7 +968,7 @@ func (r AccessRuleAccessCommonNameRuleCommonNameParam) MarshalJSON() (data []byt
 
 // Matches a specific identity provider id.
 type AccessRuleAccessLoginMethodRuleParam struct {
-	LoginMethod param.Field[AccessRuleAccessLoginMethodRuleLoginMethodParam] `json:"login_method,required"`
+	LoginMethod param.Field[AccessRuleAccessLoginMethodRuleLoginMethodParam] `json:"login_method" api:"required"`
 }
 
 func (r AccessRuleAccessLoginMethodRuleParam) MarshalJSON() (data []byte, err error) {
@@ -979,7 +979,7 @@ func (r AccessRuleAccessLoginMethodRuleParam) implementsAccessRuleUnionParam() {
 
 type AccessRuleAccessLoginMethodRuleLoginMethodParam struct {
 	// The ID of an identity provider.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r AccessRuleAccessLoginMethodRuleLoginMethodParam) MarshalJSON() (data []byte, err error) {
@@ -988,7 +988,7 @@ func (r AccessRuleAccessLoginMethodRuleLoginMethodParam) MarshalJSON() (data []b
 
 // Matches an OIDC claim. Requires an OIDC identity provider.
 type AccessRuleAccessOIDCClaimRuleParam struct {
-	OIDC param.Field[AccessRuleAccessOIDCClaimRuleOIDCParam] `json:"oidc,required"`
+	OIDC param.Field[AccessRuleAccessOIDCClaimRuleOIDCParam] `json:"oidc" api:"required"`
 }
 
 func (r AccessRuleAccessOIDCClaimRuleParam) MarshalJSON() (data []byte, err error) {
@@ -999,11 +999,11 @@ func (r AccessRuleAccessOIDCClaimRuleParam) implementsAccessRuleUnionParam() {}
 
 type AccessRuleAccessOIDCClaimRuleOIDCParam struct {
 	// The name of the OIDC claim.
-	ClaimName param.Field[string] `json:"claim_name,required"`
+	ClaimName param.Field[string] `json:"claim_name" api:"required"`
 	// The OIDC claim value to look for.
-	ClaimValue param.Field[string] `json:"claim_value,required"`
+	ClaimValue param.Field[string] `json:"claim_value" api:"required"`
 	// The ID of your OIDC identity provider.
-	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id" api:"required"`
 }
 
 func (r AccessRuleAccessOIDCClaimRuleOIDCParam) MarshalJSON() (data []byte, err error) {
@@ -1013,7 +1013,7 @@ func (r AccessRuleAccessOIDCClaimRuleOIDCParam) MarshalJSON() (data []byte, err 
 // Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
 // application. Only compatible with non_identity and bypass decisions.
 type AccessRuleAccessLinkedAppTokenRuleParam struct {
-	LinkedAppToken param.Field[AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam] `json:"linked_app_token,required"`
+	LinkedAppToken param.Field[AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam] `json:"linked_app_token" api:"required"`
 }
 
 func (r AccessRuleAccessLinkedAppTokenRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1024,7 +1024,7 @@ func (r AccessRuleAccessLinkedAppTokenRuleParam) implementsAccessRuleUnionParam(
 
 type AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam struct {
 	// The ID of an Access OIDC SaaS application
-	AppUID param.Field[string] `json:"app_uid,required"`
+	AppUID param.Field[string] `json:"app_uid" api:"required"`
 }
 
 func (r AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam) MarshalJSON() (data []byte, err error) {
@@ -1033,7 +1033,7 @@ func (r AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam) MarshalJSON() (da
 
 // Matches a user's risk score.
 type AccessRuleAccessUserRiskScoreRuleParam struct {
-	UserRiskScore param.Field[AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam] `json:"user_risk_score,required"`
+	UserRiskScore param.Field[AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam] `json:"user_risk_score" api:"required"`
 }
 
 func (r AccessRuleAccessUserRiskScoreRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1045,7 +1045,7 @@ func (r AccessRuleAccessUserRiskScoreRuleParam) implementsAccessRuleUnionParam()
 type AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam struct {
 	// A list of risk score levels to match. Values can be low, medium, high, or
 	// unscored.
-	UserRiskScore param.Field[[]AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore] `json:"user_risk_score,required"`
+	UserRiskScore param.Field[[]AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore] `json:"user_risk_score" api:"required"`
 }
 
 func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam) MarshalJSON() (data []byte, err error) {
@@ -1055,7 +1055,7 @@ func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam) MarshalJSON() (data
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken AnyValidServiceTokenRuleAnyValidServiceToken `json:"any_valid_service_token,required"`
+	AnyValidServiceToken AnyValidServiceTokenRuleAnyValidServiceToken `json:"any_valid_service_token" api:"required"`
 	JSON                 anyValidServiceTokenRuleJSON                 `json:"-"`
 }
 
@@ -1100,7 +1100,7 @@ func (r anyValidServiceTokenRuleAnyValidServiceTokenJSON) RawJSON() string {
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRuleParam struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken param.Field[AnyValidServiceTokenRuleAnyValidServiceTokenParam] `json:"any_valid_service_token,required"`
+	AnyValidServiceToken param.Field[AnyValidServiceTokenRuleAnyValidServiceTokenParam] `json:"any_valid_service_token" api:"required"`
 }
 
 func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1119,7 +1119,7 @@ func (r AnyValidServiceTokenRuleAnyValidServiceTokenParam) MarshalJSON() (data [
 
 // Enforce different MFA options
 type AuthenticationMethodRule struct {
-	AuthMethod AuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	AuthMethod AuthenticationMethodRuleAuthMethod `json:"auth_method" api:"required"`
 	JSON       authenticationMethodRuleJSON       `json:"-"`
 }
 
@@ -1144,7 +1144,7 @@ func (r AuthenticationMethodRule) implementsAccessRule() {}
 type AuthenticationMethodRuleAuthMethod struct {
 	// The type of authentication method
 	// https://datatracker.ietf.org/doc/html/rfc8176#section-2.
-	AuthMethod string                                 `json:"auth_method,required"`
+	AuthMethod string                                 `json:"auth_method" api:"required"`
 	JSON       authenticationMethodRuleAuthMethodJSON `json:"-"`
 }
 
@@ -1166,7 +1166,7 @@ func (r authenticationMethodRuleAuthMethodJSON) RawJSON() string {
 
 // Enforce different MFA options
 type AuthenticationMethodRuleParam struct {
-	AuthMethod param.Field[AuthenticationMethodRuleAuthMethodParam] `json:"auth_method,required"`
+	AuthMethod param.Field[AuthenticationMethodRuleAuthMethodParam] `json:"auth_method" api:"required"`
 }
 
 func (r AuthenticationMethodRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1178,7 +1178,7 @@ func (r AuthenticationMethodRuleParam) implementsAccessRuleUnionParam() {}
 type AuthenticationMethodRuleAuthMethodParam struct {
 	// The type of authentication method
 	// https://datatracker.ietf.org/doc/html/rfc8176#section-2.
-	AuthMethod param.Field[string] `json:"auth_method,required"`
+	AuthMethod param.Field[string] `json:"auth_method" api:"required"`
 }
 
 func (r AuthenticationMethodRuleAuthMethodParam) MarshalJSON() (data []byte, err error) {
@@ -1187,7 +1187,7 @@ func (r AuthenticationMethodRuleAuthMethodParam) MarshalJSON() (data []byte, err
 
 // Matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRule struct {
-	AzureAD AzureGroupRuleAzureAD `json:"azureAD,required"`
+	AzureAD AzureGroupRuleAzureAD `json:"azureAD" api:"required"`
 	JSON    azureGroupRuleJSON    `json:"-"`
 }
 
@@ -1210,9 +1210,9 @@ func (r AzureGroupRule) implementsAccessRule() {}
 
 type AzureGroupRuleAzureAD struct {
 	// The ID of an Azure group.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// The ID of your Azure identity provider.
-	IdentityProviderID string                    `json:"identity_provider_id,required"`
+	IdentityProviderID string                    `json:"identity_provider_id" api:"required"`
 	JSON               azureGroupRuleAzureADJSON `json:"-"`
 }
 
@@ -1235,7 +1235,7 @@ func (r azureGroupRuleAzureADJSON) RawJSON() string {
 
 // Matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRuleParam struct {
-	AzureAD param.Field[AzureGroupRuleAzureADParam] `json:"azureAD,required"`
+	AzureAD param.Field[AzureGroupRuleAzureADParam] `json:"azureAD" api:"required"`
 }
 
 func (r AzureGroupRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1246,9 +1246,9 @@ func (r AzureGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type AzureGroupRuleAzureADParam struct {
 	// The ID of an Azure group.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 	// The ID of your Azure identity provider.
-	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id" api:"required"`
 }
 
 func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
@@ -1257,7 +1257,7 @@ func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
 
 // Matches any valid client certificate.
 type CertificateRule struct {
-	Certificate CertificateRuleCertificate `json:"certificate,required"`
+	Certificate CertificateRuleCertificate `json:"certificate" api:"required"`
 	JSON        certificateRuleJSON        `json:"-"`
 }
 
@@ -1299,7 +1299,7 @@ func (r certificateRuleCertificateJSON) RawJSON() string {
 
 // Matches any valid client certificate.
 type CertificateRuleParam struct {
-	Certificate param.Field[CertificateRuleCertificateParam] `json:"certificate,required"`
+	Certificate param.Field[CertificateRuleCertificateParam] `json:"certificate" api:"required"`
 }
 
 func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1317,7 +1317,7 @@ func (r CertificateRuleCertificateParam) MarshalJSON() (data []byte, err error) 
 
 // Matches a specific country
 type CountryRule struct {
-	Geo  CountryRuleGeo  `json:"geo,required"`
+	Geo  CountryRuleGeo  `json:"geo" api:"required"`
 	JSON countryRuleJSON `json:"-"`
 }
 
@@ -1340,7 +1340,7 @@ func (r CountryRule) implementsAccessRule() {}
 
 type CountryRuleGeo struct {
 	// The country code that should be matched.
-	CountryCode string             `json:"country_code,required"`
+	CountryCode string             `json:"country_code" api:"required"`
 	JSON        countryRuleGeoJSON `json:"-"`
 }
 
@@ -1361,7 +1361,7 @@ func (r countryRuleGeoJSON) RawJSON() string {
 
 // Matches a specific country
 type CountryRuleParam struct {
-	Geo param.Field[CountryRuleGeoParam] `json:"geo,required"`
+	Geo param.Field[CountryRuleGeoParam] `json:"geo" api:"required"`
 }
 
 func (r CountryRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1372,7 +1372,7 @@ func (r CountryRuleParam) implementsAccessRuleUnionParam() {}
 
 type CountryRuleGeoParam struct {
 	// The country code that should be matched.
-	CountryCode param.Field[string] `json:"country_code,required"`
+	CountryCode param.Field[string] `json:"country_code" api:"required"`
 }
 
 func (r CountryRuleGeoParam) MarshalJSON() (data []byte, err error) {
@@ -1381,7 +1381,7 @@ func (r CountryRuleGeoParam) MarshalJSON() (data []byte, err error) {
 
 // Match an entire email domain.
 type DomainRule struct {
-	EmailDomain DomainRuleEmailDomain `json:"email_domain,required"`
+	EmailDomain DomainRuleEmailDomain `json:"email_domain" api:"required"`
 	JSON        domainRuleJSON        `json:"-"`
 }
 
@@ -1404,7 +1404,7 @@ func (r DomainRule) implementsAccessRule() {}
 
 type DomainRuleEmailDomain struct {
 	// The email domain to match.
-	Domain string                    `json:"domain,required"`
+	Domain string                    `json:"domain" api:"required"`
 	JSON   domainRuleEmailDomainJSON `json:"-"`
 }
 
@@ -1426,7 +1426,7 @@ func (r domainRuleEmailDomainJSON) RawJSON() string {
 
 // Match an entire email domain.
 type DomainRuleParam struct {
-	EmailDomain param.Field[DomainRuleEmailDomainParam] `json:"email_domain,required"`
+	EmailDomain param.Field[DomainRuleEmailDomainParam] `json:"email_domain" api:"required"`
 }
 
 func (r DomainRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1437,7 +1437,7 @@ func (r DomainRuleParam) implementsAccessRuleUnionParam() {}
 
 type DomainRuleEmailDomainParam struct {
 	// The email domain to match.
-	Domain param.Field[string] `json:"domain,required"`
+	Domain param.Field[string] `json:"domain" api:"required"`
 }
 
 func (r DomainRuleEmailDomainParam) MarshalJSON() (data []byte, err error) {
@@ -1446,7 +1446,7 @@ func (r DomainRuleEmailDomainParam) MarshalJSON() (data []byte, err error) {
 
 // Matches an email address from a list.
 type EmailListRule struct {
-	EmailList EmailListRuleEmailList `json:"email_list,required"`
+	EmailList EmailListRuleEmailList `json:"email_list" api:"required"`
 	JSON      emailListRuleJSON      `json:"-"`
 }
 
@@ -1469,7 +1469,7 @@ func (r EmailListRule) implementsAccessRule() {}
 
 type EmailListRuleEmailList struct {
 	// The ID of a previously created email list.
-	ID   string                     `json:"id,required"`
+	ID   string                     `json:"id" api:"required"`
 	JSON emailListRuleEmailListJSON `json:"-"`
 }
 
@@ -1491,7 +1491,7 @@ func (r emailListRuleEmailListJSON) RawJSON() string {
 
 // Matches an email address from a list.
 type EmailListRuleParam struct {
-	EmailList param.Field[EmailListRuleEmailListParam] `json:"email_list,required"`
+	EmailList param.Field[EmailListRuleEmailListParam] `json:"email_list" api:"required"`
 }
 
 func (r EmailListRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1502,7 +1502,7 @@ func (r EmailListRuleParam) implementsAccessRuleUnionParam() {}
 
 type EmailListRuleEmailListParam struct {
 	// The ID of a previously created email list.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r EmailListRuleEmailListParam) MarshalJSON() (data []byte, err error) {
@@ -1511,7 +1511,7 @@ func (r EmailListRuleEmailListParam) MarshalJSON() (data []byte, err error) {
 
 // Matches a specific email.
 type EmailRule struct {
-	Email EmailRuleEmail `json:"email,required"`
+	Email EmailRuleEmail `json:"email" api:"required"`
 	JSON  emailRuleJSON  `json:"-"`
 }
 
@@ -1534,7 +1534,7 @@ func (r EmailRule) implementsAccessRule() {}
 
 type EmailRuleEmail struct {
 	// The email of the user.
-	Email string             `json:"email,required" format:"email"`
+	Email string             `json:"email" api:"required" format:"email"`
 	JSON  emailRuleEmailJSON `json:"-"`
 }
 
@@ -1555,7 +1555,7 @@ func (r emailRuleEmailJSON) RawJSON() string {
 
 // Matches a specific email.
 type EmailRuleParam struct {
-	Email param.Field[EmailRuleEmailParam] `json:"email,required"`
+	Email param.Field[EmailRuleEmailParam] `json:"email" api:"required"`
 }
 
 func (r EmailRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1566,7 +1566,7 @@ func (r EmailRuleParam) implementsAccessRuleUnionParam() {}
 
 type EmailRuleEmailParam struct {
 	// The email of the user.
-	Email param.Field[string] `json:"email,required" format:"email"`
+	Email param.Field[string] `json:"email" api:"required" format:"email"`
 }
 
 func (r EmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
@@ -1576,7 +1576,7 @@ func (r EmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
 // Matches everyone.
 type EveryoneRule struct {
 	// An empty object which matches on all users.
-	Everyone EveryoneRuleEveryone `json:"everyone,required"`
+	Everyone EveryoneRuleEveryone `json:"everyone" api:"required"`
 	JSON     everyoneRuleJSON     `json:"-"`
 }
 
@@ -1620,7 +1620,7 @@ func (r everyoneRuleEveryoneJSON) RawJSON() string {
 // Matches everyone.
 type EveryoneRuleParam struct {
 	// An empty object which matches on all users.
-	Everyone param.Field[EveryoneRuleEveryoneParam] `json:"everyone,required"`
+	Everyone param.Field[EveryoneRuleEveryoneParam] `json:"everyone" api:"required"`
 }
 
 func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1639,7 +1639,7 @@ func (r EveryoneRuleEveryoneParam) MarshalJSON() (data []byte, err error) {
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRule struct {
-	ExternalEvaluation ExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	ExternalEvaluation ExternalEvaluationRuleExternalEvaluation `json:"external_evaluation" api:"required"`
 	JSON               externalEvaluationRuleJSON               `json:"-"`
 }
 
@@ -1663,10 +1663,10 @@ func (r ExternalEvaluationRule) implementsAccessRule() {}
 
 type ExternalEvaluationRuleExternalEvaluation struct {
 	// The API endpoint containing your business logic.
-	EvaluateURL string `json:"evaluate_url,required"`
+	EvaluateURL string `json:"evaluate_url" api:"required"`
 	// The API endpoint containing the key that Access uses to verify that the response
 	// came from your API.
-	KeysURL string                                       `json:"keys_url,required"`
+	KeysURL string                                       `json:"keys_url" api:"required"`
 	JSON    externalEvaluationRuleExternalEvaluationJSON `json:"-"`
 }
 
@@ -1689,7 +1689,7 @@ func (r externalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRuleParam struct {
-	ExternalEvaluation param.Field[ExternalEvaluationRuleExternalEvaluationParam] `json:"external_evaluation,required"`
+	ExternalEvaluation param.Field[ExternalEvaluationRuleExternalEvaluationParam] `json:"external_evaluation" api:"required"`
 }
 
 func (r ExternalEvaluationRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1700,10 +1700,10 @@ func (r ExternalEvaluationRuleParam) implementsAccessRuleUnionParam() {}
 
 type ExternalEvaluationRuleExternalEvaluationParam struct {
 	// The API endpoint containing your business logic.
-	EvaluateURL param.Field[string] `json:"evaluate_url,required"`
+	EvaluateURL param.Field[string] `json:"evaluate_url" api:"required"`
 	// The API endpoint containing the key that Access uses to verify that the response
 	// came from your API.
-	KeysURL param.Field[string] `json:"keys_url,required"`
+	KeysURL param.Field[string] `json:"keys_url" api:"required"`
 }
 
 func (r ExternalEvaluationRuleExternalEvaluationParam) MarshalJSON() (data []byte, err error) {
@@ -1712,7 +1712,7 @@ func (r ExternalEvaluationRuleExternalEvaluationParam) MarshalJSON() (data []byt
 
 // Matches a Github organization. Requires a Github identity provider.
 type GitHubOrganizationRule struct {
-	GitHubOrganization GitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	GitHubOrganization GitHubOrganizationRuleGitHubOrganization `json:"github-organization" api:"required"`
 	JSON               githubOrganizationRuleJSON               `json:"-"`
 }
 
@@ -1736,9 +1736,9 @@ func (r GitHubOrganizationRule) implementsAccessRule() {}
 
 type GitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
-	IdentityProviderID string `json:"identity_provider_id,required"`
+	IdentityProviderID string `json:"identity_provider_id" api:"required"`
 	// The name of the organization.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// The name of the team
 	Team string                                       `json:"team"`
 	JSON githubOrganizationRuleGitHubOrganizationJSON `json:"-"`
@@ -1764,7 +1764,7 @@ func (r githubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
 
 // Matches a Github organization. Requires a Github identity provider.
 type GitHubOrganizationRuleParam struct {
-	GitHubOrganization param.Field[GitHubOrganizationRuleGitHubOrganizationParam] `json:"github-organization,required"`
+	GitHubOrganization param.Field[GitHubOrganizationRuleGitHubOrganizationParam] `json:"github-organization" api:"required"`
 }
 
 func (r GitHubOrganizationRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1775,9 +1775,9 @@ func (r GitHubOrganizationRuleParam) implementsAccessRuleUnionParam() {}
 
 type GitHubOrganizationRuleGitHubOrganizationParam struct {
 	// The ID of your Github identity provider.
-	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id" api:"required"`
 	// The name of the organization.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// The name of the team
 	Team param.Field[string] `json:"team"`
 }
@@ -1788,7 +1788,7 @@ func (r GitHubOrganizationRuleGitHubOrganizationParam) MarshalJSON() (data []byt
 
 // Matches an Access group.
 type GroupRule struct {
-	Group GroupRuleGroup `json:"group,required"`
+	Group GroupRuleGroup `json:"group" api:"required"`
 	JSON  groupRuleJSON  `json:"-"`
 }
 
@@ -1811,7 +1811,7 @@ func (r GroupRule) implementsAccessRule() {}
 
 type GroupRuleGroup struct {
 	// The ID of a previously created Access group.
-	ID   string             `json:"id,required"`
+	ID   string             `json:"id" api:"required"`
 	JSON groupRuleGroupJSON `json:"-"`
 }
 
@@ -1832,7 +1832,7 @@ func (r groupRuleGroupJSON) RawJSON() string {
 
 // Matches an Access group.
 type GroupRuleParam struct {
-	Group param.Field[GroupRuleGroupParam] `json:"group,required"`
+	Group param.Field[GroupRuleGroupParam] `json:"group" api:"required"`
 }
 
 func (r GroupRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1843,7 +1843,7 @@ func (r GroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type GroupRuleGroupParam struct {
 	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r GroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
@@ -1853,7 +1853,7 @@ func (r GroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type GSuiteGroupRule struct {
-	GSuite GSuiteGroupRuleGSuite `json:"gsuite,required"`
+	GSuite GSuiteGroupRuleGSuite `json:"gsuite" api:"required"`
 	JSON   GSuiteGroupRuleJSON   `json:"-"`
 }
 
@@ -1876,9 +1876,9 @@ func (r GSuiteGroupRule) implementsAccessRule() {}
 
 type GSuiteGroupRuleGSuite struct {
 	// The email of the Google Workspace group.
-	Email string `json:"email,required"`
+	Email string `json:"email" api:"required"`
 	// The ID of your Google Workspace identity provider.
-	IdentityProviderID string                    `json:"identity_provider_id,required"`
+	IdentityProviderID string                    `json:"identity_provider_id" api:"required"`
 	JSON               GSuiteGroupRuleGSuiteJSON `json:"-"`
 }
 
@@ -1902,7 +1902,7 @@ func (r GSuiteGroupRuleGSuiteJSON) RawJSON() string {
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type GSuiteGroupRuleParam struct {
-	GSuite param.Field[GSuiteGroupRuleGSuiteParam] `json:"gsuite,required"`
+	GSuite param.Field[GSuiteGroupRuleGSuiteParam] `json:"gsuite" api:"required"`
 }
 
 func (r GSuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1913,9 +1913,9 @@ func (r GSuiteGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type GSuiteGroupRuleGSuiteParam struct {
 	// The email of the Google Workspace group.
-	Email param.Field[string] `json:"email,required"`
+	Email param.Field[string] `json:"email" api:"required"`
 	// The ID of your Google Workspace identity provider.
-	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id" api:"required"`
 }
 
 func (r GSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
@@ -1924,7 +1924,7 @@ func (r GSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
 
 // Matches an IP address from a list.
 type IPListRule struct {
-	IPList IPListRuleIPList `json:"ip_list,required"`
+	IPList IPListRuleIPList `json:"ip_list" api:"required"`
 	JSON   ipListRuleJSON   `json:"-"`
 }
 
@@ -1947,7 +1947,7 @@ func (r IPListRule) implementsAccessRule() {}
 
 type IPListRuleIPList struct {
 	// The ID of a previously created IP list.
-	ID   string               `json:"id,required"`
+	ID   string               `json:"id" api:"required"`
 	JSON ipListRuleIPListJSON `json:"-"`
 }
 
@@ -1969,7 +1969,7 @@ func (r ipListRuleIPListJSON) RawJSON() string {
 
 // Matches an IP address from a list.
 type IPListRuleParam struct {
-	IPList param.Field[IPListRuleIPListParam] `json:"ip_list,required"`
+	IPList param.Field[IPListRuleIPListParam] `json:"ip_list" api:"required"`
 }
 
 func (r IPListRuleParam) MarshalJSON() (data []byte, err error) {
@@ -1980,7 +1980,7 @@ func (r IPListRuleParam) implementsAccessRuleUnionParam() {}
 
 type IPListRuleIPListParam struct {
 	// The ID of a previously created IP list.
-	ID param.Field[string] `json:"id,required"`
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r IPListRuleIPListParam) MarshalJSON() (data []byte, err error) {
@@ -1989,7 +1989,7 @@ func (r IPListRuleIPListParam) MarshalJSON() (data []byte, err error) {
 
 // Matches an IP address block.
 type IPRule struct {
-	IP   IPRuleIP   `json:"ip,required"`
+	IP   IPRuleIP   `json:"ip" api:"required"`
 	JSON ipRuleJSON `json:"-"`
 }
 
@@ -2012,7 +2012,7 @@ func (r IPRule) implementsAccessRule() {}
 
 type IPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
-	IP   string       `json:"ip,required"`
+	IP   string       `json:"ip" api:"required"`
 	JSON ipRuleIPJSON `json:"-"`
 }
 
@@ -2033,7 +2033,7 @@ func (r ipRuleIPJSON) RawJSON() string {
 
 // Matches an IP address block.
 type IPRuleParam struct {
-	IP param.Field[IPRuleIPParam] `json:"ip,required"`
+	IP param.Field[IPRuleIPParam] `json:"ip" api:"required"`
 }
 
 func (r IPRuleParam) MarshalJSON() (data []byte, err error) {
@@ -2044,7 +2044,7 @@ func (r IPRuleParam) implementsAccessRuleUnionParam() {}
 
 type IPRuleIPParam struct {
 	// An IPv4 or IPv6 CIDR block.
-	IP param.Field[string] `json:"ip,required"`
+	IP param.Field[string] `json:"ip" api:"required"`
 }
 
 func (r IPRuleIPParam) MarshalJSON() (data []byte, err error) {
@@ -2053,7 +2053,7 @@ func (r IPRuleIPParam) MarshalJSON() (data []byte, err error) {
 
 // Matches an Okta group. Requires an Okta identity provider.
 type OktaGroupRule struct {
-	Okta OktaGroupRuleOkta `json:"okta,required"`
+	Okta OktaGroupRuleOkta `json:"okta" api:"required"`
 	JSON oktaGroupRuleJSON `json:"-"`
 }
 
@@ -2076,9 +2076,9 @@ func (r OktaGroupRule) implementsAccessRule() {}
 
 type OktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
-	IdentityProviderID string `json:"identity_provider_id,required"`
+	IdentityProviderID string `json:"identity_provider_id" api:"required"`
 	// The name of the Okta group.
-	Name string                `json:"name,required"`
+	Name string                `json:"name" api:"required"`
 	JSON oktaGroupRuleOktaJSON `json:"-"`
 }
 
@@ -2101,7 +2101,7 @@ func (r oktaGroupRuleOktaJSON) RawJSON() string {
 
 // Matches an Okta group. Requires an Okta identity provider.
 type OktaGroupRuleParam struct {
-	Okta param.Field[OktaGroupRuleOktaParam] `json:"okta,required"`
+	Okta param.Field[OktaGroupRuleOktaParam] `json:"okta" api:"required"`
 }
 
 func (r OktaGroupRuleParam) MarshalJSON() (data []byte, err error) {
@@ -2112,9 +2112,9 @@ func (r OktaGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type OktaGroupRuleOktaParam struct {
 	// The ID of your Okta identity provider.
-	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id" api:"required"`
 	// The name of the Okta group.
-	Name param.Field[string] `json:"name,required"`
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
@@ -2123,7 +2123,7 @@ func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
 
 // Matches a SAML group. Requires a SAML identity provider.
 type SAMLGroupRule struct {
-	SAML SAMLGroupRuleSAML `json:"saml,required"`
+	SAML SAMLGroupRuleSAML `json:"saml" api:"required"`
 	JSON samlGroupRuleJSON `json:"-"`
 }
 
@@ -2146,11 +2146,11 @@ func (r SAMLGroupRule) implementsAccessRule() {}
 
 type SAMLGroupRuleSAML struct {
 	// The name of the SAML attribute.
-	AttributeName string `json:"attribute_name,required"`
+	AttributeName string `json:"attribute_name" api:"required"`
 	// The SAML attribute value to look for.
-	AttributeValue string `json:"attribute_value,required"`
+	AttributeValue string `json:"attribute_value" api:"required"`
 	// The ID of your SAML identity provider.
-	IdentityProviderID string                `json:"identity_provider_id,required"`
+	IdentityProviderID string                `json:"identity_provider_id" api:"required"`
 	JSON               samlGroupRuleSAMLJSON `json:"-"`
 }
 
@@ -2174,7 +2174,7 @@ func (r samlGroupRuleSAMLJSON) RawJSON() string {
 
 // Matches a SAML group. Requires a SAML identity provider.
 type SAMLGroupRuleParam struct {
-	SAML param.Field[SAMLGroupRuleSAMLParam] `json:"saml,required"`
+	SAML param.Field[SAMLGroupRuleSAMLParam] `json:"saml" api:"required"`
 }
 
 func (r SAMLGroupRuleParam) MarshalJSON() (data []byte, err error) {
@@ -2185,11 +2185,11 @@ func (r SAMLGroupRuleParam) implementsAccessRuleUnionParam() {}
 
 type SAMLGroupRuleSAMLParam struct {
 	// The name of the SAML attribute.
-	AttributeName param.Field[string] `json:"attribute_name,required"`
+	AttributeName param.Field[string] `json:"attribute_name" api:"required"`
 	// The SAML attribute value to look for.
-	AttributeValue param.Field[string] `json:"attribute_value,required"`
+	AttributeValue param.Field[string] `json:"attribute_value" api:"required"`
 	// The ID of your SAML identity provider.
-	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id" api:"required"`
 }
 
 func (r SAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {
@@ -2198,7 +2198,7 @@ func (r SAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {
 
 // Matches a specific Access Service Token
 type ServiceTokenRule struct {
-	ServiceToken ServiceTokenRuleServiceToken `json:"service_token,required"`
+	ServiceToken ServiceTokenRuleServiceToken `json:"service_token" api:"required"`
 	JSON         serviceTokenRuleJSON         `json:"-"`
 }
 
@@ -2222,7 +2222,7 @@ func (r ServiceTokenRule) implementsAccessRule() {}
 
 type ServiceTokenRuleServiceToken struct {
 	// The ID of a Service Token.
-	TokenID string                           `json:"token_id,required"`
+	TokenID string                           `json:"token_id" api:"required"`
 	JSON    serviceTokenRuleServiceTokenJSON `json:"-"`
 }
 
@@ -2244,7 +2244,7 @@ func (r serviceTokenRuleServiceTokenJSON) RawJSON() string {
 
 // Matches a specific Access Service Token
 type ServiceTokenRuleParam struct {
-	ServiceToken param.Field[ServiceTokenRuleServiceTokenParam] `json:"service_token,required"`
+	ServiceToken param.Field[ServiceTokenRuleServiceTokenParam] `json:"service_token" api:"required"`
 }
 
 func (r ServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
@@ -2255,7 +2255,7 @@ func (r ServiceTokenRuleParam) implementsAccessRuleUnionParam() {}
 
 type ServiceTokenRuleServiceTokenParam struct {
 	// The ID of a Service Token.
-	TokenID param.Field[string] `json:"token_id,required"`
+	TokenID param.Field[string] `json:"token_id" api:"required"`
 }
 
 func (r ServiceTokenRuleServiceTokenParam) MarshalJSON() (data []byte, err error) {
@@ -3231,10 +3231,10 @@ func (r AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator) IsKnown()
 }
 
 type AccessApplicationPolicyNewResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationPolicyNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationPolicyNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationPolicyNewResponse                `json:"result"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -3259,8 +3259,8 @@ func (r accessApplicationPolicyNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyNewResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AccessApplicationPolicyNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationPolicyNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3307,8 +3307,8 @@ func (r accessApplicationPolicyNewResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type AccessApplicationPolicyNewResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           AccessApplicationPolicyNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationPolicyNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3492,10 +3492,10 @@ func (r AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator) IsKnow
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationPolicyUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationPolicyUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationPolicyUpdateResponse                `json:"result"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -3520,8 +3520,8 @@ func (r accessApplicationPolicyUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           AccessApplicationPolicyUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationPolicyUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3569,8 +3569,8 @@ func (r accessApplicationPolicyUpdateResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           AccessApplicationPolicyUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationPolicyUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3660,10 +3660,10 @@ type AccessApplicationPolicyDeleteParams struct {
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationPolicyDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationPolicyDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationPolicyDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationPolicyDeleteResponse                `json:"result"`
 	JSON    accessApplicationPolicyDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -3688,8 +3688,8 @@ func (r accessApplicationPolicyDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelopeErrors struct {
-	Code             int64                                                     `json:"code,required"`
-	Message          string                                                    `json:"message,required"`
+	Code             int64                                                     `json:"code" api:"required"`
+	Message          string                                                    `json:"message" api:"required"`
 	DocumentationURL string                                                    `json:"documentation_url"`
 	Source           AccessApplicationPolicyDeleteResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationPolicyDeleteResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3737,8 +3737,8 @@ func (r accessApplicationPolicyDeleteResponseEnvelopeErrorsSourceJSON) RawJSON()
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelopeMessages struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           AccessApplicationPolicyDeleteResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationPolicyDeleteResponseEnvelopeMessagesJSON   `json:"-"`
@@ -3808,10 +3808,10 @@ type AccessApplicationPolicyGetParams struct {
 }
 
 type AccessApplicationPolicyGetResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AccessApplicationPolicyGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AccessApplicationPolicyGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  AccessApplicationPolicyGetResponse                `json:"result"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -3836,8 +3836,8 @@ func (r accessApplicationPolicyGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyGetResponseEnvelopeErrors struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AccessApplicationPolicyGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             accessApplicationPolicyGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -3884,8 +3884,8 @@ func (r accessApplicationPolicyGetResponseEnvelopeErrorsSourceJSON) RawJSON() st
 }
 
 type AccessApplicationPolicyGetResponseEnvelopeMessages struct {
-	Code             int64                                                    `json:"code,required"`
-	Message          string                                                   `json:"message,required"`
+	Code             int64                                                    `json:"code" api:"required"`
+	Message          string                                                   `json:"message" api:"required"`
 	DocumentationURL string                                                   `json:"documentation_url"`
 	Source           AccessApplicationPolicyGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             accessApplicationPolicyGetResponseEnvelopeMessagesJSON   `json:"-"`

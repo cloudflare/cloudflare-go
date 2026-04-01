@@ -43,19 +43,19 @@ func (r *DEXHTTPTestPercentileService) Get(ctx context.Context, testID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if testID == "" {
 		err = errors.New("missing required test_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HTTPDetailsPercentiles struct {
@@ -84,13 +84,13 @@ func (r httpDetailsPercentilesJSON) RawJSON() string {
 }
 
 type TestStatOverTime struct {
-	Slots []TestStatOverTimeSlot `json:"slots,required"`
+	Slots []TestStatOverTimeSlot `json:"slots" api:"required"`
 	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
+	Avg int64 `json:"avg" api:"nullable"`
 	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
+	Max int64 `json:"max" api:"nullable"`
 	// lowest observed in the time period
-	Min  int64                `json:"min,nullable"`
+	Min  int64                `json:"min" api:"nullable"`
 	JSON testStatOverTimeJSON `json:"-"`
 }
 
@@ -114,8 +114,8 @@ func (r testStatOverTimeJSON) RawJSON() string {
 }
 
 type TestStatOverTimeSlot struct {
-	Timestamp string                   `json:"timestamp,required"`
-	Value     int64                    `json:"value,required"`
+	Timestamp string                   `json:"timestamp" api:"required"`
+	Value     int64                    `json:"value" api:"required"`
 	JSON      testStatOverTimeSlotJSON `json:"-"`
 }
 
@@ -137,11 +137,11 @@ func (r testStatOverTimeSlotJSON) RawJSON() string {
 }
 
 type DEXHTTPTestPercentileGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for the query in ISO (RFC3339 - ISO 8601) format
-	From param.Field[string] `query:"from,required"`
+	From param.Field[string] `query:"from" api:"required"`
 	// End time for the query in ISO (RFC3339 - ISO 8601) format
-	To param.Field[string] `query:"to,required"`
+	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
@@ -160,10 +160,10 @@ func (r DEXHTTPTestPercentileGetParams) URLQuery() (v url.Values) {
 }
 
 type DexhttpTestPercentileGetResponseEnvelope struct {
-	Errors   []DexhttpTestPercentileGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexhttpTestPercentileGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DexhttpTestPercentileGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DexhttpTestPercentileGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DexhttpTestPercentileGetResponseEnvelopeSuccess `json:"success,required"`
+	Success DexhttpTestPercentileGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  HTTPDetailsPercentiles                          `json:"result"`
 	JSON    dexhttpTestPercentileGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -188,8 +188,8 @@ func (r dexhttpTestPercentileGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DexhttpTestPercentileGetResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           DexhttpTestPercentileGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dexhttpTestPercentileGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -236,8 +236,8 @@ func (r dexhttpTestPercentileGetResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type DexhttpTestPercentileGetResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           DexhttpTestPercentileGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dexhttpTestPercentileGetResponseEnvelopeMessagesJSON   `json:"-"`

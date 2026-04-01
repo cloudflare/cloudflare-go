@@ -43,15 +43,15 @@ func (r *CrawlService) New(ctx context.Context, params CrawlNewParams, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/browser-rendering/crawl", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Cancels an ongoing crawl job by setting its status to cancelled and stopping all
@@ -61,19 +61,19 @@ func (r *CrawlService) Delete(ctx context.Context, jobID string, body CrawlDelet
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if jobID == "" {
 		err = errors.New("missing required job_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/browser-rendering/crawl/%s", body.AccountID, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Returns the result of a crawl job.
@@ -82,26 +82,26 @@ func (r *CrawlService) Get(ctx context.Context, jobID string, params CrawlGetPar
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if jobID == "" {
 		err = errors.New("missing required job_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/browser-rendering/crawl/%s", params.AccountID, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type CrawlDeleteResponse struct {
-	// The ID of the cancelled job
-	JobID string `json:"job_id,required"`
-	// Cancellation confirmation message
-	Message string                  `json:"message,required"`
+	// The ID of the cancelled job.
+	JobID string `json:"job_id" api:"required"`
+	// Cancellation confirmation message.
+	Message string                  `json:"message" api:"required"`
 	JSON    crawlDeleteResponseJSON `json:"-"`
 }
 
@@ -124,20 +124,20 @@ func (r crawlDeleteResponseJSON) RawJSON() string {
 
 type CrawlGetResponse struct {
 	// Crawl job ID.
-	ID string `json:"id,required"`
+	ID string `json:"id" api:"required"`
 	// Total seconds spent in browser so far.
-	BrowserSecondsUsed float64 `json:"browserSecondsUsed,required"`
+	BrowserSecondsUsed float64 `json:"browserSecondsUsed" api:"required"`
 	// Total number of URLs that have been crawled so far.
-	Finished float64 `json:"finished,required"`
+	Finished float64 `json:"finished" api:"required"`
 	// List of crawl job records.
-	Records []CrawlGetResponseRecord `json:"records,required"`
+	Records []CrawlGetResponseRecord `json:"records" api:"required"`
 	// Total number of URLs that were skipped due to include/exclude/subdomain filters.
 	// Skipped URLs are included in records but are not counted toward total/finished.
-	Skipped float64 `json:"skipped,required"`
+	Skipped float64 `json:"skipped" api:"required"`
 	// Current crawl job status.
-	Status string `json:"status,required"`
+	Status string `json:"status" api:"required"`
 	// Total current number of URLs in the crawl job.
-	Total float64 `json:"total,required"`
+	Total float64 `json:"total" api:"required"`
 	// Cursor for pagination.
 	Cursor string               `json:"cursor"`
 	JSON   crawlGetResponseJSON `json:"-"`
@@ -167,11 +167,11 @@ func (r crawlGetResponseJSON) RawJSON() string {
 }
 
 type CrawlGetResponseRecord struct {
-	Metadata CrawlGetResponseRecordsMetadata `json:"metadata,required"`
+	Metadata CrawlGetResponseRecordsMetadata `json:"metadata" api:"required"`
 	// Current status of the crawled URL.
-	Status CrawlGetResponseRecordsStatus `json:"status,required"`
+	Status CrawlGetResponseRecordsStatus `json:"status" api:"required"`
 	// Crawled URL.
-	URL string `json:"url,required"`
+	URL string `json:"url" api:"required"`
 	// HTML content of the crawled URL.
 	HTML string `json:"html"`
 	// JSON of the content of the crawled URL.
@@ -204,9 +204,9 @@ func (r crawlGetResponseRecordJSON) RawJSON() string {
 
 type CrawlGetResponseRecordsMetadata struct {
 	// HTTP status code of the crawled page.
-	Status float64 `json:"status,required"`
+	Status float64 `json:"status" api:"required"`
 	// Final URL of the crawled page.
-	URL string `json:"url,required"`
+	URL string `json:"url" api:"required"`
 	// Title of the crawled page.
 	Title string                              `json:"title"`
 	JSON  crawlGetResponseRecordsMetadataJSON `json:"-"`
@@ -252,8 +252,8 @@ func (r CrawlGetResponseRecordsStatus) IsKnown() bool {
 
 type CrawlNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]     `path:"account_id,required"`
-	Body      CrawlNewParamsBodyUnion `json:"body,required"`
+	AccountID param.Field[string]     `path:"account_id" api:"required"`
+	Body      CrawlNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -272,7 +272,7 @@ func (r CrawlNewParams) URLQuery() (v url.Values) {
 
 type CrawlNewParamsBody struct {
 	// URL to navigate to, eg. `https://example.com`.
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// The maximum duration allowed for the browser action to complete after the page
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
@@ -283,8 +283,9 @@ type CrawlNewParamsBody struct {
 	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
 	Authenticate        param.Field[interface{}] `json:"authenticate"`
 	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool]        `json:"bestAttempt"`
-	Cookies     param.Field[interface{}] `json:"cookies"`
+	BestAttempt   param.Field[bool]        `json:"bestAttempt"`
+	Cookies       param.Field[interface{}] `json:"cookies"`
+	CrawlPurposes param.Field[interface{}] `json:"crawlPurposes"`
 	// Maximum number of levels deep the crawler will traverse from the starting URL.
 	Depth            param.Field[float64]     `json:"depth"`
 	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
@@ -335,7 +336,7 @@ type CrawlNewParamsBodyUnion interface {
 
 type CrawlNewParamsBodyObject struct {
 	// URL to navigate to, eg. `https://example.com`.
-	URL param.Field[string] `json:"url,required" format:"uri"`
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// The maximum duration allowed for the browser action to complete after the page
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
@@ -356,6 +357,10 @@ type CrawlNewParamsBodyObject struct {
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
 	Cookies param.Field[[]CrawlNewParamsBodyObjectCookie] `json:"cookies"`
+	// List of crawl purposes to respect Content-Signal directives in robots.txt.
+	// Allowed values: 'search', 'ai-input', 'ai-train'. Learn more:
+	// https://contentsignals.org/. Default: ['search', 'ai-input', 'ai-train'].
+	CrawlPurposes param.Field[[]CrawlNewParamsBodyObjectCrawlPurpose] `json:"crawlPurposes"`
 	// Maximum number of levels deep the crawler will traverse from the starting URL.
 	Depth            param.Field[float64] `json:"depth"`
 	EmulateMediaType param.Field[string]  `json:"emulateMediaType"`
@@ -462,8 +467,8 @@ func (r CrawlNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 
 // Provide credentials for HTTP authentication.
 type CrawlNewParamsBodyObjectAuthenticate struct {
-	Password param.Field[string] `json:"password,required"`
-	Username param.Field[string] `json:"username,required"`
+	Password param.Field[string] `json:"password" api:"required"`
+	Username param.Field[string] `json:"username" api:"required"`
 }
 
 func (r CrawlNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
@@ -471,8 +476,9 @@ func (r CrawlNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err er
 }
 
 type CrawlNewParamsBodyObjectCookie struct {
-	Name         param.Field[string]                                      `json:"name,required"`
-	Value        param.Field[string]                                      `json:"value,required"`
+	// Cookie name.
+	Name         param.Field[string]                                      `json:"name" api:"required"`
+	Value        param.Field[string]                                      `json:"value" api:"required"`
 	Domain       param.Field[string]                                      `json:"domain"`
 	Expires      param.Field[float64]                                     `json:"expires"`
 	HTTPOnly     param.Field[bool]                                        `json:"httpOnly"`
@@ -534,6 +540,22 @@ const (
 func (r CrawlNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
 	case CrawlNewParamsBodyObjectCookiesSourceSchemeUnset, CrawlNewParamsBodyObjectCookiesSourceSchemeNonSecure, CrawlNewParamsBodyObjectCookiesSourceSchemeSecure:
+		return true
+	}
+	return false
+}
+
+type CrawlNewParamsBodyObjectCrawlPurpose string
+
+const (
+	CrawlNewParamsBodyObjectCrawlPurposeSearch  CrawlNewParamsBodyObjectCrawlPurpose = "search"
+	CrawlNewParamsBodyObjectCrawlPurposeAIInput CrawlNewParamsBodyObjectCrawlPurpose = "ai-input"
+	CrawlNewParamsBodyObjectCrawlPurposeAITrain CrawlNewParamsBodyObjectCrawlPurpose = "ai-train"
+)
+
+func (r CrawlNewParamsBodyObjectCrawlPurpose) IsKnown() bool {
+	switch r {
+	case CrawlNewParamsBodyObjectCrawlPurposeSearch, CrawlNewParamsBodyObjectCrawlPurposeAIInput, CrawlNewParamsBodyObjectCrawlPurposeAITrain:
 		return true
 	}
 	return false
@@ -632,10 +654,10 @@ func (r CrawlNewParamsBodyObjectJsonOptions) MarshalJSON() (data []byte, err err
 
 type CrawlNewParamsBodyObjectJsonOptionsCustomAI struct {
 	// Authorization token for the AI model: `Bearer <token>`.
-	Authorization param.Field[string] `json:"authorization,required"`
+	Authorization param.Field[string] `json:"authorization" api:"required"`
 	// AI model to use for the request. Must be formed as `<provider>/<model_name>`,
-	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`
-	Model param.Field[string] `json:"model,required"`
+	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`.
+	Model param.Field[string] `json:"model" api:"required"`
 }
 
 func (r CrawlNewParamsBodyObjectJsonOptionsCustomAI) MarshalJSON() (data []byte, err error) {
@@ -643,9 +665,9 @@ func (r CrawlNewParamsBodyObjectJsonOptionsCustomAI) MarshalJSON() (data []byte,
 }
 
 type CrawlNewParamsBodyObjectJsonOptionsResponseFormat struct {
-	Type param.Field[string] `json:"type,required"`
+	Type param.Field[string] `json:"type" api:"required"`
 	// Schema for the response format. More information here:
-	// https://developers.cloudflare.com/workers-ai/json-mode/
+	// https://developers.cloudflare.com/workers-ai/json-mode/.
 	JsonSchema param.Field[map[string]CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
@@ -755,8 +777,8 @@ func (r CrawlNewParamsBodyObjectSource) IsKnown() bool {
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
 type CrawlNewParamsBodyObjectViewport struct {
-	Height            param.Field[float64] `json:"height,required"`
-	Width             param.Field[float64] `json:"width,required"`
+	Height            param.Field[float64] `json:"height" api:"required"`
+	Width             param.Field[float64] `json:"width" api:"required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
 	HasTouch          param.Field[bool]    `json:"hasTouch"`
 	IsLandscape       param.Field[bool]    `json:"isLandscape"`
@@ -770,7 +792,7 @@ func (r CrawlNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error)
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
 type CrawlNewParamsBodyObjectWaitForSelector struct {
-	Selector param.Field[string]                                         `json:"selector,required"`
+	Selector param.Field[string]                                         `json:"selector" api:"required"`
 	Hidden   param.Field[CrawlNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
 	Timeout  param.Field[float64]                                        `json:"timeout"`
 	Visible  param.Field[CrawlNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
@@ -844,10 +866,10 @@ func (r CrawlNewParamsBodySource) IsKnown() bool {
 }
 
 type CrawlNewResponseEnvelope struct {
-	// Crawl job id
-	Result string `json:"result,required"`
-	// Response status
-	Success bool                             `json:"success,required"`
+	// Crawl job ID.
+	Result string `json:"result" api:"required"`
+	// Response status.
+	Success bool                             `json:"success" api:"required"`
 	Errors  []CrawlNewResponseEnvelopeErrors `json:"errors"`
 	JSON    crawlNewResponseEnvelopeJSON     `json:"-"`
 }
@@ -871,10 +893,10 @@ func (r crawlNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CrawlNewResponseEnvelopeErrors struct {
-	// Error code
-	Code float64 `json:"code,required"`
-	// Error Message
-	Message string                             `json:"message,required"`
+	// Error code.
+	Code float64 `json:"code" api:"required"`
+	// Error message.
+	Message string                             `json:"message" api:"required"`
 	JSON    crawlNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -897,13 +919,13 @@ func (r crawlNewResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type CrawlDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CrawlDeleteResponseEnvelope struct {
-	Result CrawlDeleteResponse `json:"result,required"`
-	// Response status
-	Success bool                                `json:"success,required"`
+	Result CrawlDeleteResponse `json:"result" api:"required"`
+	// Response status.
+	Success bool                                `json:"success" api:"required"`
 	Errors  []CrawlDeleteResponseEnvelopeErrors `json:"errors"`
 	JSON    crawlDeleteResponseEnvelopeJSON     `json:"-"`
 }
@@ -927,10 +949,10 @@ func (r crawlDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CrawlDeleteResponseEnvelopeErrors struct {
-	// Error code
-	Code float64 `json:"code,required"`
-	// Error Message
-	Message string                                `json:"message,required"`
+	// Error code.
+	Code float64 `json:"code" api:"required"`
+	// Error message.
+	Message string                                `json:"message" api:"required"`
 	JSON    crawlDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
 
@@ -953,7 +975,7 @@ func (r crawlDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type CrawlGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 	// Cursor for pagination.
@@ -993,9 +1015,9 @@ func (r CrawlGetParamsStatus) IsKnown() bool {
 }
 
 type CrawlGetResponseEnvelope struct {
-	Result CrawlGetResponse `json:"result,required"`
-	// Response status
-	Success bool                             `json:"success,required"`
+	Result CrawlGetResponse `json:"result" api:"required"`
+	// Response status.
+	Success bool                             `json:"success" api:"required"`
 	Errors  []CrawlGetResponseEnvelopeErrors `json:"errors"`
 	JSON    crawlGetResponseEnvelopeJSON     `json:"-"`
 }
@@ -1019,10 +1041,10 @@ func (r crawlGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type CrawlGetResponseEnvelopeErrors struct {
-	// Error code
-	Code float64 `json:"code,required"`
-	// Error Message
-	Message string                             `json:"message,required"`
+	// Error code.
+	Code float64 `json:"code" api:"required"`
+	// Error message.
+	Message string                             `json:"message" api:"required"`
 	JSON    crawlGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 

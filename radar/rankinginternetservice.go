@@ -45,10 +45,10 @@ func (r *RankingInternetServiceService) Categories(ctx context.Context, query Ra
 	path := "radar/ranking/internet_services/categories"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves Internet Services rank update changes over time.
@@ -58,10 +58,10 @@ func (r *RankingInternetServiceService) TimeseriesGroups(ctx context.Context, qu
 	path := "radar/ranking/internet_services/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves top Internet services based on their rank.
@@ -71,14 +71,14 @@ func (r *RankingInternetServiceService) Top(ctx context.Context, query RankingIn
 	path := "radar/ranking/internet_services/top"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type RankingInternetServiceCategoriesResponse struct {
-	Categories0 []RankingInternetServiceCategoriesResponseCategories0 `json:"categories_0,required"`
+	Categories0 []RankingInternetServiceCategoriesResponseCategories0 `json:"categories_0" api:"required"`
 	JSON        rankingInternetServiceCategoriesResponseJSON          `json:"-"`
 }
 
@@ -99,7 +99,7 @@ func (r rankingInternetServiceCategoriesResponseJSON) RawJSON() string {
 }
 
 type RankingInternetServiceCategoriesResponseCategories0 struct {
-	Name string                                                  `json:"name,required"`
+	Name string                                                  `json:"name" api:"required"`
 	JSON rankingInternetServiceCategoriesResponseCategories0JSON `json:"-"`
 }
 
@@ -121,8 +121,8 @@ func (r rankingInternetServiceCategoriesResponseCategories0JSON) RawJSON() strin
 
 type RankingInternetServiceTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   RankingInternetServiceTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 RankingInternetServiceTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   RankingInternetServiceTimeseriesGroupsResponseMeta   `json:"meta" api:"required"`
+	Serie0 RankingInternetServiceTimeseriesGroupsResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   rankingInternetServiceTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
@@ -148,16 +148,16 @@ type RankingInternetServiceTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    RankingInternetServiceTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []RankingInternetServiceTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    RankingInternetServiceTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []RankingInternetServiceTimeseriesGroupsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization RankingInternetServiceTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization RankingInternetServiceTimeseriesGroupsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []RankingInternetServiceTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []RankingInternetServiceTimeseriesGroupsResponseMetaUnit `json:"units" api:"required"`
 	JSON  rankingInternetServiceTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
@@ -204,9 +204,9 @@ func (r RankingInternetServiceTimeseriesGroupsResponseMetaAggInterval) IsKnown()
 }
 
 type RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                                `json:"level,required"`
+	Level int64                                                                `json:"level" api:"required"`
 	JSON  rankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -231,15 +231,15 @@ func (r rankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoJSON) Ra
 // Annotation associated with the result (e.g. outage or other type of event).
 type RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                                `json:"description,required"`
-	EndDate     time.Time                                                                             `json:"endDate,required" format:"date-time"`
+	DataSource  RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                                `json:"description" api:"required"`
+	EndDate     time.Time                                                                             `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                           `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                         `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                                      `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                           `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                         `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                                      `json:"startDate" api:"required" format:"date-time"`
 	JSON            rankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -327,9 +327,9 @@ func (r RankingInternetServiceTimeseriesGroupsResponseMetaConfidenceInfoAnnotati
 
 type RankingInternetServiceTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                                       `json:"startTime" api:"required" format:"date-time"`
 	JSON      rankingInternetServiceTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -375,8 +375,8 @@ func (r RankingInternetServiceTimeseriesGroupsResponseMetaNormalization) IsKnown
 }
 
 type RankingInternetServiceTimeseriesGroupsResponseMetaUnit struct {
-	Name  string                                                     `json:"name,required"`
-	Value string                                                     `json:"value,required"`
+	Name  string                                                     `json:"name" api:"required"`
+	Value string                                                     `json:"value" api:"required"`
 	JSON  rankingInternetServiceTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -398,8 +398,8 @@ func (r rankingInternetServiceTimeseriesGroupsResponseMetaUnitJSON) RawJSON() st
 }
 
 type RankingInternetServiceTimeseriesGroupsResponseSerie0 struct {
-	Timestamps  []time.Time                                                            `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]RankingInternetServiceTimeseriesGroupsResponseSerie0Union `json:"-,extras"`
+	Timestamps  []time.Time                                                            `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]RankingInternetServiceTimeseriesGroupsResponseSerie0Union `json:"-" api:"extrafields"`
 	JSON        rankingInternetServiceTimeseriesGroupsResponseSerie0JSON               `json:"-"`
 }
 
@@ -442,8 +442,8 @@ func init() {
 }
 
 type RankingInternetServiceTopResponse struct {
-	Meta RankingInternetServiceTopResponseMeta   `json:"meta,required"`
-	Top0 []RankingInternetServiceTopResponseTop0 `json:"top_0,required"`
+	Meta RankingInternetServiceTopResponseMeta   `json:"meta" api:"required"`
+	Top0 []RankingInternetServiceTopResponseTop0 `json:"top_0" api:"required"`
 	JSON rankingInternetServiceTopResponseJSON   `json:"-"`
 }
 
@@ -465,15 +465,15 @@ func (r rankingInternetServiceTopResponseJSON) RawJSON() string {
 }
 
 type RankingInternetServiceTopResponseMeta struct {
-	ConfidenceInfo RankingInternetServiceTopResponseMetaConfidenceInfo `json:"confidenceInfo,required,nullable"`
-	DateRange      []RankingInternetServiceTopResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo RankingInternetServiceTopResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []RankingInternetServiceTopResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization RankingInternetServiceTopResponseMetaNormalization `json:"normalization,required"`
+	Normalization RankingInternetServiceTopResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []RankingInternetServiceTopResponseMetaUnit `json:"units,required"`
+	Units []RankingInternetServiceTopResponseMetaUnit `json:"units" api:"required"`
 	JSON  rankingInternetServiceTopResponseMetaJSON   `json:"-"`
 }
 
@@ -498,9 +498,9 @@ func (r rankingInternetServiceTopResponseMetaJSON) RawJSON() string {
 }
 
 type RankingInternetServiceTopResponseMetaConfidenceInfo struct {
-	Annotations []RankingInternetServiceTopResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []RankingInternetServiceTopResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                   `json:"level,required"`
+	Level int64                                                   `json:"level" api:"required"`
 	JSON  rankingInternetServiceTopResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -524,15 +524,15 @@ func (r rankingInternetServiceTopResponseMetaConfidenceInfoJSON) RawJSON() strin
 // Annotation associated with the result (e.g. outage or other type of event).
 type RankingInternetServiceTopResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  RankingInternetServiceTopResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                   `json:"description,required"`
-	EndDate     time.Time                                                                `json:"endDate,required" format:"date-time"`
+	DataSource  RankingInternetServiceTopResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                   `json:"description" api:"required"`
+	EndDate     time.Time                                                                `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType RankingInternetServiceTopResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType RankingInternetServiceTopResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
-	LinkedURL       string                                                            `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                         `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                            `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                         `json:"startDate" api:"required" format:"date-time"`
 	JSON            rankingInternetServiceTopResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -620,9 +620,9 @@ func (r RankingInternetServiceTopResponseMetaConfidenceInfoAnnotationsEventType)
 
 type RankingInternetServiceTopResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                          `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                          `json:"startTime" api:"required" format:"date-time"`
 	JSON      rankingInternetServiceTopResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -667,8 +667,8 @@ func (r RankingInternetServiceTopResponseMetaNormalization) IsKnown() bool {
 }
 
 type RankingInternetServiceTopResponseMetaUnit struct {
-	Name  string                                        `json:"name,required"`
-	Value string                                        `json:"value,required"`
+	Name  string                                        `json:"name" api:"required"`
+	Value string                                        `json:"value" api:"required"`
 	JSON  rankingInternetServiceTopResponseMetaUnitJSON `json:"-"`
 }
 
@@ -690,8 +690,8 @@ func (r rankingInternetServiceTopResponseMetaUnitJSON) RawJSON() string {
 }
 
 type RankingInternetServiceTopResponseTop0 struct {
-	Rank    int64                                     `json:"rank,required"`
-	Service string                                    `json:"service,required"`
+	Rank    int64                                     `json:"rank" api:"required"`
+	Service string                                    `json:"service" api:"required"`
 	JSON    rankingInternetServiceTopResponseTop0JSON `json:"-"`
 }
 
@@ -749,8 +749,8 @@ func (r RankingInternetServiceCategoriesParamsFormat) IsKnown() bool {
 }
 
 type RankingInternetServiceCategoriesResponseEnvelope struct {
-	Result  RankingInternetServiceCategoriesResponse             `json:"result,required"`
-	Success bool                                                 `json:"success,required"`
+	Result  RankingInternetServiceCategoriesResponse             `json:"result" api:"required"`
+	Success bool                                                 `json:"success" api:"required"`
 	JSON    rankingInternetServiceCategoriesResponseEnvelopeJSON `json:"-"`
 }
 
@@ -816,8 +816,8 @@ func (r RankingInternetServiceTimeseriesGroupsParamsFormat) IsKnown() bool {
 }
 
 type RankingInternetServiceTimeseriesGroupsResponseEnvelope struct {
-	Result  RankingInternetServiceTimeseriesGroupsResponse             `json:"result,required"`
-	Success bool                                                       `json:"success,required"`
+	Result  RankingInternetServiceTimeseriesGroupsResponse             `json:"result" api:"required"`
+	Success bool                                                       `json:"success" api:"required"`
 	JSON    rankingInternetServiceTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 
@@ -877,8 +877,8 @@ func (r RankingInternetServiceTopParamsFormat) IsKnown() bool {
 }
 
 type RankingInternetServiceTopResponseEnvelope struct {
-	Result  RankingInternetServiceTopResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
+	Result  RankingInternetServiceTopResponse             `json:"result" api:"required"`
+	Success bool                                          `json:"success" api:"required"`
 	JSON    rankingInternetServiceTopResponseEnvelopeJSON `json:"-"`
 }
 

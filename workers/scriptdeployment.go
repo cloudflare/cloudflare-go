@@ -46,19 +46,19 @@ func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, pa
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // List of Worker Deployments. The first deployment in the list is the latest
@@ -68,19 +68,19 @@ func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, q
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Delete a Worker Deployment. The latest deployment, which is actively serving
@@ -89,19 +89,19 @@ func (r *ScriptDeploymentService) Delete(ctx context.Context, scriptName string,
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	if deploymentID == "" {
 		err = errors.New("missing required deployment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments/%s", body.AccountID, scriptName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get information about a Worker Deployment.
@@ -110,31 +110,31 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, de
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if scriptName == "" {
 		err = errors.New("missing required script_name parameter")
-		return
+		return nil, err
 	}
 	if deploymentID == "" {
 		err = errors.New("missing required deployment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments/%s", query.AccountID, scriptName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type Deployment struct {
-	ID          string                `json:"id,required" format:"uuid"`
-	CreatedOn   time.Time             `json:"created_on,required" format:"date-time"`
-	Source      string                `json:"source,required"`
-	Strategy    DeploymentStrategy    `json:"strategy,required"`
-	Versions    []DeploymentVersion   `json:"versions,required"`
+	ID          string                `json:"id" api:"required" format:"uuid"`
+	CreatedOn   time.Time             `json:"created_on" api:"required" format:"date-time"`
+	Source      string                `json:"source" api:"required"`
+	Strategy    DeploymentStrategy    `json:"strategy" api:"required"`
+	Versions    []DeploymentVersion   `json:"versions" api:"required"`
 	Annotations DeploymentAnnotations `json:"annotations"`
 	AuthorEmail string                `json:"author_email" format:"email"`
 	JSON        deploymentJSON        `json:"-"`
@@ -176,8 +176,8 @@ func (r DeploymentStrategy) IsKnown() bool {
 }
 
 type DeploymentVersion struct {
-	Percentage float64               `json:"percentage,required"`
-	VersionID  string                `json:"version_id,required" format:"uuid"`
+	Percentage float64               `json:"percentage" api:"required"`
+	VersionID  string                `json:"version_id" api:"required" format:"uuid"`
 	JSON       deploymentVersionJSON `json:"-"`
 }
 
@@ -224,8 +224,8 @@ func (r deploymentAnnotationsJSON) RawJSON() string {
 }
 
 type DeploymentParam struct {
-	Strategy    param.Field[DeploymentStrategy]         `json:"strategy,required"`
-	Versions    param.Field[[]DeploymentVersionParam]   `json:"versions,required"`
+	Strategy    param.Field[DeploymentStrategy]         `json:"strategy" api:"required"`
+	Versions    param.Field[[]DeploymentVersionParam]   `json:"versions" api:"required"`
 	Annotations param.Field[DeploymentAnnotationsParam] `json:"annotations"`
 }
 
@@ -234,8 +234,8 @@ func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DeploymentVersionParam struct {
-	Percentage param.Field[float64] `json:"percentage,required"`
-	VersionID  param.Field[string]  `json:"version_id,required" format:"uuid"`
+	Percentage param.Field[float64] `json:"percentage" api:"required"`
+	VersionID  param.Field[string]  `json:"version_id" api:"required" format:"uuid"`
 }
 
 func (r DeploymentVersionParam) MarshalJSON() (data []byte, err error) {
@@ -252,7 +252,7 @@ func (r DeploymentAnnotationsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptDeploymentListResponse struct {
-	Deployments []Deployment                     `json:"deployments,required"`
+	Deployments []Deployment                     `json:"deployments" api:"required"`
 	JSON        scriptDeploymentListResponseJSON `json:"-"`
 }
 
@@ -273,10 +273,10 @@ func (r scriptDeploymentListResponseJSON) RawJSON() string {
 }
 
 type ScriptDeploymentDeleteResponse struct {
-	Errors   []ScriptDeploymentDeleteResponseError   `json:"errors,required"`
-	Messages []ScriptDeploymentDeleteResponseMessage `json:"messages,required"`
+	Errors   []ScriptDeploymentDeleteResponseError   `json:"errors" api:"required"`
+	Messages []ScriptDeploymentDeleteResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptDeploymentDeleteResponseSuccess `json:"success,required"`
+	Success ScriptDeploymentDeleteResponseSuccess `json:"success" api:"required"`
 	JSON    scriptDeploymentDeleteResponseJSON    `json:"-"`
 }
 
@@ -299,8 +299,8 @@ func (r scriptDeploymentDeleteResponseJSON) RawJSON() string {
 }
 
 type ScriptDeploymentDeleteResponseError struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           ScriptDeploymentDeleteResponseErrorsSource `json:"source"`
 	JSON             scriptDeploymentDeleteResponseErrorJSON    `json:"-"`
@@ -347,8 +347,8 @@ func (r scriptDeploymentDeleteResponseErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptDeploymentDeleteResponseMessage struct {
-	Code             int64                                        `json:"code,required"`
-	Message          string                                       `json:"message,required"`
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
 	DocumentationURL string                                       `json:"documentation_url"`
 	Source           ScriptDeploymentDeleteResponseMessagesSource `json:"source"`
 	JSON             scriptDeploymentDeleteResponseMessageJSON    `json:"-"`
@@ -411,8 +411,8 @@ func (r ScriptDeploymentDeleteResponseSuccess) IsKnown() bool {
 
 type ScriptDeploymentNewParams struct {
 	// Identifier.
-	AccountID  param.Field[string] `path:"account_id,required"`
-	Deployment DeploymentParam     `json:"deployment,required"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
+	Deployment DeploymentParam     `json:"deployment" api:"required"`
 	// If set to true, the deployment will be created even if normally blocked by
 	// something such rolling back to an older version when a secret has changed.
 	Force param.Field[bool] `query:"force"`
@@ -432,11 +432,11 @@ func (r ScriptDeploymentNewParams) URLQuery() (v url.Values) {
 }
 
 type ScriptDeploymentNewResponseEnvelope struct {
-	Errors   []ScriptDeploymentNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptDeploymentNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                    `json:"result,required"`
+	Errors   []ScriptDeploymentNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptDeploymentNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Deployment                                    `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptDeploymentNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -460,8 +460,8 @@ func (r scriptDeploymentNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptDeploymentNewResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ScriptDeploymentNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptDeploymentNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -508,8 +508,8 @@ func (r scriptDeploymentNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptDeploymentNewResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ScriptDeploymentNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptDeploymentNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -572,15 +572,15 @@ func (r ScriptDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptDeploymentListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptDeploymentListResponseEnvelope struct {
-	Errors   []ScriptDeploymentListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptDeploymentListResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptDeploymentListResponse                   `json:"result,required"`
+	Errors   []ScriptDeploymentListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptDeploymentListResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ScriptDeploymentListResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptDeploymentListResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptDeploymentListResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptDeploymentListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -604,8 +604,8 @@ func (r scriptDeploymentListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptDeploymentListResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code,required"`
-	Message          string                                           `json:"message,required"`
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
 	DocumentationURL string                                           `json:"documentation_url"`
 	Source           ScriptDeploymentListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptDeploymentListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -652,8 +652,8 @@ func (r scriptDeploymentListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptDeploymentListResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code,required"`
-	Message          string                                             `json:"message,required"`
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
 	DocumentationURL string                                             `json:"documentation_url"`
 	Source           ScriptDeploymentListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptDeploymentListResponseEnvelopeMessagesJSON   `json:"-"`
@@ -716,20 +716,20 @@ func (r ScriptDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptDeploymentDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptDeploymentGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptDeploymentGetResponseEnvelope struct {
-	Errors   []ScriptDeploymentGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptDeploymentGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Deployment                                    `json:"result,required"`
+	Errors   []ScriptDeploymentGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptDeploymentGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Deployment                                    `json:"result" api:"required"`
 	// Whether the API call was successful.
-	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptDeploymentGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -753,8 +753,8 @@ func (r scriptDeploymentGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ScriptDeploymentGetResponseEnvelopeErrors struct {
-	Code             int64                                           `json:"code,required"`
-	Message          string                                          `json:"message,required"`
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
 	DocumentationURL string                                          `json:"documentation_url"`
 	Source           ScriptDeploymentGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             scriptDeploymentGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -801,8 +801,8 @@ func (r scriptDeploymentGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type ScriptDeploymentGetResponseEnvelopeMessages struct {
-	Code             int64                                             `json:"code,required"`
-	Message          string                                            `json:"message,required"`
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
 	DocumentationURL string                                            `json:"documentation_url"`
 	Source           ScriptDeploymentGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             scriptDeploymentGetResponseEnvelopeMessagesJSON   `json:"-"`

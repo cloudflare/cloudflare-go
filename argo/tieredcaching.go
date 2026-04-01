@@ -52,15 +52,15 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Tiered Cache works by dividing Cloudflare's data centers into a hierarchy of
@@ -79,26 +79,26 @@ func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetPa
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type TieredCachingEditResponse struct {
 	// The identifier of the caching setting.
-	ID TieredCachingEditResponseID `json:"id,required"`
+	ID TieredCachingEditResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Tiered Cache zone setting.
-	Value TieredCachingEditResponseValue `json:"value,required"`
+	Value TieredCachingEditResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                     `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       tieredCachingEditResponseJSON `json:"-"`
 }
 
@@ -154,13 +154,13 @@ func (r TieredCachingEditResponseValue) IsKnown() bool {
 
 type TieredCachingGetResponse struct {
 	// The identifier of the caching setting.
-	ID TieredCachingGetResponseID `json:"id,required"`
+	ID TieredCachingGetResponseID `json:"id" api:"required"`
 	// Whether the setting is editable.
-	Editable bool `json:"editable,required"`
+	Editable bool `json:"editable" api:"required"`
 	// Value of the Tiered Cache zone setting.
-	Value TieredCachingGetResponseValue `json:"value,required"`
+	Value TieredCachingGetResponseValue `json:"value" api:"required"`
 	// Last time this setting was modified.
-	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                    `json:"modified_on" api:"nullable" format:"date-time"`
 	JSON       tieredCachingGetResponseJSON `json:"-"`
 }
 
@@ -216,9 +216,9 @@ func (r TieredCachingGetResponseValue) IsKnown() bool {
 
 type TieredCachingEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Enables Tiered Caching.
-	Value param.Field[TieredCachingEditParamsValue] `json:"value,required"`
+	Value param.Field[TieredCachingEditParamsValue] `json:"value" api:"required"`
 }
 
 func (r TieredCachingEditParams) MarshalJSON() (data []byte, err error) {
@@ -242,10 +242,10 @@ func (r TieredCachingEditParamsValue) IsKnown() bool {
 }
 
 type TieredCachingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TieredCachingEditResponseEnvelopeSuccess `json:"success,required"`
+	Success TieredCachingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TieredCachingEditResponse                `json:"result"`
 	JSON    tieredCachingEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -286,14 +286,14 @@ func (r TieredCachingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TieredCachingGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type TieredCachingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success TieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
+	Success TieredCachingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  TieredCachingGetResponse                `json:"result"`
 	JSON    tieredCachingGetResponseEnvelopeJSON    `json:"-"`
 }

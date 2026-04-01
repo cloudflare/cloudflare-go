@@ -44,10 +44,10 @@ func (r *BotWebCrawlerService) Summary(ctx context.Context, dimension BotWebCraw
 	path := fmt.Sprintf("radar/bots/crawlers/summary/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Retrieves the distribution of HTTP requests from crawlers, grouped by the
@@ -58,16 +58,16 @@ func (r *BotWebCrawlerService) TimeseriesGroups(ctx context.Context, dimension B
 	path := fmt.Sprintf("radar/bots/crawlers/timeseries_groups/%v", dimension)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type BotWebCrawlerSummaryResponse struct {
 	// Metadata for the results.
-	Meta     BotWebCrawlerSummaryResponseMeta `json:"meta,required"`
-	Summary0 map[string]string                `json:"summary_0,required"`
+	Meta     BotWebCrawlerSummaryResponseMeta `json:"meta" api:"required"`
+	Summary0 map[string]string                `json:"summary_0" api:"required"`
 	JSON     botWebCrawlerSummaryResponseJSON `json:"-"`
 }
 
@@ -90,15 +90,15 @@ func (r botWebCrawlerSummaryResponseJSON) RawJSON() string {
 
 // Metadata for the results.
 type BotWebCrawlerSummaryResponseMeta struct {
-	ConfidenceInfo BotWebCrawlerSummaryResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []BotWebCrawlerSummaryResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo BotWebCrawlerSummaryResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []BotWebCrawlerSummaryResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization BotWebCrawlerSummaryResponseMetaNormalization `json:"normalization,required"`
+	Normalization BotWebCrawlerSummaryResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []BotWebCrawlerSummaryResponseMetaUnit `json:"units,required"`
+	Units []BotWebCrawlerSummaryResponseMetaUnit `json:"units" api:"required"`
 	JSON  botWebCrawlerSummaryResponseMetaJSON   `json:"-"`
 }
 
@@ -123,9 +123,9 @@ func (r botWebCrawlerSummaryResponseMetaJSON) RawJSON() string {
 }
 
 type BotWebCrawlerSummaryResponseMetaConfidenceInfo struct {
-	Annotations []BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                              `json:"level,required"`
+	Level int64                                              `json:"level" api:"required"`
 	JSON  botWebCrawlerSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -149,15 +149,15 @@ func (r botWebCrawlerSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
 // Annotation associated with the result (e.g. outage or other type of event).
 type BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                              `json:"description,required"`
-	EndDate     time.Time                                                           `json:"endDate,required" format:"date-time"`
+	DataSource  BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                              `json:"description" api:"required"`
+	EndDate     time.Time                                                           `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
-	LinkedURL       string                                                       `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                    `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
 	JSON            botWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -245,9 +245,9 @@ func (r BotWebCrawlerSummaryResponseMetaConfidenceInfoAnnotationsEventType) IsKn
 
 type BotWebCrawlerSummaryResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                     `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                     `json:"startTime" api:"required" format:"date-time"`
 	JSON      botWebCrawlerSummaryResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -292,8 +292,8 @@ func (r BotWebCrawlerSummaryResponseMetaNormalization) IsKnown() bool {
 }
 
 type BotWebCrawlerSummaryResponseMetaUnit struct {
-	Name  string                                   `json:"name,required"`
-	Value string                                   `json:"value,required"`
+	Name  string                                   `json:"name" api:"required"`
+	Value string                                   `json:"value" api:"required"`
 	JSON  botWebCrawlerSummaryResponseMetaUnitJSON `json:"-"`
 }
 
@@ -316,8 +316,8 @@ func (r botWebCrawlerSummaryResponseMetaUnitJSON) RawJSON() string {
 
 type BotWebCrawlerTimeseriesGroupsResponse struct {
 	// Metadata for the results.
-	Meta   BotWebCrawlerTimeseriesGroupsResponseMeta   `json:"meta,required"`
-	Serie0 BotWebCrawlerTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	Meta   BotWebCrawlerTimeseriesGroupsResponseMeta   `json:"meta" api:"required"`
+	Serie0 BotWebCrawlerTimeseriesGroupsResponseSerie0 `json:"serie_0" api:"required"`
 	JSON   botWebCrawlerTimeseriesGroupsResponseJSON   `json:"-"`
 }
 
@@ -343,16 +343,16 @@ type BotWebCrawlerTimeseriesGroupsResponseMeta struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval    BotWebCrawlerTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval,required"`
-	ConfidenceInfo BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo,required"`
-	DateRange      []BotWebCrawlerTimeseriesGroupsResponseMetaDateRange    `json:"dateRange,required"`
+	AggInterval    BotWebCrawlerTimeseriesGroupsResponseMetaAggInterval    `json:"aggInterval" api:"required"`
+	ConfidenceInfo BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required"`
+	DateRange      []BotWebCrawlerTimeseriesGroupsResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
-	LastUpdated time.Time `json:"lastUpdated,required" format:"date-time"`
+	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization BotWebCrawlerTimeseriesGroupsResponseMetaNormalization `json:"normalization,required"`
+	Normalization BotWebCrawlerTimeseriesGroupsResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []BotWebCrawlerTimeseriesGroupsResponseMetaUnit `json:"units,required"`
+	Units []BotWebCrawlerTimeseriesGroupsResponseMetaUnit `json:"units" api:"required"`
 	JSON  botWebCrawlerTimeseriesGroupsResponseMetaJSON   `json:"-"`
 }
 
@@ -399,9 +399,9 @@ func (r BotWebCrawlerTimeseriesGroupsResponseMetaAggInterval) IsKnown() bool {
 }
 
 type BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations,required"`
+	Annotations []BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
-	Level int64                                                       `json:"level,required"`
+	Level int64                                                       `json:"level" api:"required"`
 	JSON  botWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
@@ -426,15 +426,15 @@ func (r botWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() s
 // Annotation associated with the result (e.g. outage or other type of event).
 type BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource,required"`
-	Description string                                                                       `json:"description,required"`
-	EndDate     time.Time                                                                    `json:"endDate,required" format:"date-time"`
+	DataSource  BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	Description string                                                                       `json:"description" api:"required"`
+	EndDate     time.Time                                                                    `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType,required"`
+	EventType BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
-	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
-	LinkedURL       string                                                                `json:"linkedUrl,required" format:"uri"`
-	StartDate       time.Time                                                             `json:"startDate,required" format:"date-time"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
+	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
+	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
 	JSON            botWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -522,9 +522,9 @@ func (r BotWebCrawlerTimeseriesGroupsResponseMetaConfidenceInfoAnnotationsEventT
 
 type BotWebCrawlerTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                              `json:"startTime,required" format:"date-time"`
+	StartTime time.Time                                              `json:"startTime" api:"required" format:"date-time"`
 	JSON      botWebCrawlerTimeseriesGroupsResponseMetaDateRangeJSON `json:"-"`
 }
 
@@ -569,8 +569,8 @@ func (r BotWebCrawlerTimeseriesGroupsResponseMetaNormalization) IsKnown() bool {
 }
 
 type BotWebCrawlerTimeseriesGroupsResponseMetaUnit struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
+	Name  string                                            `json:"name" api:"required"`
+	Value string                                            `json:"value" api:"required"`
 	JSON  botWebCrawlerTimeseriesGroupsResponseMetaUnitJSON `json:"-"`
 }
 
@@ -592,8 +592,8 @@ func (r botWebCrawlerTimeseriesGroupsResponseMetaUnitJSON) RawJSON() string {
 }
 
 type BotWebCrawlerTimeseriesGroupsResponseSerie0 struct {
-	Timestamps  []time.Time                                     `json:"timestamps,required" format:"date-time"`
-	ExtraFields map[string][]string                             `json:"-,extras"`
+	Timestamps  []time.Time                                     `json:"timestamps" api:"required" format:"date-time"`
+	ExtraFields map[string][]string                             `json:"-" api:"extrafields"`
 	JSON        botWebCrawlerTimeseriesGroupsResponseSerie0JSON `json:"-"`
 }
 
@@ -704,8 +704,8 @@ func (r BotWebCrawlerSummaryParamsFormat) IsKnown() bool {
 }
 
 type BotWebCrawlerSummaryResponseEnvelope struct {
-	Result  BotWebCrawlerSummaryResponse             `json:"result,required"`
-	Success bool                                     `json:"success,required"`
+	Result  BotWebCrawlerSummaryResponse             `json:"result" api:"required"`
+	Success bool                                     `json:"success" api:"required"`
 	JSON    botWebCrawlerSummaryResponseEnvelopeJSON `json:"-"`
 }
 
@@ -841,8 +841,8 @@ func (r BotWebCrawlerTimeseriesGroupsParamsFormat) IsKnown() bool {
 }
 
 type BotWebCrawlerTimeseriesGroupsResponseEnvelope struct {
-	Result  BotWebCrawlerTimeseriesGroupsResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
+	Result  BotWebCrawlerTimeseriesGroupsResponse             `json:"result" api:"required"`
+	Success bool                                              `json:"success" api:"required"`
 	JSON    botWebCrawlerTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
 }
 

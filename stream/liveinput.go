@@ -46,15 +46,15 @@ func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, o
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a specified live input.
@@ -63,19 +63,19 @@ func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier strin
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if liveInputIdentifier == "" {
 		err = errors.New("missing required live_input_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", params.AccountID, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists the live inputs created for an account. To get the credentials needed to
@@ -85,15 +85,15 @@ func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams,
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Prevents a live input from being streamed to and makes the live input
@@ -103,15 +103,15 @@ func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier strin
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	if liveInputIdentifier == "" {
 		err = errors.New("missing required live_input_identifier parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", body.AccountID, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Retrieves details of an existing live input.
@@ -120,19 +120,19 @@ func (r *LiveInputService) Get(ctx context.Context, liveInputIdentifier string, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if liveInputIdentifier == "" {
 		err = errors.New("missing required live_input_identifier parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", query.AccountID, liveInputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Details about a live input.
@@ -165,7 +165,7 @@ type LiveInput struct {
 	// Details for playback from an live input using SRT.
 	SrtPlayback LiveInputSrtPlayback `json:"srtPlayback"`
 	// The connection status of a live input.
-	Status LiveInputStatus `json:"status,nullable"`
+	Status LiveInputStatus `json:"status" api:"nullable"`
 	// A unique identifier for a live input.
 	UID string `json:"uid"`
 	// Details for streaming to a live input using WebRTC.
@@ -513,7 +513,7 @@ func (r liveInputListResponseLiveInputJSON) RawJSON() string {
 
 type LiveInputNewParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sets the creator ID asssociated with this live input.
 	DefaultCreator param.Field[string] `json:"defaultCreator"`
 	// Indicates the number of days after which the live inputs recordings will be
@@ -585,10 +585,10 @@ func (r LiveInputNewParamsRecordingMode) IsKnown() bool {
 }
 
 type LiveInputNewResponseEnvelope struct {
-	Errors   []LiveInputNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LiveInputNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []LiveInputNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []LiveInputNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success LiveInputNewResponseEnvelopeSuccess `json:"success,required"`
+	Success LiveInputNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Details about a live input.
 	Result LiveInput                        `json:"result"`
 	JSON   liveInputNewResponseEnvelopeJSON `json:"-"`
@@ -614,8 +614,8 @@ func (r liveInputNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LiveInputNewResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           LiveInputNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             liveInputNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -662,8 +662,8 @@ func (r liveInputNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type LiveInputNewResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           LiveInputNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             liveInputNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -726,7 +726,7 @@ func (r LiveInputNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type LiveInputUpdateParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sets the creator ID asssociated with this live input.
 	DefaultCreator param.Field[string] `json:"defaultCreator"`
 	// Indicates the number of days after which the live inputs recordings will be
@@ -798,10 +798,10 @@ func (r LiveInputUpdateParamsRecordingMode) IsKnown() bool {
 }
 
 type LiveInputUpdateResponseEnvelope struct {
-	Errors   []LiveInputUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LiveInputUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []LiveInputUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []LiveInputUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success LiveInputUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success LiveInputUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Details about a live input.
 	Result LiveInput                           `json:"result"`
 	JSON   liveInputUpdateResponseEnvelopeJSON `json:"-"`
@@ -827,8 +827,8 @@ func (r liveInputUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LiveInputUpdateResponseEnvelopeErrors struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           LiveInputUpdateResponseEnvelopeErrorsSource `json:"source"`
 	JSON             liveInputUpdateResponseEnvelopeErrorsJSON   `json:"-"`
@@ -875,8 +875,8 @@ func (r liveInputUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type LiveInputUpdateResponseEnvelopeMessages struct {
-	Code             int64                                         `json:"code,required"`
-	Message          string                                        `json:"message,required"`
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
 	DocumentationURL string                                        `json:"documentation_url"`
 	Source           LiveInputUpdateResponseEnvelopeMessagesSource `json:"source"`
 	JSON             liveInputUpdateResponseEnvelopeMessagesJSON   `json:"-"`
@@ -939,7 +939,7 @@ func (r LiveInputUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type LiveInputListParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Includes the total number of videos associated with the submitted query
 	// parameters.
 	IncludeCounts param.Field[bool] `query:"include_counts"`
@@ -954,10 +954,10 @@ func (r LiveInputListParams) URLQuery() (v url.Values) {
 }
 
 type LiveInputListResponseEnvelope struct {
-	Errors   []LiveInputListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LiveInputListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []LiveInputListResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []LiveInputListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success LiveInputListResponseEnvelopeSuccess `json:"success,required"`
+	Success LiveInputListResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  LiveInputListResponse                `json:"result"`
 	JSON    liveInputListResponseEnvelopeJSON    `json:"-"`
 }
@@ -982,8 +982,8 @@ func (r liveInputListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LiveInputListResponseEnvelopeErrors struct {
-	Code             int64                                     `json:"code,required"`
-	Message          string                                    `json:"message,required"`
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
 	DocumentationURL string                                    `json:"documentation_url"`
 	Source           LiveInputListResponseEnvelopeErrorsSource `json:"source"`
 	JSON             liveInputListResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1030,8 +1030,8 @@ func (r liveInputListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type LiveInputListResponseEnvelopeMessages struct {
-	Code             int64                                       `json:"code,required"`
-	Message          string                                      `json:"message,required"`
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
 	DocumentationURL string                                      `json:"documentation_url"`
 	Source           LiveInputListResponseEnvelopeMessagesSource `json:"source"`
 	JSON             liveInputListResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1094,19 +1094,19 @@ func (r LiveInputListResponseEnvelopeSuccess) IsKnown() bool {
 
 type LiveInputDeleteParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LiveInputGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LiveInputGetResponseEnvelope struct {
-	Errors   []LiveInputGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LiveInputGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []LiveInputGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []LiveInputGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success LiveInputGetResponseEnvelopeSuccess `json:"success,required"`
+	Success LiveInputGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Details about a live input.
 	Result LiveInput                        `json:"result"`
 	JSON   liveInputGetResponseEnvelopeJSON `json:"-"`
@@ -1132,8 +1132,8 @@ func (r liveInputGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LiveInputGetResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code,required"`
-	Message          string                                   `json:"message,required"`
+	Code             int64                                    `json:"code" api:"required"`
+	Message          string                                   `json:"message" api:"required"`
 	DocumentationURL string                                   `json:"documentation_url"`
 	Source           LiveInputGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             liveInputGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -1180,8 +1180,8 @@ func (r liveInputGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type LiveInputGetResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code,required"`
-	Message          string                                     `json:"message,required"`
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
 	DocumentationURL string                                     `json:"documentation_url"`
 	Source           LiveInputGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             liveInputGetResponseEnvelopeMessagesJSON   `json:"-"`

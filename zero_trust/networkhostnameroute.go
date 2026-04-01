@@ -45,15 +45,15 @@ func (r *NetworkHostnameRouteService) New(ctx context.Context, params NetworkHos
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/routes/hostname", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Lists and filters hostname routes in an account.
@@ -63,7 +63,7 @@ func (r *NetworkHostnameRouteService) List(ctx context.Context, params NetworkHo
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/routes/hostname", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -89,19 +89,19 @@ func (r *NetworkHostnameRouteService) Delete(ctx context.Context, hostnameRouteI
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if hostnameRouteID == "" {
 		err = errors.New("missing required hostname_route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/routes/hostname/%s", body.AccountID, hostnameRouteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Updates a hostname route.
@@ -110,19 +110,19 @@ func (r *NetworkHostnameRouteService) Edit(ctx context.Context, hostnameRouteID 
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if hostnameRouteID == "" {
 		err = errors.New("missing required hostname_route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/routes/hostname/%s", params.AccountID, hostnameRouteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Get a hostname route.
@@ -131,19 +131,19 @@ func (r *NetworkHostnameRouteService) Get(ctx context.Context, hostnameRouteID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if hostnameRouteID == "" {
 		err = errors.New("missing required hostname_route_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/zerotrust/routes/hostname/%s", query.AccountID, hostnameRouteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type HostnameRoute struct {
@@ -188,7 +188,7 @@ func (r hostnameRouteJSON) RawJSON() string {
 
 type NetworkHostnameRouteNewParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the hostname route.
 	Comment param.Field[string] `json:"comment"`
 	// The hostname of the route.
@@ -202,11 +202,11 @@ func (r NetworkHostnameRouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkHostnameRouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HostnameRoute         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   HostnameRoute         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkHostnameRouteNewResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkHostnameRouteNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -246,7 +246,7 @@ func (r NetworkHostnameRouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkHostnameRouteListParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The hostname route ID.
 	ID param.Field[string] `query:"id" format:"uuid"`
 	// If set, only list hostname routes with the given comment.
@@ -279,15 +279,15 @@ func (r NetworkHostnameRouteListParams) URLQuery() (v url.Values) {
 
 type NetworkHostnameRouteDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkHostnameRouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HostnameRoute         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   HostnameRoute         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkHostnameRouteDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkHostnameRouteDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -327,7 +327,7 @@ func (r NetworkHostnameRouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkHostnameRouteEditParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the hostname route.
 	Comment param.Field[string] `json:"comment"`
 	// The hostname of the route.
@@ -341,11 +341,11 @@ func (r NetworkHostnameRouteEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkHostnameRouteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HostnameRoute         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   HostnameRoute         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkHostnameRouteEditResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkHostnameRouteEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -385,15 +385,15 @@ func (r NetworkHostnameRouteEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkHostnameRouteGetParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NetworkHostnameRouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HostnameRoute         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   HostnameRoute         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success NetworkHostnameRouteGetResponseEnvelopeSuccess `json:"success,required"`
+	Success NetworkHostnameRouteGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteGetResponseEnvelopeJSON    `json:"-"`
 }
 

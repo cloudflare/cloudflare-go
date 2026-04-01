@@ -45,15 +45,15 @@ func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...optio
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Disable your Email Routing zone. Also removes additional MX records previously
@@ -64,7 +64,7 @@ func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...o
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", body.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -91,15 +91,15 @@ func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...opt
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 // Show the DNS records needed to configure your Email Routing zone.
@@ -107,11 +107,11 @@ func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...optio
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // List of records needed to enable an Email Routing zone.
@@ -202,13 +202,13 @@ type DNSGetResponse struct {
 	// This field can have the runtime type of
 	// [[]DNSGetResponseEmailEmailRoutingDNSQueryResponseError],
 	// [[]DNSGetResponseEmailDNSSettingsResponseCollectionError].
-	Errors interface{} `json:"errors,required"`
+	Errors interface{} `json:"errors" api:"required"`
 	// This field can have the runtime type of
 	// [[]DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage],
 	// [[]DNSGetResponseEmailDNSSettingsResponseCollectionMessage].
-	Messages interface{} `json:"messages,required"`
+	Messages interface{} `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DNSGetResponseSuccess `json:"success,required"`
+	Success DNSGetResponseSuccess `json:"success" api:"required"`
 	// This field can have the runtime type of
 	// [DNSGetResponseEmailEmailRoutingDNSQueryResponseResult], [[]DNSRecord].
 	Result interface{} `json:"result"`
@@ -276,10 +276,10 @@ func init() {
 }
 
 type DNSGetResponseEmailEmailRoutingDNSQueryResponse struct {
-	Errors   []DNSGetResponseEmailEmailRoutingDNSQueryResponseError   `json:"errors,required"`
-	Messages []DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage `json:"messages,required"`
+	Errors   []DNSGetResponseEmailEmailRoutingDNSQueryResponseError   `json:"errors" api:"required"`
+	Messages []DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess    `json:"success,required"`
+	Success    DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess    `json:"success" api:"required"`
 	Result     DNSGetResponseEmailEmailRoutingDNSQueryResponseResult     `json:"result"`
 	ResultInfo DNSGetResponseEmailEmailRoutingDNSQueryResponseResultInfo `json:"result_info"`
 	JSON       dnsGetResponseEmailEmailRoutingDNSQueryResponseJSON       `json:"-"`
@@ -308,8 +308,8 @@ func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseJSON) RawJSON() string {
 func (r DNSGetResponseEmailEmailRoutingDNSQueryResponse) implementsDNSGetResponse() {}
 
 type DNSGetResponseEmailEmailRoutingDNSQueryResponseError struct {
-	Code             int64                                                       `json:"code,required"`
-	Message          string                                                      `json:"message,required"`
+	Code             int64                                                       `json:"code" api:"required"`
+	Message          string                                                      `json:"message" api:"required"`
 	DocumentationURL string                                                      `json:"documentation_url"`
 	Source           DNSGetResponseEmailEmailRoutingDNSQueryResponseErrorsSource `json:"source"`
 	JSON             dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorJSON    `json:"-"`
@@ -357,8 +357,8 @@ func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorsSourceJSON) RawJSON
 }
 
 type DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage struct {
-	Code             int64                                                         `json:"code,required"`
-	Message          string                                                        `json:"message,required"`
+	Code             int64                                                         `json:"code" api:"required"`
+	Message          string                                                        `json:"message" api:"required"`
 	DocumentationURL string                                                        `json:"documentation_url"`
 	Source           DNSGetResponseEmailEmailRoutingDNSQueryResponseMessagesSource `json:"source"`
 	JSON             dnsGetResponseEmailEmailRoutingDNSQueryResponseMessageJSON    `json:"-"`
@@ -504,10 +504,10 @@ func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseResultInfoJSON) RawJSON()
 }
 
 type DNSGetResponseEmailDNSSettingsResponseCollection struct {
-	Errors   []DNSGetResponseEmailDNSSettingsResponseCollectionError   `json:"errors,required"`
-	Messages []DNSGetResponseEmailDNSSettingsResponseCollectionMessage `json:"messages,required"`
+	Errors   []DNSGetResponseEmailDNSSettingsResponseCollectionError   `json:"errors" api:"required"`
+	Messages []DNSGetResponseEmailDNSSettingsResponseCollectionMessage `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    DNSGetResponseEmailDNSSettingsResponseCollectionSuccess    `json:"success,required"`
+	Success    DNSGetResponseEmailDNSSettingsResponseCollectionSuccess    `json:"success" api:"required"`
 	Result     []DNSRecord                                                `json:"result"`
 	ResultInfo DNSGetResponseEmailDNSSettingsResponseCollectionResultInfo `json:"result_info"`
 	JSON       dnsGetResponseEmailDNSSettingsResponseCollectionJSON       `json:"-"`
@@ -536,8 +536,8 @@ func (r dnsGetResponseEmailDNSSettingsResponseCollectionJSON) RawJSON() string {
 func (r DNSGetResponseEmailDNSSettingsResponseCollection) implementsDNSGetResponse() {}
 
 type DNSGetResponseEmailDNSSettingsResponseCollectionError struct {
-	Code             int64                                                        `json:"code,required"`
-	Message          string                                                       `json:"message,required"`
+	Code             int64                                                        `json:"code" api:"required"`
+	Message          string                                                       `json:"message" api:"required"`
 	DocumentationURL string                                                       `json:"documentation_url"`
 	Source           DNSGetResponseEmailDNSSettingsResponseCollectionErrorsSource `json:"source"`
 	JSON             dnsGetResponseEmailDNSSettingsResponseCollectionErrorJSON    `json:"-"`
@@ -585,8 +585,8 @@ func (r dnsGetResponseEmailDNSSettingsResponseCollectionErrorsSourceJSON) RawJSO
 }
 
 type DNSGetResponseEmailDNSSettingsResponseCollectionMessage struct {
-	Code             int64                                                          `json:"code,required"`
-	Message          string                                                         `json:"message,required"`
+	Code             int64                                                          `json:"code" api:"required"`
+	Message          string                                                         `json:"message" api:"required"`
 	DocumentationURL string                                                         `json:"documentation_url"`
 	Source           DNSGetResponseEmailDNSSettingsResponseCollectionMessagesSource `json:"source"`
 	JSON             dnsGetResponseEmailDNSSettingsResponseCollectionMessageJSON    `json:"-"`
@@ -701,7 +701,7 @@ func (r DNSGetResponseSuccess) IsKnown() bool {
 
 type DNSNewParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Domain of your zone.
 	Name param.Field[string] `json:"name"`
 }
@@ -711,10 +711,10 @@ func (r DNSNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSNewResponseEnvelope struct {
-	Errors   []DNSNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DNSNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DNSNewResponseEnvelopeSuccess `json:"success,required"`
+	Success DNSNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Settings                      `json:"result"`
 	JSON    dnsNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -739,8 +739,8 @@ func (r dnsNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSNewResponseEnvelopeErrors struct {
-	Code             int64                              `json:"code,required"`
-	Message          string                             `json:"message,required"`
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
 	DocumentationURL string                             `json:"documentation_url"`
 	Source           DNSNewResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dnsNewResponseEnvelopeErrorsJSON   `json:"-"`
@@ -787,8 +787,8 @@ func (r dnsNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DNSNewResponseEnvelopeMessages struct {
-	Code             int64                                `json:"code,required"`
-	Message          string                               `json:"message,required"`
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
 	DocumentationURL string                               `json:"documentation_url"`
 	Source           DNSNewResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dnsNewResponseEnvelopeMessagesJSON   `json:"-"`
@@ -851,12 +851,12 @@ func (r DNSNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSDeleteParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DNSEditParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Domain of your zone.
 	Name param.Field[string] `json:"name"`
 }
@@ -866,10 +866,10 @@ func (r DNSEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSEditResponseEnvelope struct {
-	Errors   []DNSEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []DNSEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DNSEditResponseEnvelopeSuccess `json:"success,required"`
+	Success DNSEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  Settings                       `json:"result"`
 	JSON    dnsEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -894,8 +894,8 @@ func (r dnsEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DNSEditResponseEnvelopeErrors struct {
-	Code             int64                               `json:"code,required"`
-	Message          string                              `json:"message,required"`
+	Code             int64                               `json:"code" api:"required"`
+	Message          string                              `json:"message" api:"required"`
 	DocumentationURL string                              `json:"documentation_url"`
 	Source           DNSEditResponseEnvelopeErrorsSource `json:"source"`
 	JSON             dnsEditResponseEnvelopeErrorsJSON   `json:"-"`
@@ -942,8 +942,8 @@ func (r dnsEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
 }
 
 type DNSEditResponseEnvelopeMessages struct {
-	Code             int64                                 `json:"code,required"`
-	Message          string                                `json:"message,required"`
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
 	DocumentationURL string                                `json:"documentation_url"`
 	Source           DNSEditResponseEnvelopeMessagesSource `json:"source"`
 	JSON             dnsEditResponseEnvelopeMessagesJSON   `json:"-"`
@@ -1006,7 +1006,7 @@ func (r DNSEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Domain of your zone.
 	Subdomain param.Field[string] `query:"subdomain"`
 }

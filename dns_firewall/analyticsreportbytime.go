@@ -48,24 +48,24 @@ func (r *AnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID st
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if dnsFirewallID == "" {
 		err = errors.New("missing required dns_firewall_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", params.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type AnalyticsReportBytimeGetParams struct {
 	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -119,10 +119,10 @@ func (r AnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type AnalyticsReportBytimeGetResponseEnvelope struct {
-	Errors   []AnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsReportBytimeGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []AnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AnalyticsReportBytimeGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success AnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
+	Success AnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Result  dns.ByTime                                      `json:"result"`
 	JSON    analyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -147,8 +147,8 @@ func (r analyticsReportBytimeGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AnalyticsReportBytimeGetResponseEnvelopeErrors struct {
-	Code             int64                                                `json:"code,required"`
-	Message          string                                               `json:"message,required"`
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
 	DocumentationURL string                                               `json:"documentation_url"`
 	Source           AnalyticsReportBytimeGetResponseEnvelopeErrorsSource `json:"source"`
 	JSON             analyticsReportBytimeGetResponseEnvelopeErrorsJSON   `json:"-"`
@@ -195,8 +195,8 @@ func (r analyticsReportBytimeGetResponseEnvelopeErrorsSourceJSON) RawJSON() stri
 }
 
 type AnalyticsReportBytimeGetResponseEnvelopeMessages struct {
-	Code             int64                                                  `json:"code,required"`
-	Message          string                                                 `json:"message,required"`
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
 	DocumentationURL string                                                 `json:"documentation_url"`
 	Source           AnalyticsReportBytimeGetResponseEnvelopeMessagesSource `json:"source"`
 	JSON             analyticsReportBytimeGetResponseEnvelopeMessagesJSON   `json:"-"`

@@ -41,27 +41,27 @@ func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, 
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/config/full", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	res = &env.Result
-	return
+	return res, nil
 }
 
 type ConfigFullGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigFullGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Configuration         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   Configuration         `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success ConfigFullGetResponseEnvelopeSuccess `json:"success,required"`
+	Success ConfigFullGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    configFullGetResponseEnvelopeJSON    `json:"-"`
 }
 
