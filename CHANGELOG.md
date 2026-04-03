@@ -14,26 +14,40 @@ In this release, you'll see a number of breaking changes. This is primarily due 
 
 See the [v6.9.0 Migration Guide](./docs/migration-guides/v6.9.0-migration-guide.md) for before/after code examples and actions needed for each change.
 
-### AI Gateway - AccountTag Field Removal
+### AI Gateway - AccountID, AccountTag, and InternalID Field Removal
 
-The `AccountTag` field has been removed from multiple response types:
+The `AccountID`, `AccountTag`, and `InternalID` fields have been removed from all AI Gateway response types:
 
-- `DynamicRoutingNewResponse.AccountTag`
-- `DynamicRoutingDeleteResponse.AccountTag`
-- `DynamicRoutingNewDeploymentResponse.AccountTag`
-- `DynamicRoutingNewVersionResponse.AccountTag`
-- `DynamicRoutingGetResponse.AccountTag`
-- `DynamicRoutingGetVersionResponse.AccountTag`
+- `AIGatewayNewResponse`
+- `AIGatewayUpdateResponse`
+- `AIGatewayListResponse`
+- `AIGatewayDeleteResponse`
+- `AIGatewayGetResponse`
+- `DynamicRoutingNewResponse`
+- `DynamicRoutingDeleteResponse`
+- `DynamicRoutingNewDeploymentResponse`
+- `DynamicRoutingNewVersionResponse`
+- `DynamicRoutingGetResponse`
+- `DynamicRoutingGetVersionResponse`
 
-### AI Search - BoostBy Field Addition
+### AI Search - VectorizeName Field Removal
 
-The `BoostBy` field has been added to retrieval options across multiple response types:
+The `VectorizeName` field has been removed from all AI Search instance response types:
 
-- `InstanceNewResponseRetrievalOptions.BoostBy`
-- `InstanceUpdateResponseRetrievalOptions.BoostBy`
-- `InstanceListResponseRetrievalOptions.BoostBy`
-- `InstanceDeleteResponseRetrievalOptions.BoostBy`
-- `InstanceReadResponseRetrievalOptions.BoostBy`
+- `InstanceNewResponse.VectorizeName`
+- `InstanceUpdateResponse.VectorizeName`
+- `InstanceListResponse.VectorizeName`
+- `InstanceDeleteResponse.VectorizeName`
+- `InstanceReadResponse.VectorizeName`
+
+### AI Search - KeywordMatchMode Enum Values Changed
+
+The `KeywordMatchMode` enum values have been renamed:
+
+- `KeywordMatchModeExactMatch` → `KeywordMatchModeAnd`
+- `KeywordMatchModeFuzzyMatch` → `KeywordMatchModeOr`
+
+Affects `InstanceNewParams` and `InstanceUpdateParams`.
 
 ### Billing - New PayGo Usage Endpoint
 
@@ -74,9 +88,64 @@ The observability telemetry filters have been restructured:
 - Filters now support nested groups via `kind: 'group'`
 - Affects telemetry endpoints: keys, query, and values
 
+### Workers - Domain Service Return Type Changes
+
+The `workers.Domain` service methods now return specific response types instead of the generic `Domain` type:
+
+- `Update()` returns `*DomainUpdateResponse` instead of `*Domain`
+- `List()` returns `pagination.SinglePage[DomainListResponse]` instead of `pagination.SinglePage[Domain]`
+- `Delete()` now returns `(*DomainDeleteResponse, error)` instead of just `error`
+- `Get()` returns `*DomainGetResponse` instead of `*Domain`
+
+### Zero Trust - NetworkSubnet Response Type Consolidation
+
+The `NetworkSubnet` service methods now use the shared `Subnet` type instead of endpoint-specific response types:
+
+- `NetworkSubnetService.List()` returns `Subnet` instead of `NetworkSubnetListResponse`
+- `NetworkSubnetWARPService.New()` returns `Subnet` instead of `NetworkSubnetWARPNewResponse`
+- `NetworkSubnetWARPService.Edit()` returns `Subnet` instead of `NetworkSubnetWARPEditResponse`
+- `NetworkSubnetWARPService.Get()` returns `Subnet` instead of `NetworkSubnetWARPGetResponse`
+- `NetworkSubnetCloudflareSourceService.Update()` returns `Subnet` instead of `NetworkSubnetCloudflareSourceUpdateResponse`
+
+The removed types (`NetworkSubnetListResponse`, `NetworkSubnetWARPNewResponse`, etc.) have been consolidated into the shared `Subnet` type.
+
+### Zero Trust - MfaBypass Field Removal
+
+The `MfaBypass` field has been removed from MFA configuration types across multiple services:
+
+**Affected Param Types:**
+- `AccessApplicationNewParamsBodySelfHostedApplicationMfaConfig.MfaBypass`
+- `AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfig.MfaBypass`
+- `AccessApplicationPolicyNewParamsMfaConfig.MfaBypass`
+- `AccessApplicationPolicyUpdateParamsMfaConfig.MfaBypass`
+- `AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig.MfaBypass`
+- `AccessPolicyNewParamsMfaConfig.MfaBypass`
+- `AccessPolicyUpdateParamsMfaConfig.MfaBypass`
+
+**Affected Response Types:**
+- All corresponding MfaConfig response types
+
+### Zero Trust - MfaConfigurationAllowed Field Removal
+
+The `MfaConfigurationAllowed` field has been removed from Organization types:
+
+- `OrganizationNewParams.MfaConfigurationAllowed`
+- `OrganizationUpdateParams.MfaConfigurationAllowed`
+- `OrganizationNewResponse.MfaConfigurationAllowed`
+
 ---
 
 ## Features
+
+### AI Search - BoostBy Field Addition
+
+The `BoostBy` field has been added to retrieval options across multiple response types:
+
+- `InstanceNewResponseRetrievalOptions.BoostBy`
+- `InstanceUpdateResponseRetrievalOptions.BoostBy`
+- `InstanceListResponseRetrievalOptions.BoostBy`
+- `InstanceDeleteResponseRetrievalOptions.BoostBy`
+- `InstanceReadResponseRetrievalOptions.BoostBy`
 
 ### Browser Rendering (`client.browserRendering`)
 
