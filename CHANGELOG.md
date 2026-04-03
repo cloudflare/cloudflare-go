@@ -4,25 +4,210 @@
 
 Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
 
-### Features
+In this release, you'll see a number of breaking changes. This is primarily due to changes in OpenAPI definitions, which our libraries are based off of, and codegen updates that we rely on to read those OpenAPI definitions and produce our SDK libraries.
 
-* feat: add billable usage PayGo endpoint to billing resource ([69e048f](https://github.com/cloudflare/cloudflare-go/commit/69e048fca95c1d0581d864d0d92e230effd17c99))
-* feat(tags): GRM-385 add resource_tagging routes ([aee0f8b](https://github.com/cloudflare/cloudflare-go/commit/aee0f8b76c4461db803e03003229118ae9d45631))
+## Please ensure you read through the list of changes below before moving to this version - this will help you understand any down or upstream issues it may cause to your environments.
 
+---
 
-### Bug Fixes
+## Breaking Changes
 
-* add check for transport errors, pass error in retry logic ([f2eddeb](https://github.com/cloudflare/cloudflare-go/commit/f2eddeb26b235e5810c9c691b4480b957bb97beb))
+See the [v6.9.0 Migration Guide](./docs/migration-guides/v6.9.0-migration-guide.md) for before/after code examples and actions needed for each change.
 
+### AI Gateway - AccountTag Field Removal
 
-### Chores
+The `AccountTag` field has been removed from multiple response types:
 
-* **api:** update composite API spec ([4f5f60e](https://github.com/cloudflare/cloudflare-go/commit/4f5f60e249862f761c6da28821676917e706fec3))
-* **api:** update composite API spec ([5b59c6c](https://github.com/cloudflare/cloudflare-go/commit/5b59c6c3daa884275f95b6a9b5ac7420123a31eb))
-* **api:** update composite API spec ([9410b35](https://github.com/cloudflare/cloudflare-go/commit/9410b35f80fdaa2ff813e7c346b0a5272f6e7acf))
-* **api:** update composite API spec ([d45e9a7](https://github.com/cloudflare/cloudflare-go/commit/d45e9a72691f667da4e96f82f05d72692f955e3c))
-* **api:** update composite API spec ([5393dad](https://github.com/cloudflare/cloudflare-go/commit/5393dad2c7a85344a751b1214106a99f31b02de5))
-* sync manual ([#4242](https://github.com/cloudflare/cloudflare-go/issues/4242)) ([14d83b4](https://github.com/cloudflare/cloudflare-go/commit/14d83b4af0d2339cb2fe9b0e3e561dafadd3ab67))
+- `DynamicRoutingNewResponse.AccountTag`
+- `DynamicRoutingDeleteResponse.AccountTag`
+- `DynamicRoutingNewDeploymentResponse.AccountTag`
+- `DynamicRoutingNewVersionResponse.AccountTag`
+- `DynamicRoutingGetResponse.AccountTag`
+- `DynamicRoutingGetVersionResponse.AccountTag`
+
+### AI Search - BoostBy Field Addition
+
+The `BoostBy` field has been added to retrieval options across multiple response types:
+
+- `InstanceNewResponseRetrievalOptions.BoostBy`
+- `InstanceUpdateResponseRetrievalOptions.BoostBy`
+- `InstanceListResponseRetrievalOptions.BoostBy`
+- `InstanceDeleteResponseRetrievalOptions.BoostBy`
+- `InstanceReadResponseRetrievalOptions.BoostBy`
+
+### Billing - New PayGo Usage Endpoint
+
+**NEW**: Added `billing.Usage` service with PayGo endpoint:
+- `client.Billing.Usage.Paygo()` - Returns billable usage data for PayGo (self-serve) accounts
+
+**Note**: The PayGo endpoint parameters (`From`, `To`) are now the primary query mechanism. The previously available `LastMonthPeriodStart` and `LastYearPeriodStart` parameters were removed in the underlying API specification.
+
+### Connectivity - TCP Service Support
+
+The directory services now support TCP service configurations via discriminated union types:
+
+- `ServiceConfig` is now a discriminated union of `HttpServiceConfig` and `TcpServiceConfig`
+- New `TcpServiceConfig` type with `tcp_port` and `app_protocol` fields
+- `HttpServiceConfig` and `TcpServiceConfig` both extend `ServiceCommon` base type
+
+### Custom Hostnames - Hostname Parameter Type Change
+
+The `Hostname` parameter in `CustomHostnameListParams` has changed from a simple string to a structured object:
+
+- **Before**: `Hostname param.Field[string]`
+- **After**: `Hostname param.Field[CustomHostnameListParamsHostname]` (object with `Contain` field)
+
+### AI Search - InstanceItem Service Methods Removed
+
+The `InstanceItem` service methods have been removed. The service structure still exists at `client.AISearch.Instances.Items` but no longer provides any methods:
+
+- `List()` - List indexed items in an AI Search instance
+- `ListAutoPaging()` - Auto-paging list method
+- `Get()` - Get a specific indexed item
+- All associated response types (`InstanceItemListResponse`, `InstanceItemGetResponse`, etc.)
+
+### Workers - Filter Type Changes
+
+The observability telemetry filters have been restructured:
+
+- Filter types changed from `QueryFilter[]` to `FilterNode[]` (discriminated union)
+- Filters now support nested groups via `kind: 'group'`
+- Affects telemetry endpoints: keys, query, and values
+
+---
+
+## Features
+
+### Browser Rendering (`client.browserRendering`)
+
+- **Crawl**: New endpoints for headless browser crawling
+    - `Create()` - Start a crawl job
+    - `List()` - List crawl jobs
+    - `Get()` - Get crawl job details
+    - `Update()` - Update crawl job
+    - `Delete()` - Delete crawl job
+    - `Screenshot()` - Take screenshots during crawl
+    - `Scrape()` - Scrape content during crawl
+
+### Brand Protection v2 (`client.brandProtection.v2`)
+
+- New v2 API endpoints:
+    - `Logo` - Logo management
+    - `LogoMatch` - Logo matching
+    - `Match` - Brand protection matching
+    - `Query` - Query brand protection data
+
+### Google Tag Gateway (`client.googleTagGateway`)
+
+- **NEW SERVICE**: Manage Google Tag configurations
+    - `Config.Create()`, `Update()`, `List()`, `Delete()`, `Get()`
+
+### Resource Tagging (`client.resourceTagging`)
+
+- **NEW SERVICE**: Resource tagging management
+    - `AccountTag` management
+    - `Key` management for resource tagging
+
+### Zero Trust Device IP Profiles (`client.zeroTrust.devices.ipProfiles`)
+
+- IP profile management for device posture
+    - `Create()`, `Update()`, `List()`, `Delete()`, `Get()`
+
+### Abuse Reports
+
+- `Mitigation` responses now include additional metadata fields
+
+### Accounts
+
+- `managed_by` field with `parent_org_id`, `parent_org_name` support
+
+### AI Gateway
+
+- `zdr` field added to all responses and params
+- Dataset, evaluation, log, and provider config endpoints updated
+
+### AI Search
+
+- Instance management expanded with new fields
+- Job management enhancements
+- Token management updates
+
+### API Gateway
+
+- Configuration and user schema updates
+- Expression template fallthrough improvements
+
+### D1
+
+- Database query and raw query parameter refinements
+- Time travel support: `GetBookmark()`, `Restore()`
+
+### DNS
+
+- `dns_records/usage` endpoints added
+- Record type improvements
+
+### Email Security
+
+- Enhanced investigation endpoints
+- New fields: `envelope_from`, `envelope_to`, `postfix_id_outbound`, `replyto`
+- New detection classification: `outbound_ndr`
+
+### Logpush
+
+- New datasets: `dex_application_tests`, `dex_device_state_events`, `ipsec_logs`, `warp_config_changes`, `warp_toggle_changes`
+
+### Magic Transit
+
+- App and connector enhancements
+- CF interconnect improvements
+- License key and provisioning support
+
+### Organizations
+
+- Organization account management improvements
+- Hierarchical organization support
+
+### R2
+
+- Super Slurper job enhancements
+- Job log improvements
+
+### Rulesets
+
+- Buffering fields: `request_body_buffering`, `response_body_buffering`
+
+### Workers
+
+- Subdomain deletion support
+- Script observability settings
+- Tags and tail consumers support
+
+### Workflows
+
+- Instance retention configuration
+- New status option: `restart`
+
+### Zero Trust
+
+- MCP portal and server configuration updates
+- Access application type enhancements
+- Gateway proxy endpoint improvements
+- Tunnel connection updates
+
+---
+
+## Deprecations
+
+None in this release.
+
+---
+
+## Bug Fixes
+
+- **AI Search**: Fixed test compatibility issues
+- **Billing**: Transport error handling improvements
+- **Client**: Retry logic error passing fixes
 
 ## 6.8.0 (2026-02-27)
 
