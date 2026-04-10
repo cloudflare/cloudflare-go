@@ -23,6 +23,7 @@ type BrowserRenderingService struct {
 	Links      *LinkService
 	Markdown   *MarkdownService
 	Crawl      *CrawlService
+	Devtools   *DevtoolService
 }
 
 // NewBrowserRenderingService generates a new service that applies the given
@@ -40,5 +41,6 @@ func NewBrowserRenderingService(opts ...option.RequestOption) (r *BrowserRenderi
 	r.Links = NewLinkService(opts...)
 	r.Markdown = NewMarkdownService(opts...)
 	r.Crawl = NewCrawlService(opts...)
+	r.Devtools = NewDevtoolService(opts...)
 	return
 }
