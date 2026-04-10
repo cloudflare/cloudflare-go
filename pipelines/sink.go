@@ -85,20 +85,24 @@ func (r *SinkService) ListAutoPaging(ctx context.Context, params SinkListParams,
 }
 
 // Delete Pipeline in Account.
-func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDeleteParams, opts ...option.RequestOption) (res *SinkDeleteResponse, err error) {
+	var env SinkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return err
+		return nil, err
 	}
 	if sinkID == "" {
 		err = errors.New("missing required sink_id parameter")
-		return err
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/sinks/%s", params.AccountID, sinkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
-	return err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Get Sink Details.
@@ -3248,6 +3252,8 @@ func (r SinkListResponseSchemaFormatTimestampFormat) IsKnown() bool {
 	return false
 }
 
+type SinkDeleteResponse = interface{}
+
 type SinkGetResponse struct {
 	// Indicates a unique identifier for this sink.
 	ID         string    `json:"id" api:"required"`
@@ -5786,6 +5792,30 @@ func (r SinkDeleteParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type SinkDeleteResponseEnvelope struct {
+	Result SinkDeleteResponse `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success bool                           `json:"success" api:"required"`
+	JSON    sinkDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// sinkDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SinkDeleteResponseEnvelope]
+type sinkDeleteResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SinkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sinkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type SinkGetParams struct {

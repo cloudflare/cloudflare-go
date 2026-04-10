@@ -124,7 +124,7 @@ func (r *SubdomainService) Get(ctx context.Context, subdomainID string, query Su
 
 type SubdomainNewResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The subdomain domain name.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
@@ -132,30 +132,26 @@ type SubdomainNewResponse struct {
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
-	EmailSendingDKIMSelector string `json:"email_sending_dkim_selector"`
-	// The return-path domain used for bounce handling.
-	EmailSendingReturnPathDomain string `json:"email_sending_return_path_domain"`
-	// Whether Email Routing (receiving) is enabled on this subdomain. Read-only;
-	// included for informational purposes since both services share the subdomain row.
-	Enabled bool `json:"enabled"`
+	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
-	Modified time.Time                `json:"modified" format:"date-time"`
-	JSON     subdomainNewResponseJSON `json:"-"`
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The return-path domain used for bounce handling.
+	ReturnPathDomain string                   `json:"return_path_domain"`
+	JSON             subdomainNewResponseJSON `json:"-"`
 }
 
 // subdomainNewResponseJSON contains the JSON metadata for the struct
 // [SubdomainNewResponse]
 type subdomainNewResponseJSON struct {
-	EmailSendingEnabled          apijson.Field
-	Name                         apijson.Field
-	Tag                          apijson.Field
-	Created                      apijson.Field
-	EmailSendingDKIMSelector     apijson.Field
-	EmailSendingReturnPathDomain apijson.Field
-	Enabled                      apijson.Field
-	Modified                     apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Tag              apijson.Field
+	Created          apijson.Field
+	DKIMSelector     apijson.Field
+	Modified         apijson.Field
+	ReturnPathDomain apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SubdomainNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -168,7 +164,7 @@ func (r subdomainNewResponseJSON) RawJSON() string {
 
 type SubdomainListResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The subdomain domain name.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
@@ -176,30 +172,26 @@ type SubdomainListResponse struct {
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
-	EmailSendingDKIMSelector string `json:"email_sending_dkim_selector"`
-	// The return-path domain used for bounce handling.
-	EmailSendingReturnPathDomain string `json:"email_sending_return_path_domain"`
-	// Whether Email Routing (receiving) is enabled on this subdomain. Read-only;
-	// included for informational purposes since both services share the subdomain row.
-	Enabled bool `json:"enabled"`
+	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
-	Modified time.Time                 `json:"modified" format:"date-time"`
-	JSON     subdomainListResponseJSON `json:"-"`
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The return-path domain used for bounce handling.
+	ReturnPathDomain string                    `json:"return_path_domain"`
+	JSON             subdomainListResponseJSON `json:"-"`
 }
 
 // subdomainListResponseJSON contains the JSON metadata for the struct
 // [SubdomainListResponse]
 type subdomainListResponseJSON struct {
-	EmailSendingEnabled          apijson.Field
-	Name                         apijson.Field
-	Tag                          apijson.Field
-	Created                      apijson.Field
-	EmailSendingDKIMSelector     apijson.Field
-	EmailSendingReturnPathDomain apijson.Field
-	Enabled                      apijson.Field
-	Modified                     apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Tag              apijson.Field
+	Created          apijson.Field
+	DKIMSelector     apijson.Field
+	Modified         apijson.Field
+	ReturnPathDomain apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SubdomainListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -349,7 +341,7 @@ func (r SubdomainDeleteResponseSuccess) IsKnown() bool {
 
 type SubdomainGetResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The subdomain domain name.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
@@ -357,30 +349,26 @@ type SubdomainGetResponse struct {
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
-	EmailSendingDKIMSelector string `json:"email_sending_dkim_selector"`
-	// The return-path domain used for bounce handling.
-	EmailSendingReturnPathDomain string `json:"email_sending_return_path_domain"`
-	// Whether Email Routing (receiving) is enabled on this subdomain. Read-only;
-	// included for informational purposes since both services share the subdomain row.
-	Enabled bool `json:"enabled"`
+	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
-	Modified time.Time                `json:"modified" format:"date-time"`
-	JSON     subdomainGetResponseJSON `json:"-"`
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The return-path domain used for bounce handling.
+	ReturnPathDomain string                   `json:"return_path_domain"`
+	JSON             subdomainGetResponseJSON `json:"-"`
 }
 
 // subdomainGetResponseJSON contains the JSON metadata for the struct
 // [SubdomainGetResponse]
 type subdomainGetResponseJSON struct {
-	EmailSendingEnabled          apijson.Field
-	Name                         apijson.Field
-	Tag                          apijson.Field
-	Created                      apijson.Field
-	EmailSendingDKIMSelector     apijson.Field
-	EmailSendingReturnPathDomain apijson.Field
-	Enabled                      apijson.Field
-	Modified                     apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Tag              apijson.Field
+	Created          apijson.Field
+	DKIMSelector     apijson.Field
+	Modified         apijson.Field
+	ReturnPathDomain apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SubdomainGetResponse) UnmarshalJSON(data []byte) (err error) {

@@ -56,8 +56,9 @@ func (r *VideoService) StorageUsage(ctx context.Context, params VideoStorageUsag
 type VideoStorageUsageResponse struct {
 	// A user-defined identifier for the media creator.
 	Creator string `json:"creator"`
-	// The total minutes of video content stored in the account.
-	TotalStorageMinutes int64 `json:"totalStorageMinutes"`
+	// The total minutes of video content stored in the account. May contain decimal
+	// values.
+	TotalStorageMinutes float64 `json:"totalStorageMinutes"`
 	// The storage capacity alloted for the account.
 	TotalStorageMinutesLimit int64 `json:"totalStorageMinutesLimit"`
 	// The total count of videos associated with the account.

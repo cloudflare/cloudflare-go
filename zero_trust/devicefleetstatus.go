@@ -99,9 +99,12 @@ type DeviceFleetStatusGetResponse struct {
 	RamAvailableKB  int64                                           `json:"ramAvailableKb" api:"nullable"`
 	RamUsedPct      float64                                         `json:"ramUsedPct" api:"nullable"`
 	RamUsedPctByApp [][]DeviceFleetStatusGetResponseRamUsedPctByApp `json:"ramUsedPctByApp" api:"nullable"`
-	SwitchLocked    bool                                            `json:"switchLocked" api:"nullable"`
-	WifiStrengthDbm int64                                           `json:"wifiStrengthDbm" api:"nullable"`
-	JSON            deviceFleetStatusGetResponseJSON                `json:"-"`
+	// Device registration identifier (UUID v4). On multi-user devices, this uniquely
+	// identifies a user's registration on the device.
+	RegistrationID  string                           `json:"registrationId" api:"nullable"`
+	SwitchLocked    bool                             `json:"switchLocked" api:"nullable"`
+	WifiStrengthDbm int64                            `json:"wifiStrengthDbm" api:"nullable"`
+	JSON            deviceFleetStatusGetResponseJSON `json:"-"`
 }
 
 // deviceFleetStatusGetResponseJSON contains the JSON metadata for the struct
@@ -143,6 +146,7 @@ type deviceFleetStatusGetResponseJSON struct {
 	RamAvailableKB     apijson.Field
 	RamUsedPct         apijson.Field
 	RamUsedPctByApp    apijson.Field
+	RegistrationID     apijson.Field
 	SwitchLocked       apijson.Field
 	WifiStrengthDbm    apijson.Field
 	raw                string

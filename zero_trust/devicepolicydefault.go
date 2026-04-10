@@ -104,7 +104,8 @@ type DevicePolicyDefaultEditResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelInclude `json:"include"`
+	Include  []SplitTunnelInclude `json:"include"`
+	PolicyID string               `json:"policy_id"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
@@ -137,6 +138,7 @@ type devicePolicyDefaultEditResponseJSON struct {
 	FallbackDomains            apijson.Field
 	GatewayUniqueID            apijson.Field
 	Include                    apijson.Field
+	PolicyID                   apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
 	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
@@ -207,7 +209,8 @@ type DevicePolicyDefaultGetResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelInclude `json:"include"`
+	Include  []SplitTunnelInclude `json:"include"`
+	PolicyID string               `json:"policy_id"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
@@ -240,6 +243,7 @@ type devicePolicyDefaultGetResponseJSON struct {
 	FallbackDomains            apijson.Field
 	GatewayUniqueID            apijson.Field
 	Include                    apijson.Field
+	PolicyID                   apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
 	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field

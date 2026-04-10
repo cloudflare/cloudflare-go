@@ -31,12 +31,12 @@ func TestWatermarkNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.Watermarks.New(context.TODO(), stream.WatermarkNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		File:      cloudflare.F("@/Users/rchen/Downloads/watermark.png"),
 		Name:      cloudflare.F("Marketing Videos"),
 		Opacity:   cloudflare.F(0.750000),
 		Padding:   cloudflare.F(0.100000),
 		Position:  cloudflare.F("center"),
 		Scale:     cloudflare.F(0.100000),
+		URL:       cloudflare.F("https://example.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

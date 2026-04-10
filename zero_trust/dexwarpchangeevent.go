@@ -69,6 +69,8 @@ type DexwarpChangeEventGetResponse struct {
 	From interface{} `json:"from"`
 	// The hostname of the machine the event is from
 	Hostname string `json:"hostname"`
+	// API Resource UUID tag.
+	RegistrationID string `json:"registration_id"`
 	// The serial number of the machine the event is from
 	SerialNumber string `json:"serial_number"`
 	// Timestamp in ISO format
@@ -93,6 +95,7 @@ type dexwarpChangeEventGetResponseJSON struct {
 	DeviceRegistration apijson.Field
 	From               apijson.Field
 	Hostname           apijson.Field
+	RegistrationID     apijson.Field
 	SerialNumber       apijson.Field
 	Timestamp          apijson.Field
 	To                 apijson.Field
@@ -159,6 +162,8 @@ type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEve
 	DeviceRegistration string `json:"device_registration"`
 	// The hostname of the machine the event is from
 	Hostname string `json:"hostname"`
+	// API Resource UUID tag.
+	RegistrationID string `json:"registration_id"`
 	// The serial number of the machine the event is from
 	SerialNumber string `json:"serial_number"`
 	// Timestamp in ISO format
@@ -179,6 +184,7 @@ type dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEve
 	DeviceID           apijson.Field
 	DeviceRegistration apijson.Field
 	Hostname           apijson.Field
+	RegistrationID     apijson.Field
 	SerialNumber       apijson.Field
 	Timestamp          apijson.Field
 	Toggle             apijson.Field
@@ -222,6 +228,8 @@ type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEve
 	From               DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventFrom `json:"from"`
 	// The hostname of the machine the event is from
 	Hostname string `json:"hostname"`
+	// API Resource UUID tag.
+	RegistrationID string `json:"registration_id"`
 	// The serial number of the machine the event is from
 	SerialNumber string `json:"serial_number"`
 	// Timestamp in ISO format
@@ -240,6 +248,7 @@ type dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEve
 	DeviceRegistration apijson.Field
 	From               apijson.Field
 	Hostname           apijson.Field
+	RegistrationID     apijson.Field
 	SerialNumber       apijson.Field
 	Timestamp          apijson.Field
 	To                 apijson.Field

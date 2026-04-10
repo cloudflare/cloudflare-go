@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -63,6 +65,9 @@ type InvestigateReclassifyNewParams struct {
 	// Account Identifier
 	AccountID           param.Field[string]                                            `path:"account_id" api:"required"`
 	ExpectedDisposition param.Field[InvestigateReclassifyNewParamsExpectedDisposition] `json:"expected_disposition" api:"required"`
+	// When true, search the submissions datastore only. When false or omitted, search
+	// the regular datastore only.
+	Submission param.Field[bool] `query:"submission"`
 	// Base64 encoded content of the EML file
 	EmlContent            param.Field[string] `json:"eml_content"`
 	EscalatedSubmissionID param.Field[string] `json:"escalated_submission_id"`
@@ -70,6 +75,15 @@ type InvestigateReclassifyNewParams struct {
 
 func (r InvestigateReclassifyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [InvestigateReclassifyNewParams]'s query parameters as
+// `url.Values`.
+func (r InvestigateReclassifyNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type InvestigateReclassifyNewParamsExpectedDisposition string

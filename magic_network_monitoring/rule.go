@@ -164,6 +164,8 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParam
 }
 
 type MagicNetworkMonitoringRule struct {
+	// The id of the rule. Must be unique.
+	ID string `json:"id" api:"required"`
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
@@ -175,8 +177,6 @@ type MagicNetworkMonitoringRule struct {
 	Prefixes []string `json:"prefixes" api:"required"`
 	// MNM rule type.
 	Type MagicNetworkMonitoringRuleType `json:"type" api:"required"`
-	// The id of the rule. Must be unique.
-	ID string `json:"id"`
 	// The number of bits per second for the rule. When this value is exceeded for the
 	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
 	BandwidthThreshold float64 `json:"bandwidth_threshold"`
@@ -200,11 +200,11 @@ type MagicNetworkMonitoringRule struct {
 // magicNetworkMonitoringRuleJSON contains the JSON metadata for the struct
 // [MagicNetworkMonitoringRule]
 type magicNetworkMonitoringRuleJSON struct {
+	ID                     apijson.Field
 	AutomaticAdvertisement apijson.Field
 	Name                   apijson.Field
 	Prefixes               apijson.Field
 	Type                   apijson.Field
-	ID                     apijson.Field
 	BandwidthThreshold     apijson.Field
 	Duration               apijson.Field
 	PacketThreshold        apijson.Field
@@ -317,29 +317,55 @@ func (r MagicNetworkMonitoringRuleZscoreTarget) IsKnown() bool {
 
 type RuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The amount of time that the rule threshold must be exceeded to send an alert
-	// notification. The final value must be equivalent to one of the following 8
-	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
-	Duration param.Field[RuleNewParamsDuration] `json:"duration" api:"required"`
-	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
-	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
-	// the rule name. Max 256 characters.
-	Name param.Field[string] `json:"name" api:"required"`
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement param.Field[bool] `json:"automatic_advertisement"`
+	AutomaticAdvertisement param.Field[bool] `json:"automatic_advertisement" api:"required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     param.Field[string]   `json:"name" api:"required"`
+	Prefixes param.Field[[]string] `json:"prefixes" api:"required"`
+	// MNM rule type.
+	Type param.Field[RuleNewParamsType] `json:"type" api:"required"`
 	// The number of bits per second for the rule. When this value is exceeded for the
 	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	Bandwidth param.Field[float64] `json:"bandwidth"`
+	BandwidthThreshold param.Field[float64] `json:"bandwidth_threshold"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+	Duration param.Field[RuleNewParamsDuration] `json:"duration"`
 	// The number of packets per second for the rule. When this value is exceeded for
 	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	PacketThreshold param.Field[float64]  `json:"packet_threshold"`
-	Prefixes        param.Field[[]string] `json:"prefixes"`
+	PacketThreshold param.Field[float64] `json:"packet_threshold"`
+	// Prefix match type to be applied for a prefix auto advertisement when using an
+	// advanced_ddos rule.
+	PrefixMatch param.Field[RuleNewParamsPrefixMatch] `json:"prefix_match"`
+	// Level of sensitivity set for zscore rules.
+	ZscoreSensitivity param.Field[RuleNewParamsZscoreSensitivity] `json:"zscore_sensitivity"`
+	// Target of the zscore rule analysis.
+	ZscoreTarget param.Field[RuleNewParamsZscoreTarget] `json:"zscore_target"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// MNM rule type.
+type RuleNewParamsType string
+
+const (
+	RuleNewParamsTypeThreshold    RuleNewParamsType = "threshold"
+	RuleNewParamsTypeZscore       RuleNewParamsType = "zscore"
+	RuleNewParamsTypeAdvancedDDoS RuleNewParamsType = "advanced_ddos"
+)
+
+func (r RuleNewParamsType) IsKnown() bool {
+	switch r {
+	case RuleNewParamsTypeThreshold, RuleNewParamsTypeZscore, RuleNewParamsTypeAdvancedDDoS:
+		return true
+	}
+	return false
 }
 
 // The amount of time that the rule threshold must be exceeded to send an alert
@@ -361,6 +387,57 @@ const (
 func (r RuleNewParamsDuration) IsKnown() bool {
 	switch r {
 	case RuleNewParamsDuration1m, RuleNewParamsDuration5m, RuleNewParamsDuration10m, RuleNewParamsDuration15m, RuleNewParamsDuration20m, RuleNewParamsDuration30m, RuleNewParamsDuration45m, RuleNewParamsDuration60m:
+		return true
+	}
+	return false
+}
+
+// Prefix match type to be applied for a prefix auto advertisement when using an
+// advanced_ddos rule.
+type RuleNewParamsPrefixMatch string
+
+const (
+	RuleNewParamsPrefixMatchExact    RuleNewParamsPrefixMatch = "exact"
+	RuleNewParamsPrefixMatchSubnet   RuleNewParamsPrefixMatch = "subnet"
+	RuleNewParamsPrefixMatchSupernet RuleNewParamsPrefixMatch = "supernet"
+)
+
+func (r RuleNewParamsPrefixMatch) IsKnown() bool {
+	switch r {
+	case RuleNewParamsPrefixMatchExact, RuleNewParamsPrefixMatchSubnet, RuleNewParamsPrefixMatchSupernet:
+		return true
+	}
+	return false
+}
+
+// Level of sensitivity set for zscore rules.
+type RuleNewParamsZscoreSensitivity string
+
+const (
+	RuleNewParamsZscoreSensitivityLow    RuleNewParamsZscoreSensitivity = "low"
+	RuleNewParamsZscoreSensitivityMedium RuleNewParamsZscoreSensitivity = "medium"
+	RuleNewParamsZscoreSensitivityHigh   RuleNewParamsZscoreSensitivity = "high"
+)
+
+func (r RuleNewParamsZscoreSensitivity) IsKnown() bool {
+	switch r {
+	case RuleNewParamsZscoreSensitivityLow, RuleNewParamsZscoreSensitivityMedium, RuleNewParamsZscoreSensitivityHigh:
+		return true
+	}
+	return false
+}
+
+// Target of the zscore rule analysis.
+type RuleNewParamsZscoreTarget string
+
+const (
+	RuleNewParamsZscoreTargetBits    RuleNewParamsZscoreTarget = "bits"
+	RuleNewParamsZscoreTargetPackets RuleNewParamsZscoreTarget = "packets"
+)
+
+func (r RuleNewParamsZscoreTarget) IsKnown() bool {
+	switch r {
+	case RuleNewParamsZscoreTargetBits, RuleNewParamsZscoreTargetPackets:
 		return true
 	}
 	return false
@@ -411,31 +488,55 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The amount of time that the rule threshold must be exceeded to send an alert
-	// notification. The final value must be equivalent to one of the following 8
-	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
-	Duration param.Field[RuleUpdateParamsDuration] `json:"duration" api:"required"`
-	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
-	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
-	// the rule name. Max 256 characters.
-	Name param.Field[string] `json:"name" api:"required"`
-	// The id of the rule. Must be unique.
-	ID param.Field[string] `json:"id"`
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement param.Field[bool] `json:"automatic_advertisement"`
+	AutomaticAdvertisement param.Field[bool] `json:"automatic_advertisement" api:"required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     param.Field[string]   `json:"name" api:"required"`
+	Prefixes param.Field[[]string] `json:"prefixes" api:"required"`
+	// MNM rule type.
+	Type param.Field[RuleUpdateParamsType] `json:"type" api:"required"`
 	// The number of bits per second for the rule. When this value is exceeded for the
 	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	Bandwidth param.Field[float64] `json:"bandwidth"`
+	BandwidthThreshold param.Field[float64] `json:"bandwidth_threshold"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
+	Duration param.Field[RuleUpdateParamsDuration] `json:"duration"`
 	// The number of packets per second for the rule. When this value is exceeded for
 	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	PacketThreshold param.Field[float64]  `json:"packet_threshold"`
-	Prefixes        param.Field[[]string] `json:"prefixes"`
+	PacketThreshold param.Field[float64] `json:"packet_threshold"`
+	// Prefix match type to be applied for a prefix auto advertisement when using an
+	// advanced_ddos rule.
+	PrefixMatch param.Field[RuleUpdateParamsPrefixMatch] `json:"prefix_match"`
+	// Level of sensitivity set for zscore rules.
+	ZscoreSensitivity param.Field[RuleUpdateParamsZscoreSensitivity] `json:"zscore_sensitivity"`
+	// Target of the zscore rule analysis.
+	ZscoreTarget param.Field[RuleUpdateParamsZscoreTarget] `json:"zscore_target"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// MNM rule type.
+type RuleUpdateParamsType string
+
+const (
+	RuleUpdateParamsTypeThreshold    RuleUpdateParamsType = "threshold"
+	RuleUpdateParamsTypeZscore       RuleUpdateParamsType = "zscore"
+	RuleUpdateParamsTypeAdvancedDDoS RuleUpdateParamsType = "advanced_ddos"
+)
+
+func (r RuleUpdateParamsType) IsKnown() bool {
+	switch r {
+	case RuleUpdateParamsTypeThreshold, RuleUpdateParamsTypeZscore, RuleUpdateParamsTypeAdvancedDDoS:
+		return true
+	}
+	return false
 }
 
 // The amount of time that the rule threshold must be exceeded to send an alert
@@ -457,6 +558,57 @@ const (
 func (r RuleUpdateParamsDuration) IsKnown() bool {
 	switch r {
 	case RuleUpdateParamsDuration1m, RuleUpdateParamsDuration5m, RuleUpdateParamsDuration10m, RuleUpdateParamsDuration15m, RuleUpdateParamsDuration20m, RuleUpdateParamsDuration30m, RuleUpdateParamsDuration45m, RuleUpdateParamsDuration60m:
+		return true
+	}
+	return false
+}
+
+// Prefix match type to be applied for a prefix auto advertisement when using an
+// advanced_ddos rule.
+type RuleUpdateParamsPrefixMatch string
+
+const (
+	RuleUpdateParamsPrefixMatchExact    RuleUpdateParamsPrefixMatch = "exact"
+	RuleUpdateParamsPrefixMatchSubnet   RuleUpdateParamsPrefixMatch = "subnet"
+	RuleUpdateParamsPrefixMatchSupernet RuleUpdateParamsPrefixMatch = "supernet"
+)
+
+func (r RuleUpdateParamsPrefixMatch) IsKnown() bool {
+	switch r {
+	case RuleUpdateParamsPrefixMatchExact, RuleUpdateParamsPrefixMatchSubnet, RuleUpdateParamsPrefixMatchSupernet:
+		return true
+	}
+	return false
+}
+
+// Level of sensitivity set for zscore rules.
+type RuleUpdateParamsZscoreSensitivity string
+
+const (
+	RuleUpdateParamsZscoreSensitivityLow    RuleUpdateParamsZscoreSensitivity = "low"
+	RuleUpdateParamsZscoreSensitivityMedium RuleUpdateParamsZscoreSensitivity = "medium"
+	RuleUpdateParamsZscoreSensitivityHigh   RuleUpdateParamsZscoreSensitivity = "high"
+)
+
+func (r RuleUpdateParamsZscoreSensitivity) IsKnown() bool {
+	switch r {
+	case RuleUpdateParamsZscoreSensitivityLow, RuleUpdateParamsZscoreSensitivityMedium, RuleUpdateParamsZscoreSensitivityHigh:
+		return true
+	}
+	return false
+}
+
+// Target of the zscore rule analysis.
+type RuleUpdateParamsZscoreTarget string
+
+const (
+	RuleUpdateParamsZscoreTargetBits    RuleUpdateParamsZscoreTarget = "bits"
+	RuleUpdateParamsZscoreTargetPackets RuleUpdateParamsZscoreTarget = "packets"
+)
+
+func (r RuleUpdateParamsZscoreTarget) IsKnown() bool {
+	switch r {
+	case RuleUpdateParamsZscoreTargetBits, RuleUpdateParamsZscoreTargetPackets:
 		return true
 	}
 	return false
@@ -561,26 +713,52 @@ type RuleEditParams struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement param.Field[bool] `json:"automatic_advertisement"`
+	AutomaticAdvertisement param.Field[bool] `json:"automatic_advertisement" api:"required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     param.Field[string]   `json:"name" api:"required"`
+	Prefixes param.Field[[]string] `json:"prefixes" api:"required"`
+	// MNM rule type.
+	Type param.Field[RuleEditParamsType] `json:"type" api:"required"`
 	// The number of bits per second for the rule. When this value is exceeded for the
 	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	Bandwidth param.Field[float64] `json:"bandwidth"`
+	BandwidthThreshold param.Field[float64] `json:"bandwidth_threshold"`
 	// The amount of time that the rule threshold must be exceeded to send an alert
 	// notification. The final value must be equivalent to one of the following 8
 	// values ["1m","5m","10m","15m","20m","30m","45m","60m"].
 	Duration param.Field[RuleEditParamsDuration] `json:"duration"`
-	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
-	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
-	// the rule name. Max 256 characters.
-	Name param.Field[string] `json:"name"`
 	// The number of packets per second for the rule. When this value is exceeded for
 	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	PacketThreshold param.Field[float64]  `json:"packet_threshold"`
-	Prefixes        param.Field[[]string] `json:"prefixes"`
+	PacketThreshold param.Field[float64] `json:"packet_threshold"`
+	// Prefix match type to be applied for a prefix auto advertisement when using an
+	// advanced_ddos rule.
+	PrefixMatch param.Field[RuleEditParamsPrefixMatch] `json:"prefix_match"`
+	// Level of sensitivity set for zscore rules.
+	ZscoreSensitivity param.Field[RuleEditParamsZscoreSensitivity] `json:"zscore_sensitivity"`
+	// Target of the zscore rule analysis.
+	ZscoreTarget param.Field[RuleEditParamsZscoreTarget] `json:"zscore_target"`
 }
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// MNM rule type.
+type RuleEditParamsType string
+
+const (
+	RuleEditParamsTypeThreshold    RuleEditParamsType = "threshold"
+	RuleEditParamsTypeZscore       RuleEditParamsType = "zscore"
+	RuleEditParamsTypeAdvancedDDoS RuleEditParamsType = "advanced_ddos"
+)
+
+func (r RuleEditParamsType) IsKnown() bool {
+	switch r {
+	case RuleEditParamsTypeThreshold, RuleEditParamsTypeZscore, RuleEditParamsTypeAdvancedDDoS:
+		return true
+	}
+	return false
 }
 
 // The amount of time that the rule threshold must be exceeded to send an alert
@@ -602,6 +780,57 @@ const (
 func (r RuleEditParamsDuration) IsKnown() bool {
 	switch r {
 	case RuleEditParamsDuration1m, RuleEditParamsDuration5m, RuleEditParamsDuration10m, RuleEditParamsDuration15m, RuleEditParamsDuration20m, RuleEditParamsDuration30m, RuleEditParamsDuration45m, RuleEditParamsDuration60m:
+		return true
+	}
+	return false
+}
+
+// Prefix match type to be applied for a prefix auto advertisement when using an
+// advanced_ddos rule.
+type RuleEditParamsPrefixMatch string
+
+const (
+	RuleEditParamsPrefixMatchExact    RuleEditParamsPrefixMatch = "exact"
+	RuleEditParamsPrefixMatchSubnet   RuleEditParamsPrefixMatch = "subnet"
+	RuleEditParamsPrefixMatchSupernet RuleEditParamsPrefixMatch = "supernet"
+)
+
+func (r RuleEditParamsPrefixMatch) IsKnown() bool {
+	switch r {
+	case RuleEditParamsPrefixMatchExact, RuleEditParamsPrefixMatchSubnet, RuleEditParamsPrefixMatchSupernet:
+		return true
+	}
+	return false
+}
+
+// Level of sensitivity set for zscore rules.
+type RuleEditParamsZscoreSensitivity string
+
+const (
+	RuleEditParamsZscoreSensitivityLow    RuleEditParamsZscoreSensitivity = "low"
+	RuleEditParamsZscoreSensitivityMedium RuleEditParamsZscoreSensitivity = "medium"
+	RuleEditParamsZscoreSensitivityHigh   RuleEditParamsZscoreSensitivity = "high"
+)
+
+func (r RuleEditParamsZscoreSensitivity) IsKnown() bool {
+	switch r {
+	case RuleEditParamsZscoreSensitivityLow, RuleEditParamsZscoreSensitivityMedium, RuleEditParamsZscoreSensitivityHigh:
+		return true
+	}
+	return false
+}
+
+// Target of the zscore rule analysis.
+type RuleEditParamsZscoreTarget string
+
+const (
+	RuleEditParamsZscoreTargetBits    RuleEditParamsZscoreTarget = "bits"
+	RuleEditParamsZscoreTargetPackets RuleEditParamsZscoreTarget = "packets"
+)
+
+func (r RuleEditParamsZscoreTarget) IsKnown() bool {
+	switch r {
+	case RuleEditParamsZscoreTargetBits, RuleEditParamsZscoreTargetPackets:
 		return true
 	}
 	return false

@@ -199,7 +199,7 @@ func (r deploymentVersionJSON) RawJSON() string {
 }
 
 type DeploymentAnnotations struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
+	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
 	WorkersMessage string `json:"workers/message"`
 	// Operation that triggered the creation of the deployment.
 	WorkersTriggeredBy string                    `json:"workers/triggered_by"`
@@ -243,7 +243,7 @@ func (r DeploymentVersionParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DeploymentAnnotationsParam struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
+	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 }
 

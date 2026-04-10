@@ -41,7 +41,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 				Annotations: cloudflare.F(workers.ScriptVersionNewParamsMetadataAnnotations{
 					WorkersAlias:   cloudflare.F("staging"),
 					WorkersMessage: cloudflare.F("Fixed worker code."),
-					WorkersTag:     cloudflare.F("workers/tag"),
+					WorkersTag:     cloudflare.F("any-identifier-from-external-system"),
 				}),
 				Bindings: cloudflare.F([]workers.ScriptVersionNewParamsMetadataBindingUnion{workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),

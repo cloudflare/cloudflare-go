@@ -47,7 +47,8 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				Limits: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsLimits{
-					CPUMs: cloudflare.F(int64(50)),
+					CPUMs:       cloudflare.F(int64(50)),
+					Subrequests: cloudflare.F(int64(1000)),
 				}),
 				Logpush: cloudflare.F(false),
 				Migrations: cloudflare.F[workers.ScriptScriptAndVersionSettingEditParamsSettingsMigrationsUnion](workers.SingleStepMigrationParam{

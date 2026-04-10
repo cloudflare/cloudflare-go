@@ -53,8 +53,12 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 				}}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
+				Containers: cloudflare.F([]workers.VersionContainerParam{{
+					ClassName: cloudflare.F("MyDurableObject"),
+				}}),
 				Limits: cloudflare.F(workers.VersionLimitsParam{
-					CPUMs: cloudflare.F(int64(50)),
+					CPUMs:       cloudflare.F(int64(50)),
+					Subrequests: cloudflare.F(int64(1000)),
 				}),
 				MainModule: cloudflare.F("index.js"),
 				Migrations: cloudflare.F[workers.VersionMigrationsUnionParam](workers.SingleStepMigrationParam{

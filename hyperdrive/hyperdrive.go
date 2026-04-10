@@ -44,8 +44,10 @@ type Hyperdrive struct {
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Defines the last modified time of the Hyperdrive configuration.
-	ModifiedOn time.Time      `json:"modified_on" format:"date-time"`
-	MTLS       HyperdriveMTLS `json:"mtls"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// mTLS configuration for the origin connection. Cannot be used with VPC Service
+	// origins; TLS must be managed on the VPC Service.
+	MTLS HyperdriveMTLS `json:"mtls"`
 	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
 	// the origin database.
 	//
@@ -81,8 +83,6 @@ func (r hyperdriveJSON) RawJSON() string {
 type HyperdriveOrigin struct {
 	// Set the name of your origin database.
 	Database string `json:"database" api:"required"`
-	// Defines the host (hostname or IP) of your origin database.
-	Host string `json:"host" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme HyperdriveOriginScheme `json:"scheme" api:"required"`
 	// Set the user of your origin database.
@@ -90,22 +90,28 @@ type HyperdriveOrigin struct {
 	// Defines the Client ID of the Access token to use when connecting to the origin
 	// database.
 	AccessClientID string `json:"access_client_id"`
+	// Defines the host (hostname or IP) of your origin database.
+	Host string `json:"host"`
 	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
 	// 3306 for MySQL if not specified.
-	Port  int64                `json:"port"`
-	JSON  hyperdriveOriginJSON `json:"-"`
-	union HyperdriveOriginUnion
+	Port int64 `json:"port"`
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID string               `json:"service_id"`
+	JSON      hyperdriveOriginJSON `json:"-"`
+	union     HyperdriveOriginUnion
 }
 
 // hyperdriveOriginJSON contains the JSON metadata for the struct
 // [HyperdriveOrigin]
 type hyperdriveOriginJSON struct {
 	Database       apijson.Field
-	Host           apijson.Field
 	Scheme         apijson.Field
 	User           apijson.Field
 	AccessClientID apijson.Field
+	Host           apijson.Field
 	Port           apijson.Field
+	ServiceID      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -127,13 +133,15 @@ func (r *HyperdriveOrigin) UnmarshalJSON(data []byte) (err error) {
 // specific types for more type safety.
 //
 // Possible runtime types of the union are [HyperdriveOriginPublicDatabase],
-// [HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel].
+// [HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel],
+// [HyperdriveOriginDatabaseReachableThroughAWorkersVPC].
 func (r HyperdriveOrigin) AsUnion() HyperdriveOriginUnion {
 	return r.union
 }
 
-// Union satisfied by [HyperdriveOriginPublicDatabase] or
-// [HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel].
+// Union satisfied by [HyperdriveOriginPublicDatabase],
+// [HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel] or
+// [HyperdriveOriginDatabaseReachableThroughAWorkersVPC].
 type HyperdriveOriginUnion interface {
 	implementsHyperdriveOrigin()
 }
@@ -149,6 +157,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HyperdriveOriginDatabaseReachableThroughAWorkersVPC{}),
 		},
 	)
 }
@@ -257,6 +269,57 @@ const (
 func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme) IsKnown() bool {
 	switch r {
 	case HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgres, HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgresql, HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemeMysql:
+		return true
+	}
+	return false
+}
+
+type HyperdriveOriginDatabaseReachableThroughAWorkersVPC struct {
+	// Set the name of your origin database.
+	Database string `json:"database" api:"required"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme HyperdriveOriginDatabaseReachableThroughAWorkersVPCScheme `json:"scheme" api:"required"`
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID string `json:"service_id" api:"required"`
+	// Set the user of your origin database.
+	User string                                                  `json:"user" api:"required"`
+	JSON hyperdriveOriginDatabaseReachableThroughAWorkersVPCJSON `json:"-"`
+}
+
+// hyperdriveOriginDatabaseReachableThroughAWorkersVPCJSON contains the JSON
+// metadata for the struct [HyperdriveOriginDatabaseReachableThroughAWorkersVPC]
+type hyperdriveOriginDatabaseReachableThroughAWorkersVPCJSON struct {
+	Database    apijson.Field
+	Scheme      apijson.Field
+	ServiceID   apijson.Field
+	User        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveOriginDatabaseReachableThroughAWorkersVPC) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveOriginDatabaseReachableThroughAWorkersVPCJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r HyperdriveOriginDatabaseReachableThroughAWorkersVPC) implementsHyperdriveOrigin() {}
+
+// Specifies the URL scheme used to connect to your origin database.
+type HyperdriveOriginDatabaseReachableThroughAWorkersVPCScheme string
+
+const (
+	HyperdriveOriginDatabaseReachableThroughAWorkersVPCSchemePostgres   HyperdriveOriginDatabaseReachableThroughAWorkersVPCScheme = "postgres"
+	HyperdriveOriginDatabaseReachableThroughAWorkersVPCSchemePostgresql HyperdriveOriginDatabaseReachableThroughAWorkersVPCScheme = "postgresql"
+	HyperdriveOriginDatabaseReachableThroughAWorkersVPCSchemeMysql      HyperdriveOriginDatabaseReachableThroughAWorkersVPCScheme = "mysql"
+)
+
+func (r HyperdriveOriginDatabaseReachableThroughAWorkersVPCScheme) IsKnown() bool {
+	switch r {
+	case HyperdriveOriginDatabaseReachableThroughAWorkersVPCSchemePostgres, HyperdriveOriginDatabaseReachableThroughAWorkersVPCSchemePostgresql, HyperdriveOriginDatabaseReachableThroughAWorkersVPCSchemeMysql:
 		return true
 	}
 	return false
@@ -402,6 +465,8 @@ func (r hyperdriveCachingHyperdriveHyperdriveCachingEnabledJSON) RawJSON() strin
 
 func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveCaching() {}
 
+// mTLS configuration for the origin connection. Cannot be used with VPC Service
+// origins; TLS must be managed on the VPC Service.
 type HyperdriveMTLS struct {
 	// Define CA certificate ID obtained after uploading CA cert.
 	CACertificateID string `json:"ca_certificate_id"`
@@ -435,7 +500,9 @@ type HyperdriveParam struct {
 	Name    param.Field[string]                      `json:"name" api:"required"`
 	Origin  param.Field[HyperdriveOriginUnionParam]  `json:"origin" api:"required"`
 	Caching param.Field[HyperdriveCachingUnionParam] `json:"caching"`
-	MTLS    param.Field[HyperdriveMTLSParam]         `json:"mtls"`
+	// mTLS configuration for the origin connection. Cannot be used with VPC Service
+	// origins; TLS must be managed on the VPC Service.
+	MTLS param.Field[HyperdriveMTLSParam] `json:"mtls"`
 	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
 	// the origin database.
 	//
@@ -452,8 +519,6 @@ func (r HyperdriveParam) MarshalJSON() (data []byte, err error) {
 type HyperdriveOriginParam struct {
 	// Set the name of your origin database.
 	Database param.Field[string] `json:"database" api:"required"`
-	// Defines the host (hostname or IP) of your origin database.
-	Host param.Field[string] `json:"host" api:"required"`
 	// Set the password needed to access your origin database. The API never returns
 	// this write-only value.
 	Password param.Field[string] `json:"password" api:"required"`
@@ -467,9 +532,14 @@ type HyperdriveOriginParam struct {
 	// Defines the Client Secret of the Access Token to use when connecting to the
 	// origin database. The API never returns this write-only value.
 	AccessClientSecret param.Field[string] `json:"access_client_secret"`
+	// Defines the host (hostname or IP) of your origin database.
+	Host param.Field[string] `json:"host"`
 	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
 	// 3306 for MySQL if not specified.
 	Port param.Field[int64] `json:"port"`
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID param.Field[string] `json:"service_id"`
 }
 
 func (r HyperdriveOriginParam) MarshalJSON() (data []byte, err error) {
@@ -480,6 +550,7 @@ func (r HyperdriveOriginParam) implementsHyperdriveOriginUnionParam() {}
 
 // Satisfied by [hyperdrive.HyperdriveOriginPublicDatabaseParam],
 // [hyperdrive.HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam],
+// [hyperdrive.HyperdriveOriginDatabaseReachableThroughAWorkersVPCParam],
 // [HyperdriveOriginParam].
 type HyperdriveOriginUnionParam interface {
 	implementsHyperdriveOriginUnionParam()
@@ -533,6 +604,28 @@ func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam) Mars
 }
 
 func (r HyperdriveOriginAccessProtectedDatabaseBehindCloudflareTunnelParam) implementsHyperdriveOriginUnionParam() {
+}
+
+type HyperdriveOriginDatabaseReachableThroughAWorkersVPCParam struct {
+	// Set the name of your origin database.
+	Database param.Field[string] `json:"database" api:"required"`
+	// Set the password needed to access your origin database. The API never returns
+	// this write-only value.
+	Password param.Field[string] `json:"password" api:"required"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme param.Field[HyperdriveOriginDatabaseReachableThroughAWorkersVPCScheme] `json:"scheme" api:"required"`
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID param.Field[string] `json:"service_id" api:"required"`
+	// Set the user of your origin database.
+	User param.Field[string] `json:"user" api:"required"`
+}
+
+func (r HyperdriveOriginDatabaseReachableThroughAWorkersVPCParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r HyperdriveOriginDatabaseReachableThroughAWorkersVPCParam) implementsHyperdriveOriginUnionParam() {
 }
 
 type HyperdriveCachingParam struct {
@@ -590,6 +683,8 @@ func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) MarshalJSON() 
 func (r HyperdriveCachingHyperdriveHyperdriveCachingEnabledParam) implementsHyperdriveCachingUnionParam() {
 }
 
+// mTLS configuration for the origin connection. Cannot be used with VPC Service
+// origins; TLS must be managed on the VPC Service.
 type HyperdriveMTLSParam struct {
 	// Define CA certificate ID obtained after uploading CA cert.
 	CACertificateID param.Field[string] `json:"ca_certificate_id"`

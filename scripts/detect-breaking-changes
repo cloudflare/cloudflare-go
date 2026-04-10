@@ -213,11 +213,6 @@ TEST_PATHS=(
 	page_shield/connection_test.go
 	page_shield/script_test.go
 	page_shield/cookie_test.go
-	rulesets/ruleset_test.go
-	rulesets/phase_test.go
-	rulesets/phaseversion_test.go
-	rulesets/rule_test.go
-	rulesets/version_test.go
 	url_normalization/urlnormalization_test.go
 	spectrum/analyticsaggregatecurrent_test.go
 	spectrum/analyticseventbytime_test.go
@@ -700,10 +695,6 @@ TEST_PATHS=(
 	ai_search/instance_test.go
 	ai_search/instancejob_test.go
 	ai_search/token_test.go
-	security_center/insight_test.go
-	security_center/insightclass_test.go
-	security_center/insightseverity_test.go
-	security_center/insighttype_test.go
 	browser_rendering/content_test.go
 	browser_rendering/pdf_test.go
 	browser_rendering/scrape_test.go
@@ -713,6 +704,10 @@ TEST_PATHS=(
 	browser_rendering/link_test.go
 	browser_rendering/markdown_test.go
 	browser_rendering/crawl_test.go
+	browser_rendering/devtoolsession_test.go
+	browser_rendering/devtoolbrowser_test.go
+	browser_rendering/devtoolbrowserpage_test.go
+	browser_rendering/devtoolbrowsertarget_test.go
 	custom_pages/custompage_test.go
 	custom_pages/asset_test.go
 	secrets_store/store_test.go

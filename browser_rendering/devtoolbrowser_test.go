@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust_test
+package browser_rendering_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
-func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
+func TestDevtoolBrowserNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,26 +28,12 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.New(context.TODO(), zero_trust.AccessAIControlMcpServerNewParams{
-		AccountID:       cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
-		ID:              cloudflare.F("my-mcp-server"),
-		AuthType:        cloudflare.F(zero_trust.AccessAIControlMcpServerNewParamsAuthTypeUnauthenticated),
-		Hostname:        cloudflare.F("https://example.com/mcp"),
-		Name:            cloudflare.F("My MCP Server"),
-		AuthCredentials: cloudflare.F("auth_credentials"),
-		Description:     cloudflare.F("This is one remote mcp server"),
-		UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpServerNewParamsUpdatedPrompt{{
-			Name:        cloudflare.F("name"),
-			Alias:       cloudflare.F("my-custom-alias"),
-			Description: cloudflare.F("description"),
-			Enabled:     cloudflare.F(true),
-		}}),
-		UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpServerNewParamsUpdatedTool{{
-			Name:        cloudflare.F("name"),
-			Alias:       cloudflare.F("my-custom-alias"),
-			Description: cloudflare.F("description"),
-			Enabled:     cloudflare.F(true),
-		}}),
+	_, err := client.BrowserRendering.Devtools.Browser.New(context.TODO(), browser_rendering.DevtoolBrowserNewParams{
+		AccountID: cloudflare.F("account_id"),
+		KeepAlive: cloudflare.F(10000.000000),
+		Lab:       cloudflare.F(true),
+		Recording: cloudflare.F(true),
+		Targets:   cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -58,7 +44,7 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
+func TestDevtoolBrowserDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -72,26 +58,11 @@ func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Update(
+	_, err := client.BrowserRendering.Devtools.Browser.Delete(
 		context.TODO(),
-		"my-mcp-server",
-		zero_trust.AccessAIControlMcpServerUpdateParams{
-			AccountID:       cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
-			AuthCredentials: cloudflare.F("auth_credentials"),
-			Description:     cloudflare.F("This is one remote mcp server"),
-			Name:            cloudflare.F("My MCP Server"),
-			UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpServerUpdateParamsUpdatedPrompt{{
-				Name:        cloudflare.F("name"),
-				Alias:       cloudflare.F("my-custom-alias"),
-				Description: cloudflare.F("description"),
-				Enabled:     cloudflare.F(true),
-			}}),
-			UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpServerUpdateParamsUpdatedTool{{
-				Name:        cloudflare.F("name"),
-				Alias:       cloudflare.F("my-custom-alias"),
-				Description: cloudflare.F("description"),
-				Enabled:     cloudflare.F(true),
-			}}),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolBrowserDeleteParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -103,7 +74,7 @@ func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessAIControlMcpServerListWithOptionalParams(t *testing.T) {
+func TestDevtoolBrowserConnectWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -117,11 +88,44 @@ func TestAccessAIControlMcpServerListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.List(context.TODO(), zero_trust.AccessAIControlMcpServerListParams{
-		AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
-		Page:      cloudflare.F(int64(1)),
-		PerPage:   cloudflare.F(int64(1)),
-		Search:    cloudflare.F("search"),
+	err := client.BrowserRendering.Devtools.Browser.Connect(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolBrowserConnectParams{
+			AccountID: cloudflare.F("account_id"),
+			KeepAlive: cloudflare.F(10000.000000),
+			Lab:       cloudflare.F(true),
+			Recording: cloudflare.F(true),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestDevtoolBrowserLaunchWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	err := client.BrowserRendering.Devtools.Browser.Launch(context.TODO(), browser_rendering.DevtoolBrowserLaunchParams{
+		AccountID: cloudflare.F("account_id"),
+		KeepAlive: cloudflare.F(10000.000000),
+		Lab:       cloudflare.F(true),
+		Recording: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -132,7 +136,7 @@ func TestAccessAIControlMcpServerListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessAIControlMcpServerDelete(t *testing.T) {
+func TestDevtoolBrowserProtocol(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -146,11 +150,11 @@ func TestAccessAIControlMcpServerDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Delete(
+	_, err := client.BrowserRendering.Devtools.Browser.Protocol(
 		context.TODO(),
-		"my-mcp-server",
-		zero_trust.AccessAIControlMcpServerDeleteParams{
-			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolBrowserProtocolParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -162,7 +166,7 @@ func TestAccessAIControlMcpServerDelete(t *testing.T) {
 	}
 }
 
-func TestAccessAIControlMcpServerRead(t *testing.T) {
+func TestDevtoolBrowserVersion(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -176,41 +180,11 @@ func TestAccessAIControlMcpServerRead(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Read(
+	_, err := client.BrowserRendering.Devtools.Browser.Version(
 		context.TODO(),
-		"my-mcp-server",
-		zero_trust.AccessAIControlMcpServerReadParams{
-			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccessAIControlMcpServerSync(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Sync(
-		context.TODO(),
-		"my-mcp-portal",
-		zero_trust.AccessAIControlMcpServerSyncParams{
-			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolBrowserVersionParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

@@ -38,6 +38,7 @@ func NewEmbedService(opts ...option.RequestOption) (r *EmbedService) {
 // a video. On failure, returns a JSON response body.
 func (r *EmbedService) Get(ctx context.Context, identifier string, query EmbedGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/html")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err

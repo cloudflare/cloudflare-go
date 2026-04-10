@@ -761,6 +761,12 @@ type Origin struct {
 	// will not receive traffic and are excluded from health checks. The origin will
 	// only be disabled for the current pool.
 	Enabled bool `json:"enabled"`
+	// Whether to flatten CNAME records for this origin, resolving them to A/AAAA
+	// records before returning to the client. When true (the default), the director
+	// resolves CNAME addresses to their underlying A/AAAA records. When false, the
+	// origin address is returned as a raw CNAME record without resolution. This
+	// setting mirrors the DNS API record flatten_cname setting.
+	FlattenCNAME bool `json:"flatten_cname"`
 	// The request header is used to pass additional information with an HTTP request.
 	// Currently supported header is 'Host'.
 	Header Header `json:"header"`
@@ -789,6 +795,7 @@ type originJSON struct {
 	Address          apijson.Field
 	DisabledAt       apijson.Field
 	Enabled          apijson.Field
+	FlattenCNAME     apijson.Field
 	Header           apijson.Field
 	Name             apijson.Field
 	Port             apijson.Field
@@ -816,6 +823,12 @@ type OriginParam struct {
 	// will not receive traffic and are excluded from health checks. The origin will
 	// only be disabled for the current pool.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Whether to flatten CNAME records for this origin, resolving them to A/AAAA
+	// records before returning to the client. When true (the default), the director
+	// resolves CNAME addresses to their underlying A/AAAA records. When false, the
+	// origin address is returned as a raw CNAME record without resolution. This
+	// setting mirrors the DNS API record flatten_cname setting.
+	FlattenCNAME param.Field[bool] `json:"flatten_cname"`
 	// The request header is used to pass additional information with an HTTP request.
 	// Currently supported header is 'Host'.
 	Header param.Field[HeaderParam] `json:"header"`

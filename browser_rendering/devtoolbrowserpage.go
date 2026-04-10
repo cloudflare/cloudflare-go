@@ -3,6 +3,14 @@
 package browser_rendering
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"slices"
+
+	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
@@ -23,4 +31,30 @@ func NewDevtoolBrowserPageService(opts ...option.RequestOption) (r *DevtoolBrows
 	r = &DevtoolBrowserPageService{}
 	r.Options = opts
 	return
+}
+
+// Establishes a WebSocket connection to a specific Chrome DevTools target or page.
+func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, targetID string, query DevtoolBrowserPageGetParams, opts ...option.RequestOption) (err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return err
+	}
+	if sessionID == "" {
+		err = errors.New("missing required session_id parameter")
+		return err
+	}
+	if targetID == "" {
+		err = errors.New("missing required target_id parameter")
+		return err
+	}
+	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s/page/%s", query.AccountID, sessionID, targetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
+	return err
+}
+
+type DevtoolBrowserPageGetParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

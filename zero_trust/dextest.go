@@ -721,6 +721,9 @@ type DEXTestListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page
 	PerPage param.Field[float64] `query:"per_page"`
+	// Optionally filter results to a specific device registration. Must be used in
+	// combination with a single deviceId.
+	RegistrationID param.Field[string] `query:"registration_id"`
 	// Optionally filter results by test name
 	TestName param.Field[string] `query:"testName"`
 }

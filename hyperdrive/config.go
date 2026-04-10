@@ -330,10 +330,15 @@ type ConfigEditParams struct {
 	// Define configurations using a unique string identifier.
 	AccountID param.Field[string]                       `path:"account_id" api:"required"`
 	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
-	MTLS      param.Field[ConfigEditParamsMTLS]         `json:"mtls"`
+	// mTLS configuration for the origin connection. Cannot be used with VPC Service
+	// origins; TLS must be managed on the VPC Service.
+	MTLS param.Field[ConfigEditParamsMTLS] `json:"mtls"`
 	// The name of the Hyperdrive configuration. Used to identify the configuration in
 	// the Cloudflare dashboard and API.
-	Name   param.Field[string]                      `json:"name"`
+	Name param.Field[string] `json:"name"`
+	// Connect to a database through a Workers VPC Service. TLS settings (mTLS,
+	// sslmode) cannot be configured on the Hyperdrive when using a VPC Service origin;
+	// TLS must be managed on the VPC Service itself.
 	Origin param.Field[ConfigEditParamsOriginUnion] `json:"origin"`
 	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
 	// the origin database.
@@ -403,6 +408,8 @@ func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) MarshalJSON()
 func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsConfigEditParamsCachingUnion() {
 }
 
+// mTLS configuration for the origin connection. Cannot be used with VPC Service
+// origins; TLS must be managed on the VPC Service.
 type ConfigEditParamsMTLS struct {
 	// Define CA certificate ID obtained after uploading CA cert.
 	CACertificateID param.Field[string] `json:"ca_certificate_id"`
@@ -416,6 +423,9 @@ func (r ConfigEditParamsMTLS) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Connect to a database through a Workers VPC Service. TLS settings (mTLS,
+// sslmode) cannot be configured on the Hyperdrive when using a VPC Service origin;
+// TLS must be managed on the VPC Service itself.
 type ConfigEditParamsOrigin struct {
 	// Defines the Client ID of the Access token to use when connecting to the origin
 	// database.
@@ -435,6 +445,9 @@ type ConfigEditParamsOrigin struct {
 	Port param.Field[int64] `json:"port"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[ConfigEditParamsOriginScheme] `json:"scheme"`
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID param.Field[string] `json:"service_id"`
 	// Set the user of your origin database.
 	User param.Field[string] `json:"user"`
 }
@@ -445,9 +458,14 @@ func (r ConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
 
 func (r ConfigEditParamsOrigin) implementsConfigEditParamsOriginUnion() {}
 
+// Connect to a database through a Workers VPC Service. TLS settings (mTLS,
+// sslmode) cannot be configured on the Hyperdrive when using a VPC Service origin;
+// TLS must be managed on the VPC Service itself.
+//
 // Satisfied by [hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabase],
 // [hyperdrive.ConfigEditParamsOriginHyperdriveInternetOrigin],
 // [hyperdrive.ConfigEditParamsOriginHyperdriveOverAccessOrigin],
+// [hyperdrive.ConfigEditParamsOriginHyperdriveVPCServiceOrigin],
 // [ConfigEditParamsOrigin].
 type ConfigEditParamsOriginUnion interface {
 	implementsConfigEditParamsOriginUnion()
@@ -518,6 +536,21 @@ func (r ConfigEditParamsOriginHyperdriveOverAccessOrigin) MarshalJSON() (data []
 }
 
 func (r ConfigEditParamsOriginHyperdriveOverAccessOrigin) implementsConfigEditParamsOriginUnion() {}
+
+// Connect to a database through a Workers VPC Service. TLS settings (mTLS,
+// sslmode) cannot be configured on the Hyperdrive when using a VPC Service origin;
+// TLS must be managed on the VPC Service itself.
+type ConfigEditParamsOriginHyperdriveVPCServiceOrigin struct {
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID param.Field[string] `json:"service_id" api:"required"`
+}
+
+func (r ConfigEditParamsOriginHyperdriveVPCServiceOrigin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsOriginHyperdriveVPCServiceOrigin) implementsConfigEditParamsOriginUnion() {}
 
 // Specifies the URL scheme used to connect to your origin database.
 type ConfigEditParamsOriginScheme string

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package rulesets_test
+package browser_rendering_test
 
 import (
 	"context"
@@ -9,13 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/rulesets"
 )
 
-func TestVersionListWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestDevtoolBrowserTargetNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,10 +28,41 @@ func TestVersionListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Rulesets.Versions.List(
+	_, err := client.BrowserRendering.Devtools.Browser.Targets.New(
 		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		rulesets.VersionListParams{
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolBrowserTargetNewParams{
+			AccountID: cloudflare.F("account_id"),
+			URL:       cloudflare.F("https://example.com"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestDevtoolBrowserTargetList(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.BrowserRendering.Devtools.Browser.Targets.List(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolBrowserTargetListParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)
@@ -45,8 +75,7 @@ func TestVersionListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestVersionDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestDevtoolBrowserTargetActivate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,11 +89,11 @@ func TestVersionDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Rulesets.Versions.Delete(
+	_, err := client.BrowserRendering.Devtools.Browser.Targets.Activate(
 		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		"1",
-		rulesets.VersionDeleteParams{
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"target_id",
+		browser_rendering.DevtoolBrowserTargetActivateParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)
@@ -77,8 +106,7 @@ func TestVersionDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestVersionGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestDevtoolBrowserTargetGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,11 +120,11 @@ func TestVersionGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Rulesets.Versions.Get(
+	_, err := client.BrowserRendering.Devtools.Browser.Targets.Get(
 		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		"1",
-		rulesets.VersionGetParams{
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"target_id",
+		browser_rendering.DevtoolBrowserTargetGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)

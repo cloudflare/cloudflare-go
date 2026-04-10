@@ -106,20 +106,24 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 }
 
 // Delete Stream in Account.
-func (r *StreamService) Delete(ctx context.Context, streamID string, params StreamDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *StreamService) Delete(ctx context.Context, streamID string, params StreamDeleteParams, opts ...option.RequestOption) (res *StreamDeleteResponse, err error) {
+	var env StreamDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return err
+		return nil, err
 	}
 	if streamID == "" {
 		err = errors.New("missing required stream_id parameter")
-		return err
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", params.AccountID, streamID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
-	return err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Get Stream Details.
@@ -3124,6 +3128,8 @@ func (r StreamListResponseSchemaFormatTimestampFormat) IsKnown() bool {
 	return false
 }
 
+type StreamDeleteResponse = interface{}
+
 type StreamGetResponse struct {
 	// Indicates a unique identifier for this stream.
 	ID         string                `json:"id" api:"required"`
@@ -5334,6 +5340,30 @@ func (r StreamDeleteParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type StreamDeleteResponseEnvelope struct {
+	Result StreamDeleteResponse `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success bool                             `json:"success" api:"required"`
+	JSON    streamDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// streamDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamDeleteResponseEnvelope]
+type streamDeleteResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamGetParams struct {

@@ -141,20 +141,24 @@ func (r *PipelineService) NewV1(ctx context.Context, params PipelineNewV1Params,
 }
 
 // Delete Pipeline in Account.
-func (r *PipelineService) DeleteV1(ctx context.Context, pipelineID string, body PipelineDeleteV1Params, opts ...option.RequestOption) (err error) {
+func (r *PipelineService) DeleteV1(ctx context.Context, pipelineID string, body PipelineDeleteV1Params, opts ...option.RequestOption) (res *PipelineDeleteV1Response, err error) {
+	var env PipelineDeleteV1ResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return err
+		return nil, err
 	}
 	if pipelineID == "" {
 		err = errors.New("missing required pipeline_id parameter")
-		return err
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines/%s", body.AccountID, pipelineID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // [DEPRECATED] Get configuration of a pipeline. Use the new
@@ -1557,6 +1561,8 @@ func (r pipelineNewV1ResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type PipelineDeleteV1Response = interface{}
+
 // [DEPRECATED] Describes the configuration of a pipeline. Use the new
 // streams/sinks/pipelines API instead.
 //
@@ -2821,6 +2827,30 @@ func (r pipelineNewV1ResponseEnvelopeJSON) RawJSON() string {
 type PipelineDeleteV1Params struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type PipelineDeleteV1ResponseEnvelope struct {
+	Result PipelineDeleteV1Response `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success bool                                 `json:"success" api:"required"`
+	JSON    pipelineDeleteV1ResponseEnvelopeJSON `json:"-"`
+}
+
+// pipelineDeleteV1ResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PipelineDeleteV1ResponseEnvelope]
+type pipelineDeleteV1ResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineDeleteV1ResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineDeleteV1ResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type PipelineGetParams struct {
