@@ -7,16 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // WaitingRoomService contains methods and other services that help with
@@ -84,47 +81,6 @@ func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, p
 	}
 	res = &env.Result
 	return res, nil
-}
-
-// Lists waiting rooms for account or zone.
-func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WaitingRoom], err error) {
-	var raw *http.Response
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
-	}
-	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if params.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = params.AccountID
-	}
-	if params.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = params.ZoneID
-	}
-	path := fmt.Sprintf("%s/%s/waiting_rooms", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Lists waiting rooms for account or zone.
-func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WaitingRoom] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a waiting room.
@@ -1358,25 +1314,6 @@ func (r *WaitingRoomUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 
 func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-type WaitingRoomListParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Maximum number of results per page. Must be a multiple of 5.
-	PerPage param.Field[float64] `query:"per_page"`
-}
-
-// URLQuery serializes [WaitingRoomListParams]'s query parameters as `url.Values`.
-func (r WaitingRoomListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type WaitingRoomDeleteParams struct {

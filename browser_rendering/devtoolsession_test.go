@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package rulesets_test
+package browser_rendering_test
 
 import (
 	"context"
@@ -9,13 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/rulesets"
 )
 
-func TestPhaseVersionListWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestDevtoolSessionListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,13 +28,11 @@ func TestPhaseVersionListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Rulesets.Phases.Versions.List(
-		context.TODO(),
-		rulesets.PhaseHTTPRequestFirewallCustom,
-		rulesets.PhaseVersionListParams{
-			AccountID: cloudflare.F("account_id"),
-		},
-	)
+	_, err := client.BrowserRendering.Devtools.Session.List(context.TODO(), browser_rendering.DevtoolSessionListParams{
+		AccountID: cloudflare.F("account_id"),
+		Limit:     cloudflare.F(1.000000),
+		Offset:    cloudflare.F(0.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -45,8 +42,7 @@ func TestPhaseVersionListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPhaseVersionGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestDevtoolSessionGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,11 +56,10 @@ func TestPhaseVersionGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Rulesets.Phases.Versions.Get(
+	_, err := client.BrowserRendering.Devtools.Session.Get(
 		context.TODO(),
-		rulesets.PhaseHTTPRequestFirewallCustom,
-		"1",
-		rulesets.PhaseVersionGetParams{
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolSessionGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)

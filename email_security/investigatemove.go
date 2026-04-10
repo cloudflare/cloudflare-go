@@ -7,14 +7,17 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // InvestigateMoveService contains methods and other services that help with
@@ -38,10 +41,9 @@ func NewInvestigateMoveService(opts ...option.RequestOption) (r *InvestigateMove
 
 // Moves a single email message to a different folder or changes its quarantine
 // status.
-func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateMoveNewResponse], err error) {
-	var raw *http.Response
+func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) (res *[]InvestigateMoveNewResponse, err error) {
+	var env InvestigateMoveNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -51,22 +53,12 @@ func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, para
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/move", params.AccountID, postfixID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
+	res = &env.Result
 	return res, nil
-}
-
-// Moves a single email message to a different folder or changes its quarantine
-// status.
-func (r *InvestigateMoveService) NewAutoPaging(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveNewResponse] {
-	return pagination.NewSinglePageAutoPager(r.New(ctx, postfixID, params, opts...))
 }
 
 // Maximum batch size: 1000 messages per request
@@ -182,10 +174,22 @@ type InvestigateMoveNewParams struct {
 	// Account Identifier
 	AccountID   param.Field[string]                              `path:"account_id" api:"required"`
 	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination" api:"required"`
+	// When true, search the submissions datastore only. When false or omitted, search
+	// the regular datastore only.
+	Submission param.Field[bool] `query:"submission"`
 }
 
 func (r InvestigateMoveNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [InvestigateMoveNewParams]'s query parameters as
+// `url.Values`.
+func (r InvestigateMoveNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type InvestigateMoveNewParamsDestination string
@@ -204,6 +208,33 @@ func (r InvestigateMoveNewParamsDestination) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type InvestigateMoveNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo                  `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                  `json:"messages" api:"required"`
+	Result   []InvestigateMoveNewResponse           `json:"result" api:"required"`
+	Success  bool                                   `json:"success" api:"required"`
+	JSON     investigateMoveNewResponseEnvelopeJSON `json:"-"`
+}
+
+// investigateMoveNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [InvestigateMoveNewResponseEnvelope]
+type investigateMoveNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateMoveNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateMoveNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type InvestigateMoveBulkParams struct {

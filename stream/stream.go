@@ -189,6 +189,8 @@ type Video struct {
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
 	AllowedOrigins []AllowedOrigins `json:"allowedOrigins"`
+	// The unique identifier of the source video this video was clipped from.
+	ClippedFrom string `json:"clippedFrom"`
 	// The date and time the media item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// A user-defined identifier for the media creator.
@@ -205,6 +207,8 @@ type Video struct {
 	// duration will fail during processing. A value of `-1` means the value is
 	// unknown.
 	MaxDurationSeconds int64 `json:"maxDurationSeconds"`
+	// The maximum size in bytes for the video upload.
+	MaxSizeBytes int64 `json:"maxSizeBytes"`
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing videos.
 	Meta interface{} `json:"meta"`
@@ -213,6 +217,9 @@ type Video struct {
 	Playback VideoPlayback `json:"playback"`
 	// The video's preview page URI. This field is omitted until encoding is complete.
 	Preview string `json:"preview" format:"uri"`
+	// Public details for the video including title, share link, channel link, and
+	// logo.
+	PublicDetails VideoPublicDetails `json:"publicDetails"`
 	// Indicates whether the video is playable. The field is empty if the video is not
 	// ready for viewing or the live stream is still in progress.
 	ReadyToStream bool `json:"readyToStream"`
@@ -256,16 +263,19 @@ type Video struct {
 // videoJSON contains the JSON metadata for the struct [Video]
 type videoJSON struct {
 	AllowedOrigins        apijson.Field
+	ClippedFrom           apijson.Field
 	Created               apijson.Field
 	Creator               apijson.Field
 	Duration              apijson.Field
 	Input                 apijson.Field
 	LiveInput             apijson.Field
 	MaxDurationSeconds    apijson.Field
+	MaxSizeBytes          apijson.Field
 	Meta                  apijson.Field
 	Modified              apijson.Field
 	Playback              apijson.Field
 	Preview               apijson.Field
+	PublicDetails         apijson.Field
 	ReadyToStream         apijson.Field
 	ReadyToStreamAt       apijson.Field
 	RequireSignedURLs     apijson.Field
@@ -340,6 +350,37 @@ func (r videoPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 
+// Public details for the video including title, share link, channel link, and
+// logo.
+type VideoPublicDetails struct {
+	ChannelLink string                 `json:"channel_link" api:"nullable"`
+	Logo        string                 `json:"logo" api:"nullable"`
+	MediaID     int64                  `json:"media_id"`
+	ShareLink   string                 `json:"share_link" api:"nullable"`
+	Title       string                 `json:"title" api:"nullable"`
+	JSON        videoPublicDetailsJSON `json:"-"`
+}
+
+// videoPublicDetailsJSON contains the JSON metadata for the struct
+// [VideoPublicDetails]
+type videoPublicDetailsJSON struct {
+	ChannelLink apijson.Field
+	Logo        apijson.Field
+	MediaID     apijson.Field
+	ShareLink   apijson.Field
+	Title       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VideoPublicDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r videoPublicDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies a detailed status for a video. If the `state` is `inprogress` or
 // `error`, the `step` field returns `encoding` or `manifest`. If the `state` is
 // `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
@@ -401,7 +442,6 @@ func (r VideoStatusState) IsKnown() bool {
 type StreamNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
 	// Specifies the TUS protocol version. This value must be included in every upload
 	// request. Notes: The only supported version of TUS protocol is 1.0.0.
 	TusResumable param.Field[StreamNewParamsTusResumable] `header:"Tus-Resumable" api:"required"`
@@ -418,10 +458,6 @@ type StreamNewParams struct {
 	// `allowedorigins`, `thumbnailtimestamppct`, `watermark`, `scheduleddeletion`,
 	// `maxdurationseconds`.
 	UploadMetadata param.Field[string] `header:"Upload-Metadata"`
-}
-
-func (r StreamNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [StreamNewParams]'s query parameters as `url.Values`.
@@ -451,8 +487,15 @@ func (r StreamNewParamsTusResumable) IsKnown() bool {
 type StreamListParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filter by video ID(s). Can be a single ID or a comma-separated list of IDs.
+	ID param.Field[string] `query:"id"`
+	// Alias for 'start'. Returns videos created after this date/time (RFC 3339
+	// format).
+	After param.Field[time.Time] `query:"after" format:"date-time"`
 	// Lists videos in ascending order of creation.
 	Asc param.Field[bool] `query:"asc"`
+	// Alias for 'end'. Returns videos created before this date/time (RFC 3339 format).
+	Before param.Field[time.Time] `query:"before" format:"date-time"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `query:"creator"`
 	// Lists videos created before the specified date.
@@ -460,6 +503,12 @@ type StreamListParams struct {
 	// Includes the total number of videos associated with the submitted query
 	// parameters.
 	IncludeCounts param.Field[bool] `query:"include_counts"`
+	// Maximum number of videos to return (default 1000, max 1000).
+	Limit param.Field[int64] `query:"limit"`
+	// Filter by live input ID to find videos associated with a specific live stream.
+	LiveInputID param.Field[string] `query:"live_input_id"`
+	// Filter by video name/UID(s). Can be a single name or a comma-separated list.
+	Name param.Field[string] `query:"name"`
 	// Provides a partial word match of the `name` key in the `meta` field. Slow for
 	// medium to large video libraries. May be unavailable for very large libraries.
 	Search param.Field[string] `query:"search"`
@@ -524,6 +573,9 @@ type StreamEditParams struct {
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing videos.
 	Meta param.Field[interface{}] `json:"meta"`
+	// Public details for the video including title, share link, channel link, and
+	// logo.
+	PublicDetails param.Field[StreamEditParamsPublicDetails] `json:"publicDetails"`
 	// Indicates whether the video can be a accessed using the UID. When set to `true`,
 	// a signed token must be generated with a signing key to view the video.
 	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
@@ -536,12 +588,28 @@ type StreamEditParams struct {
 	// divide the desired timestamp by the total duration of the video. If this value
 	// is not set, the default thumbnail image is taken from 0s of the video.
 	ThumbnailTimestampPct param.Field[float64] `json:"thumbnailTimestampPct"`
+	// The unique identifier for the video. Can be used to verify the video being
+	// updated.
+	UID param.Field[string] `json:"uid"`
 	// The date and time when the video upload URL is no longer valid for direct user
 	// uploads.
 	UploadExpiry param.Field[time.Time] `json:"uploadExpiry" format:"date-time"`
 }
 
 func (r StreamEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Public details for the video including title, share link, channel link, and
+// logo.
+type StreamEditParamsPublicDetails struct {
+	ChannelLink param.Field[string] `json:"channel_link"`
+	Logo        param.Field[string] `json:"logo"`
+	ShareLink   param.Field[string] `json:"share_link"`
+	Title       param.Field[string] `json:"title"`
+}
+
+func (r StreamEditParamsPublicDetails) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

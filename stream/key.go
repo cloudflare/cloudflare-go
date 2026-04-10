@@ -137,14 +137,17 @@ type KeyGetResponse struct {
 	// Identifier.
 	ID string `json:"id"`
 	// The date and time a signing key was created.
-	Created time.Time          `json:"created" format:"date-time"`
-	JSON    keyGetResponseJSON `json:"-"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The unique identifier for the signing key.
+	KeyID string             `json:"key_id"`
+	JSON  keyGetResponseJSON `json:"-"`
 }
 
 // keyGetResponseJSON contains the JSON metadata for the struct [KeyGetResponse]
 type keyGetResponseJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
+	KeyID       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

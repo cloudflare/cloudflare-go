@@ -37,10 +37,10 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 // Creates a download for a video when a video is ready to view. Use
 // `/downloads/{download_type}` instead for type-specific downloads. Available
 // types are `default` and `audio`.
-func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
+func (r *DownloadService) New(ctx context.Context, identifier string, body DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
 	var env DownloadNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -48,8 +48,8 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 		err = errors.New("missing required identifier parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", params.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,24 +100,23 @@ func (r *DownloadService) Get(ctx context.Context, identifier string, query Down
 	return res, nil
 }
 
+// An object with download type keys. Each key is optional and only present if that
+// download type has been created.
 type DownloadNewResponse struct {
-	// Indicates the progress as a percentage between 0 and 100.
-	PercentComplete float64 `json:"percentComplete"`
-	// The status of a generated download.
-	Status DownloadNewResponseStatus `json:"status"`
-	// The URL to access the generated download.
-	URL  string                  `json:"url" format:"uri"`
-	JSON downloadNewResponseJSON `json:"-"`
+	// The audio-only download. Only present if this download type has been created.
+	Audio DownloadNewResponseAudio `json:"audio"`
+	// The default video download. Only present if this download type has been created.
+	Default DownloadNewResponseDefault `json:"default"`
+	JSON    downloadNewResponseJSON    `json:"-"`
 }
 
 // downloadNewResponseJSON contains the JSON metadata for the struct
 // [DownloadNewResponse]
 type downloadNewResponseJSON struct {
-	PercentComplete apijson.Field
-	Status          apijson.Field
-	URL             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Audio       apijson.Field
+	Default     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *DownloadNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -128,18 +127,93 @@ func (r downloadNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The audio-only download. Only present if this download type has been created.
+type DownloadNewResponseAudio struct {
+	// Indicates the progress as a percentage between 0 and 100.
+	PercentComplete float64 `json:"percentComplete" api:"required"`
+	// The status of a generated download.
+	Status DownloadNewResponseAudioStatus `json:"status" api:"required"`
+	// The URL to access the generated download.
+	URL  string                       `json:"url" format:"uri"`
+	JSON downloadNewResponseAudioJSON `json:"-"`
+}
+
+// downloadNewResponseAudioJSON contains the JSON metadata for the struct
+// [DownloadNewResponseAudio]
+type downloadNewResponseAudioJSON struct {
+	PercentComplete apijson.Field
+	Status          apijson.Field
+	URL             apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DownloadNewResponseAudio) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r downloadNewResponseAudioJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of a generated download.
-type DownloadNewResponseStatus string
+type DownloadNewResponseAudioStatus string
 
 const (
-	DownloadNewResponseStatusReady      DownloadNewResponseStatus = "ready"
-	DownloadNewResponseStatusInprogress DownloadNewResponseStatus = "inprogress"
-	DownloadNewResponseStatusError      DownloadNewResponseStatus = "error"
+	DownloadNewResponseAudioStatusReady      DownloadNewResponseAudioStatus = "ready"
+	DownloadNewResponseAudioStatusInprogress DownloadNewResponseAudioStatus = "inprogress"
+	DownloadNewResponseAudioStatusError      DownloadNewResponseAudioStatus = "error"
 )
 
-func (r DownloadNewResponseStatus) IsKnown() bool {
+func (r DownloadNewResponseAudioStatus) IsKnown() bool {
 	switch r {
-	case DownloadNewResponseStatusReady, DownloadNewResponseStatusInprogress, DownloadNewResponseStatusError:
+	case DownloadNewResponseAudioStatusReady, DownloadNewResponseAudioStatusInprogress, DownloadNewResponseAudioStatusError:
+		return true
+	}
+	return false
+}
+
+// The default video download. Only present if this download type has been created.
+type DownloadNewResponseDefault struct {
+	// Indicates the progress as a percentage between 0 and 100.
+	PercentComplete float64 `json:"percentComplete" api:"required"`
+	// The status of a generated download.
+	Status DownloadNewResponseDefaultStatus `json:"status" api:"required"`
+	// The URL to access the generated download.
+	URL  string                         `json:"url" format:"uri"`
+	JSON downloadNewResponseDefaultJSON `json:"-"`
+}
+
+// downloadNewResponseDefaultJSON contains the JSON metadata for the struct
+// [DownloadNewResponseDefault]
+type downloadNewResponseDefaultJSON struct {
+	PercentComplete apijson.Field
+	Status          apijson.Field
+	URL             apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DownloadNewResponseDefault) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r downloadNewResponseDefaultJSON) RawJSON() string {
+	return r.raw
+}
+
+// The status of a generated download.
+type DownloadNewResponseDefaultStatus string
+
+const (
+	DownloadNewResponseDefaultStatusReady      DownloadNewResponseDefaultStatus = "ready"
+	DownloadNewResponseDefaultStatusInprogress DownloadNewResponseDefaultStatus = "inprogress"
+	DownloadNewResponseDefaultStatusError      DownloadNewResponseDefaultStatus = "error"
+)
+
+func (r DownloadNewResponseDefaultStatus) IsKnown() bool {
+	switch r {
+	case DownloadNewResponseDefaultStatusReady, DownloadNewResponseDefaultStatusInprogress, DownloadNewResponseDefaultStatusError:
 		return true
 	}
 	return false
@@ -175,9 +249,9 @@ func (r downloadGetResponseJSON) RawJSON() string {
 // The audio-only download. Only present if this download type has been created.
 type DownloadGetResponseAudio struct {
 	// Indicates the progress as a percentage between 0 and 100.
-	PercentComplete float64 `json:"percentComplete"`
+	PercentComplete float64 `json:"percentComplete" api:"required"`
 	// The status of a generated download.
-	Status DownloadGetResponseAudioStatus `json:"status"`
+	Status DownloadGetResponseAudioStatus `json:"status" api:"required"`
 	// The URL to access the generated download.
 	URL  string                       `json:"url" format:"uri"`
 	JSON downloadGetResponseAudioJSON `json:"-"`
@@ -221,9 +295,9 @@ func (r DownloadGetResponseAudioStatus) IsKnown() bool {
 // The default video download. Only present if this download type has been created.
 type DownloadGetResponseDefault struct {
 	// Indicates the progress as a percentage between 0 and 100.
-	PercentComplete float64 `json:"percentComplete"`
+	PercentComplete float64 `json:"percentComplete" api:"required"`
 	// The status of a generated download.
-	Status DownloadGetResponseDefaultStatus `json:"status"`
+	Status DownloadGetResponseDefaultStatus `json:"status" api:"required"`
 	// The URL to access the generated download.
 	URL  string                         `json:"url" format:"uri"`
 	JSON downloadGetResponseDefaultJSON `json:"-"`
@@ -267,11 +341,6 @@ func (r DownloadGetResponseDefaultStatus) IsKnown() bool {
 type DownloadNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type DownloadNewResponseEnvelope struct {
@@ -279,8 +348,10 @@ type DownloadNewResponseEnvelope struct {
 	Messages []DownloadNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success DownloadNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  DownloadNewResponse                `json:"result"`
-	JSON    downloadNewResponseEnvelopeJSON    `json:"-"`
+	// An object with download type keys. Each key is optional and only present if that
+	// download type has been created.
+	Result DownloadNewResponse             `json:"result"`
+	JSON   downloadNewResponseEnvelopeJSON `json:"-"`
 }
 
 // downloadNewResponseEnvelopeJSON contains the JSON metadata for the struct

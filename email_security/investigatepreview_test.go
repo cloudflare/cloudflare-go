@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestInvestigatePreviewNew(t *testing.T) {
+func TestInvestigatePreviewNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,8 +28,9 @@ func TestInvestigatePreviewNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Investigate.Preview.New(context.TODO(), email_security.InvestigatePreviewNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		PostfixID: cloudflare.F("4Njp3P0STMz2c02Q"),
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		PostfixID:  cloudflare.F("4Njp3P0STMz2c02Q"),
+		Submission: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -35,7 +35,8 @@ func NewRuleCatchAllService(opts ...option.RequestOption) (r *RuleCatchAllServic
 }
 
 // Enable or disable catch-all routing rule, or change action to forward to
-// specific destination address.
+// specific destination address. Forward actions require all destination addresses
+// to be verified.
 func (r *RuleCatchAllService) Update(ctx context.Context, params RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
 	var env RuleCatchAllUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

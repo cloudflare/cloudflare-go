@@ -169,6 +169,9 @@ type Version struct {
 	// enable upcoming features or opt in or out of specific changes not included in a
 	// `compatibility_date`.
 	CompatibilityFlags []string `json:"compatibility_flags"`
+	// List of containers attached to a Worker. Containers can only be attached to
+	// Durable Object classes of this Worker script.
+	Containers []VersionContainer `json:"containers"`
 	// Resource limits enforced at runtime.
 	Limits VersionLimits `json:"limits"`
 	// The name of the main module in the `modules` array (e.g. the name of the module
@@ -218,6 +221,7 @@ type versionJSON struct {
 	Bindings           apijson.Field
 	CompatibilityDate  apijson.Field
 	CompatibilityFlags apijson.Field
+	Containers         apijson.Field
 	Limits             apijson.Field
 	MainModule         apijson.Field
 	MigrationTag       apijson.Field
@@ -241,9 +245,9 @@ func (r versionJSON) RawJSON() string {
 
 // Metadata about the version.
 type VersionAnnotations struct {
-	// Human-readable message about the version.
+	// Human-readable message about the version. Truncated to 1000 bytes if longer.
 	WorkersMessage string `json:"workers/message"`
-	// User-provided identifier for the version.
+	// User-provided identifier for the version. Maximum 100 bytes.
 	WorkersTag string `json:"workers/tag"`
 	// Operation that triggered the creation of the version.
 	WorkersTriggeredBy string                 `json:"workers/triggered_by"`
@@ -409,6 +413,8 @@ type VersionBinding struct {
 	// The kind of resource that the binding provides.
 	Type VersionBindingsType `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
+	//
+	// Deprecated: This property has been renamed to `database_id`.
 	ID string `json:"id"`
 	// This field can have the runtime type of [interface{}].
 	Algorithm interface{} `json:"algorithm"`
@@ -416,12 +422,16 @@ type VersionBinding struct {
 	AllowedDestinationAddresses interface{} `json:"allowed_destination_addresses"`
 	// This field can have the runtime type of [[]string].
 	AllowedSenderAddresses interface{} `json:"allowed_sender_addresses"`
+	// ID of the Flagship app to bind to for feature flag evaluation.
+	AppID string `json:"app_id"`
 	// R2 bucket to bind to.
 	BucketName string `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
 	CertificateID string `json:"certificate_id"`
 	// The exported class name of the Durable Object.
 	ClassName string `json:"class_name"`
+	// Identifier of the D1 database to bind to.
+	DatabaseID string `json:"database_id"`
 	// The name of the dataset to bind to.
 	Dataset string `json:"dataset"`
 	// Destination address for the email.
@@ -509,9 +519,11 @@ type versionBindingJSON struct {
 	Algorithm                   apijson.Field
 	AllowedDestinationAddresses apijson.Field
 	AllowedSenderAddresses      apijson.Field
+	AppID                       apijson.Field
 	BucketName                  apijson.Field
 	CertificateID               apijson.Field
 	ClassName                   apijson.Field
+	DatabaseID                  apijson.Field
 	Dataset                     apijson.Field
 	DestinationAddress          apijson.Field
 	DispatchNamespace           apijson.Field
@@ -591,6 +603,7 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindVectorize],
 // [VersionBindingsWorkersBindingKindVersionMetadata],
 // [VersionBindingsWorkersBindingKindSecretsStoreSecret],
+// [VersionBindingsWorkersBindingKindFlagship],
 // [VersionBindingsWorkersBindingKindSecretKey],
 // [VersionBindingsWorkersBindingKindWorkflow],
 // [VersionBindingsWorkersBindingKindWasmModule],
@@ -631,6 +644,7 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindVectorize],
 // [VersionBindingsWorkersBindingKindVersionMetadata],
 // [VersionBindingsWorkersBindingKindSecretsStoreSecret],
+// [VersionBindingsWorkersBindingKindFlagship],
 // [VersionBindingsWorkersBindingKindSecretKey],
 // [VersionBindingsWorkersBindingKindWorkflow],
 // [VersionBindingsWorkersBindingKindWasmModule],
@@ -788,6 +802,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindSecretsStoreSecret{}),
 			DiscriminatorValue: "secrets_store_secret",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindFlagship{}),
+			DiscriminatorValue: "flagship",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1088,20 +1107,25 @@ func (r VersionBindingsWorkersBindingKindBrowserType) IsKnown() bool {
 
 type VersionBindingsWorkersBindingKindD1 struct {
 	// Identifier of the D1 database to bind to.
-	ID string `json:"id" api:"required"`
+	DatabaseID string `json:"database_id" api:"required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type VersionBindingsWorkersBindingKindD1Type `json:"type" api:"required"`
+	// Identifier of the D1 database to bind to.
+	//
+	// Deprecated: This property has been renamed to `database_id`.
+	ID   string                                  `json:"id"`
 	JSON versionBindingsWorkersBindingKindD1JSON `json:"-"`
 }
 
 // versionBindingsWorkersBindingKindD1JSON contains the JSON metadata for the
 // struct [VersionBindingsWorkersBindingKindD1]
 type versionBindingsWorkersBindingKindD1JSON struct {
-	ID          apijson.Field
+	DatabaseID  apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2288,6 +2312,51 @@ func (r VersionBindingsWorkersBindingKindSecretsStoreSecretType) IsKnown() bool 
 	return false
 }
 
+type VersionBindingsWorkersBindingKindFlagship struct {
+	// ID of the Flagship app to bind to for feature flag evaluation.
+	AppID string `json:"app_id" api:"required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindFlagshipType `json:"type" api:"required"`
+	JSON versionBindingsWorkersBindingKindFlagshipJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindFlagshipJSON contains the JSON metadata for the
+// struct [VersionBindingsWorkersBindingKindFlagship]
+type versionBindingsWorkersBindingKindFlagshipJSON struct {
+	AppID       apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindFlagship) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindFlagshipJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindFlagship) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindFlagshipType string
+
+const (
+	VersionBindingsWorkersBindingKindFlagshipTypeFlagship VersionBindingsWorkersBindingKindFlagshipType = "flagship"
+)
+
+func (r VersionBindingsWorkersBindingKindFlagshipType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindFlagshipTypeFlagship:
+		return true
+	}
+	return false
+}
+
 type VersionBindingsWorkersBindingKindSecretKey struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
@@ -2610,6 +2679,7 @@ const (
 	VersionBindingsTypeVectorize              VersionBindingsType = "vectorize"
 	VersionBindingsTypeVersionMetadata        VersionBindingsType = "version_metadata"
 	VersionBindingsTypeSecretsStoreSecret     VersionBindingsType = "secrets_store_secret"
+	VersionBindingsTypeFlagship               VersionBindingsType = "flagship"
 	VersionBindingsTypeSecretKey              VersionBindingsType = "secret_key"
 	VersionBindingsTypeWorkflow               VersionBindingsType = "workflow"
 	VersionBindingsTypeWasmModule             VersionBindingsType = "wasm_module"
@@ -2619,7 +2689,7 @@ const (
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
+	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeFlagship, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -2663,16 +2733,42 @@ func (r VersionBindingsJurisdiction) IsKnown() bool {
 	return false
 }
 
+// Container configuration for a Worker.
+type VersionContainer struct {
+	// Select which Durable Object class should get this container attached.
+	ClassName string               `json:"class_name" api:"required"`
+	JSON      versionContainerJSON `json:"-"`
+}
+
+// versionContainerJSON contains the JSON metadata for the struct
+// [VersionContainer]
+type versionContainerJSON struct {
+	ClassName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionContainer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionContainerJSON) RawJSON() string {
+	return r.raw
+}
+
 // Resource limits enforced at runtime.
 type VersionLimits struct {
 	// CPU time limit in milliseconds.
-	CPUMs int64             `json:"cpu_ms" api:"required"`
-	JSON  versionLimitsJSON `json:"-"`
+	CPUMs int64 `json:"cpu_ms"`
+	// Subrequest limit per request.
+	Subrequests int64             `json:"subrequests"`
+	JSON        versionLimitsJSON `json:"-"`
 }
 
 // versionLimitsJSON contains the JSON metadata for the struct [VersionLimits]
 type versionLimitsJSON struct {
 	CPUMs       apijson.Field
+	Subrequests apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3110,6 +3206,9 @@ type VersionParam struct {
 	// enable upcoming features or opt in or out of specific changes not included in a
 	// `compatibility_date`.
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
+	// List of containers attached to a Worker. Containers can only be attached to
+	// Durable Object classes of this Worker script.
+	Containers param.Field[[]VersionContainerParam] `json:"containers"`
 	// Resource limits enforced at runtime.
 	Limits param.Field[VersionLimitsParam] `json:"limits"`
 	// The name of the main module in the `modules` array (e.g. the name of the module
@@ -3145,9 +3244,9 @@ func (r VersionParam) MarshalJSON() (data []byte, err error) {
 
 // Metadata about the version.
 type VersionAnnotationsParam struct {
-	// Human-readable message about the version.
+	// Human-readable message about the version. Truncated to 1000 bytes if longer.
 	WorkersMessage param.Field[string] `json:"workers/message"`
-	// User-provided identifier for the version.
+	// User-provided identifier for the version. Maximum 100 bytes.
 	WorkersTag param.Field[string] `json:"workers/tag"`
 }
 
@@ -3214,16 +3313,22 @@ type VersionBindingParam struct {
 	// The kind of resource that the binding provides.
 	Type param.Field[VersionBindingsType] `json:"type" api:"required"`
 	// Identifier of the D1 database to bind to.
+	//
+	// Deprecated: This property has been renamed to `database_id`.
 	ID                          param.Field[string]      `json:"id"`
 	Algorithm                   param.Field[interface{}] `json:"algorithm"`
 	AllowedDestinationAddresses param.Field[interface{}] `json:"allowed_destination_addresses"`
 	AllowedSenderAddresses      param.Field[interface{}] `json:"allowed_sender_addresses"`
+	// ID of the Flagship app to bind to for feature flag evaluation.
+	AppID param.Field[string] `json:"app_id"`
 	// R2 bucket to bind to.
 	BucketName param.Field[string] `json:"bucket_name"`
 	// Identifier of the certificate to bind to.
 	CertificateID param.Field[string] `json:"certificate_id"`
 	// The exported class name of the Durable Object.
 	ClassName param.Field[string] `json:"class_name"`
+	// Identifier of the D1 database to bind to.
+	DatabaseID param.Field[string] `json:"database_id"`
 	// The name of the dataset to bind to.
 	Dataset param.Field[string] `json:"dataset"`
 	// Destination address for the email.
@@ -3332,6 +3437,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindVectorizeParam],
 // [workers.VersionBindingsWorkersBindingKindVersionMetadataParam],
 // [workers.VersionBindingsWorkersBindingKindSecretsStoreSecretParam],
+// [workers.VersionBindingsWorkersBindingKindFlagshipParam],
 // [workers.VersionBindingsWorkersBindingKindSecretKeyParam],
 // [workers.VersionBindingsWorkersBindingKindWorkflowParam],
 // [workers.VersionBindingsWorkersBindingKindWasmModuleParam],
@@ -3437,11 +3543,15 @@ func (r VersionBindingsWorkersBindingKindBrowserParam) implementsVersionBindings
 
 type VersionBindingsWorkersBindingKindD1Param struct {
 	// Identifier of the D1 database to bind to.
-	ID param.Field[string] `json:"id" api:"required"`
+	DatabaseID param.Field[string] `json:"database_id" api:"required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[VersionBindingsWorkersBindingKindD1Type] `json:"type" api:"required"`
+	// Identifier of the D1 database to bind to.
+	//
+	// Deprecated: This property has been renamed to `database_id`.
+	ID param.Field[string] `json:"id"`
 }
 
 func (r VersionBindingsWorkersBindingKindD1Param) MarshalJSON() (data []byte, err error) {
@@ -3830,6 +3940,21 @@ func (r VersionBindingsWorkersBindingKindSecretsStoreSecretParam) MarshalJSON() 
 func (r VersionBindingsWorkersBindingKindSecretsStoreSecretParam) implementsVersionBindingsUnionParam() {
 }
 
+type VersionBindingsWorkersBindingKindFlagshipParam struct {
+	// ID of the Flagship app to bind to for feature flag evaluation.
+	AppID param.Field[string] `json:"app_id" api:"required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindFlagshipType] `json:"type" api:"required"`
+}
+
+func (r VersionBindingsWorkersBindingKindFlagshipParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindFlagshipParam) implementsVersionBindingsUnionParam() {}
+
 type VersionBindingsWorkersBindingKindSecretKeyParam struct {
 	// Algorithm-specific key parameters.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
@@ -3930,10 +4055,22 @@ func (r VersionBindingsWorkersBindingKindVPCNetworkParam) MarshalJSON() (data []
 
 func (r VersionBindingsWorkersBindingKindVPCNetworkParam) implementsVersionBindingsUnionParam() {}
 
+// Container configuration for a Worker.
+type VersionContainerParam struct {
+	// Select which Durable Object class should get this container attached.
+	ClassName param.Field[string] `json:"class_name" api:"required"`
+}
+
+func (r VersionContainerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Resource limits enforced at runtime.
 type VersionLimitsParam struct {
 	// CPU time limit in milliseconds.
-	CPUMs param.Field[int64] `json:"cpu_ms" api:"required"`
+	CPUMs param.Field[int64] `json:"cpu_ms"`
+	// Subrequest limit per request.
+	Subrequests param.Field[int64] `json:"subrequests"`
 }
 
 func (r VersionLimitsParam) MarshalJSON() (data []byte, err error) {

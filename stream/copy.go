@@ -58,19 +58,22 @@ func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...opt
 type CopyNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// A video's URL. The server must be publicly routable and support `HTTP HEAD`
-	// requests and `HTTP GET` range requests. The server should respond to `HTTP HEAD`
-	// requests with a `content-range` header that includes the size of the file.
-	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
 	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowedOrigins"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `json:"creator"`
+	// A video's URL. The server must be publicly routable and support `HTTP HEAD`
+	// requests and `HTTP GET` range requests. The server should respond to `HTTP HEAD`
+	// requests with a `content-range` header that includes the size of the file. This
+	// is the preferred field over `url`.
+	Input param.Field[string] `json:"input" format:"uri"`
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing videos.
 	Meta param.Field[interface{}] `json:"meta"`
+	// A video's name. Used for legacy compatibility.
+	Name param.Field[string] `json:"name"`
 	// Indicates whether the video can be a accessed using the UID. When set to `true`,
 	// a signed token must be generated with a signing key to view the video.
 	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
@@ -82,8 +85,13 @@ type CopyNewParams struct {
 	// video's duration. To convert from a second-wise timestamp to a percentage,
 	// divide the desired timestamp by the total duration of the video. If this value
 	// is not set, the default thumbnail image is taken from 0s of the video.
-	ThumbnailTimestampPct param.Field[float64]                `json:"thumbnailTimestampPct"`
-	Watermark             param.Field[CopyNewParamsWatermark] `json:"watermark"`
+	ThumbnailTimestampPct param.Field[float64] `json:"thumbnailTimestampPct"`
+	// A video's URL. The server must be publicly routable and support `HTTP HEAD`
+	// requests and `HTTP GET` range requests. The server should respond to `HTTP HEAD`
+	// requests with a `content-range` header that includes the size of the file. This
+	// field is deprecated in favor of `input`.
+	URL       param.Field[string]                 `json:"url" format:"uri"`
+	Watermark param.Field[CopyNewParamsWatermark] `json:"watermark"`
 	// A user-defined identifier for the media creator.
 	UploadCreator param.Field[string] `header:"Upload-Creator"`
 }

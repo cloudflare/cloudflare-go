@@ -63,7 +63,8 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepAssets:         cloudflare.F(false),
 				KeepBindings:       cloudflare.F([]string{"string"}),
 				Limits: cloudflare.F(workers.ScriptUpdateParamsMetadataLimits{
-					CPUMs: cloudflare.F(int64(50)),
+					CPUMs:       cloudflare.F(int64(50)),
+					Subrequests: cloudflare.F(int64(1000)),
 				}),
 				Logpush:    cloudflare.F(false),
 				MainModule: cloudflare.F("worker.js"),

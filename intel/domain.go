@@ -282,6 +282,8 @@ type DomainGetParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Domain    param.Field[string] `query:"domain"`
+	// Skip DNS resolution lookups for faster response.
+	SkipDNS param.Field[bool] `query:"skip_dns"`
 }
 
 // URLQuery serializes [DomainGetParams]'s query parameters as `url.Values`.

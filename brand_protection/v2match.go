@@ -78,6 +78,7 @@ type V2MatchGetResponseMatch struct {
 	Domain           string                               `json:"domain" api:"required"`
 	FirstSeen        string                               `json:"first_seen" api:"required"`
 	PublicScans      V2MatchGetResponseMatchesPublicScans `json:"public_scans" api:"required,nullable"`
+	Registrar        string                               `json:"registrar" api:"required,nullable"`
 	ScanStatus       string                               `json:"scan_status" api:"required"`
 	ScanSubmissionID int64                                `json:"scan_submission_id" api:"required,nullable"`
 	Source           string                               `json:"source" api:"required,nullable"`
@@ -97,6 +98,7 @@ type v2MatchGetResponseMatchJSON struct {
 	Domain           apijson.Field
 	FirstSeen        apijson.Field
 	PublicScans      apijson.Field
+	Registrar        apijson.Field
 	ScanStatus       apijson.Field
 	ScanSubmissionID apijson.Field
 	Source           apijson.Field
@@ -149,7 +151,7 @@ type V2MatchGetParams struct {
 	Offset           param.Field[string] `query:"offset"`
 	// Sort order. Options: 'asc' (ascending) or 'desc' (descending)
 	Order param.Field[V2MatchGetParamsOrder] `query:"order"`
-	// Column to sort by. Options: 'domain' or 'first_seen'
+	// Column to sort by. Options: 'domain', 'first_seen', or 'registrar'
 	OrderBy param.Field[V2MatchGetParamsOrderBy] `query:"orderBy"`
 }
 
@@ -177,17 +179,18 @@ func (r V2MatchGetParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Column to sort by. Options: 'domain' or 'first_seen'
+// Column to sort by. Options: 'domain', 'first_seen', or 'registrar'
 type V2MatchGetParamsOrderBy string
 
 const (
 	V2MatchGetParamsOrderByDomain    V2MatchGetParamsOrderBy = "domain"
 	V2MatchGetParamsOrderByFirstSeen V2MatchGetParamsOrderBy = "first_seen"
+	V2MatchGetParamsOrderByRegistrar V2MatchGetParamsOrderBy = "registrar"
 )
 
 func (r V2MatchGetParamsOrderBy) IsKnown() bool {
 	switch r {
-	case V2MatchGetParamsOrderByDomain, V2MatchGetParamsOrderByFirstSeen:
+	case V2MatchGetParamsOrderByDomain, V2MatchGetParamsOrderByFirstSeen, V2MatchGetParamsOrderByRegistrar:
 		return true
 	}
 	return false

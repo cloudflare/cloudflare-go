@@ -41,7 +41,8 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Rules consist of a set of criteria for matching emails (such as an email being
 // sent to a specific custom email address) plus a set of actions to take on the
-// email (like forwarding it to a specific destination address).
+// email (like forwarding it to a specific destination address). Forward actions
+// require all destination addresses to be verified.
 func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +59,8 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	return res, nil
 }
 
-// Update actions and matches, or enable/disable specific routing rules.
+// Update actions and matches, or enable/disable specific routing rules. Forward
+// actions require all destination addresses to be verified.
 func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params RuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

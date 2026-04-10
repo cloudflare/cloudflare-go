@@ -3,16 +3,13 @@
 package stream
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"mime/multipart"
 	"net/http"
 	"slices"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -190,8 +187,6 @@ func (r watermarkJSON) RawJSON() string {
 type WatermarkNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The image file to upload.
-	File param.Field[string] `json:"file" api:"required"`
 	// A short description of the watermark profile.
 	Name param.Field[string] `json:"name"`
 	// The translucency of the image. A value of `0.0` makes the image completely
@@ -211,21 +206,12 @@ type WatermarkNewParams struct {
 	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
 	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
 	Scale param.Field[float64] `json:"scale"`
+	// URL of the watermark image to copy.
+	URL param.Field[string] `json:"url" format:"uri"`
 }
 
-func (r WatermarkNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
-	buf := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
-	if err != nil {
-		writer.Close()
-		return nil, "", err
-	}
-	err = writer.Close()
-	if err != nil {
-		return nil, "", err
-	}
-	return buf.Bytes(), writer.FormDataContentType(), nil
+func (r WatermarkNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type WatermarkNewResponseEnvelope struct {

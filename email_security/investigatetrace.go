@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -38,10 +40,10 @@ func NewInvestigateTraceService(opts ...option.RequestOption) (r *InvestigateTra
 
 // Gets the delivery trace for an email message, showing its path through email
 // security processing.
-func (r *InvestigateTraceService) Get(ctx context.Context, postfixID string, query InvestigateTraceGetParams, opts ...option.RequestOption) (res *InvestigateTraceGetResponse, err error) {
+func (r *InvestigateTraceService) Get(ctx context.Context, postfixID string, params InvestigateTraceGetParams, opts ...option.RequestOption) (res *InvestigateTraceGetResponse, err error) {
 	var env InvestigateTraceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -49,8 +51,8 @@ func (r *InvestigateTraceService) Get(ctx context.Context, postfixID string, que
 		err = errors.New("missing required postfix_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/trace", query.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/trace", params.AccountID, postfixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -180,6 +182,18 @@ func (r investigateTraceGetResponseOutboundLineJSON) RawJSON() string {
 type InvestigateTraceGetParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// When true, search the submissions datastore only. When false or omitted, search
+	// the regular datastore only.
+	Submission param.Field[bool] `query:"submission"`
+}
+
+// URLQuery serializes [InvestigateTraceGetParams]'s query parameters as
+// `url.Values`.
+func (r InvestigateTraceGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type InvestigateTraceGetResponseEnvelope struct {

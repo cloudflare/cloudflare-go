@@ -168,22 +168,24 @@ func (r *AccessAIControlMcpServerService) Sync(ctx context.Context, id string, b
 
 type AccessAIControlMcpServerNewResponse struct {
 	// server id
-	ID                 string                                      `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpServerNewResponseAuthType `json:"auth_type" api:"required"`
-	Hostname           string                                      `json:"hostname" api:"required" format:"uri"`
-	Name               string                                      `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                    `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                    `json:"tools" api:"required"`
-	CreatedAt          time.Time                                   `json:"created_at" format:"date-time"`
-	CreatedBy          string                                      `json:"created_by"`
-	Description        string                                      `json:"description" api:"nullable"`
-	Error              string                                      `json:"error"`
-	LastSuccessfulSync time.Time                                   `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                   `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                   `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                      `json:"modified_by"`
-	Status             string                                      `json:"status"`
-	JSON               accessAIControlMcpServerNewResponseJSON     `json:"-"`
+	ID                 string                                             `json:"id" api:"required"`
+	AuthType           AccessAIControlMcpServerNewResponseAuthType        `json:"auth_type" api:"required"`
+	Hostname           string                                             `json:"hostname" api:"required" format:"uri"`
+	Name               string                                             `json:"name" api:"required"`
+	Prompts            []map[string]interface{}                           `json:"prompts" api:"required"`
+	Tools              []map[string]interface{}                           `json:"tools" api:"required"`
+	CreatedAt          time.Time                                          `json:"created_at" format:"date-time"`
+	CreatedBy          string                                             `json:"created_by"`
+	Description        string                                             `json:"description" api:"nullable"`
+	Error              string                                             `json:"error"`
+	LastSuccessfulSync time.Time                                          `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                          `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                          `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                             `json:"modified_by"`
+	Status             string                                             `json:"status"`
+	UpdatedPrompts     []AccessAIControlMcpServerNewResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools       []AccessAIControlMcpServerNewResponseUpdatedTool   `json:"updated_tools"`
+	JSON               accessAIControlMcpServerNewResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerNewResponseJSON contains the JSON metadata for the
@@ -204,6 +206,8 @@ type accessAIControlMcpServerNewResponseJSON struct {
 	ModifiedAt         apijson.Field
 	ModifiedBy         apijson.Field
 	Status             apijson.Field
+	UpdatedPrompts     apijson.Field
+	UpdatedTools       apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -232,24 +236,80 @@ func (r AccessAIControlMcpServerNewResponseAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpServerNewResponseUpdatedPrompt struct {
+	Name        string                                               `json:"name" api:"required"`
+	Alias       string                                               `json:"alias"`
+	Description string                                               `json:"description"`
+	Enabled     bool                                                 `json:"enabled"`
+	JSON        accessAIControlMcpServerNewResponseUpdatedPromptJSON `json:"-"`
+}
+
+// accessAIControlMcpServerNewResponseUpdatedPromptJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerNewResponseUpdatedPrompt]
+type accessAIControlMcpServerNewResponseUpdatedPromptJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerNewResponseUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerNewResponseUpdatedPromptJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpServerNewResponseUpdatedTool struct {
+	Name        string                                             `json:"name" api:"required"`
+	Alias       string                                             `json:"alias"`
+	Description string                                             `json:"description"`
+	Enabled     bool                                               `json:"enabled"`
+	JSON        accessAIControlMcpServerNewResponseUpdatedToolJSON `json:"-"`
+}
+
+// accessAIControlMcpServerNewResponseUpdatedToolJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerNewResponseUpdatedTool]
+type accessAIControlMcpServerNewResponseUpdatedToolJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerNewResponseUpdatedTool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerNewResponseUpdatedToolJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpServerUpdateResponse struct {
 	// server id
-	ID                 string                                         `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpServerUpdateResponseAuthType `json:"auth_type" api:"required"`
-	Hostname           string                                         `json:"hostname" api:"required" format:"uri"`
-	Name               string                                         `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                       `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                       `json:"tools" api:"required"`
-	CreatedAt          time.Time                                      `json:"created_at" format:"date-time"`
-	CreatedBy          string                                         `json:"created_by"`
-	Description        string                                         `json:"description" api:"nullable"`
-	Error              string                                         `json:"error"`
-	LastSuccessfulSync time.Time                                      `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                      `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                      `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                         `json:"modified_by"`
-	Status             string                                         `json:"status"`
-	JSON               accessAIControlMcpServerUpdateResponseJSON     `json:"-"`
+	ID                 string                                                `json:"id" api:"required"`
+	AuthType           AccessAIControlMcpServerUpdateResponseAuthType        `json:"auth_type" api:"required"`
+	Hostname           string                                                `json:"hostname" api:"required" format:"uri"`
+	Name               string                                                `json:"name" api:"required"`
+	Prompts            []map[string]interface{}                              `json:"prompts" api:"required"`
+	Tools              []map[string]interface{}                              `json:"tools" api:"required"`
+	CreatedAt          time.Time                                             `json:"created_at" format:"date-time"`
+	CreatedBy          string                                                `json:"created_by"`
+	Description        string                                                `json:"description" api:"nullable"`
+	Error              string                                                `json:"error"`
+	LastSuccessfulSync time.Time                                             `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                             `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                             `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                                `json:"modified_by"`
+	Status             string                                                `json:"status"`
+	UpdatedPrompts     []AccessAIControlMcpServerUpdateResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools       []AccessAIControlMcpServerUpdateResponseUpdatedTool   `json:"updated_tools"`
+	JSON               accessAIControlMcpServerUpdateResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerUpdateResponseJSON contains the JSON metadata for the
@@ -270,6 +330,8 @@ type accessAIControlMcpServerUpdateResponseJSON struct {
 	ModifiedAt         apijson.Field
 	ModifiedBy         apijson.Field
 	Status             apijson.Field
+	UpdatedPrompts     apijson.Field
+	UpdatedTools       apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -298,24 +360,80 @@ func (r AccessAIControlMcpServerUpdateResponseAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpServerUpdateResponseUpdatedPrompt struct {
+	Name        string                                                  `json:"name" api:"required"`
+	Alias       string                                                  `json:"alias"`
+	Description string                                                  `json:"description"`
+	Enabled     bool                                                    `json:"enabled"`
+	JSON        accessAIControlMcpServerUpdateResponseUpdatedPromptJSON `json:"-"`
+}
+
+// accessAIControlMcpServerUpdateResponseUpdatedPromptJSON contains the JSON
+// metadata for the struct [AccessAIControlMcpServerUpdateResponseUpdatedPrompt]
+type accessAIControlMcpServerUpdateResponseUpdatedPromptJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerUpdateResponseUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerUpdateResponseUpdatedPromptJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpServerUpdateResponseUpdatedTool struct {
+	Name        string                                                `json:"name" api:"required"`
+	Alias       string                                                `json:"alias"`
+	Description string                                                `json:"description"`
+	Enabled     bool                                                  `json:"enabled"`
+	JSON        accessAIControlMcpServerUpdateResponseUpdatedToolJSON `json:"-"`
+}
+
+// accessAIControlMcpServerUpdateResponseUpdatedToolJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerUpdateResponseUpdatedTool]
+type accessAIControlMcpServerUpdateResponseUpdatedToolJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerUpdateResponseUpdatedTool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerUpdateResponseUpdatedToolJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpServerListResponse struct {
 	// server id
-	ID                 string                                       `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpServerListResponseAuthType `json:"auth_type" api:"required"`
-	Hostname           string                                       `json:"hostname" api:"required" format:"uri"`
-	Name               string                                       `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                     `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                     `json:"tools" api:"required"`
-	CreatedAt          time.Time                                    `json:"created_at" format:"date-time"`
-	CreatedBy          string                                       `json:"created_by"`
-	Description        string                                       `json:"description" api:"nullable"`
-	Error              string                                       `json:"error"`
-	LastSuccessfulSync time.Time                                    `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                    `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                       `json:"modified_by"`
-	Status             string                                       `json:"status"`
-	JSON               accessAIControlMcpServerListResponseJSON     `json:"-"`
+	ID                 string                                              `json:"id" api:"required"`
+	AuthType           AccessAIControlMcpServerListResponseAuthType        `json:"auth_type" api:"required"`
+	Hostname           string                                              `json:"hostname" api:"required" format:"uri"`
+	Name               string                                              `json:"name" api:"required"`
+	Prompts            []map[string]interface{}                            `json:"prompts" api:"required"`
+	Tools              []map[string]interface{}                            `json:"tools" api:"required"`
+	CreatedAt          time.Time                                           `json:"created_at" format:"date-time"`
+	CreatedBy          string                                              `json:"created_by"`
+	Description        string                                              `json:"description" api:"nullable"`
+	Error              string                                              `json:"error"`
+	LastSuccessfulSync time.Time                                           `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                           `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                           `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                              `json:"modified_by"`
+	Status             string                                              `json:"status"`
+	UpdatedPrompts     []AccessAIControlMcpServerListResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools       []AccessAIControlMcpServerListResponseUpdatedTool   `json:"updated_tools"`
+	JSON               accessAIControlMcpServerListResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerListResponseJSON contains the JSON metadata for the
@@ -336,6 +454,8 @@ type accessAIControlMcpServerListResponseJSON struct {
 	ModifiedAt         apijson.Field
 	ModifiedBy         apijson.Field
 	Status             apijson.Field
+	UpdatedPrompts     apijson.Field
+	UpdatedTools       apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -364,24 +484,80 @@ func (r AccessAIControlMcpServerListResponseAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpServerListResponseUpdatedPrompt struct {
+	Name        string                                                `json:"name" api:"required"`
+	Alias       string                                                `json:"alias"`
+	Description string                                                `json:"description"`
+	Enabled     bool                                                  `json:"enabled"`
+	JSON        accessAIControlMcpServerListResponseUpdatedPromptJSON `json:"-"`
+}
+
+// accessAIControlMcpServerListResponseUpdatedPromptJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerListResponseUpdatedPrompt]
+type accessAIControlMcpServerListResponseUpdatedPromptJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerListResponseUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerListResponseUpdatedPromptJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpServerListResponseUpdatedTool struct {
+	Name        string                                              `json:"name" api:"required"`
+	Alias       string                                              `json:"alias"`
+	Description string                                              `json:"description"`
+	Enabled     bool                                                `json:"enabled"`
+	JSON        accessAIControlMcpServerListResponseUpdatedToolJSON `json:"-"`
+}
+
+// accessAIControlMcpServerListResponseUpdatedToolJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerListResponseUpdatedTool]
+type accessAIControlMcpServerListResponseUpdatedToolJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerListResponseUpdatedTool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerListResponseUpdatedToolJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpServerDeleteResponse struct {
 	// server id
-	ID                 string                                         `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpServerDeleteResponseAuthType `json:"auth_type" api:"required"`
-	Hostname           string                                         `json:"hostname" api:"required" format:"uri"`
-	Name               string                                         `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                       `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                       `json:"tools" api:"required"`
-	CreatedAt          time.Time                                      `json:"created_at" format:"date-time"`
-	CreatedBy          string                                         `json:"created_by"`
-	Description        string                                         `json:"description" api:"nullable"`
-	Error              string                                         `json:"error"`
-	LastSuccessfulSync time.Time                                      `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                      `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                      `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                         `json:"modified_by"`
-	Status             string                                         `json:"status"`
-	JSON               accessAIControlMcpServerDeleteResponseJSON     `json:"-"`
+	ID                 string                                                `json:"id" api:"required"`
+	AuthType           AccessAIControlMcpServerDeleteResponseAuthType        `json:"auth_type" api:"required"`
+	Hostname           string                                                `json:"hostname" api:"required" format:"uri"`
+	Name               string                                                `json:"name" api:"required"`
+	Prompts            []map[string]interface{}                              `json:"prompts" api:"required"`
+	Tools              []map[string]interface{}                              `json:"tools" api:"required"`
+	CreatedAt          time.Time                                             `json:"created_at" format:"date-time"`
+	CreatedBy          string                                                `json:"created_by"`
+	Description        string                                                `json:"description" api:"nullable"`
+	Error              string                                                `json:"error"`
+	LastSuccessfulSync time.Time                                             `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                             `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                             `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                                `json:"modified_by"`
+	Status             string                                                `json:"status"`
+	UpdatedPrompts     []AccessAIControlMcpServerDeleteResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools       []AccessAIControlMcpServerDeleteResponseUpdatedTool   `json:"updated_tools"`
+	JSON               accessAIControlMcpServerDeleteResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerDeleteResponseJSON contains the JSON metadata for the
@@ -402,6 +578,8 @@ type accessAIControlMcpServerDeleteResponseJSON struct {
 	ModifiedAt         apijson.Field
 	ModifiedBy         apijson.Field
 	Status             apijson.Field
+	UpdatedPrompts     apijson.Field
+	UpdatedTools       apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -430,24 +608,80 @@ func (r AccessAIControlMcpServerDeleteResponseAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpServerDeleteResponseUpdatedPrompt struct {
+	Name        string                                                  `json:"name" api:"required"`
+	Alias       string                                                  `json:"alias"`
+	Description string                                                  `json:"description"`
+	Enabled     bool                                                    `json:"enabled"`
+	JSON        accessAIControlMcpServerDeleteResponseUpdatedPromptJSON `json:"-"`
+}
+
+// accessAIControlMcpServerDeleteResponseUpdatedPromptJSON contains the JSON
+// metadata for the struct [AccessAIControlMcpServerDeleteResponseUpdatedPrompt]
+type accessAIControlMcpServerDeleteResponseUpdatedPromptJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerDeleteResponseUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerDeleteResponseUpdatedPromptJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpServerDeleteResponseUpdatedTool struct {
+	Name        string                                                `json:"name" api:"required"`
+	Alias       string                                                `json:"alias"`
+	Description string                                                `json:"description"`
+	Enabled     bool                                                  `json:"enabled"`
+	JSON        accessAIControlMcpServerDeleteResponseUpdatedToolJSON `json:"-"`
+}
+
+// accessAIControlMcpServerDeleteResponseUpdatedToolJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerDeleteResponseUpdatedTool]
+type accessAIControlMcpServerDeleteResponseUpdatedToolJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerDeleteResponseUpdatedTool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerDeleteResponseUpdatedToolJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpServerReadResponse struct {
 	// server id
-	ID                 string                                       `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpServerReadResponseAuthType `json:"auth_type" api:"required"`
-	Hostname           string                                       `json:"hostname" api:"required" format:"uri"`
-	Name               string                                       `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                     `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                     `json:"tools" api:"required"`
-	CreatedAt          time.Time                                    `json:"created_at" format:"date-time"`
-	CreatedBy          string                                       `json:"created_by"`
-	Description        string                                       `json:"description" api:"nullable"`
-	Error              string                                       `json:"error"`
-	LastSuccessfulSync time.Time                                    `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                    `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                       `json:"modified_by"`
-	Status             string                                       `json:"status"`
-	JSON               accessAIControlMcpServerReadResponseJSON     `json:"-"`
+	ID                 string                                              `json:"id" api:"required"`
+	AuthType           AccessAIControlMcpServerReadResponseAuthType        `json:"auth_type" api:"required"`
+	Hostname           string                                              `json:"hostname" api:"required" format:"uri"`
+	Name               string                                              `json:"name" api:"required"`
+	Prompts            []map[string]interface{}                            `json:"prompts" api:"required"`
+	Tools              []map[string]interface{}                            `json:"tools" api:"required"`
+	CreatedAt          time.Time                                           `json:"created_at" format:"date-time"`
+	CreatedBy          string                                              `json:"created_by"`
+	Description        string                                              `json:"description" api:"nullable"`
+	Error              string                                              `json:"error"`
+	LastSuccessfulSync time.Time                                           `json:"last_successful_sync" format:"date-time"`
+	LastSynced         time.Time                                           `json:"last_synced" format:"date-time"`
+	ModifiedAt         time.Time                                           `json:"modified_at" format:"date-time"`
+	ModifiedBy         string                                              `json:"modified_by"`
+	Status             string                                              `json:"status"`
+	UpdatedPrompts     []AccessAIControlMcpServerReadResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools       []AccessAIControlMcpServerReadResponseUpdatedTool   `json:"updated_tools"`
+	JSON               accessAIControlMcpServerReadResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerReadResponseJSON contains the JSON metadata for the
@@ -468,6 +702,8 @@ type accessAIControlMcpServerReadResponseJSON struct {
 	ModifiedAt         apijson.Field
 	ModifiedBy         apijson.Field
 	Status             apijson.Field
+	UpdatedPrompts     apijson.Field
+	UpdatedTools       apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -496,17 +732,73 @@ func (r AccessAIControlMcpServerReadResponseAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpServerReadResponseUpdatedPrompt struct {
+	Name        string                                                `json:"name" api:"required"`
+	Alias       string                                                `json:"alias"`
+	Description string                                                `json:"description"`
+	Enabled     bool                                                  `json:"enabled"`
+	JSON        accessAIControlMcpServerReadResponseUpdatedPromptJSON `json:"-"`
+}
+
+// accessAIControlMcpServerReadResponseUpdatedPromptJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerReadResponseUpdatedPrompt]
+type accessAIControlMcpServerReadResponseUpdatedPromptJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerReadResponseUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerReadResponseUpdatedPromptJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpServerReadResponseUpdatedTool struct {
+	Name        string                                              `json:"name" api:"required"`
+	Alias       string                                              `json:"alias"`
+	Description string                                              `json:"description"`
+	Enabled     bool                                                `json:"enabled"`
+	JSON        accessAIControlMcpServerReadResponseUpdatedToolJSON `json:"-"`
+}
+
+// accessAIControlMcpServerReadResponseUpdatedToolJSON contains the JSON metadata
+// for the struct [AccessAIControlMcpServerReadResponseUpdatedTool]
+type accessAIControlMcpServerReadResponseUpdatedToolJSON struct {
+	Name        apijson.Field
+	Alias       apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpServerReadResponseUpdatedTool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpServerReadResponseUpdatedToolJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpServerSyncResponse = interface{}
 
 type AccessAIControlMcpServerNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// server id
-	ID              param.Field[string]                                    `json:"id" api:"required"`
-	AuthType        param.Field[AccessAIControlMcpServerNewParamsAuthType] `json:"auth_type" api:"required"`
-	Hostname        param.Field[string]                                    `json:"hostname" api:"required" format:"uri"`
-	Name            param.Field[string]                                    `json:"name" api:"required"`
-	AuthCredentials param.Field[string]                                    `json:"auth_credentials"`
-	Description     param.Field[string]                                    `json:"description"`
+	ID              param.Field[string]                                           `json:"id" api:"required"`
+	AuthType        param.Field[AccessAIControlMcpServerNewParamsAuthType]        `json:"auth_type" api:"required"`
+	Hostname        param.Field[string]                                           `json:"hostname" api:"required" format:"uri"`
+	Name            param.Field[string]                                           `json:"name" api:"required"`
+	AuthCredentials param.Field[string]                                           `json:"auth_credentials"`
+	Description     param.Field[string]                                           `json:"description"`
+	UpdatedPrompts  param.Field[[]AccessAIControlMcpServerNewParamsUpdatedPrompt] `json:"updated_prompts"`
+	UpdatedTools    param.Field[[]AccessAIControlMcpServerNewParamsUpdatedTool]   `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpServerNewParams) MarshalJSON() (data []byte, err error) {
@@ -527,6 +819,28 @@ func (r AccessAIControlMcpServerNewParamsAuthType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AccessAIControlMcpServerNewParamsUpdatedPrompt struct {
+	Name        param.Field[string] `json:"name" api:"required"`
+	Alias       param.Field[string] `json:"alias"`
+	Description param.Field[string] `json:"description"`
+	Enabled     param.Field[bool]   `json:"enabled"`
+}
+
+func (r AccessAIControlMcpServerNewParamsUpdatedPrompt) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessAIControlMcpServerNewParamsUpdatedTool struct {
+	Name        param.Field[string] `json:"name" api:"required"`
+	Alias       param.Field[string] `json:"alias"`
+	Description param.Field[string] `json:"description"`
+	Enabled     param.Field[bool]   `json:"enabled"`
+}
+
+func (r AccessAIControlMcpServerNewParamsUpdatedTool) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessAIControlMcpServerNewResponseEnvelope struct {
@@ -553,13 +867,37 @@ func (r accessAIControlMcpServerNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpServerUpdateParams struct {
-	AccountID       param.Field[string] `path:"account_id" api:"required"`
-	AuthCredentials param.Field[string] `json:"auth_credentials"`
-	Description     param.Field[string] `json:"description"`
-	Name            param.Field[string] `json:"name"`
+	AccountID       param.Field[string]                                              `path:"account_id" api:"required"`
+	AuthCredentials param.Field[string]                                              `json:"auth_credentials"`
+	Description     param.Field[string]                                              `json:"description"`
+	Name            param.Field[string]                                              `json:"name"`
+	UpdatedPrompts  param.Field[[]AccessAIControlMcpServerUpdateParamsUpdatedPrompt] `json:"updated_prompts"`
+	UpdatedTools    param.Field[[]AccessAIControlMcpServerUpdateParamsUpdatedTool]   `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpServerUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessAIControlMcpServerUpdateParamsUpdatedPrompt struct {
+	Name        param.Field[string] `json:"name" api:"required"`
+	Alias       param.Field[string] `json:"alias"`
+	Description param.Field[string] `json:"description"`
+	Enabled     param.Field[bool]   `json:"enabled"`
+}
+
+func (r AccessAIControlMcpServerUpdateParamsUpdatedPrompt) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessAIControlMcpServerUpdateParamsUpdatedTool struct {
+	Name        param.Field[string] `json:"name" api:"required"`
+	Alias       param.Field[string] `json:"alias"`
+	Description param.Field[string] `json:"description"`
+	Enabled     param.Field[bool]   `json:"enabled"`
+}
+
+func (r AccessAIControlMcpServerUpdateParamsUpdatedTool) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

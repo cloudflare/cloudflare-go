@@ -113,9 +113,10 @@ type MessageAckResponse struct {
 	// The number of messages that were succesfully acknowledged.
 	AckCount float64 `json:"ackCount"`
 	// The number of messages that were succesfully retried.
-	RetryCount float64                `json:"retryCount"`
-	Warnings   []string               `json:"warnings"`
-	JSON       messageAckResponseJSON `json:"-"`
+	RetryCount float64 `json:"retryCount"`
+	// Map of lease IDs to warning messages encountered during acknowledgement.
+	Warnings map[string]string      `json:"warnings"`
+	JSON     messageAckResponseJSON `json:"-"`
 }
 
 // messageAckResponseJSON contains the JSON metadata for the struct

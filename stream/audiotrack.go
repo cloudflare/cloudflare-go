@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 )
 
 // AudioTrackService contains methods and other services that help with interacting
@@ -111,10 +110,9 @@ func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioId
 
 // Lists additional audio tracks on a video. Note this API will not return
 // information for audio attached to the video upload.
-func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Audio], err error) {
-	var raw *http.Response
+func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *AudioTrackGetResponse, err error) {
+	var env AudioTrackGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,22 +122,12 @@ func (r *AudioTrackService) Get(ctx context.Context, identifier string, query Au
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio", query.AccountID, identifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
+	res = &env.Result
 	return res, nil
-}
-
-// Lists additional audio tracks on a video. Note this API will not return
-// information for audio attached to the video upload.
-func (r *AudioTrackService) GetAutoPaging(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Audio] {
-	return pagination.NewSinglePageAutoPager(r.Get(ctx, identifier, query, opts...))
 }
 
 type Audio struct {
@@ -188,6 +176,28 @@ func (r AudioStatus) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AudioTrackGetResponse struct {
+	// Array of audio tracks for the video.
+	Audio []Audio                   `json:"audio"`
+	JSON  audioTrackGetResponseJSON `json:"-"`
+}
+
+// audioTrackGetResponseJSON contains the JSON metadata for the struct
+// [AudioTrackGetResponse]
+type audioTrackGetResponseJSON struct {
+	Audio       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AudioTrackGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r audioTrackGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type AudioTrackDeleteParams struct {
@@ -645,4 +655,143 @@ func (r AudioTrackEditResponseEnvelopeSuccess) IsKnown() bool {
 type AudioTrackGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type AudioTrackGetResponseEnvelope struct {
+	Errors   []AudioTrackGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []AudioTrackGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success AudioTrackGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  AudioTrackGetResponse                `json:"result"`
+	JSON    audioTrackGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// audioTrackGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AudioTrackGetResponseEnvelope]
+type audioTrackGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AudioTrackGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r audioTrackGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AudioTrackGetResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           AudioTrackGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             audioTrackGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// audioTrackGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AudioTrackGetResponseEnvelopeErrors]
+type audioTrackGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AudioTrackGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r audioTrackGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AudioTrackGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    audioTrackGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// audioTrackGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [AudioTrackGetResponseEnvelopeErrorsSource]
+type audioTrackGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AudioTrackGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r audioTrackGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type AudioTrackGetResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           AudioTrackGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             audioTrackGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// audioTrackGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AudioTrackGetResponseEnvelopeMessages]
+type audioTrackGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AudioTrackGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r audioTrackGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type AudioTrackGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    audioTrackGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// audioTrackGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [AudioTrackGetResponseEnvelopeMessagesSource]
+type audioTrackGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AudioTrackGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r audioTrackGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type AudioTrackGetResponseEnvelopeSuccess bool
+
+const (
+	AudioTrackGetResponseEnvelopeSuccessTrue AudioTrackGetResponseEnvelopeSuccess = true
+)
+
+func (r AudioTrackGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AudioTrackGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

@@ -39560,7 +39560,8 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -40306,7 +40307,8 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
 	SaaSApp  param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
@@ -40882,7 +40884,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -41702,7 +41705,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -42488,7 +42492,8 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -42764,7 +42769,8 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -42981,7 +42987,8 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -43203,7 +43210,8 @@ type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication struc
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -43412,7 +43420,8 @@ type AccessApplicationNewParamsBodyBookmarkApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion] `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -43771,7 +43780,8 @@ type AccessApplicationNewParamsBodyBrowserRDPApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -44576,7 +44586,8 @@ type AccessApplicationNewParamsBodyMcpServerApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
@@ -45300,7 +45311,8 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
@@ -46308,7 +46320,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -47054,7 +47067,8 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
 	SaaSApp  param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
@@ -47630,7 +47644,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -48450,7 +48465,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -49236,7 +49252,8 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -49512,7 +49529,8 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -49729,7 +49747,8 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -49951,7 +49970,8 @@ type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication st
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -50160,7 +50180,8 @@ type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion] `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -50519,7 +50540,8 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -51324,7 +51346,8 @@ type AccessApplicationUpdateParamsBodyMcpServerApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
@@ -52048,7 +52071,8 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.

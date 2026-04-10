@@ -96,6 +96,8 @@ type TokenNewParams struct {
 	// accepted. The maximum time specification is 24 hours from issuing time. If this
 	// field is not set, the default is one hour after issuing.
 	Exp param.Field[int64] `json:"exp"`
+	// Optional flags for the signed token.
+	Flags param.Field[TokenNewParamsFlags] `json:"flags"`
 	// The optional unix epoch timestamp that specifies the time before a the token is
 	// not accepted. If this field is not set, the default is one hour before issuing.
 	Nbf param.Field[int64] `json:"nbf"`
@@ -165,6 +167,16 @@ func (r TokenNewParamsAccessRulesType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Optional flags for the signed token.
+type TokenNewParamsFlags struct {
+	// Whether to return the original video without transformations.
+	Original param.Field[bool] `json:"original"`
+}
+
+func (r TokenNewParamsFlags) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type TokenNewResponseEnvelope struct {
