@@ -522,15 +522,17 @@ func (r InstanceNewResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceNewResponseMetadata struct {
-	CreatedFromAISearchWizard bool                            `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                          `json:"worker_domain"`
-	JSON                      instanceNewResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                       `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceNewResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                     `json:"worker_domain"`
+	JSON                      instanceNewResponseMetadataJSON            `json:"-"`
 }
 
 // instanceNewResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceNewResponseMetadata]
 type instanceNewResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -541,6 +543,31 @@ func (r *InstanceNewResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r instanceNewResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponseMetadataSearchForAgents struct {
+	Hostname string                                         `json:"hostname" api:"required"`
+	ZoneID   string                                         `json:"zone_id" api:"required"`
+	ZoneName string                                         `json:"zone_name" api:"required"`
+	JSON     instanceNewResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceNewResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceNewResponseMetadataSearchForAgents]
+type instanceNewResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -708,8 +735,6 @@ type InstanceNewResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceNewResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -785,8 +810,6 @@ func (r InstanceNewResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceNewResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -1403,15 +1426,17 @@ func (r InstanceUpdateResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceUpdateResponseMetadata struct {
-	CreatedFromAISearchWizard bool                               `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                             `json:"worker_domain"`
-	JSON                      instanceUpdateResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                          `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceUpdateResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                        `json:"worker_domain"`
+	JSON                      instanceUpdateResponseMetadataJSON            `json:"-"`
 }
 
 // instanceUpdateResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceUpdateResponseMetadata]
 type instanceUpdateResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -1422,6 +1447,31 @@ func (r *InstanceUpdateResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r instanceUpdateResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponseMetadataSearchForAgents struct {
+	Hostname string                                            `json:"hostname" api:"required"`
+	ZoneID   string                                            `json:"zone_id" api:"required"`
+	ZoneName string                                            `json:"zone_name" api:"required"`
+	JSON     instanceUpdateResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceUpdateResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceUpdateResponseMetadataSearchForAgents]
+type instanceUpdateResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1590,8 +1640,6 @@ type InstanceUpdateResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -1667,8 +1715,6 @@ func (r InstanceUpdateResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -2288,15 +2334,17 @@ func (r InstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceListResponseMetadata struct {
-	CreatedFromAISearchWizard bool                             `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                           `json:"worker_domain"`
-	JSON                      instanceListResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceListResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                      `json:"worker_domain"`
+	JSON                      instanceListResponseMetadataJSON            `json:"-"`
 }
 
 // instanceListResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceListResponseMetadata]
 type instanceListResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -2307,6 +2355,31 @@ func (r *InstanceListResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r instanceListResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponseMetadataSearchForAgents struct {
+	Hostname string                                          `json:"hostname" api:"required"`
+	ZoneID   string                                          `json:"zone_id" api:"required"`
+	ZoneName string                                          `json:"zone_name" api:"required"`
+	JSON     instanceListResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceListResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceListResponseMetadataSearchForAgents]
+type instanceListResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2474,8 +2547,6 @@ type InstanceListResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceListResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -2551,8 +2622,6 @@ func (r InstanceListResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceListResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -3169,15 +3238,17 @@ func (r InstanceDeleteResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceDeleteResponseMetadata struct {
-	CreatedFromAISearchWizard bool                               `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                             `json:"worker_domain"`
-	JSON                      instanceDeleteResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                          `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceDeleteResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                        `json:"worker_domain"`
+	JSON                      instanceDeleteResponseMetadataJSON            `json:"-"`
 }
 
 // instanceDeleteResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceDeleteResponseMetadata]
 type instanceDeleteResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -3188,6 +3259,31 @@ func (r *InstanceDeleteResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r instanceDeleteResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponseMetadataSearchForAgents struct {
+	Hostname string                                            `json:"hostname" api:"required"`
+	ZoneID   string                                            `json:"zone_id" api:"required"`
+	ZoneName string                                            `json:"zone_name" api:"required"`
+	JSON     instanceDeleteResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceDeleteResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceDeleteResponseMetadataSearchForAgents]
+type instanceDeleteResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3356,8 +3452,6 @@ type InstanceDeleteResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -3433,8 +3527,6 @@ func (r InstanceDeleteResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -4251,15 +4343,17 @@ func (r InstanceReadResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceReadResponseMetadata struct {
-	CreatedFromAISearchWizard bool                             `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                           `json:"worker_domain"`
-	JSON                      instanceReadResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceReadResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                      `json:"worker_domain"`
+	JSON                      instanceReadResponseMetadataJSON            `json:"-"`
 }
 
 // instanceReadResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceReadResponseMetadata]
 type instanceReadResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -4270,6 +4364,31 @@ func (r *InstanceReadResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r instanceReadResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponseMetadataSearchForAgents struct {
+	Hostname string                                          `json:"hostname" api:"required"`
+	ZoneID   string                                          `json:"zone_id" api:"required"`
+	ZoneName string                                          `json:"zone_name" api:"required"`
+	JSON     instanceReadResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceReadResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceReadResponseMetadataSearchForAgents]
+type instanceReadResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4437,8 +4556,6 @@ type InstanceReadResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceReadResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -4514,8 +4631,6 @@ func (r InstanceReadResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceReadResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5075,6 +5190,8 @@ type InstanceNewParams struct {
 	CustomMetadata param.Field[[]InstanceNewParamsCustomMetadata] `json:"custom_metadata"`
 	EmbeddingModel param.Field[InstanceNewParamsEmbeddingModel]   `json:"embedding_model"`
 	FusionMethod   param.Field[InstanceNewParamsFusionMethod]     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	HybridSearchEnabled param.Field[bool] `json:"hybrid_search_enabled"`
 	// Controls which storage backends are used during indexing. Defaults to
 	// vector-only.
 	IndexMethod          param.Field[InstanceNewParamsIndexMethod]          `json:"index_method"`
@@ -5269,11 +5386,22 @@ func (r InstanceNewParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceNewParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                     `json:"created_from_aisearch_wizard"`
+	SearchForAgents           param.Field[InstanceNewParamsMetadataSearchForAgents] `json:"search_for_agents"`
+	WorkerDomain              param.Field[string]                                   `json:"worker_domain"`
 }
 
 func (r InstanceNewParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsMetadataSearchForAgents struct {
+	Hostname param.Field[string] `json:"hostname" api:"required"`
+	ZoneID   param.Field[string] `json:"zone_id" api:"required"`
+	ZoneName param.Field[string] `json:"zone_name" api:"required"`
+}
+
+func (r InstanceNewParamsMetadataSearchForAgents) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -5367,8 +5495,6 @@ type InstanceNewParamsRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5416,8 +5542,6 @@ func (r InstanceNewParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceNewParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5858,11 +5982,22 @@ func (r InstanceUpdateParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceUpdateParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                        `json:"created_from_aisearch_wizard"`
+	SearchForAgents           param.Field[InstanceUpdateParamsMetadataSearchForAgents] `json:"search_for_agents"`
+	WorkerDomain              param.Field[string]                                      `json:"worker_domain"`
 }
 
 func (r InstanceUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsMetadataSearchForAgents struct {
+	Hostname param.Field[string] `json:"hostname" api:"required"`
+	ZoneID   param.Field[string] `json:"zone_id" api:"required"`
+	ZoneName param.Field[string] `json:"zone_name" api:"required"`
+}
+
+func (r InstanceUpdateParamsMetadataSearchForAgents) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -5956,8 +6091,6 @@ type InstanceUpdateParamsRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -6005,8 +6138,6 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -6511,8 +6642,6 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
@@ -6579,8 +6708,6 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKno
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -6684,40 +6811,15 @@ func (r instanceReadResponseEnvelopeJSON) RawJSON() string {
 
 type InstanceSearchParams struct {
 	AccountID       param.Field[string]                              `path:"account_id" api:"required"`
-	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceSearchParamsAISearchOptions] `json:"ai_search_options"`
+	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages"`
+	// A simple text query string. Alternative to 'messages' — provide either this or
+	// 'messages', not both.
+	Query param.Field[string] `json:"query"`
 }
 
 func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type InstanceSearchParamsMessage struct {
-	Content     param.Field[string]                           `json:"content" api:"required"`
-	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role" api:"required"`
-	ExtraFields map[string]interface{}                        `json:"-,extras"`
-}
-
-func (r InstanceSearchParamsMessage) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type InstanceSearchParamsMessagesRole string
-
-const (
-	InstanceSearchParamsMessagesRoleSystem    InstanceSearchParamsMessagesRole = "system"
-	InstanceSearchParamsMessagesRoleDeveloper InstanceSearchParamsMessagesRole = "developer"
-	InstanceSearchParamsMessagesRoleUser      InstanceSearchParamsMessagesRole = "user"
-	InstanceSearchParamsMessagesRoleAssistant InstanceSearchParamsMessagesRole = "assistant"
-	InstanceSearchParamsMessagesRoleTool      InstanceSearchParamsMessagesRole = "tool"
-)
-
-func (r InstanceSearchParamsMessagesRole) IsKnown() bool {
-	switch r {
-	case InstanceSearchParamsMessagesRoleSystem, InstanceSearchParamsMessagesRoleDeveloper, InstanceSearchParamsMessagesRoleUser, InstanceSearchParamsMessagesRoleAssistant, InstanceSearchParamsMessagesRoleTool:
-		return true
-	}
-	return false
 }
 
 type InstanceSearchParamsAISearchOptions struct {
@@ -6847,8 +6949,6 @@ type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                      `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                        `json:"max_num_results"`
@@ -6915,8 +7015,6 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -6943,6 +7041,34 @@ const (
 func (r InstanceSearchParamsAISearchOptionsRetrievalRetrievalType) IsKnown() bool {
 	switch r {
 	case InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeVector, InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeKeyword, InstanceSearchParamsAISearchOptionsRetrievalRetrievalTypeHybrid:
+		return true
+	}
+	return false
+}
+
+type InstanceSearchParamsMessage struct {
+	Content     param.Field[string]                           `json:"content" api:"required"`
+	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role" api:"required"`
+	ExtraFields map[string]interface{}                        `json:"-,extras"`
+}
+
+func (r InstanceSearchParamsMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsMessagesRole string
+
+const (
+	InstanceSearchParamsMessagesRoleSystem    InstanceSearchParamsMessagesRole = "system"
+	InstanceSearchParamsMessagesRoleDeveloper InstanceSearchParamsMessagesRole = "developer"
+	InstanceSearchParamsMessagesRoleUser      InstanceSearchParamsMessagesRole = "user"
+	InstanceSearchParamsMessagesRoleAssistant InstanceSearchParamsMessagesRole = "assistant"
+	InstanceSearchParamsMessagesRoleTool      InstanceSearchParamsMessagesRole = "tool"
+)
+
+func (r InstanceSearchParamsMessagesRole) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsMessagesRoleSystem, InstanceSearchParamsMessagesRoleDeveloper, InstanceSearchParamsMessagesRoleUser, InstanceSearchParamsMessagesRoleAssistant, InstanceSearchParamsMessagesRoleTool:
 		return true
 	}
 	return false
