@@ -34,8 +34,9 @@ func NewDLPLimitService(opts ...option.RequestOption) (r *DLPLimitService) {
 	return
 }
 
-// Retrieves current DLP usage limits and quotas for the account, including dataset
-// limits and scan quotas.
+// Retrieves current DLP usage limits and quotas for the account, including maximum
+// allowed counts and current usage for custom entries, dataset cells, and document
+// fingerprints.
 func (r *DLPLimitService) List(ctx context.Context, query DLPLimitListParams, opts ...option.RequestOption) (res *DLPLimitListResponse, err error) {
 	var env DLPLimitListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,16 +54,34 @@ func (r *DLPLimitService) List(ctx context.Context, query DLPLimitListParams, op
 }
 
 type DLPLimitListResponse struct {
-	MaxDatasetCells int64                    `json:"max_dataset_cells" api:"required"`
-	JSON            dlpLimitListResponseJSON `json:"-"`
+	// Maximum number of custom regex entries allowed for the account.
+	MaxCustomRegexEntries int64 `json:"max_custom_regex_entries" api:"required"`
+	// Maximum number of dataset cells allowed for the account, across all EDM and CWL
+	// datasets.
+	MaxDatasetCells int64 `json:"max_dataset_cells" api:"required"`
+	// Maximum number of document fingerprints allowed for the account.
+	MaxDocumentFingerprints int64 `json:"max_document_fingerprints" api:"required"`
+	// Number of custom regex entries currently configured for the account.
+	UsedCustomRegexEntries int64 `json:"used_custom_regex_entries" api:"required"`
+	// Number of dataset cells currently configured for the account, across all EDM and
+	// CWL datasets. Document fingerprints do not count towards this limit.
+	UsedDatasetCells int64 `json:"used_dataset_cells" api:"required"`
+	// Number of document fingerprints currently configured for the account.
+	UsedDocumentFingerprints int64                    `json:"used_document_fingerprints" api:"required"`
+	JSON                     dlpLimitListResponseJSON `json:"-"`
 }
 
 // dlpLimitListResponseJSON contains the JSON metadata for the struct
 // [DLPLimitListResponse]
 type dlpLimitListResponseJSON struct {
-	MaxDatasetCells apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	MaxCustomRegexEntries    apijson.Field
+	MaxDatasetCells          apijson.Field
+	MaxDocumentFingerprints  apijson.Field
+	UsedCustomRegexEntries   apijson.Field
+	UsedDatasetCells         apijson.Field
+	UsedDocumentFingerprints apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *DLPLimitListResponse) UnmarshalJSON(data []byte) (err error) {
