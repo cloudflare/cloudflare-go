@@ -36,9 +36,8 @@ func NewJsonService(opts ...option.RequestOption) (r *JsonService) {
 	return
 }
 
-// Use AI to extract structured JSON from a webpage. Provide a `prompt` describing
-// what to extract, or a `response_format` with a JSON schema for typed output.
-// Supports both URL and raw HTML input.
+// Gets json from a webpage from a provided URL or HTML. Pass `prompt` or `schema`
+// in the body. Control page loading with `gotoOptions` and `waitFor*` options.
 func (r *JsonService) New(ctx context.Context, params JsonNewParams, opts ...option.RequestOption) (res *JsonNewResponse, err error) {
 	var env JsonNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
