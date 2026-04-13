@@ -36,7 +36,7 @@ func NewEmailSendingService(opts ...option.RequestOption) (r *EmailSendingServic
 	return
 }
 
-// Send an email using the builder.
+// Send an email
 func (r *EmailSendingService) Send(ctx context.Context, params EmailSendingSendParams, opts ...option.RequestOption) (res *EmailSendingSendResponse, err error) {
 	var env EmailSendingSendResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +53,7 @@ func (r *EmailSendingService) Send(ctx context.Context, params EmailSendingSendP
 	return res, nil
 }
 
-// Send a raw MIME email message.
+// Send a raw MIME email
 func (r *EmailSendingService) SendRaw(ctx context.Context, params EmailSendingSendRawParams, opts ...option.RequestOption) (res *EmailSendingSendRawResponse, err error) {
 	var env EmailSendingSendRawResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
