@@ -107,6 +107,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/url_scanner"
 	"github.com/cloudflare/cloudflare-go/v6/user"
 	"github.com/cloudflare/cloudflare-go/v6/vectorize"
+	"github.com/cloudflare/cloudflare-go/v6/vulnerability_scanner"
 	"github.com/cloudflare/cloudflare-go/v6/waiting_rooms"
 	"github.com/cloudflare/cloudflare-go/v6/web3"
 	"github.com/cloudflare/cloudflare-go/v6/workers"
@@ -202,6 +203,7 @@ type Client struct {
 	RUM                         *rum.RUMService
 	Vectorize                   *vectorize.VectorizeService
 	URLScanner                  *url_scanner.URLScannerService
+	VulnerabilityScanner        *vulnerability_scanner.VulnerabilityScannerService
 	Radar                       *radar.RadarService
 	BotManagement               *bot_management.BotManagementService
 	Fraud                       *fraud.FraudService
@@ -342,6 +344,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.RUM = rum.NewRUMService(opts...)
 	r.Vectorize = vectorize.NewVectorizeService(opts...)
 	r.URLScanner = url_scanner.NewURLScannerService(opts...)
+	r.VulnerabilityScanner = vulnerability_scanner.NewVulnerabilityScannerService(opts...)
 	r.Radar = radar.NewRadarService(opts...)
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
 	r.Fraud = fraud.NewFraudService(opts...)
