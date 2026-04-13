@@ -35,7 +35,7 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 	return
 }
 
-// Create a New Priority Intelligence Requirement
+// Creates a new priority intelligence request in Cloudforce One.
 func (r *RequestPriorityService) New(ctx context.Context, params RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
 	var env RequestPriorityNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +52,7 @@ func (r *RequestPriorityService) New(ctx context.Context, params RequestPriority
 	return res, nil
 }
 
-// Update a Priority Intelligence Requirement
+// Updates a priority intelligence request in Cloudforce One.
 func (r *RequestPriorityService) Update(ctx context.Context, priorityID string, params RequestPriorityUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,7 +73,7 @@ func (r *RequestPriorityService) Update(ctx context.Context, priorityID string, 
 	return res, nil
 }
 
-// Delete a Priority Intelligence Requirement
+// Deletes a priority intelligence request from Cloudforce One.
 func (r *RequestPriorityService) Delete(ctx context.Context, priorityID string, body RequestPriorityDeleteParams, opts ...option.RequestOption) (res *RequestPriorityDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -89,7 +89,7 @@ func (r *RequestPriorityService) Delete(ctx context.Context, priorityID string, 
 	return res, err
 }
 
-// Get a Priority Intelligence Requirement
+// Retrieves a specific priority intelligence request from Cloudforce One.
 func (r *RequestPriorityService) Get(ctx context.Context, priorityID string, query RequestPriorityGetParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -110,7 +110,7 @@ func (r *RequestPriorityService) Get(ctx context.Context, priorityID string, que
 	return res, nil
 }
 
-// Get Priority Intelligence Requirement Quota
+// Retrieves quota usage for Cloudforce One priority requests.
 func (r *RequestPriorityService) Quota(ctx context.Context, query RequestPriorityQuotaParams, opts ...option.RequestOption) (res *Quota, err error) {
 	var env RequestPriorityQuotaResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

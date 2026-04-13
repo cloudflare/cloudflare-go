@@ -36,7 +36,7 @@ func NewRequestAssetService(opts ...option.RequestOption) (r *RequestAssetServic
 	return
 }
 
-// List Request Assets
+// Lists assets attached to a Cloudforce One intelligence request.
 func (r *RequestAssetService) New(ctx context.Context, requestID string, params RequestAssetNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -62,12 +62,12 @@ func (r *RequestAssetService) New(ctx context.Context, requestID string, params 
 	return res, nil
 }
 
-// List Request Assets
+// Lists assets attached to a Cloudforce One intelligence request.
 func (r *RequestAssetService) NewAutoPaging(ctx context.Context, requestID string, params RequestAssetNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.New(ctx, requestID, params, opts...))
 }
 
-// Update a Request Asset
+// Updates an asset in a Cloudforce One intelligence request.
 func (r *RequestAssetService) Update(ctx context.Context, requestID string, assetID string, params RequestAssetUpdateParams, opts ...option.RequestOption) (res *RequestAssetUpdateResponse, err error) {
 	var env RequestAssetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -92,7 +92,7 @@ func (r *RequestAssetService) Update(ctx context.Context, requestID string, asse
 	return res, nil
 }
 
-// Delete a Request Asset
+// Removes an asset from a Cloudforce One intelligence request.
 func (r *RequestAssetService) Delete(ctx context.Context, requestID string, assetID string, body RequestAssetDeleteParams, opts ...option.RequestOption) (res *RequestAssetDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -112,7 +112,7 @@ func (r *RequestAssetService) Delete(ctx context.Context, requestID string, asse
 	return res, err
 }
 
-// Get a Request Asset
+// Retrieves an asset attached to a Cloudforce One intelligence request.
 func (r *RequestAssetService) Get(ctx context.Context, requestID string, assetID string, query RequestAssetGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[RequestAssetGetResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -142,7 +142,7 @@ func (r *RequestAssetService) Get(ctx context.Context, requestID string, assetID
 	return res, nil
 }
 
-// Get a Request Asset
+// Retrieves an asset attached to a Cloudforce One intelligence request.
 func (r *RequestAssetService) GetAutoPaging(ctx context.Context, requestID string, assetID string, query RequestAssetGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RequestAssetGetResponse] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, requestID, assetID, query, opts...))
 }

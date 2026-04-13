@@ -84,7 +84,7 @@ func (r *RequestService) Update(ctx context.Context, requestID string, params Re
 	return res, nil
 }
 
-// List Requests
+// Lists Cloudforce One intelligence requests with filtering and pagination.
 func (r *RequestService) List(ctx context.Context, params RequestListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ListItem], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -106,12 +106,12 @@ func (r *RequestService) List(ctx context.Context, params RequestListParams, opt
 	return res, nil
 }
 
-// List Requests
+// Lists Cloudforce One intelligence requests with filtering and pagination.
 func (r *RequestService) ListAutoPaging(ctx context.Context, params RequestListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ListItem] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a Request
+// Deletes a Cloudforce One intelligence request and all associated data.
 func (r *RequestService) Delete(ctx context.Context, requestID string, body RequestDeleteParams, opts ...option.RequestOption) (res *RequestDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -127,7 +127,8 @@ func (r *RequestService) Delete(ctx context.Context, requestID string, body Requ
 	return res, err
 }
 
-// Get Request Priority, Status, and TLP constants
+// Retrieves constant values used in Cloudforce One requests, including valid
+// statuses and types.
 func (r *RequestService) Constants(ctx context.Context, query RequestConstantsParams, opts ...option.RequestOption) (res *RequestConstants, err error) {
 	var env RequestConstantsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -144,7 +145,7 @@ func (r *RequestService) Constants(ctx context.Context, query RequestConstantsPa
 	return res, nil
 }
 
-// Get a Request
+// Retrieves details for a specific Cloudforce One intelligence request.
 func (r *RequestService) Get(ctx context.Context, requestID string, query RequestGetParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -165,7 +166,7 @@ func (r *RequestService) Get(ctx context.Context, requestID string, query Reques
 	return res, nil
 }
 
-// Get Request Quota
+// Retrieves quota usage for Cloudforce One standard requests.
 func (r *RequestService) Quota(ctx context.Context, query RequestQuotaParams, opts ...option.RequestOption) (res *Quota, err error) {
 	var env RequestQuotaResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -182,7 +183,7 @@ func (r *RequestService) Quota(ctx context.Context, query RequestQuotaParams, op
 	return res, nil
 }
 
-// Get Request Types
+// Lists available request types for Cloudforce One intelligence requests.
 func (r *RequestService) Types(ctx context.Context, query RequestTypesParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -204,7 +205,7 @@ func (r *RequestService) Types(ctx context.Context, query RequestTypesParams, op
 	return res, nil
 }
 
-// Get Request Types
+// Lists available request types for Cloudforce One intelligence requests.
 func (r *RequestService) TypesAutoPaging(ctx context.Context, query RequestTypesParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.Types(ctx, query, opts...))
 }

@@ -36,7 +36,7 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 	return
 }
 
-// Create a New Request Message
+// Adds a message to a Cloudforce One intelligence request conversation.
 func (r *RequestMessageService) New(ctx context.Context, requestID string, params RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
 	var env RequestMessageNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *RequestMessageService) New(ctx context.Context, requestID string, param
 	return res, nil
 }
 
-// Update a Request Message
+// Updates a message in a Cloudforce One intelligence request thread.
 func (r *RequestMessageService) Update(ctx context.Context, requestID string, messageID int64, params RequestMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
 	var env RequestMessageUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -78,7 +78,7 @@ func (r *RequestMessageService) Update(ctx context.Context, requestID string, me
 	return res, nil
 }
 
-// Delete a Request Message
+// Removes a message from a Cloudforce One intelligence request thread.
 func (r *RequestMessageService) Delete(ctx context.Context, requestID string, messageID int64, body RequestMessageDeleteParams, opts ...option.RequestOption) (res *RequestMessageDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -94,7 +94,7 @@ func (r *RequestMessageService) Delete(ctx context.Context, requestID string, me
 	return res, err
 }
 
-// List Request Messages
+// Lists messages in a Cloudforce One intelligence request conversation.
 func (r *RequestMessageService) Get(ctx context.Context, requestID string, params RequestMessageGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Message], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -120,7 +120,7 @@ func (r *RequestMessageService) Get(ctx context.Context, requestID string, param
 	return res, nil
 }
 
-// List Request Messages
+// Lists messages in a Cloudforce One intelligence request conversation.
 func (r *RequestMessageService) GetAutoPaging(ctx context.Context, requestID string, params RequestMessageGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Message] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, requestID, params, opts...))
 }
