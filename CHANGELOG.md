@@ -1,5 +1,42 @@
 # Changelog
 
+## 6.9.0 (2026-04-14)
+
+Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
+
+### Features
+
+* feat: add billable usage PayGo endpoint to billing resource ([69e048f](https://github.com/cloudflare/cloudflare-go/commit/69e048fca95c1d0581d864d0d92e230effd17c99))
+* feat: BRAPI-1051 add browser rendering devtools methods ([5304d73](https://github.com/cloudflare/cloudflare-go/commit/5304d733023cf4a096fffebc30a951d7e8944263))
+* feat(registrar): converge new registrar API into existing registrar resource ([74bb417](https://github.com/cloudflare/cloudflare-go/commit/74bb4176760cfecfde5978e3d4326c1b623bdd6e))
+* feat(tags): GRM-385 add resource_tagging routes ([aee0f8b](https://github.com/cloudflare/cloudflare-go/commit/aee0f8b76c4461db803e03003229118ae9d45631))
+* feat(vulnerability_scanner): add Stainless config for Vulnerability Scanner API ([761311e](https://github.com/cloudflare/cloudflare-go/commit/761311ed982159bec7bb28f1917476130bcb11bf))
+
+
+### Bug Fixes
+
+* add check for transport errors, pass error in retry logic ([f2eddeb](https://github.com/cloudflare/cloudflare-go/commit/f2eddeb26b235e5810c9c691b4480b957bb97beb))
+
+
+### Chores
+
+* **api:** update composite API spec ([c91544a](https://github.com/cloudflare/cloudflare-go/commit/c91544a50b6fc4d277a002b39e3764d172cefa20))
+* **api:** update composite API spec ([55b32cd](https://github.com/cloudflare/cloudflare-go/commit/55b32cdc2c993e126ca278436ea05afc64bebb96))
+* **api:** update composite API spec ([62e9ee0](https://github.com/cloudflare/cloudflare-go/commit/62e9ee0e8c5af4b857684768747031c05b6cb1bb))
+* **api:** update composite API spec ([9cb95d3](https://github.com/cloudflare/cloudflare-go/commit/9cb95d3d24e504aa4760a1c25e4b7cf13a4e1711))
+* **api:** update composite API spec ([0b07a94](https://github.com/cloudflare/cloudflare-go/commit/0b07a9453f739d26f7e50013c27c74947e5b7867))
+* **api:** update composite API spec ([11aa53a](https://github.com/cloudflare/cloudflare-go/commit/11aa53acc6194922e25b87670a8286922a02e500))
+* **api:** update composite API spec ([ba37942](https://github.com/cloudflare/cloudflare-go/commit/ba379421551d68c2464e6847c0c25ce54120ee3a))
+* **api:** update composite API spec ([e6b7f25](https://github.com/cloudflare/cloudflare-go/commit/e6b7f25938fbc0e6e8b317441df5336597a2b897))
+* **api:** update composite API spec ([43129bc](https://github.com/cloudflare/cloudflare-go/commit/43129bc4d803d4de72f9182acc1c7ea2c50d53f0))
+* **api:** update composite API spec ([0cfda91](https://github.com/cloudflare/cloudflare-go/commit/0cfda9184d10f00e45facde1aaef3ba284d66ddf))
+* **api:** update composite API spec ([4f5f60e](https://github.com/cloudflare/cloudflare-go/commit/4f5f60e249862f761c6da28821676917e706fec3))
+* **api:** update composite API spec ([5b59c6c](https://github.com/cloudflare/cloudflare-go/commit/5b59c6c3daa884275f95b6a9b5ac7420123a31eb))
+* **api:** update composite API spec ([9410b35](https://github.com/cloudflare/cloudflare-go/commit/9410b35f80fdaa2ff813e7c346b0a5272f6e7acf))
+* **api:** update composite API spec ([d45e9a7](https://github.com/cloudflare/cloudflare-go/commit/d45e9a72691f667da4e96f82f05d72692f955e3c))
+* **api:** update composite API spec ([5393dad](https://github.com/cloudflare/cloudflare-go/commit/5393dad2c7a85344a751b1214106a99f31b02de5))
+* sync manual ([#4242](https://github.com/cloudflare/cloudflare-go/issues/4242)) ([14d83b4](https://github.com/cloudflare/cloudflare-go/commit/14d83b4af0d2339cb2fe9b0e3e561dafadd3ab67))
+
 ## 6.8.0 (2026-02-27)
 
 Full Changelog: [v6.7.0...v6.8.0](https://github.com/cloudflare/cloudflare-go/compare/v6.7.0...v6.8.0)
