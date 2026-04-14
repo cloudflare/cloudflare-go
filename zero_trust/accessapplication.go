@@ -8123,6 +8123,9 @@ type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -8142,6 +8145,7 @@ type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -8209,6 +8213,54 @@ func (r *AccessApplicationNewResponseInfrastructureApplicationPoliciesConnection
 
 func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                     `json:"session_duration"`
+	JSON            accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseBrowserRDPApplication struct {
@@ -17433,6 +17485,9 @@ type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -17452,6 +17507,7 @@ type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -17519,6 +17575,54 @@ func (r *AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnect
 
 func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                        `json:"session_duration"`
+	JSON            accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseBrowserRDPApplication struct {
@@ -26743,6 +26847,9 @@ type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -26762,6 +26869,7 @@ type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -26829,6 +26937,54 @@ func (r *AccessApplicationListResponseInfrastructureApplicationPoliciesConnectio
 
 func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                      `json:"session_duration"`
+	JSON            accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseBrowserRDPApplication struct {
@@ -36072,6 +36228,9 @@ type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -36091,6 +36250,7 @@ type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -36158,6 +36318,54 @@ func (r *AccessApplicationGetResponseInfrastructureApplicationPoliciesConnection
 
 func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                     `json:"session_duration"`
+	JSON            accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseBrowserRDPApplication struct {
@@ -43681,6 +43889,9 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -43713,6 +43924,38 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRu
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 // Contains the targets secured by the application.
@@ -50441,6 +50684,9 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -50473,6 +50719,38 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectio
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 // Contains the targets secured by the application.
