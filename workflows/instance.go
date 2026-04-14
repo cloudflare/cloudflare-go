@@ -902,6 +902,7 @@ type InstanceNewResponseEnvelopeResultInfo struct {
 	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
+	TotalPages float64                                   `json:"total_pages"`
 	JSON       instanceNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -913,6 +914,7 @@ type instanceNewResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -927,16 +929,15 @@ func (r instanceNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// `page` and `cursor` are mutually exclusive, use one or the other.
+	// Opaque token for cursor-based pagination. Mutually exclusive with `page`.
 	Cursor param.Field[string] `query:"cursor"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
-	// should only be used when `cursor` is used, defines a new direction for the
-	// cursor
+	// Defines the direction for cursor-based pagination.
 	Direction param.Field[InstanceListParamsDirection] `query:"direction"`
-	// `page` and `cursor` are mutually exclusive, use one or the other.
+	// Deprecated: use `cursor` for pagination instead.
 	Page    param.Field[float64]                  `query:"page"`
 	PerPage param.Field[float64]                  `query:"per_page"`
 	Status  param.Field[InstanceListParamsStatus] `query:"status"`
@@ -950,8 +951,7 @@ func (r InstanceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// should only be used when `cursor` is used, defines a new direction for the
-// cursor
+// Defines the direction for cursor-based pagination.
 type InstanceListParamsDirection string
 
 const (
@@ -1175,6 +1175,7 @@ type InstanceGetResponseEnvelopeResultInfo struct {
 	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
+	TotalPages float64                                   `json:"total_pages"`
 	JSON       instanceGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1186,6 +1187,7 @@ type instanceGetResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
