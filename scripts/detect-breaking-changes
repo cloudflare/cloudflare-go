@@ -498,6 +498,10 @@ TEST_PATHS=(
 	vectorize/indexmetadataindex_test.go
 	url_scanner/response_test.go
 	url_scanner/scan_test.go
+	vulnerability_scanner/credentialset_test.go
+	vulnerability_scanner/credentialsetcredential_test.go
+	vulnerability_scanner/scan_test.go
+	vulnerability_scanner/targetenvironment_test.go
 	radar/aitomarkdown_test.go
 	radar/aiinference_test.go
 	radar/aiinferencesummary_test.go
