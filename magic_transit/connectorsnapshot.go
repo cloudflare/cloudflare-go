@@ -882,28 +882,34 @@ type ConnectorSnapshotGetResponseMount struct {
 	Name string `json:"name" api:"required"`
 	// Available disk size (bytes)
 	AvailableBytes float64 `json:"available_bytes"`
+	// Available inodes on filesystem
+	AvailableInodes float64 `json:"available_inodes"`
 	// Determines whether the disk is read-only
 	IsReadOnly bool `json:"is_read_only"`
 	// Determines whether the disk is removable
 	IsRemovable bool `json:"is_removable"`
 	// Total disk size (bytes)
-	TotalBytes float64                               `json:"total_bytes"`
-	JSON       connectorSnapshotGetResponseMountJSON `json:"-"`
+	TotalBytes float64 `json:"total_bytes"`
+	// Total inodes on filesystem
+	TotalInodes float64                               `json:"total_inodes"`
+	JSON        connectorSnapshotGetResponseMountJSON `json:"-"`
 }
 
 // connectorSnapshotGetResponseMountJSON contains the JSON metadata for the struct
 // [ConnectorSnapshotGetResponseMount]
 type connectorSnapshotGetResponseMountJSON struct {
-	FileSystem     apijson.Field
-	Kind           apijson.Field
-	MountPoint     apijson.Field
-	Name           apijson.Field
-	AvailableBytes apijson.Field
-	IsReadOnly     apijson.Field
-	IsRemovable    apijson.Field
-	TotalBytes     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	FileSystem      apijson.Field
+	Kind            apijson.Field
+	MountPoint      apijson.Field
+	Name            apijson.Field
+	AvailableBytes  apijson.Field
+	AvailableInodes apijson.Field
+	IsReadOnly      apijson.Field
+	IsRemovable     apijson.Field
+	TotalBytes      apijson.Field
+	TotalInodes     apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ConnectorSnapshotGetResponseMount) UnmarshalJSON(data []byte) (err error) {
