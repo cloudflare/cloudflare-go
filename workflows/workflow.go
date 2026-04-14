@@ -463,6 +463,7 @@ type WorkflowUpdateResponseEnvelopeResultInfo struct {
 	TotalCount float64                                      `json:"total_count" api:"required"`
 	Cursor     string                                       `json:"cursor"`
 	Page       float64                                      `json:"page"`
+	TotalPages float64                                      `json:"total_pages"`
 	JSON       workflowUpdateResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -474,6 +475,7 @@ type workflowUpdateResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -601,6 +603,7 @@ type WorkflowDeleteResponseEnvelopeResultInfo struct {
 	TotalCount float64                                      `json:"total_count" api:"required"`
 	Cursor     string                                       `json:"cursor"`
 	Page       float64                                      `json:"page"`
+	TotalPages float64                                      `json:"total_pages"`
 	JSON       workflowDeleteResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -612,6 +615,7 @@ type workflowDeleteResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -723,6 +727,7 @@ type WorkflowGetResponseEnvelopeResultInfo struct {
 	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
+	TotalPages float64                                   `json:"total_pages"`
 	JSON       workflowGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -734,6 +739,7 @@ type workflowGetResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
