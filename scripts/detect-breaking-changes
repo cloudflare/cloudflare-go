@@ -456,6 +456,7 @@ TEST_PATHS=(
 	zero_trust/dlpdatasetversionentry_test.go
 	zero_trust/dlppattern_test.go
 	zero_trust/dlppayloadlog_test.go
+	zero_trust/dlpsetting_test.go
 	zero_trust/dlpemailaccountmapping_test.go
 	zero_trust/dlpemailrule_test.go
 	zero_trust/dlpprofile_test.go
