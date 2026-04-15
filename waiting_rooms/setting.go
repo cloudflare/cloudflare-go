@@ -34,7 +34,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	return
 }
 
-// Update zone-level Waiting Room settings
+// Fully updates zone-level Waiting Room settings, replacing the existing
+// configuration.
 func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
 	var env SettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,7 +52,7 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 	return res, nil
 }
 
-// Patch zone-level Waiting Room settings
+// Partially updates zone-level Waiting Room settings using PATCH semantics.
 func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opts ...option.RequestOption) (res *SettingEditResponse, err error) {
 	var env SettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -68,7 +69,8 @@ func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opt
 	return res, nil
 }
 
-// Get zone-level Waiting Room settings
+// Gets the zone-level Waiting Room settings that apply as defaults to all waiting
+// rooms on the zone.
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	var env SettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
