@@ -28,7 +28,6 @@ import (
 // the [NewInstanceService] method instead.
 type InstanceService struct {
 	Options []option.RequestOption
-	Items   *InstanceItemService
 	Jobs    *InstanceJobService
 }
 
@@ -38,7 +37,6 @@ type InstanceService struct {
 func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	r = &InstanceService{}
 	r.Options = opts
-	r.Items = NewInstanceItemService(opts...)
 	r.Jobs = NewInstanceJobService(opts...)
 	return
 }
