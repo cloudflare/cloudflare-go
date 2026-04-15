@@ -7,12 +7,15 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
@@ -104,6 +107,43 @@ func (r *RegistrationService) New(ctx context.Context, params RegistrationNewPar
 	}
 	res = &env.Result
 	return res, nil
+}
+
+// Returns a paginated list of domain registrations owned by the account.
+//
+// This endpoint uses cursor-based pagination. Results are ordered by registration
+// date by default. To fetch the next page, pass the `cursor` value from the
+// `result_info` object in the response as the `cursor` query parameter in your
+// next request. An empty `cursor` string indicates there are no more pages.
+func (r *RegistrationService) List(ctx context.Context, params RegistrationListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[Registration], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/registrar/registrations", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns a paginated list of domain registrations owned by the account.
+//
+// This endpoint uses cursor-based pagination. Results are ordered by registration
+// date by default. To fetch the next page, pass the `cursor` value from the
+// `result_info` object in the response as the `cursor` query parameter in your
+// next request. An empty `cursor` string indicates there are no more pages.
+func (r *RegistrationService) ListAutoPaging(ctx context.Context, params RegistrationListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[Registration] {
+	return pagination.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Updates an existing domain registration.
@@ -352,6 +392,64 @@ const (
 func (r RegistrationNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RegistrationNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RegistrationListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Opaque token from a previous response's `result_info.cursor`. Pass this value to
+	// fetch the next page of results. Omit (or pass an empty string) for the first
+	// page.
+	Cursor param.Field[string] `query:"cursor"`
+	// Sort direction for results. Defaults to ascending order.
+	Direction param.Field[RegistrationListParamsDirection] `query:"direction"`
+	// Number of items to return per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Column to sort results by. Defaults to registration date (`registry_created_at`)
+	// when omitted.
+	SortBy param.Field[RegistrationListParamsSortBy] `query:"sort_by"`
+}
+
+// URLQuery serializes [RegistrationListParams]'s query parameters as `url.Values`.
+func (r RegistrationListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Sort direction for results. Defaults to ascending order.
+type RegistrationListParamsDirection string
+
+const (
+	RegistrationListParamsDirectionAsc  RegistrationListParamsDirection = "asc"
+	RegistrationListParamsDirectionDesc RegistrationListParamsDirection = "desc"
+)
+
+func (r RegistrationListParamsDirection) IsKnown() bool {
+	switch r {
+	case RegistrationListParamsDirectionAsc, RegistrationListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Column to sort results by. Defaults to registration date (`registry_created_at`)
+// when omitted.
+type RegistrationListParamsSortBy string
+
+const (
+	RegistrationListParamsSortByRegistryCreatedAt RegistrationListParamsSortBy = "registry_created_at"
+	RegistrationListParamsSortByRegistryExpiresAt RegistrationListParamsSortBy = "registry_expires_at"
+	RegistrationListParamsSortByName              RegistrationListParamsSortBy = "name"
+)
+
+func (r RegistrationListParamsSortBy) IsKnown() bool {
+	switch r {
+	case RegistrationListParamsSortByRegistryCreatedAt, RegistrationListParamsSortByRegistryExpiresAt, RegistrationListParamsSortByName:
 		return true
 	}
 	return false
