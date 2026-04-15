@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/cloudflare/cloudflare-go/v6/workers"
 )
 
@@ -47,7 +48,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
 						HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page),
-						RunWorkerFirst:   cloudflare.F[workers.ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](workers.ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray([]string{"string"})),
+						RunWorkerFirst:   cloudflare.F[workers.ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](shared.UnionBool(true)),
 						ServeDirectly:    cloudflare.F(true),
 					}),
 					JWT: cloudflare.F("jwt"),

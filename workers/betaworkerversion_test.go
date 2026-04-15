@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/cloudflare/cloudflare-go/v6/workers"
 )
 
@@ -42,7 +43,7 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 					Config: cloudflare.F(workers.VersionAssetsConfigParam{
 						HTMLHandling:     cloudflare.F(workers.VersionAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers.VersionAssetsConfigNotFoundHandling404Page),
-						RunWorkerFirst:   cloudflare.F[workers.VersionAssetsConfigRunWorkerFirstUnionParam](workers.VersionAssetsConfigRunWorkerFirstArrayParam([]string{"string"})),
+						RunWorkerFirst:   cloudflare.F[workers.VersionAssetsConfigRunWorkerFirstUnionParam](shared.UnionBool(true)),
 					}),
 					JWT: cloudflare.F("jwt"),
 				}),
