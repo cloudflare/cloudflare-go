@@ -51,9 +51,26 @@ func NewRegistrationService(opts ...option.RequestOption) (r *RegistrationServic
 //   - The account must not already be at the maximum supported domain limit. A
 //     single account may own up to 100 domains in total across registrations created
 //     through either the dashboard or this API.
-//   - The domain must be on a supported extension listed in `info.description`.
+//   - The domain must be on a supported extension for programmatic registration.
 //   - Use `POST /domain-check` immediately before calling this endpoint to confirm
 //     real-time availability and pricing.
+//
+// ### Supported extensions
+//
+// In this API, "extension" means the full registrable suffix after the domain
+// label. For example, in `example.co.uk`, the extension is `co.uk`.
+//
+// Programmatic registration is currently supported for:
+//
+// `com`, `org`, `net`, `app`, `dev`, `cc`, `xyz`, `info`, `cloud`, `studio`,
+// `live`, `link`, `pro`, `tech`, `fyi`, `shop`, `online`, `tools`, `run`, `games`,
+// `build`, `systems`, `world`, `news`, `site`, `network`, `chat`, `space`,
+// `family`, `page`, `life`, `group`, `email`, `solutions`, `day`, `blog`, `ing`,
+// `icu`, `academy`, `today`
+//
+// Cloudflare Registrar supports 400+ extensions in the dashboard. Extensions not
+// listed above can still be registered at
+// `https://dash.cloudflare.com/{account_id}/domains/registrations`.
 //
 // ### Express mode
 //

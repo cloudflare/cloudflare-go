@@ -124,8 +124,7 @@ func (r *RegistrarService) Check(ctx context.Context, params RegistrarCheckParam
 //
 // Suggestions are scoped to extensions supported for programmatic registration via
 // this API (`POST /registrations`). Domains on unsupported extensions will not
-// appear in results, even if they are available at the registry level. See the
-// supported extensions list in `info.description`.
+// appear in results, even if they are available at the registry level.
 //
 // ### Use cases
 //
