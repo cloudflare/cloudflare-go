@@ -45,6 +45,11 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponse, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 func (r *SubscriptionService) Update(ctx context.Context, subscriptionID string, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponse, err error) {
 	var env SubscriptionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -84,6 +94,11 @@ func (r *SubscriptionService) List(ctx context.Context, params SubscriptionListP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,6 +125,11 @@ func (r *SubscriptionService) ListAutoPaging(ctx context.Context, params Subscri
 func (r *SubscriptionService) Delete(ctx context.Context, subscriptionID string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
 	var env SubscriptionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -131,6 +151,11 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionID string,
 func (r *SubscriptionService) Get(ctx context.Context, subscriptionID string, query SubscriptionGetParams, opts ...option.RequestOption) (res *SubscriptionGetResponse, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2870,6 +2895,8 @@ func (r SubscriptionGetResponseSourceType) IsKnown() bool {
 
 type SubscriptionNewParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Destination configuration for the subscription
 	Destination param.Field[SubscriptionNewParamsDestination] `json:"destination"`
@@ -3234,6 +3261,8 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionUpdateParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Destination configuration for the subscription
 	Destination param.Field[SubscriptionUpdateParamsDestination] `json:"destination"`
@@ -3321,6 +3350,8 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionListParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction
 	Direction param.Field[SubscriptionListParamsDirection] `query:"direction"`
@@ -3376,6 +3407,8 @@ func (r SubscriptionListParamsOrder) IsKnown() bool {
 
 type SubscriptionDeleteParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -3424,6 +3457,8 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionGetParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

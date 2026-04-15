@@ -38,6 +38,11 @@ func NewZoneTransferOutgoingStatusService(opts ...option.RequestOption) (r *Zone
 func (r *ZoneTransferOutgoingStatusService) Get(ctx context.Context, query ZoneTransferOutgoingStatusGetParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	var env ZoneTransferOutgoingStatusGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -52,6 +57,7 @@ func (r *ZoneTransferOutgoingStatusService) Get(ctx context.Context, query ZoneT
 }
 
 type ZoneTransferOutgoingStatusGetParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

@@ -47,6 +47,12 @@ func NewAccessApplicationPolicyService(opts ...option.RequestOption) (r *AccessA
 func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyNewResponse, err error) {
 	var env AccessApplicationPolicyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -83,6 +89,12 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, 
 func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID string, policyID string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessApplicationPolicyUpdateResponse, err error) {
 	var env AccessApplicationPolicyUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -124,6 +136,12 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -170,6 +188,12 @@ func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, app
 func (r *AccessApplicationPolicyService) Delete(ctx context.Context, appID string, policyID string, body AccessApplicationPolicyDeleteParams, opts ...option.RequestOption) (res *AccessApplicationPolicyDeleteResponse, err error) {
 	var env AccessApplicationPolicyDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -210,6 +234,12 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, appID strin
 func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, policyID string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyGetResponse, err error) {
 	var env AccessApplicationPolicyGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -3111,8 +3141,12 @@ func (r AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator) IsKnown
 
 type AccessApplicationPolicyNewParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
@@ -3372,8 +3406,12 @@ func (r AccessApplicationPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationPolicyUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
@@ -3634,8 +3672,12 @@ func (r AccessApplicationPolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationPolicyListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Page number of results.
 	Page param.Field[int64] `query:"page"`
@@ -3654,8 +3696,12 @@ func (r AccessApplicationPolicyListParams) URLQuery() (v url.Values) {
 
 type AccessApplicationPolicyDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -3802,8 +3848,12 @@ func (r AccessApplicationPolicyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationPolicyGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

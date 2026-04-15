@@ -41,6 +41,11 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
 	var env RouteNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 func (r *RouteService) Update(ctx context.Context, routeID string, params RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
 	var env RouteUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -80,6 +90,11 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *RouteListResponse, err error) {
 	var env RouteListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,6 +112,11 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	var env RouteDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,6 +140,11 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 func (r *RouteService) BulkUpdate(ctx context.Context, params RouteBulkUpdateParams, opts ...option.RequestOption) (res *RouteBulkUpdateResponse, err error) {
 	var env RouteBulkUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -137,6 +162,11 @@ func (r *RouteService) BulkUpdate(ctx context.Context, params RouteBulkUpdatePar
 func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
 	var env RouteEmptyResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -154,6 +184,11 @@ func (r *RouteService) Empty(ctx context.Context, body RouteEmptyParams, opts ..
 func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetParams, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
 	var env RouteGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -666,6 +701,8 @@ func (r routeGetResponseRouteJSON) RawJSON() string {
 
 type RouteNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The next-hop IP Address for the static route.
 	Nexthop param.Field[string] `json:"nexthop" api:"required"`
@@ -730,6 +767,8 @@ func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The next-hop IP Address for the static route.
 	Nexthop param.Field[string] `json:"nexthop" api:"required"`
@@ -794,6 +833,8 @@ func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -842,6 +883,8 @@ func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -890,6 +933,8 @@ func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteBulkUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                       `path:"account_id" api:"required"`
 	Routes    param.Field[[]RouteBulkUpdateParamsRoute] `json:"routes" api:"required"`
 }
@@ -964,6 +1009,8 @@ func (r RouteBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteEmptyParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1012,6 +1059,8 @@ func (r RouteEmptyResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

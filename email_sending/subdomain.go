@@ -44,6 +44,11 @@ func NewSubdomainService(opts ...option.RequestOption) (r *SubdomainService) {
 func (r *SubdomainService) New(ctx context.Context, params SubdomainNewParams, opts ...option.RequestOption) (res *SubdomainNewResponse, err error) {
 	var env SubdomainNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *SubdomainService) List(ctx context.Context, query SubdomainListParams, 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -88,6 +98,11 @@ func (r *SubdomainService) ListAutoPaging(ctx context.Context, query SubdomainLi
 // active on the subdomain, only sending is disabled.
 func (r *SubdomainService) Delete(ctx context.Context, subdomainID string, body SubdomainDeleteParams, opts ...option.RequestOption) (res *SubdomainDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -105,6 +120,11 @@ func (r *SubdomainService) Delete(ctx context.Context, subdomainID string, body 
 func (r *SubdomainService) Get(ctx context.Context, subdomainID string, query SubdomainGetParams, opts ...option.RequestOption) (res *SubdomainGetResponse, err error) {
 	var env SubdomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -381,6 +401,8 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 
 type SubdomainNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The subdomain name. Must be within the zone.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -531,16 +553,22 @@ func (r SubdomainNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubdomainListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubdomainDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubdomainGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

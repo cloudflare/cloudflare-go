@@ -41,6 +41,11 @@ func NewInterconnectService(opts ...option.RequestOption) (r *InterconnectServic
 // Create a new interconnect
 func (r *InterconnectService) New(ctx context.Context, params InterconnectNewParams, opts ...option.RequestOption) (res *InterconnectNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -53,6 +58,11 @@ func (r *InterconnectService) New(ctx context.Context, params InterconnectNewPar
 // List existing interconnects
 func (r *InterconnectService) List(ctx context.Context, params InterconnectListParams, opts ...option.RequestOption) (res *InterconnectListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,6 +76,11 @@ func (r *InterconnectService) List(ctx context.Context, params InterconnectListP
 func (r *InterconnectService) Delete(ctx context.Context, icon string, body InterconnectDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -82,6 +97,11 @@ func (r *InterconnectService) Delete(ctx context.Context, icon string, body Inte
 // Get information about an interconnect object
 func (r *InterconnectService) Get(ctx context.Context, icon string, query InterconnectGetParams, opts ...option.RequestOption) (res *InterconnectGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -99,6 +119,11 @@ func (r *InterconnectService) Get(ctx context.Context, icon string, query Interc
 func (r *InterconnectService) LOA(ctx context.Context, icon string, query InterconnectLOAParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -115,6 +140,11 @@ func (r *InterconnectService) LOA(ctx context.Context, icon string, query Interc
 // Get the current status of an interconnect object
 func (r *InterconnectService) Status(ctx context.Context, icon string, query InterconnectStatusParams, opts ...option.RequestOption) (res *InterconnectStatusResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -999,6 +1029,8 @@ func (r InterconnectStatusResponseState) IsKnown() bool {
 
 type InterconnectNewParams struct {
 	// Customer account tag
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]            `path:"account_id" api:"required"`
 	Body      InterconnectNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -1116,6 +1148,8 @@ func (r InterconnectNewParamsBodyBandwidth) IsKnown() bool {
 
 type InterconnectListParams struct {
 	// Customer account tag
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Cursor    param.Field[int64]  `query:"cursor"`
 	Limit     param.Field[int64]  `query:"limit"`
@@ -1135,20 +1169,28 @@ func (r InterconnectListParams) URLQuery() (v url.Values) {
 
 type InterconnectDeleteParams struct {
 	// Customer account tag
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InterconnectGetParams struct {
 	// Customer account tag
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InterconnectLOAParams struct {
 	// Customer account tag
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InterconnectStatusParams struct {
 	// Customer account tag
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

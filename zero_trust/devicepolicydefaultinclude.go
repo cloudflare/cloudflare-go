@@ -40,6 +40,11 @@ func (r *DevicePolicyDefaultIncludeService) Update(ctx context.Context, params D
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -67,6 +72,11 @@ func (r *DevicePolicyDefaultIncludeService) Get(ctx context.Context, query Devic
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -90,6 +100,7 @@ func (r *DevicePolicyDefaultIncludeService) GetAutoPaging(ctx context.Context, q
 }
 
 type DevicePolicyDefaultIncludeUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]            `path:"account_id" api:"required"`
 	Body      []SplitTunnelIncludeUnionParam `json:"body" api:"required"`
 }
@@ -99,5 +110,6 @@ func (r DevicePolicyDefaultIncludeUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type DevicePolicyDefaultIncludeGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

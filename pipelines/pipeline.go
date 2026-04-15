@@ -50,6 +50,11 @@ func NewPipelineService(opts ...option.RequestOption) (r *PipelineService) {
 func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opts ...option.RequestOption) (res *PipelineNewResponse, err error) {
 	var env PipelineNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,6 +76,11 @@ func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opt
 func (r *PipelineService) Update(ctx context.Context, pipelineName string, params PipelineUpdateParams, opts ...option.RequestOption) (res *PipelineUpdateResponse, err error) {
 	var env PipelineUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -94,6 +104,11 @@ func (r *PipelineService) Update(ctx context.Context, pipelineName string, param
 // Deprecated: Use list_v1 instead. This endpoint will be removed in the future.
 func (r *PipelineService) List(ctx context.Context, params PipelineListParams, opts ...option.RequestOption) (res *PipelineListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,6 +125,11 @@ func (r *PipelineService) List(ctx context.Context, params PipelineListParams, o
 func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body PipelineDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -127,6 +147,11 @@ func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body 
 func (r *PipelineService) NewV1(ctx context.Context, params PipelineNewV1Params, opts ...option.RequestOption) (res *PipelineNewV1Response, err error) {
 	var env PipelineNewV1ResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -144,6 +169,11 @@ func (r *PipelineService) NewV1(ctx context.Context, params PipelineNewV1Params,
 func (r *PipelineService) DeleteV1(ctx context.Context, pipelineID string, body PipelineDeleteV1Params, opts ...option.RequestOption) (res *PipelineDeleteV1Response, err error) {
 	var env PipelineDeleteV1ResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -168,6 +198,11 @@ func (r *PipelineService) DeleteV1(ctx context.Context, pipelineID string, body 
 func (r *PipelineService) Get(ctx context.Context, pipelineName string, query PipelineGetParams, opts ...option.RequestOption) (res *PipelineGetResponse, err error) {
 	var env PipelineGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -189,6 +224,11 @@ func (r *PipelineService) Get(ctx context.Context, pipelineName string, query Pi
 func (r *PipelineService) GetV1(ctx context.Context, pipelineID string, query PipelineGetV1Params, opts ...option.RequestOption) (res *PipelineGetV1Response, err error) {
 	var env PipelineGetV1ResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -211,6 +251,11 @@ func (r *PipelineService) ListV1(ctx context.Context, params PipelineListV1Param
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -237,6 +282,11 @@ func (r *PipelineService) ListV1AutoPaging(ctx context.Context, params PipelineL
 func (r *PipelineService) ValidateSql(ctx context.Context, params PipelineValidateSqlParams, opts ...option.RequestOption) (res *PipelineValidateSqlResponse, err error) {
 	var env PipelineValidateSqlResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2227,6 +2277,8 @@ func (r pipelineValidateSqlResponseGraphNodeJSON) RawJSON() string {
 
 type PipelineNewParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                       `path:"account_id" api:"required"`
 	Destination param.Field[PipelineNewParamsDestination] `json:"destination" api:"required"`
 	// Defines the name of the pipeline.
@@ -2496,6 +2548,8 @@ func (r pipelineNewResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineUpdateParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                          `path:"account_id" api:"required"`
 	Destination param.Field[PipelineUpdateParamsDestination] `json:"destination" api:"required"`
 	// Defines the name of the pipeline.
@@ -2765,6 +2819,8 @@ func (r pipelineUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineListParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies which page to retrieve.
 	Page param.Field[string] `query:"page"`
@@ -2784,11 +2840,15 @@ func (r PipelineListParams) URLQuery() (v url.Values) {
 
 type PipelineDeleteParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PipelineNewV1Params struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the name of the Pipeline.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -2826,6 +2886,8 @@ func (r pipelineNewV1ResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineDeleteV1Params struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2855,6 +2917,8 @@ func (r pipelineDeleteV1ResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineGetParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2888,6 +2952,8 @@ func (r pipelineGetResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineGetV1Params struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2917,6 +2983,8 @@ func (r pipelineGetV1ResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineListV1Params struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
@@ -2932,6 +3000,8 @@ func (r PipelineListV1Params) URLQuery() (v url.Values) {
 
 type PipelineValidateSqlParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies SQL to validate.
 	Sql param.Field[string] `json:"sql" api:"required"`

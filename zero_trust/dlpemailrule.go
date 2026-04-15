@@ -44,6 +44,11 @@ func NewDLPEmailRuleService(opts ...option.RequestOption) (r *DLPEmailRuleServic
 func (r *DLPEmailRuleService) New(ctx context.Context, params DLPEmailRuleNewParams, opts ...option.RequestOption) (res *DLPEmailRuleNewResponse, err error) {
 	var env DLPEmailRuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *DLPEmailRuleService) New(ctx context.Context, params DLPEmailRuleNewPar
 func (r *DLPEmailRuleService) Update(ctx context.Context, ruleID string, params DLPEmailRuleUpdateParams, opts ...option.RequestOption) (res *DLPEmailRuleUpdateResponse, err error) {
 	var env DLPEmailRuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,6 +93,11 @@ func (r *DLPEmailRuleService) List(ctx context.Context, query DLPEmailRuleListPa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,6 +125,11 @@ func (r *DLPEmailRuleService) ListAutoPaging(ctx context.Context, query DLPEmail
 func (r *DLPEmailRuleService) Delete(ctx context.Context, ruleID string, body DLPEmailRuleDeleteParams, opts ...option.RequestOption) (res *DLPEmailRuleDeleteResponse, err error) {
 	var env DLPEmailRuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -132,6 +152,11 @@ func (r *DLPEmailRuleService) Delete(ctx context.Context, ruleID string, body DL
 func (r *DLPEmailRuleService) BulkEdit(ctx context.Context, params DLPEmailRuleBulkEditParams, opts ...option.RequestOption) (res *DLPEmailRuleBulkEditResponse, err error) {
 	var env DLPEmailRuleBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -150,6 +175,11 @@ func (r *DLPEmailRuleService) BulkEdit(ctx context.Context, params DLPEmailRuleB
 func (r *DLPEmailRuleService) Get(ctx context.Context, ruleID string, query DLPEmailRuleGetParams, opts ...option.RequestOption) (res *DLPEmailRuleGetResponse, err error) {
 	var env DLPEmailRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -1122,6 +1152,7 @@ func (r DLPEmailRuleGetResponseConditionsValueArray) ImplementsDLPEmailRuleGetRe
 }
 
 type DLPEmailRuleNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                      `path:"account_id" api:"required"`
 	Action    param.Field[DLPEmailRuleNewParamsAction] `json:"action" api:"required"`
 	// Triggered if all conditions match.
@@ -1352,6 +1383,7 @@ func (r DLPEmailRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEmailRuleUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                         `path:"account_id" api:"required"`
 	Action    param.Field[DLPEmailRuleUpdateParamsAction] `json:"action" api:"required"`
 	// Triggered if all conditions match.
@@ -1582,10 +1614,12 @@ func (r DLPEmailRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEmailRuleListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPEmailRuleDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1729,6 +1763,7 @@ func (r DLPEmailRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEmailRuleBulkEditParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]           `path:"account_id" api:"required"`
 	NewPriorities param.Field[map[string]int64] `json:"new_priorities" api:"required"`
 }
@@ -1877,6 +1912,7 @@ func (r DLPEmailRuleBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEmailRuleGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

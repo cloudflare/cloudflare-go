@@ -54,6 +54,12 @@ func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplica
 func (r *AccessApplicationService) New(ctx context.Context, params AccessApplicationNewParams, opts ...option.RequestOption) (res *AccessApplicationNewResponse, err error) {
 	var env AccessApplicationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -85,6 +91,12 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *AccessApplicationUpdateResponse, err error) {
 	var env AccessApplicationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -121,6 +133,12 @@ func (r *AccessApplicationService) List(ctx context.Context, params AccessApplic
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -161,6 +179,12 @@ func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, params Ac
 func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
 	var env AccessApplicationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -196,6 +220,12 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam,
 func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, query AccessApplicationGetParams, opts ...option.RequestOption) (res *AccessApplicationGetResponse, err error) {
 	var env AccessApplicationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -231,6 +261,12 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, qu
 func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppIDParam, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
 	var env AccessApplicationRevokeTokensResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -39578,8 +39614,12 @@ type AccessApplicationNewParams struct {
 	// Contains the targets secured by the application.
 	Body AccessApplicationNewParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -46372,8 +46412,12 @@ type AccessApplicationUpdateParams struct {
 	// Contains the targets secured by the application.
 	Body AccessApplicationUpdateParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -53165,8 +53209,12 @@ func (r AccessApplicationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The aud of the app.
 	AUD param.Field[string] `query:"aud"`
@@ -53197,8 +53245,12 @@ func (r AccessApplicationListParams) URLQuery() (v url.Values) {
 
 type AccessApplicationDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -53343,8 +53395,12 @@ func (r AccessApplicationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -53489,8 +53545,12 @@ func (r AccessApplicationGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationRevokeTokensParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

@@ -44,6 +44,12 @@ func NewAccessServiceTokenService(opts ...option.RequestOption) (r *AccessServic
 func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServiceTokenNewParams, opts ...option.RequestOption) (res *AccessServiceTokenNewResponse, err error) {
 	var env AccessServiceTokenNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -75,6 +81,12 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 func (r *AccessServiceTokenService) Update(ctx context.Context, serviceTokenID string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -111,6 +123,12 @@ func (r *AccessServiceTokenService) List(ctx context.Context, params AccessServi
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -151,6 +169,12 @@ func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, params A
 func (r *AccessServiceTokenService) Delete(ctx context.Context, serviceTokenID string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -186,6 +210,12 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, serviceTokenID s
 func (r *AccessServiceTokenService) Get(ctx context.Context, serviceTokenID string, query AccessServiceTokenGetParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -221,6 +251,11 @@ func (r *AccessServiceTokenService) Get(ctx context.Context, serviceTokenID stri
 func (r *AccessServiceTokenService) Refresh(ctx context.Context, serviceTokenID string, body AccessServiceTokenRefreshParams, opts ...option.RequestOption) (res *ServiceToken, err error) {
 	var env AccessServiceTokenRefreshResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -242,6 +277,11 @@ func (r *AccessServiceTokenService) Refresh(ctx context.Context, serviceTokenID 
 func (r *AccessServiceTokenService) Rotate(ctx context.Context, serviceTokenID string, params AccessServiceTokenRotateParams, opts ...option.RequestOption) (res *AccessServiceTokenRotateResponse, err error) {
 	var env AccessServiceTokenRotateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -374,8 +414,12 @@ type AccessServiceTokenNewParams struct {
 	// The name of the service token.
 	Name param.Field[string] `json:"name" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// A version number identifying the current `client_secret` associated with the
 	// service token. Incrementing it triggers a rotation; the previous secret will
@@ -538,8 +582,12 @@ func (r AccessServiceTokenNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessServiceTokenUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// A version number identifying the current `client_secret` associated with the
 	// service token. Incrementing it triggers a rotation; the previous secret will
@@ -704,8 +752,12 @@ func (r AccessServiceTokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessServiceTokenListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The name of the service token.
 	Name param.Field[string] `query:"name"`
@@ -728,8 +780,12 @@ func (r AccessServiceTokenListParams) URLQuery() (v url.Values) {
 
 type AccessServiceTokenDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -874,8 +930,12 @@ func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessServiceTokenGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -1020,6 +1080,8 @@ func (r AccessServiceTokenGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessServiceTokenRefreshParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1165,6 +1227,8 @@ func (r AccessServiceTokenRefreshResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessServiceTokenRotateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The expiration of the previous `client_secret`. If not provided, it defaults to
 	// the current timestamp in order to immediately expire the previous secret.

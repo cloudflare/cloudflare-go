@@ -58,6 +58,11 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, opts ...option.RequestOption) (res *AIGatewayNewResponse, err error) {
 	var env AIGatewayNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -75,6 +80,11 @@ func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, o
 func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatewayUpdateParams, opts ...option.RequestOption) (res *AIGatewayUpdateResponse, err error) {
 	var env AIGatewayUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,6 +107,11 @@ func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,6 +138,11 @@ func (r *AIGatewayService) ListAutoPaging(ctx context.Context, params AIGatewayL
 func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGatewayDeleteParams, opts ...option.RequestOption) (res *AIGatewayDeleteResponse, err error) {
 	var env AIGatewayDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -144,6 +164,11 @@ func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGateway
 func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGetParams, opts ...option.RequestOption) (res *AIGatewayGetResponse, err error) {
 	var env AIGatewayGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -1885,6 +1910,7 @@ func (r AIGatewayGetResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// gateway id
 	ID                      param.Field[string]                                  `json:"id" api:"required"`
@@ -2002,6 +2028,7 @@ func (r aiGatewayNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AIGatewayUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID               param.Field[string]                                     `path:"account_id" api:"required"`
 	CacheInvalidateOnUpdate param.Field[bool]                                       `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                param.Field[int64]                                      `json:"cache_ttl" api:"required"`
@@ -2225,6 +2252,7 @@ func (r aiGatewayUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AIGatewayListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
@@ -2241,6 +2269,7 @@ func (r AIGatewayListParams) URLQuery() (v url.Values) {
 }
 
 type AIGatewayDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2268,6 +2297,7 @@ func (r aiGatewayDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AIGatewayGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -45,6 +45,11 @@ func NewNetworkRouteNetworkService(opts ...option.RequestOption) (r *NetworkRout
 func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNetworkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -75,6 +80,11 @@ func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded s
 func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNetworkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -100,6 +110,11 @@ func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncode
 func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNetworkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -119,6 +134,8 @@ func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded 
 
 type NetworkRouteNetworkNewParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// UUID of the tunnel.
 	TunnelID param.Field[string] `json:"tunnel_id" api:"required" format:"uuid"`
@@ -177,6 +194,8 @@ func (r NetworkRouteNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteNetworkDeleteParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The type of tunnel.
 	TunType param.Field[NetworkRouteNetworkDeleteParamsTunType] `query:"tun_type"`
@@ -261,6 +280,8 @@ func (r NetworkRouteNetworkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteNetworkEditParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

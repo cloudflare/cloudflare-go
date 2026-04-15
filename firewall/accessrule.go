@@ -49,6 +49,12 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *AccessRuleNewResponse, err error) {
 	var env AccessRuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -83,6 +89,12 @@ func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParam
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -127,6 +139,12 @@ func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRul
 func (r *AccessRuleService) Delete(ctx context.Context, ruleID string, body AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
 	var env AccessRuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -164,6 +182,12 @@ func (r *AccessRuleService) Delete(ctx context.Context, ruleID string, body Acce
 func (r *AccessRuleService) Edit(ctx context.Context, ruleID string, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponse, err error) {
 	var env AccessRuleEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -199,6 +223,12 @@ func (r *AccessRuleService) Edit(ctx context.Context, ruleID string, params Acce
 func (r *AccessRuleService) Get(ctx context.Context, ruleID string, query AccessRuleGetParams, opts ...option.RequestOption) (res *AccessRuleGetResponse, err error) {
 	var env AccessRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -1504,8 +1534,12 @@ type AccessRuleNewParams struct {
 	// The action to apply to a matched request.
 	Mode param.Field[AccessRuleNewParamsMode] `json:"mode" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
 	Notes param.Field[string] `json:"notes"`
@@ -1625,8 +1659,12 @@ func (r AccessRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessRuleListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID        param.Field[string]                            `path:"zone_id"`
 	Configuration param.Field[AccessRuleListParamsConfiguration] `query:"configuration"`
 	// Defines the direction used to sort returned rules.
@@ -1765,8 +1803,12 @@ func (r AccessRuleListParamsOrder) IsKnown() bool {
 
 type AccessRuleDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -1819,8 +1861,12 @@ type AccessRuleEditParams struct {
 	// The action to apply to a matched request.
 	Mode param.Field[AccessRuleEditParamsMode] `json:"mode" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
 	Notes param.Field[string] `json:"notes"`
@@ -1940,8 +1986,12 @@ func (r AccessRuleEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessRuleGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

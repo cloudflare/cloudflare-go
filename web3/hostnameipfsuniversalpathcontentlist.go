@@ -42,6 +42,11 @@ func NewHostnameIPFSUniversalPathContentListService(opts ...option.RequestOption
 func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, identifier string, params HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *ContentList, err error) {
 	var env HostnameIPFSUniversalPathContentListUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -63,6 +68,11 @@ func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context
 func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, identifier string, query HostnameIPFSUniversalPathContentListGetParams, opts ...option.RequestOption) (res *ContentList, err error) {
 	var env HostnameIPFSUniversalPathContentListGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -118,6 +128,8 @@ func (r ContentListAction) IsKnown() bool {
 
 type HostnameIPFSUniversalPathContentListUpdateParams struct {
 	// Specify the identifier of the hostname.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Behavior of the content list.
 	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action" api:"required"`
@@ -223,6 +235,8 @@ func (r HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess) IsKno
 
 type HostnameIPFSUniversalPathContentListGetParams struct {
 	// Specify the identifier of the hostname.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

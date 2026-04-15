@@ -53,6 +53,11 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 func (r *RateLimitService) New(ctx context.Context, params RateLimitNewParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -76,6 +81,11 @@ func (r *RateLimitService) List(ctx context.Context, params RateLimitListParams,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -112,6 +122,11 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, params RateLimitL
 func (r *RateLimitService) Delete(ctx context.Context, rateLimitID string, body RateLimitDeleteParams, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
 	var env RateLimitDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -138,6 +153,11 @@ func (r *RateLimitService) Delete(ctx context.Context, rateLimitID string, body 
 func (r *RateLimitService) Edit(ctx context.Context, rateLimitID string, params RateLimitEditParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -164,6 +184,11 @@ func (r *RateLimitService) Edit(ctx context.Context, rateLimitID string, params 
 func (r *RateLimitService) Get(ctx context.Context, rateLimitID string, query RateLimitGetParams, opts ...option.RequestOption) (res *RateLimit, err error) {
 	var env RateLimitGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -859,6 +884,8 @@ func (r rateLimitDeleteResponseMatchResponseJSON) RawJSON() string {
 
 type RateLimitNewParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -1078,6 +1105,8 @@ func (r RateLimitNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RateLimitListParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -1096,6 +1125,8 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 
 type RateLimitDeleteParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -1144,6 +1175,8 @@ func (r RateLimitDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RateLimitEditParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -1363,6 +1396,8 @@ func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RateLimitGetParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

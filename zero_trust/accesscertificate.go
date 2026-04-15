@@ -44,6 +44,12 @@ func NewAccessCertificateService(opts ...option.RequestOption) (r *AccessCertifi
 func (r *AccessCertificateService) New(ctx context.Context, params AccessCertificateNewParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	var env AccessCertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -75,6 +81,12 @@ func (r *AccessCertificateService) New(ctx context.Context, params AccessCertifi
 func (r *AccessCertificateService) Update(ctx context.Context, certificateID string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	var env AccessCertificateUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -111,6 +123,12 @@ func (r *AccessCertificateService) List(ctx context.Context, params AccessCertif
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -151,6 +169,12 @@ func (r *AccessCertificateService) ListAutoPaging(ctx context.Context, params Ac
 func (r *AccessCertificateService) Delete(ctx context.Context, certificateID string, body AccessCertificateDeleteParams, opts ...option.RequestOption) (res *AccessCertificateDeleteResponse, err error) {
 	var env AccessCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -186,6 +210,12 @@ func (r *AccessCertificateService) Delete(ctx context.Context, certificateID str
 func (r *AccessCertificateService) Get(ctx context.Context, certificateID string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	var env AccessCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -281,8 +311,12 @@ type AccessCertificateNewParams struct {
 	// The name of the certificate.
 	Name param.Field[string] `json:"name" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames param.Field[[]AssociatedHostnamesParam] `json:"associated_hostnames"`
@@ -435,8 +469,12 @@ type AccessCertificateUpdateParams struct {
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames param.Field[[]AssociatedHostnamesParam] `json:"associated_hostnames" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The name of the certificate.
 	Name param.Field[string] `json:"name"`
@@ -587,8 +625,12 @@ func (r AccessCertificateUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCertificateListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Page number of results.
 	Page param.Field[int64] `query:"page"`
@@ -607,8 +649,12 @@ func (r AccessCertificateListParams) URLQuery() (v url.Values) {
 
 type AccessCertificateDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -753,8 +799,12 @@ func (r AccessCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCertificateGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

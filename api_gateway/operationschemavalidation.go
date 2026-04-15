@@ -45,6 +45,11 @@ func NewOperationSchemaValidationService(opts ...option.RequestOption) (r *Opera
 // instead.
 func (r *OperationSchemaValidationService) Update(ctx context.Context, operationID string, params OperationSchemaValidationUpdateParams, opts ...option.RequestOption) (res *OperationSchemaValidationUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -66,6 +71,11 @@ func (r *OperationSchemaValidationService) Update(ctx context.Context, operation
 func (r *OperationSchemaValidationService) Edit(ctx context.Context, params OperationSchemaValidationEditParams, opts ...option.RequestOption) (res *SettingsMultipleRequest, err error) {
 	var env OperationSchemaValidationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -86,6 +96,11 @@ func (r *OperationSchemaValidationService) Edit(ctx context.Context, params Oper
 // instead.
 func (r *OperationSchemaValidationService) Get(ctx context.Context, operationID string, query OperationSchemaValidationGetParams, opts ...option.RequestOption) (res *OperationSchemaValidationGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -288,6 +303,8 @@ func (r OperationSchemaValidationGetResponseMitigationAction) IsKnown() bool {
 
 type OperationSchemaValidationUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When set, this applies a mitigation action to this operation
 	//
@@ -330,6 +347,8 @@ func (r OperationSchemaValidationUpdateParamsMitigationAction) IsKnown() bool {
 
 type OperationSchemaValidationEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID                  param.Field[string]          `path:"zone_id" api:"required"`
 	SettingsMultipleRequest SettingsMultipleRequestParam `json:"settings_multiple_request" api:"required"`
 }
@@ -383,5 +402,7 @@ func (r OperationSchemaValidationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationSchemaValidationGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

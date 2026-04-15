@@ -44,6 +44,11 @@ func NewBetaWorkerService(opts ...option.RequestOption) (r *BetaWorkerService) {
 func (r *BetaWorkerService) New(ctx context.Context, params BetaWorkerNewParams, opts ...option.RequestOption) (res *Worker, err error) {
 	var env BetaWorkerNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,6 +69,11 @@ func (r *BetaWorkerService) New(ctx context.Context, params BetaWorkerNewParams,
 func (r *BetaWorkerService) Update(ctx context.Context, workerID string, params BetaWorkerUpdateParams, opts ...option.RequestOption) (res *Worker, err error) {
 	var env BetaWorkerUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,6 +96,11 @@ func (r *BetaWorkerService) List(ctx context.Context, params BetaWorkerListParam
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -111,6 +126,11 @@ func (r *BetaWorkerService) ListAutoPaging(ctx context.Context, params BetaWorke
 // Delete a Worker and all its associated resources (versions, deployments, etc.).
 func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, body BetaWorkerDeleteParams, opts ...option.RequestOption) (res *BetaWorkerDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -129,6 +149,11 @@ func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, body Be
 func (r *BetaWorkerService) Edit(ctx context.Context, workerID string, params BetaWorkerEditParams, opts ...option.RequestOption) (res *Worker, err error) {
 	var env BetaWorkerEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -150,6 +175,11 @@ func (r *BetaWorkerService) Edit(ctx context.Context, workerID string, params Be
 func (r *BetaWorkerService) Get(ctx context.Context, workerID string, query BetaWorkerGetParams, opts ...option.RequestOption) (res *Worker, err error) {
 	var env BetaWorkerGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -877,6 +907,8 @@ func (r BetaWorkerDeleteResponseSuccess) IsKnown() bool {
 
 type BetaWorkerNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Worker    WorkerParam         `json:"worker" api:"required"`
 }
@@ -1026,6 +1058,8 @@ func (r BetaWorkerNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Worker    WorkerParam         `json:"worker" api:"required"`
 }
@@ -1175,6 +1209,8 @@ func (r BetaWorkerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction.
 	Order param.Field[BetaWorkerListParamsOrder] `query:"order"`
@@ -1230,11 +1266,15 @@ func (r BetaWorkerListParamsOrderBy) IsKnown() bool {
 
 type BetaWorkerDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type BetaWorkerEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Worker    WorkerParam         `json:"worker" api:"required"`
 }
@@ -1384,6 +1424,8 @@ func (r BetaWorkerEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

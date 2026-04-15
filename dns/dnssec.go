@@ -39,6 +39,11 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env DNSSECDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -56,6 +61,11 @@ func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opt
 func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
 	var env DNSSECEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -73,6 +83,11 @@ func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts 
 func (r *DNSSECService) Get(ctx context.Context, query DNSSECGetParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
 	var env DNSSECGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -188,6 +203,8 @@ func (r DNSSECStatus) IsKnown() bool {
 
 type DNSSECDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -332,6 +349,8 @@ func (r DNSSECDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSSECEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If true, multi-signer DNSSEC is enabled on the zone, allowing multiple providers
 	// to serve a DNSSEC-signed zone at the same time. This is required for DNSKEY
@@ -525,6 +544,8 @@ func (r DNSSECEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSSECGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

@@ -39,6 +39,11 @@ func NewCredentialService(opts ...option.RequestOption) (r *CredentialService) {
 func (r *CredentialService) New(ctx context.Context, bucketName string, params CredentialNewParams, opts ...option.RequestOption) (res *CredentialNewResponse, err error) {
 	var env CredentialNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,6 +65,8 @@ type CredentialNewResponse = interface{}
 
 type CredentialNewParams struct {
 	// Use this to identify the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Provides the Cloudflare API token for accessing R2.
 	Token param.Field[string] `json:"token" api:"required"`

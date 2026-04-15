@@ -38,6 +38,11 @@ func NewURLNormalizationService(opts ...option.RequestOption) (r *URLNormalizati
 func (r *URLNormalizationService) Update(ctx context.Context, params URLNormalizationUpdateParams, opts ...option.RequestOption) (res *URLNormalizationUpdateResponse, err error) {
 	var env URLNormalizationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *URLNormalizationService) Update(ctx context.Context, params URLNormaliz
 func (r *URLNormalizationService) Delete(ctx context.Context, body URLNormalizationDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return err
@@ -68,6 +78,11 @@ func (r *URLNormalizationService) Delete(ctx context.Context, body URLNormalizat
 func (r *URLNormalizationService) Get(ctx context.Context, query URLNormalizationGetParams, opts ...option.RequestOption) (res *URLNormalizationGetResponse, err error) {
 	var env URLNormalizationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -201,6 +216,8 @@ func (r URLNormalizationGetResponseType) IsKnown() bool {
 
 type URLNormalizationUpdateParams struct {
 	// The unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The scope of the URL normalization.
 	Scope param.Field[URLNormalizationUpdateParamsScope] `json:"scope" api:"required"`
@@ -398,11 +415,15 @@ func (r URLNormalizationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type URLNormalizationDeleteParams struct {
 	// The unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type URLNormalizationGetParams struct {
 	// The unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

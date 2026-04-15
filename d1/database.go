@@ -45,6 +45,11 @@ func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opt
 func (r *DatabaseService) Update(ctx context.Context, databaseID string, params DatabaseUpdateParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -84,6 +94,11 @@ func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,6 +125,11 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body DatabaseDeleteParams, opts ...option.RequestOption) (res *DatabaseDeleteResponse, err error) {
 	var env DatabaseDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -131,6 +151,11 @@ func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body Da
 func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params DatabaseEditParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -155,6 +180,11 @@ func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params Da
 func (r *DatabaseService) Export(ctx context.Context, databaseID string, params DatabaseExportParams, opts ...option.RequestOption) (res *DatabaseExportResponse, err error) {
 	var env DatabaseExportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -176,6 +206,11 @@ func (r *DatabaseService) Export(ctx context.Context, databaseID string, params 
 func (r *DatabaseService) Get(ctx context.Context, databaseID string, query DatabaseGetParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -199,6 +234,11 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, query Data
 func (r *DatabaseService) Import(ctx context.Context, databaseID string, params DatabaseImportParams, opts ...option.RequestOption) (res *DatabaseImportResponse, err error) {
 	var env DatabaseImportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -221,6 +261,11 @@ func (r *DatabaseService) Query(ctx context.Context, databaseID string, params D
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -253,6 +298,11 @@ func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params Dat
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -905,6 +955,8 @@ func (r databaseRawResponseResultsJSON) RawJSON() string {
 
 type DatabaseNewParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// D1 database name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -1004,6 +1056,8 @@ func (r DatabaseNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseUpdateParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Configuration for D1 read replication.
 	ReadReplication param.Field[DatabaseUpdateParamsReadReplication] `json:"read_replication" api:"required"`
@@ -1089,6 +1143,8 @@ func (r DatabaseUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseListParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// a database name to search for.
 	Name param.Field[string] `query:"name"`
@@ -1108,6 +1164,8 @@ func (r DatabaseListParams) URLQuery() (v url.Values) {
 
 type DatabaseDeleteParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1156,6 +1214,8 @@ func (r DatabaseDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseEditParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Configuration for D1 read replication.
 	ReadReplication param.Field[DatabaseEditParamsReadReplication] `json:"read_replication"`
@@ -1241,6 +1301,8 @@ func (r DatabaseEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseExportParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies that you will poll this endpoint until the export completes
 	OutputFormat param.Field[DatabaseExportParamsOutputFormat] `json:"output_format" api:"required"`
@@ -1328,6 +1390,8 @@ func (r DatabaseExportResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseGetParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1377,6 +1441,8 @@ func (r DatabaseGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseImportParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]           `path:"account_id" api:"required"`
 	Body      DatabaseImportParamsBodyUnion `json:"body" api:"required"`
 }
@@ -1562,6 +1628,8 @@ func (r DatabaseImportResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseQueryParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A single query object or a batch query object
 	Body DatabaseQueryParamsBodyUnion `json:"body" api:"required"`
@@ -1632,6 +1700,8 @@ func (r DatabaseQueryParamsBodyMultipleQueriesBatch) MarshalJSON() (data []byte,
 
 type DatabaseRawParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A single query object or a batch query object
 	Body DatabaseRawParamsBodyUnion `json:"body" api:"required"`

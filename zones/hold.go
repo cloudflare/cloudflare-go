@@ -42,6 +42,11 @@ func NewHoldService(opts ...option.RequestOption) (r *HoldService) {
 func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	var env HoldNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -60,6 +65,11 @@ func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...opt
 func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	var env HoldDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -78,6 +88,11 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	var env HoldEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -96,6 +111,11 @@ func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...o
 func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	var env HoldGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -135,6 +155,8 @@ func (r zoneHoldJSON) RawJSON() string {
 
 type HoldNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If provided, the zone hold will extend to block any subdomain of the given zone,
 	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
@@ -196,6 +218,8 @@ func (r HoldNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type HoldDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If `hold_after` is provided, the hold will be temporarily disabled, then
 	// automatically re-enabled by the system at the time specified in this
@@ -256,6 +280,8 @@ func (r HoldDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type HoldEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If `hold_after` is provided and future-dated, the hold will be temporarily
 	// disabled, then automatically re-enabled by the system at the time specified in
@@ -319,6 +345,8 @@ func (r HoldEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type HoldGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

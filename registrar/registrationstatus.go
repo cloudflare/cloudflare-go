@@ -81,6 +81,11 @@ func NewRegistrationStatusService(opts ...option.RequestOption) (r *Registration
 func (r *RegistrationStatusService) Get(ctx context.Context, domainName string, query RegistrationStatusGetParams, opts ...option.RequestOption) (res *WorkflowStatus, err error) {
 	var env RegistrationStatusGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -100,6 +105,8 @@ func (r *RegistrationStatusService) Get(ctx context.Context, domainName string, 
 
 type RegistrationStatusGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

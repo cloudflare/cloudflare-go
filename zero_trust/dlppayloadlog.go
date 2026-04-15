@@ -40,6 +40,11 @@ func NewDLPPayloadLogService(opts ...option.RequestOption) (r *DLPPayloadLogServ
 func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *DLPPayloadLogUpdateResponse, err error) {
 	var env DLPPayloadLogUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -58,6 +63,11 @@ func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogU
 func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetParams, opts ...option.RequestOption) (res *DLPPayloadLogGetResponse, err error) {
 	var env DLPPayloadLogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -184,6 +194,7 @@ func (r DLPPayloadLogGetResponseMaskingLevel) IsKnown() bool {
 }
 
 type DLPPayloadLogUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Masking level for payload logs.
 	//
@@ -375,6 +386,7 @@ func (r DLPPayloadLogUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPPayloadLogGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

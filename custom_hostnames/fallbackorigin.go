@@ -40,6 +40,11 @@ func NewFallbackOriginService(opts ...option.RequestOption) (r *FallbackOriginSe
 func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponse, err error) {
 	var env FallbackOriginUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -58,6 +63,11 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponse, err error) {
 	var env FallbackOriginDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -77,6 +87,11 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponse, err error) {
 	var env FallbackOriginGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -257,6 +272,8 @@ func (r FallbackOriginGetResponseStatus) IsKnown() bool {
 
 type FallbackOriginUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Your origin hostname that requests to your custom hostnames will be sent to.
 	Origin param.Field[string] `json:"origin" api:"required"`
@@ -407,6 +424,8 @@ func (r FallbackOriginUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type FallbackOriginDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -551,6 +570,8 @@ func (r FallbackOriginDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type FallbackOriginGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

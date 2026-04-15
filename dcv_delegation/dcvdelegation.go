@@ -39,6 +39,11 @@ func NewDCVDelegationService(opts ...option.RequestOption) (r *DCVDelegationServ
 func (r *DCVDelegationService) Get(ctx context.Context, query DCVDelegationGetParams, opts ...option.RequestOption) (res *DCVDelegationUUID, err error) {
 	var env DCVDelegationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -76,6 +81,8 @@ func (r dcvDelegationUUIDJSON) RawJSON() string {
 
 type DCVDelegationGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

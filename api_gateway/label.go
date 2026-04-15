@@ -47,6 +47,11 @@ func (r *LabelService) List(ctx context.Context, params LabelListParams, opts ..
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -127,6 +132,8 @@ func (r LabelListResponseSource) IsKnown() bool {
 
 type LabelListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Direction to order results.
 	Direction param.Field[LabelListParamsDirection] `query:"direction"`

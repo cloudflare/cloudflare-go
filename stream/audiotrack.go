@@ -39,6 +39,11 @@ func NewAudioTrackService(opts ...option.RequestOption) (r *AudioTrackService) {
 func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audioIdentifier string, body AudioTrackDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env AudioTrackDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,6 +69,11 @@ func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audio
 func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params AudioTrackCopyParams, opts ...option.RequestOption) (res *Audio, err error) {
 	var env AudioTrackCopyResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -87,6 +97,11 @@ func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params 
 func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioIdentifier string, params AudioTrackEditParams, opts ...option.RequestOption) (res *Audio, err error) {
 	var env AudioTrackEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -113,6 +128,11 @@ func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioId
 func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *AudioTrackGetResponse, err error) {
 	var env AudioTrackGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -202,6 +222,8 @@ func (r audioTrackGetResponseJSON) RawJSON() string {
 
 type AudioTrackDeleteParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -346,6 +368,8 @@ func (r AudioTrackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AudioTrackCopyParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A string to uniquely identify the track amongst other audio track labels for the
 	// specified video.
@@ -501,6 +525,8 @@ func (r AudioTrackCopyResponseEnvelopeSuccess) IsKnown() bool {
 
 type AudioTrackEditParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Denotes whether the audio track will be played by default in a player.
 	Default param.Field[bool] `json:"default"`
@@ -654,6 +680,8 @@ func (r AudioTrackEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type AudioTrackGetParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

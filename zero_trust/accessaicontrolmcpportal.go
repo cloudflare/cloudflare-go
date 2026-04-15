@@ -42,6 +42,11 @@ func NewAccessAIControlMcpPortalService(opts ...option.RequestOption) (r *Access
 func (r *AccessAIControlMcpPortalService) New(ctx context.Context, params AccessAIControlMcpPortalNewParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalNewResponse, err error) {
 	var env AccessAIControlMcpPortalNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *AccessAIControlMcpPortalService) New(ctx context.Context, params Access
 func (r *AccessAIControlMcpPortalService) Update(ctx context.Context, id string, params AccessAIControlMcpPortalUpdateParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalUpdateResponse, err error) {
 	var env AccessAIControlMcpPortalUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -81,6 +91,11 @@ func (r *AccessAIControlMcpPortalService) List(ctx context.Context, params Acces
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,6 +122,11 @@ func (r *AccessAIControlMcpPortalService) ListAutoPaging(ctx context.Context, pa
 func (r *AccessAIControlMcpPortalService) Delete(ctx context.Context, id string, body AccessAIControlMcpPortalDeleteParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalDeleteResponse, err error) {
 	var env AccessAIControlMcpPortalDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -128,6 +148,11 @@ func (r *AccessAIControlMcpPortalService) Delete(ctx context.Context, id string,
 func (r *AccessAIControlMcpPortalService) Read(ctx context.Context, id string, query AccessAIControlMcpPortalReadParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalReadResponse, err error) {
 	var env AccessAIControlMcpPortalReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -897,6 +922,7 @@ func (r accessAIControlMcpPortalReadResponseServersUpdatedToolJSON) RawJSON() st
 }
 
 type AccessAIControlMcpPortalNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// portal id
 	ID       param.Field[string] `json:"id" api:"required"`
@@ -973,6 +999,7 @@ func (r accessAIControlMcpPortalNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Allow remote code execution in Dynamic Workers (beta)
 	AllowCodeMode param.Field[bool]   `json:"allow_code_mode"`
@@ -1047,6 +1074,7 @@ func (r accessAIControlMcpPortalUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
@@ -1064,6 +1092,7 @@ func (r AccessAIControlMcpPortalListParams) URLQuery() (v url.Values) {
 }
 
 type AccessAIControlMcpPortalDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1091,6 +1120,7 @@ func (r accessAIControlMcpPortalDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalReadParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
