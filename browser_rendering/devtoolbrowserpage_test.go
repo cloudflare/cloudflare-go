@@ -15,6 +15,7 @@ import (
 )
 
 func TestDevtoolBrowserPageGet(t *testing.T) {
+	t.Skip("HTTP 101 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
